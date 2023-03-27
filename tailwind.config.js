@@ -3,7 +3,7 @@ const { fontFamily } = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -22,8 +22,23 @@ module.exports = {
           700: 'rgb(var(--tw-color-primary-700) / <alpha-value>)',
           800: 'rgb(var(--tw-color-primary-800) / <alpha-value>)',
           900: 'rgb(var(--tw-color-primary-900) / <alpha-value>)',
+          DEFAULT: 'rgb(var(--tw-color-primary-500) / <alpha-value>)',
         },
         dark: '#222222',
+        warning: '#FFCC00',
+        secondary: {
+          DEFAULT: '#007AFF',
+          50: '#B8DAFF',
+          100: '#A3CFFF',
+          200: '#7ABAFF',
+          300: '#52A5FF',
+          400: '#298FFF',
+          500: '#007AFF',
+          600: '#005FC7',
+          700: '#00448F',
+          800: '#002957',
+          900: '#000F1F',
+        },
       },
       keyframes: {
         flicker: {
