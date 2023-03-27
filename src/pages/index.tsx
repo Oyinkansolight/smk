@@ -49,7 +49,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className='w-full p-8 md:w-1/2'>
-                <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4 py-16'>
+                <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center gap-4 p-4 py-16'>
                   <Image
                     width={146}
                     height={146}
