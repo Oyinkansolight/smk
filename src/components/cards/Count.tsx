@@ -16,10 +16,11 @@ const CountCard = ({ count, title, variant }: CountCardProps) => {
   return (
     <BasicCard
       className={clsxm(
-        variant === 'primary' && 'bg-[#FFEFEA] text-[#FF6633]',
-        variant === 'secondary' && 'bg-[#F8E6FF] text-[#660195]',
-        variant === 'tertiary' && 'bg-[#E3FFF5] text-[#02A369]',
-        '!m-0 flex h-[156px] w-full min-w-[180px] items-center whitespace-nowrap !rounded-[9px] px-[36px] py-[21px] shadow-sm lg:w-[180px] xl:w-[230px]'
+        variant === 'primary' && '!bg-[#FFEFEA] text-[#FF6633]',
+        variant === 'secondary' && '!bg-[#F8E6FF] text-[#660195]',
+        variant === 'tertiary' && '!bg-[#E3FFF5] text-[#02A369]',
+        '!m-0 flex h-[156px] w-full min-w-[180px] items-center whitespace-nowrap',
+        '!rounded-[9px] px-[36px] py-[21px] shadow-sm lg:w-[180px] xl:w-[230px]'
       )}
     >
       <div className='flex flex-col gap-8'>

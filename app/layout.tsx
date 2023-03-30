@@ -1,30 +1,19 @@
-import '/src/styles/globals.css';
+'use client';
 
-import Header from '@/components/layout/Header';
-import RightSidebar from '@/components/layout/RightSidebar';
-import Sidebar from '@/components/layout/Sidebar';
+import '/src/styles/globals.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <html>
-            <head />
-            <div className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
-                <Header />
-
-                <div className='flex flex-1 flex-row overflow-y-hidden'>
-                    <main className='flex-1 overflow-y-auto p-2 text-xs'>
-                        <div>{children}</div>
-                    </main>
-
-                    <Sidebar />
-
-                    <RightSidebar />
-                </div>
-            </div>
-        </html>
-    );
+  return (
+    <html>
+      <head />
+      <div>{children}</div>
+    </html>
+  );
 }

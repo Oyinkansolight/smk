@@ -1,5 +1,17 @@
 import BasicCard from '@/components/cards/Basic';
 import CountCard from '@/components/cards/Count';
-import SidebarInfoCard from '@/components/cards/SidebarInfo';
+import {
+  SidebarInfoCardOne,
+  SidebarInfoCardThree,
+  SidebarInfoCardTwo,
+} from '@/components/cards/SidebarInfo';
+import ToggleCard from '@/components/cards/Toggle';
 
-export { BasicCard, CountCard, SidebarInfoCard };
+export {
+  BasicCard,
+  CountCard,
+  SidebarInfoCardOne,
+  SidebarInfoCardThree,
+  SidebarInfoCardTwo,
+  ToggleCard,
+};
