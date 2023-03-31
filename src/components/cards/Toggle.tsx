@@ -33,7 +33,7 @@ const ToggleCard = ({
           </div>
           <div className='flex flex-row gap-x-[10px]'>
             {toggle && (
-              <div className='flex max-w-[144px] divide-x overflow-hidden rounded-full border-[1.8px] border-[#F5F6F7] bg-white text-[10.8px] rtl:flex-row-reverse'>
+              <div className='flex max-w-[144px] divide-x overflow-hidden rounded-full border-[2px] border-[#F5F6F7] bg-white text-[10.8px] rtl:flex-row-reverse'>
                 <button
                   onClick={toggleToday}
                   className={clsxm(

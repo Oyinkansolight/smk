@@ -6,13 +6,7 @@ import { GoChevronRight } from 'react-icons/go';
 import Pill from '@/components/buttons/Pill';
 import { CalendarStepper, EventCalendar } from '@/components/calendars';
 import { BasicCard, CountCard, ToggleCard } from '@/components/cards';
-import { BarChart } from '@/components/charts';
-const StreamChart = dynamic(
-  () => import('../../src/components/charts/Stream'),
-  { ssr: false }
-);
-import dynamic from 'next/dynamic';
-
+import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { InstitutionSlider } from '@/components/sliders';
@@ -209,10 +203,9 @@ const Page = () => {
             <ToggleCard
               kebab
               title='Login Logs'
-              className='h-[165px] w-full !rounded-[9px] !px-9 !py-6 shadow-sm lg:max-w-[486px]'
+              className='relative h-[165px] w-full !rounded-[9px] !px-9 !py-6 shadow-sm lg:max-w-[486px]'
             >
-              {/* <AreaChart /> */}
-              <div style={{ height: '50vh', margin: '2rem' }}>
+              <div className='absolute bottom-0 left-0 h-[70px] w-full'>
                 <StreamChart />
               </div>
             </ToggleCard>
@@ -424,7 +417,9 @@ const Page = () => {
                   Attendance Tracker
                 </div>
 
-                <BarChart />
+                <div className='h-[150px]'>
+                  <BarChart />
+                </div>
               </div>
             </BasicCard>
 

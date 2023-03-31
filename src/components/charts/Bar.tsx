@@ -145,31 +145,23 @@ import { ResponsiveBar } from '@nivo/bar';
 const data = [
   {
     day: 'Monday',
-    degress: 59,
+    days: 59,
   },
   {
     day: 'Tuesday',
-    degress: 61,
+    days: 61,
   },
   {
     day: 'Wednesday',
-    degress: 55,
+    days: 55,
   },
   {
     day: 'Thursday',
-    degress: 78,
+    days: 78,
   },
   {
     day: 'Friday',
-    degress: 71,
-  },
-  {
-    day: 'Saturday',
-    degress: 56,
-  },
-  {
-    day: 'Sunday',
-    degress: 67,
+    days: 71,
   },
 ];
 
@@ -177,12 +169,12 @@ const BarChart = () => {
   return (
     <ResponsiveBar
       data={data}
-      keys={['degress']}
+      keys={['days']}
       indexBy='day'
       // margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.4}
       valueScale={{ type: 'linear' }}
-      colors='#3182CE'
+      colors='#8833FF'
       animate={false}
       enableLabel={false}
       axisTop={null}
@@ -195,6 +187,30 @@ const BarChart = () => {
         legendPosition: 'middle',
         legendOffset: -40,
       }}
+      legends={[
+        {
+          dataFrom: 'keys',
+          anchor: 'bottom-right',
+          direction: 'column',
+          justify: false,
+          translateX: 120,
+          translateY: 0,
+          itemsSpacing: 2,
+          itemWidth: 100,
+          itemHeight: 20,
+          itemDirection: 'left-to-right',
+          itemOpacity: 0.85,
+          symbolSize: 20,
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemOpacity: 1,
+              },
+            },
+          ],
+        },
+      ]}
     />
   );
 };

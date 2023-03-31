@@ -131,10 +131,9 @@ export default function TeacherDashboardView() {
             <ToggleCard
               kebab
               title='Login Logs'
-              className='h-[165px] w-full !rounded-[9px] !px-9 !py-6 shadow-sm lg:max-w-[486px]'
+              className='relative h-[165px] w-full !rounded-[9px] !px-9 !py-6 shadow-sm lg:max-w-[486px]'
             >
-              {/* <AreaChart /> */}
-              <div style={{ height: '50vh', margin: '2rem' }}>
+              <div className='absolute bottom-0 left-0 h-[70px] w-full'>
                 <StreamChart />
               </div>
             </ToggleCard>

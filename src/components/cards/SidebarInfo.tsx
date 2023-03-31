@@ -1,3 +1,4 @@
+import commaNumber from 'comma-number';
 import React from 'react';
 
 import clsxm from '@/lib/clsxm';
@@ -213,6 +214,105 @@ export const SidebarInfoCardThree = () => {
 
         <div className='px-[18px] text-right text-[11px] font-bold text-[#6B7A99]'>
           View report
+        </div>
+      </div>
+    </BasicCard>
+  );
+};
+
+export const AdminSidebarInfoCardOne = () => {
+  return (
+    <BasicCard
+      className={clsxm(
+        'hideScroll min-h-[171px] !w-[320px] !overflow-y-scroll border-2 !pb-[18px] !pt-[27px]'
+      )}
+    >
+      <div className='mx-auto flex flex-col justify-center gap-y-7'>
+        <div className='flex flex-row justify-between px-[18px]'>
+          <div className='text-xs font-bold text-[#6B7A99]'>Total Revenue</div>
+          <div>
+            <LineGraphComponent width={95.5} height={27} />
+          </div>
+        </div>
+
+        <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
+          ₦{commaNumber(12200281.9)}
+        </div>
+
+        <hr className='border-b' />
+
+        <div className='px-[18px] text-right text-[11px] font-bold text-[#6B7A99]'>
+          View report
+        </div>
+      </div>
+    </BasicCard>
+  );
+};
+
+export const AdminSidebarInfoCardTwo = () => {
+  return (
+    <BasicCard
+      className={clsxm(
+        'hideScroll min-h-[171px] !w-[320px] !overflow-y-scroll border-2 !pb-[18px] !pt-[27px]'
+      )}
+    >
+      <div className='mx-auto flex flex-col justify-center gap-y-7'>
+        <div className='flex flex-row justify-between px-[18px]'>
+          <div className='text-xs font-bold text-[#6B7A99]'>Total Budget</div>
+          <div>
+            <LineGraphComponent width={95.5} height={27} />
+          </div>
+        </div>
+
+        <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
+          ₦{commaNumber(912200281.9)}
+        </div>
+
+        <hr className='border-b' />
+
+        <div className='px-[18px] text-right text-[11px] font-bold text-[#6B7A99]'>
+          View report
+        </div>
+      </div>
+    </BasicCard>
+  );
+};
+
+export const AdminSidebarInfoCardThree = () => {
+  return (
+    <BasicCard
+      className={clsxm(
+        'hideScroll min-h-[171px] !w-[320px] !overflow-y-scroll border-2 !pb-[18px] !pt-[27px]'
+      )}
+    >
+      <div className='mx-auto flex flex-col justify-center gap-y-7'>
+        <div className='flex flex-row justify-between px-[18px]'>
+          <div className='text-xs font-bold text-[#6B7A99]'>Total Staffs</div>
+          <div>
+            <LineGraphComponent width={95.5} height={27} />
+          </div>
+        </div>
+
+        <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
+          {commaNumber(50)}
+        </div>
+
+        <hr className='border-b' />
+
+        <div className='flex flex-row items-center gap-7'>
+          <div className='flex flex-row items-center gap-x-3'>
+            <div className='h-[9px] w-[9px] rounded-full bg-[#8833FF80] bg-opacity-50' />
+            <div className='text-[10.8px] font-bold text-[#6B7A99]'>
+              First Time
+            </div>
+          </div>
+
+          <div className='flex flex-row items-center gap-x-3'>
+            <div className='h-[9px] w-[9px] rounded-full bg-[#FF663380] bg-opacity-50' />
+            <div className='text-[10.8px] font-bold text-[#6B7A99]'>
+              Returning
+            </div>
+          </div>
         </div>
       </div>
     </BasicCard>

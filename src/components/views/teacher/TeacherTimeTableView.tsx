@@ -2,18 +2,18 @@ export default function TeacherTimeTableView() {
   return (
     <div className='flex items-center justify-center py-8 px-4'>
       <div className='w-full max-w-sm shadow-lg'>
-        <div className='rounded-t bg-white p-5 dark:bg-gray-800 md:p-8'>
+        <div className='rounded-t bg-white p-5 md:p-8'>
           <div className='flex items-center justify-between px-4'>
             <span
               tabIndex={0}
-              className='text-base  font-bold text-gray-800 focus:outline-none dark:text-gray-100'
+              className='text-base  font-bold text-gray-800 focus:outline-none'
             >
-              October 2020
+              March 2023
             </span>
             <div className='flex items-center'>
               <button
                 aria-label='calendar backward'
-                className='text-gray-800 hover:text-gray-400 focus:text-gray-400 dark:text-gray-100'
+                className='text-gray-800 hover:text-gray-400 focus:text-gray-400'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -33,7 +33,7 @@ export default function TeacherTimeTableView() {
               </button>
               <button
                 aria-label='calendar forward'
-                className='ml-3 text-gray-800 hover:text-gray-400 focus:text-gray-400 dark:text-gray-100'
+                className='ml-3 text-gray-800 hover:text-gray-400 focus:text-gray-400'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -59,49 +59,49 @@ export default function TeacherTimeTableView() {
                 <tr>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Mo
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Tu
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         We
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Th
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Fr
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Sa
                       </p>
                     </div>
                   </th>
                   <th>
                     <div className='flex w-full justify-center'>
-                      <p className='text-center text-base font-medium text-gray-800 dark:text-gray-100'>
+                      <p className='text-center text-base font-medium text-gray-800'>
                         Su
                       </p>
                     </div>
@@ -121,53 +121,39 @@ export default function TeacherTimeTableView() {
                   </td>
                   <td className='pt-6'>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        1
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>1</p>
                     </div>
                   </td>
                   <td className='pt-6'>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        2
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>2</p>
                     </div>
                   </td>
                   <td className='pt-6'>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        3
-                      </p>
+                      <p className='text-base text-gray-500'>3</p>
                     </div>
                   </td>
                   <td className='pt-6'>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        4
-                      </p>
+                      <p className='text-base text-gray-500'>4</p>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        5
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>5</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        6
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>6</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        7
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>7</p>
                     </div>
                   </td>
                   <td>
@@ -185,162 +171,118 @@ export default function TeacherTimeTableView() {
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        9
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>9</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        10
-                      </p>
+                      <p className='text-base text-gray-500'>10</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        11
-                      </p>
+                      <p className='text-base text-gray-500'>11</p>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        12
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>12</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        13
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>13</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        14
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>14</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        15
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>15</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        16
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>16</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        17
-                      </p>
+                      <p className='text-base text-gray-500'>17</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        18
-                      </p>
+                      <p className='text-base text-gray-500'>18</p>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        19
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>19</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        20
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>20</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        21
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>21</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        22
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>22</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        23
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>23</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        24
-                      </p>
+                      <p className='text-base text-gray-500'>24</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base text-gray-500 dark:text-gray-100'>
-                        25
-                      </p>
+                      <p className='text-base text-gray-500'>25</p>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        26
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>26</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        27
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>27</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        28
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>28</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        29
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>29</p>
                     </div>
                   </td>
                   <td>
                     <div className='flex w-full cursor-pointer justify-center px-2 py-2'>
-                      <p className='text-base font-medium text-gray-500 dark:text-gray-100'>
-                        30
-                      </p>
+                      <p className='text-base font-medium text-gray-500'>30</p>
                     </div>
                   </td>
                 </tr>
