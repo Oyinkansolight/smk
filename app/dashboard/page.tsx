@@ -13,7 +13,7 @@ const StreamChart = dynamic(
 );
 import dynamic from 'next/dynamic';
 
-import CircularCounter from '@/components/counter/Circular';
+import { CircularCounter } from '@/components/counter';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { InstitutionSlider } from '@/components/sliders';
 
