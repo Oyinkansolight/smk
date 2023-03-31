@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { RiDashboardFill } from 'react-icons/ri';
 
 import StaffProfileCard from '@/components/cards/StaffProfile';
+import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
+import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
 
 // const streamData = [
 //     {
@@ -83,35 +85,45 @@ import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardVie
 // ];
 
 const TeacherFullDashboard = () => {
-  const [tabIdx, setTabIdx] = useState(0);
+  const [tabIdx, setTabIdx] = useState(1);
   return (
     <div className='flex'>
       <StaffProfileCard />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
-        <TabBar
-          selected={tabIdx}
-          onSelect={(i) => setTabIdx(i)}
-          items={[
-            {
-              icon: <RiDashboardFill className='h-5 w-5' />,
-              label: 'Dashboard',
-            },
-            {
-              icon: <RiDashboardFill className='h-5 w-5' />,
-              label: 'Class List',
-            },
-            {
-              icon: <RiDashboardFill className='h-5 w-5' />,
-              label: 'Time Table',
-            },
-            {
-              icon: <RiDashboardFill className='h-5 w-5' />,
-              label: 'Activity',
-            },
-          ]}
-        />
+        <div className='flex w-full'>
+          <TabBar
+            selected={tabIdx}
+            onSelect={(i) => setTabIdx(i)}
+            items={[
+              {
+                icon: <RiDashboardFill className='h-5 w-5' />,
+                label: 'Dashboard',
+              },
+              {
+                icon: <RiDashboardFill className='h-5 w-5' />,
+                label: 'Class List',
+              },
+              {
+                icon: <RiDashboardFill className='h-5 w-5' />,
+                label: 'Time Table',
+              },
+              {
+                icon: <RiDashboardFill className='h-5 w-5' />,
+                label: 'Activity',
+              },
+            ]}
+          />
+          <div className='flex-1' />
+          <SearchInput placeholder='Search Tasks' />
+        </div>
 
-        {tabIdx === 1 ? <TaskListView /> : <TeacherDashboardView />}
+        {tabIdx === 1 ? (
+          <TaskListView />
+        ) : tabIdx === 2 ? (
+          <TeacherTimeTableView />
+        ) : (
+          <TeacherDashboardView />
+        )}
       </div>
     </div>
   );
