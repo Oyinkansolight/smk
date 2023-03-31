@@ -1,4 +1,11 @@
-import TeacherFullDashboard from '@/components/views/teacher/TeacherFullDashboard';
+'use client';
+import { useState } from 'react';
+import { RiDashboardFill } from 'react-icons/ri';
+
+import StaffProfileCard from '@/components/cards/StaffProfile';
+import TabBar from '@/components/layout/TabBar';
+import TaskListView from '@/components/views/teacher/TaskListView';
+import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 
 // const streamData = [
 //     {
@@ -75,8 +82,39 @@ import TeacherFullDashboard from '@/components/views/teacher/TeacherFullDashboar
 //     },
 // ];
 
-const Page = () => {
-  return <TeacherFullDashboard />;
+const TeacherFullDashboard = () => {
+  const [tabIdx, setTabIdx] = useState(0);
+  return (
+    <div className='flex'>
+      <StaffProfileCard />
+      <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+        <TabBar
+          selected={tabIdx}
+          onSelect={(i) => setTabIdx(i)}
+          items={[
+            {
+              icon: <RiDashboardFill className='h-5 w-5' />,
+              label: 'Dashboard',
+            },
+            {
+              icon: <RiDashboardFill className='h-5 w-5' />,
+              label: 'Class List',
+            },
+            {
+              icon: <RiDashboardFill className='h-5 w-5' />,
+              label: 'Time Table',
+            },
+            {
+              icon: <RiDashboardFill className='h-5 w-5' />,
+              label: 'Activity',
+            },
+          ]}
+        />
+
+        {tabIdx === 1 ? <TaskListView /> : <TeacherDashboardView />}
+      </div>
+    </div>
+  );
 };
 
-export default Page;
+export default TeacherFullDashboard;
