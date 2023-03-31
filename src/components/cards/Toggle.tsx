@@ -39,7 +39,7 @@ const ToggleCard = ({
                   className={clsxm(
                     today === true
                       ? 'bg-[#008146] !font-[900] text-white'
-                      : 'text-[#6B7A99]',
+                      : 'bg-white text-[#6B7A99]',
                     'flex items-center justify-center py-2 px-[13px] font-medium transition-colors duration-200 hover:bg-[#008146] hover:text-white'
                   )}
                 >
@@ -51,7 +51,7 @@ const ToggleCard = ({
                   className={clsxm(
                     today === false
                       ? 'bg-[#008146] !font-[900] text-white'
-                      : 'text-[#6B7A99]',
+                      : 'bg-white text-[#6B7A99]',
                     'flex items-center justify-center py-2 px-[13px] font-medium transition-colors duration-200 hover:bg-[#008146] hover:text-white'
                   )}
                 >
