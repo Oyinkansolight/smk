@@ -1,0 +1,30 @@
+.rw-calendar-month .rw-cell {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rw-calendar-row {
+  display: flex;
+  justify-content: center;
+}
+
+.rw-head-cell {
+  width: 40px;
+  padding: 15px 0px;
+  color: #9c9c9c;
+}
+
+.rw-calendar-btn-right,
+.rw-calendar-btn-left {
+  color: #3361ff;
+}
+
+.rw-calendar-contained {
+  border-radius: 4px;
+  background-color: #fff;
+  border: #3361ff 2px solid;
+}
