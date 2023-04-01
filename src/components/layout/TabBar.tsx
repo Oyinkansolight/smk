@@ -19,7 +19,7 @@ export default function TabBar({
             if (onSelect) onSelect(i);
           }}
           className={clsxm(
-            '-px-1 -mb-px inline-flex h-10 items-center whitespace-nowrap border-b-2 bg-transparent px-2 py-2 text-center text-blue-600 focus:outline-none sm:px-4',
+            '-px-1 -mb-px inline-flex h-20 items-center whitespace-nowrap border-b-4 bg-transparent px-2 py-2 text-center text-blue-600 focus:outline-none sm:px-4',
             selected === i
               ? 'border-blue-500 text-blue-600'
               : 'text-gray-700 hover:border-gray-400'
@@ -27,7 +27,7 @@ export default function TabBar({
         >
           {item.icon}
 
-          <span className='mx-1 text-sm sm:text-base'>{item.label}</span>
+          <span className='mx-1 text-sm font-bold'>{item.label}</span>
         </button>
       ))}
     </div>

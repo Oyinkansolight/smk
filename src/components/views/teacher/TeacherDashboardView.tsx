@@ -15,6 +15,7 @@ const StreamChart = dynamic(() => import('../../charts/Stream'), {
 import dynamic from 'next/dynamic';
 
 import { InstitutionSlider } from '@/components/sliders';
+import ClockInTime from '@/components/views/teacher/ClockInTime';
 
 const timeLineData = [
   {
@@ -74,10 +75,24 @@ const percentageData = [
 export default function TeacherDashboardView() {
   return (
     <>
-      <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px]'>
-        <CountCard count={12566} title='Total Students' variant='primary' />
-        <CountCard count={66} title='Total Staff' variant='secondary' />
-        <CountCard count={12} title='Total Grades' variant='tertiary' />
+      <div className='flex flex-col gap-8 bg-white p-8'>
+        <div className='flex h-14 w-full justify-end'>
+          <ClockInTime />
+        </div>
+        <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px]'>
+          <CountCard
+            count={5}
+            title='Total Attending Subjects'
+            variant='primary'
+            className='flex-1'
+          />
+          <CountCard
+            count={10}
+            title='Total Attending Grades'
+            variant='secondary'
+            className='flex-1'
+          />
+        </div>
       </div>
 
       <div className='flex flex-col'>

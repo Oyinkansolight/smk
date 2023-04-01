@@ -12,8 +12,8 @@ export default function StaffProfileCard() {
   return (
     <div className='flex flex-col items-center'>
       <div className='flex w-full justify-between'>
-        <CircleButton icon={<RiUserFill />} />
-        <CircleButton icon={<SlOptions />} />
+        <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
+        <CircleButton icon={<SlOptions className='h-4 w-4' />} />
       </div>
       <BigAvatar src='/images/teacher_1.png' />
       <div className='h-10' />

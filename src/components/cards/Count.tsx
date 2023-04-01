@@ -10,9 +10,10 @@ interface CountCardProps {
   count: number;
   title: string;
   variant: 'primary' | 'secondary' | 'tertiary';
+  className?: string;
 }
 
-const CountCard = ({ count, title, variant }: CountCardProps) => {
+const CountCard = ({ count, title, variant, className }: CountCardProps) => {
   return (
     <BasicCard
       className={clsxm(
@@ -20,7 +21,8 @@ const CountCard = ({ count, title, variant }: CountCardProps) => {
         variant === 'secondary' && '!bg-[#F8E6FF] text-[#660195]',
         variant === 'tertiary' && '!bg-[#E3FFF5] text-[#02A369]',
         '!m-0 flex h-[156px] w-full min-w-[180px] items-center whitespace-nowrap',
-        '!rounded-[9px] px-[36px] py-[21px] shadow-sm lg:w-[180px] xl:w-[230px]'
+        '!rounded-[9px] px-[36px] py-[21px] shadow-sm lg:w-[180px] xl:w-[230px]',
+        className
       )}
     >
       <div className='flex flex-col gap-8'>

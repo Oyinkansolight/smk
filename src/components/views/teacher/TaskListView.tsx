@@ -4,7 +4,7 @@ import TaskAccordion from '@/components/accordions/TaskAccordion';
 
 export default function TaskListView() {
   return (
-    <div>
+    <div className='flex flex-col space-y-6'>
       <div className='flex justify-end'>
         <div className='flex items-center font-bold'>
           <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
@@ -14,13 +14,12 @@ export default function TaskListView() {
           Add
         </div>
       </div>
-      <div className='h-4' />
       {Array(5)
         .fill(0)
         .map((v, i) => {
           return (
             <TaskAccordion
-              taskName={`Class ${i}`}
+              taskName={`Class ${i + 1}`}
               lessons={[
                 { progress: 2, topic: 'English' },
                 { progress: 5, topic: 'Mathematics' },

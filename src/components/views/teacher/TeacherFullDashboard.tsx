@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { RiDashboardFill } from 'react-icons/ri';
+import { BiListCheck } from 'react-icons/bi';
+import { IoMdTrendingUp } from 'react-icons/io';
+import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 import StaffProfileCard from '@/components/cards/StaffProfile';
 import SearchInput from '@/components/input/SearchInput';
@@ -85,12 +87,12 @@ import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableVie
 // ];
 
 const TeacherFullDashboard = () => {
-  const [tabIdx, setTabIdx] = useState(1);
+  const [tabIdx, setTabIdx] = useState(0);
   return (
     <div className='flex'>
       <StaffProfileCard />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
-        <div className='flex w-full'>
+        <div className='flex w-full items-center'>
           <TabBar
             selected={tabIdx}
             onSelect={(i) => setTabIdx(i)}
@@ -100,21 +102,23 @@ const TeacherFullDashboard = () => {
                 label: 'Dashboard',
               },
               {
-                icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Class List',
+                icon: <BiListCheck className='h-5 w-5' />,
+                label: 'Task List',
               },
               {
-                icon: <RiDashboardFill className='h-5 w-5' />,
+                icon: <RiCalendar2Fill className='h-5 w-5' />,
                 label: 'Time Table',
               },
               {
-                icon: <RiDashboardFill className='h-5 w-5' />,
+                icon: <IoMdTrendingUp className='h-5 w-5' />,
                 label: 'Activity',
               },
             ]}
           />
-          <div className='flex-1' />
-          <SearchInput placeholder='Search Tasks' />
+          <div className='h-full flex-1 border-b-4' />
+          <div className='h-full border-b-4'>
+            <SearchInput placeholder='Search Tasks' />
+          </div>
         </div>
 
         {tabIdx === 1 ? (
