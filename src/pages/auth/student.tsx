@@ -27,7 +27,7 @@ export default function StudentAuth() {
             <div className='h1'>Welcome</div>
 
             <div className='container m-auto'>
-              <BasicCard className='max-w-[550px] p-6 md:p-10'>
+              <BasicCard className='mx-auto max-w-[550px] p-6 md:p-10'>
                 <form className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'>
                   <div className='h2'>Sign in</div>
                   <BaseInput
