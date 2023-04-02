@@ -1,7 +1,10 @@
 import moment from 'moment';
+import Calendar from 'react-widgets/Calendar';
+
+import 'react-widgets/styles.css';
+import '../../../styles/calendar.css';
 
 import { CalendarStepper } from '@/components/calendars';
-import CalenderView from '@/components/calendars/CalenderView';
 const timeLineData = [
   {
     image: '/images/teacher_step_1.png',
@@ -32,7 +35,9 @@ const timeLineData = [
 export default function TeacherTimeTableView() {
   return (
     <div className='flex items-start justify-between gap-10 py-8'>
-      <CalenderView />
+      <div className='max-w-xs'>
+        <Calendar />
+      </div>
       <div className='flex-1 rounded-lg bg-white p-4'>
         <div className='flex items-center text-xl'>
           <div className='font-bold text-[#6B7A99]'>Calender Items</div>

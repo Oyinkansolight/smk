@@ -26,6 +26,7 @@ module.exports = {
         },
         dark: '#222222',
         warning: '#FFCC00',
+        blue1: '#3361FF',
         secondary: {
           DEFAULT: '#007AFF',
           50: '#B8DAFF',
