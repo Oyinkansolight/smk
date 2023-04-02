@@ -21,17 +21,17 @@ export default function ClockInTime() {
   return clockState === ClockInState.clockedIn ? (
     <div className='flex items-center'>
       <div>
-        Time Online: <span className='text-xl text-red-500'>2:0:0</span>
+        Time Online: <span className='text-xl text-[#FB6340]'>00:20:05</span>
       </div>
       <div className='w-4' />
-      <button className='rounded-sm border border-[#007AFF] bg-white py-2 px-5 text-[#007AFF]'>
+      <button className='h-[40px] w-[120px] rounded-[3.2px] border border-[#007AFF] bg-white py-2 px-5 text-[#007AFF]'>
         Stop Clock
       </button>
     </div>
   ) : clockState === ClockInState.notClocked ? (
     <div className='flex items-center'>
       <div>
-        You are <span className='font-bold text-green-500'>Within</span> your
+        You are <span className='font-bold text-[#008146]'>Within</span> your
         clock area
       </div>
       <div className='w-4' />
@@ -42,7 +42,7 @@ export default function ClockInTime() {
   ) : (
     <div className='flex items-center'>
       <div>
-        You are <span className='font-bold text-red-500'>{distance} Km</span>{' '}
+        You are <span className='font-bold text-[#FB6340]'>{distance} Km</span>{' '}
         away from your clock area
       </div>
       <div className='w-4' />

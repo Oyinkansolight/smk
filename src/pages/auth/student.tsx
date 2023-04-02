@@ -86,29 +86,3 @@ export default function StudentAuth() {
     </Layout>
   );
 }
-
-{
-  /* <div className="w-full md:w-1/2 p-8">
-  <div className="p-4 py-16 flex flex-col items-center justify-center bg-blueGray-100 h-full">
-    <Image width={146} height={146} src="/images/subeb.png" alt="" />
-
-    <form className="flex flex-col md:max-w-lg w-full mx-auto gap-6">
-      <BaseInput placeholder='Enter username here' label='Username' name='username' />
-
-      <BaseInput placeholder='Enter password here' label='Password' name='password' />
-
-      <Button className='h-[54px] justify-center'>Sign In</Button>
-
-      <div className="flex flex-wrap justify-between -m-2 mb-4">
-        <div className="w-auto p-2">
-          <div className="flex items-center">
-            <Checkbox type='warning' />
-            <label className="ml-2 text-sm text-gray-900 font-medium" htmlFor="default-checkbox">Remember Me</label>
-          </div>
-        </div>
-        <div className="w-auto p-2"><a className="text-sm hover:text-primary font-medium" href="#">Forgot Password?</a></div>
-      </div>
-    </form>
-  </div>
-</div> */
-}

@@ -30,11 +30,11 @@ export default function LessonsTable({
                 <LessonProgress done={lesson.progress} total={10} />
               </td>
               <td className='flex items-center justify-center px-6 py-4'>
-                <div className='cursor-pointer text-[#ADB3CC] hover:text-blue-500'>
+                <div className='cursor-pointer text-[#ADB3CC] hover:text-[#3361FF]'>
                   Edit
                 </div>
                 <div className='w-4' />
-                <div className='cursor-pointer text-[#ADB3CC] hover:text-blue-500'>
+                <div className='cursor-pointer text-[#ADB3CC] hover:text-[#3361FF]'>
                   Delete
                 </div>
               </td>

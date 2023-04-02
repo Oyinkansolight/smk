@@ -11,7 +11,7 @@ export default function TabBar({
   onSelect?: (idx: number) => void;
 }) {
   return (
-    <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap border-b border-gray-200'>
+    <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap '>
       {items.map((item, i) => (
         <button
           key={i}
@@ -19,15 +19,22 @@ export default function TabBar({
             if (onSelect) onSelect(i);
           }}
           className={clsxm(
-            '-px-1 -mb-px inline-flex h-20 items-center whitespace-nowrap border-b-4 bg-transparent px-2 py-2 text-center text-blue-600 focus:outline-none sm:px-4',
+            '-px-1 -mb-px inline-flex h-20 items-center whitespace-nowrap border-b-[3px] bg-transparent px-2 pt-2 text-center text-blue-600 focus:outline-none sm:px-4',
             selected === i
-              ? 'border-blue-500 text-blue-600'
-              : 'text-gray-700 hover:border-gray-400'
+              ? 'border-blue-500 text-[#3361FF]'
+              : 'border-[#EDEFF2] text-[#ADB8CC] hover:border-gray-400'
           )}
         >
           {item.icon}
 
-          <span className='mx-1 text-sm font-bold'>{item.label}</span>
+          <span
+            className={clsxm(
+              'mx-1 text-sm',
+              selected === i ? 'font-[900]' : 'font-bold'
+            )}
+          >
+            {item.label}
+          </span>
         </button>
       ))}
     </div>

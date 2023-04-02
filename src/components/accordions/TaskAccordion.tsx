@@ -29,8 +29,8 @@ export default function TaskAccordion({
       >
         <BsArrowDownCircle
           className={clsxm(
-            'h-5 w-5 text-[#7F9CFF] transition-transform duration-300',
-            expanded ? 'rotate-180 ' : 'text-[#C3CAD9]'
+            'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
+            expanded ? 'rotate-180' : 'text-[#C3CAD9]'
           )}
         />
         <div className='w-4' />
@@ -67,7 +67,7 @@ export default function TaskAccordion({
       >
         <LessonsTable lessons={lessons} />
         <div className='flex cursor-pointer justify-start py-5'>
-          <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-blue-500'>
+          <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-[#3361FF]'>
             Add To Lesson
           </div>
         </div>

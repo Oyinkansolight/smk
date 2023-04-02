@@ -92,7 +92,7 @@ const TeacherFullDashboard = () => {
     <div className='flex'>
       <StaffProfileCard />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
-        <div className='flex w-full items-center'>
+        <div className='flex w-full items-center justify-between'>
           <TabBar
             selected={tabIdx}
             onSelect={(i) => setTabIdx(i)}
@@ -102,7 +102,7 @@ const TeacherFullDashboard = () => {
                 label: 'Dashboard',
               },
               {
-                icon: <BiListCheck className='h-5 w-5' />,
+                icon: <BiListCheck className='h-7 w-7' />,
                 label: 'Task List',
               },
               {
@@ -115,9 +115,11 @@ const TeacherFullDashboard = () => {
               },
             ]}
           />
-          <div className='h-full flex-1 border-b-4' />
-          <div className='h-full border-b-4'>
-            <SearchInput placeholder='Search Tasks' />
+
+          <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+
+          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
+            <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
           </div>
         </div>
 

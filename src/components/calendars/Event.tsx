@@ -42,11 +42,11 @@ const DatePillData = [
 
 const EventCalendar = ({ className, children }: EventCalendarProps) => {
   return (
-    <BasicCard className={className}>
+    <BasicCard className={clsxm(className, '!w-full !rounded-2xl')}>
       <div className='flex flex-col gap-y-[9px]'>
         <div className='text-lg font-bold text-[#4D5E80]'>Event/Calendar</div>
 
-        <div className='flex flex-row gap-x-10'>
+        <div className='hideScroll flex flex-row gap-x-10 overflow-x-scroll'>
           {DatePillData.map((date, i) => (
             <DatePill key={i} date={date} selected={i === 3} />
           ))}

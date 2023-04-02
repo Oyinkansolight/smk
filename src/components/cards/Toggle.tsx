@@ -25,7 +25,7 @@ const ToggleCard = ({
   const toggleToday = () => setToday(!today);
 
   return (
-    <BasicCard className={className}>
+    <BasicCard className={clsxm(className, '!m-0')}>
       <div className='flex flex-col gap-y-7'>
         <div className='flex flex-row items-center justify-between'>
           <div className='whitespace-nowrap text-lg font-bold text-[#4D5E80]'>

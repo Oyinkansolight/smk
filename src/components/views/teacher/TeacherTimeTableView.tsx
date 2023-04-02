@@ -4,6 +4,8 @@ import Calendar from 'react-widgets/Calendar';
 import 'react-widgets/styles.css';
 import '../../../styles/calendar.css';
 
+import clsxm from '@/lib/clsxm';
+
 import { CalendarStepper } from '@/components/calendars';
 const timeLineData = [
   {
@@ -42,9 +44,17 @@ export default function TeacherTimeTableView() {
         <div className='flex items-center text-xl'>
           <div className='font-bold text-[#6B7A99]'>Calender Items</div>
           <div className='w-10' />
-          <div className='text-blue-500'>({moment().format('D-M-yyyy')})</div>
+          <div className='text-[#3361FF]'>({moment().format('D-M-yyyy')})</div>
           <div className='flex-1' />
-          <button className='rounded border py-2 px-6 text-base font-bold text-blue-500'>
+          <button
+            className={clsxm(
+              'flex items-center justify-center',
+              'hover:bg-[#3361FF] hover:text-white',
+              'h-9 w-[142px] rounded border py-2 px-6 shadow-sm',
+              'active:bg-[#3361FF] active:text-white active:ring-1',
+              'whitespace-nowrap text-[10.8px] font-bold text-[#3361FF]'
+            )}
+          >
             Add Item To Calender
           </button>
         </div>

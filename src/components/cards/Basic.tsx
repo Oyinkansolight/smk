@@ -12,7 +12,7 @@ const BasicCard = ({ children, className }: BasicCardProps) => {
     <section
       className={clsxm(
         className && className,
-        'mx-auto overflow-hidden rounded-[30px] bg-white p-6 shadow-sm'
+        'overflow-hidden rounded-[30px] bg-white p-6 shadow-sm'
       )}
     >
       {children}

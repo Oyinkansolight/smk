@@ -1,4 +1,5 @@
 import BasicCard from '@/components/cards/Basic';
+import ClockInCountCard from '@/components/cards/ClockInCount';
 import CountCard from '@/components/cards/Count';
 import IndividualTotal from '@/components/cards/IndividualTotal';
 import SchoolTotalCard from '@/components/cards/SchoolTotal';
@@ -17,6 +18,7 @@ export {
   AdminSidebarInfoCardThree,
   AdminSidebarInfoCardTwo,
   BasicCard,
+  ClockInCountCard,
   CountCard,
   IndividualTotal,
   SchoolTotalCard,

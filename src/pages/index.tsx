@@ -2,8 +2,10 @@ import Image from 'next/image';
 import * as React from 'react';
 
 import Button from '@/components/buttons/Button';
+import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import PrimaryLink from '@/components/links/PrimaryLink';
 import Seo from '@/components/Seo';
 
 /**
@@ -21,85 +23,76 @@ import Seo from '@/components/Seo';
 export default function HomePage() {
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
-      <Seo />
+      <Seo templateTitle='Student Auth' />
 
       <main>
-        <section className='bg-white'>
-          {/* <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'> */}
-          <section className='relative overflow-hidden bg-white'>
-            <div className='relative z-10 -m-8 flex flex-wrap'>
-              <div className='hidden p-8 md:block md:w-1/2'>
-                <Image
-                  width={154}
-                  height={53}
-                  className='absolute left-[60px] top-[60px] z-20'
-                  src='/images/edo_logo.png'
-                  alt=''
-                />
-                <div className='container mx-auto'>
-                  <Image
-                    width={726}
-                    height={1024}
-                    className='h-screen max-h-[100vh] w-full'
-                    style={{ objectFit: 'fill' }}
-                    src='/images/admin_layout_bg.png'
-                    alt=''
-                  />
-                </div>
-              </div>
-              <div className='w-full p-8 md:w-1/2'>
-                <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center gap-4 p-4 py-16'>
-                  <Image
-                    width={146}
-                    height={146}
-                    src='/images/subeb.png'
-                    alt=''
+        <section className='authBackground relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
+          <Image
+            width={154}
+            height={53}
+            className='absolute left-[60px] top-[60px] z-20'
+            src='/images/edo_logo.png'
+            alt=''
+          />
+
+          <div className='container flex flex-col items-center gap-8 px-4 md:px-0'>
+            <div className='h1'>Welcome</div>
+
+            <div className='container m-auto'>
+              <BasicCard className='mx-auto max-w-[550px] p-6 md:p-10'>
+                <form className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'>
+                  <div className='h2'>Sign in</div>
+                  <BaseInput
+                    placeholder='Enter username here'
+                    label='Username'
+                    name='username'
                   />
 
-                  <form className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'>
-                    <BaseInput
-                      placeholder='Enter username here'
-                      label='Username'
-                      name='username'
-                    />
+                  <BaseInput
+                    placeholder='Enter password here'
+                    label='Password'
+                    name='password'
+                  />
 
-                    <BaseInput
-                      placeholder='Enter password here'
-                      label='Password'
-                      name='password'
-                    />
+                  <Button
+                    variant='secondary'
+                    className='h-[54px] justify-center'
+                  >
+                    Sign In
+                  </Button>
 
-                    <Button className='h-[54px] justify-center'>Sign In</Button>
-
-                    <div className='-m-2 mb-4 flex flex-wrap justify-between'>
-                      <div className='w-auto p-2'>
-                        <div className='flex items-center'>
-                          <Checkbox type='warning' />
-                          {/* <input className="w-4 h-4" id="default-checkbox" type="checkbox" value="" /> */}
-                          <label
-                            className='ml-2 text-sm font-medium text-gray-900'
-                            htmlFor='default-checkbox'
-                          >
-                            Remember Me
-                          </label>
-                        </div>
-                      </div>
-                      <div className='w-auto p-2'>
-                        <a
-                          className='text-sm font-medium hover:text-primary'
-                          href='#'
+                  <div className='-m-2 mb-4 flex flex-wrap justify-between'>
+                    <div className='w-auto p-2'>
+                      <div className='flex items-center'>
+                        <Checkbox type='warning' />
+                        <label
+                          className='ml-2 text-sm font-medium text-gray-900'
+                          htmlFor='default-checkbox'
                         >
-                          Forgot Password?
-                        </a>
+                          Remember Me
+                        </label>
                       </div>
                     </div>
-                  </form>
-                </div>
-              </div>
+                    <div className='w-auto p-2'>
+                      <a
+                        className='text-sm font-medium hover:text-primary'
+                        href='#'
+                      >
+                        Forgot Password?
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-wrap gap-1 whitespace-nowrap'>
+                    <div>Don’t have an account?</div>
+                    <PrimaryLink variant='secondary' href='/auth/student'>
+                      Sign Up
+                    </PrimaryLink>
+                  </div>
+                </form>
+              </BasicCard>
             </div>
-          </section>
-          {/* </div> */}
+          </div>
         </section>
       </main>
     </Layout>
