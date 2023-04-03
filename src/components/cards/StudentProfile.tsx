@@ -19,7 +19,7 @@ export default function StudentProfile() {
       <BigAvatar src='/images/student_1.png' />
       <div className='h-10' />
       <div className='text-xl font-extrabold'>Anthony Mba</div>
-      <div className='py-4 text-blue1'>Primary 1a</div>
+      <div className='py-4 text-dodger-500'>Primary 1a</div>
       <OnlineStatus status='online' />
       <div className='grid grid-cols-2 gap-4 py-4'>
         {[
