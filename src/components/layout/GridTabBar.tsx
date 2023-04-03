@@ -18,10 +18,15 @@ export default function GridTabBar({
             if (onSelect) onSelect(i);
           }}
           className={clsxm(
-            'relative flex  h-[108px] w-[108px] flex-col items-center justify-center  p-5',
+            'border-2',
+            i % 2 === 0 && 'border-r-0',
+            i > 1 && Number(selected) === 3 && 'border-r-2',
+            i <= 1 && Number(selected) <= 1 && 'border-b-0',
+            i > 1 && Number(selected) > 1 && 'border-t-0',
+            'relative flex  h-[108px] w-[108px] flex-col items-center justify-center bg-[#F7F8FA] p-5',
             selected === i
-              ? 'rounded-lg border-blue-500 bg-white text-blue-600'
-              : 'border-2 text-[#C3CAD9] hover:border-gray-400 '
+              ? 'rounded-[11.57px] border-0 bg-white text-[#3361FF] shadow-lg'
+              : 'text-[#C3CAD9]'
           )}
         >
           <div>{item.icon}</div>
@@ -29,7 +34,7 @@ export default function GridTabBar({
           <div className='font-bold'>{item.label}</div>
           <div
             className={clsxm(
-              'full absolute top-5 right-5 h-2 w-2 rounded bg-blue-500',
+              'full absolute top-5 right-5 h-2 w-2 rounded bg-[#3361FF]',
               selected === i ? '' : 'hidden'
             )}
           />
