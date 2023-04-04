@@ -24,7 +24,7 @@ export default function GridTabBar({
             i > 1 && Number(selected) === 3 && 'border-r-2',
             i <= 1 && Number(selected) <= 1 && 'border-b-0',
             i > 1 && Number(selected) > 1 && 'border-t-0',
-            'relative flex  h-[108px] w-[108px] flex-col items-center justify-center bg-[#F7F8FA] p-5',
+            'relative flex  aspect-square w-full flex-col items-center justify-center bg-[#F7F8FA] p-5',
             selected === i
               ? 'rounded-[11.57px] border-0 bg-white text-[#3361FF] shadow-lg'
               : 'text-[#C3CAD9]'

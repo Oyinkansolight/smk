@@ -9,11 +9,13 @@ import clsxm from '@/lib/clsxm';
 interface CircularCounterProps {
   total?: number;
   variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md';
 }
 
 const CircularCounter = ({
   total = 0,
   variant = 'primary',
+  size = 'md',
 }: CircularCounterProps) => {
   return (
     <div>
@@ -28,9 +30,21 @@ const CircularCounter = ({
               : `rgb(51, 97, 255, ${total / 100})`,
           trailColor: 'rgba(0, 0, 0, 0.1)',
         })}
-        className='h-full max-h-[95px] w-full max-w-[95px]'
+        className={clsxm(
+          'h-full  w-full ',
+          size === 'sm'
+            ? 'max-h-[60px] max-w-[60px]'
+            : 'max-h-[95px] max-w-[95px]'
+        )}
       >
-        <div className={clsxm('text-[30px] font-semibold')}>{total}%</div>
+        <div
+          className={clsxm(
+            'font-semibold',
+            size === 'sm' ? 'text-[15px]' : 'text-[30px]'
+          )}
+        >
+          {total}%
+        </div>
       </CircularProgressbarWithChildren>
     </div>
   );

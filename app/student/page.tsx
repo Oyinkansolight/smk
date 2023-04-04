@@ -7,9 +7,10 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import StudentProfile from '@/components/cards/StudentProfile';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
+import ReportCardView from '@/components/views/student.tsx/ReportCardView';
 import StudentDashboardView from '@/components/views/student.tsx/StudentDashboardView';
-import TaskListView from '@/components/views/teacher/TaskListView';
-import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
+import StudentTaskListView from '@/components/views/student.tsx/StudentTaskListView';
+import StudentTimeTableView from '@/components/views/student.tsx/StudentTimeTableView';
 
 // const streamData = [
 //     {
@@ -87,11 +88,11 @@ import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableVie
 // ];
 
 const Page = () => {
-  const [tabIdx, setTabIdx] = useState(0);
+  const [tabIdx, setTabIdx] = useState(4);
   return (
-    <div className='flex'>
+    <div className='flex gap-6'>
       <StudentProfile />
-      <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+      <div className='flex flex-1 flex-col gap-[31px] rounded-xl border px-4'>
         <div className='flex w-full items-center'>
           <TabBar
             selected={tabIdx}
@@ -131,9 +132,25 @@ const Page = () => {
         </div>
 
         {tabIdx === 1 ? (
-          <TaskListView />
+          <StudentTaskListView
+            tasks={[
+              { name: 'Math Assignment', progress: 12 },
+              { name: 'French Assignment', progress: 12 },
+              { name: 'Math Assignment', progress: 12 },
+              { name: 'Science Assignment', progress: 12 },
+            ]}
+          />
         ) : tabIdx === 2 ? (
-          <TeacherTimeTableView />
+          <StudentTimeTableView />
+        ) : tabIdx === 4 ? (
+          <ReportCardView
+            report={[
+              { name: 'Mathematics', score: 58, date: new Date() },
+              { name: 'Mathematics', score: 88, date: new Date() },
+              { name: 'Mathematics', score: 45, date: new Date() },
+              { name: 'Mathematics', score: 34, date: new Date() },
+            ]}
+          />
         ) : (
           <StudentDashboardView />
         )}
