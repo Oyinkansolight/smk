@@ -1,6 +1,10 @@
+import { useState } from 'react';
+import { AiFillCloud } from 'react-icons/ai';
+import { BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
+import { HiUsers } from 'react-icons/hi';
 import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
-import { RiDashboardFill, RiUserFill, RiWhatsappFill } from 'react-icons/ri';
+import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
 import CircleButton from '@/components/buttons/CircleButton';
@@ -9,39 +13,46 @@ import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 
 export default function StaffProfileCard() {
+  const [currentGrid, setCurrentGrid] = useState(0);
+
+  const handleToggleGrid = (index: number) => {
+    setCurrentGrid(index);
+  };
+
   return (
-    <div className='flex flex-col items-center'>
+    <div className='flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
         <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
         <CircleButton icon={<SlOptions className='h-4 w-4' />} />
       </div>
       <BigAvatar src='/images/teacher_1.png' />
       <div className='h-10' />
-      <div className='text-xl font-extrabold'>Staff Name</div>
+      <div className='mb-1 text-xl font-bold'>Staff Name</div>
       <OnlineStatus status='online' />
       <div className='h-8' />
       <GridTabBar
-        selected={0}
+        selected={currentGrid}
+        onSelect={handleToggleGrid}
         items={[
           {
-            icon: <RiDashboardFill className='h-5 w-5' />,
+            icon: <BiListCheck className='h-7 w-7' />,
             label: 'Dashboard',
           },
           {
-            icon: <RiDashboardFill className='h-5 w-5' />,
-            label: 'Class List',
+            icon: <RiUserFill className='h-5 w-5' />,
+            label: 'Profile',
           },
           {
-            icon: <RiDashboardFill className='h-5 w-5' />,
-            label: 'Time Table',
+            icon: <HiUsers className='h-5 w-5' />,
+            label: 'Manage Class',
           },
           {
-            icon: <RiDashboardFill className='h-5 w-5' />,
-            label: 'Activity',
+            icon: <AiFillCloud className='h-5 w-5' />,
+            label: 'Documents',
           },
         ]}
       />
-      <div className='h-48' />
+      <div className='h-20' />
       <div className='text-[#ADB8CC]'>Contact School</div>
       <div className='h-2' />
       <div className='flex space-x-3 rounded-full border-2 border-[#EDEFF2] p-3'>

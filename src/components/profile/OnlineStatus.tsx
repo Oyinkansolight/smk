@@ -8,9 +8,9 @@ export default function OnlineStatus({
   return (
     <div
       className={clsxm(
-        'rounded-full py-1 px-8 capitalize text-white',
+        'max-h-[24px] rounded-full py-1 px-8 capitalize text-white',
         status === 'online'
-          ? 'bg-green-500'
+          ? 'bg-[#4AAF05]'
           : status === 'away'
           ? 'bg-orange-500'
           : 'bg-gray-400'
