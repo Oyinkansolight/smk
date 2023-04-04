@@ -15,7 +15,7 @@ import StudentTaskListView from '@/components/views/student.tsx/StudentTaskListV
 import StudentTimeTableView from '@/components/views/student.tsx/StudentTimeTableView';
 
 const Page = () => {
-  const [tabIdx, setTabIdx] = useState(4);
+  const [tabIdx, setTabIdx] = useState(0);
   return (
     <div className='mt-4 flex gap-6'>
       <StudentProfile />
