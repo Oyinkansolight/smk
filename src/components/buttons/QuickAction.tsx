@@ -7,15 +7,21 @@ import Icon from '~/svg/quick_action.svg';
 interface QuickActionButtonProps {
   onClick?: () => void;
   title: string;
+  className?: string;
 }
 
-const QuickActionButton = ({ onClick, title }: QuickActionButtonProps) => {
+const QuickActionButton = ({
+  onClick,
+  title,
+  className,
+}: QuickActionButtonProps) => {
   return (
     <button
       onClick={onClick}
       className={clsxm(
         'flex flex-col items-center justify-center',
-        'h-[103px] w-[142px] rounded-[9px] border-[0.5px] shadow-sm'
+        'h-[103px] w-[142px] rounded-[9px] border-[0.5px] shadow-sm',
+        className
       )}
     >
       <div className='flex flex-col items-center gap-[13.5px]'>

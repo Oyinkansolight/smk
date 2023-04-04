@@ -10,7 +10,7 @@ export default function SearchInput(
 ) {
   return (
     <div className={clsxm('relative', props.className)}>
-      <div className='pointer-events-none absolute inset-y-0 left-0 top-4 flex items-center pl-3'>
+      <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
         <BiSearchAlt2 className='h-5 w-5 text-[#C3CAD9]' />
       </div>
       <input
