@@ -28,7 +28,7 @@ export default function StudentProfile() {
       <div className='text-xl font-extrabold'>Anthony Mba</div>
       <div className='py-4 text-dodger-500'>Primary 1a</div>
       <OnlineStatus status='online' />
-      <div className='grid grid-cols-2 gap-4 whitespace-nowrap py-4'>
+      <div className='grid w-full max-w-[216px] grid-cols-2 gap-4 overflow-hidden whitespace-nowrap py-4'>
         {[
           { title: 'Primary', subtitle: 'Grade' },
           { title: '1A', subtitle: 'Class' },
@@ -77,7 +77,7 @@ export default function StudentProfile() {
 }
 
 const InfoTab = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <div className='flex flex-col rounded-md bg-[#F8FDFF] p-2 shadow-sm'>
+  <div className='flex w-full flex-col rounded-md bg-[#F8FDFF] p-2 shadow-sm'>
     <div className=' text-xs font-bold'>{title}</div>
     <div className='text-[7.2px] font-light'>{subtitle}</div>
   </div>

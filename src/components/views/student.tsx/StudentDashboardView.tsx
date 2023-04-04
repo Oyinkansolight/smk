@@ -75,7 +75,7 @@ const classesAfterBreak: ClassScheduleViewProps[] = [
   },
 ];
 
-const quickActions = ['Add Item', 'Mange Schedule'];
+const quickActions = ['Attend Class', 'Assessments'];
 
 export default function StudentDashboardView() {
   return (

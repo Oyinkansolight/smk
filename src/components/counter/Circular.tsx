@@ -39,8 +39,8 @@ const CircularCounter = ({
       >
         <div
           className={clsxm(
-            'font-semibold',
-            size === 'sm' ? 'text-[15px]' : 'text-[30px]'
+            'font-bold',
+            size === 'sm' ? 'mt-1 text-[23px]' : 'text-[30px]'
           )}
         >
           {total}%
