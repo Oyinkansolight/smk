@@ -9,12 +9,13 @@ export default function StudentTaskListView({
 }) {
   return (
     <div className=''>
-      <div className='border- flex items-center justify-between'>
-        <div className='text-xl font-bold text-[#6B7A99]'>Assignment List</div>
+      <div className='flex items-center justify-between border-b-[2px] py-3'>
+        <div className='text-xl font-bold text-[#6B7A99]'>Exam Report List</div>
         <div className='flex items-center font-bold'>
           <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
         </div>
       </div>
+      <div className='h-8' />
       <div className='relative overflow-x-auto'>
         <table className='w-full text-left text-sm text-gray-500 '>
           <thead className=' text-xs uppercase text-gray-700 '>

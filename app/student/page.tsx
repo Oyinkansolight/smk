@@ -1,4 +1,5 @@
 'use client';
+import { duration } from 'moment';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { IoMdTrendingUp } from 'react-icons/io';
@@ -8,6 +9,7 @@ import StudentProfile from '@/components/cards/StudentProfile';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import ReportCardView from '@/components/views/student.tsx/ReportCardView';
+import StudentActivityHistory from '@/components/views/student.tsx/StudentActivityHistory';
 import StudentDashboardView from '@/components/views/student.tsx/StudentDashboardView';
 import StudentTaskListView from '@/components/views/student.tsx/StudentTaskListView';
 import StudentTimeTableView from '@/components/views/student.tsx/StudentTimeTableView';
@@ -142,6 +144,8 @@ const Page = () => {
           />
         ) : tabIdx === 2 ? (
           <StudentTimeTableView />
+        ) : tabIdx === 3 ? (
+          <div></div>
         ) : tabIdx === 4 ? (
           <ReportCardView
             report={[
@@ -149,6 +153,35 @@ const Page = () => {
               { name: 'Mathematics', score: 88, date: new Date() },
               { name: 'Mathematics', score: 45, date: new Date() },
               { name: 'Mathematics', score: 34, date: new Date() },
+            ]}
+          />
+        ) : tabIdx === 5 ? (
+          <StudentActivityHistory
+            activities={[
+              {
+                activity: 'Class',
+                date: new Date('2022-09-27 18:00:00.000'),
+                duration: duration(3, 'h'),
+                status: 'Completed',
+              },
+              {
+                activity: 'Class',
+                date: new Date('2022-09-27 18:00:00.000'),
+                duration: duration(3, 'h'),
+                status: 'Completed',
+              },
+              {
+                activity: 'Class',
+                date: new Date('2022-09-27 18:00:00.000'),
+                duration: duration(3, 'h'),
+                status: 'Completed',
+              },
+              {
+                activity: 'Class',
+                date: new Date('2022-09-27 18:00:00.000'),
+                duration: duration(3, 'h'),
+                status: 'Completed',
+              },
             ]}
           />
         ) : (
