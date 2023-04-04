@@ -54,6 +54,14 @@ const classes: ClassScheduleViewProps[] = [
     teacherName: 'Super Teacher',
     progress: 10,
   },
+  {
+    classState: 1,
+    end: new Date(),
+    start: new Date(),
+    name: 'English Class',
+    teacherName: 'Super Teacher',
+    progress: 10,
+  },
 ];
 
 const classesAfterBreak: ClassScheduleViewProps[] = [

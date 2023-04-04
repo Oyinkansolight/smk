@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BsFillCloudyFill, BsFillSendFill } from 'react-icons/bs';
 import { FaUser, FaUserFriends } from 'react-icons/fa';
 import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
@@ -10,8 +11,14 @@ import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 
 export default function StudentProfile() {
+  const [currentGrid, setCurrentGrid] = useState(0);
+
+  const handleToggleGrid = (index: number) => {
+    setCurrentGrid(index);
+  };
+
   return (
-    <div className='flex max-w-[18rem] flex-col items-center'>
+    <div className='flex max-w-[18rem] flex-col items-center pr-3'>
       <div className='flex w-full justify-between'>
         <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
         <CircleButton icon={<SlOptions className='h-4 w-4' />} />
@@ -21,7 +28,7 @@ export default function StudentProfile() {
       <div className='text-xl font-extrabold'>Anthony Mba</div>
       <div className='py-4 text-dodger-500'>Primary 1a</div>
       <OnlineStatus status='online' />
-      <div className='grid grid-cols-2 gap-4 py-4'>
+      <div className='grid grid-cols-2 gap-4 whitespace-nowrap py-4'>
         {[
           { title: 'Primary', subtitle: 'Grade' },
           { title: '1A', subtitle: 'Class' },
@@ -32,7 +39,9 @@ export default function StudentProfile() {
         ))}
       </div>
       <GridTabBar
-        selected={0}
+        variant='secondary'
+        selected={currentGrid}
+        onSelect={handleToggleGrid}
         items={[
           {
             icon: <RiDashboardFill className='h-5 w-5' />,
@@ -69,7 +78,7 @@ export default function StudentProfile() {
 
 const InfoTab = ({ title, subtitle }: { title: string; subtitle: string }) => (
   <div className='flex flex-col rounded-md bg-[#F8FDFF] p-2 shadow-sm'>
-    <div className=' font-bold'>{title}</div>
-    <div className='text-xs font-light'>{subtitle}</div>
+    <div className=' text-xs font-bold'>{title}</div>
+    <div className='text-[7.2px] font-light'>{subtitle}</div>
   </div>
 );
