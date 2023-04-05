@@ -8,6 +8,21 @@ const nextConfig = {
   swcMinify: true,
   experimental: { appDir: true },
 
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/auth/user',
+        permanent: true,
+      },
+      {
+        source: '/login',
+        destination: '/auth/user',
+        permanent: true,
+      },
+    ];
+  },
+
   // Uncoment to add domain whitelist
   // images: {
   //   domains: [
