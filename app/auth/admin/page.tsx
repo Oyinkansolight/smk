@@ -2,12 +2,28 @@
 
 import Image from 'next/image';
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 
+import { SignInParams, useSignIn } from '@/server/auth';
+
 export default function AdminAuth() {
+  const { register, handleSubmit } = useForm<SignInParams, unknown>({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+  const signIn = useSignIn();
+  const onSubmit = async (data: SignInParams) => {
+    try {
+      await signIn.mutateAsync(data);
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
   return (
     <Layout>
       <main>
@@ -42,20 +58,27 @@ export default function AdminAuth() {
                     alt=''
                   />
 
-                  <form className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'>
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'
+                  >
                     <BaseInput
                       placeholder='Enter username here'
                       label='Username'
                       name='username'
+                      register={register}
                     />
 
                     <BaseInput
                       placeholder='Enter password here'
                       label='Password'
                       name='password'
+                      register={register}
                     />
 
-                    <Button className='h-[54px] justify-center'>Sign In</Button>
+                    <Button type='submit' className='h-[54px] justify-center'>
+                      Sign In
+                    </Button>
 
                     <div className='-m-2 mb-4 flex flex-wrap justify-between'>
                       <div className='w-auto p-2'>
