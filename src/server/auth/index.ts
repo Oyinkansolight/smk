@@ -9,6 +9,8 @@ export interface SignUpParams {
   fullName: string;
 }
 
+export type SignInParams = Omit<SignUpParams, 'fullName'>;
+
 export function useSignUp() {
   const mutation = useMutation({
     mutationKey: 'sign_up',
@@ -20,8 +22,7 @@ export function useSignUp() {
 export function useSignIn() {
   const mutation = useMutation({
     mutationKey: 'sign_in',
-    mutationFn: (params: Omit<SignUpParams, 'fullName'>) =>
-      request.post('/signin', params),
+    mutationFn: (params: SignInParams) => request.post('/signin', params),
   });
   return mutation;
 }
