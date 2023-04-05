@@ -1,16 +1,15 @@
+'use client';
+
 import Image from 'next/image';
 import * as React from 'react';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
-import Seo from '@/components/Seo';
 
 export default function AdminAuth() {
   return (
     <Layout>
-      <Seo templateTitle='Admin Auth' />
-
       <main>
         <section className='bg-white'>
           <section className='relative overflow-hidden bg-white'>

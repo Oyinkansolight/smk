@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import * as React from 'react';
 
@@ -6,13 +8,10 @@ import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
-import Seo from '@/components/Seo';
 
 export default function StudentAuth() {
   return (
     <Layout>
-      <Seo templateTitle='Student Auth' />
-
       <main>
         <section className='authBackground relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
           <Image
