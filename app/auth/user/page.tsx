@@ -12,6 +12,7 @@ import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
 
 import { SignInParams, useSignIn } from '@/server/auth';
+import ROUTES from '@/constant/routes';
 
 export default function StudentAuth() {
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
@@ -94,7 +95,7 @@ export default function StudentAuth() {
 
                   <div className='flex flex-wrap gap-1 whitespace-nowrap'>
                     <div>Don’t have an account?</div>
-                    <PrimaryLink variant='secondary' href='/auth/student'>
+                    <PrimaryLink variant='secondary' href={ROUTES.USER_AUTH}>
                       Sign Up
                     </PrimaryLink>
                   </div>
