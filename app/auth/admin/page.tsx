@@ -73,6 +73,7 @@ export default function AdminAuth() {
                       placeholder='Enter password here'
                       label='Password'
                       name='password'
+                      type='password'
                       register={register}
                     />
 

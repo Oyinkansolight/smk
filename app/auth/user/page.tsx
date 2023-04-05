@@ -11,8 +11,8 @@ import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
 
-import { SignInParams, useSignIn } from '@/server/auth';
 import ROUTES from '@/constant/routes';
+import { SignInParams, useSignIn } from '@/server/auth';
 
 export default function StudentAuth() {
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
@@ -60,6 +60,7 @@ export default function StudentAuth() {
                     placeholder='Enter password here'
                     label='Password'
                     name='password'
+                    type='password'
                     register={register}
                   />
 
