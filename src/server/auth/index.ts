@@ -4,8 +4,9 @@ import { request } from '@/server';
 
 export interface SignUpParams {
   email: string;
+  phoneNumber?: string;
   password: string;
-  username: string;
+  username?: string;
   fullName: string;
 }
 
@@ -22,7 +23,8 @@ export function useSignUp() {
 export function useSignIn() {
   const mutation = useMutation({
     mutationKey: 'sign_in',
-    mutationFn: (params: SignInParams) => request.post('/signin', params),
+    mutationFn: (params: SignInParams) =>
+      request.post('/auth/reset-password', params),
   });
   return mutation;
 }
