@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -19,10 +19,7 @@ import { BaseInput } from '@/components/input';
 import NextImage from '@/components/NextImage';
 import { VerticalStepper } from '@/components/stepper';
 
-import {
-  CreateInstitutionParams,
-  useCreateInstitution,
-} from '@/server/institution';
+import { useCreateInstitution } from '@/server/institution';
 import {
   useGetLocalGovernments,
   useGetPermissions,
@@ -57,12 +54,9 @@ export default function Page() {
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
-  const { register, getValues } = useForm();
+  const { register, getValues, control } = useForm();
 
   const create = useCreateInstitution();
-  const [onBoardObject, setOnBoardObject] = useState<CreateInstitutionParams>(
-    {}
-  );
 
   const StepperLayout = ({ children }: { children: React.ReactNode }) => (
     <div className='flex w-full max-w-[656px] flex-col gap-y-8'>
@@ -88,7 +82,6 @@ export default function Page() {
                 await create.mutateAsync({
                   ...getValues(),
                   permissions: Array.from(permissions.values()).join(','),
-                  ...onBoardObject,
                 });
               } catch (error) {
                 logger(error);
@@ -183,13 +176,7 @@ export default function Page() {
     );
   };
 
-  const StepThree = ({
-    ob,
-    setOb,
-  }: {
-    ob: CreateInstitutionParams;
-    setOb: (ob: CreateInstitutionParams) => void;
-  }) => {
+  const StepThree = () => {
     const locals = useGetLocalGovernments();
     const towns = useGetTowns();
     return (
@@ -206,27 +193,19 @@ export default function Page() {
               register={register}
             />
 
-            <Select
-              options={towns.data ?? []}
-              value={towns.data?.find((v) => v.value === ob.townId)}
-              onChange={(v) => {
-                const n = {
-                  ...ob,
-                  townId: v?.value,
-                };
-                setOb(n);
+            <Controller
+              control={control}
+              name='townId'
+              render={({ field }) => {
+                return <Select options={towns.data ?? []} {...field} />;
               }}
             />
 
-            <Select
-              options={locals.data ?? []}
-              value={locals.data?.find((v) => v.value === ob.localGovernmentId)}
-              onChange={(v) => {
-                const n = {
-                  ...ob,
-                  localGovernmentId: v?.value,
-                };
-                setOb(n);
+            <Controller
+              control={control}
+              name='localGovernmentId'
+              render={({ field }) => {
+                return <Select options={locals.data ?? []} {...field} />;
               }}
             />
           </div>
@@ -366,7 +345,7 @@ export default function Page() {
   const steps = [
     <StepOne key={0} />,
     <StepTwo key={1} />,
-    <StepThree ob={onBoardObject} setOb={setOnBoardObject} key={2} />,
+    <StepThree key={2} />,
     <StepFour key={3} />,
     <StepFive key={4} />,
     <StepSix key={5} />,
