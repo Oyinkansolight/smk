@@ -5,3 +5,8 @@ export interface DashboardOverview {
   totalSecondaryInstitutions?: number;
   totalTertiaryInstitutions?: number;
 }
+
+export interface Label {
+  id: string;
+  value: string;
+}
