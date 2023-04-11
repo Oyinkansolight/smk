@@ -14,6 +14,8 @@ import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import { AdSlider } from '@/components/sliders';
 
+import { useGetDashboardOverview } from '@/server/dashboard';
+
 import StudentBadge from '~/svg/student_badge.svg';
 
 // const timeLineData = [
@@ -135,6 +137,7 @@ const percentageData = [
 // ];
 
 const Page = () => {
+  const data = useGetDashboardOverview();
   return (
     <div className='flex flex-col gap-[27px] px-4 pt-6'>
       <div className='flex justify-end'>
@@ -147,25 +150,25 @@ const Page = () => {
       </div>
 
       <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
-        <SchoolTotalCard count={17119} />
+        <SchoolTotalCard count={data.data?.totalInstitutions ?? 0} />
         <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
           <IndividualTotal
-            count={4500}
+            count={data.data?.totalEccdeInstitutions ?? 0}
             name='Nursery School'
             variant='secondary'
           />
           <IndividualTotal
-            count={2200}
+            count={data.data?.totalPrimaryInstitutions ?? 0}
             name='Primary School'
             variant='secondary'
           />
           <IndividualTotal
-            count={12156}
+            count={data.data?.totalSecondaryInstitutions ?? 0}
             name='Secondary School'
             variant='secondary'
           />
           <IndividualTotal
-            count={243}
+            count={data.data?.totalTertiaryInstitutions ?? 0}
             name='Tertiary School'
             variant='secondary'
           />

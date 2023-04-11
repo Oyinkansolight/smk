@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { AiFillCheckCircle } from 'react-icons/ai';
 import Select from 'react-select';
+import { toast } from 'react-toastify';
 
 import '/src/styles/globals.css';
 import 'slick-carousel/slick/slick.css';
@@ -9,11 +12,19 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-circular-progressbar/dist/styles.css';
 
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import NextImage from '@/components/NextImage';
 import { VerticalStepper } from '@/components/stepper';
+
+import { useCreateInstitution } from '@/server/institution';
+import {
+  useGetLocalGovernments,
+  useGetPermissions,
+  useGetTowns,
+} from '@/server/onboard';
 
 const stepData = [
   {
@@ -38,9 +49,14 @@ const stepData = [
 
 export default function Page() {
   const [step, setStep] = useState(0);
+  const d = useGetPermissions();
+  const [permissions, setPermissions] = useState(new Set<number>());
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
+  const { register, getValues, control } = useForm();
+
+  const create = useCreateInstitution();
 
   const StepperLayout = ({ children }: { children: React.ReactNode }) => (
     <div className='flex w-full max-w-[656px] flex-col gap-y-8'>
@@ -58,11 +74,27 @@ export default function Page() {
         </Button>
 
         <Button
-          onClick={() => handleStepChange(step + 1)}
+          onClick={async () => {
+            if (step < steps.length - 1) {
+              handleStepChange(step + 1);
+            } else {
+              try {
+                await create.mutateAsync({
+                  ...getValues(),
+                  permissions: Array.from(permissions.values()).join(','),
+                });
+              } catch (error) {
+                logger(error);
+                toast.error('Error');
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                toast.error(error as any);
+              }
+            }
+          }}
           variant='secondary'
           className='!h-10 w-[120px] justify-center'
         >
-          Next
+          {step === steps.length - 1 ? 'Complete' : 'Next'}
         </Button>
       </div>
     </div>
@@ -114,15 +146,17 @@ export default function Page() {
             <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
               <BaseInput
                 label='First Name'
-                name='first_name'
+                name='firstName'
                 placeholder='First Name'
                 className='md:min-w-[312px] md:max-w-[312px]'
+                register={register}
               />
               <BaseInput
                 label='Last Name'
-                name='last_name'
+                name='lastName'
                 placeholder='Last Name'
                 className='md:min-w-[312px] md:max-w-[312px]'
+                register={register}
               />
             </div>
 
@@ -134,6 +168,7 @@ export default function Page() {
               label='Official Email'
               name='email'
               placeholder='Details here'
+              register={register}
             />
           </div>
         </div>
@@ -142,11 +177,8 @@ export default function Page() {
   };
 
   const StepThree = () => {
-    const options = [
-      { value: 'blue', label: 'Etsako West' },
-      { value: 'ocean', label: 'Etsako East' },
-    ];
-
+    const locals = useGetLocalGovernments();
+    const towns = useGetTowns();
     return (
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
@@ -158,11 +190,24 @@ export default function Page() {
               label='Enter Address'
               name='address'
               placeholder='Details here'
+              register={register}
             />
 
-            <Select options={options} />
+            <Controller
+              control={control}
+              name='townId'
+              render={({ field }) => {
+                return <Select options={towns.data ?? []} {...field} />;
+              }}
+            />
 
-            <Select options={options} />
+            <Controller
+              control={control}
+              name='localGovernmentId'
+              render={({ field }) => {
+                return <Select options={locals.data ?? []} {...field} />;
+              }}
+            />
           </div>
         </div>
       </StepperLayout>
@@ -181,8 +226,36 @@ export default function Page() {
               disable
               label='Admin Role Staff'
               name='role'
+              register={register}
               placeholder='Chief Education Officers (CEO’s)'
             />
+          </div>
+          <div className='py-5 font-bold'>Select Permissions*</div>
+          <div className='grid w-full grid-cols-1 gap-y-2 md:grid-cols-2'>
+            {d.data?.map((v, i) => (
+              <div
+                onClick={() => {
+                  if (permissions.has(i)) {
+                    const s = new Set(permissions);
+                    s.delete(i);
+                    setPermissions(s);
+                  } else {
+                    const s = new Set(permissions);
+                    s.add(i);
+                    setPermissions(s);
+                  }
+                }}
+                key={i}
+                className='flex cursor-pointer items-center gap-10'
+              >
+                <AiFillCheckCircle
+                  className={clsxm(
+                    permissions.has(i) ? 'text-primary-500' : 'text-[#abd4ff]'
+                  )}
+                />
+                <div>{v.value}</div>
+              </div>
+            ))}
           </div>
         </div>
       </StepperLayout>
@@ -200,6 +273,7 @@ export default function Page() {
             <BaseInput
               label='Login details'
               name='user_email'
+              register={register}
               placeholder='name@mail.com'
             />
 
@@ -207,12 +281,14 @@ export default function Page() {
               <BaseInput
                 label='Enter Password'
                 name='password'
+                register={register}
                 placeholder='Password'
                 className='md:min-w-[312px] md:max-w-[312px]'
               />
               <BaseInput
                 label='Confirm Password'
                 name='confirm_password'
+                register={register}
                 placeholder='Confirm Password'
                 className='md:min-w-[312px] md:max-w-[312px]'
               />
@@ -282,7 +358,9 @@ export default function Page() {
           <VerticalStepper currentStep={step} steps={stepData} />
         </div>
 
-        <div className='flex w-full flex-col'>{steps[step]}</div>
+        <form>
+          <div className='flex w-full flex-col'>{steps[step]}</div>
+        </form>
       </div>
     </div>
   );
