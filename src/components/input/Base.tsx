@@ -30,7 +30,7 @@ type BaseInputProps<
 > = {
   className?: string;
   helper?: HelperProps | any;
-  label: string;
+  label: string | JSX.Element;
   name: string;
   register?: UseFormRegister<any>;
   validation?: RegisterOptions<TFieldValues, TFieldName>;
