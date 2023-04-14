@@ -1,6 +1,6 @@
 'use client';
 
-import AddSchool from '@/components/Modal/addStudent';
+import AddStudent from '@/components/modal/AddSingleSchool';
 import Button from '@/components/buttons/Button';
 import Pill from '@/components/buttons/Pill';
 import {
@@ -155,7 +155,7 @@ const Page = () => {
         </Button>
       </div>
       {isOpen && (
-        <AddSchool
+        <AddStudent
           onClickHandler={() => {
             setIsOpen(isOpen);
           }}

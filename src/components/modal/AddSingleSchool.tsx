@@ -7,7 +7,7 @@ interface propType {
   onClickHandler: () => void;
 }
 
-function addStudent({ onClickHandler }: propType) {
+function AddSingleSchool({ onClickHandler }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
       <div className='flex w-[700px] flex-col space-y-4 bg-white p-4'>
@@ -48,4 +48,4 @@ function addStudent({ onClickHandler }: propType) {
   );
 }
 
-export default addStudent;
+export default AddSingleSchool;
