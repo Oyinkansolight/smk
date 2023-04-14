@@ -1,4 +1,6 @@
 import TaskAccordion from '@/components/accordions/TaskAccordion';
+import Button from '@/components/buttons/Button';
+import LessonsTable from '@/components/tables/LessonsTable';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function TaskListView() {
@@ -9,8 +11,19 @@ export default function TaskListView() {
           <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
         </div>
         <div className='w-8' />
-        <div className='cursor-pointer rounded-md border border-blue-500 bg-white py-2 px-8 text-center font-bold text-blue-500'>
-          Add
+        <div className='flex gap-5'>
+          <Button
+            variant='outline'
+            className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+          >
+            Download Report
+          </Button>
+          <Button
+            variant='outline'
+            className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+          >
+            Manage
+          </Button>
         </div>
       </div>
       {Array(5)
@@ -18,17 +31,21 @@ export default function TaskListView() {
         .map((v, i) => {
           return (
             <TaskAccordion
+              length={4}
               taskName={`Class ${i + 1}`}
-              lessons={[
-                { progress: 2, topic: 'English' },
-                { progress: 5, topic: 'Mathematics' },
-                { progress: 7, topic: 'Computer Studies' },
-                { progress: 2, topic: 'Engineering' },
-              ]}
               nextClass={new Date()}
               endDate={new Date()}
               key={i}
-            />
+            >
+              <LessonsTable
+                lessons={[
+                  { progress: 2, topic: 'English' },
+                  { progress: 5, topic: 'Mathematics' },
+                  { progress: 7, topic: 'Computer Studies' },
+                  { progress: 2, topic: 'Engineering' },
+                ]}
+              />
+            </TaskAccordion>
           );
         })}
     </div>
