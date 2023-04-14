@@ -7,18 +7,20 @@ import { TbClockHour4 } from 'react-icons/tb';
 
 import clsxm from '@/lib/clsxm';
 
-import LessonsTable from '@/components/tables/LessonsTable';
-
 export default function TaskAccordion({
   taskName,
-  lessons,
+  children,
   nextClass,
   endDate,
+  length = 300,
+  showIcons = true,
 }: {
   taskName: string;
-  lessons: { topic: string; progress: number }[];
-  nextClass: Date;
-  endDate: Date;
+  children: JSX.Element;
+  nextClass?: Date;
+  endDate?: Date;
+  length?: number;
+  showIcons?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -36,36 +38,47 @@ export default function TaskAccordion({
         <div className='w-4' />
         <div className='text-[#6B7A99]'>{taskName}</div>
         <div className='w-8' />
-        <div className='text-[#ADB8CC]'>{`${lessons.length} Lesson${
-          lessons.length > 1 ? 's' : ''
-        }`}</div>
-        <div className='w-3' />
-        <BsListTask className='h-5 w-5 text-[#C3CAD9]' />
-        <div className='w-3' />
-        <BiPaperclip className='h-5 w-5 text-[#C3CAD9]' />
+        <div className='text-[#ADB8CC]'>Lessons</div>
+        {showIcons && (
+          <>
+            <div className='w-3' />
+            <BsListTask className='h-5 w-5 text-[#C3CAD9]' />
+            <div className='w-3' />
+            <BiPaperclip className='h-5 w-5 text-[#C3CAD9]' />
+          </>
+        )}
         <div className='flex-1' />
-        <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
-        <div className='w-2' />
-        <div className='text-[#6B7A99]'>
-          Next Class: {moment(nextClass).format('MMM D, h:ma')}
-        </div>
-        <div className='w-10' />
-        <TbClockHour4 className='h-5 w-5 text-[#C3CAD9]' />
-        <div className='w-2' />
-        <div className='text-[#6B7A99]'>
-          End Date: {moment(endDate).format('MMM D, h:ma')}
-        </div>
+        {nextClass && (
+          <>
+            <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
+            <div className='w-2' />
+            <div className='text-[#6B7A99]'>
+              Next Class: {moment(nextClass).format('MMM D, h:ma')}
+            </div>
+          </>
+        )}
+
+        {endDate && (
+          <>
+            <div className='w-10' />
+            <TbClockHour4 className='h-5 w-5 text-[#C3CAD9]' />
+            <div className='w-2' />
+            <div className='text-[#6B7A99]'>
+              End Date: {moment(endDate).format('MMM D, h:ma')}
+            </div>
+          </>
+        )}
       </div>
       <div
         style={{
-          height: expanded ? `${40 + 72 + 52.4 * lessons.length}px` : '0px',
+          height: expanded ? `${40 + 72 + 52.4 * length}px` : '0px',
         }}
         className={clsxm(
           'overflow-hidden transition-all duration-300',
           expanded ? '' : ''
         )}
       >
-        <LessonsTable lessons={lessons} />
+        {children}
         <div className='flex cursor-pointer justify-start py-5'>
           <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-[#3361FF]'>
             Add To Lesson

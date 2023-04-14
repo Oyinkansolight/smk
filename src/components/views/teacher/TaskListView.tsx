@@ -1,6 +1,7 @@
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 import TaskAccordion from '@/components/accordions/TaskAccordion';
+import LessonsTable from '@/components/tables/LessonsTable';
 
 export default function TaskListView() {
   return (
@@ -19,17 +20,21 @@ export default function TaskListView() {
         .map((v, i) => {
           return (
             <TaskAccordion
+              length={4}
               taskName={`Class ${i + 1}`}
-              lessons={[
-                { progress: 2, topic: 'English' },
-                { progress: 5, topic: 'Mathematics' },
-                { progress: 7, topic: 'Computer Studies' },
-                { progress: 2, topic: 'Engineering' },
-              ]}
               nextClass={new Date()}
               endDate={new Date()}
               key={i}
-            />
+            >
+              <LessonsTable
+                lessons={[
+                  { progress: 2, topic: 'English' },
+                  { progress: 5, topic: 'Mathematics' },
+                  { progress: 7, topic: 'Computer Studies' },
+                  { progress: 2, topic: 'Engineering' },
+                ]}
+              />
+            </TaskAccordion>
           );
         })}
     </div>
