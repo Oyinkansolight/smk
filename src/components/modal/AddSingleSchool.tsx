@@ -4,7 +4,7 @@ import Close from '~/svg/close.svg';
 import Star from '~/svg/stars.svg';
 
 interface propType {
-  onClickHandler: () => void;
+  onClickHandler?: () => void;
 }
 
 function AddSingleSchool({ onClickHandler }: propType) {
