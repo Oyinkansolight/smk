@@ -1,6 +1,7 @@
 'use client';
 
 import AdminHeader from '@/components/layout/AdminHeader';
+import AdminRightSidebar from '@/components/layout/AdminRightSidebar';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import { usePathname } from 'next/navigation';
 import 'react-circular-progressbar/dist/styles.css';
