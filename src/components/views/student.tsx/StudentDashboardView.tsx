@@ -1,6 +1,3 @@
-import moment from 'moment';
-import { RiCalendar2Fill } from 'react-icons/ri';
-
 import QuickActionButton from '@/components/buttons/QuickAction';
 import { BasicCard } from '@/components/cards';
 import BreakTimeView from '@/components/views/student.tsx/BreakTimeView';
@@ -8,6 +5,8 @@ import ClassScheduleView, {
   ClassScheduleViewProps,
 } from '@/components/views/student.tsx/ClassScheduleView';
 import StudentClockInTime from '@/components/views/student.tsx/StudentClockInTime';
+import moment from 'moment';
+import { RiCalendar2Fill } from 'react-icons/ri';
 
 // const timeLineData = [
 //   {

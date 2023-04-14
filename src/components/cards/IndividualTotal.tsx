@@ -1,11 +1,9 @@
+import BasicCard from '@/components/cards/Basic';
+import PrimaryLink from '@/components/links/PrimaryLink';
+import clsxm from '@/lib/clsxm';
 import commaNumber from 'comma-number';
 import React from 'react';
 import { GoChevronRight } from 'react-icons/go';
-
-import clsxm from '@/lib/clsxm';
-
-import BasicCard from '@/components/cards/Basic';
-import PrimaryLink from '@/components/links/PrimaryLink';
 
 interface IndividualTotalProps {
   count: number;

@@ -1,30 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { AiFillCheckCircle } from 'react-icons/ai';
-import Select from 'react-select';
-import { toast } from 'react-toastify';
-
-import '/src/styles/globals.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-circular-progressbar/dist/styles.css';
-
-import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
-
+import NextImage from '@/components/NextImage';
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
-import NextImage from '@/components/NextImage';
 import { VerticalStepper } from '@/components/stepper';
-
+import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import { useCreateInstitution } from '@/server/institution';
 import {
   useGetLocalGovernments,
   useGetPermissions,
   useGetTowns,
 } from '@/server/onboard';
+import { useState } from 'react';
+import 'react-circular-progressbar/dist/styles.css';
+import { Controller, useForm } from 'react-hook-form';
+import { AiFillCheckCircle } from 'react-icons/ai';
+import Select from 'react-select';
+import { toast } from 'react-toastify';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+
+import '/src/styles/globals.css';
 
 const stepData = [
   {

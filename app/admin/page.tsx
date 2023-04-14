@@ -1,8 +1,5 @@
 'use client';
 
-import commaNumber from 'comma-number';
-import { GoChevronRight } from 'react-icons/go';
-
 import Pill from '@/components/buttons/Pill';
 import { CalendarStepper, EventCalendar } from '@/components/calendars';
 import { BasicCard, CountCard, ToggleCard } from '@/components/cards';
@@ -10,7 +7,8 @@ import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { InstitutionSlider } from '@/components/sliders';
-
+import commaNumber from 'comma-number';
+import { GoChevronRight } from 'react-icons/go';
 import StudentBadge from '~/svg/student_badge.svg';
 
 const timeLineData = [

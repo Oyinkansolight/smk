@@ -1,12 +1,11 @@
-import Image from 'next/image';
-import * as React from 'react';
-
+import Seo from '@/components/Seo';
 import Button from '@/components/buttons/Button';
 import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
-import Seo from '@/components/Seo';
+import Image from 'next/image';
+import * as React from 'react';
 
 /**
  * SVGR Support

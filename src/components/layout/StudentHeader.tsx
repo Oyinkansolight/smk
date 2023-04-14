@@ -1,9 +1,7 @@
-import * as React from 'react';
-import { GoBell, GoThreeBars } from 'react-icons/go';
-
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
-
+import * as React from 'react';
+import { GoBell, GoThreeBars } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
 import Badge from '~/svg/eca.svg';
 

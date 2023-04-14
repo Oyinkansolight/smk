@@ -1,19 +1,21 @@
 'use client';
 
-import '/src/styles/globals.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-circular-progressbar/dist/styles.css';
-
 import AdminHeader from '@/components/layout/AdminHeader';
-import AdminRightSidebar from '@/components/layout/AdminRightSidebar';
 import AdminSidebar from '@/components/layout/AdminSidebar';
+import { usePathname } from 'next/navigation';
+import 'react-circular-progressbar/dist/styles.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+
+import '/src/styles/globals.css';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const routeDetails = usePathname();
+
   return (
     <html>
       <head />
@@ -26,8 +28,7 @@ export default function RootLayout({
           </main>
 
           <AdminSidebar />
-
-          <AdminRightSidebar />
+          {routeDetails === '/super-admin' && <AdminRightSidebar />}
         </div>
       </div>
     </html>

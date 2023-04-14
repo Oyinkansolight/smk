@@ -1,8 +1,6 @@
-import { useQuery } from 'react-query';
-
 import { request } from '@/server';
-
 import { DashboardOverview } from '@/types';
+import { useQuery } from 'react-query';
 
 export function useGetDashboardOverview() {
   const query = useQuery({

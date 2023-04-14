@@ -1,11 +1,10 @@
-import React from 'react';
-
 import {
   AdminSidebarInfoCardOne,
   AdminSidebarInfoCardThree,
   AdminSidebarInfoCardTwo,
   SidebarInfoCardOne,
 } from '@/components/cards';
+import React from 'react';
 
 const AdminRightSidebar = () => {
   return (

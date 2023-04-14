@@ -1,7 +1,6 @@
+import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-
-import clsxm from '@/lib/clsxm';
 
 export default function ReportCardView({
   report,

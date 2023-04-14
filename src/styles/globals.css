@@ -127,3 +127,12 @@
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+
+.notification {
+  background: #ffffff;
+  width: 300px;
+  border: 1.07993px solid #f5f9f7;
+  box-shadow: 0px 8px 18px -6px rgba(24, 39, 75, 0.12),
+    0px 12px 42px -4px rgba(24, 39, 75, 0.12);
+  border-radius: 3px 3px 12px 12px;
+}

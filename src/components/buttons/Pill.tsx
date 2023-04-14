@@ -1,6 +1,5 @@
-import React from 'react';
-
 import clsxm from '@/lib/clsxm';
+import React from 'react';
 
 interface PillProps {
   text: string;

@@ -1,9 +1,7 @@
+import BasicCard from '@/components/cards/Basic';
+import clsxm from '@/lib/clsxm';
 import React, { useState } from 'react';
 import { CiMenuKebab } from 'react-icons/ci';
-
-import clsxm from '@/lib/clsxm';
-
-import BasicCard from '@/components/cards/Basic';
 
 interface ToggleCardProps {
   title: string;

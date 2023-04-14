@@ -1,18 +1,16 @@
 'use client';
 
-import Image from 'next/image';
-import * as React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-
 import Button from '@/components/buttons/Button';
 import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
-
 import ROUTES from '@/constant/routes';
 import { SignInParams, useSignIn } from '@/server/auth';
+import Image from 'next/image';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 export default function StudentAuth() {
   const { register, handleSubmit } = useForm<SignInParams, unknown>({

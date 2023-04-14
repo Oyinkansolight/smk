@@ -1,8 +1,6 @@
-import { Dialog, Transition } from '@headlessui/react';
-import Image from 'next/image';
-import { Fragment, useState } from 'react';
-
 import AddSubjectView from '@/components/views/add-subject';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useState } from 'react';
 
 export default function FilterModal({ children }: { children: JSX.Element }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +20,7 @@ export default function FilterModal({ children }: { children: JSX.Element }) {
       </div>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as='div' className='relative z-10' onClose={closeModal}>
+        <Dialog as='div' className='relative z-[1000]' onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter='ease-out duration-300'
@@ -47,20 +45,6 @@ export default function FilterModal({ children }: { children: JSX.Element }) {
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
-                  <Image
-                    width={150}
-                    height={100}
-                    alt='Wamirii Logo'
-                    src='/images/logo.png'
-                    className='mx-auto'
-                  />
-
-                  <Dialog.Title
-                    as='h3'
-                    className='text-lg font-medium leading-6 text-gray-900'
-                  >
-                    Filter
-                  </Dialog.Title>
                   <AddSubjectView />
                 </Dialog.Panel>
               </Transition.Child>

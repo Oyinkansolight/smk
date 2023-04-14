@@ -1,13 +1,11 @@
 'use client';
-import { useState } from 'react';
-import { AiFillCheckCircle } from 'react-icons/ai';
-
-import clsxm from '@/lib/clsxm';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
-
+import clsxm from '@/lib/clsxm';
 import { Label } from '@/types';
+import { useState } from 'react';
+import { AiFillCheckCircle } from 'react-icons/ai';
 
 export default function AddSubjectView() {
   const [classes, setClasses] = useState(new Set());
@@ -42,213 +40,220 @@ export default function AddSubjectView() {
   const d4: Label[] = [{ id: 'ex', value: 'Example' }];
 
   return (
-    <div className='flex h-screen items-center justify-center bg-gray-400'>
+    <div className='flex h-screen items-center justify-center'>
       <div className='flex max-h-screen w-full max-w-2xl flex-col items-center overflow-auto bg-white p-10'>
         <div className='py-2 text-4xl font-bold'>Add New Subject</div>
-        <div>Kindly enter the details below</div>
+        <div className='mt-4'>Kindly enter the details below</div>
         <div className='h-8' />
-        <div className='w-full'>
-          <div className='w-full max-w-xs'>
+
+        <div className='flex flex-col gap-10 w-full'>
+          <div className='w-full'>
+            <div className='w-full max-w-xs'>
+              <BaseInput
+                label={
+                  <span>
+                    Subject Name<span className='text-[#E5A500]'>*</span>
+                  </span>
+                }
+                name='subject'
+              />
+            </div>
+          </div>
+
+          <div className='w-full'>
             <BaseInput
               label={
                 <span>
-                  Subject Name<span className='text-[#E5A500]'>*</span>
+                  Enter Description<span className='text-[#E5A500]'>*</span>
                 </span>
               }
-              name='subject'
+              name='description'
             />
           </div>
         </div>
-        <div className='h-4' />
-        <div className='w-full'>
-          <BaseInput
-            label={
-              <span>
-                Enter Description<span className='text-[#E5A500]'>*</span>
-              </span>
-            }
-            name='description'
-          />
-        </div>
+
         <div className='h-2' />
-        <div className='w-full text-start font-bold'>
+        <div className='w-full text-start text-xs'>
           <div>Select classes applicable</div>
         </div>
-        <div className='h-4' />
-        <div className='w-full text-start font-bold'>
-          <div>ECCDE School</div>
-        </div>
-        <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4'>
-          <div className='flex cursor-pointer items-center gap-2'>
-            {Array.from(classes.entries()).length === d.length ? (
-              <AiFillCheckCircle
-                className={clsxm('h-5 w-5 text-fun-green-500')}
-              />
-            ) : (
-              <div className='h-5 w-5 rounded-full border-2' />
-            )}
-            <div>Select All</div>
+
+        <div className='flex flex-col gap-5 mt-7 w-full'>
+          <div className='w-full text-start font-bold'>
+            <div>ECCDE School</div>
           </div>
-          {d?.map((v, i) => (
-            <div
-              onClick={() => {
-                if (classes.has(i)) {
-                  const s = new Set(classes);
-                  s.delete(i);
-                  setClasses(s);
-                } else {
-                  const s = new Set(classes);
-                  s.add(i);
-                  setClasses(s);
-                }
-              }}
-              key={i}
-              className='flex cursor-pointer items-center gap-2'
-            >
-              {classes.has(i) ? (
+          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+            <div className='flex cursor-pointer items-center gap-2'>
+              {Array.from(classes.entries()).length === d.length ? (
                 <AiFillCheckCircle
                   className={clsxm('h-5 w-5 text-fun-green-500')}
                 />
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>{v.value}</div>
+              <div>Select All</div>
             </div>
-          ))}
-        </div>
-        <div className='h-4' />
-        <div className='w-full text-start font-bold'>
-          <div>Primary School</div>
-        </div>
-        <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4'>
-          <div className='flex cursor-pointer items-center gap-2'>
-            {Array.from(classes1.entries()).length === d2.length ? (
-              <AiFillCheckCircle
-                className={clsxm('h-5 w-5 text-fun-green-500')}
-              />
-            ) : (
-              <div className='h-5 w-5 rounded-full border-2' />
-            )}
-            <div>Select All</div>
+            {d?.map((v, i) => (
+              <div
+                onClick={() => {
+                  if (classes.has(i)) {
+                    const s = new Set(classes);
+                    s.delete(i);
+                    setClasses(s);
+                  } else {
+                    const s = new Set(classes);
+                    s.add(i);
+                    setClasses(s);
+                  }
+                }}
+                key={i}
+                className='flex cursor-pointer items-center gap-2'
+              >
+                {classes.has(i) ? (
+                  <AiFillCheckCircle
+                    className={clsxm('h-5 w-5 text-fun-green-500')}
+                  />
+                ) : (
+                  <div className='h-5 w-5 rounded-full border-2' />
+                )}
+                <div>{v.value}</div>
+              </div>
+            ))}
           </div>
-          {d2?.map((v, i) => (
-            <div
-              onClick={() => {
-                if (classes1.has(i)) {
-                  const s = new Set(classes1);
-                  s.delete(i);
-                  setClasses1(s);
-                } else {
-                  const s = new Set(classes1);
-                  s.add(i);
-                  setClasses1(s);
-                }
-              }}
-              key={i}
-              className='flex cursor-pointer items-center gap-2'
-            >
-              {classes1.has(i) ? (
+
+          <div className='w-full text-start font-bold'>
+            <div>Primary School</div>
+          </div>
+          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+            <div className='flex cursor-pointer items-center gap-2'>
+              {Array.from(classes1.entries()).length === d2.length ? (
                 <AiFillCheckCircle
                   className={clsxm('h-5 w-5 text-fun-green-500')}
                 />
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>{v.value}</div>
+              <div>Select All</div>
             </div>
-          ))}
-        </div>
-        <div className='h-4' />
-        <div className='w-full text-start font-bold'>
-          <div>Secondary School</div>
-        </div>
-        <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4'>
-          <div className='flex cursor-pointer items-center gap-2'>
-            {Array.from(classes2.entries()).length === d3.length ? (
-              <AiFillCheckCircle
-                className={clsxm('h-5 w-5 text-fun-green-500')}
-              />
-            ) : (
-              <div className='h-5 w-5 rounded-full border-2' />
-            )}
-            <div>Select All</div>
+            {d2?.map((v, i) => (
+              <div
+                onClick={() => {
+                  if (classes1.has(i)) {
+                    const s = new Set(classes1);
+                    s.delete(i);
+                    setClasses1(s);
+                  } else {
+                    const s = new Set(classes1);
+                    s.add(i);
+                    setClasses1(s);
+                  }
+                }}
+                key={i}
+                className='flex cursor-pointer items-center gap-2'
+              >
+                {classes1.has(i) ? (
+                  <AiFillCheckCircle
+                    className={clsxm('h-5 w-5 text-fun-green-500')}
+                  />
+                ) : (
+                  <div className='h-5 w-5 rounded-full border-2' />
+                )}
+                <div>{v.value}</div>
+              </div>
+            ))}
           </div>
-          {d3?.map((v, i) => (
-            <div
-              onClick={() => {
-                if (classes2.has(i)) {
-                  const s = new Set(classes2);
-                  s.delete(i);
-                  setClasses2(s);
-                } else {
-                  const s = new Set(classes2);
-                  s.add(i);
-                  setClasses2(s);
-                }
-              }}
-              key={i}
-              className='flex cursor-pointer items-center gap-2'
-            >
-              {classes2.has(i) ? (
+
+          <div className='w-full text-start font-bold'>
+            <div>Secondary School</div>
+          </div>
+          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+            <div className='flex cursor-pointer items-center gap-2'>
+              {Array.from(classes2.entries()).length === d3.length ? (
                 <AiFillCheckCircle
                   className={clsxm('h-5 w-5 text-fun-green-500')}
                 />
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>{v.value}</div>
+              <div>Select All</div>
             </div>
-          ))}
-        </div>
-        <div className='h-4' />
-        <div className='w-full text-start font-bold'>
-          <div>Tertiary School</div>
-        </div>
-        <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4'>
-          <div className='flex cursor-pointer items-center gap-2'>
-            {Array.from(classes3.entries()).length === d4.length ? (
-              <AiFillCheckCircle
-                className={clsxm('h-5 w-5 text-fun-green-500')}
-              />
-            ) : (
-              <div className='h-5 w-5 rounded-full border-2' />
-            )}
-            <div>Select All</div>
+            {d3?.map((v, i) => (
+              <div
+                onClick={() => {
+                  if (classes2.has(i)) {
+                    const s = new Set(classes2);
+                    s.delete(i);
+                    setClasses2(s);
+                  } else {
+                    const s = new Set(classes2);
+                    s.add(i);
+                    setClasses2(s);
+                  }
+                }}
+                key={i}
+                className='flex cursor-pointer items-center gap-2'
+              >
+                {classes2.has(i) ? (
+                  <AiFillCheckCircle
+                    className={clsxm('h-5 w-5 text-fun-green-500')}
+                  />
+                ) : (
+                  <div className='h-5 w-5 rounded-full border-2' />
+                )}
+                <div>{v.value}</div>
+              </div>
+            ))}
           </div>
-          {d4?.map((v, i) => (
-            <div
-              onClick={() => {
-                if (classes3.has(i)) {
-                  const s = new Set(classes3);
-                  s.delete(i);
-                  setClasses3(s);
-                } else {
-                  const s = new Set(classes3);
-                  s.add(i);
-                  setClasses3(s);
-                }
-              }}
-              key={i}
-              className='flex cursor-pointer items-center gap-2'
-            >
-              {classes3.has(i) ? (
+
+          <div className='w-full text-start font-bold'>
+            <div>Tertiary School</div>
+          </div>
+          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+            <div className='flex cursor-pointer items-center gap-2'>
+              {Array.from(classes3.entries()).length === d4.length ? (
                 <AiFillCheckCircle
                   className={clsxm('h-5 w-5 text-fun-green-500')}
                 />
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>{v.value}</div>
+              <div>Select All</div>
             </div>
-          ))}
+            {d4?.map((v, i) => (
+              <div
+                onClick={() => {
+                  if (classes3.has(i)) {
+                    const s = new Set(classes3);
+                    s.delete(i);
+                    setClasses3(s);
+                  } else {
+                    const s = new Set(classes3);
+                    s.add(i);
+                    setClasses3(s);
+                  }
+                }}
+                key={i}
+                className='flex cursor-pointer items-center gap-2'
+              >
+                {classes3.has(i) ? (
+                  <AiFillCheckCircle
+                    className={clsxm('h-5 w-5 text-fun-green-500')}
+                  />
+                ) : (
+                  <div className='h-5 w-5 rounded-full border-2' />
+                )}
+                <div>{v.value}</div>
+              </div>
+            ))}
+          </div>
         </div>
+
         <div className='h-8' />
         <div className='font-bold text-[#E5A500]'>Note</div>
-        <div>
+        <div className='text-xs mt-2'>
           You would be required to add curriculum and lesson note for this
           subject in the subject settings
         </div>
-        <Button className='px-10'>Add Subject</Button>
+        <Button className='px-20 text-xs mt-8'>Add Subject</Button>
       </div>
     </div>
   );

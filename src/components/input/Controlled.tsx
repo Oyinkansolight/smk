@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import clsxm from '@/lib/clsxm';
 import { motion } from 'framer-motion';
 import React, { FC, useState } from 'react';
 import { RiEyeCloseLine, RiEyeLine, RiInformationFill } from 'react-icons/ri';
-
-import clsxm from '@/lib/clsxm';
 
 export enum HelperType {
   info = 'info',

@@ -1,9 +1,9 @@
 'use-client';
-import moment from 'moment';
-import Image from 'next/image';
 
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
+import moment from 'moment';
+import Image from 'next/image';
 
 const weeks = ['M', 'T', 'W', 'T', 'F'];
 

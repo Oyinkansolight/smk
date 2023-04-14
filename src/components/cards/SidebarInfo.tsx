@@ -1,12 +1,9 @@
-import commaNumber from 'comma-number';
-import React from 'react';
-
-import clsxm from '@/lib/clsxm';
-
 import BasicCard from '@/components/cards/Basic';
 import { LineGraphComponent } from '@/components/charts';
 import PrimaryLink from '@/components/links/PrimaryLink';
-
+import clsxm from '@/lib/clsxm';
+import commaNumber from 'comma-number';
+import React from 'react';
 import Jpg from '~/svg/jpg.svg';
 import Pdf from '~/svg/pdf.svg';
 import Xls from '~/svg/xls.svg';

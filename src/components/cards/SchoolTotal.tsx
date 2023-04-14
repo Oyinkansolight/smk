@@ -1,10 +1,7 @@
+import BasicCard from '@/components/cards/Basic';
+import clsxm from '@/lib/clsxm';
 import commaNumber from 'comma-number';
 import React from 'react';
-
-import clsxm from '@/lib/clsxm';
-
-import BasicCard from '@/components/cards/Basic';
-
 import UsersThree from '~/svg/users_three.svg';
 
 interface SchoolTotalCardProps {

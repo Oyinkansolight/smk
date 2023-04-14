@@ -1,7 +1,6 @@
 'use client';
 
-import { BsPlus } from 'react-icons/bs';
-
+import AddSchool from '@/components/Modal/addStudent';
 import Button from '@/components/buttons/Button';
 import Pill from '@/components/buttons/Pill';
 import {
@@ -13,9 +12,9 @@ import {
 import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import { AdSlider } from '@/components/sliders';
-
 import { useGetDashboardOverview } from '@/server/dashboard';
-
+import { useState } from 'react';
+import { BsPlus } from 'react-icons/bs';
 import StudentBadge from '~/svg/student_badge.svg';
 
 // const timeLineData = [
@@ -137,17 +136,31 @@ const percentageData = [
 // ];
 
 const Page = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const data = useGetDashboardOverview();
   return (
     <div className='flex flex-col gap-[27px] px-4 pt-6'>
       <div className='flex justify-end'>
-        <Button className='max-w-[169px] text-right'>
+        <Button
+          className='max-w-[169px] text-right'
+          onClickHandler={() => {
+            setIsOpen(true);
+          }}
+        >
           <div className='flex flex-row items-center gap-2'>
             <BsPlus className='h-[20px] w-[20px]' />
             <div>Add School</div>
           </div>
         </Button>
       </div>
+      {isOpen && (
+        <AddSchool
+          onClickHandler={() => {
+            setIsOpen(isOpen);
+          }}
+        />
+      )}
 
       <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
         <SchoolTotalCard count={data.data?.totalInstitutions ?? 0} />

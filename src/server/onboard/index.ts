@@ -1,6 +1,5 @@
-import { useQuery } from 'react-query';
-
 import { Label } from '@/types';
+import { useQuery } from 'react-query';
 
 export function useGetLocalGovernments() {
   const query = useQuery({

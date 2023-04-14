@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-
 import clsxm from '@/lib/clsxm';
+import { useEffect, useState } from 'react';
 
 enum ClockInState {
   tooFar = 0,

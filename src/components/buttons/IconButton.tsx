@@ -1,8 +1,7 @@
+import clsxm from '@/lib/clsxm';
 import * as React from 'react';
 import { IconType } from 'react-icons';
 import { ImSpinner2 } from 'react-icons/im';
-
-import clsxm from '@/lib/clsxm';
 
 const IconButtonVariant = [
   'primary',

@@ -1,9 +1,4 @@
 'use client';
-import { duration } from 'moment';
-import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
-import { IoMdTrendingUp } from 'react-icons/io';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 import StudentProfile from '@/components/cards/StudentProfile';
 import SearchInput from '@/components/input/SearchInput';
@@ -13,6 +8,11 @@ import StudentActivityHistory from '@/components/views/student.tsx/StudentActivi
 import StudentDashboardView from '@/components/views/student.tsx/StudentDashboardView';
 import StudentTaskListView from '@/components/views/student.tsx/StudentTaskListView';
 import StudentTimeTableView from '@/components/views/student.tsx/StudentTimeTableView';
+import { duration } from 'moment';
+import { useState } from 'react';
+import { BiListCheck } from 'react-icons/bi';
+import { IoMdTrendingUp } from 'react-icons/io';
+import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);

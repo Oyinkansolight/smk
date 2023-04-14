@@ -1,6 +1,5 @@
-import { BsCheck } from 'react-icons/bs';
-
 import clsxm from '@/lib/clsxm';
+import { BsCheck } from 'react-icons/bs';
 
 type stepType = {
   title: string;

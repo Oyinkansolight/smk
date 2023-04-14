@@ -1,6 +1,5 @@
-import * as React from 'react';
-
 import clsxm from '@/lib/clsxm';
+import * as React from 'react';
 
 const TextButtonVariant = ['primary', 'basic'] as const;
 

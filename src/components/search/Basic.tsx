@@ -1,6 +1,9 @@
 import React from 'react';
 
-const BasicSearch = () => {
+type propTypes = {
+  handleSearch?: (value: string) => void;
+};
+const BasicSearch = ({ handleSearch }: propTypes) => {
   return (
     <form className='flex w-full items-center'>
       <label htmlFor='simple-search' className='sr-only'>
@@ -28,6 +31,7 @@ const BasicSearch = () => {
           className='block h-[54px] w-full max-w-[581px] rounded-full border-0 bg-white p-2.5 pl-[54px] text-xs text-black shadow-sm placeholder:text-[#ADB8CC] focus:border-blue-500 focus:ring-blue-500'
           placeholder='Search documents'
           required
+          onChange={(e) => handleSearch?.(e.target.value)}
         />
       </div>
     </form>

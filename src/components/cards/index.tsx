@@ -2,6 +2,7 @@ import BasicCard from '@/components/cards/Basic';
 import ClockInCountCard from '@/components/cards/ClockInCount';
 import CountCard from '@/components/cards/Count';
 import IndividualTotal from '@/components/cards/IndividualTotal';
+import SchoolProfileCard from '@/components/cards/SchoolProfile';
 import SchoolTotalCard from '@/components/cards/SchoolTotal';
 import {
   AdminSidebarInfoCardOne,
@@ -25,5 +26,6 @@ export {
   SidebarInfoCardOne,
   SidebarInfoCardThree,
   SidebarInfoCardTwo,
+  SchoolProfileCard,
   ToggleCard,
 };

@@ -1,11 +1,10 @@
+import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import { useState } from 'react';
 import { AiTwotoneFlag } from 'react-icons/ai';
 import { BiPaperclip } from 'react-icons/bi';
 import { BsArrowDownCircle, BsListTask } from 'react-icons/bs';
 import { TbClockHour4 } from 'react-icons/tb';
-
-import clsxm from '@/lib/clsxm';
 
 export default function TaskAccordion({
   taskName,
@@ -74,7 +73,7 @@ export default function TaskAccordion({
           height: expanded ? `${40 + 72 + 52.4 * length}px` : '0px',
         }}
         className={clsxm(
-          'overflow-hidden transition-all duration-300',
+          'overflow-hidden transition-all duratißon-200',
           expanded ? '' : ''
         )}
       >

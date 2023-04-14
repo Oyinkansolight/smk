@@ -1,6 +1,5 @@
-import { MdKeyboardArrowDown } from 'react-icons/md';
-
 import LessonProgress from '@/components/counter/LessonProgress';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function StudentTaskListView({
   tasks,

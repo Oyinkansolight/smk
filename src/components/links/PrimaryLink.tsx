@@ -1,10 +1,8 @@
-import * as React from 'react';
-
-import clsxm from '@/lib/clsxm';
-
 import UnstyledLink, {
   UnstyledLinkProps,
 } from '@/components/links/UnstyledLink';
+import clsxm from '@/lib/clsxm';
+import * as React from 'react';
 
 const PrimaryLinkVariant = ['primary', 'secondary', 'basic'] as const;
 type PrimaryLinkProps = {

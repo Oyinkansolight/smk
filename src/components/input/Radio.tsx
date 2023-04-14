@@ -1,8 +1,7 @@
+import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { RiCheckboxBlankCircleLine } from 'react-icons/ri';
-
-import clsxm from '@/lib/clsxm';
 
 interface RadioProps {
   name?: string;

@@ -1,10 +1,9 @@
-import React from 'react';
-
 import {
   SidebarInfoCardOne,
   SidebarInfoCardThree,
   SidebarInfoCardTwo,
 } from '@/components/cards';
+import React from 'react';
 
 const RightSidebar = () => {
   return (

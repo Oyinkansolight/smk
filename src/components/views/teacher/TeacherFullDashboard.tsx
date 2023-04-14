@@ -1,8 +1,4 @@
 'use client';
-import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
-import { IoMdTrendingUp } from 'react-icons/io';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 import StaffProfileCard from '@/components/cards/StaffProfile';
 import SearchInput from '@/components/input/SearchInput';
@@ -10,6 +6,10 @@ import TabBar from '@/components/layout/TabBar';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
+import { useState } from 'react';
+import { BiListCheck } from 'react-icons/bi';
+import { IoMdTrendingUp } from 'react-icons/io';
+import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 // const streamData = [
 //     {
@@ -89,7 +89,7 @@ import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableVie
 const TeacherFullDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   return (
-    <div className='flex'>
+    <div className='layout flex'>
       <StaffProfileCard />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <div className='flex w-full items-center justify-between'>

@@ -1,10 +1,9 @@
+import clsxm from '@/lib/clsxm';
 import React from 'react';
 import {
-  buildStyles,
   CircularProgressbarWithChildren,
+  buildStyles,
 } from 'react-circular-progressbar';
-
-import clsxm from '@/lib/clsxm';
 
 interface CircularCounterProps {
   total?: number;

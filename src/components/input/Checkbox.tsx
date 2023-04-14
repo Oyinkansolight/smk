@@ -1,7 +1,6 @@
+import clsxm from '@/lib/clsxm';
 import React, { useEffect, useState } from 'react';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
-
-import clsxm from '@/lib/clsxm';
 
 interface CheckboxProps {
   name?: string;

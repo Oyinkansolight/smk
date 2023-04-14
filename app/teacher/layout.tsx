@@ -1,12 +1,12 @@
 'use client';
 
-import '/src/styles/globals.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-circular-progressbar/dist/styles.css';
-
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
+import 'react-circular-progressbar/dist/styles.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+
+import '/src/styles/globals.css';
 
 export default function RootLayout({
   children,

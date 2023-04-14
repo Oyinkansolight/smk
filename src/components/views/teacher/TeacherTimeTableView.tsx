@@ -1,12 +1,11 @@
+import { CalendarStepper } from '@/components/calendars';
+import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import Calendar from 'react-widgets/Calendar';
-
 import 'react-widgets/styles.css';
+
 import '../../../styles/calendar.css';
 
-import clsxm from '@/lib/clsxm';
-
-import { CalendarStepper } from '@/components/calendars';
 const timeLineData = [
   {
     image: '/images/teacher_step_1.png',

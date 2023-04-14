@@ -1,7 +1,7 @@
+import clsxm from '@/lib/clsxm';
 import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { BiSearchAlt2 } from 'react-icons/bi';
 
-import clsxm from '@/lib/clsxm';
 export default function SearchInput(
   props: DetailedHTMLProps<
     InputHTMLAttributes<HTMLInputElement>,

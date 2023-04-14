@@ -1,11 +1,10 @@
+import clsxm from '@/lib/clsxm';
 import Select, {
   ActionMeta,
   GroupBase,
   OptionsOrGroups,
   SingleValue,
 } from 'react-select';
-
-import clsxm from '@/lib/clsxm';
 
 export interface DropdownSelectProps {
   options: OptionsOrGroups<string, GroupBase<string>> | undefined;

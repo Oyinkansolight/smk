@@ -1,15 +1,13 @@
 'use client';
 
+import Button from '@/components/buttons/Button';
+import { BaseInput, Checkbox } from '@/components/input';
+import Layout from '@/components/layout/Layout';
+import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-
-import Button from '@/components/buttons/Button';
-import { BaseInput, Checkbox } from '@/components/input';
-import Layout from '@/components/layout/Layout';
-
-import { SignInParams, useSignIn } from '@/server/auth';
 
 export default function AdminAuth() {
   const { register, handleSubmit } = useForm<SignInParams, unknown>({

@@ -1,19 +1,21 @@
 'use client';
 
-import '/src/styles/globals.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-circular-progressbar/dist/styles.css';
-
 import Header from '@/components/layout/Header';
 import RightSidebar from '@/components/layout/RightSidebar';
 import Sidebar from '@/components/layout/Sidebar';
+import { usePathname } from 'next/navigation';
+import 'react-circular-progressbar/dist/styles.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+
+import '/src/styles/globals.css';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const routeDetails = usePathname();
   return (
     <html>
       <head />
@@ -27,7 +29,7 @@ export default function RootLayout({
 
           <Sidebar />
 
-          <RightSidebar />
+          {routeDetails === '/admin' && <RightSidebar />}
         </div>
       </div>
     </html>

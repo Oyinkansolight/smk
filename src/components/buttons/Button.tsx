@@ -1,8 +1,7 @@
+import clsxm from '@/lib/clsxm';
 import * as React from 'react';
 import { IconType } from 'react-icons';
 import { ImSpinner2 } from 'react-icons/im';
-
-import clsxm from '@/lib/clsxm';
 
 const ButtonVariant = [
   'primary',
@@ -23,6 +22,7 @@ type ButtonProps = {
   rightIcon?: IconType;
   leftIconClassName?: string;
   rightIconClassName?: string;
+  onClickHandler: () => void;
 } & React.ComponentPropsWithRef<'button'>;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -39,6 +39,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon: RightIcon,
       leftIconClassName,
       rightIconClassName,
+      onClickHandler,
       ...rest
     },
     ref
@@ -107,6 +108,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
           className
         )}
+        onClick={onClickHandler}
         {...rest}
       >
         {isLoading && (

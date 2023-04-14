@@ -1,7 +1,6 @@
+import NextImage from '@/components/NextImage';
 import * as React from 'react';
 import Slider from 'react-slick';
-
-import NextImage from '@/components/NextImage';
 
 // interface AdSliderInterface {
 //   banner: any[];

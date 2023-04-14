@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import clsxm from '@/lib/clsxm';
 import { motion } from 'framer-motion';
 import React, { FC, useState } from 'react';
 import {
@@ -8,8 +9,6 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 import { RiEyeCloseLine, RiEyeLine, RiInformationFill } from 'react-icons/ri';
-
-import clsxm from '@/lib/clsxm';
 
 export enum HelperType {
   info = 'info',
@@ -104,7 +103,7 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
       <label
         htmlFor={name}
         className={clsxm(
-          'block text-sm font-semibold text-gray-400',
+          'block text-sm font-semibold text-gray-400 text-left',
           helper?.type && helper?.type !== 'info'
             ? helperTextClasses[helper.type]
             : 'text-primary-dark'

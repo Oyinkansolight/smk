@@ -15,7 +15,7 @@ export default function GridTabBar({
   variant = 'primary',
 }: GridTabBarProps) {
   return (
-    <div className='grid grid-cols-2 whitespace-nowrap'>
+    <div className='grid grid-cols-2 whitespace-nowrap overflow-hidden'>
       {items.map((item, i) => (
         <button
           key={i}
@@ -41,7 +41,7 @@ export default function GridTabBar({
         >
           <div>{item.icon}</div>
           <div className='h-4' />
-          <div className='font-bold'>{item.label}</div>
+          <div className='font-bold text-xs'>{item.label}</div>
           <div
             className={clsxm(
               'full absolute top-5 right-5 h-2 w-2 rounded',

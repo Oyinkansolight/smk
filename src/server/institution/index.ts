@@ -1,6 +1,6 @@
+import { request } from '@/server';
 import { useMutation } from 'react-query';
 
-import { request } from '@/server';
 export interface CreateInstitutionParams {
   firstName?: string;
   lastName?: string;

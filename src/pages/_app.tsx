@@ -1,11 +1,10 @@
-import { AppProps } from 'next/app';
-
-import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import '@/styles/globals.css';
+import { AppProps } from 'next/app';
 import 'react-circular-progressbar/dist/styles.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 
 /**
  * !STARTERCONF info

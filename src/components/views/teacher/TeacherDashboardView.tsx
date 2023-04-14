@@ -1,15 +1,14 @@
+import QuickActionButton from '@/components/buttons/QuickAction';
 import { CalendarStepper, EventCalendar } from '@/components/calendars';
 import { BasicCard, ClockInCountCard, ToggleCard } from '@/components/cards';
-
+import { BarChart } from '@/components/charts';
+import ClockInTime from '@/components/views/teacher/ClockInTime';
+import dynamic from 'next/dynamic';
 import StudentBadge from '~/svg/student_badge.svg';
+
 const StreamChart = dynamic(() => import('../../charts/Stream'), {
   ssr: false,
 });
-import dynamic from 'next/dynamic';
-
-import QuickActionButton from '@/components/buttons/QuickAction';
-import { BarChart } from '@/components/charts';
-import ClockInTime from '@/components/views/teacher/ClockInTime';
 
 const timeLineData = [
   {
