@@ -7,6 +7,8 @@ interface propType {
   onClickHandler?: () => void;
 }
 
+//Change to trigger build
+
 function AddSingleSchool({ onClickHandler }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>

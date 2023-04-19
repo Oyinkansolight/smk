@@ -3,13 +3,16 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import ROUTES from '@/constant/routes';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function AdminAuth() {
+  const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -17,7 +20,19 @@ export default function AdminAuth() {
   const signIn = useSignIn();
   const onSubmit = async (data: SignInParams) => {
     try {
-      await signIn.mutateAsync(data);
+      const response = await signIn.mutateAsync(data);
+
+      if (response) {
+        toast.success('Login successful');
+
+        //2 Second delay before redirecting to dashboard
+        setTimeout(() => {
+          toast.info('Redirecting to dashboard...');
+        }, 2000);
+
+        router.push(ROUTES.SUPER_ADMIN)
+      }
+
     } catch (error) {
       toast.error((error as Error).message);
     }
@@ -61,18 +76,19 @@ export default function AdminAuth() {
                     className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'
                   >
                     <BaseInput
-                      placeholder='Enter username here'
+                      name='email'
+                      type='email'
                       label='Username'
-                      name='username'
                       register={register}
+                      placeholder='Enter username here'
                     />
 
                     <BaseInput
-                      placeholder='Enter password here'
                       label='Password'
                       name='password'
                       type='password'
                       register={register}
+                      placeholder='Enter password here'
                     />
 
                     <Button type='submit' className='h-[54px] justify-center'>

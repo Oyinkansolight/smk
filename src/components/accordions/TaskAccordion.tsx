@@ -11,15 +11,19 @@ export default function TaskAccordion({
   children,
   nextClass,
   endDate,
+  lesson,
   length = 300,
   showIcons = true,
+  bordered = false
 }: {
   taskName: string;
   children: JSX.Element;
   nextClass?: Date;
   endDate?: Date;
+  lesson?: boolean;
   length?: number;
   showIcons?: boolean;
+  bordered?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -73,16 +77,18 @@ export default function TaskAccordion({
           height: expanded ? `${40 + 72 + 52.4 * length}px` : '0px',
         }}
         className={clsxm(
-          'overflow-hidden transition-all duratißon-200',
-          expanded ? '' : ''
+          'overflow-hidden transition-all duration-200 overflow-y-scroll',
+          expanded ? '' : '',
+          expanded && bordered ? 'border border-[#E3E3E3] px-6' : ''
         )}
       >
         {children}
-        <div className='flex cursor-pointer justify-start py-5'>
+
+        {lesson && <div className='flex cursor-pointer justify-start py-5'>
           <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-[#3361FF]'>
             Add To Lesson
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

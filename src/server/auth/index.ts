@@ -22,6 +22,20 @@ export function useSignUp() {
 export function useSignIn() {
   const mutation = useMutation({
     mutationKey: 'sign_in',
+    // mutationFn: (params: SignInParams) =>
+    //   request.post('/v1/government/authentication/login', {
+    //     email: 'John.Mathew@xyz.com',
+    //     password: 'John@Mathew',
+    //   }),
+    mutationFn: (params: SignInParams) =>
+      request.post('/v1/government/authentication/login', params),
+  });
+  return mutation;
+}
+
+export function useResetPassword() {
+  const mutation = useMutation({
+    mutationKey: 'reset_password',
     mutationFn: (params: SignInParams) =>
       request.post('/auth/reset-password', params),
   });

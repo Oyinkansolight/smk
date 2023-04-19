@@ -1,7 +1,8 @@
 import TaskAccordion from '@/components/accordions/TaskAccordion';
 import Button from '@/components/buttons/Button';
+import { CurriculumCard } from '@/components/cards';
 import FilterModal from '@/components/modals/add-subject-modal';
-import LessonsTable from '@/components/tables/LessonsTable';
+import clsxm from '@/lib/clsxm';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function TaskListView() {
@@ -33,22 +34,51 @@ export default function TaskListView() {
       {Array(3)
         .fill(0)
         .map((v, i) => {
+          if (i === 2) {
+            return (
+              <TaskAccordion
+                bordered
+                length={4}
+                lesson={false}
+                taskName={`Primary ${i + 1}`}
+                key={i}
+              >
+                <div className='flex flex-col divide-y-2 !text-xs pt-[33px]'>
+                  {Array(4)
+                    .fill(0)
+                    .map((v, j) => {
+                      return (
+                        <div key={j} className={clsxm(
+                          j === 0 && 'border-t',
+                          j === 3 && 'border-b',
+                          'flex flex-row justify-between py-[22px]'
+                        )}>
+                          <div>Period {j}</div>
+                          <div><span className='text-[#8898AA]'>5</span>/10</div>
+                          <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
+                            <div>View</div>
+                            <div>Edit</div>
+                            <div>Delete</div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                </div>
+              </TaskAccordion>
+            )
+          }
           return (
             <TaskAccordion
-              length={4}
-              taskName={`Class ${i + 1}`}
-              nextClass={new Date()}
-              endDate={new Date()}
+              length={1}
+              lesson={false}
+              taskName={`Primary ${i + 1}`}
               key={i}
             >
-              <LessonsTable
-                lessons={[
-                  { progress: 2, topic: 'English' },
-                  { progress: 5, topic: 'Mathematics' },
-                  { progress: 7, topic: 'Computer Studies' },
-                  { progress: 2, topic: 'Engineering' },
-                ]}
-              />
+              <div className='flex flex-wrap mt-4 gap-[27px]'>
+                <CurriculumCard name="First Term Curriculum" count={85} variant="primary" />
+                <CurriculumCard name="Second Term Curriculum" count={85} variant="secondary" />
+                <CurriculumCard name="Third Term Curriculum" count={85} variant="tertiary" />
+              </div>
             </TaskAccordion>
           );
         })}
