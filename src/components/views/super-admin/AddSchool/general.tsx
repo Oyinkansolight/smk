@@ -2,14 +2,28 @@
 
 import Dragdrop from '@/components/input/dragdrop';
 import FormInput from '@/components/input/formInput';
-import React, { useState } from 'react';
+import React from 'react';
 
-const Biodata = () => {
-  const [schoolName, setSchoolName] = useState<string | number>('');
-  const [schoolEmail, setSchoolEmail] = useState<string | number>('');
-  const [imageName, setImageName] = useState<string>('');
-  const [, setImageData] = useState();
+interface BiodataProps {
+  schoolName: string | number;
+  setSchoolName: (v: string | number) => void;
+  schoolEmail: string | number;
+  setSchoolEmail: (v: string | number) => void;
+  imageName: string;
+  setImageName: (v: string | undefined) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setImageData: (v: any) => void;
+}
 
+const Biodata = ({
+  imageName,
+  schoolEmail,
+  schoolName,
+  setImageData,
+  setImageName,
+  setSchoolEmail,
+  setSchoolName,
+}: BiodataProps) => {
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>General Details</h2>

@@ -1,17 +1,17 @@
 import { geocodingInstance } from '@/server';
+import { GeoCodeResponse } from '@/types/geocode';
 import { useMutation } from 'react-query';
 
 export interface GeocodingParams {
-  params: {
-    address: string;
-  };
+  address: string;
 }
 
 export function useGeocoding() {
   const mutation = useMutation({
     mutationKey: 'geocoding',
-    mutationFn: (params: GeocodingParams) =>
-      geocodingInstance.get('', { params }),
+    mutationFn: async (params: GeocodingParams) =>
+      (await geocodingInstance.get('', { params })).data
+        .results as GeoCodeResponse[],
   });
 
   return mutation;

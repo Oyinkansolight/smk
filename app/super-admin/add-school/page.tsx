@@ -5,12 +5,30 @@ import Account from '@/components/views/super-admin/AddSchool/account';
 import General from '@/components/views/super-admin/AddSchool/general';
 import Location from '@/components/views/super-admin/AddSchool/location';
 import Publish from '@/components/views/super-admin/AddSchool/publish';
+import logger from '@/lib/logger';
+import { useGeocoding } from '@/server/geocoding';
+import { useCreateInstitution } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
+
 const AddStudent = () => {
   const [stage, setStage] = useState(1);
+  const [schoolName, setSchoolName] = useState<string | number>('');
+  const [schoolEmail, setSchoolEmail] = useState<string | number>('');
+  const [imageName, setImageName] = useState<string>('');
+  const [, setImageData] = useState();
+  const [schoolName1, setSchoolName1] = useState<string | number>('');
+  const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
+  const [imageName1, setImageName1] = useState<string>('');
+  const [, setImageData1] = useState();
+  const [location, setLocation] = useState<string | number>('');
+  const [town, setTown] = useState<string | number>('');
+  const [lga, setLga] = useState<string | number>('');
+
+  const createInstitution = useCreateInstitution();
+  const geocoding = useGeocoding();
 
   const nextHandler = (): void => {
     if (stage >= 1 && stage <= 3) {
@@ -66,10 +84,58 @@ const AddStudent = () => {
       />
 
       <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
-        {stage === 1 && <General />}
-        {stage === 2 && <Location />}
-        {stage === 3 && <Account />}
-        {stage === 4 && <Publish />}
+        {stage === 1 && (
+          <General
+            schoolEmail={schoolEmail}
+            imageName={imageName}
+            schoolName={schoolName}
+            setImageData={(v) => setImageData(v)}
+            setImageName={(v) => setImageName(v ?? '')}
+            setSchoolEmail={setSchoolEmail}
+            setSchoolName={setSchoolName}
+          />
+        )}
+        {stage === 2 && (
+          <Location
+            location={location}
+            town={town}
+            lga={lga}
+            setLocation={setLocation}
+            setTown={setTown}
+            setLga={setLga}
+          />
+        )}
+        {stage === 3 && (
+          <Account
+            schoolEmail1={schoolEmail1}
+            imageName1={imageName1}
+            schoolName1={schoolName1}
+            setImageData1={(v) => setImageData1(v)}
+            setImageName1={(v) => setImageName1(v ?? '')}
+            setSchoolEmail1={setSchoolEmail1}
+            setSchoolName1={setSchoolName1}
+          />
+        )}
+        {stage === 4 && (
+          <Publish
+            onSubmit={async () => {
+              try {
+                const d = await geocoding.mutateAsync({
+                  address: location as string,
+                });
+                createInstitution.mutateAsync({
+                  instituteLat: d[0].geometry?.location?.lat?.toString(),
+                  instituteLong: d[0].geometry?.location?.lng?.toString(),
+                  instituteAddress: location as string,
+                  instituteEmail: schoolEmail as string,
+                  instituteName: schoolName as string,
+                });
+              } catch (error) {
+                logger(error);
+              }
+            }}
+          />
+        )}
 
         <div className='my-6 flex justify-end'>
           <div className='flex space-x-6'>
