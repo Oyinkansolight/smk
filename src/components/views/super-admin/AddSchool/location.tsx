@@ -2,12 +2,25 @@
 
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
-import { useState } from 'react';
 
-const Biodata = () => {
-  const [location, setLocation] = useState<string | number>('');
-  const [town, settown] = useState<string | number>('');
 
+interface LocationBioProps {
+  location: string | number;
+  setLocation: (v: string | number) => void;
+  town: string | number;
+  setTown: (v: string | number) => void;
+  lga: string | number;
+  setLga: (v: string | number) => void;
+}
+
+const Biodata = ({
+  location,
+  town,
+  lga,
+  setLga,
+  setLocation,
+  setTown,
+}: LocationBioProps) => {
   const options = ['Lagos', 'Ogun', 'Oyo', 'Edo'];
   return (
     <section className=''>
@@ -27,7 +40,7 @@ const Biodata = () => {
           <FormSelect
             label='Select Town*'
             formValue={town}
-            setFormValue={settown}
+            setFormValue={setTown}
             options={options}
           />
         </div>
@@ -35,8 +48,8 @@ const Biodata = () => {
         <div className='w-full mt-4'>
           <FormSelect
             label='Select Local Government '
-            formValue={town}
-            setFormValue={settown}
+            formValue={lga}
+            setFormValue={setLga}
             options={options}
           />
         </div>

@@ -7,11 +7,7 @@ import { VerticalStepper } from '@/components/stepper';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useCreateInstitution } from '@/server/institution';
-import {
-  useGetLocalGovernments,
-  useGetPermissions,
-  useGetTowns,
-} from '@/server/onboard';
+import { useGetLocalGovernments, useGetPermissions, useGetTowns } from '@/server/onboard';
 import { useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import { Controller, useForm } from 'react-hook-form';
@@ -21,7 +17,10 @@ import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
+
+
 import '/src/styles/globals.css';
+
 
 const stepData = [
   {
@@ -78,7 +77,7 @@ export default function Page() {
               try {
                 await create.mutateAsync({
                   ...getValues(),
-                  permissions: Array.from(permissions.values()).join(','),
+                  // permissions: Array.from(permissions.values()).join(','),
                 });
               } catch (error) {
                 logger(error);
