@@ -1,26 +1,29 @@
 'use client';
 
-import NextImage from '@/components/NextImage';
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import { VerticalStepper } from '@/components/stepper';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
-import { useCreateInstitution } from '@/server/institution';
-import { useGetLocalGovernments, useGetPermissions, useGetTowns } from '@/server/onboard';
-import { useState } from 'react';
+import {
+  useCompleteInstitutionOnboarding,
+  useOnboardVerification,
+} from '@/server/institution';
+import {
+  useGetLocalGovernments,
+  useGetPermissions,
+} from '@/server/onboard';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import { Controller, useForm } from 'react-hook-form';
-import { AiFillCheckCircle } from 'react-icons/ai';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
-
-
 import '/src/styles/globals.css';
-
+import Dragdrop from '@/components/input/dragdrop';
 
 const stepData = [
   {
@@ -33,26 +36,56 @@ const stepData = [
     title: 'Location Details',
   },
   {
-    title: 'Permission Details',
+    title: 'Staff Details',
+  },
+  {
+    title: 'Student Details',
   },
   {
     title: 'Account Details',
   },
   {
-    title: 'Account Summary',
+    title: 'Publish',
   },
 ];
 
 export default function Page() {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
   const d = useGetPermissions();
+  const [imageName, setImageName] = useState<string>('');
+  const [imageData, setImageData] = useState('');
   const [permissions, setPermissions] = useState(new Set<number>());
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
   const { register, getValues, control } = useForm();
 
-  const create = useCreateInstitution();
+  let token = '';
+
+  if (typeof window !== 'undefined') {
+    const query = window.location.search.substring(1);
+    token = query.split('=')[1];
+  }
+
+  const create = useCompleteInstitutionOnboarding();
+  const verification = useOnboardVerification();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const verifyUser = async () => {
+      const res = await verification.mutateAsync(token);
+      if (res.data.message === 'Token verified successfully.') {
+        toast.success('Institution verified successfully.');
+        setUser(res.data.data);
+        console.log(res.data.data);
+        setIsLoading(false);
+      }
+    };
+
+    verifyUser();
+  }, [token]);
 
   const StepperLayout = ({ children }: { children: React.ReactNode }) => (
     <div className='flex w-full max-w-[656px] flex-col gap-y-8'>
@@ -81,7 +114,8 @@ export default function Page() {
                 });
               } catch (error) {
                 logger(error);
-                toast.error('Error');
+                // toast.error('Error');
+                // router
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 toast.error(error as any);
               }
@@ -121,17 +155,6 @@ export default function Page() {
   );
 
   const StepTwo = () => {
-    // const [{ opacity }, dragRef] = useDrag(
-    //   () => ({
-    //     type: "image",
-    //     item: { text },
-    //     collect: (monitor) => ({
-    //       opacity: monitor.isDragging() ? 0.5 : 1
-    //     })
-    //   }),
-    //   []
-    // );
-
     return (
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
@@ -141,30 +164,28 @@ export default function Page() {
           <div className='mt-4 flex flex-col gap-10'>
             <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
               <BaseInput
-                label='First Name'
-                name='firstName'
-                placeholder='First Name'
-                className='md:min-w-[312px] md:max-w-[312px]'
+                label='Institution Name'
+                name='name'
+                placeholder='Name'
                 register={register}
+                value={user?.instituteName}
               />
-              <BaseInput
-                label='Last Name'
-                name='lastName'
-                placeholder='Last Name'
-                className='md:min-w-[312px] md:max-w-[312px]'
-                register={register}
-              />
-            </div>
 
-            <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
-              <input type='file' />
+              <Dragdrop
+                className='max-h-10 items-center flex'
+                setImageName={setImageName}
+                imageName={imageName}
+                label='Upload School Logo*'
+                setImageData={setImageData}
+              />
             </div>
 
             <BaseInput
-              label='Official Email'
+              label='Institution Official Email'
               name='email'
               placeholder='Details here'
               register={register}
+              value={user?.instituteEmail}
             />
           </div>
         </div>
@@ -174,7 +195,27 @@ export default function Page() {
 
   const StepThree = () => {
     const locals = useGetLocalGovernments();
-    const towns = useGetTowns();
+    const [towns, setTowns] = useState<any>([]);
+    const [currentTownIndex, setCurrentTownIndex] = useState(0);
+    // const towns = useGetTowns(currentTownIndex);
+
+    useEffect(() => {
+      if (!locals.isLoading && locals.data && locals.data.length > 0) {
+        locals.data.forEach((local) => {
+          setTowns([...towns, local.towns]);
+        });
+      }
+    }, [locals.data]);
+
+    useEffect(() => {
+      logger(currentTownIndex);
+    }, [currentTownIndex])
+
+    const handleGetTownIndex = (e: any) => {
+      // setCurrentTownIndex(e.target.value);
+      logger(e.target.value)
+    }
+
     return (
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
@@ -187,78 +228,145 @@ export default function Page() {
               name='address'
               placeholder='Details here'
               register={register}
+              value={user?.instituteAddress}
             />
 
-            <Controller
-              control={control}
-              name='townId'
-              render={({ field }) => {
-                return <Select options={towns.data ?? []} {...field} />;
-              }}
-            />
+            <div className='flex flex-col'>
+              <div>Select LGA</div>
+              <Controller
+                control={control}
+                name='localGovernmentId'
+                render={({ field }) => {
+                  return <Select options={locals.data ?? []} {...field} />;
+                }}
+              />
+            </div>
 
-            <Controller
-              control={control}
-              name='localGovernmentId'
-              render={({ field }) => {
-                return <Select options={locals.data ?? []} {...field} />;
-              }}
-            />
+            <div className='flex flex-col'>
+              <div>Select Town</div>
+
+              <Controller
+                control={control}
+                name='townId'
+                render={({ field }) => {
+                  return <Select options={towns[currentTownIndex] ?? []} {...field} />;
+                }}
+              />
+            </div>
+
           </div>
         </div>
       </StepperLayout>
     );
   };
 
+  // const StepFour = () => {
+  //   return (
+  //     <StepperLayout>
+  //       <div className='flex flex-col gap-y-2'>
+  //         <div className='h2'>Permission Details</div>
+  //         <div className='p'>Kindly see the level of permission bebelow:</div>
+
+  //         <div className='mt-4 flex flex-col gap-10'>
+  //           <BaseInput
+  //             disable
+  //             label='Admin Role Staff'
+  //             name='role'
+  //             register={register}
+  //             placeholder='Chief Education Officers (CEO’s)'
+  //           />
+  //         </div>
+  //         <div className='py-5 font-bold'>Permissions*</div>
+  //         <div className='grid w-full grid-cols-1 gap-y-2 md:grid-cols-2'>
+  //           {d.data?.map((v, i) => (
+  //             <div
+  //               onClick={() => {
+  //                 if (permissions.has(i)) {
+  //                   const s = new Set(permissions);
+  //                   s.delete(i);
+  //                   setPermissions(s);
+  //                 } else {
+  //                   const s = new Set(permissions);
+  //                   s.add(i);
+  //                   setPermissions(s);
+  //                 }
+  //               }}
+  //               key={i}
+  //               className='flex cursor-pointer items-center gap-10'
+  //             >
+  //               <AiFillCheckCircle
+  //                 className={clsxm(
+  //                   permissions.has(i) ? 'text-primary-500' : 'text-[#abd4ff]'
+  //                 )}
+  //               />
+  //               <div>{v.value}</div>
+  //             </div>
+  //           ))}
+  //         </div>
+  //       </div>
+  //     </StepperLayout>
+  //   );
+  // };
+
   const StepFour = () => {
     return (
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
-          <div className='h2'>Permission Details</div>
-          <div className='p'>Kindly see the level of permission bebelow:</div>
+          <div className='h2'>Staff Details</div>
+          <div className='p'>Kindly enter the details of the institution below:</div>
 
-          <div className='mt-4 flex flex-col gap-10'>
+          <div className='mt-4 flex flex-col gap-10 mb-10'>
             <BaseInput
               disable
-              label='Admin Role Staff'
-              name='role'
+              label='Enter Number of Staff *'
+              name='staff_number'
               register={register}
-              placeholder='Chief Education Officers (CEO’s)'
+              placeholder='Details here'
             />
           </div>
-          <div className='py-5 font-bold'>Select Permissions*</div>
-          <div className='grid w-full grid-cols-1 gap-y-2 md:grid-cols-2'>
-            {d.data?.map((v, i) => (
-              <div
-                onClick={() => {
-                  if (permissions.has(i)) {
-                    const s = new Set(permissions);
-                    s.delete(i);
-                    setPermissions(s);
-                  } else {
-                    const s = new Set(permissions);
-                    s.add(i);
-                    setPermissions(s);
-                  }
-                }}
-                key={i}
-                className='flex cursor-pointer items-center gap-10'
-              >
-                <AiFillCheckCircle
-                  className={clsxm(
-                    permissions.has(i) ? 'text-primary-500' : 'text-[#abd4ff]'
-                  )}
-                />
-                <div>{v.value}</div>
-              </div>
-            ))}
-          </div>
+
+          <Dragdrop
+            className='h-[255px] max-h-[255px] items-center flex flex-col'
+            setImageName={setImageName}
+            imageName={imageName}
+            label='Upload CSV'
+            setImageData={setImageData}
+          />
         </div>
       </StepperLayout>
     );
   };
 
   const StepFive = () => {
+    return (
+      <StepperLayout>
+        <div className='flex flex-col gap-y-2'>
+          <div className='h2'>Student Details</div>
+          <div className='p'>Kindly enter the details of the institution below:</div>
+
+          <div className='mt-4 flex flex-col gap-10 mb-10'>
+            <BaseInput
+              disable
+              label='Enter Number of Students *'
+              name='student_number'
+              register={register}
+              placeholder='Details here'
+            />
+          </div>
+
+          <Dragdrop
+            className='h-[255px] max-h-[255px] items-center flex flex-col'
+            setImageName={setImageName}
+            imageName={imageName}
+            label='Upload CSV'
+            setImageData={setImageData}
+          />
+        </div>
+      </StepperLayout>
+    );
+  };
+
+  const StepSix = () => {
     return (
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
@@ -271,10 +379,12 @@ export default function Page() {
               name='user_email'
               register={register}
               placeholder='name@mail.com'
+              value={user?.instituteEmail}
             />
 
             <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
               <BaseInput
+                type='password'
                 label='Enter Password'
                 name='password'
                 register={register}
@@ -282,6 +392,7 @@ export default function Page() {
                 className='md:min-w-[312px] md:max-w-[312px]'
               />
               <BaseInput
+                type='password'
                 label='Confirm Password'
                 name='confirm_password'
                 register={register}
@@ -295,45 +406,69 @@ export default function Page() {
     );
   };
 
-  const StepSix = () => {
+  const StepSeven = () => {
     return (
       <StepperLayout>
-        <div className='flex flex-col gap-y-2'>
-          <div className='h2'>Account Summary</div>
-          <div className='p'>
-            Kindly ensure that the details below are correct before submitting
-          </div>
+        <section className=''>
+          <h2 className='text-2xl font-bold'>Publish</h2>
+          <p>Kindly ensure that the details below are correct before submitting:</p>
 
-          <div className='mt-4 flex flex-col gap-10'>
-            <NextImage
-              alt='ID card'
-              width={396}
-              height={248}
-              src='/images/template_id.png'
-            />
-          </div>
+          <div className='bg-[#F4F9FF] p-8 rounded-md mt-4'>
+            <h2 className='text-xl font-bold mb-10'>Summary</h2>
 
-          <div className='mt-5 flex flex-row gap-x-[19px]'>
-            <Button
-              variant='outline'
-              className='h-10 w-[120px] justify-center whitespace-nowrap border-secondary !text-xs text-secondary'
-            >
-              Share
-            </Button>
-            <Button
-              variant='outline'
-              className='h-10 w-[120px] justify-center whitespace-nowrap border-secondary !text-xs text-secondary'
-            >
-              Download
-            </Button>
-            <Button
-              variant='outline'
-              className='h-10 w-[120px] justify-center whitespace-nowrap border-secondary !text-xs text-secondary'
-            >
-              Send to Printer
-            </Button>
+            <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+              <div className='col-span-8'>
+                <h2 className='text-xs mb-2 font-medium'>Name</h2>
+                <p>Alive School</p>
+              </div>
+
+              <div className='col-span-4'>
+                <h2 className='text-xs mb-2 font-medium'>Address</h2>
+                <p>School Location</p>
+              </div>
+            </div>
+
+            <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+              <div className='col-span-8'>
+                <h2 className='text-xs mb-2 font-medium'>Official Email</h2>
+                <p>school@mail.com</p>
+              </div>
+
+              <div className='col-span-4'>
+                <h2 className='text-xs mb-2 font-medium'>Local Govt</h2>
+                <p>lga</p>
+              </div>
+            </div>
+            <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+              <div className='col-span-8'>
+                <h2 className='text-xs mb-2 font-medium'>Town</h2>
+                <p>town</p>
+              </div>
+            </div>
+
+            <div className='h-[0.5px] bg-black' />
+
+            <div className='grid grid-cols-12 gap-4  items-center mt-[30px]'>
+              <div className='col-span-8'>
+                <h2 className='text-xs mb-2 font-medium'>No of Staffs</h2>
+                <p>23</p>
+              </div>
+
+              <div className='col-span-4'>
+                <h2 className='text-xs mb-2 font-medium'>No of Students</h2>
+                <p>190</p>
+              </div>
+            </div>
+
+            <h2 className='text-center text-base text-[#E5A500] font-medium mb-3 mt-[30px]'>
+              Note
+            </h2>
+            <p className='text-center'>
+              Login details would be generated and sent to the school&apos;s official
+              email.
+            </p>
           </div>
-        </div>
+        </section>
       </StepperLayout>
     );
   };
@@ -345,19 +480,38 @@ export default function Page() {
     <StepFour key={3} />,
     <StepFive key={4} />,
     <StepSix key={5} />,
+    <StepSeven key={6} />,
   ];
 
-  return (
-    <div className='flex h-full flex-col'>
-      <div className='flex h-full w-full flex-row gap-x-10'>
-        <div className='hidden h-[50vh] justify-center border-r border-secondary pl-[14px] pr-[28px] md:flex'>
-          <VerticalStepper currentStep={step} steps={stepData} />
-        </div>
+  if (isLoading) {
+    return (
+      <div className='flex w-screen h-2/3 items-center justify-center'>
+        <div className='flex flex-col gap-3'>
+          <div className='text-center'>Verifying Token</div>
 
-        <form>
-          <div className='flex w-full flex-col'>{steps[step]}</div>
-        </form>
+          <Image
+            width={154}
+            height={53}
+            className='animate-bounce'
+            src='/images/edo_logo.png'
+            alt=''
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className='flex h-full flex-col'>
+        <div className='flex h-full w-full flex-row gap-x-10'>
+          <div className='hidden h-[50vh] justify-center border-r border-secondary pl-[14px] pr-[28px] md:flex'>
+            <VerticalStepper currentStep={step} steps={stepData} />
+          </div>
+
+          <form className='w-full'>
+            <div className='flex w-full flex-col'>{steps[step]}</div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 }

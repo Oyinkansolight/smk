@@ -9,13 +9,40 @@ import {
   ToggleCard,
 } from '@/components/cards';
 import { BarChart, StreamChart } from '@/components/charts';
-import { CircularCounter } from '@/components/counter';
+import AddSingleSchool from '@/components/modal/addSchool';
 import { AdSlider } from '@/components/sliders';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
 import { BsPlus } from 'react-icons/bs';
 import StudentBadge from '~/svg/student_badge.svg';
-import AddSingleSchool from '@/components/modal/AddSingleSchool';
+
+// const timeLineData = [
+//   {
+//     image: '/images/teacher_step_1.png',
+//     title: 'MR. Gbadamosi’s Class',
+//     details: '1:32 AM',
+//   },
+//   {
+//     image: '/images/teacher_step_2.png',
+//     title: 'Mrs. Erhveba’s Class',
+//     details: '1:32 AM',
+//   },
+//   {
+//     image: '/images/teacher_step_3.png',
+//     title: 'Submitted a bug',
+//     details: 'Yesterday 12:39 AM',
+//   },
+//   {
+//     image: '/images/teacher_step_4.png',
+//     title: 'Modified A data in Page X',
+//     details: 'Aug 11',
+//   },
+//   {
+//     image: '/images/teacher_step_2.png',
+//     title: 'Mrs. Erhveba’s Class',
+//     details: '3:30 PM',
+//   },
+// ];
 
 const percentageData = [
   {
@@ -31,6 +58,81 @@ const percentageData = [
     percentage: 90,
   },
 ];
+
+// const streamData = [
+//     {
+//         Raoul: 97,
+//         Josiane: 95,
+//         Marcel: 46,
+//         René: 22,
+//         Paul: 97,
+//         Jacques: 84,
+//     },
+//     {
+//         Raoul: 32,
+//         Josiane: 62,
+//         Marcel: 131,
+//         René: 132,
+//         Paul: 160,
+//         Jacques: 137,
+//     },
+//     {
+//         Raoul: 43,
+//         Josiane: 51,
+//         Marcel: 88,
+//         René: 95,
+//         Paul: 117,
+//         Jacques: 91,
+//     },
+//     {
+//         Raoul: 26,
+//         Josiane: 68,
+//         Marcel: 182,
+//         René: 147,
+//         Paul: 115,
+//         Jacques: 134,
+//     },
+//     {
+//         Raoul: 92,
+//         Josiane: 139,
+//         Marcel: 70,
+//         René: 142,
+//         Paul: 49,
+//         Jacques: 39,
+//     },
+//     {
+//         Raoul: 51,
+//         Josiane: 150,
+//         Marcel: 92,
+//         René: 151,
+//         Paul: 67,
+//         Jacques: 170,
+//     },
+//     {
+//         Raoul: 193,
+//         Josiane: 84,
+//         Marcel: 139,
+//         René: 147,
+//         Paul: 143,
+//         Jacques: 168,
+//     },
+//     {
+//         Raoul: 185,
+//         Josiane: 175,
+//         Marcel: 136,
+//         René: 113,
+//         Paul: 136,
+//         Jacques: 62,
+//     },
+//     {
+//         Raoul: 43,
+//         Josiane: 140,
+//         Marcel: 98,
+//         René: 65,
+//         Paul: 127,
+//         Jacques: 162,
+//     },
+// ];
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +156,7 @@ const Page = () => {
       {isOpen && (
         <AddSingleSchool
           onClickHandler={() => {
-            setIsOpen(isOpen);
+            setIsOpen(!isOpen);
           }}
         />
       )}
@@ -66,21 +168,25 @@ const Page = () => {
             count={data.data?.totalEccdeInstitutions ?? 0}
             name='Nursery School'
             variant='secondary'
+            link='/super-admin/eccde'
           />
           <IndividualTotal
             count={data.data?.totalPrimaryInstitutions ?? 0}
             name='Primary School'
+            link='/super-admin/primary'
             variant='secondary'
           />
           <IndividualTotal
             count={data.data?.totalSecondaryInstitutions ?? 0}
             name='Secondary School'
+            link='/super-admin/eccde'
             variant='secondary'
           />
           <IndividualTotal
             count={data.data?.totalTertiaryInstitutions ?? 0}
             name='Tertiary School'
-            variant='secondary'
+            link='/super-admin/tertiary'
+            variant='tertiary'
           />
         </div>
       </div>
@@ -97,11 +203,13 @@ const Page = () => {
             count={243}
             name='Total Students'
             variant='primary'
+            link='/super-admin/all-student'
           />
           <IndividualTotal
             count={243}
             name='Total Teachers'
             variant='primary'
+            link='/super-admin/all-staff'
           />
         </div>
 
@@ -164,7 +272,7 @@ const Page = () => {
 
         <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
           <div className='flex flex-col gap-y-7'>
-            <BasicCard className='h-fit !bg-[#FFDC4F]'>
+            {/* <BasicCard className='h-fit !bg-[#FFDC4F]'>
               <div className='mb-7 text-lg font-bold text-[#450065]'>
                 Info Tracker
               </div>
@@ -185,7 +293,7 @@ const Page = () => {
                   </div>
                 ))}
               </div>
-            </BasicCard>
+            </BasicCard> */}
 
             <div className='flex flex-col gap-[23px] rounded-[10px] bg-white px-[33px] py-4'>
               <div className='text-lg font-bold text-[#450065]'>

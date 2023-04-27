@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { RiDashboardFill } from 'react-icons/ri';
 
 const SingleSubjectDashboard = () => {
-  const [tabIdx, setTabIdx] = useState(1);
+  const [tabIdx, setTabIdx] = useState(0);
   return (
     // max-width: 68.75rem;
     // @apply mx-auto w-11/12;

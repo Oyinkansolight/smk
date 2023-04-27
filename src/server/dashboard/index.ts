@@ -1,4 +1,4 @@
-import { request } from '@/server';
+import request from '@/server';
 import { DashboardOverview } from '@/types';
 import { useQuery } from 'react-query';
 

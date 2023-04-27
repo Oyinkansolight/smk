@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import { GeocodingParams, useGeocoding } from '@/server/geocoding';
-import React from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const Page = () => {
@@ -27,9 +27,7 @@ const Page = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <BaseInput
         name='address'
         label='Address'
@@ -40,7 +38,7 @@ const Page = () => {
         Get Address
       </Button>
     </form>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

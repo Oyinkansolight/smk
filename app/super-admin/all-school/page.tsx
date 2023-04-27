@@ -85,7 +85,7 @@ const AddStudent = () => {
           <h1 className='font-semibold text-2xl'>624,500</h1>
         </div>
         <Link
-          href='/add-school'
+          href='/super-admin/add-school'
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add School

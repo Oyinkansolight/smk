@@ -40,7 +40,7 @@ export default function AdminHeader() {
             </button>
             {isOpen && (
               <div className='absolute z-10 right-10 top-4'>
-                <AdminNotification />
+                <AdminNotification link='/super-admin/all-notification' />
               </div>
             )}
             {isOpen && (

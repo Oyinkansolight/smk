@@ -4,9 +4,10 @@ import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
 import { useEffect, useState } from 'react';
 import { useGeoLocation } from 'use-geo-location';
 
-
 export default function ClockInTime() {
   const [inArea, setInArea] = useState(false);
+  const [distance, setDistance] = useState('Calculating...');
+  const [isLoading, setIsLoading] = useState(false);
   const [clockedIn, setClockedIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState(0);
   const { latitude, longitude, loading, error } = useGeoLocation();
@@ -14,11 +15,14 @@ export default function ClockInTime() {
   const long = 3.334813;
 
   useEffect(() => {
+    setIsLoading(loading);
     logger({ latitude, longitude, loading, error });
     if (latitude && longitude) {
       const d = calculateEarthDistance(latitude, longitude, lat, long);
+      setDistance(d.toFixed(2));
       if (d < 100) {
         setInArea(true);
+        setIsLoading(false);
       }
     }
   }, [latitude, longitude, loading, error]);
@@ -35,8 +39,7 @@ export default function ClockInTime() {
         <div>
           You are{' '}
           <span className='font-bold text-[#FB6340]'>
-            {calculateEarthDistance(latitude, longitude, lat, long).toFixed(2)}{' '}
-            Km
+            {isLoading ? 'Calculating' : distance} Km
           </span>{' '}
           away from your clock area
         </div>

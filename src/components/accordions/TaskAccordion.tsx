@@ -14,7 +14,7 @@ export default function TaskAccordion({
   lesson,
   length = 300,
   showIcons = true,
-  bordered = false
+  bordered = false,
 }: {
   taskName: string;
   children: JSX.Element;
@@ -84,11 +84,13 @@ export default function TaskAccordion({
       >
         {children}
 
-        {lesson && <div className='flex cursor-pointer justify-start py-5'>
-          <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-[#3361FF]'>
-            Add To Lesson
+        {lesson && (
+          <div className='flex cursor-pointer justify-start py-5'>
+            <div className='rounded-md bg-white py-2 px-4 text-center font-bold text-[#3361FF]'>
+              Add To Lesson
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );

@@ -39,7 +39,6 @@ type BaseInputProps<
   onClick?: (e?: any) => void;
   disable?: boolean;
   value?: string;
-  onChange?: (value: string) => void;
 };
 
 const helperTextClasses: Record<string, string> = {
@@ -71,7 +70,6 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
   helper,
   icon,
   onClick,
-  onChange,
   value,
   disable = false,
   ...otherInputProps
@@ -125,10 +123,9 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
                 ? helperBorderClasses[helper.type]
                 : 'focus:border-primary'
             )}
-            {...(register ? register(name, validation) : {})}
-            onChange={(e) => onChange && onChange(e.currentTarget.value)}
             value={value}
             {...otherInputProps}
+            {...(register ? register(name, validation) : {})}
           />
 
           {icon && (

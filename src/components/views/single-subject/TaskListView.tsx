@@ -48,24 +48,29 @@ export default function TaskListView() {
                     .fill(0)
                     .map((v, j) => {
                       return (
-                        <div key={j} className={clsxm(
-                          j === 0 && 'border-t',
-                          j === 3 && 'border-b',
-                          'flex flex-row justify-between py-[22px]'
-                        )}>
+                        <div
+                          key={j}
+                          className={clsxm(
+                            j === 0 && 'border-t',
+                            j === 3 && 'border-b',
+                            'flex flex-row justify-between py-[22px]'
+                          )}
+                        >
                           <div>Period {j}</div>
-                          <div><span className='text-[#8898AA]'>5</span>/10</div>
+                          <div>
+                            <span className='text-[#8898AA]'>5</span>/10
+                          </div>
                           <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
                             <div>View</div>
                             <div>Edit</div>
                             <div>Delete</div>
                           </div>
                         </div>
-                      )
+                      );
                     })}
                 </div>
               </TaskAccordion>
-            )
+            );
           }
           return (
             <TaskAccordion
@@ -75,9 +80,21 @@ export default function TaskListView() {
               key={i}
             >
               <div className='flex flex-wrap mt-4 gap-[27px]'>
-                <CurriculumCard name="First Term Curriculum" count={85} variant="primary" />
-                <CurriculumCard name="Second Term Curriculum" count={85} variant="secondary" />
-                <CurriculumCard name="Third Term Curriculum" count={85} variant="tertiary" />
+                <CurriculumCard
+                  name='First Term Curriculum'
+                  count={85}
+                  variant='primary'
+                />
+                <CurriculumCard
+                  name='Second Term Curriculum'
+                  count={85}
+                  variant='secondary'
+                />
+                <CurriculumCard
+                  name='Third Term Curriculum'
+                  count={85}
+                  variant='tertiary'
+                />
               </div>
             </TaskAccordion>
           );

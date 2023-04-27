@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import React from 'react';
+import Notificationarrow from '~/svg/notificationarrow.svg';
 
-const Notification = () => {
+const Notification = ({ link }: { link: string }) => {
   return (
     <div className='notification  max-h-[400px] overflow-y-auto'>
       <div className='header pb-2 pt-6 border-b-2 mb-4 px-6'>
@@ -22,6 +24,13 @@ const Notification = () => {
           </p>
         </div>
       ))}
+      <div className='flex justify-end p-2'>
+        <Link href={link}>
+          <div className='text-[#1EC572] text-sm flex space-x-2 items-center'>
+            <span>View all</span> <Notificationarrow className='h-3' />
+          </div>
+        </Link>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import { request } from '@/server';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import request from '@/server';
 import { useMutation } from 'react-query';
-
 
 export interface CreateInstitutionParams {
   instituteName?: string;
@@ -20,7 +20,20 @@ export function useCreateInstitution() {
   const mutation = useMutation({
     mutationKey: 'create_institution',
     mutationFn: (params: CreateInstitutionParams) =>
-      request.post('/v1/government/institutes/add-institute', params),
+      request.post('/v1/government/institutes/add-institute', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+
+export function useInviteInstitution() {
+  const mutation = useMutation({
+    mutationKey: 'invite_institution',
+    mutationFn: (params: CreateInstitutionParams) =>
+      request.post('/v1/government/institutes/invite-institute', params, {
+        withCredentials: true,
+      }),
   });
   return mutation;
 }
@@ -31,8 +44,23 @@ export function useCompleteInstitutionOnboarding() {
     mutationFn: (params: CreateInstitutionParams) =>
       request.post(
         '/v1/government/institutes/complete-institute-onboarding',
-        params
+        params,
+        {
+          withCredentials: true,
+        }
       ),
   });
+  return mutation;
+}
+
+export function useOnboardVerification() {
+  const mutation = useMutation({
+    mutationKey: 'onboard_verification',
+    mutationFn: async (token: string) =>
+      (await request.get(
+        `/v1/government/institutes/verify-institute-token?token=${token}`
+      )) as any,
+  });
+
   return mutation;
 }

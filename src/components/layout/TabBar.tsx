@@ -2,19 +2,20 @@
 
 import clsxm from '@/lib/clsxm';
 
+interface propTypes {
+  items: { label: string; icon: JSX.Element }[];
+  selected?: number;
+  onSelect?: (idx: number) => void;
+  buttonActiveClassName?: string;
+  variant?: 'primary' | 'secondary';
+}
 export default function TabBar({
   items,
   selected,
   onSelect,
   buttonActiveClassName,
   variant = 'secondary',
-}: {
-  items: { label: string; icon: JSX.Element }[];
-  selected?: number;
-  onSelect?: (idx: number) => void;
-  buttonActiveClassName?: string;
-  variant?: 'primary' | 'secondary';
-}) {
+}: propTypes) {
   return (
     <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap '>
       {items.map((item, i) => (

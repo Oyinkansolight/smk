@@ -3,6 +3,7 @@
 import { BasicSearch } from '@/components/search';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
@@ -56,6 +57,15 @@ const AllStaff = () => {
     },
   ];
 
+  const [staffs, setstaffs] = useState(mockData);
+
+  const handleSearch = (value: string) => {
+    const result = mockData.filter((data) =>
+      data.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setstaffs(result);
+  };
+
   return (
     <section className='px-[60px] py-6'>
       <div className='flex items-center space-x-4'>
@@ -77,7 +87,7 @@ const AllStaff = () => {
           <h1 className='font-semibold text-2xl'>64,450</h1>
         </div>
         <Link
-          href='#'
+          href='/admin/add-staff'
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add Teacher
@@ -88,7 +98,7 @@ const AllStaff = () => {
           <select name='' className='border-none bg-transparent outline-none'>
             <option value=''>Filter</option>
           </select>
-          <BasicSearch />
+          <BasicSearch handleSearch={handleSearch} />
         </div>
       </div>
 
@@ -101,7 +111,7 @@ const AllStaff = () => {
           <div className='col-span-3'>Schools</div>
           <div className='col-span-2'>Location</div>
         </div>
-        {mockData.map((item, idx) => (
+        {staffs.map((item, idx) => (
           <div
             className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
             key={idx}

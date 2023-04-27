@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CurriculumView = () => {
   return (
@@ -22,7 +22,7 @@ const CurriculumView = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CurriculumView
+export default CurriculumView;

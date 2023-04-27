@@ -5,9 +5,18 @@ type propType = {
   placeholder: string;
   formValue: string | number;
   setFormValue: (value: string | number) => void;
+  type?: string;
+  disabled?: boolean;
 };
 
-const Input = ({ label, formValue, setFormValue, placeholder }: propType) => {
+const Input = ({
+  label,
+  formValue,
+  type,
+  setFormValue,
+  placeholder,
+  disabled,
+}: propType) => {
   return (
     <div className=''>
       <div>
@@ -16,7 +25,8 @@ const Input = ({ label, formValue, setFormValue, placeholder }: propType) => {
         </label>
         <div className='mt-1 w-full border p-2 rounded'>
           <input
-            type='text'
+            disabled={disabled}
+            type={type || 'text'}
             className='w-full border-none outline-none'
             placeholder={placeholder}
             value={formValue}

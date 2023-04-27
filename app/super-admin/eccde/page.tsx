@@ -3,6 +3,7 @@
 import { BasicSearch } from '@/components/search';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
@@ -55,6 +56,15 @@ const AddStudent = () => {
     },
   ];
 
+  const [eccede, seteccede] = useState(mockData);
+
+  const handleSearch = (value: string) => {
+    const result = mockData.filter((data) =>
+      data.name.toLowerCase().includes(value.toLowerCase())
+    );
+    seteccede(result);
+  };
+
   return (
     <section className='px-[60px] py-6'>
       <div className='flex items-center space-x-4'>
@@ -76,7 +86,7 @@ const AddStudent = () => {
           <h1 className='font-semibold text-2xl'>624,500</h1>
         </div>
         <Link
-          href='/biodata'
+          href='/super-admin/add-school'
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add School
@@ -87,7 +97,7 @@ const AddStudent = () => {
           <select name='' className='border-none bg-transparent outline-none'>
             <option value=''>Filter</option>
           </select>
-          <BasicSearch />
+          <BasicSearch handleSearch={handleSearch} />
         </div>
       </div>
 
@@ -99,7 +109,7 @@ const AddStudent = () => {
           <div className='col-span-2'>Staffs</div>
           <div className='col-span-2'>Location</div>
         </div>
-        {mockData.map((item, idx) => (
+        {eccede.map((item, idx) => (
           <div
             className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
             key={idx}

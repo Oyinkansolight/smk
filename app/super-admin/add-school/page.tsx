@@ -1,5 +1,6 @@
 'use client';
 
+import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Account from '@/components/views/super-admin/AddSchool/account';
 import General from '@/components/views/super-admin/AddSchool/general';
@@ -11,14 +12,15 @@ import { useCreateInstitution } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-
-const AddStudent = () => {
+const AddSchool = () => {
   const [stage, setStage] = useState(1);
+  const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [imageName, setImageName] = useState<string>('');
-  const [, setImageData] = useState();
+  const [imageData, setImageData] = useState('http://placeimg.com/640/480');
   const [schoolName1, setSchoolName1] = useState<string | number>('');
   const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   const [imageName1, setImageName1] = useState<string>('');
@@ -107,33 +109,22 @@ const AddStudent = () => {
         )}
         {stage === 3 && (
           <Account
-            schoolEmail1={schoolEmail1}
-            imageName1={imageName1}
-            schoolName1={schoolName1}
-            setImageData1={(v) => setImageData1(v)}
-            setImageName1={(v) => setImageName1(v ?? '')}
-            setSchoolEmail1={setSchoolEmail1}
-            setSchoolName1={setSchoolName1}
+            schoolEmail={schoolEmail}
+            imageName={imageName}
+            schoolName={schoolName}
+            setImageData={(v) => setImageData(v)}
+            setImageName={(v) => setImageName(v ?? '')}
+            setSchoolEmail={setSchoolEmail}
+            setSchoolName={setSchoolName}
           />
         )}
         {stage === 4 && (
           <Publish
-            onSubmit={async () => {
-              try {
-                const d = await geocoding.mutateAsync({
-                  address: location as string,
-                });
-                createInstitution.mutateAsync({
-                  instituteLat: d[0].geometry?.location?.lat?.toString(),
-                  instituteLong: d[0].geometry?.location?.lng?.toString(),
-                  instituteAddress: location as string,
-                  instituteEmail: schoolEmail as string,
-                  instituteName: schoolName as string,
-                });
-              } catch (error) {
-                logger(error);
-              }
-            }}
+            lga={lga}
+            town={town}
+            location={location}
+            schoolName={schoolName}
+            schoolEmail={schoolEmail}
           />
         )}
 
@@ -141,21 +132,62 @@ const AddStudent = () => {
           <div className='flex space-x-6'>
             <button
               onClick={prevHandler}
-              className='w-full rounded px-2 py-3 text-xs text-[#3361FF] md:px-6'
+              className='w-full rounded px-2 py-3 text-xs text-[#008146] md:px-6'
             >
               Prev
             </button>
-            <button
-              onClick={nextHandler}
-              className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
-            >
-              Next
-            </button>
+            {stage <= 3 ? (
+              <button
+                onClick={nextHandler}
+                className='w-full rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
+              >
+                Next
+              </button>
+            ) : (
+              <button
+                onClick={async () => {
+                  try {
+                    toast.info('Creating Institution...');
+                    const d = await geocoding.mutateAsync({
+                      address: location as string,
+                    });
+                    const response = createInstitution.mutateAsync({
+                      instituteLat: d[0].geometry?.location?.lat?.toString(),
+                      instituteLong: d[0].geometry?.location?.lng?.toString(),
+                      instituteAddress: location as string,
+                      instituteEmail: schoolEmail as string,
+                      instituteName: schoolName as string,
+                      instituteLogo: 'http://placeimg.com/640/480',
+                      instituteType: 1,
+                      town: 1,
+                      email: schoolEmail as string,
+                      password: 'test_password' as string,
+                      role: 1,
+                    });
+
+                    if ((await response).data) setisOpen(true);
+                  } catch (error) {
+                    logger(error);
+                  }
+                }}
+                className='w-full rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
+              >
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>
+      {isOpen && (
+        <Success
+          title='Institution created successfully'
+          description='Login details would be generated and sent to the school’s official email.'
+          link='/super-admin/all-school'
+          textLink='Manage School'
+        />
+      )}
     </section>
   );
 };
 
-export default AddStudent;
+export default AddSchool;

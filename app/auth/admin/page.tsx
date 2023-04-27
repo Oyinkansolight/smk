@@ -3,6 +3,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
@@ -15,7 +16,7 @@ export default function AdminAuth() {
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
-    mode: 'onChange',
+    mode: 'all',
   });
   const signIn = useSignIn();
   const onSubmit = async (data: SignInParams) => {
@@ -23,6 +24,7 @@ export default function AdminAuth() {
       const response = await signIn.mutateAsync(data);
 
       if (response) {
+        localStorage.setItem('TOKEN_KEY', response.data.data.token);
         toast.success('Login successful');
 
         //2 Second delay before redirecting to dashboard
@@ -30,9 +32,18 @@ export default function AdminAuth() {
           toast.info('Redirecting to dashboard...');
         }, 2000);
 
-        router.push(ROUTES.SUPER_ADMIN)
+        if (response.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
+          router.push(ROUTES.SUPER_ADMIN);
+        } else if (response.data.data.type === USER_ROLES.INSTITUTION_ADMIN) {
+          router.push(ROUTES.ADMIN);
+        } else if (response.data.data.type === USER_ROLES.TEACHER) {
+          router.push(ROUTES.TEACHER);
+        } else if (response.data.data.type === USER_ROLES.STUDENT) {
+          router.push(ROUTES.STUDENT);
+        } else {
+          toast.error('Invalid user role');
+        }
       }
-
     } catch (error) {
       toast.error((error as Error).message);
     }

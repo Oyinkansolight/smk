@@ -9,9 +9,15 @@ interface IndividualTotalProps {
   count: number;
   name: string;
   variant: 'primary' | 'secondary' | 'tertiary';
+  link: string;
 }
 
-const IndividualTotal = ({ count, name, variant }: IndividualTotalProps) => {
+const IndividualTotal = ({
+  count,
+  name,
+  variant,
+  link,
+}: IndividualTotalProps) => {
   return (
     <BasicCard
       className={clsxm(
@@ -28,7 +34,7 @@ const IndividualTotal = ({ count, name, variant }: IndividualTotalProps) => {
       </div>
 
       <div className='absolute right-3 bottom-4'>
-        <PrimaryLink href='#'>
+        <PrimaryLink href={link}>
           View all <GoChevronRight />{' '}
         </PrimaryLink>
       </div>
