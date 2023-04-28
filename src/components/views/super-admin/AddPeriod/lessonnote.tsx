@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import dynamic from 'next/dynamic'
 import FormInput from '@/components/input/formInput';
 import logger from '@/lib/logger';
 import { convertToHTML } from 'draft-convert';
@@ -8,8 +9,13 @@ import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import 'draft-js/dist/Draft.css';
 import React, { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
+// import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
+const Editor = dynamic(() => import('react-draft-wysiwyg').then(draft => draft.Editor), {
+  loading: () => <p>Loading...</p>,
+})
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
