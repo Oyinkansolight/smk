@@ -7,33 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(1);
-  const [isOpen, setisOpen] = useState(false);
-
-  const nextHandler = (): void => {
-    if (stage >= 1 && stage <= 3) {
-      setStage(stage + 1);
-    }
-  };
-  const prevHandler = (): void => {
-    if (stage >= 2) {
-      setStage(stage - 1);
-    }
-  };
-  const stepperData = [
-    {
-      stage: 1,
-      stageName: 'Period Details',
-    },
-    {
-      stage: 2,
-      stageName: 'Lesson Note',
-    },
-    {
-      stage: 3,
-      stageName: 'Public',
-    },
-  ];
+  const [isOpen] = useState(false);
 
   return (
     <section className='px-[60px] py-6'>

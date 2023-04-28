@@ -3,7 +3,6 @@ import { CircularCounter } from '@/components/counter';
 import clsxm from '@/lib/clsxm';
 import React from 'react';
 
-
 interface CurriculumProps {
   name: string;
   count: number;

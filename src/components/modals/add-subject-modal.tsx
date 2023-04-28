@@ -2,7 +2,6 @@ import AddSubjectView from '@/components/views/add-subject';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
-
 export default function AddSubjectModal({
   children,
 }: {

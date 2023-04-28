@@ -1,6 +1,7 @@
 'use client';
 
 import clsxm from '@/lib/clsxm';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Close from '~/svg/close.svg';
 import Upload from '~/svg/upload.svg';
@@ -13,7 +14,13 @@ type propType = {
   className?: string;
 };
 
-const Input = ({ label, setImageData, setImageName, imageName, className }: propType) => {
+const Input = ({
+  label,
+  setImageData,
+  setImageName,
+  imageName,
+  className,
+}: propType) => {
   const handleImage = (file: any) => {
     if (file) {
       setImageData(file);
@@ -48,10 +55,7 @@ const Input = ({ label, setImageData, setImageName, imageName, className }: prop
         <label htmlFor='' className='text-xs font-bold'>
           {label}
         </label>
-        <div className={clsxm(
-          className,
-          'mt-1 w-full border p-5 rounded'
-        )}>
+        <div className={clsxm(className, 'mt-1 w-full border p-5 rounded')}>
           <input
             type='file'
             id='upload'

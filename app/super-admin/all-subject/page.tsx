@@ -59,12 +59,12 @@ const AllSubjects = () => {
         <h3 className='text-[10px] font-medium'>Dashboard</h3>
       </div>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Students</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Subjects</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
-          <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>64,450</h1>
+          <p className='text-[#615F5F]'>Total Subjects</p>
+          <h1 className='font-semibold text-2xl'>64</h1>
         </div>
         <AddSubjectModal>
           <div className='cursor-pointer w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '>

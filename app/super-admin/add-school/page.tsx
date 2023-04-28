@@ -21,13 +21,15 @@ const AddSchool = () => {
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState('http://placeimg.com/640/480');
-  const [schoolName1, setSchoolName1] = useState<string | number>('');
-  const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
-  const [imageName1, setImageName1] = useState<string>('');
-  const [, setImageData1] = useState();
+  // const [schoolName1, setSchoolName1] = useState<string | number>('');
+  // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
+  // const [imageName1, setImageName1] = useState<string>('');
+  // const [, setImageData1] = useState();
   const [location, setLocation] = useState<string | number>('');
   const [town, setTown] = useState<string | number>('');
   const [lga, setLga] = useState<string | number>('');
+
+  logger(imageData);
 
   const createInstitution = useCreateInstitution();
   const geocoding = useGeocoding();

@@ -7,9 +7,16 @@ interface propType {
   description: string;
   link: string;
   textLink: string;
+  showHome?: boolean;
 }
 
-function addStudent({ title, description, link, textLink }: propType) {
+function addStudent({
+  title,
+  description,
+  link,
+  textLink,
+  showHome = true,
+}: propType) {
   return (
     <div className='fixed inset-0 z-[999999] grid place-content-center rounded-sm bg-black/30'>
       <div className='flex w-[700px] py-16 flex-col justify-center items-center  bg-white px-4 rounded'>
@@ -25,12 +32,14 @@ function addStudent({ title, description, link, textLink }: propType) {
           >
             {textLink}
           </Link>
-          <Link
-            href='/super-admin'
-            className='w-max  rounded border border-[#008146] px-12 py-3 text-xs text-[#008146] '
-          >
-            Go Home
-          </Link>
+          {showHome && (
+            <Link
+              href='/super-admin'
+              className='w-max  rounded border border-[#008146] px-12 py-3 text-xs text-[#008146] '
+            >
+              Go Home
+            </Link>
+          )}
         </div>
       </div>
     </div>

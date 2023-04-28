@@ -14,6 +14,7 @@ export interface CreateInstitutionParams {
   email?: string;
   password?: string;
   role?: number;
+  id?: number;
 }
 
 export function useCreateInstitution() {
@@ -44,10 +45,7 @@ export function useCompleteInstitutionOnboarding() {
     mutationFn: (params: CreateInstitutionParams) =>
       request.post(
         '/v1/government/institutes/complete-institute-onboarding',
-        params,
-        {
-          withCredentials: true,
-        }
+        params
       ),
   });
   return mutation;

@@ -5,8 +5,8 @@ import { BaseInput } from '@/components/input';
 
 export default function AddWeekView() {
   return (
-    <div className='flex h-screen items-center justify-center'>
-      <div className='flex max-h-screen w-full max-w-2xl flex-col items-center overflow-auto bg-white p-10'>
+    <div className='flex items-center justify-center'>
+      <div className='flex max-h-screen w-full max-w-2xl flex-col items-center overflow-auto bg-white'>
         <div className='py-2 text-4xl font-bold'>Add New Week</div>
         <div className='mt-4'>Kindly enter the details below</div>
         <div className='h-8' />

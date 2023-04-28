@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
+import Dragdrop from '@/components/input/dragdrop';
+import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -9,10 +12,7 @@ import {
   useCompleteInstitutionOnboarding,
   useOnboardVerification,
 } from '@/server/institution';
-import {
-  useGetLocalGovernments,
-  useGetPermissions,
-} from '@/server/onboard';
+import { useGetLocalGovernments } from '@/server/onboard';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
@@ -23,7 +23,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
-import Dragdrop from '@/components/input/dragdrop';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const stepData = [
   {
@@ -50,13 +51,16 @@ const stepData = [
 ];
 
 export default function Page() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
-  const d = useGetPermissions();
+  // const d = useGetPermissions();
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState('');
-  const [permissions, setPermissions] = useState(new Set<number>());
+  // const [permissions, setPermissions] = useState(new Set<number>());
+  const [isComplete, setIsComplete] = useState(false);
+
+  logger(imageData);
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
@@ -79,12 +83,13 @@ export default function Page() {
       if (res.data.message === 'Token verified successfully.') {
         toast.success('Institution verified successfully.');
         setUser(res.data.data);
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setIsLoading(false);
       }
     };
 
     verifyUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const StepperLayout = ({ children }: { children: React.ReactNode }) => (
@@ -109,9 +114,20 @@ export default function Page() {
             } else {
               try {
                 await create.mutateAsync({
-                  ...getValues(),
+                  // ...getValues(),
+                  town: 1,
+                  role: 1,
+                  instituteType: 1,
+                  password: '123456',
+                  instituteLat: '6.465422',
+                  instituteLong: '3.406448',
+                  email: user?.instituteEmail ?? 'e@mail.com',
+                  instituteLogo: 'https://picsum.photos/200',
+                  instituteAddress: getValues('instituteAddress'),
+                  id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
+                setIsComplete(true);
               } catch (error) {
                 logger(error);
                 // toast.error('Error');
@@ -196,25 +212,26 @@ export default function Page() {
   const StepThree = () => {
     const locals = useGetLocalGovernments();
     const [towns, setTowns] = useState<any>([]);
-    const [currentTownIndex, setCurrentTownIndex] = useState(0);
+    const [currentTownIndex] = useState(0);
     // const towns = useGetTowns(currentTownIndex);
 
     useEffect(() => {
       if (!locals.isLoading && locals.data && locals.data.length > 0) {
-        locals.data.forEach((local) => {
+        locals.data.forEach((local: any) => {
           setTowns([...towns, local.towns]);
         });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [locals.data]);
 
     useEffect(() => {
       logger(currentTownIndex);
-    }, [currentTownIndex])
+    }, [currentTownIndex]);
 
-    const handleGetTownIndex = (e: any) => {
-      // setCurrentTownIndex(e.target.value);
-      logger(e.target.value)
-    }
+    // const handleGetTownIndex = (e: any) => {
+    //   // setCurrentTownIndex(e.target.value);
+    //   logger(e.target.value);
+    // };
 
     return (
       <StepperLayout>
@@ -225,7 +242,7 @@ export default function Page() {
           <div className='mt-4 flex flex-col gap-10'>
             <BaseInput
               label='Enter Address'
-              name='address'
+              name='instituteAddress'
               placeholder='Details here'
               register={register}
               value={user?.instituteAddress}
@@ -249,11 +266,15 @@ export default function Page() {
                 control={control}
                 name='townId'
                 render={({ field }) => {
-                  return <Select options={towns[currentTownIndex] ?? []} {...field} />;
+                  return (
+                    <Select
+                      options={towns[currentTownIndex] ?? []}
+                      {...field}
+                    />
+                  );
                 }}
               />
             </div>
-
           </div>
         </div>
       </StepperLayout>
@@ -313,11 +334,12 @@ export default function Page() {
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
           <div className='h2'>Staff Details</div>
-          <div className='p'>Kindly enter the details of the institution below:</div>
+          <div className='p'>
+            Kindly enter the details of the institution below:
+          </div>
 
           <div className='mt-4 flex flex-col gap-10 mb-10'>
             <BaseInput
-              disable
               label='Enter Number of Staff *'
               name='staff_number'
               register={register}
@@ -342,11 +364,12 @@ export default function Page() {
       <StepperLayout>
         <div className='flex flex-col gap-y-2'>
           <div className='h2'>Student Details</div>
-          <div className='p'>Kindly enter the details of the institution below:</div>
+          <div className='p'>
+            Kindly enter the details of the institution below:
+          </div>
 
           <div className='mt-4 flex flex-col gap-10 mb-10'>
             <BaseInput
-              disable
               label='Enter Number of Students *'
               name='student_number'
               register={register}
@@ -375,10 +398,10 @@ export default function Page() {
 
           <div className='mt-4 flex flex-col gap-10'>
             <BaseInput
+              disable
               label='Login details'
               name='user_email'
               register={register}
-              placeholder='name@mail.com'
               value={user?.instituteEmail}
             />
 
@@ -411,7 +434,9 @@ export default function Page() {
       <StepperLayout>
         <section className=''>
           <h2 className='text-2xl font-bold'>Publish</h2>
-          <p>Kindly ensure that the details below are correct before submitting:</p>
+          <p>
+            Kindly ensure that the details below are correct before submitting:
+          </p>
 
           <div className='bg-[#F4F9FF] p-8 rounded-md mt-4'>
             <h2 className='text-xl font-bold mb-10'>Summary</h2>
@@ -419,30 +444,32 @@ export default function Page() {
             <div className='grid grid-cols-12 gap-4  items-center mb-10'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>Name</h2>
-                <p>Alive School</p>
+                <p>{user?.instituteName}</p>
               </div>
 
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>Address</h2>
-                <p>School Location</p>
+                <p>{getValues('instituteAddress')}</p>
               </div>
             </div>
 
             <div className='grid grid-cols-12 gap-4  items-center mb-10'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>Official Email</h2>
-                <p>school@mail.com</p>
+                <p>{user?.instituteEmail}</p>
               </div>
 
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>Local Govt</h2>
-                <p>lga</p>
+                {/* <p>{getValues("localGovernmentId") ?? "Etsako"}</p> */}
+                <p>Etsako</p>
               </div>
             </div>
             <div className='grid grid-cols-12 gap-4  items-center mb-10'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>Town</h2>
-                <p>town</p>
+                {/* <p>{getValues("townId") ?? "Agbor"}</p> */}
+                <p>Agbor</p>
               </div>
             </div>
 
@@ -451,12 +478,12 @@ export default function Page() {
             <div className='grid grid-cols-12 gap-4  items-center mt-[30px]'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>No of Staffs</h2>
-                <p>23</p>
+                <p>{getValues('staff_number') ?? 200}</p>
               </div>
 
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>No of Students</h2>
-                <p>190</p>
+                <p>{getValues('student_number') ?? 762}</p>
               </div>
             </div>
 
@@ -464,8 +491,8 @@ export default function Page() {
               Note
             </h2>
             <p className='text-center'>
-              Login details would be generated and sent to the school&apos;s official
-              email.
+              Login details would be generated and sent to the school&apos;s
+              official email.
             </p>
           </div>
         </section>
@@ -510,6 +537,16 @@ export default function Page() {
           <form className='w-full'>
             <div className='flex w-full flex-col'>{steps[step]}</div>
           </form>
+
+          {isComplete && (
+            <Success
+              showHome={false}
+              title='Account created successfully'
+              description='You can now access your account.'
+              link='/auth/admin'
+              textLink='Go to Access Portal'
+            />
+          )}
         </div>
       </div>
     );

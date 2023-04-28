@@ -44,20 +44,20 @@ import StudentBadge from '~/svg/student_badge.svg';
 //   },
 // ];
 
-const percentageData = [
-  {
-    title: 'Query Schools',
-    percentage: 70,
-  },
-  {
-    title: 'Query Schools',
-    percentage: 50,
-  },
-  {
-    title: 'Query Schools',
-    percentage: 90,
-  },
-];
+// const percentageData = [
+//   {
+//     title: 'Query Schools',
+//     percentage: 70,
+//   },
+//   {
+//     title: 'Query Schools',
+//     percentage: 50,
+//   },
+//   {
+//     title: 'Query Schools',
+//     percentage: 90,
+//   },
+// ];
 
 // const streamData = [
 //     {

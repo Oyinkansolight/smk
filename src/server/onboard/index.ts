@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
 import { Label } from '@/types';
 import { useQuery } from 'react-query';

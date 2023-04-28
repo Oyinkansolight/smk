@@ -6,7 +6,6 @@ import { BiPaperclip } from 'react-icons/bi';
 import { BsArrowDownCircle, BsListTask } from 'react-icons/bs';
 import { TbClockHour4 } from 'react-icons/tb';
 
-
 export default function TaskAccordion({
   taskName,
   subName,
