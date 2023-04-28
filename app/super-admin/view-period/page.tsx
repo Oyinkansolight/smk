@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const AddSchool = () => {
+const ViewPeriod = () => {
   const router = useRouter();
   const [isOpen] = useState(false);
   return (
@@ -88,4 +88,4 @@ const AddSchool = () => {
   );
 };
 
-export default AddSchool;
+export default ViewPeriod;

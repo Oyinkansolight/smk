@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-const AddSchool = () => {
+const EditPeriod = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
 
@@ -107,4 +107,4 @@ const AddSchool = () => {
   );
 };
 
-export default AddSchool;
+export default EditPeriod;

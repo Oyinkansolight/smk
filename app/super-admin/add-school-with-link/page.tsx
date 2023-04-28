@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const AddSchool = () => {
+const AddSchoolLink = () => {
   const router = useRouter();
   const [stage] = useState(1);
   const [schoolName, setSchoolName] = useState<string | number>('');
@@ -117,4 +117,4 @@ const AddSchool = () => {
   );
 };
 
-export default AddSchool;
+export default AddSchoolLink;
