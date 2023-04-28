@@ -53,7 +53,7 @@ export default function AllCurriculumView() {
                   }
                   actions={
                     <div className='flex items-center'>
-                      <Button>Add Period</Button>
+                      <Button onClick={()=> window.location.href = '/super-admin/edit-period'}>Add Period</Button>
                       <div className='w-2' />
                       <SlOptionsVertical className='w-4 h-4' />
                     </div>
@@ -79,8 +79,8 @@ export default function AllCurriculumView() {
                               <span className='text-[#8898AA]'>5</span>/10
                             </div>
                             <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
-                              <div>View</div>
-                              <div>Edit</div>
+                              <div className='cursor-pointer' onClick={()=> window.location.href = '/super-admin/view-period'}>View</div>
+                              <div className='cursor-pointer' onClick={()=> window.location.href = '/super-admin/edit-period'}>Edit</div>
                               <div>Delete</div>
                             </div>
                           </div>
