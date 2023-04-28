@@ -6,8 +6,11 @@ import { BiPaperclip } from 'react-icons/bi';
 import { BsArrowDownCircle, BsListTask } from 'react-icons/bs';
 import { TbClockHour4 } from 'react-icons/tb';
 
+
 export default function TaskAccordion({
   taskName,
+  subName,
+  actions,
   children,
   nextClass,
   endDate,
@@ -17,6 +20,8 @@ export default function TaskAccordion({
   bordered = false,
 }: {
   taskName: string;
+  subName?: string | JSX.Element;
+  actions?: JSX.Element;
   children: JSX.Element;
   nextClass?: Date;
   endDate?: Date;
@@ -41,7 +46,7 @@ export default function TaskAccordion({
         <div className='w-4' />
         <div className='text-[#6B7A99]'>{taskName}</div>
         <div className='w-8' />
-        <div className='text-[#ADB8CC]'>Lessons</div>
+        <div className='text-[#ADB8CC]'>{subName || 'Lessons'}</div>
         {showIcons && (
           <>
             <div className='w-3' />
@@ -71,13 +76,14 @@ export default function TaskAccordion({
             </div>
           </>
         )}
+        {actions}
       </div>
       <div
         style={{
           height: expanded ? `${40 + 72 + 52.4 * length}px` : '0px',
         }}
         className={clsxm(
-          'overflow-hidden transition-all duration-200 overflow-y-scroll',
+          'overflow-hidden transition-all duration-200 overflow-y-auto',
           expanded ? '' : '',
           expanded && bordered ? 'border border-[#E3E3E3] px-6' : ''
         )}

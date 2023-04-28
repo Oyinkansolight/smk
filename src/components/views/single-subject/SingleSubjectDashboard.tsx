@@ -3,52 +3,65 @@
 import SubjectProfileCard from '@/components/cards/SubjectProfile';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import CurriculumView from '@/components/views/single-subject/CurriculumView';
+import AllCurriculumView from '@/components/views/single-subject/AllCurriculumView';
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import { useState } from 'react';
+import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
 const SingleSubjectDashboard = () => {
-  const [tabIdx, setTabIdx] = useState(0);
+  const [page, setPage] = useState(0);
   return (
     // max-width: 68.75rem;
     // @apply mx-auto w-11/12;
     <div className='w-11/12 max-w-7xl mx-auto flex overflow-y-scroll'>
       <SubjectProfileCard name='Mathematics' />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
-        <div className='flex w-full items-center justify-between'>
-          <TabBar
-            variant='primary'
-            selected={tabIdx}
-            onSelect={(i) => setTabIdx(i)}
-            items={[
-              {
-                icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Subject Classes',
-              },
-            ]}
-          />
+        {page === 0 ? (
+          <>
+            <div className='flex w-full items-center justify-between'>
+              <TabBar
+                variant='primary'
+                selected={0}
+                items={[
+                  {
+                    icon: <RiDashboardFill className='h-5 w-5' />,
+                    label: 'Subject Classes',
+                  },
+                ]}
+              />
 
-          <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+              <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
 
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-          </div>
-        </div>
+              <div className='h-full border-b-[2px] border-[#EDEFF2]'>
+                <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
+              </div>
+            </div>
+            <TaskListView curriculumClicked={() => setPage(1)} />
+          </>
+        ) : (
+          <>
+            <div className='flex w-full items-center justify-between'>
+              <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
 
-        {tabIdx === 0 && <TaskListView />}
-        {tabIdx === 1 && <CurriculumView />}
-        {/* {tabIdx === 0 && <StudentDashboardView />}
-        {tabIdx === 1 &&
-          <ExamReportView
-            report={[
-              { name: 'Mathematics', score: 58, date: new Date() },
-              { name: 'Mathematics', score: 88, date: new Date() },
-              { name: 'Mathematics', score: 45, date: new Date() },
-              { name: 'Mathematics', score: 34, date: new Date() },
-            ]} />
-        }
-        {tabIdx === 2 && <SchoolCalendarView />} */}
+              <div className='h-full w-full items-center border-b-[2px] flex border-[#EDEFF2]'>
+                <div
+                  onClick={() => setPage(0)}
+                  className='bg-[#EDEFF2] cursor-pointer items-center rounded-md py-2 px-4 flex'
+                >
+                  <MdArrowBackIos className='text-[#E5A500]' />{' '}
+                  <div className='w-4' /> <div>Go Back</div>
+                </div>
+                <div className='flex-1' />
+                <SearchInput
+                  placeholder='Search Tasks'
+                  className='pt-[14px] pb-5'
+                />
+              </div>
+            </div>
+            <AllCurriculumView />
+          </>
+        )}
       </div>
     </div>
   );

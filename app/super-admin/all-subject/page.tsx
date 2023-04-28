@@ -1,8 +1,8 @@
 'use client';
 
+import AddSubjectModal from '@/components/modals/add-subject-modal';
 import { BasicSearch } from '@/components/search';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 
 const AllSubjects = () => {
@@ -66,12 +66,11 @@ const AllSubjects = () => {
           <p className='text-[#615F5F]'>Total Students</p>
           <h1 className='font-semibold text-2xl'>64,450</h1>
         </div>
-        <Link
-          href='/super-admin/subject'
-          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Subject
-        </Link>
+        <AddSubjectModal>
+          <div className='cursor-pointer w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '>
+            Add Subject
+          </div>
+        </AddSubjectModal>
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>

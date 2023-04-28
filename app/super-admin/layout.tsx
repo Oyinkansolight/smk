@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html>
       <head />
-      <div className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
+      <body className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
         <AdminHeader />
 
         <div className='flex flex-1 flex-row overflow-y-hidden'>
@@ -31,7 +31,7 @@ export default function RootLayout({
           <AdminSidebar />
           {routeDetails === '/super-admin' && <AdminRightSidebar />}
         </div>
-      </div>
+      </body>
     </html>
   );
 }

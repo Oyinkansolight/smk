@@ -3,15 +3,18 @@ import { CircularCounter } from '@/components/counter';
 import clsxm from '@/lib/clsxm';
 import React from 'react';
 
+
 interface CurriculumProps {
   name: string;
   count: number;
+  onClick: () => void;
   variant?: 'primary' | 'secondary' | 'tertiary';
 }
 
 const CurriculumCard = ({
   name,
   count,
+  onClick,
   variant = 'primary',
 }: CurriculumProps) => {
   return (
@@ -21,8 +24,8 @@ const CurriculumCard = ({
         variant === 'primary'
           ? '!bg-[#F8FDFF]'
           : variant === 'secondary'
-            ? '!bg-[#FDF8FF]'
-            : '!bg-[#FFFCF8]'
+          ? '!bg-[#FDF8FF]'
+          : '!bg-[#FFFCF8]'
       )}
     >
       <div className='flex flex-col gap-[9px]'>
@@ -31,7 +34,12 @@ const CurriculumCard = ({
           <CircularCounter size='sm' total={count} />
         </div>
 
-        <div className='text-[#008146] text-[13px] cursor-pointer'>View</div>
+        <div
+          onClick={onClick}
+          className='text-[#008146] text-[13px] cursor-pointer'
+        >
+          View
+        </div>
       </div>
     </BasicCard>
   );

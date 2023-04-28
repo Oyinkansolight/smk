@@ -1,7 +1,6 @@
-import AddSubjectView from '@/components/views/add-subject';
+import AddWeekView from '@/components/views/add-week';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-
 
 export default function AddSubjectModal({
   children,
@@ -50,7 +49,7 @@ export default function AddSubjectModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
-                  <AddSubjectView />
+                  <AddWeekView />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
