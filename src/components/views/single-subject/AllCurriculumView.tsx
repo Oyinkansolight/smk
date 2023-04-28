@@ -4,10 +4,13 @@ import { CircularCounter } from '@/components/counter';
 import AddWeekModal from '@/components/modals/add-week-modal';
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { AiTwotoneFlag } from 'react-icons/ai';
 import { SlOptionsVertical } from 'react-icons/sl';
 
 export default function AllCurriculumView() {
+  const router = useRouter();
+
   const isEmpty = false;
   return (
     <div className='bg-white h-full p-4'>
@@ -54,9 +57,7 @@ export default function AllCurriculumView() {
                   actions={
                     <div className='flex items-center'>
                       <Button
-                        onClick={() =>
-                          (window.location.href = '/super-admin/edit-period')
-                        }
+                        onClick={() => router.push('/super-admin/edit-period')}
                       >
                         Add Period
                       </Button>
@@ -88,8 +89,7 @@ export default function AllCurriculumView() {
                               <div
                                 className='cursor-pointer'
                                 onClick={() =>
-                                  (window.location.href =
-                                    '/super-admin/view-period')
+                                  router.push('/super-admin/view-period')
                                 }
                               >
                                 View
@@ -97,8 +97,7 @@ export default function AllCurriculumView() {
                               <div
                                 className='cursor-pointer'
                                 onClick={() =>
-                                  (window.location.href =
-                                    '/super-admin/edit-period')
+                                  router.push('/super-admin/edit-period')
                                 }
                               >
                                 Edit

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import { useState } from 'react';
@@ -19,7 +20,7 @@ export default function TaskAccordion({
   bordered = false,
 }: {
   taskName: string;
-  subName?: string | JSX.Element;
+  subName?: string | JSX.Element | any;
   actions?: JSX.Element;
   children: JSX.Element;
   nextClass?: Date;

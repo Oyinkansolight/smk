@@ -4,11 +4,12 @@ import Button from '@/components/buttons/Button';
 import Success from '@/components/modal/Success';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const AddSchool = () => {
+  const router = useRouter();
   const [isOpen] = useState(false);
-
   return (
     <section className='px-[60px] py-6'>
       <Link href='/super-admin'>
@@ -31,7 +32,7 @@ const AddSchool = () => {
         <div className='flex-1' />
         <Button
           onClick={() => {
-            window.location.href = '/super-admin/edit-period';
+            router.push('/super-admin/edit-period');
           }}
           variant='outline'
         >
