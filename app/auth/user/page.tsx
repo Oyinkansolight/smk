@@ -13,6 +13,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+
 export default function StudentAuth() {
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
@@ -21,7 +22,8 @@ export default function StudentAuth() {
   const signIn = useSignIn();
   const onSubmit = async (data: SignInParams) => {
     try {
-      await signIn.mutateAsync(data);
+      const r = await signIn.mutateAsync(data);
+      toast.success(r.data.message);
     } catch (error) {
       toast.error(getErrMsg(error as Error));
     }
@@ -51,7 +53,7 @@ export default function StudentAuth() {
                   <BaseInput
                     placeholder='Enter username here'
                     label='Username'
-                    name='username'
+                    name='email'
                     register={register}
                   />
 

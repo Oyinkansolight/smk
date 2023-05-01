@@ -5,12 +5,19 @@ import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import AllCurriculumView from '@/components/views/single-subject/AllCurriculumView';
 import TaskListView from '@/components/views/single-subject/TaskListView';
+import logger from '@/lib/logger';
+import { useGetSubjectById } from '@/server/institution';
+import parseUrl from 'parse-url';
 import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
+
 const SingleSubjectDashboard = () => {
   const [page, setPage] = useState(0);
+  const url = parseUrl(window.location.href);
+  const { data } = useGetSubjectById(url.query.id);
+  logger(data);
   return (
     // max-width: 68.75rem;
     // @apply mx-auto w-11/12;

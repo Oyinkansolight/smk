@@ -4,6 +4,7 @@ import request from '@/server';
 import { Subject } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -110,11 +111,13 @@ export function useGetSubjectById(id: string) {
     queryKey: ['get_subject_list_by_id', id],
     queryFn: async () => {
       try {
-        const d = await request.get(
-          '/v1/government/institutes/get-subject-list',
-          { params: { id } }
-        );
+        if (id){
+          const d = await request.get(
+            '/v1/government/institutes/get-subject-list',
+            { params: { id } }
+          );
         return d.data.data.data as Subject[];
+        }
       } catch (error) {
         logger(error);
         throw error;
