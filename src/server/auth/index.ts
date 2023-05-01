@@ -1,6 +1,7 @@
 import request from '@/server';
 import { useMutation } from 'react-query';
 
+
 export interface SignUpParams {
   email: string;
   phoneNumber?: string;
@@ -29,6 +30,9 @@ export function useSignIn() {
     //   }),
     mutationFn: (params: SignInParams) =>
       request.post('/v1/government/authentication/login', params),
+    onSuccess: (response) => {
+      localStorage.setItem('TOKEN_KEY', response.data.data.token);
+    },
   });
   return mutation;
 }

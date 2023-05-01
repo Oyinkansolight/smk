@@ -2,43 +2,47 @@
 
 import AddSubjectModal from '@/components/modals/add-subject-modal';
 import { BasicSearch } from '@/components/search';
+import { getErrMsg } from '@/server';
+import { useGetSubjectList } from '@/server/institution';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
 
 const AllSubjects = () => {
   const mockData = [
     {
       name: 'Mathematics',
-      desc: 'It is the study of maths',
+      description: 'It is the study of maths',
       class: 5,
     },
     {
       name: 'English',
-      desc: 'It is the study of english',
+      description: 'It is the study of english',
       class: 10,
     },
     {
       name: 'Sciences',
-      desc: 'It is the study of science',
+      description: 'It is the study of science',
       class: 12,
     },
     {
       name: 'Igbo',
-      desc: 'It is the study of Igbo',
+      description: 'It is the study of Igbo',
       class: 18,
     },
     {
       name: 'History',
-      desc: 'It is the study of history',
+      description: 'It is the study of history',
       class: 16,
     },
     {
       name: 'Yoruba',
-      desc: 'It is the study of Yoruba',
+      description: 'It is the study of Yoruba',
       class: 5,
     },
   ];
-  const [subjects, setsubjects] = useState(mockData);
+  const [, setsubjects] = useState(mockData);
 
   const handleSearch = (value: string) => {
     const result = mockData.filter((data) =>
@@ -46,6 +50,15 @@ const AllSubjects = () => {
     );
     setsubjects(result);
   };
+
+  const { data, error, isLoading } = useGetSubjectList();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
+
   return (
     <section className='px-[60px] py-6'>
       <div className='flex items-center space-x-4'>
@@ -87,16 +100,25 @@ const AllSubjects = () => {
           <div className='col-span-5'>Description</div>
           <div className='col-span-4'>Classes</div>
         </div>
-        {subjects.map((item, idx) => (
-          <div
-            className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-            key={idx}
-          >
-            <div className='col-span-3'>{item.name} </div>
-            <div className='col-span-5'>{item.desc} </div>
-            <div className='col-span-4'> {item.class} </div>
-          </div>
-        ))}
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          (data ?? []).map((item, idx) => (
+            <div
+              onClick={() => {
+                window.location.href = `/super-admin/subject?id=${
+                  item.id ?? ''
+                }`;
+              }}
+              className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+              key={idx}
+            >
+              <div className='col-span-3'>{item.name} </div>
+              <div className='col-span-5'>{item.description} </div>
+              <div className='col-span-4'> {2} </div>
+            </div>
+          ))
+        )}
 
         <div className='my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>

@@ -6,6 +6,7 @@ import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import ROUTES from '@/constant/routes';
+import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
 import * as React from 'react';
@@ -22,7 +23,7 @@ export default function StudentAuth() {
     try {
       await signIn.mutateAsync(data);
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error as Error));
     }
   };
   return (

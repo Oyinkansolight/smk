@@ -2,6 +2,7 @@
 import { getFromLocalStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
+
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
@@ -12,6 +13,10 @@ const request = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+export function getErrMsg(error: any) {
+  return error.response.data.message;
+}
 
 request.interceptors.request.use(function (
   config: AxiosRequestConfig<any>

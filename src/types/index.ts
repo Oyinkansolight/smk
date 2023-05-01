@@ -7,6 +7,6 @@ export interface DashboardOverview {
 }
 
 export interface Label {
-  id: string;
+  id: string | number;
   value: string;
 }

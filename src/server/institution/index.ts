@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logger from '@/lib/logger';
 import request from '@/server';
-import { useMutation } from 'react-query';
+import { Subject } from '@/types/institute';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface CreateInstitutionParams {
   instituteName?: string;
@@ -15,6 +17,11 @@ export interface CreateInstitutionParams {
   password?: string;
   role?: number;
   id?: number;
+}
+
+export interface CreateSubjectParams {
+  name?: string;
+  classId?: number[];
 }
 
 export function useCreateInstitution() {
@@ -61,4 +68,58 @@ export function useOnboardVerification() {
   });
 
   return mutation;
+}
+
+export function useCreateSubject() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'create_subject',
+    mutationFn: async (params: CreateSubjectParams) => {
+      return (
+        await request.post('/v1/government/institutes/add-subject', params)
+      ).data.data as Subject;
+    },
+    onSettled: (data) => {
+      client.refetchQueries('get_subject_list');
+      client.refetchQueries(['get_subject_list_by_id', data?.id]);
+    },
+  });
+  return mutation;
+}
+
+export function useGetSubjectList() {
+  const query = useQuery({
+    queryKey: 'get_subject_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/institutes/get-subject-list'
+        );
+        return d.data.data.data as Subject[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+
+export function useGetSubjectById(id: string) {
+  const query = useQuery({
+    queryKey: ['get_subject_list_by_id', id],
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/institutes/get-subject-list',
+          { params: { id } }
+        );
+        return d.data.data.data as Subject[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
 }
