@@ -1,6 +1,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import clsxm from '@/lib/clsxm';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Badge from '~/svg/badge_1.svg';
 
@@ -16,6 +17,7 @@ const locationDetails = [
 ];
 export default function GeneralSettingsView() {
   const [isEdit, setIsEdit] = useState(false);
+  const router = useRouter();
   return (
     <div>
       <div
@@ -28,6 +30,7 @@ export default function GeneralSettingsView() {
           disabled={isEdit}
           variant='secondary'
           className='bg-white border-secondary border text-secondary'
+          onClick={() => router.push('/admin/account-settings/edit-history')}
         >
           View Change History
         </Button>

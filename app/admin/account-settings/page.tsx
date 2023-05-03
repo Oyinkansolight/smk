@@ -132,7 +132,7 @@ function AccountSettings() {
       <div className='flex justify-end my-4 gap-x-4'>
         <Button
           onClick={() =>
-            (window.location.href = '/account-settings/manage-access-roles')
+            (window.location.href = '/admin/account-settings/manage-access-roles')
           }
           variant='outline'
           className='bg-white border-secondary border text-secondary'
