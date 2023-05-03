@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
+import User1 from '~/svg/user1.svg';
 
 const Page = () => {
   const mockData = [
@@ -68,8 +69,12 @@ const Page = () => {
             className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
             key={idx}
           >
-            <div className='col-span-6'>#{idx + 1} </div>
-            <div className='col-span-6 w-max text-center text-[#525F7F] flex space-x-2 items-center'></div>
+            <div className='col-span-6 flex items-center gap-4'>
+              <User1 className='h-12 w-12' /> <div>James Omokwe</div>{' '}
+            </div>
+            <div className='col-span-6 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+              03/03/12 22:43
+            </div>
           </div>
         ))}
 
