@@ -17,7 +17,7 @@ export default function AccountSettingsSideBar({
           key={i}
           className={clsxm(
             'bg-white border border-l-4 border-transparent text-lg px-6 py-2 cursor-pointer',
-            selected === i && 'border-primary'
+            selected === i && 'border-secondary'
           )}
         >
           <div>{v}</div>
