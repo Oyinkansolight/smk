@@ -11,12 +11,12 @@ import { useGetSubjectById } from '@/server/institution';
 import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 const SingleSubjectDashboard = () => {
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
-  const { id } = router.query as any;
+  const id = searchParams?.get('id') as string;
   const { data } = useGetSubjectById(id);
   logger(data);
   return (
