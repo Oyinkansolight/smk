@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SubjectProfileCard from '@/components/cards/SubjectProfile';
@@ -10,12 +11,12 @@ import { useGetSubjectById } from '@/server/institution';
 import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 const SingleSubjectDashboard = () => {
-  const params = useParams();
+  const router = useRouter();
   const [page, setPage] = useState(0);
-  const id = params?.id as string;
+  const { id } = router.query as any;
   const { data } = useGetSubjectById(id);
   logger(data);
   return (
