@@ -1,64 +1,67 @@
 'use client';
 
-import AddSubjectModal from '@/components/modals/add-subject-modal';
 import { BasicSearch } from '@/components/search';
-import { getErrMsg } from '@/server';
-import { useGetSubjectList } from '@/server/institution';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import Link from 'next/link';
+import { useState } from 'react';
+// import Back from '@/'
+// import clsxm from '@/lib/clsxm';
+import AvrilImage from '~/svg/avril.svg';
 
-const AllSubjects = () => {
-  const router = useRouter();
+const AlltransferRequest = () => {
   const mockData = [
     {
-      name: 'Mathematics',
-      description: 'It is the study of maths',
-      class: 5,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
     {
-      name: 'English',
-      description: 'It is the study of english',
-      class: 10,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
     {
-      name: 'Sciences',
-      description: 'It is the study of science',
-      class: 12,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
     {
-      name: 'Igbo',
-      description: 'It is the study of Igbo',
-      class: 18,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
     {
-      name: 'History',
-      description: 'It is the study of history',
-      class: 16,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
     {
-      name: 'Yoruba',
-      description: 'It is the study of Yoruba',
-      class: 5,
+      name: 'James Omokwe',
+      new_school: 'Tertiary Girls College',
+      old_school: 'Scaling Heights School',
+      performance: '89%',
+      location: 'Benin',
     },
   ];
-  const [, setsubjects] = useState(mockData);
+
+  const [staffs, setstaffs] = useState(mockData);
 
   const handleSearch = (value: string) => {
     const result = mockData.filter((data) =>
       data.name.toLowerCase().includes(value.toLowerCase())
     );
-    setsubjects(result);
+    setstaffs(result);
   };
-
-  const { data, error, isLoading } = useGetSubjectList();
-
-  useEffect(() => {
-    if (error) {
-      toast.error(getErrMsg(error));
-    }
-  }, [error]);
 
   return (
     <section className='px-[60px] py-6'>
@@ -73,18 +76,15 @@ const AllSubjects = () => {
         <h3 className='text-[10px] font-medium'>Dashboard</h3>
       </div>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Subjects</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Student Transfer Request</h1>
 
-      <div className='mb-6 flex justify-between items-end'>
-        <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
-          <p className='text-[#615F5F]'>Total Subjects</p>
-          <h1 className='font-semibold text-2xl'>64</h1>
-        </div>
-        <AddSubjectModal>
-          <div className='cursor-pointer w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '>
-            Add Subject
-          </div>
-        </AddSubjectModal>
+      <div className='mb-6 flex justify-end '>
+        <Link
+          href='/admin/add-staff'
+          className='w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '
+        >
+          Transfer Student
+        </Link>
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
@@ -97,31 +97,35 @@ const AllSubjects = () => {
 
       <div className='table-add-student mt-5 pb-4 pt-1'>
         <div className='table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-3'>Subject Name</div>
-          <div className='col-span-5'>Description</div>
-          <div className='col-span-4'>Classes</div>
+          <div className='col-span-3'>Student Name</div>
+          <div className='col-span-3'>Previous School</div>
+          <div className='col-span-2'>New School</div>
+          <div className='col-span-2'>Performance level</div>
+          <div className='col-span-2'>Location</div>
         </div>
-        {isLoading ? (
-          <div className='text-center'>Loading...</div>
-        ) : (
-          (data ?? []).map((item, idx) => (
-            <div
-              onClick={() => {
-                router.push(`/super-admin/subject?id=${item.id ?? ''
-                  }`);
-              }}
-              className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              key={idx}
-            >
-              <div className='col-span-3'>{item.name} </div>
-              <div className='col-span-5'>{item.description} </div>
-              <div className='col-span-4'> {2} </div>
+        {staffs.map((item, idx) => (
+          <div
+            className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+            key={idx}
+          >
+            <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+              <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+              <Link href='/super-admin/teacher'>
+                <h2 className='text-sm font-medium'>{item.name}</h2>
+              </Link>{' '}
             </div>
-          ))
-        )}
+            <div className='col-span-3'>{item.old_school} </div>
+            <div className='col-span-2'>{item.new_school} </div>
+            <div className='col-span-2 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+              <h2 className='text-sm font-medium'>{item.performance}</h2>
+            </div>{' '}
+            <div className='col-span-2'> {item.location} </div>
+          </div>
+        ))}
 
         <div className='my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+            {' '}
             <svg
               width='6'
               height='8'
@@ -168,4 +172,4 @@ const AllSubjects = () => {
   );
 };
 
-export default AllSubjects;
+export default AlltransferRequest;

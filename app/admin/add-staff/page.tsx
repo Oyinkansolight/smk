@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Biodata from '@/components/views/admin/Addstaff/biodata';
 import Contact from '@/components/views/admin/Addstaff/contact';
@@ -7,23 +9,134 @@ import Document from '@/components/views/admin/Addstaff/document';
 import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
+import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
-const AddStudent = () => {
-  const [stage, setStage] = useState(1);
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-  const nextHandler = (): void => {
-    if (stage >= 1 && stage <= 4) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const AddStaff = () => {
+  const {
+    register,
+
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+  const [stage, setStage] = useState(7);
+  const [isOpen, setisOpen] = useState(false);
+  const [publishData, setpublishData] = useState(null);
+
+  const [imageName, setImageName] = useState<string>('');
+  const [imageData, setImageData] = useState('http://placeimg.com/640/480');
+
+  const [imageName1, setImageName1] = useState<string>('');
+  const [imageData1, setImageData1] = useState('http://placeimg.com/640/480');
+
+  const [imageName2, setImageName2] = useState<string>('');
+  const [imageData2, setImageData2] = useState('http://placeimg.com/640/480');
+  const handleCreateStaff = useCreateStaff();
+
+  const onSubmit: SubmitHandler<any> = async (data) => {
+    console.log(errors);
+    console.log(data);
+    if (
+      stage === 1 &&
+      data.firstName &&
+      data.lastName &&
+      data.gender &&
+      data.staffType &&
+      data.dob
+    ) {
       setStage(stage + 1);
     }
+    if (
+      stage === 2 &&
+      data.phoneNumber &&
+      data.address &&
+      data.email &&
+      data.townId
+    ) {
+      setStage(stage + 1);
+    }
+    if (
+      stage === 3 &&
+      data.schoolAttended &&
+      data.courseAttended &&
+      data.grade &&
+      data.year
+    ) {
+      setStage(stage + 1);
+    }
+    if (
+      stage === 4 &&
+      data.employerName &&
+      data.role &&
+      data.employmentType &&
+      data.employmentyear
+    ) {
+      setStage(stage + 1);
+    }
+    if (
+      stage === 5 &&
+      data.idCardImage &&
+      data.firstDocumentType &&
+      data.firstUpload &&
+      data.secondDocumentType &&
+      data.secondUpload
+    ) {
+      setStage(stage + 1);
+    }
+    if (stage === 6) {
+      data.password = '12345678';
+      data.idCardImage = 'http://placeimg.com/640/480';
+      data.firstUpload = 'http://placeimg.com/640/480';
+      data.secondUpload = 'http://placeimg.com/640/480';
+      data.townId = +data.townId;
+      setpublishData(data);
+    }
+    if (stage === 7) {
+      try {
+        const response = await handleCreateStaff.mutateAsync(data);
+
+        if (response) {
+          toast.success('Login successful');
+
+          //2 Second - Open Success Modal
+          setisOpen(true);
+        }
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
+    }
   };
+
+  // const nextHandler = (): void => {
+  //   // handleSubmit(onSubmit);
+  //   // console.log(getValues())
+  //   // console.log(formState)
+
+  //   // if (stage >= 1 && stage <= 4) {
+  //   //   setStage(stage + 1);
+  //   // }
+  // };
   const prevHandler = (): void => {
     if (stage >= 2) {
       setStage(stage - 1);
     }
   };
+
   const stepperData = [
     {
       stage: 1,
@@ -53,6 +166,14 @@ const AddStudent = () => {
 
   return (
     <section className='px-[60px] py-6'>
+      {isOpen && (
+        <Success
+          title='Staff created successfully'
+          description='Institution Staff created successfully'
+          link='/super-admin/all-staff'
+          textLink='Manage staff'
+        />
+      )}
       <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -76,32 +197,53 @@ const AddStudent = () => {
       />
 
       <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
-        {stage === 1 && <Biodata />}
-        {stage === 2 && <Contact />}
-        {stage === 3 && <Education />}
-        {stage === 4 && <Employment />}
-        {stage === 5 && <Document />}
-        {stage === 6 && <Publish />}
-
-        <div className='mb-6 flex justify-end'>
-          <div className='flex space-x-6'>
-            <button
-              onClick={prevHandler}
-              className='w-full rounded px-2 py-3 text-xs text-[#3361FF] md:px-6'
-            >
-              Prev
-            </button>
-            <button
-              onClick={nextHandler}
-              className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
-            >
-              Next
-            </button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {stage === 1 && <Biodata register={register} errors={errors} />}
+          {stage === 2 && <Contact register={register} errors={errors} />}
+          {stage === 3 && <Education register={register} errors={errors} />}
+          {stage === 4 && <Employment register={register} errors={errors} />}
+          {stage === 5 && (
+            <Document
+              register={register}
+              errors={errors}
+              setImageData={(v) => setImageData(v)}
+              imageName={imageName}
+              setImageName={(v) => setImageName(v ?? '')}
+              setImageData1={(v) => setImageData1(v)}
+              imageName1={imageName1}
+              setImageName1={(v) => setImageName1(v ?? '')}
+              setImageData2={(v) => setImageData2(v)}
+              imageName2={imageName2}
+              setImageName2={(v) => setImageName2(v ?? '')}
+            />
+          )}
+          {stage === 6 ||
+            (stage === 7 && <Publish publishData={publishData} />)}
+          <div className='mb-6 flex justify-end'>
+            <div className='flex space-x-6'>
+              <button
+                type='button'
+                onClick={prevHandler}
+                className='cursor-pointer w-full rounded px-2 py-3 text-xs text-[#3361FF] md:px-6'
+              >
+                Prev
+              </button>
+              {stage <= 6 && (
+                <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
+                  Next
+                </button>
+              )}
+              {stage === 7 && (
+                <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
+                  Continue
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );
 };
 
-export default AddStudent;
+export default AddStaff;

@@ -1,32 +1,62 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-// import Back from '@/'
+import FormSelect from '@/components/input/formSelect';
 
-const Education = () => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+type Iprops = {
+  register: any;
+  errors: any;
+};
+
+const classOptions: string[] = ['AAA', 'BBB', 'CCC'];
+const teachersOptions: string[] = ['AAAA', 'BBBB', 'CCCC'];
+const Education = ({ register, errors }: Iprops) => {
   return (
     <section className=''>
-      <h2 className='text-3xl font-bold'>Contact Details</h2>
+      <h2 className='text-3xl font-bold'>Educational Details</h2>
       <p>Kindly enter the details below:</p>
 
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Class{' '}
-          </label>
-          <input
-            type='text'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
+          <FormSelect
+            label='Class'
+            name='class'
+            options={classOptions}
+            register={register}
+            validation={{
+              required: 'Class is required',
+            }}
+            helper={
+              errors?.class && {
+                message: errors?.class?.message,
+                type: 'danger',
+              }
+            }
           />
         </div>
         <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Teacher{' '}
-          </label>
-          <input
-            type='email'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
+          <FormSelect
+            label='Teacher'
+            name='teacher'
+            options={teachersOptions}
+            register={register}
+            validation={{
+              required: 'Teacher is required',
+            }}
+            helper={
+              errors?.teacher && {
+                message: errors?.teacher?.message,
+                type: 'danger',
+              }
+            }
           />
         </div>
       </div>

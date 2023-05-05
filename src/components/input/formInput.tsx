@@ -1,21 +1,64 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+
+import clsxm from '@/lib/clsxm';
+import { RegisterOptions, UseFormRegister } from 'react-hook-form';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+export enum HelperType {
+  info = 'info',
+  warning = 'warning',
+  danger = 'danger',
+  success = 'success',
+  disabled = 'disabled',
+}
+
+type HelperProps = {
+  message?: string;
+  type?: string;
+};
 
 type propType = {
   label: string;
   placeholder: string;
-  formValue: string | number;
-  setFormValue: (value: string | number) => void;
+  formValue?: string | number;
+  setFormValue?: (value: string | number) => void;
   type?: string;
   disabled?: boolean;
+  register?: UseFormRegister<any>;
+  validation?: RegisterOptions<any>;
+  name?: string;
+  helper?: HelperProps;
 };
 
 const Input = ({
   label,
   formValue,
-  type,
+  type = 'text',
   setFormValue,
   placeholder,
   disabled,
+  register,
+  validation,
+  name,
+  helper,
 }: propType) => {
   return (
     <div className=''>
@@ -23,18 +66,24 @@ const Input = ({
         <label htmlFor='' className='text-xs font-bold'>
           {label}
         </label>
-        <div className='mt-1 w-full border p-2 rounded'>
+        <div className={clsxm('mt-1 w-full border p-2 rounded')}>
           <input
             disabled={disabled}
-            type={type || 'text'}
+            type={type}
             className='w-full border-none outline-none'
             placeholder={placeholder}
-            value={formValue}
+            {...(register ? register(name as string, validation) : {})}
+            value={formValue && formValue}
             onChange={(e) => {
-              setFormValue(e.target.value);
+              setFormValue && setFormValue(e.target.value);
             }}
           />
         </div>
+        {helper?.type === 'danger' && (
+          <div className='text-red-600 border-red-500 bg-red-300 rounded p-2 mt-1'>
+            {helper?.message}
+          </div>
+        )}
       </div>
     </div>
   );

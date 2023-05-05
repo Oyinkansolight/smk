@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SubjectProfileCard from '@/components/cards/SubjectProfile';
@@ -7,16 +8,16 @@ import AllCurriculumView from '@/components/views/single-subject/AllCurriculumVi
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import logger from '@/lib/logger';
 import { useGetSubjectById } from '@/server/institution';
-import parseUrl from 'parse-url';
 import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
-
+import { useSearchParams } from 'next/navigation';
 
 const SingleSubjectDashboard = () => {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(0);
-  const url = parseUrl(window.location.href);
-  const { data } = useGetSubjectById(url.query.id);
+  const id = searchParams?.get('id') as string;
+  const { data } = useGetSubjectById(id);
   logger(data);
   return (
     // max-width: 68.75rem;
@@ -37,7 +38,9 @@ const SingleSubjectDashboard = () => {
                   },
                 ]}
               />
+
               <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+
               <div className='h-full border-b-[2px] border-[#EDEFF2]'>
                 <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
               </div>

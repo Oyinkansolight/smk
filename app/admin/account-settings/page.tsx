@@ -5,6 +5,7 @@ import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import AddAdminModal from '@/components/modals/add-admin-modal';
 import GeneralSettingsView from '@/components/views/account-settings/GeneralSettingsView';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
@@ -127,12 +128,13 @@ function TableOption() {
 
 function AccountSettings() {
   const [eccede] = useState(mockData);
+  const router = useRouter();
   return (
     <>
       <div className='flex justify-end my-4 gap-x-4'>
         <Button
           onClick={() =>
-            (window.location.href = '/admin/account-settings/manage-access-roles')
+            router.push('/admin/account-settings/manage-access-roles')
           }
           variant='outline'
           className='bg-white border-secondary border text-secondary'

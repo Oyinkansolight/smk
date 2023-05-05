@@ -1,7 +1,6 @@
 import BasicCard from '@/components/cards/Basic';
 import { CircularCounter } from '@/components/counter';
 import clsxm from '@/lib/clsxm';
-import Image from 'next/image';
 import React from 'react';
 
 interface CurriculumProps {
@@ -31,16 +30,7 @@ const CurriculumCard = ({
       <div className='flex flex-col gap-[9px]'>
         <div className='flex flex-row items-center justify-between'>
           <div className='text-[13px] text-[#200E32]'>{name}</div>
-          {count === 100 ? (
-            <Image
-              src='/images/curriculum_done.png'
-              alt='done'
-              height={65}
-              width={65}
-            />
-          ) : (
-            <CircularCounter size='sm' total={count} />
-          )}
+          <CircularCounter size='sm' total={count} />
         </div>
 
         <div

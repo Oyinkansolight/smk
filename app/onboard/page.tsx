@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import Success from '@/components/modal/Success';
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import Dragdrop from '@/components/input/dragdrop';
-import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -23,6 +23,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
