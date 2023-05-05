@@ -12,22 +12,12 @@ export default function AllCurriculumView() {
   const router = useRouter();
 
   const isEmpty = false;
-  const count = 100;
   return (
     <div className='bg-white h-full p-4'>
       <div className='rounded-lg py-6 px-6 flex items-center bg-[#ECF4FF]'>
         <div>First Term Primary 1 Mathematics Curriculum</div>
         <div className='flex-1' />
-        {count === 100 ? (
-            <Image
-              src='/images/curriculum_done.png'
-              alt='done'
-              height={65}
-              width={65}
-            />
-          ) : (
-            <CircularCounter size='sm' total={count} />
-          )}
+        <CircularCounter size='sm' total={85} />
       </div>
       <div className='h-4' />
       <div className='flex flex-col space-y-6'>

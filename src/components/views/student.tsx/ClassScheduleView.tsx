@@ -4,7 +4,6 @@ import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import { useState } from 'react';
 
-
 export enum ClassState {
   active = 0,
   upcoming = 1,
@@ -17,7 +16,6 @@ export interface ClassScheduleViewProps {
   teacherName: string;
   progress: number;
   name: string;
-  onClick?: () => void;
 }
 
 export default function ClassScheduleView({
@@ -27,12 +25,11 @@ export default function ClassScheduleView({
   teacherName,
   progress,
   name,
-  onClick,
 }: ClassScheduleViewProps) {
   const [lessonNote, setLessonNote] = useState(false);
   const [assignment, setAssignment] = useState(true);
   return (
-    <div onClick={onClick} className='relative text-sm font-medium'>
+    <div className='relative text-sm font-medium'>
       <div
         className={clsxm(
           'absolute -top-2 left-3 rounded-md bg-[#42BBFF] py-1 px-4 text-white',

@@ -3,14 +3,32 @@
 import clsxm from '@/lib/clsxm';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RegisterOptions, UseFormRegister } from 'react-hook-form';
 import Close from '~/svg/close.svg';
 import Upload from '~/svg/upload.svg';
+
+export enum HelperType {
+  info = 'info',
+  warning = 'warning',
+  danger = 'danger',
+  success = 'success',
+  disabled = 'disabled',
+}
+
+type HelperProps = {
+  message?: string;
+  type?: string;
+};
 
 type propType = {
   label: string;
   setImageData: (value: any | null) => void;
   imageName: string;
   setImageName: (value: string) => void;
+  register?: UseFormRegister<any>;
+  validation?: RegisterOptions<any>;
+  name?: string;
+  helper?: HelperProps;
   className?: string;
 };
 
@@ -20,6 +38,10 @@ const Input = ({
   setImageName,
   imageName,
   className,
+  helper,
+  register,
+  name,
+  validation,
 }: propType) => {
   const handleImage = (file: any) => {
     if (file) {
@@ -61,6 +83,7 @@ const Input = ({
             id='upload'
             hidden
             accept='image/*'
+            {...(register ? register(name as string, validation) : {})}
             onChange={(e) => {
               if (e.target.files) {
                 handleImage(e.target.files[0]);
@@ -75,23 +98,25 @@ const Input = ({
                   setImageName('');
                 }}
               >
-                <Close alt='avril' className='h-4 w-4 ml-1' />
+                <Close alt='close' className='h-4 w-4 ml-1' />
               </button>
             </div>
           ) : (
-            <div className='text-gray-400 flex items-center space-x-2 truncate font-semibold'>
+            <div className='text-gray-400 flex space-x-2 truncate'>
               <Upload alt='avril' className='h-4 w-4 mr-1' /> Drag and drop an
               image, or
-              <label
-                className='text-[#008146] ß cursor-pointer'
-                htmlFor='upload'
-              >
+              <label className='text-[#008146] cursor-pointer' htmlFor='upload'>
                 browse
               </label>
               <span>(Max 6MB)</span>
             </div>
           )}
         </div>
+        {helper?.type === 'danger' && (
+          <div className='text-red-600 border-red-500 bg-red-300 rounded p-2 mt-1'>
+            {helper?.message}
+          </div>
+        )}
       </div>
     </div>
   );

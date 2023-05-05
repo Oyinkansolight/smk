@@ -17,10 +17,10 @@ interface BiodataProps {
 
 const Biodata = ({
   imageName,
-  schoolEmail,
-  schoolName,
   setImageData,
   setImageName,
+  schoolEmail,
+  schoolName,
   setSchoolEmail,
   setSchoolName,
 }: BiodataProps) => {

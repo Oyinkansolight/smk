@@ -2,21 +2,18 @@ import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
+import { useState } from 'react';
 import { BsFillCloudyFill, BsFillSendFill } from 'react-icons/bs';
 import { FaUser, FaUserFriends } from 'react-icons/fa';
 import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiDashboardFill, RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
-export default function StudentProfile({
-  currentGrid,
-  setCurrentGrid,
-}: {
-  currentGrid?: number;
-  setCurrentGrid?: (idx: number) => void;
-}) {
+export default function StudentProfile() {
+  const [currentGrid, setCurrentGrid] = useState(0);
+
   const handleToggleGrid = (index: number) => {
-    if (setCurrentGrid) setCurrentGrid(index);
+    setCurrentGrid(index);
   };
 
   return (

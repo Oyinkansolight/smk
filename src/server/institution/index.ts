@@ -4,7 +4,6 @@ import request from '@/server';
 import { Subject } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -106,17 +105,17 @@ export function useGetSubjectList() {
   return query;
 }
 
-export function useGetSubjectById(id: string) {
+export function useGetSubjectById(id?: string) {
   const query = useQuery({
     queryKey: ['get_subject_list_by_id', id],
     queryFn: async () => {
       try {
-        if (id){
+        if (id) {
           const d = await request.get(
             '/v1/government/institutes/get-subject-list',
             { params: { id } }
           );
-        return d.data.data.data as Subject[];
+          return d.data.data.data as Subject[];
         }
       } catch (error) {
         logger(error);
@@ -125,4 +124,24 @@ export function useGetSubjectById(id: string) {
     },
   });
   return query;
+}
+export function useCreateStaff() {
+  const mutation = useMutation({
+    mutationKey: 'create-staff',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/teachers/add-staff', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useCreateStudent() {
+  const mutation = useMutation({
+    mutationKey: 'create-student',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/students/add-student', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
 }

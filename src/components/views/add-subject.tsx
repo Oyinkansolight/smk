@@ -10,7 +10,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 
-
 export default function AddSubjectView() {
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
   const { mutateAsync } = useCreateSubject();

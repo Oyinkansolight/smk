@@ -5,6 +5,7 @@ import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
+import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -24,8 +25,7 @@ export default function AdminAuth() {
       const response = await signIn.mutateAsync(data);
 
       if (response) {
-        localStorage.setItem('TOKEN_KEY', response.data.data.token);
-        toast.success('Login successful');
+        toast.success(response.data.message);
 
         //2 Second delay before redirecting to dashboard
         setTimeout(() => {
@@ -45,7 +45,7 @@ export default function AdminAuth() {
         }
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error as Error));
     }
   };
   return (
