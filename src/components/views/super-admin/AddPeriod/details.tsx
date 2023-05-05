@@ -1,7 +1,9 @@
 'use client';
 
+import StepAccordion from '@/components/accordions/StepAccordion';
 import FormInput from '@/components/input/formInput';
 import { useState } from 'react';
+import { FiUpload } from 'react-icons/fi';
 
 const Biodata = () => {
   const [schoolaName, setSchoolName] = useState<string | number>('');
@@ -14,6 +16,20 @@ const Biodata = () => {
       <div className='bg-[#F4F9FF] py-6 mt-5 text-center text-xl font-bold'>
         <h1>Week 1 - Period 1</h1>
       </div>
+
+      <label
+        htmlFor='document-upload'
+        className='flex items-center justify-center py-4 my-4 bg-[#F5FFF4]'
+      >
+        <div>
+          Click or drag document here to{' '}
+          <span className='text-primary'>Import</span>
+        </div>
+        <div className='w-1' />
+        <FiUpload className='h-4 w-4 text-primary' />
+      </label>
+
+      <input className='hidden' id='document-upload' type='file' />
 
       <div className='my-10  gap-6 w-1/2'>
         <FormInput
@@ -100,6 +116,13 @@ const Biodata = () => {
           formValue={schoolaName}
           placeholder='Enter details here'
         />
+      </div>
+      <div className='flex flex-col gap-4'>
+        <StepAccordion taskName='Step 1' />
+        <StepAccordion taskName='Step 2' />
+        <StepAccordion taskName='Step 3' />
+        <StepAccordion taskName='Step 4' />
+        <StepAccordion taskName='Step 5' />
       </div>
     </section>
   );

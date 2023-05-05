@@ -37,9 +37,7 @@ const SingleSubjectDashboard = () => {
                   },
                 ]}
               />
-
               <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
               <div className='h-full border-b-[2px] border-[#EDEFF2]'>
                 <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
               </div>

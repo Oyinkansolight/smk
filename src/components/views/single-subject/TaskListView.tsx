@@ -47,7 +47,7 @@ export default function TaskListView({
               <div className='flex flex-wrap mt-4 gap-[27px]'>
                 <CurriculumCard
                   name='First Term Curriculum'
-                  count={85}
+                  count={100}
                   variant='primary'
                   onClick={() => curriculumClicked(i)}
                 />

@@ -15,6 +15,7 @@ export default function AddWeekView() {
           <BaseInput label='' value='Week 1' disable name='subject' />
           <div className='w-full flex gap-4'>
             <BaseInput
+            className='flex-1 w-full'
               label={
                 <span>
                   Theme for the week<span className='text-[#E5A500]'>*</span>
@@ -23,23 +24,13 @@ export default function AddWeekView() {
               name='subject'
             />
             <BaseInput
+              className='flex-1 w-full'
               label={
                 <span>
                   Select No of period<span className='text-[#E5A500]'>*</span>
                 </span>
               }
               name='subject'
-            />
-          </div>
-
-          <div className='w-full'>
-            <BaseInput
-              label={
-                <span>
-                  Enter Description<span className='text-[#E5A500]'>*</span>
-                </span>
-              }
-              name='description'
             />
           </div>
         </div>
