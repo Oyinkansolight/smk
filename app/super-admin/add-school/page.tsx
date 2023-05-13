@@ -16,12 +16,13 @@ import { toast } from 'react-toastify';
 
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(3);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState<File | undefined>();
+  const [password, setPassword] = useState('');
   // const [schoolName1, setSchoolName1] = useState<string | number>('');
   // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   // const [imageName1, setImageName1] = useState<string>('');
@@ -143,6 +144,8 @@ const AddSchool = () => {
             setImageName={(v) => setImageName(v ?? '')}
             setSchoolEmail={setSchoolEmail}
             setSchoolName={setSchoolName}
+            password={password}
+            setPassword={setPassword}
           />
         )}
         {stage === 4 && (
