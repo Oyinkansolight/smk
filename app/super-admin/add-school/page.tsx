@@ -64,7 +64,7 @@ const AddSchool = () => {
   ];
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -87,7 +87,7 @@ const AddSchool = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         {stage === 1 && (
           <General
             schoolEmail={schoolEmail}
@@ -160,7 +160,7 @@ const AddSchool = () => {
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,
                       instituteLogo: 'http://placeimg.com/640/480',
-                      instituteType: 1,
+                      instituteType: 'SECONDARY',
                       town: 1,
                       email: schoolEmail as string,
                       password: 'test_password' as string,

@@ -5,6 +5,26 @@ import FormInput from '@/components/input/formInput';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -50,7 +70,6 @@ const Biodata = ({ register, errors }: Iprops) => {
             }
           }
         />
-
       </div>
       <div className='my-10 '>
         <FormInput
@@ -68,7 +87,6 @@ const Biodata = ({ register, errors }: Iprops) => {
             }
           }
         />
-
       </div>
     </section>
   );

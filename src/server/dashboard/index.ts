@@ -7,8 +7,19 @@ export function useGetDashboardOverview() {
     queryKey: 'dashboard_overview',
     queryFn: () =>
       request
-        .get('/dashboard/overview')
-        .then((v) => v.data as DashboardOverview),
+        .get('/v1/government/dashboards/get-government-dashboard')
+        .then((v) => v.data.data as DashboardOverview),
+  });
+  return query;
+}
+
+export function useGetInstitutionDashboardOverview() {
+  const query = useQuery({
+    queryKey: 'dashboard_overview',
+    queryFn: () =>
+      request
+        .get('/v1/government/dashboards/get-institution-dashboard')
+        .then((v) => v.data.data as DashboardOverview),
   });
   return query;
 }

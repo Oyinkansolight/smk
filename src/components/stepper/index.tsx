@@ -36,7 +36,10 @@ function Index({ currentStage, variant, data, section }: propType) {
                 item.stage
               )}
             </div>
-            <h1 className='text-xs font-semibold'> {item.stageName} </h1>
+            <h1 className='text-xs font-semibold md:block hidden'>
+              {' '}
+              {item.stageName}{' '}
+            </h1>
             {data.length - 1 !== idx && (
               <span>
                 {section === 'admin' ? (

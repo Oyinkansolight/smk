@@ -10,7 +10,32 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -28,35 +53,30 @@ const TransferStudent = () => {
   const [isOpen, setisOpen] = useState(false);
   const [publishData, setpublishData] = useState(null);
 
-
   const handleCreateStaff = useCreateStaff();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     console.log(errors);
     console.log(data);
-    if (
-      stage === 1 &&
-      data.studentId &&
-      data.studentName &&
-      data.reason
-
-    ) {
+    if (stage === 1 && data.studentId && data.studentName && data.reason) {
       setStage(stage + 1);
     }
 
-    if (stage === 3) {
-      try {
-        const response = await handleCreateStaff.mutateAsync(data);
+    if (stage === 2) {
+      setisOpen(true);
 
-        if (response) {
-          toast.success('Login successful');
+      // try {
+      //   const response = await handleCreateStaff.mutateAsync(data);
 
-          //2 Second - Open Success Modal
-          setisOpen(true);
-        }
-      } catch (error) {
-        toast.error((error as Error).message);
-      }
+      //   if (response) {
+      //     toast.success('Login successful');
+
+      //     //2 Second - Open Success Modal
+      //     setisOpen(true);
+      //   }
+      // } catch (error) {
+      //   toast.error((error as Error).message);
+      // }
     }
   };
 
@@ -84,17 +104,16 @@ const TransferStudent = () => {
       stage: 2,
       stageName: 'Account Summary',
     },
-
   ];
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Staff created successfully'
-          description='Institution Staff created successfully'
-          link='/super-admin/all-staff'
-          textLink='Manage staff'
+          title='Student transfer request successful'
+          description='Hurray!!!'
+          link='/super-admin/all-transfer-request'
+          textLink='Manage Student'
         />
       )}
       <Link href='/admin'>
@@ -119,12 +138,12 @@ const TransferStudent = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && <Details register={register} errors={errors} />}
 
           {stage === 2 && <Publish publishData={publishData} />}
-          <div className='mb-6 flex justify-end'>
+          <div className='my-10 flex justify-end'>
             <div className='flex space-x-6'>
               <button
                 type='button'
@@ -133,9 +152,14 @@ const TransferStudent = () => {
               >
                 Prev
               </button>
-              {stage == 1 && (
+              {stage < 2 && (
                 <button className='w-full rounded border bg-primary px-8 py-3 text-xs text-[#fff] '>
                   Next
+                </button>
+              )}
+              {stage == 2 && (
+                <button className='w-full rounded border bg-primary px-8 py-3 text-xs text-[#fff] '>
+                  Continue
                 </button>
               )}
             </div>

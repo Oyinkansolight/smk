@@ -49,7 +49,7 @@ export default function AddSubjectModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
-                  <AddSubjectView />
+                  <AddSubjectView closeModal={closeModal} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

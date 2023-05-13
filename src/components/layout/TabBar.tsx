@@ -17,7 +17,7 @@ export default function TabBar({
   variant = 'secondary',
 }: propTypes) {
   return (
-    <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap '>
+    <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap'>
       {items.map((item, i) => (
         <button
           key={i}

@@ -13,7 +13,13 @@ export default function AdminHeader() {
       <div className='mx-auto flex h-20 items-center justify-between px-4'>
         <div className='flex w-full flex-row gap-28'>
           <div className='flex flex-row items-center gap-9'>
-            <Image width={154} height={53} src='/images/edo_logo.png' alt='' />
+            <Image
+              width={154}
+              height={53}
+              src='/images/edo_logo.png'
+              alt=''
+              className='hidden lg:block'
+            />
 
             <div className='flex flex-row items-center justify-center gap-[15px]'>
               <Image width={40} height={40} src='/images/governor.png' alt='' />

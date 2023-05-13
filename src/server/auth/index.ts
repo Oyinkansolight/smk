@@ -28,9 +28,9 @@ export function useSignIn() {
     //     password: 'John@Mathew',
     //   }),
     mutationFn: (params: SignInParams) =>
-      request.post('/v1/government/authentication/login', params),
+      request.post('/v1/authentication/login', params),
     onSuccess: (response) => {
-      localStorage.setItem('TOKEN_KEY', response.data.data.token);
+      localStorage.setItem('TOKEN_KEY', response.data.data.data.token);
     },
   });
   return mutation;

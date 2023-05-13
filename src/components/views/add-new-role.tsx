@@ -49,7 +49,9 @@ export default function AddNewRoleView() {
         </div>
 
         <div className='h-8' />
-        <Button variant='secondary' className='px-20 text-xs mt-8'>Finish</Button>
+        <Button variant='secondary' className='px-20 text-xs mt-8'>
+          Finish
+        </Button>
       </div>
     </div>
   );

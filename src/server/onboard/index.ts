@@ -8,7 +8,7 @@ export function useGetLocalGovernments() {
     queryKey: 'get_local_governments',
     queryFn: async () =>
       (await request.get(`/v1/government/admin/get-local-government-area`)).data
-        .data.localGovernmentArea as [],
+        .data.data.localGovernmentArea as [],
   });
 
   query.data?.forEach((item: any) => {

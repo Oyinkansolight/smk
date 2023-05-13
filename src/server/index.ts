@@ -14,6 +14,7 @@ const request = axios.create({
 });
 
 export function getErrMsg(error: any) {
+  if (error.code === 'ERR_NETWORK') return 'Network Error';
   return error.response.data.message;
 }
 

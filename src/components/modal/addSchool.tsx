@@ -12,7 +12,7 @@ interface propType {
 function AddSingleSchool({ onClickHandler }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[700px] flex-col space-y-4 bg-white p-4'>
+      <div className='flex w-[700px] flex-col space-y-4 bg-white p-10 md:p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             {' '}

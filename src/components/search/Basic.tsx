@@ -10,7 +10,7 @@ const BasicSearch = ({ handleSearch }: propTypes) => {
         Search
       </label>
       <div className='relative w-full'>
-        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-[23.4px]'>
+        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 md:pl-[23.4px]'>
           <svg
             aria-hidden='true'
             className='h-5 w-5 text-[#ADB8CC]'

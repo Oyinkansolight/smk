@@ -24,6 +24,22 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddStaff = () => {
   const {
     register,
@@ -34,7 +50,7 @@ const AddStaff = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-  const [stage, setStage] = useState(7);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [publishData, setpublishData] = useState(null);
 
@@ -96,22 +112,45 @@ const AddStaff = () => {
       data.secondDocumentType &&
       data.secondUpload
     ) {
-      setStage(stage + 1);
-    }
-    if (stage === 6) {
       data.password = '12345678';
       data.idCardImage = 'http://placeimg.com/640/480';
       data.firstUpload = 'http://placeimg.com/640/480';
       data.secondUpload = 'http://placeimg.com/640/480';
+      data.weight = data.townId;
+      data.height = data.townId;
       data.townId = +data.townId;
+      data.teacherEducation = [
+        {
+          schoolAttended: data.schoolAttended,
+          courseAttended: data.courseAttended,
+          grade: 'MASTER',
+          educationYear: data.year,
+        },
+      ];
+      data.employmentHistory = [
+        {
+          employerName: data.employerName,
+          role: data.role,
+          employmentType: 'FULL_TIME',
+          employmentYear: data.employmentyear,
+        },
+      ];
+      delete data.schoolAttended;
+      delete data.courseAttended;
+      delete data.grade;
+      delete data.year;
+      delete data.employerName;
+      delete data.role;
+      delete data.employmentType;
+      delete data.employmentyear;
+
       setpublishData(data);
-    }
-    if (stage === 7) {
+
       try {
         const response = await handleCreateStaff.mutateAsync(data);
 
         if (response) {
-          toast.success('Login successful');
+          toast.success('Staff Added successful');
 
           //2 Second - Open Success Modal
           setisOpen(true);
@@ -165,7 +204,7 @@ const AddStaff = () => {
   ];
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
           title='Staff created successfully'
@@ -196,7 +235,7 @@ const AddStaff = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && <Biodata register={register} errors={errors} />}
           {stage === 2 && <Contact register={register} errors={errors} />}

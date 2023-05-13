@@ -22,11 +22,21 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
 };
-const gradeOptions: string[] = ['AAAA', 'BBBB', 'CCCC'];
+const gradeOptions: string[] = [
+  'First Class',
+  'Second Class Honours (Upper Division)',
+  'Second Class Honours (Lower Division)',
+  'Third Class Honours',
+  'Pass degree',
+];
 
 const Education = ({ register, errors }: Iprops) => {
   return (

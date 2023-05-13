@@ -48,7 +48,7 @@ const Page = () => {
     },
   ];
 
-  const [eccede, seteccede] = useState(mockData);
+  const [eccede] = useState(mockData);
   return (
     <div className='h-full px-12'>
       <div className='cursor-pointer flex items-center'>
@@ -59,14 +59,14 @@ const Page = () => {
         Account Details Change History
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1'>
-        <div className='table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-6'>Administrator</div>
           <div className='col-span-6'>Timestamp</div>
         </div>
         {eccede.map((item, idx) => (
           <div
-            className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
             key={idx}
           >
             <div className='col-span-6 flex items-center gap-4'>
@@ -78,7 +78,7 @@ const Page = () => {
           </div>
         ))}
 
-        <div className='my-4 flex items-center justify-end space-x-3 pr-10'>
+        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}
             <svg

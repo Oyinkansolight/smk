@@ -6,6 +6,7 @@ import ClassScheduleView, {
 } from '@/components/views/student.tsx/ClassScheduleView';
 import StudentClockInTime from '@/components/views/student.tsx/StudentClockInTime';
 import moment from 'moment';
+import { useRouter } from 'next/navigation';
 import { RiCalendar2Fill } from 'react-icons/ri';
 
 // const timeLineData = [
@@ -77,6 +78,7 @@ const classesAfterBreak: ClassScheduleViewProps[] = [
 const quickActions = ['Attend Class', 'Assessments'];
 
 export default function StudentDashboardView() {
+  const router = useRouter();
   return (
     <>
       <div className='-mt-[10px] flex flex-row items-center justify-between'>
@@ -125,7 +127,11 @@ export default function StudentDashboardView() {
             </div>
             <div className='flex flex-col gap-8'>
               {classes.map((c, i) => (
-                <ClassScheduleView key={i} {...c} />
+                <ClassScheduleView
+                  onClick={() => router.push('/student/student-lesson')}
+                  key={i}
+                  {...c}
+                />
               ))}
               <BreakTimeView start={new Date()} end={new Date()} />
               {classesAfterBreak.map((c, i) => (

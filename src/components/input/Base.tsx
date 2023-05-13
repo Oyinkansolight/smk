@@ -97,7 +97,7 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
     );
 
   return (
-    <div className='space-y-2'>
+    <div className='space-y-2 w-full'>
       <label
         htmlFor={name}
         className={clsxm(
@@ -121,7 +121,8 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
               'block w-full rounded-[5px] border-[0.5px] border-gray-300 bg-white py-2 pl-2 pr-4 font-light text-black placeholder-opacity-30 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40',
               helper?.type
                 ? helperBorderClasses[helper.type]
-                : 'focus:border-primary'
+                : 'focus:border-primary',
+              disable && 'bg-[#E5E5E5]'
             )}
             value={value}
             {...otherInputProps}

@@ -11,14 +11,40 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// import { useGetTeachersList } from '@/server/institution';
+// import { useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
 };
 
-const classOptions: string[] = ['AAA', 'BBB', 'CCC'];
-const teachersOptions: string[] = ['AAAA', 'BBBB', 'CCCC'];
+const classOptions: string[] = [
+  'Primary 1',
+  'Primary 2',
+  'Primary 3',
+  'Primary 4',
+  'Primary 5',
+  'Primary 6',
+];
+
 const Education = ({ register, errors }: Iprops) => {
+  // const teachersList = useGetTeachersList();
+
+  // const [teachers] = useState<any>(teachersList || []);
+
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Educational Details</h2>
@@ -46,7 +72,7 @@ const Education = ({ register, errors }: Iprops) => {
           <FormSelect
             label='Teacher'
             name='teacher'
-            options={teachersOptions}
+            options={['Adams Smith', 'Augustine Steven']}
             register={register}
             validation={{
               required: 'Teacher is required',

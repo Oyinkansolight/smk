@@ -39,7 +39,7 @@ const AddPeriod = () => {
   ];
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -64,7 +64,7 @@ const AddPeriod = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         {stage === 1 && <Details />}
         {stage === 2 && <Lessonnote />}
         {stage === 3 && <Publish />}

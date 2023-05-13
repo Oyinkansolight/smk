@@ -2,7 +2,29 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
+import FormSelect from '@/components/input/formSelectOptional';
+import { useGetLocalGovernments } from '@/server/onboard';
+import { useEffect, useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -16,9 +38,20 @@ type Iprops = {
   register: any;
   errors: any;
 };
-const TownOptions: string[] = ['1', '2', '3'];
-
 const Contact = ({ register, errors }: Iprops) => {
+  const locals = useGetLocalGovernments();
+  const [towns, setTowns] = useState<any>([]);
+
+  useEffect(() => {
+    if (!locals.isLoading && locals.data && locals.data.length > 0) {
+      locals.data.forEach((local: any) => {
+        setTowns([...towns, local.towns]);
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locals.data]);
+
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Contact Details</h2>
@@ -49,7 +82,7 @@ const Contact = ({ register, errors }: Iprops) => {
             name='email'
             register={register}
             validation={{
-              required: 'Phone Number is required',
+              required: 'Email Number is required',
             }}
             helper={
               errors?.email && {
@@ -82,7 +115,7 @@ const Contact = ({ register, errors }: Iprops) => {
           <FormSelect
             label='Town'
             name='townId'
-            options={TownOptions}
+            options={Array.prototype.concat.apply([], towns)}
             register={register}
             validation={{
               required: 'Town is required',

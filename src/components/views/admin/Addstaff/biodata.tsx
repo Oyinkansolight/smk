@@ -12,24 +12,44 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// import { useGetStaffTypes } from '@/server/institution';
+// import { useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
 };
 
-const StaffTypeOptions: string[] = ['Headmaster', 'Headmistress', 'Admin'];
-const GenderOptions: string[] = ['male', 'female', 'other'];
+const GenderOptions: string[] = ['MALE', 'FEMALE', 'Other'];
 const Biodata = ({ register, errors }: Iprops) => {
+  // const staffType = useGetStaffTypes();
+
+  // const [] = useState<any>(staffType.data || []);
+
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Bio Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 w-1/2 gap-6'>
+      <div className='my-10 grid grid-cols-2 gap-6'>
         <FormSelect
           label='Staff type'
           name='staffType'
-          options={StaffTypeOptions}
+          options={['COACH', 'TEACHER', 'PRINCIPAL']}
           register={register}
           validation={{
             required: 'Staff type is required',

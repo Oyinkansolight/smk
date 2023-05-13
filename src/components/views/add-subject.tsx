@@ -9,8 +9,13 @@ import { Label } from '@/types';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiFillCheckCircle } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 
-export default function AddSubjectView() {
+interface AddSubjectViewProps {
+  closeModal: () => void;
+}
+
+export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
   const { mutateAsync } = useCreateSubject();
   const [classes1, setClasses] = useState(new Set());
@@ -44,13 +49,22 @@ export default function AddSubjectView() {
 
   const d4: Label[] = [{ id: 'ex', value: 'Example' }];
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const ids: any[] = [];
     classes1.forEach((v) => ids.push(d1[v as number].id));
     classes2.forEach((v) => ids.push(d2[v as number].id));
     classes3.forEach((v) => ids.push(d3[v as number].id));
     classes4.forEach((v) => ids.push(d4[v as number].id));
-    mutateAsync({ classId: ids, name: data.subject });
+    const response = await mutateAsync({
+      classId: ids,
+      name: data.subject,
+      description: data.description,
+    });
+
+    if (response) {
+      toast.success('Subject added successfully');
+      closeModal();
+    }
   };
 
   return (

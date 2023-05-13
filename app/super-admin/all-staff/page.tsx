@@ -4,9 +4,10 @@ import { BasicSearch } from '@/components/search';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import AvrilImage from '~/svg/avril.svg';
+
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
-import AvrilImage from '~/svg/avril.svg';
 
 const AllStaff = () => {
   const mockData = [
@@ -67,7 +68,7 @@ const AllStaff = () => {
   };
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       <div className='flex items-center space-x-4'>
         <Image
           src='/svg/back.svg'
@@ -86,12 +87,6 @@ const AllStaff = () => {
           <p className='text-[#615F5F]'>Total Teacher</p>
           <h1 className='font-semibold text-2xl'>64,450</h1>
         </div>
-        <Link
-          href='/admin/add-staff'
-          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Teacher
-        </Link>
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
@@ -102,8 +97,8 @@ const AllStaff = () => {
         </div>
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1'>
-        <div className='table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-1'>No</div>
           <div className='col-span-3'>Name</div>
           <div className='col-span-2'>Teacerh ID</div>
@@ -113,7 +108,7 @@ const AllStaff = () => {
         </div>
         {staffs.map((item, idx) => (
           <div
-            className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
             key={idx}
           >
             <div className='col-span-1'>#{idx + 1} </div>
@@ -133,7 +128,7 @@ const AllStaff = () => {
           </div>
         ))}
 
-        <div className='my-4 flex items-center justify-end space-x-3 pr-10'>
+        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}
             <svg

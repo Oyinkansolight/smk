@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import Success from '@/components/modal/Success';
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import Dragdrop from '@/components/input/dragdrop';
+import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -36,6 +36,18 @@ import '/src/styles/globals.css';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const stepData = [
   {
     title: 'Start',
@@ -45,12 +57,6 @@ const stepData = [
   },
   {
     title: 'Location Details',
-  },
-  {
-    title: 'Staff Details',
-  },
-  {
-    title: 'Student Details',
   },
   {
     title: 'Account Details',
@@ -90,9 +96,9 @@ export default function Page() {
     setIsLoading(true);
     const verifyUser = async () => {
       const res = await verification.mutateAsync(token);
-      if (res.data.message === 'Token verified successfully.') {
+      if (res.data.data.message === 'Token verified successfully.') {
         toast.success('Institution verified successfully.');
-        setUser(res.data.data);
+        setUser(res.data.data.data);
         // console.log(res.data.data);
         setIsLoading(false);
       }
@@ -127,7 +133,7 @@ export default function Page() {
                   // ...getValues(),
                   town: 1,
                   role: 1,
-                  instituteType: 1,
+                  instituteType: 'SECONDARY',
                   password: '123456',
                   instituteLat: '6.465422',
                   instituteLong: '3.406448',
@@ -224,6 +230,8 @@ export default function Page() {
     const [towns, setTowns] = useState<any>([]);
     const [currentTownIndex] = useState(0);
     // const towns = useGetTowns(currentTownIndex);
+
+    logger(locals);
 
     useEffect(() => {
       if (!locals.isLoading && locals.data && locals.data.length > 0) {
@@ -339,65 +347,65 @@ export default function Page() {
   //   );
   // };
 
-  const StepFour = () => {
-    return (
-      <StepperLayout>
-        <div className='flex flex-col gap-y-2'>
-          <div className='h2'>Staff Details</div>
-          <div className='p'>
-            Kindly enter the details of the institution below:
-          </div>
+  // const StepFour = () => {
+  //   return (
+  //     <StepperLayout>
+  //       <div className='flex flex-col gap-y-2'>
+  //         <div className='h2'>Staff Details</div>
+  //         <div className='p'>
+  //           Kindly enter the details of the institution below:
+  //         </div>
 
-          <div className='mt-4 flex flex-col gap-10 mb-10'>
-            <BaseInput
-              label='Enter Number of Staff *'
-              name='staff_number'
-              register={register}
-              placeholder='Details here'
-            />
-          </div>
+  //         <div className='mt-4 flex flex-col gap-10 mb-10'>
+  //           <BaseInput
+  //             label='Enter Number of Staff *'
+  //             name='staff_number'
+  //             register={register}
+  //             placeholder='Details here'
+  //           />
+  //         </div>
 
-          <Dragdrop
-            className='h-[255px] max-h-[255px] items-center flex flex-col'
-            setImageName={setImageName}
-            imageName={imageName}
-            label='Upload CSV'
-            setImageData={setImageData}
-          />
-        </div>
-      </StepperLayout>
-    );
-  };
+  //         <Dragdrop
+  //           className='h-[255px] max-h-[255px] items-center flex flex-col'
+  //           setImageName={setImageName}
+  //           imageName={imageName}
+  //           label='Upload CSV'
+  //           setImageData={setImageData}
+  //         />
+  //       </div>
+  //     </StepperLayout>
+  //   );
+  // };
 
-  const StepFive = () => {
-    return (
-      <StepperLayout>
-        <div className='flex flex-col gap-y-2'>
-          <div className='h2'>Student Details</div>
-          <div className='p'>
-            Kindly enter the details of the institution below:
-          </div>
+  // const StepFive = () => {
+  //   return (
+  //     <StepperLayout>
+  //       <div className='flex flex-col gap-y-2'>
+  //         <div className='h2'>Student Details</div>
+  //         <div className='p'>
+  //           Kindly enter the details of the institution below:
+  //         </div>
 
-          <div className='mt-4 flex flex-col gap-10 mb-10'>
-            <BaseInput
-              label='Enter Number of Students *'
-              name='student_number'
-              register={register}
-              placeholder='Details here'
-            />
-          </div>
+  //         <div className='mt-4 flex flex-col gap-10 mb-10'>
+  //           <BaseInput
+  //             label='Enter Number of Students *'
+  //             name='student_number'
+  //             register={register}
+  //             placeholder='Details here'
+  //           />
+  //         </div>
 
-          <Dragdrop
-            className='h-[255px] max-h-[255px] items-center flex flex-col'
-            setImageName={setImageName}
-            imageName={imageName}
-            label='Upload CSV'
-            setImageData={setImageData}
-          />
-        </div>
-      </StepperLayout>
-    );
-  };
+  //         <Dragdrop
+  //           className='h-[255px] max-h-[255px] items-center flex flex-col'
+  //           setImageName={setImageName}
+  //           imageName={imageName}
+  //           label='Upload CSV'
+  //           setImageData={setImageData}
+  //         />
+  //       </div>
+  //     </StepperLayout>
+  //   );
+  // };
 
   const StepSix = () => {
     return (
@@ -485,18 +493,6 @@ export default function Page() {
 
             <div className='h-[0.5px] bg-black' />
 
-            <div className='grid grid-cols-12 gap-4  items-center mt-[30px]'>
-              <div className='col-span-8'>
-                <h2 className='text-xs mb-2 font-medium'>No of Staffs</h2>
-                <p>{getValues('staff_number') ?? 200}</p>
-              </div>
-
-              <div className='col-span-4'>
-                <h2 className='text-xs mb-2 font-medium'>No of Students</h2>
-                <p>{getValues('student_number') ?? 762}</p>
-              </div>
-            </div>
-
             <h2 className='text-center text-base text-[#E5A500] font-medium mb-3 mt-[30px]'>
               Note
             </h2>
@@ -514,8 +510,6 @@ export default function Page() {
     <StepOne key={0} />,
     <StepTwo key={1} />,
     <StepThree key={2} />,
-    <StepFour key={3} />,
-    <StepFive key={4} />,
     <StepSix key={5} />,
     <StepSeven key={6} />,
   ];
@@ -544,7 +538,7 @@ export default function Page() {
             <VerticalStepper currentStep={step} steps={stepData} />
           </div>
 
-          <form className='w-full'>
+          <form className='w-full overflow-y-scroll'>
             <div className='flex w-full flex-col'>{steps[step]}</div>
           </form>
 

@@ -2,7 +2,9 @@
 import ButtonLink from '@/components/links/ButtonLink';
 import clsxm from '@/lib/clsxm';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
+import { BiExit } from 'react-icons/bi';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import PieChart from '~/svg/chart_pie_slice.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
@@ -14,30 +16,79 @@ import UsersThree from '~/svg/users_three.svg';
 
 const AdminSidebar = () => {
   const routeDetails = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const handleToggle = () => setOpen(!open);
 
   return (
-    <aside className='order-first flex h-screen w-52 flex-col items-center overflow-y-auto border-r-2 bg-[#F7F8FA] py-8 rtl:border-l rtl:border-r-0'>
-      <nav className='flex flex-1 flex-col space-y-6'>
+    <aside
+      className={clsxm(
+        open ? 'w-52' : 'w-20',
+        'order-first transition-all delay-100 flex h-screen flex-col items-center overflow-y-auto border-r-2 bg-[#F7F8FA] py-8 rtl:border-l rtl:border-r-0'
+      )}
+    >
+      <nav className='flex flex-1 flex-col space-y-3 md:space-y-6'>
+        <div
+          onClick={handleToggle}
+          className={clsxm(
+            'flex w-12 justify-center cursor-pointer bg-primary-50 bg-opacity-30 p-4 rounded-full'
+          )}
+        >
+          <GiHamburgerMenu />
+        </div>
+
         <SideBarButton
-          icon={<ID className='fill-current' />}
+          open={open}
+          icon={
+            <ID
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Dashboard'
           href='/super-admin'
           active={routeDetails && routeDetails.includes('dashboard') && true}
         />
         <SideBarButton
-          icon={<NoteBook className='fill-current' />}
+          open={open}
+          icon={
+            <NoteBook
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Schools'
           href='/super-admin/all-school'
           active={routeDetails && routeDetails.includes('school') && true}
         />
         <SideBarButton
-          icon={<OpenBook className='fill-current' />}
+          open={open}
+          icon={
+            <OpenBook
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Students'
           href='/super-admin/all-student'
           active={routeDetails && routeDetails.includes('student') && true}
         />
         <SideBarButton
-          icon={<IDBadge className='fill-current' />}
+          open={open}
+          icon={
+            <IDBadge
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Teachers'
           href='/super-admin/all-staff'
           active={
@@ -45,33 +96,102 @@ const AdminSidebar = () => {
           }
         />
         <SideBarButton
-          icon={<PieChart className='fill-current' />}
+          open={open}
+          icon={
+            <PieChart
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Budgets'
-          href='/super-admin/budget'
+          href='/super-admin/#'
           active={routeDetails && routeDetails.includes('budget') && true}
         />
         <SideBarButton
-          icon={<Folder className='fill-current' />}
+          open={open}
+          icon={
+            <Folder
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
+          title='Library'
+          href='/super-admin/library'
+          active={routeDetails && routeDetails.includes('library') && true}
+        />
+        <SideBarButton
+          open={open}
+          icon={
+            <Folder
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Subjects'
           href='/super-admin/all-subject'
           active={routeDetails && routeDetails.includes('subject') && true}
         />
         <SideBarButton
-          icon={<UsersThree className='fill-current' />}
+          open={open}
+          icon={
+            <UsersThree
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Account and settings'
           href='/super-admin/account'
           active={routeDetails && routeDetails.includes('account') && true}
         />
         <SideBarButton
-          icon={<NoteBook className='fill-current' />}
+          open={open}
+          icon={
+            <NoteBook
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Blog'
-          href='/super-admin/blog'
+          href='/super-admin/#'
           active={routeDetails && routeDetails.includes('blog') && true}
         />
         <SideBarButton
-          icon={<Chat className='fill-current' />}
+          open={open}
+          icon={
+            <Chat
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
           title='Messages'
-          href='/super-admin/message'
+          href='/super-admin/#'
+          active={routeDetails && routeDetails.includes('message') && true}
+        />
+
+        <SideBarButton
+          open={open}
+          icon={
+            <BiExit
+              className={clsxm(
+                'fill-red-500',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
+          title='Logout'
+          href='/auth/admin'
           active={routeDetails && routeDetails.includes('message') && true}
         />
       </nav>
@@ -84,21 +204,36 @@ interface SideBarButtonProps {
   title: string;
   href: string;
   active: boolean | any;
+  open: boolean;
 }
 
-const SideBarButton = ({ icon, title, href, active }: SideBarButtonProps) => (
+const SideBarButton = ({
+  icon,
+  title,
+  href,
+  active,
+  open,
+}: SideBarButtonProps) => (
   <ButtonLink
     href={href}
     className={clsxm(
+      open && 'w-[190px]',
       active
         ? 'bg-[#0081460D] bg-opacity-5 font-bold text-[#008146]'
         : 'bg-transparent text-[#BDBEBE]',
-      'h-12 w-[190px] overflow-hidden border-0 shadow-none hover:bg-[#0081460D] hover:text-[#008146]'
+      'h-12 overflow-hidden border-0 shadow-none hover:bg-[#0081460D] hover:text-[#008146]'
     )}
   >
     <div className='flex flex-row items-center gap-[14px]'>
       {icon}
-      <div className='whitespace-nowrap text-[14px]'>{title}</div>
+      <div
+        className={clsxm(
+          open ? 'block' : 'hidden',
+          'whitespace-nowrap text-[14px]'
+        )}
+      >
+        {title}
+      </div>
     </div>
   </ButtonLink>
 );

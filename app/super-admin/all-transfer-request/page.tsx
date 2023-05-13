@@ -54,17 +54,17 @@ const AlltransferRequest = () => {
     },
   ];
 
-  const [staffs, setstaffs] = useState(mockData);
+  const [student, setstudent] = useState(mockData);
 
   const handleSearch = (value: string) => {
     const result = mockData.filter((data) =>
       data.name.toLowerCase().includes(value.toLowerCase())
     );
-    setstaffs(result);
+    setstudent(result);
   };
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       <div className='flex items-center space-x-4'>
         <Image
           src='/svg/back.svg'
@@ -80,7 +80,7 @@ const AlltransferRequest = () => {
 
       <div className='mb-6 flex justify-end '>
         <Link
-          href='/admin/add-staff'
+          href='/super-admin/transfer-student'
           className='w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '
         >
           Transfer Student
@@ -95,17 +95,17 @@ const AlltransferRequest = () => {
         </div>
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1'>
-        <div className='table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Student Name</div>
           <div className='col-span-3'>Previous School</div>
           <div className='col-span-2'>New School</div>
           <div className='col-span-2'>Performance level</div>
           <div className='col-span-2'>Location</div>
         </div>
-        {staffs.map((item, idx) => (
+        {student.map((item, idx) => (
           <div
-            className='grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
             key={idx}
           >
             <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
@@ -123,7 +123,7 @@ const AlltransferRequest = () => {
           </div>
         ))}
 
-        <div className='my-4 flex items-center justify-end space-x-3 pr-10'>
+        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}
             <svg

@@ -20,12 +20,26 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
   {
     loading: () => <p>Loading...</p>,
   }
 );
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Editorcomponent = () => {
   const [body] = useState('');

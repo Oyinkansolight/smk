@@ -1,6 +1,7 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
+import FormSelect from '@/components/input/formSelect';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import logger from '@/lib/logger';
@@ -27,8 +28,15 @@ const AddSchoolLink = () => {
     },
   ];
 
+  const institutions = [
+    'ECCDE',
+    'PRIMARY',
+    'SECONDARY',
+    'TERTIARY',
+  ];
+
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -53,7 +61,7 @@ const AddSchoolLink = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         <h2 className='text-2xl font-bold'>Details</h2>
         <p>Kindly enter the details of the school below:</p>
 
@@ -63,6 +71,14 @@ const AddSchoolLink = () => {
             setFormValue={setSchoolName}
             formValue={schoolName}
             placeholder='Detail here'
+          />
+        </div>
+        <div className='mb-10'>
+          <FormSelect
+            label='Select Institute Type*'
+            formValue={institutions[0]}
+            setFormValue={() => console.log('')}
+            options={institutions}
           />
         </div>
         <div className='mb-10   '>
@@ -88,11 +104,11 @@ const AddSchoolLink = () => {
 
                   if (response.data) {
                     setisOpen(true);
-                    setTimeout(() => {
-                      router.push(
-                        `/onboard?token=${response.data.data.token}}`
-                      );
-                    }, 3000);
+                    // setTimeout(() => {
+                    //   router.push(
+                    //     `/onboard?token=${response.data.data.data.token}`
+                    //   );
+                    // }, 3000);
                   }
                 } catch (error) {
                   logger(error);

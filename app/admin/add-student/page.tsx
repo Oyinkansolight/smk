@@ -17,8 +17,6 @@ import { toast } from 'react-toastify';
 export default function AddStudent() {
   const {
     register,
-    getValues,
-    formState,
     formState: { errors },
     handleSubmit,
   } = useForm({
@@ -138,7 +136,7 @@ export default function AddStudent() {
   ];
 
   return (
-    <section className='px-[60px] py-6'>
+    <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
           title='Student created successfully'
@@ -169,7 +167,7 @@ export default function AddStudent() {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 px-20 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && <Biodata register={register} errors={errors} />}
           {stage === 2 && <Contact register={register} errors={errors} />}

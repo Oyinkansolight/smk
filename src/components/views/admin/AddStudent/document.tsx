@@ -14,6 +14,26 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -73,7 +93,7 @@ const Document = ({
           <FormSelect
             label='Document Type'
             name='firstDocumentType'
-            options={['Document1', 'Document2', 'Document3']}
+            options={['Birth Certificate', 'LG Origin']}
             register={register}
             validation={{
               required: 'Document is required',
@@ -111,7 +131,7 @@ const Document = ({
           <FormSelect
             label='Document Type'
             name='secondDocumentType'
-            options={['Document1', 'Document2', 'Document3']}
+            options={['Birth Certificate', 'LG Origin']}
             register={register}
             validation={{
               required: 'Document is required',

@@ -46,7 +46,9 @@ export default function AddAdminView() {
         </div>
 
         <div className='h-8' />
-        <Button variant='secondary' className='px-20 text-xs mt-8'>Send Invite</Button>
+        <Button variant='secondary' className='px-20 text-xs mt-8'>
+          Send Invite
+        </Button>
       </div>
     </div>
   );

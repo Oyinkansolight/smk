@@ -11,7 +11,7 @@ export interface CreateInstitutionParams {
   instituteAddress?: string;
   instituteLat?: string;
   instituteLong?: string;
-  instituteType?: number;
+  instituteType?: string;
   town?: number;
   email?: string;
   password?: string;
@@ -22,6 +22,7 @@ export interface CreateInstitutionParams {
 export interface CreateSubjectParams {
   name?: string;
   classId?: number[];
+  description?: string;
 }
 
 export function useCreateInstitution() {
@@ -76,7 +77,10 @@ export function useCreateSubject() {
     mutationKey: 'create_subject',
     mutationFn: async (params: CreateSubjectParams) => {
       return (
-        await request.post('/v1/government/institutes/add-subject', params)
+        await request.post(
+          '/v1/government/classes-subjects/add-subject',
+          params
+        )
       ).data.data as Subject;
     },
     onSettled: (data) => {
@@ -95,7 +99,38 @@ export function useGetSubjectList() {
         const d = await request.get(
           '/v1/government/institutes/get-subject-list'
         );
-        return d.data.data.data as Subject[];
+        return d.data.data.data.data as Subject[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+
+export function useGetTeachersList() {
+  const query = useQuery({
+    queryKey: 'get_teachers_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/government/teachers/get-staffs');
+        return d.data.data.data as any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetStaffTypes() {
+  const query = useQuery({
+    queryKey: 'get_staff_type_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/utilities/get-staff-type');
+        return d.data.data.data as any;
       } catch (error) {
         logger(error);
         throw error;
@@ -115,7 +150,7 @@ export function useGetSubjectById(id?: string) {
             '/v1/government/institutes/get-subject-list',
             { params: { id } }
           );
-          return d.data.data.data as Subject[];
+          return d.data.data.data.data as Subject[];
         }
       } catch (error) {
         logger(error);
@@ -129,7 +164,7 @@ export function useCreateStaff() {
   const mutation = useMutation({
     mutationKey: 'create-staff',
     mutationFn: (params: any) =>
-      request.post('/v1/government/teachers/add-staff', params, {
+      request.post('/v1/government/teachers/add-teaching-staff', params, {
         withCredentials: true,
       }),
   });

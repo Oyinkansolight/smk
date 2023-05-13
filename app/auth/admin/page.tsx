@@ -8,37 +8,42 @@ import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function AdminAuth() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
     mode: 'all',
   });
-  const signIn = useSignIn();
+
+  const { mutateAsync } = useSignIn();
   const onSubmit = async (data: SignInParams) => {
+    setLoading(true);
+
     try {
-      const response = await signIn.mutateAsync(data);
+      const response = await mutateAsync(data);
 
       if (response) {
-        toast.success(response.data.message);
+        toast.success(response.data.data.message);
+        toast.info('Redirecting to dashboard...');
+        setLoading(false);
 
-        //2 Second delay before redirecting to dashboard
-        setTimeout(() => {
-          toast.info('Redirecting to dashboard...');
-        }, 2000);
-
-        if (response.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
+        if (response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
           router.push(ROUTES.SUPER_ADMIN);
-        } else if (response.data.data.type === USER_ROLES.INSTITUTION_ADMIN) {
+        } else if (
+          response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
+        ) {
           router.push(ROUTES.ADMIN);
-        } else if (response.data.data.type === USER_ROLES.TEACHER) {
+        } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
           router.push(ROUTES.TEACHER);
-        } else if (response.data.data.type === USER_ROLES.STUDENT) {
+        } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
         } else {
           toast.error('Invalid user role');
@@ -46,6 +51,7 @@ export default function AdminAuth() {
       }
     } catch (error) {
       toast.error(getErrMsg(error as Error));
+      setLoading(false);
     }
   };
   return (
@@ -54,7 +60,7 @@ export default function AdminAuth() {
         <section className='bg-white'>
           <section className='relative overflow-hidden bg-white'>
             <div className='relative z-10 -m-8 flex flex-wrap'>
-              <div className='hidden p-8 md:block md:w-1/2'>
+              <div className='hidden p-8 lg:block lg:w-1/2'>
                 <Image
                   width={154}
                   height={53}
@@ -73,7 +79,7 @@ export default function AdminAuth() {
                   />
                 </div>
               </div>
-              <div className='w-full p-8 md:w-1/2'>
+              <div className='w-full p-8 mt-20 lg:mt-0 lg:w-1/2'>
                 <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4 py-16'>
                   <Image
                     width={146}
@@ -102,7 +108,11 @@ export default function AdminAuth() {
                       placeholder='Enter password here'
                     />
 
-                    <Button type='submit' className='h-[54px] justify-center'>
+                    <Button
+                      isLoading={loading}
+                      type='submit'
+                      className='h-[54px] justify-center'
+                    >
                       Sign In
                     </Button>
 
@@ -119,12 +129,12 @@ export default function AdminAuth() {
                         </div>
                       </div>
                       <div className='w-auto p-2'>
-                        <a
+                        <Link
                           className='text-sm font-medium hover:text-primary'
-                          href='#'
+                          href='/auth/admin/'
                         >
                           Forgot Password?
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </form>
