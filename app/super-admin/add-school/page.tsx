@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(2);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
@@ -50,9 +50,18 @@ const AddSchool = () => {
       if (location === '' || lga === '' || town === '') {
         toast.error('Please enter all value for all fields');
       } else {
-        googleAddress = geocode.mutateAsync({ address: location as string });
-        logger(googleAddress);
+        googleAddress = await geocode.mutateAsync({
+          address: location as string,
+        });
+        if (googleAddress.length === 0) {
+          toast.error('Invalid address');
+          return;
+        }
+        setStage(3);
       }
+    }
+    if (stage === 3) {
+      setStage(4);
     }
   };
   const prevHandler = (): void => {
