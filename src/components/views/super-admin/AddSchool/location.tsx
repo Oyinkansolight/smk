@@ -2,6 +2,7 @@
 
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
+import { useGetLocalGovernments } from '@/server/onboard';
 
 interface LocationBioProps {
   location: string | number;
@@ -20,46 +21,9 @@ const Biodata = ({
   setLocation,
   setTown,
 }: LocationBioProps) => {
-  //create local government array in edo state nigeria
-  const options = [
-    'Akoko-Edo',
-    'Egor',
-    'Esan Central',
-    'Esan North-East',
-    'Esan South-East',
-    'Esan West',
-    'Etsako Central',
-    'Etsako East',
-    'Etsako West',
-    'Igueben',
-    'Ikpoba-Okha',
-    'Orhionmwon',
-    'Oredo',
-    'Ovia North-East',
-    'Ovia South-West',
-    'Owan East',
-    'Owan West',
-    'Uhunmwonde',
-  ];
+  const { data } = useGetLocalGovernments();
 
-  //create a towns array of all the local governments in edo state nigeria
-  const towns = [
-    'Benin City',
-    'Auchi',
-    'Igarra',
-    'Igueben',
-    'Iguobazuwa',
-    'Iguododo',
-    'Iguofu',
-    'Iguoriakhi',
-    'Iguoro',
-    'Iguosun',
-    'Iguotsemwan',
-    'Iguotu',
-    'Iguowei',
-    'Ihievbe',
-    'Ihievbe-Agbon',
-  ];
+  //create local government array in edo state nigeria
 
   return (
     <section className=''>
@@ -81,7 +45,7 @@ const Biodata = ({
             label='Select Local Government '
             formValue={lga}
             setFormValue={setLga}
-            options={options}
+            options={data?.map((v) => v.label ?? 'NULL') ?? []}
           />
         </div>
 
@@ -90,7 +54,11 @@ const Biodata = ({
             label='Select Town*'
             formValue={town}
             setFormValue={setTown}
-            options={towns}
+            options={
+              data
+                ?.find((v) => v.name === lga)
+                ?.towns?.map((v) => v.label ?? '') ?? []
+            }
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
-import { Label } from '@/types';
+import { Label, LocalGovernmentArea } from '@/types';
 import { useQuery } from 'react-query';
 
 export function useGetLocalGovernments() {
@@ -8,7 +8,7 @@ export function useGetLocalGovernments() {
     queryKey: 'get_local_governments',
     queryFn: async () =>
       (await request.get(`/v1/government/admin/get-local-government-area`)).data
-        .data.data.localGovernmentArea as [],
+        .data.data.localGovernmentArea as LocalGovernmentArea[],
   });
 
   query.data?.forEach((item: any) => {

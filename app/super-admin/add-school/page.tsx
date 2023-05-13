@@ -14,13 +14,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
 const AddSchool = () => {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(2);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [imageName, setImageName] = useState<string>('');
-  const [imageData, setImageData] = useState('http://placeimg.com/640/480');
+  const [imageData, setImageData] = useState<File | undefined>();
   // const [schoolName1, setSchoolName1] = useState<string | number>('');
   // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   // const [imageName1, setImageName1] = useState<string>('');
@@ -28,15 +29,30 @@ const AddSchool = () => {
   const [location, setLocation] = useState<string | number>('');
   const [town, setTown] = useState<string | number>('');
   const [lga, setLga] = useState<string | number>('');
+  let googleAddress;
+
+  const geocode = useGeocoding();
 
   logger(imageData);
 
   const createInstitution = useCreateInstitution();
   const geocoding = useGeocoding();
 
-  const nextHandler = (): void => {
-    if (stage >= 1 && stage <= 3) {
-      setStage(stage + 1);
+  const nextHandler = async () => {
+    if (stage === 1) {
+      if (schoolName === '' || schoolEmail === '' || !imageData) {
+        toast.error('Please enter a value for all fields');
+      } else {
+        setStage(2);
+      }
+    }
+    if (stage === 2) {
+      if (location === '' || lga === '' || town === '') {
+        toast.error('Please enter all value for all fields');
+      } else {
+        googleAddress = geocode.mutateAsync({ address: location as string });
+        logger(googleAddress);
+      }
     }
   };
   const prevHandler = (): void => {
