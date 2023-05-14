@@ -1,7 +1,6 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import logger from '@/lib/logger';
@@ -11,13 +10,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
 const AddSchoolLink = () => {
   const [stage] = useState(1);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [isOpen, setisOpen] = useState(false);
-
-  const [type, setType] = useState('');
 
   const inviteInstitution = useInviteInstitution();
 
@@ -27,8 +25,6 @@ const AddSchoolLink = () => {
       stageName: 'Details',
     },
   ];
-
-  const institutions = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -68,14 +64,6 @@ const AddSchoolLink = () => {
             placeholder='Detail here'
           />
         </div>
-        <div className='mb-10'>
-          <FormSelect
-            label='Select Institute Type*'
-            formValue={type}
-            setFormValue={(t) => setType(t as string)}
-            options={institutions}
-          />
-        </div>
         <div className='mb-10   '>
           <FormInput
             type='email'
@@ -95,7 +83,6 @@ const AddSchoolLink = () => {
                   const response = await inviteInstitution.mutateAsync({
                     instituteName: schoolName as string,
                     instituteEmail: schoolEmail as string,
-                    instituteType: type,
                   });
 
                   if (response.data) {

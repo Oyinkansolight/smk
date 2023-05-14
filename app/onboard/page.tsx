@@ -26,6 +26,66 @@ import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
 
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -92,6 +152,8 @@ export default function Page() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
+  const institutions = [{id:0, label: 'ECCDE'}, {id: 1, label: 'PRIMARY'}, {id: 2, label: 'SECONDARY'}, {id: 3, label: 'TERTIARY'}];
+  const [type, setType] = useState<{id: number, label: string} | null>();
   // const d = useGetPermissions();
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState<File>();
@@ -178,7 +240,7 @@ export default function Page() {
                   // ...getValues(),
                   town: (getValues('townId') as Town | undefined)?.id,
                   role: 1,
-                  instituteType: 'SECONDARY',
+                  instituteType: type?.label,
                   password: getValues('password'),
                   instituteLat: d[0].geometry?.location?.lat?.toString() ?? '0',
                   instituteLong:
@@ -258,13 +320,30 @@ export default function Page() {
               />
             </div>
 
-            <BaseInput
-              label='Institution Official Email'
-              name='email'
-              placeholder='Details here'
-              register={register}
-              value={user?.instituteEmail}
-            />
+            <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
+              <BaseInput
+                label='Institution Official Email'
+                name='email'
+                placeholder='Details here'
+                register={register}
+                value={user?.instituteEmail}
+              />
+              <div>
+                <div
+        className={clsxm(
+          'block text-sm font-semibold mb-2 text-gray-400 text-left',
+        )}
+      >
+        Select Institution Type
+      </div>
+                <Select
+
+                value={type}
+                onChange={(v)=>setType(v)}
+                options={institutions}
+              />
+              </div>
+            </div>
           </div>
         </div>
       </StepperLayout>
