@@ -143,7 +143,7 @@ const TransferStudent = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && <Details register={register} errors={errors} />}
 

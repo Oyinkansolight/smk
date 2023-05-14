@@ -52,7 +52,7 @@ const Library = () => {
           </div>
         </div>
 
-        {tabIdx === 0 && <Files filesData={filesData.data} />}
+        {tabIdx === 0 && <Files filesData={filesData} />}
       </div>
     </div>
   );

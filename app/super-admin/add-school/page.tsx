@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(3);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');

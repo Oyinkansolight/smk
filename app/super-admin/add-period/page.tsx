@@ -64,7 +64,7 @@ const AddPeriod = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         {stage === 1 && <Details />}
         {stage === 2 && <Lessonnote />}
         {stage === 3 && <Publish />}

@@ -61,7 +61,7 @@ const AddSchoolLink = () => {
         data={stepperData}
       />
 
-      <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
+      <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <h2 className='text-2xl font-bold'>Details</h2>
         <p>Kindly enter the details of the school below:</p>
 

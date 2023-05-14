@@ -27,7 +27,7 @@ function Index({ currentStage, variant, data, section }: propType) {
                     ? `bg-[${variant}] p-2 text-white`
                     : `border border-[${variant}] p-2 text-[${variant}]`,
                 ],
-                'grid h-7 w-7 place-content-center rounded-full border'
+                'hidden lg:grid h-7 w-7 place-content-center rounded-full border'
               )}
             >
               {currentStage > item.stage ? (
@@ -36,7 +36,7 @@ function Index({ currentStage, variant, data, section }: propType) {
                 item.stage
               )}
             </div>
-            <h1 className='text-xs font-semibold md:block hidden'>
+            <h1 className='text-[10px] md:text-xs font-semibold whitespace-nowrap'>
               {' '}
               {item.stageName}{' '}
             </h1>

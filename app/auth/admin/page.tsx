@@ -48,6 +48,11 @@ export default function AdminAuth() {
         } else {
           toast.error('Invalid user role');
         }
+
+        const name = response.data.data.data.firstName + ' ' + response.data.data.data.lastName;
+        const role = response.data.data.data.type;
+        const userDetails = { name, role };
+        localStorage.setItem('user', JSON.stringify(userDetails));
       }
     } catch (error) {
       toast.error(getErrMsg(error as Error));

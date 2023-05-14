@@ -6,12 +6,17 @@ import TabBar from '@/components/layout/TabBar';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
+import { DashboardOverview } from '@/types';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
-const TeacherFullDashboard = () => {
+interface TeacherFullDashboardProps {
+  overviewData: DashboardOverview;
+}
+
+const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {
   const [tabIdx, setTabIdx] = useState(0);
 
   return (
@@ -54,7 +59,7 @@ const TeacherFullDashboard = () => {
         ) : tabIdx === 2 ? (
           <TeacherTimeTableView />
         ) : (
-          <TeacherDashboardView />
+          <TeacherDashboardView overviewData={overviewData} />
         )}
       </div>
     </div>
