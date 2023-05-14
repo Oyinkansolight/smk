@@ -1,8 +1,10 @@
 'use client';
 
+import { LocalGovernmentArea, Town } from '@/types';
+
 interface PublishInterface {
-  lga: string | number;
-  town: string | number;
+  lga: LocalGovernmentArea | undefined;
+  town: Town | undefined;
   location: string | number;
   schoolName: string | number;
   schoolEmail: string | number;
@@ -43,13 +45,13 @@ const Publish = ({
 
           <div className='col-span-4'>
             <h2 className='text-xs mb-2 font-medium'>Local Govt</h2>
-            <p>{lga}</p>
+            <p>{lga?.label}</p>
           </div>
         </div>
         <div className='grid grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Town</h2>
-            <p>{town}</p>
+            <p>{town?.label}</p>
           </div>
         </div>
 

@@ -8,16 +8,16 @@ import logger from '@/lib/logger';
 import { useInviteInstitution } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddSchoolLink = () => {
-  const router = useRouter();
   const [stage] = useState(1);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [isOpen, setisOpen] = useState(false);
+
+  const [type, setType] = useState('');
 
   const inviteInstitution = useInviteInstitution();
 
@@ -28,12 +28,7 @@ const AddSchoolLink = () => {
     },
   ];
 
-  const institutions = [
-    'ECCDE',
-    'PRIMARY',
-    'SECONDARY',
-    'TERTIARY',
-  ];
+  const institutions = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -76,8 +71,8 @@ const AddSchoolLink = () => {
         <div className='mb-10'>
           <FormSelect
             label='Select Institute Type*'
-            formValue={institutions[0]}
-            setFormValue={() => console.log('')}
+            formValue={type}
+            setFormValue={(t) => setType(t as string)}
             options={institutions}
           />
         </div>
@@ -100,6 +95,7 @@ const AddSchoolLink = () => {
                   const response = await inviteInstitution.mutateAsync({
                     instituteName: schoolName as string,
                     instituteEmail: schoolEmail as string,
+                    instituteType: type,
                   });
 
                   if (response.data) {

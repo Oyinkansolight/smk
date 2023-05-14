@@ -10,11 +10,13 @@ import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
 import { useCreateInstitution } from '@/server/institution';
+import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
 
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
@@ -29,8 +31,8 @@ const AddSchool = () => {
   // const [imageName1, setImageName1] = useState<string>('');
   // const [, setImageData1] = useState();
   const [location, setLocation] = useState<string | number>('');
-  const [town, setTown] = useState<string | number>('');
-  const [lga, setLga] = useState<string | number>('');
+  const [town, setTown] = useState<Town>();
+  const [lga, setLga] = useState<LocalGovernmentArea>();
   let googleAddress: GeoCodeResponse[] = [];
 
   const geocode = useGeocoding();
@@ -48,7 +50,7 @@ const AddSchool = () => {
       }
     }
     if (stage === 2) {
-      if (location === '' || lga === '' || town === '') {
+      if (location === '' || !lga || !town) {
         toast.error('Please enter all value for all fields');
       } else {
         googleAddress = await geocode.mutateAsync({
@@ -193,7 +195,7 @@ const AddSchool = () => {
                       instituteName: schoolName as string,
                       instituteLogo: p,
                       instituteType: 'SECONDARY',
-                      town: 1,
+                      town: town?.id,
                       email: schoolEmail as string,
                       password: password,
                       role: 1,
