@@ -13,7 +13,7 @@ import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 interface TeacherFullDashboardProps {
-  overviewData: DashboardOverview;
+  overviewData: DashboardOverview | undefined;
 }
 
 const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {

@@ -11,8 +11,15 @@ export default function ClockInTime() {
   const [clockedIn, setClockedIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState(0);
   const { latitude, longitude, loading, error } = useGeoLocation();
-  const lat = 6.574832;
-  const long = 3.334813;
+  const institutionData = localStorage.getItem('institution');
+  let institute;
+
+  if (institutionData) {
+    institute = JSON.parse(institutionData);
+  }
+
+  const lat = institute.instituteLat;
+  const long = institute.instituteLong;
 
   useEffect(() => {
     setIsLoading(loading);
@@ -25,7 +32,7 @@ export default function ClockInTime() {
         setIsLoading(false);
       }
     }
-  }, [latitude, longitude, loading, error]);
+  }, [latitude, longitude, loading, error, lat, long]);
 
   useEffect(() => {
     setTimeout(() => {

@@ -42,7 +42,7 @@ const timeLineData = [
 const quickActions = ['Add Item', 'Mange Schedule', 'Mark Assignment'];
 
 interface TeacherDashboardViewProps {
-  overviewData: DashboardOverview;
+  overviewData: DashboardOverview | undefined;
 }
 export default function TeacherDashboardView({ overviewData }: TeacherDashboardViewProps) {
   return (

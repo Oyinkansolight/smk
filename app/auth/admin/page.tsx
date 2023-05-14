@@ -42,6 +42,7 @@ export default function AdminAuth() {
         ) {
           router.push(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
+          localStorage.setItem('institution', JSON.stringify(response.data.data.data.staff.institution));
           router.push(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
