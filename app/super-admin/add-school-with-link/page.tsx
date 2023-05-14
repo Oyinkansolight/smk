@@ -1,19 +1,17 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import logger from '@/lib/logger';
 import { useInviteInstitution } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
 const AddSchoolLink = () => {
-  const router = useRouter();
   const [stage] = useState(1);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
@@ -26,13 +24,6 @@ const AddSchoolLink = () => {
       stage: 1,
       stageName: 'Details',
     },
-  ];
-
-  const institutions = [
-    'ECCDE',
-    'PRIMARY',
-    'SECONDARY',
-    'TERTIARY',
   ];
 
   return (
@@ -71,14 +62,6 @@ const AddSchoolLink = () => {
             setFormValue={setSchoolName}
             formValue={schoolName}
             placeholder='Detail here'
-          />
-        </div>
-        <div className='mb-10'>
-          <FormSelect
-            label='Select Institute Type*'
-            formValue={institutions[0]}
-            setFormValue={() => console.log('')}
-            options={institutions}
           />
         </div>
         <div className='mb-10   '>

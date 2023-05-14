@@ -3,14 +3,15 @@
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
 import { useGetLocalGovernments } from '@/server/onboard';
+import { LocalGovernmentArea, Town } from '@/types';
 
 interface LocationBioProps {
   location: string | number;
   setLocation: (v: string | number) => void;
-  town: string | number;
-  setTown: (v: string | number) => void;
-  lga: string | number;
-  setLga: (v: string | number) => void;
+  town: Town | undefined;
+  setTown: (v: Town) => void;
+  lga: LocalGovernmentArea | undefined;
+  setLga: (v: LocalGovernmentArea) => void;
 }
 
 const Biodata = ({
@@ -43,8 +44,13 @@ const Biodata = ({
         <div className='w-full mt-4'>
           <FormSelect
             label='Select Local Government '
-            formValue={lga}
-            setFormValue={setLga}
+            formValue={lga?.label}
+            setFormValue={(value) => {
+              const l = data?.find((v) => v.label === value);
+              if (l) {
+                setLga(l);
+              }
+            }}
             options={data?.map((v) => v.label ?? 'NULL') ?? []}
           />
         </div>
@@ -52,11 +58,20 @@ const Biodata = ({
         <div className='w-full'>
           <FormSelect
             label='Select Town*'
-            formValue={town}
-            setFormValue={setTown}
+            formValue={town?.label}
+            setFormValue={(value) => {
+              if (lga) {
+                const t = lga.towns?.find(
+                  (townValue) => value === townValue.label
+                );
+                if (t) {
+                  setTown(t);
+                }
+              }
+            }}
             options={
               data
-                ?.find((v) => v.name === lga)
+                ?.find((v) => v.id === lga?.id)
                 ?.towns?.map((v) => v.label ?? '') ?? []
             }
           />
