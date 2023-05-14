@@ -6,13 +6,13 @@ import { BaseInput } from '@/components/input';
 import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
+import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
-import {
-  useCompleteInstitutionOnboarding,
-  useOnboardVerification,
-} from '@/server/institution';
+import { useGeocoding } from '@/server/geocoding';
+import { useCompleteInstitutionOnboarding, useOnboardVerification } from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
+import { LocalGovernmentArea, Town } from '@/types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
@@ -23,6 +23,130 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -72,7 +196,7 @@ export default function Page() {
   const [step, setStep] = useState(0);
   // const d = useGetPermissions();
   const [imageName, setImageName] = useState<string>('');
-  const [imageData, setImageData] = useState('');
+  const [imageData, setImageData] = useState<File>();
   // const [permissions, setPermissions] = useState(new Set<number>());
   const [isComplete, setIsComplete] = useState(false);
 
@@ -91,6 +215,7 @@ export default function Page() {
 
   const create = useCompleteInstitutionOnboarding();
   const verification = useOnboardVerification();
+  const geo = useGeocoding();
 
   useEffect(() => {
     setIsLoading(true);
@@ -125,20 +250,37 @@ export default function Page() {
 
         <Button
           onClick={async () => {
+            if (step === 5) {
+              if (getValues('password') !== getValues('confirm_password}')) {
+                toast.error('Password mismatch');
+              }
+            }
             if (step < steps.length - 1) {
               handleStepChange(step + 1);
             } else {
               try {
+                const d = await geo.mutateAsync({
+                  address: getValues('instituteAddress'),
+                });
+                if (d.length === 0) {
+                  toast.error('Invalid address. Re enter your address');
+                }
+                const buffer = await imageData?.arrayBuffer();
+                const p = `profile_picture/${imageName}`;
+                if (buffer) {
+                  uploadDocument(p, buffer);
+                }
                 await create.mutateAsync({
                   // ...getValues(),
-                  town: 1,
+                  town: (getValues('townId') as Town).id,
                   role: 1,
                   instituteType: 'SECONDARY',
-                  password: '123456',
-                  instituteLat: '6.465422',
-                  instituteLong: '3.406448',
+                  password: getValues('password'),
+                  instituteLat: d[0].geometry?.location?.lat?.toString() ?? '0',
+                  instituteLong:
+                    d[0].geometry?.location?.lat?.toString() ?? '0',
                   email: user?.instituteEmail ?? 'e@mail.com',
-                  instituteLogo: 'https://picsum.photos/200',
+                  instituteLogo: p,
                   instituteAddress: getValues('instituteAddress'),
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
@@ -227,24 +369,7 @@ export default function Page() {
 
   const StepThree = () => {
     const locals = useGetLocalGovernments();
-    const [towns, setTowns] = useState<any>([]);
-    const [currentTownIndex] = useState(0);
     // const towns = useGetTowns(currentTownIndex);
-
-    logger(locals);
-
-    useEffect(() => {
-      if (!locals.isLoading && locals.data && locals.data.length > 0) {
-        locals.data.forEach((local: any) => {
-          setTowns([...towns, local.towns]);
-        });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [locals.data]);
-
-    useEffect(() => {
-      logger(currentTownIndex);
-    }, [currentTownIndex]);
 
     // const handleGetTownIndex = (e: any) => {
     //   // setCurrentTownIndex(e.target.value);
@@ -286,7 +411,17 @@ export default function Page() {
                 render={({ field }) => {
                   return (
                     <Select
-                      options={towns[currentTownIndex] ?? []}
+                      options={
+                        locals.data?.find(
+                          (v) =>
+                            v.id ===
+                            (
+                              getValues(
+                                'localGovernmentId'
+                              ) as LocalGovernmentArea
+                            )?.id
+                        )?.towns
+                      }
                       {...field}
                     />
                   );

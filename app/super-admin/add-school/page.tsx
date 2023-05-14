@@ -6,17 +6,18 @@ import Account from '@/components/views/super-admin/AddSchool/account';
 import General from '@/components/views/super-admin/AddSchool/general';
 import Location from '@/components/views/super-admin/AddSchool/location';
 import Publish from '@/components/views/super-admin/AddSchool/publish';
+import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
 import { useCreateInstitution } from '@/server/institution';
+import { GeoCodeResponse } from '@/types/geocode';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 const AddSchool = () => {
-  const [stage, setStage] = useState(3);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
@@ -30,14 +31,13 @@ const AddSchool = () => {
   const [location, setLocation] = useState<string | number>('');
   const [town, setTown] = useState<string | number>('');
   const [lga, setLga] = useState<string | number>('');
-  let googleAddress;
+  let googleAddress: GeoCodeResponse[] = [];
 
   const geocode = useGeocoding();
 
   logger(imageData);
 
   const createInstitution = useCreateInstitution();
-  const geocoding = useGeocoding();
 
   const nextHandler = async () => {
     if (stage === 1) {
@@ -178,20 +178,24 @@ const AddSchool = () => {
                 onClick={async () => {
                   try {
                     toast.info('Creating Institution...');
-                    const d = await geocoding.mutateAsync({
-                      address: location as string,
-                    });
+                    const array = await imageData?.arrayBuffer();
+                    const p = `profile_pictures/${imageName}`;
+                    if (array) {
+                      await uploadDocument(p, array);
+                    }
                     const response = createInstitution.mutateAsync({
-                      instituteLat: d[0].geometry?.location?.lat?.toString(),
-                      instituteLong: d[0].geometry?.location?.lng?.toString(),
+                      instituteLat:
+                        googleAddress[0].geometry?.location?.lat?.toString(),
+                      instituteLong:
+                        googleAddress[0].geometry?.location?.lng?.toString(),
                       instituteAddress: location as string,
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,
-                      instituteLogo: 'http://placeimg.com/640/480',
+                      instituteLogo: p,
                       instituteType: 'SECONDARY',
                       town: 1,
                       email: schoolEmail as string,
-                      password: 'test_password' as string,
+                      password: password,
                       role: 1,
                     });
 
