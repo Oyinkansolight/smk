@@ -6,13 +6,17 @@ import Account from '@/components/views/super-admin/AddSchool/account';
 import General from '@/components/views/super-admin/AddSchool/general';
 import Location from '@/components/views/super-admin/AddSchool/location';
 import Publish from '@/components/views/super-admin/AddSchool/publish';
+import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
 import { useCreateInstitution } from '@/server/institution';
+import { LocalGovernmentArea, Town } from '@/types';
+import { GeoCodeResponse } from '@/types/geocode';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
 
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
@@ -20,23 +24,47 @@ const AddSchool = () => {
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [imageName, setImageName] = useState<string>('');
-  const [imageData, setImageData] = useState('http://placeimg.com/640/480');
+  const [imageData, setImageData] = useState<File | undefined>();
+  const [password, setPassword] = useState('');
   // const [schoolName1, setSchoolName1] = useState<string | number>('');
   // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   // const [imageName1, setImageName1] = useState<string>('');
   // const [, setImageData1] = useState();
   const [location, setLocation] = useState<string | number>('');
-  const [town, setTown] = useState<string | number>('');
-  const [lga, setLga] = useState<string | number>('');
+  const [town, setTown] = useState<Town>();
+  const [lga, setLga] = useState<LocalGovernmentArea>();
+  let googleAddress: GeoCodeResponse[] = [];
+
+  const geocode = useGeocoding();
 
   logger(imageData);
 
   const createInstitution = useCreateInstitution();
-  const geocoding = useGeocoding();
 
-  const nextHandler = (): void => {
-    if (stage >= 1 && stage <= 3) {
-      setStage(stage + 1);
+  const nextHandler = async () => {
+    if (stage === 1) {
+      if (schoolName === '' || schoolEmail === '' || !imageData) {
+        toast.error('Please enter a value for all fields');
+      } else {
+        setStage(2);
+      }
+    }
+    if (stage === 2) {
+      if (location === '' || !lga || !town) {
+        toast.error('Please enter all value for all fields');
+      } else {
+        googleAddress = await geocode.mutateAsync({
+          address: location as string,
+        });
+        if (googleAddress.length === 0) {
+          toast.error('Invalid address');
+          return;
+        }
+        setStage(3);
+      }
+    }
+    if (stage === 3) {
+      setStage(4);
     }
   };
   const prevHandler = (): void => {
@@ -118,6 +146,8 @@ const AddSchool = () => {
             setImageName={(v) => setImageName(v ?? '')}
             setSchoolEmail={setSchoolEmail}
             setSchoolName={setSchoolName}
+            password={password}
+            setPassword={setPassword}
           />
         )}
         {stage === 4 && (
@@ -150,20 +180,24 @@ const AddSchool = () => {
                 onClick={async () => {
                   try {
                     toast.info('Creating Institution...');
-                    const d = await geocoding.mutateAsync({
-                      address: location as string,
-                    });
+                    const array = await imageData?.arrayBuffer();
+                    const p = `profile_pictures/${imageName}`;
+                    if (array) {
+                      await uploadDocument(p, array);
+                    }
                     const response = createInstitution.mutateAsync({
-                      instituteLat: d[0].geometry?.location?.lat?.toString(),
-                      instituteLong: d[0].geometry?.location?.lng?.toString(),
+                      instituteLat:
+                        googleAddress[0].geometry?.location?.lat?.toString(),
+                      instituteLong:
+                        googleAddress[0].geometry?.location?.lng?.toString(),
                       instituteAddress: location as string,
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,
-                      instituteLogo: 'http://placeimg.com/640/480',
+                      instituteLogo: p,
                       instituteType: 'SECONDARY',
-                      town: 1,
+                      town: town?.id,
                       email: schoolEmail as string,
-                      password: 'test_password' as string,
+                      password: password,
                       role: 1,
                     });
 

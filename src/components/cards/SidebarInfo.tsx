@@ -204,7 +204,7 @@ export const SidebarInfoCardThree = () => {
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          12,090
+          0
         </div>
 
         <hr className='border-b' />
@@ -233,7 +233,7 @@ export const AdminSidebarInfoCardOne = () => {
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          ₦{commaNumber(12200281.9)}
+          ₦{commaNumber(0)}
         </div>
 
         <hr className='border-b' />
@@ -262,7 +262,7 @@ export const AdminSidebarInfoCardTwo = () => {
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          ₦{commaNumber(912200281.9)}
+          ₦{commaNumber(0)}
         </div>
 
         <hr className='border-b' />
@@ -291,7 +291,7 @@ export const AdminSidebarInfoCardThree = () => {
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          {commaNumber(50)}
+          {commaNumber(0)}
         </div>
 
         <hr className='border-b' />

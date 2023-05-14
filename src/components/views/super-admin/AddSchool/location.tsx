@@ -2,14 +2,16 @@
 
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
+import { useGetLocalGovernments } from '@/server/onboard';
+import { LocalGovernmentArea, Town } from '@/types';
 
 interface LocationBioProps {
   location: string | number;
   setLocation: (v: string | number) => void;
-  town: string | number;
-  setTown: (v: string | number) => void;
-  lga: string | number;
-  setLga: (v: string | number) => void;
+  town: Town | undefined;
+  setTown: (v: Town) => void;
+  lga: LocalGovernmentArea | undefined;
+  setLga: (v: LocalGovernmentArea) => void;
 }
 
 const Biodata = ({
@@ -20,46 +22,9 @@ const Biodata = ({
   setLocation,
   setTown,
 }: LocationBioProps) => {
-  //create local government array in edo state nigeria
-  const options = [
-    'Akoko-Edo',
-    'Egor',
-    'Esan Central',
-    'Esan North-East',
-    'Esan South-East',
-    'Esan West',
-    'Etsako Central',
-    'Etsako East',
-    'Etsako West',
-    'Igueben',
-    'Ikpoba-Okha',
-    'Orhionmwon',
-    'Oredo',
-    'Ovia North-East',
-    'Ovia South-West',
-    'Owan East',
-    'Owan West',
-    'Uhunmwonde',
-  ];
+  const { data } = useGetLocalGovernments();
 
-  //create a towns array of all the local governments in edo state nigeria
-  const towns = [
-    'Benin City',
-    'Auchi',
-    'Igarra',
-    'Igueben',
-    'Iguobazuwa',
-    'Iguododo',
-    'Iguofu',
-    'Iguoriakhi',
-    'Iguoro',
-    'Iguosun',
-    'Iguotsemwan',
-    'Iguotu',
-    'Iguowei',
-    'Ihievbe',
-    'Ihievbe-Agbon',
-  ];
+  //create local government array in edo state nigeria
 
   return (
     <section className=''>
@@ -79,18 +44,36 @@ const Biodata = ({
         <div className='w-full mt-4'>
           <FormSelect
             label='Select Local Government '
-            formValue={lga}
-            setFormValue={setLga}
-            options={options}
+            formValue={lga?.label}
+            setFormValue={(value) => {
+              const l = data?.find((v) => v.label === value);
+              if (l) {
+                setLga(l);
+              }
+            }}
+            options={data?.map((v) => v.label ?? 'NULL') ?? []}
           />
         </div>
 
         <div className='w-full'>
           <FormSelect
             label='Select Town*'
-            formValue={town}
-            setFormValue={setTown}
-            options={towns}
+            formValue={town?.label}
+            setFormValue={(value) => {
+              if (lga) {
+                const t = lga.towns?.find(
+                  (townValue) => value === townValue.label
+                );
+                if (t) {
+                  setTown(t);
+                }
+              }
+            }}
+            options={
+              data
+                ?.find((v) => v.id === lga?.id)
+                ?.towns?.map((v) => v.label ?? '') ?? []
+            }
           />
         </div>
       </div>

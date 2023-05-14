@@ -3,6 +3,7 @@ import { CalendarStepper, EventCalendar } from '@/components/calendars';
 import { BasicCard, ClockInCountCard, ToggleCard } from '@/components/cards';
 import { BarChart } from '@/components/charts';
 import ClockInTime from '@/components/views/teacher/ClockInTime';
+import { DashboardOverview } from '@/types';
 import dynamic from 'next/dynamic';
 import StudentBadge from '~/svg/student_badge.svg';
 
@@ -40,7 +41,10 @@ const timeLineData = [
 
 const quickActions = ['Add Item', 'Mange Schedule', 'Mark Assignment'];
 
-export default function TeacherDashboardView() {
+interface TeacherDashboardViewProps {
+  overviewData: DashboardOverview | undefined;
+}
+export default function TeacherDashboardView({ overviewData }: TeacherDashboardViewProps) {
   return (
     <>
       <div className='-mt-[10px] flex flex-row items-center justify-between'>
@@ -59,12 +63,12 @@ export default function TeacherDashboardView() {
         </div>
         <div className='grid grid-cols-2 gap-3 md:gap-[20px] xl:gap-[27px]'>
           <ClockInCountCard
-            count={5}
+            count={overviewData?.Total_Subjects ?? 0}
             variant='primary'
             title='Total Attending Subjects'
           />
           <ClockInCountCard
-            count={10}
+            count={overviewData?.Total_Grades ?? 0}
             variant='secondary'
             title='Total Attending Grades'
           />

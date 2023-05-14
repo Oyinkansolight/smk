@@ -13,12 +13,23 @@ import IDBadge from '~/svg/identification_badge.svg';
 import NoteBook from '~/svg/notebook.svg';
 import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
+import { toast } from 'react-toastify';
 
 const AdminSidebar = () => {
   const routeDetails = usePathname();
   const [open, setOpen] = useState(false);
 
   const handleToggle = () => setOpen(!open);
+
+  const handleLogout = () => {
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm('Are you sure you want to logout?');
+    if (confirm) {
+      // eslint-disable-next-line no-alert
+      toast.success('You have been logged out successfully');
+      localStorage.removeItem('user');
+    }
+  };
 
   return (
     <aside
@@ -192,6 +203,7 @@ const AdminSidebar = () => {
           }
           title='Logout'
           href='/auth/admin'
+          onClick={handleLogout}
           active={routeDetails && routeDetails.includes('message') && true}
         />
       </nav>
@@ -205,6 +217,7 @@ interface SideBarButtonProps {
   href: string;
   active: boolean | any;
   open: boolean;
+  onClick?: () => void;
 }
 
 const SideBarButton = ({
@@ -213,9 +226,11 @@ const SideBarButton = ({
   href,
   active,
   open,
+  onClick,
 }: SideBarButtonProps) => (
   <ButtonLink
     href={href}
+    onClick={onClick}
     className={clsxm(
       open && 'w-[190px]',
       active
