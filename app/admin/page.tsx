@@ -7,6 +7,7 @@ import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { InstitutionSlider } from '@/components/sliders';
+import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
 import commaNumber from 'comma-number';
 import { GoChevronRight } from 'react-icons/go';
 import StudentBadge from '~/svg/student_badge.svg';
@@ -67,12 +68,14 @@ const percentageData = [
 ];
 
 const Page = () => {
+  const { data } = useGetInstitutionDashboardOverview();
+
   return (
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
       <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px]'>
-        <CountCard count={12566} title='Total Students' variant='primary' />
-        <CountCard count={66} title='Total Staff' variant='secondary' />
-        <CountCard count={12} title='Total Grades' variant='tertiary' />
+        <CountCard count={data?.Total_Students ?? 0} title='Total Students' variant='primary' />
+        <CountCard count={data?.Total_Staff ?? 0} title='Total Staff' variant='secondary' />
+        <CountCard count={data?.Total_Grades ?? 0} title='Total Grades' variant='tertiary' />
       </div>
 
       <div className='flex flex-col'>

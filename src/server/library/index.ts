@@ -10,6 +10,11 @@ export interface UploadFileParams {
   createdBy?: string;
 }
 
+export interface UpdateFileSubjectParams {
+  fileId?: number;
+  subjectId?: number;
+}
+
 export function useUploadFile() {
   const mutation = useMutation({
     mutationKey: 'upload-file',
@@ -29,4 +34,17 @@ export function useGetAllFiles() {
         .then((v) => v.data.data as any),
   });
   return query;
+}
+
+export function useAssignSubjectsToFile() {
+  const mutation = useMutation({
+    mutationKey: 'update-subjects',
+    mutationFn: async (params: UploadFileParams) => {
+      return await request.post(
+        '/v1/government/library/assign-to-subject',
+        params
+      );
+    },
+  });
+  return mutation;
 }

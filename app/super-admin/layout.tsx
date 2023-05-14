@@ -24,9 +24,9 @@ export default function RootLayout({
         <AdminHeader />
 
         <div className='flex flex-1 flex-row overflow-y-hidden'>
-          <main className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
+          <div className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
             <div>{children}</div>
-          </main>
+          </div>
 
           <AdminSidebar />
           {routeDetails === '/super-admin' && <AdminRightSidebar />}

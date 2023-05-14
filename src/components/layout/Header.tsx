@@ -9,6 +9,12 @@ import AdminNotification from './AdminNotification';
 
 export default function Header() {
   const [isOpen, setisOpen] = React.useState(false);
+  const userData = localStorage.getItem('user');
+  let user;
+
+  if (userData) {
+    user = JSON.parse(userData);
+  }
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
@@ -33,9 +39,9 @@ export default function Header() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  Santos Igbhosa
+                  {user.name ?? 'User Name'}
                 </div>
-                <Pill text='School Admin' variant='primary' />
+                <Pill text={user?.role ?? "User Role"} variant='primary' />
               </div>
             </div>
 

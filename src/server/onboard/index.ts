@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
-import { Label, LocalGovernmentArea } from '@/types';
-import { useQuery } from 'react-query';
+import { InviteAdminParams, Label, LocalGovernmentArea } from '@/types';
+import { useMutation, useQuery } from 'react-query';
 
 export function useGetLocalGovernments() {
   const query = useQuery({
@@ -50,4 +50,25 @@ export function useGetPermissions() {
     ],
   });
   return query;
+}
+
+export function useGetAdminRoles() {
+  const query = useQuery({
+    queryKey: 'get_all_admin_roles',
+    queryFn: async () =>
+      (await request.get(`/v1/government/roles/get-roles`)).data.data,
+  });
+
+  return query;
+}
+
+export function useInviteAdmin() {
+  const mutation = useMutation({
+    mutationKey: 'invite_admin',
+    mutationFn: (params: InviteAdminParams) =>
+      request.post('/v1/government/admin/invite-admin', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
 }

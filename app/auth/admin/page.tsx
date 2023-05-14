@@ -42,12 +42,18 @@ export default function AdminAuth() {
         ) {
           router.push(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
+          localStorage.setItem('institution', JSON.stringify(response.data.data.data.staff.institution));
           router.push(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
         } else {
           toast.error('Invalid user role');
         }
+
+        const name = response.data.data.data.firstName + ' ' + response.data.data.data.lastName;
+        const role = response.data.data.data.type;
+        const userDetails = { name, role };
+        localStorage.setItem('user', JSON.stringify(userDetails));
       }
     } catch (error) {
       toast.error(getErrMsg(error as Error));

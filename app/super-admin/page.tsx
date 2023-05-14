@@ -11,7 +11,6 @@ import {
 import { BarChart, StreamChart } from '@/components/charts';
 import AddSingleSchool from '@/components/modal/addSchool';
 import { AdSlider } from '@/components/sliders';
-import logger from '@/lib/logger';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
 import { BsPlus } from 'react-icons/bs';
@@ -21,7 +20,7 @@ const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { data } = useGetDashboardOverview();
-  logger(data);
+
   return (
     <div className='layout flex flex-col gap-[27px] px-4 pt-6'>
       <div className='flex justify-end'>
@@ -46,7 +45,7 @@ const Page = () => {
       )}
 
       <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
-        <SchoolTotalCard count={data?.data?.Total_Schools ?? 0} />
+        <SchoolTotalCard count={data?.Total_Schools ?? 0} />
         <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
           <IndividualTotal
             count={data?.data?.Total_ECCDE ?? 0}
@@ -55,19 +54,19 @@ const Page = () => {
             link='/super-admin/eccde'
           />
           <IndividualTotal
-            count={data?.data?.Total_Primary ?? 0}
+            count={data?.Total_Primary ?? 0}
             name='Primary School'
             link='/super-admin/primary'
             variant='secondary'
           />
           <IndividualTotal
-            count={data?.data?.Total_Secondary ?? 0}
+            count={data?.Total_Secondary ?? 0}
             name='Secondary School'
             link='/super-admin/eccde'
             variant='secondary'
           />
           <IndividualTotal
-            count={data?.data?.Total_Tertiary ?? 0}
+            count={data?.Total_Tertiary ?? 0}
             name='Tertiary School'
             link='/super-admin/tertiary'
             variant='tertiary'
@@ -84,13 +83,13 @@ const Page = () => {
 
         <div className='grid grid-cols-2 gap-6'>
           <IndividualTotal
-            count={data?.data?.Total_Students ?? 0}
+            count={data?.Total_Students ?? 0}
             name='Total Students'
             variant='primary'
             link='/super-admin/all-student'
           />
           <IndividualTotal
-            count={data?.data?.Total_Teachers ?? 0}
+            count={data?.Total_Teachers ?? 0}
             name='Total Teachers'
             variant='primary'
             link='/super-admin/all-staff'
