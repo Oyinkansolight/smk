@@ -31,3 +31,7 @@ export interface Town {
   label?: string;
 }
 
+export interface InviteAdminParams {
+  email?: string;
+  role?: number;
+}

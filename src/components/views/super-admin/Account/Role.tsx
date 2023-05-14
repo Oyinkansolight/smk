@@ -9,6 +9,7 @@ const Role = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isOpen, setisOpen] = useState(false);
 
+
   function handleModal() {
     setisOpen(!isOpen);
   }
