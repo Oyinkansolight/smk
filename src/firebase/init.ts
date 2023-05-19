@@ -2,14 +2,15 @@ import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyDrugHovIIoO4QSOJa3XHs7KMFbdR-dlSw',
-  authDomain: 'smk-project-d0ff1.firebaseapp.com',
-  projectId: 'smk-project-d0ff1',
-  storageBucket: 'smk-project-d0ff1.appspot.com',
-  messagingSenderId: '35883128324',
-  appId: '1:35883128324:web:1fd396284152ccc5914751',
-  measurementId: 'G-3WPGHLYQ6P',
+  apiKey: 'AIzaSyDEn6jkFcOq9x-eRhFO4l_o0BnG_A8FOZk',
+  authDomain: 'edo-ems.firebaseapp.com',
+  projectId: 'edo-ems',
+  storageBucket: 'edo-ems.appspot.com',
+  messagingSenderId: '340775384417',
+  appId: '1:340775384417:web:3b25c8930c144ba5cdc120',
+  measurementId: 'G-LCJGRFEBR0',
 };
 
 // Initialize Firebase
