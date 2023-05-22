@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BasicCard from '@/components/cards/Basic';
 import { LineGraphComponent } from '@/components/charts';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import clsxm from '@/lib/clsxm';
+import { DashboardOverview } from '@/types';
 import commaNumber from 'comma-number';
 import React from 'react';
 import Jpg from '~/svg/jpg.svg';
@@ -203,9 +205,7 @@ export const SidebarInfoCardThree = () => {
           </div>
         </div>
 
-        <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          0
-        </div>
+        <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>0</div>
 
         <hr className='border-b' />
 
@@ -275,7 +275,7 @@ export const AdminSidebarInfoCardTwo = () => {
   );
 };
 
-export const AdminSidebarInfoCardThree = () => {
+export const AdminSidebarInfoCardThree = (data: DashboardOverview | any) => {
   return (
     <BasicCard
       className={clsxm(
@@ -291,7 +291,7 @@ export const AdminSidebarInfoCardThree = () => {
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
-          {commaNumber(0)}
+          {commaNumber(data?.data?.Total_Staff ?? 0)}
         </div>
 
         <hr className='border-b' />

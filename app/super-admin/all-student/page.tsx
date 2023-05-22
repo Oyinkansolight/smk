@@ -1,9 +1,13 @@
 'use client';
 
 import { BasicSearch } from '@/components/search';
+import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
+import { useGetStudentsList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
@@ -56,34 +60,55 @@ const AllStudent = () => {
       location: 'Benin',
     },
   ];
-  const [students, setstudents] = useState(mockData);
+  const { data, error, isLoading } = useGetStudentsList();
+
+  const [students, setstudents] = useState(data ?? []);
 
   const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.name.toLowerCase().includes(value.toLowerCase())
+    const result = students.filter(
+      (data) =>
+        data.user[0].firstName.toLowerCase().includes(value.toLowerCase()) ||
+        data.user[0].lastName.toLowerCase().includes(value.toLowerCase())
     );
     setstudents(result);
   };
+
+  logger(students);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <div className='flex items-center space-x-4'>
-        <Image
-          src='/svg/back.svg'
-          width={10}
-          height={10}
-          alt='back'
-          className='h-4 w-4'
-        />
-        <h3 className='text-[10px] font-medium'>Dashboard</h3>
-      </div>
+      <Link href='/super-admin'>
+        <div className='flex items-center space-x-4'>
+          <Image
+            src='/svg/back.svg'
+            width={10}
+            height={10}
+            alt='back'
+            className='h-4 w-4'
+          />
+          <h3 className='text-[10px] font-medium'>Dashboard</h3>
+        </div>
+      </Link>
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>All Students</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>64,450</h1>
+          <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
         </div>
+        <Link
+          href='/admin/add-student'
+          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
+        >
+          Add Student
+        </Link>
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
@@ -101,29 +126,38 @@ const AllStudent = () => {
           <div className='col-span-2'>Student ID</div>
           <div className='col-span-1'>Type</div>
           <div className='col-span-3'>Schools</div>
-          <div className='col-span-2'>Location</div>
         </div>
-        {students.map((item, idx) => (
-          <div
-            className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-            key={idx}
-          >
-            <div className='col-span-1'>#{idx + 1} </div>
-            <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-              <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-              <Link href='/super-admin/student'>
-                <h2 className='text-sm font-medium'>{item.name}</h2>
-              </Link>
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          (data ?? []).map((item, idx) => (
+            <div
+              className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+              key={idx}
+            >
+              <div className='col-span-1'>#{idx + 1} </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+                <Link href='/super-admin/student'>
+                  <h2 className='text-sm font-medium capitalize'>
+                    {item.user[0].firstName} {item.user[0].lastName}
+                  </h2>
+                </Link>
+              </div>
+              <div className='col-span-2'>{item.id} </div>
+              <div className='col-span-1'>
+                {' '}
+                {item?.institution?.instituteType || 'N/A '}{' '}
+              </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                {item?.institution?.instituteName || 'N/A '}{' '}
+              </div>{' '}
             </div>
-            <div className='col-span-2'>{item.Student_ID} </div>
-            <div className='col-span-1'>{item.type} </div>
-            <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-              <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-              <h2 className='text-sm font-medium'>{item.school}</h2>
-            </div>{' '}
-            <div className='col-span-2'> {item.location} </div>
-          </div>
-        ))}
+          ))
+        )}
+        {!isLoading && data?.length === 0 && (
+          <div className='text-red-500 py-4 text-center'>No record found</div>
+        )}
 
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>

@@ -45,7 +45,7 @@ export default function Page() {
       if (response.data.data.status) {
         toast.success('File uploaded successfully');
         setTimeout(() => {
-          router.push("/super-admin/library")
+          router.push('/super-admin/library');
         }, 2000);
       }
     }

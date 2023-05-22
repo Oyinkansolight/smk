@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
 import { InviteAdminParams, Label, LocalGovernmentArea } from '@/types';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetLocalGovernments() {
   const query = useQuery({
@@ -63,12 +63,17 @@ export function useGetAdminRoles() {
 }
 
 export function useInviteAdmin() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'invite_admin',
     mutationFn: (params: InviteAdminParams) =>
       request.post('/v1/government/admin/invite-admin', params, {
         withCredentials: true,
       }),
+    onSettled: () => {
+      client.refetchQueries('get_admin_list');
+    },
   });
   return mutation;
 }

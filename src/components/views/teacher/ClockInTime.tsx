@@ -1,25 +1,48 @@
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
+import { useClockIn, useClockOut } from '@/server/teacher';
 import { useEffect, useState } from 'react';
 import { useGeoLocation } from 'use-geo-location';
 
 export default function ClockInTime() {
+  const clockIn = useClockIn();
+  const clockOut = useClockOut();
   const [inArea, setInArea] = useState(false);
   const [distance, setDistance] = useState('Calculating...');
   const [isLoading, setIsLoading] = useState(false);
   const [clockedIn, setClockedIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState(0);
   const { latitude, longitude, loading, error } = useGeoLocation();
-  const institutionData = localStorage.getItem('institution');
+  const institutionData = getFromLocalStorage('institution');
   let institute;
 
   if (institutionData) {
     institute = JSON.parse(institutionData);
   }
 
-  const lat = institute.instituteLat;
-  const long = institute.instituteLong;
+  const lat = institute?.instituteLat ?? '6.5994752';
+  const long = institute?.instituteLong ?? '3.3488896';
+
+  const handleClockIn = async () => {
+    const res = await clockIn.mutateAsync({
+      clockInTime: `${Date()}`,
+      teacherId: 1
+    });
+    console.log(res);
+
+    // setClockedIn(true)
+  }
+
+  const handleClockOut = async () => {
+    const res = await clockOut.mutateAsync({
+      clockOutTime: `${Date()}`,
+      teacherId: 1
+    });
+    console.log(res);
+    // setClockedIn(false);
+  }
 
   useEffect(() => {
     setIsLoading(loading);
@@ -78,7 +101,7 @@ export default function ClockInTime() {
       </div>
       <div className='w-4' />
       <button
-        onClick={() => setClockedIn(false)}
+        onClick={handleClockOut}
         className='h-[40px] w-[120px] rounded-[3.2px] border border-[#007AFF] bg-white py-2 px-5 text-[#007AFF]'
       >
         Stop Clock
@@ -92,7 +115,7 @@ export default function ClockInTime() {
       </div>
       <div className='w-4' />
       <button
-        onClick={() => setClockedIn(true)}
+        onClick={handleClockIn}
         className='rounded-sm bg-[#007AFF] py-2 px-5 text-white'
       >
         Clock In

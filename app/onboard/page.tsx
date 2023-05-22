@@ -10,7 +10,10 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
-import { useCompleteInstitutionOnboarding, useOnboardVerification } from '@/server/institution';
+import {
+  useCompleteInstitutionOnboarding,
+  useOnboardVerification,
+} from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import Image from 'next/image';
@@ -22,103 +25,7 @@ import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
-
-
 import '/src/styles/globals.css';
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -152,8 +59,13 @@ export default function Page() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
-  const institutions = [{id:0, label: 'ECCDE'}, {id: 1, label: 'PRIMARY'}, {id: 2, label: 'SECONDARY'}, {id: 3, label: 'TERTIARY'}];
-  const [type, setType] = useState<{id: number, label: string} | null>();
+  const institutions = [
+    { id: 0, label: 'ECCDE' },
+    { id: 1, label: 'PRIMARY' },
+    { id: 2, label: 'SECONDARY' },
+    { id: 3, label: 'TERTIARY' },
+  ];
+  const [type, setType] = useState<{ id: number; label: string } | null>();
   // const d = useGetPermissions();
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState<File>();
@@ -330,18 +242,17 @@ export default function Page() {
               />
               <div>
                 <div
-        className={clsxm(
-          'block text-sm font-semibold mb-2 text-gray-400 text-left',
-        )}
-      >
-        Select Institution Type
-      </div>
+                  className={clsxm(
+                    'block text-sm font-semibold mb-2 text-gray-400 text-left'
+                  )}
+                >
+                  Select Institution Type
+                </div>
                 <Select
-
-                value={type}
-                onChange={(v)=>setType(v)}
-                options={institutions}
-              />
+                  value={type}
+                  onChange={(v) => setType(v)}
+                  options={institutions}
+                />
               </div>
             </div>
           </div>

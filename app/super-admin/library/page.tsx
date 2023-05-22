@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
@@ -11,10 +12,14 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiWhatsappFill } from 'react-icons/ri';
 import Folder from '~/svg/folder.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
   const filesData = useGetAllFiles();
+  const { data, error, isLoading } = filesData;
 
   const [tabIdx, setTabIdx] = useState(0);
+
   return (
     <div className='flex overflow-x-hidden'>
       <div className='hidden lg:flex flex-col items-center px-16 pt-5'>
@@ -52,7 +57,9 @@ const Library = () => {
           </div>
         </div>
 
-        {tabIdx === 0 && <Files filesData={filesData} />}
+        {tabIdx === 0 && (
+          <Files data={data} isLoading={isLoading} variant='primary' />
+        )}
       </div>
     </div>
   );

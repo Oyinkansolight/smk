@@ -12,12 +12,12 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/auth/user',
+        destination: '/auth/admin',
         permanent: true,
       },
       {
         source: '/login',
-        destination: '/auth/user',
+        destination: '/auth/admin',
         permanent: true,
       },
     ];
@@ -25,11 +25,16 @@ const nextConfig = {
 
   // Uncoment to add domain whitelist
   images: {
-    domains: ['res.cloudinary.com', 'firebasestorage.googleapis.com'],
+    domains: [
+      'res.cloudinary.com',
+      'firebasestorage.googleapis.com',
+      'placeimg.com',
+      'picsum.photos',
+    ],
   },
 
   // SVGR
-  webpack(config) {
+  webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -43,6 +48,9 @@ const nextConfig = {
         },
       ],
     });
+
+    config.resolve.alias.canvas = false;
+    config.resolve.alias.encoding = false;
 
     return config;
   },

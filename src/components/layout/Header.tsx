@@ -1,15 +1,15 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
+import { getFromLocalStorage } from '@/lib/helper';
 import * as React from 'react';
-import { GoBell, GoThreeBars } from 'react-icons/go';
+import { GoBell } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
-import Badge from '~/svg/badge_1.svg';
 
 import AdminNotification from './AdminNotification';
 
 export default function Header() {
   const [isOpen, setisOpen] = React.useState(false);
-  const userData = localStorage.getItem('user');
+  const userData = getFromLocalStorage('user');
   let user;
 
   if (userData) {
@@ -20,16 +20,6 @@ export default function Header() {
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
       <div className='mx-auto flex h-20 items-center justify-between px-4'>
         <div className='flex w-full flex-row gap-28'>
-          <div className='flex flex-row items-center gap-9'>
-            <div className='focus:outline-nones flex h-[45px] w-[45px] items-center justify-center rounded-full bg-white shadow-sm transition-colors duration-200 hover:bg-gray-200'>
-              <GoThreeBars className='fill-current text-[#C3CAD9]' />
-            </div>
-
-            <div className='flex h-[55px] w-[55px] items-center justify-center rounded-full border'>
-              <Badge className='h-[46px] w-[46px]' />
-            </div>
-          </div>
-
           <BasicSearch />
         </div>
         <nav>
@@ -39,9 +29,11 @@ export default function Header() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {user.name ?? 'User Name'}
+                  {user?.name === 'null null'
+                    ? user?.email.split('@')[0]
+                    : user?.name}
                 </div>
-                <Pill text={user?.role ?? "User Role"} variant='primary' />
+                <Pill text={user?.role ?? 'User Role'} variant='primary' />
               </div>
             </div>
 

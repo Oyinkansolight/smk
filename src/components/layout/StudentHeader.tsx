@@ -1,5 +1,6 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
+import { getFromLocalStorage } from '@/lib/helper';
 import * as React from 'react';
 import { GoBell, GoThreeBars } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
@@ -7,9 +8,13 @@ import Badge from '~/svg/eca.svg';
 
 import AdminNotification from './AdminNotification';
 
-export default function StudentHeader() {
+interface StudentHeaderProps {
+  toggleSidebar: () => void;
+}
+
+export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
   const [isOpen, setisOpen] = React.useState(false);
-  const userData = localStorage.getItem('user');
+  const userData = getFromLocalStorage('user');
   let user;
 
   if (userData) {
@@ -21,7 +26,10 @@ export default function StudentHeader() {
       <div className='mx-auto flex h-20 items-center justify-between px-4'>
         <div className='flex w-full flex-row gap-28'>
           <div className='flex flex-row items-center gap-9'>
-            <div className='focus:outline-nones flex h-[45px] w-[45px] items-center justify-center rounded-full bg-white shadow-sm transition-colors duration-200 hover:bg-gray-200'>
+            <div
+              onClick={toggleSidebar}
+              className='focus:outline-nones flex h-[45px] w-[45px] items-center justify-center rounded-full bg-white shadow-sm transition-colors duration-200 hover:bg-gray-200'
+            >
               <GoThreeBars className='fill-current text-[#C3CAD9]' />
             </div>
 
@@ -39,9 +47,18 @@ export default function StudentHeader() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {user.name ?? 'User Name'}
+                  {user?.name === 'null null'
+                    ? user?.email.split('@')[0]
+                    : user?.name}
                 </div>
-                <Pill text={user?.role ?? 'Student'} variant='primary' />
+                <Pill
+                  text={
+                    user?.name === 'null null'
+                      ? user?.email.split('@')[0]
+                      : user?.name
+                  }
+                  variant='primary'
+                />
               </div>
             </div>
 

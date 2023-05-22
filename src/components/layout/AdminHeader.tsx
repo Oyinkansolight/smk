@@ -1,5 +1,6 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
+import { getFromLocalStorage } from '@/lib/helper';
 import Image from 'next/image';
 import * as React from 'react';
 import { GoBell } from 'react-icons/go';
@@ -8,7 +9,7 @@ import AdminNotification from './AdminNotification';
 
 export default function AdminHeader() {
   const [isOpen, setisOpen] = React.useState(false);
-  const userData = localStorage.getItem('user');
+  const userData = getFromLocalStorage('user');
   let user;
 
   if (userData) {
@@ -29,13 +30,24 @@ export default function AdminHeader() {
             />
 
             <div className='flex flex-row items-center justify-center gap-[15px]'>
-              <Image width={40} height={40} src='/images/avatar.png' alt='' />
+              <Image
+                width={40}
+                height={40}
+                alt='Profile Picture'
+                src={
+                  user?.name === 'Godwin Nogheghase Obaseki'
+                    ? '/images/governor.png'
+                    : '/images/avatar.png'
+                }
+              />
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#333333]'>
-                  {user.name ?? 'User Name'}
+                  {user?.name === 'null null'
+                    ? user?.email.split('@')[0]
+                    : user?.name}
                 </div>
-                <Pill text={user.role ?? 'User Role'} variant='primary' />
+                <Pill text={user?.role ?? 'User Role'} variant='primary' />
               </div>
             </div>
           </div>

@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { IoDocumentOutline } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 import PieChart from '~/svg/chart_pie_slice.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
@@ -13,7 +15,6 @@ import IDBadge from '~/svg/identification_badge.svg';
 import NoteBook from '~/svg/notebook.svg';
 import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
-import { toast } from 'react-toastify';
 
 const AdminSidebar = () => {
   const routeDetails = usePathname();
@@ -27,7 +28,9 @@ const AdminSidebar = () => {
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
-      localStorage.removeItem('user');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('user');
+      }
     }
   };
 
@@ -137,7 +140,7 @@ const AdminSidebar = () => {
         <SideBarButton
           open={open}
           icon={
-            <Folder
+            <IoDocumentOutline
               className={clsxm(
                 'fill-current',
                 open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
@@ -220,7 +223,7 @@ interface SideBarButtonProps {
   onClick?: () => void;
 }
 
-const SideBarButton = ({
+export const SideBarButton = ({
   icon,
   title,
   href,

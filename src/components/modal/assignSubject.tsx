@@ -2,33 +2,41 @@
 import FormSelect from '@/components/input/formSelect';
 import { useGetSubjectList } from '@/server/institution';
 import React, { useEffect, useState } from 'react';
-import Close from '~/svg/close.svg';
+import { ImSpinner2 } from 'react-icons/im';
 import { FallingLines } from 'react-loader-spinner';
+import Close from '~/svg/close.svg';
 
 type Iprops = {
   register: any;
   errors: any;
-  onClickHandler: () => void;
-  handleSubmit: () => void;
+  loading?: boolean;
+  onClickHandler?: () => void;
+  handleSubmit?: () => void;
 };
 
-function CreateFolder({ onClickHandler, register, errors, handleSubmit }: Iprops) {
+function CreateFolder({
+  onClickHandler,
+  register,
+  errors,
+  loading,
+  handleSubmit,
+}: Iprops) {
   const getSubjects = useGetSubjectList();
   const [allSubjects, setAllSubjects] = useState<any[]>([]);
+
   // const [allSubjectsData, setAllSubjectsData] = useState<any[]>([]);
-  const [selectedSubjectIndex] = useState(0);
 
   const options = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
 
   useEffect(() => {
     if (!getSubjects.isLoading) {
       // setAllSubjectsData(getSubjects.data);
-      getSubjects.data && getSubjects.data.map((item: any) => {
-        setAllSubjects((prev) => [...prev, item.name])
-      })
+      getSubjects.data &&
+        getSubjects.data.map((item: any) => {
+          setAllSubjects((prev) => [...prev, item.name]);
+        });
     }
-  }, [getSubjects.data, getSubjects.isLoading])
-
+  }, [getSubjects.data, getSubjects.isLoading]);
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
@@ -41,11 +49,7 @@ function CreateFolder({ onClickHandler, register, errors, handleSubmit }: Iprops
 
         {getSubjects.isLoading ? (
           <div className='flex justify-center items-center h-[45vh] mt-4 px-5 pb-10'>
-            <FallingLines
-              color="#4fa94d"
-              width="100"
-              visible={true}
-            />
+            <FallingLines color='#4fa94d' width='100' visible={true} />
           </div>
         ) : (
           <div className='mt-4  px-5 pb-10'>
@@ -126,14 +130,16 @@ function CreateFolder({ onClickHandler, register, errors, handleSubmit }: Iprops
 
             <div className='flex justify-center mt-12'>
               <button
-                onClick={() => handleSubmit}
+                onClick={() => {
+                  handleSubmit && handleSubmit();
+                }}
                 className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
               >
-                Proceed
+                {loading ? <ImSpinner2 className='animate-spin' /> : 'Proceed'}
               </button>
             </div>
-          </div>)
-        }
+          </div>
+        )}
       </div>
     </div>
   );

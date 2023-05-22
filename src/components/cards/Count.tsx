@@ -34,7 +34,7 @@ const CountCard = ({
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-2'>
           <div className='text-[21px] font-bold'>
-            {(count || count === 0) ? commaNumber(count) : text}
+            {count || count === 0 ? commaNumber(count) : text}
           </div>
           <div className='text-4 font-semibold capitalize'>{title}</div>
         </div>

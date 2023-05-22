@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import Files from '@/components/views/admin/Library/Files';
+import Files from '@/components/views/super-admin/Library/Files';
+import logger from '@/lib/logger';
+import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -11,7 +14,32 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiWhatsappFill } from 'react-icons/ri';
 import Folder from '~/svg/folder.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
+  const GovtFilesData = useGetAllFiles('');
+  const schoolFilesData: any = [];
+  const { data, error, isLoading } = GovtFilesData;
+
+  data &&
+    data.forEach((element: any) => {
+      if (element.userTypes.includes('Institutions')) {
+        schoolFilesData.push(element);
+      }
+    });
+
   const [tabIdx, setTabIdx] = useState(0);
   return (
     <div className='flex'>
@@ -54,8 +82,16 @@ const Library = () => {
           </div>
         </div>
 
-        {tabIdx === 0 && <Files />}
-        {tabIdx === 1 && <Files />}
+        {tabIdx === 0 && (
+          <Files data={data} isLoading={isLoading} variant='secondary' />
+        )}
+        {tabIdx === 1 && (
+          <Files
+            data={schoolFilesData}
+            isLoading={isLoading}
+            variant='secondary'
+          />
+        )}
       </div>
     </div>
   );

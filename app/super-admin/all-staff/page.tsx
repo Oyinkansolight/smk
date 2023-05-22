@@ -1,10 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { BasicSearch } from '@/components/search';
+import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
+import { useGetTeachersList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
@@ -58,6 +85,7 @@ const AllStaff = () => {
     },
   ];
 
+  const { data, error, isLoading } = useGetTeachersList();
   const [staffs, setstaffs] = useState(mockData);
 
   const handleSearch = (value: string) => {
@@ -66,27 +94,42 @@ const AllStaff = () => {
     );
     setstaffs(result);
   };
+  logger(data);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <div className='flex items-center space-x-4'>
-        <Image
-          src='/svg/back.svg'
-          width={10}
-          height={10}
-          alt='back'
-          className='h-4 w-4'
-        />
-        <h3 className='text-[10px] font-medium'>Dashboard</h3>
-      </div>
+      <Link href='/super-admin'>
+        <div className='flex items-center space-x-4'>
+          <Image
+            src='/svg/back.svg'
+            width={10}
+            height={10}
+            alt='back'
+            className='h-4 w-4'
+          />
+          <h3 className='text-[10px] font-medium'>Dashboard</h3>
+        </div>
+      </Link>
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>All Teachers</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>64,450</h1>
+          <h1 className='font-semibold text-2xl'>{data?.data.length ?? 0}</h1>
         </div>
+        <Link
+          href='/admin/add-staff'
+          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
+        >
+          Add Staff
+        </Link>
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
@@ -101,33 +144,40 @@ const AllStaff = () => {
         <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-1'>No</div>
           <div className='col-span-3'>Name</div>
-          <div className='col-span-2'>Teacerh ID</div>
+          <div className='col-span-2'>Staff ID</div>
           <div className='col-span-1'>Type</div>
           <div className='col-span-3'>Schools</div>
-          <div className='col-span-2'>Location</div>
         </div>
-        {staffs.map((item, idx) => (
-          <div
-            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
-            key={idx}
-          >
-            <div className='col-span-1'>#{idx + 1} </div>
-            <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-              <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-              <Link href='/super-admin/teacher'>
-                <h2 className='text-sm font-medium'>{item.name}</h2>
-              </Link>{' '}
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          (data.data ?? []).map((item: any, idx: number) => (
+            <div
+              className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+              key={idx}
+            >
+              <div className='col-span-1'>#{idx + 1} </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+                <Link href='/super-admin/teacher'>
+                  <h2 className='text-sm font-medium capitalize'>
+                    {item.user[0].firstName} {item.user[0].lastName}
+                  </h2>
+                </Link>
+              </div>
+              <div className='col-span-2'>{item.id} </div>
+              <div className='col-span-1'> {item.staffType} </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                <h2 className='text-sm font-medium'>
+                  {item?.institution?.instituteName || 'N/A '}{' '}
+                </h2>
+              </div>{' '}
             </div>
-            <div className='col-span-2'>{item.teacherID} </div>
-            <div className='col-span-1'>{item.type} </div>
-            <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-              <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-              <h2 className='text-sm font-medium'>{item.school}</h2>
-            </div>{' '}
-            <div className='col-span-2'> {item.location} </div>
-          </div>
-        ))}
-
+          ))
+        )}
+        {!isLoading && data?.length === 0 && (
+          <div className='text-red-500 py-4 text-center'>No record found</div>
+        )}
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}

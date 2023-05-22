@@ -5,29 +5,12 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/super-admin/TransferStudent/Details';
 import Publish from '@/components/views/super-admin/TransferStudent/publish';
-import { useCreateStaff } from '@/server/institution';
+import logger from '@/lib/logger';
+// import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -51,13 +34,13 @@ const TransferStudent = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
-  const [publishData, setpublishData] = useState(null);
+  const [publishData] = useState(null);
 
-  const handleCreateStaff = useCreateStaff();
+  // const handleCreateStaff = useCreateStaff();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(errors);
-    console.log(data);
+    logger(errors);
+    logger(data);
     if (stage === 1 && data.studentId && data.studentName && data.reason) {
       setStage(stage + 1);
     }

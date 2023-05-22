@@ -73,9 +73,21 @@ const Page = () => {
   return (
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
       <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px]'>
-        <CountCard count={data?.Total_Students ?? 0} title='Total Students' variant='primary' />
-        <CountCard count={data?.Total_Staff ?? 0} title='Total Staff' variant='secondary' />
-        <CountCard count={data?.Total_Grades ?? 0} title='Total Grades' variant='tertiary' />
+        <CountCard
+          count={data?.Total_Students ?? 0}
+          title='Total Students'
+          variant='primary'
+        />
+        <CountCard
+          count={data?.Total_Staff ?? 0}
+          title='Total Staff'
+          variant='secondary'
+        />
+        <CountCard
+          count={data?.Total_Grades ?? 0}
+          title='Total Grades'
+          variant='tertiary'
+        />
       </div>
 
       <div className='flex flex-col'>

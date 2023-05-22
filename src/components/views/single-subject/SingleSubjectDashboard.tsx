@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SubjectProfileCard from '@/components/cards/SubjectProfile';
@@ -8,23 +9,51 @@ import TaskListView from '@/components/views/single-subject/TaskListView';
 import Files from '@/components/views/super-admin/Library/Files';
 import logger from '@/lib/logger';
 import { useGetSubjectById } from '@/server/institution';
+import { useGetAllFiles } from '@/server/library';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);
   const id = params?.get('id') as string;
   const { data } = useGetSubjectById(id);
+  const filesData = useGetAllFiles();
+
+  const currentSubjectName = (data ?? [])[0]?.name;
+  const { data: dataContent, isLoading } = filesData;
+
+  const dataResult: any = [];
+  dataContent &&
+    dataContent.forEach((element: any) => {
+      element.subject.map((item: any) => {
+        if (item?.subject === currentSubjectName) {
+          dataResult.push(element);
+        }
+      });
+    });
+
   logger(data);
   return (
     // max-width: 68.75rem;
     // @apply mx-auto w-11/12;
     <div className='w-11/12 max-w-7xl mx-auto flex overflow-y-scroll'>
-      <SubjectProfileCard name={(data ?? [])[0]?.name ?? 'Mathematics'} />
+      <SubjectProfileCard name={(data ?? [])[0]?.name ?? 'Loading...'} />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <>
           <div className='flex w-full items-center justify-between'>
@@ -52,7 +81,9 @@ const SingleSubjectDashboard = () => {
           </div>
 
           {page === 0 && <TaskListView curriculumClicked={() => setPage(2)} />}
-          {page === 1 && <Files />}
+          {page === 1 && (
+            <Files data={dataResult} isLoading={isLoading} variant='primary' />
+          )}
           {page === 2 && (
             <>
               <div className='flex w-full items-center justify-between'>

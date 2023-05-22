@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { useRouter } from 'next/router';
+import * as React from 'react';
 import { useEffect } from 'react';
 
 /**
@@ -15,10 +15,10 @@ import { useEffect } from 'react';
 // to customize the default configuration.
 
 export default function HomePage() {
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
-    router.push("/auth/admin")
-  }, [])
+    router.push('/auth/admin');
+  }, [router]);
 
   return (
     <div>Loading...</div>

@@ -42,7 +42,12 @@ export default function AdminAuth() {
         ) {
           router.push(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
-          localStorage.setItem('institution', JSON.stringify(response.data.data.data.staff.institution));
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(
+              'institution',
+              JSON.stringify(response.data.data.data.staff.institution)
+            );
+          }
           router.push(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
@@ -50,10 +55,16 @@ export default function AdminAuth() {
           toast.error('Invalid user role');
         }
 
-        const name = response.data.data.data.firstName + ' ' + response.data.data.data.lastName;
+        const name =
+          response.data.data.data.firstName +
+          ' ' +
+          response.data.data.data.lastName;
         const role = response.data.data.data.type;
-        const userDetails = { name, role };
-        localStorage.setItem('user', JSON.stringify(userDetails));
+        const email = response.data.data.data.email;
+        const userDetails = { name, role, email };
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(userDetails));
+        }
       }
     } catch (error) {
       toast.error(getErrMsg(error as Error));
@@ -86,64 +97,76 @@ export default function AdminAuth() {
                 </div>
               </div>
               <div className='w-full p-8 mt-20 lg:mt-0 lg:w-1/2'>
-                <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4 py-16'>
-                  <Image
-                    width={146}
-                    height={146}
-                    src='/images/subeb.png'
-                    alt=''
-                  />
+                <div className='flex flex-col justify-center h-full py-6  lg:py-10 px-6'>
+                  <div className='flex flex-col justify-center items-center text-center'>
+                    <div className='h1 mb-4'>
+                      Edo State Education Management Portal
+                    </div>
 
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'
-                  >
-                    <BaseInput
-                      name='email'
-                      type='email'
-                      label='Username'
-                      register={register}
-                      placeholder='Enter username here'
+                    <div className='h4 mb-4'>
+                      Powered by{' '}
+                      <span className='text-primary'>Teesas Education</span>
+                    </div>
+                  </div>
+                  <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4 py-16'>
+                    <Image
+                      width={146}
+                      height={146}
+                      src='/images/Seal_of_Edo_State.png'
+                      alt=''
                     />
 
-                    <BaseInput
-                      label='Password'
-                      name='password'
-                      type='password'
-                      register={register}
-                      placeholder='Enter password here'
-                    />
-
-                    <Button
-                      isLoading={loading}
-                      type='submit'
-                      className='h-[54px] justify-center'
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'
                     >
-                      Sign In
-                    </Button>
+                      <BaseInput
+                        name='email'
+                        type='email'
+                        label='Username'
+                        register={register}
+                        placeholder='Enter username here'
+                      />
 
-                    <div className='-m-2 mb-4 flex flex-wrap justify-between'>
-                      <div className='w-auto p-2'>
-                        <div className='flex items-center'>
-                          <Checkbox type='warning' />
-                          <label
-                            className='ml-2 text-sm font-medium text-gray-900'
-                            htmlFor='default-checkbox'
+                      <BaseInput
+                        label='Password'
+                        name='password'
+                        type='password'
+                        register={register}
+                        placeholder='Enter password here'
+                      />
+
+                      <Button
+                        isLoading={loading}
+                        type='submit'
+                        className='h-[54px] justify-center'
+                      >
+                        Sign In
+                      </Button>
+
+                      <div className='-m-2 mb-4 flex flex-wrap justify-between'>
+                        <div className='w-auto p-2'>
+                          <div className='flex items-center'>
+                            <Checkbox type='warning' />
+                            <label
+                              className='ml-2 text-sm font-medium text-gray-900'
+                              htmlFor='default-checkbox'
+                            >
+                              Remember Me
+                            </label>
+                          </div>
+                        </div>
+                        <div className='w-auto p-2'>
+                          <Link
+                            className='text-sm font-medium hover:text-primary'
+                            href='/auth/admin/'
                           >
-                            Remember Me
-                          </label>
+                            Forgot Password?
+                          </Link>
                         </div>
                       </div>
-                      <div className='w-auto p-2'>
-                        <Link
-                          className='text-sm font-medium hover:text-primary'
-                          href='/auth/admin/'
-                        >
-                          Forgot Password?
-                        </Link>
-                      </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>

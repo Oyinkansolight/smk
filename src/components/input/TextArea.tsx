@@ -101,7 +101,7 @@ const TextArea: FC<BaseInputProps<any, any>> = ({
       <label
         htmlFor={name}
         className={clsxm(
-          'block text-sm font-semibold text-gray-400 text-left',
+          'block text-xs font-bold text-gray-400 text-left',
           helper?.type && helper?.type !== 'info'
             ? helperTextClasses[helper.type]
             : 'text-primary-dark'

@@ -16,15 +16,16 @@ export default function RootLayout({
   return (
     <html>
       <head />
-      <body className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
-        <Header />
+      <body className='flex h-screen min-h-screen flex-row bg-[#F7F8FA]'>
+        <Sidebar />
 
-        <div className='flex flex-1 flex-row overflow-y-hidden'>
-          <main className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
+        <div className='flex flex-1 flex-col overflow-y-hidden'>
+          <Header />
+
+          <main className='hideScroll flex-1 overflow-y-auto text-xs'>
             <div>{children}</div>
           </main>
 
-          <Sidebar />
         </div>
       </body>
     </html>

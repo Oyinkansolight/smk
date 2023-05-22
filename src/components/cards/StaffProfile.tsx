@@ -19,7 +19,7 @@ export default function StaffProfileCard() {
   };
 
   return (
-    <div className='flex flex-col items-center px-10 pt-5'>
+    <div className='hidden lg:flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
         <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
         <CircleButton icon={<SlOptions className='h-4 w-4' />} />

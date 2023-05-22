@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logger from '@/lib/logger';
 import request from '@/server';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface UploadFileParams {
   filename?: string;
@@ -12,7 +13,9 @@ export interface UploadFileParams {
 
 export interface UpdateFileSubjectParams {
   fileId?: number;
-  subjectId?: number;
+  classes?: string;
+  subject: string;
+  schoolType: string;
 }
 
 export function useUploadFile() {
@@ -25,25 +28,45 @@ export function useUploadFile() {
   return mutation;
 }
 
-export function useGetAllFiles() {
+export function useGetAllFiles(type?: string) {
+  const sectionType = type ?? '';
+
   const query = useQuery({
     queryKey: 'get_all_files',
-    queryFn: () =>
-      request
-        .get('/v1/government/library/get-all-files')
-        .then((v) => v.data.data as any),
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/government/library/get-all-files');
+        if (sectionType) {
+          const result = d.data.data.data.data.filter((item: any) =>
+            item.userTypes.includes(sectionType)
+          );
+          return result;
+        } else {
+          return d.data.data.data.data;
+        }
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
   });
+
   return query;
 }
 
 export function useAssignSubjectsToFile() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'update-subjects',
-    mutationFn: async (params: UploadFileParams) => {
+    mutationFn: async (params: UpdateFileSubjectParams) => {
       return await request.post(
         '/v1/government/library/assign-to-subject',
         params
       );
+    },
+    onSettled: () => {
+      client.refetchQueries('get_all_files');
     },
   });
   return mutation;

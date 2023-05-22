@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import StudentProfile from '@/components/cards/StudentProfile';
@@ -10,17 +11,36 @@ import StudentContactDetails from '@/components/views/student.tsx/StudentContact
 import StudentDashboardView from '@/components/views/student.tsx/StudentDashboardView';
 import StudentTaskListView from '@/components/views/student.tsx/StudentTaskListView';
 import StudentTimeTableView from '@/components/views/student.tsx/StudentTimeTableView';
+import Files from '@/components/views/super-admin/Library/Files';
+import { useGetAllFiles } from '@/server/library';
 import { duration } from 'moment';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
+  const GovtFilesData = useGetAllFiles('');
+  const { data, isLoading } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
   const [currentGrid, setCurrentGrid] = useState(0);
+  const studentFilesData: any = [];
+
+  data &&
+    data.forEach((element: any) => {
+      if (element.userTypes.includes('Students')) {
+        studentFilesData.push(element);
+      }
+    });
+
   return (
-    <div className='mt-4 flex gap-6'>
+    <div className='mt-4 flex gap-6 w-full'>
       <StudentProfile
         currentGrid={currentGrid}
         setCurrentGrid={(i) => {
@@ -28,7 +48,7 @@ const Page = () => {
           setCurrentGrid(i);
         }}
       />
-      <div className='flex max-h-[85vh] flex-1 flex-col gap-[31px] overflow-y-scroll rounded-xl border px-4'>
+      <div className='flex min-w-[40vw] max-h-[85vh] flex-1 flex-col gap-[31px] overflow-y-scroll rounded-xl border px-4'>
         {currentGrid === 0 ? (
           <>
             <div className='flex w-full items-center'>
@@ -160,7 +180,14 @@ const Page = () => {
             )}
           </>
         ) : (
-          <div />
+          currentGrid === 3 && (
+            <Files
+              canUpload={false}
+              data={studentFilesData}
+              isLoading={isLoading}
+              variant='secondary'
+            />
+          )
         )}
       </div>
     </div>

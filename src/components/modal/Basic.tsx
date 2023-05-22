@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import clsxm from '@/lib/clsxm';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
 interface BasicModalProps {
   children: any;
   content: any;
+  className?: string;
 }
 
-export default function BasicModal({ children, content }: BasicModalProps) {
-  const [isOpen, setIsOpen] = useState(true);
+export default function BasicModal({
+  children,
+  content,
+  className,
+}: BasicModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -20,7 +26,7 @@ export default function BasicModal({ children, content }: BasicModalProps) {
 
   return (
     <>
-      <div className='fixed inset-0 flex items-center justify-center'>
+      <div className='flex items-center justify-center'>
         <div onClick={openModal}>{children}</div>
       </div>
 
@@ -49,7 +55,12 @@ export default function BasicModal({ children, content }: BasicModalProps) {
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
+                <Dialog.Panel
+                  className={clsxm(
+                    className,
+                    'w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'
+                  )}
+                >
                   {content}
                 </Dialog.Panel>
               </Transition.Child>

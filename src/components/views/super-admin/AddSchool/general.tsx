@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Dragdrop from '@/components/input/dragdrop';
 import FormInput from '@/components/input/formInput';
+import FormSelect from '@/components/input/formSelect';
 import React from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface BiodataProps {
   schoolName: string | number;
@@ -13,6 +17,8 @@ interface BiodataProps {
   setImageName: (v: string | undefined) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setImageData: (v: any) => void;
+  instituteType: string | number;
+  setInstituteType: any;
 }
 
 const Biodata = ({
@@ -23,7 +29,11 @@ const Biodata = ({
   schoolName,
   setSchoolEmail,
   setSchoolName,
+  instituteType,
+  setInstituteType,
 }: BiodataProps) => {
+  const institutions = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
+
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>General Details</h2>
@@ -53,12 +63,21 @@ const Biodata = ({
           />
         </div>
       </div>
-      <div className='w-full'>
-        <FormInput
-          label='School Official Email*'
-          setFormValue={setSchoolEmail}
-          formValue={schoolEmail}
-          placeholder='Details here'
+      <div className='my-10 grid grid-cols-2 gap-6'>
+        <div className='w-full'>
+          <FormInput
+            label='School Official Email*'
+            setFormValue={setSchoolEmail}
+            formValue={schoolEmail}
+            placeholder='Details here'
+          />
+        </div>
+
+        <FormSelect
+          label='Select Institue Type*'
+          formValue={instituteType}
+          setFormValue={setInstituteType}
+          options={institutions}
         />
       </div>
     </section>

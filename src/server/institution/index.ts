@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { Subject } from '@/types/institute';
+import { Student, Subject } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface CreateInstitutionParams {
@@ -97,9 +97,27 @@ export function useGetSubjectList() {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list'
+          '/v1/government/institutes/get-subject-list?limit=100'
         );
         return d.data.data.data.data as Subject[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+
+export function useGetStudentsList() {
+  const query = useQuery({
+    queryKey: 'get_student_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/students/get-students?limit=100'
+        );
+        return d.data.data.data.data as Student[];
       } catch (error) {
         logger(error);
         throw error;
@@ -114,8 +132,33 @@ export function useGetTeachersList() {
     queryKey: 'get_teachers_list',
     queryFn: async () => {
       try {
-        const d = await request.get('/v1/government/teachers/get-staffs');
+        const d = await request.get(
+          '/v1/government/teachers/get-staffs?limit=100'
+        );
         return d.data.data.data as any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetSchools(type?: string) {
+  const instituteType = type ?? '';
+  const query = useQuery({
+    queryKey: 'get_school_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/institutes/get-institutes?limit=100'
+        );
+        const result = d.data.data.data.data.filter(
+          (item: any) =>
+            item.instituteType.includes(instituteType) &&
+            item.isOnboardingCompleted
+        );
+        return result as any;
       } catch (error) {
         logger(error);
         throw error;
@@ -179,4 +222,22 @@ export function useCreateStudent() {
       }),
   });
   return mutation;
+}
+
+export function useGetIncidentReports(id?: string) {
+  const query = useQuery({
+    queryKey: ['get_incident_report_list', id],
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/report/get-institution-report?institutionId=${id}`
+        );
+        return d.data.data.data.data as [];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
 }

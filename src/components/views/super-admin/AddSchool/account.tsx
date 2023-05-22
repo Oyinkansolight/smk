@@ -24,8 +24,8 @@ const Account = ({
   password,
   setPassword,
 }: // password
-  // setPassword
-  AccountProps) => {
+// setPassword
+AccountProps) => {
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>Account Details</h2>

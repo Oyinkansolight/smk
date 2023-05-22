@@ -1,16 +1,13 @@
 'use client';
 
-import StaffProfileCard from '@/components/cards/StaffProfile';
-import SearchInput from '@/components/input/SearchInput';
-import TabBar from '@/components/layout/TabBar';
+import { BasicCard } from '@/components/cards';
+import ClockInTime from '@/components/views/teacher/ClockInTime';
+import IncidentReport from '@/components/views/teacher/IncidentReport';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
 import { DashboardOverview } from '@/types';
 import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
-import { IoMdTrendingUp } from 'react-icons/io';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 interface TeacherFullDashboardProps {
   overviewData: DashboardOverview | undefined;
@@ -19,48 +16,31 @@ interface TeacherFullDashboardProps {
 const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {
   const [tabIdx, setTabIdx] = useState(0);
 
+  const handleTabChange = (i: number) => setTabIdx(i);
+
   return (
-    <div className='layout flex'>
-      <StaffProfileCard />
-      <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
-        <div className='flex w-full items-center justify-between'>
-          <TabBar
-            selected={tabIdx}
-            onSelect={(i) => setTabIdx(i)}
-            items={[
-              {
-                icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Dashboard',
-              },
-              {
-                icon: <BiListCheck className='h-7 w-7' />,
-                label: 'Task List',
-              },
-              {
-                icon: <RiCalendar2Fill className='h-5 w-5' />,
-                label: 'Time Table',
-              },
-              {
-                icon: <IoMdTrendingUp className='h-5 w-5' />,
-                label: 'Activity',
-              },
-            ]}
-          />
-
-          <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
+    <div className='flex'>
+      <div className='flex flex-1 flex-col gap-[31px] w-full'>
+        <BasicCard className='flex w-full flex-col gap-8 !rounded-[4.5px] bg-white !px-[27px] !pb-[27px] !pt-[18px]'>
+          <div className='flex w-full justify-end'>
+            <ClockInTime />
           </div>
-        </div>
+        </BasicCard>
 
-        {tabIdx === 1 ? (
-          <TaskListView />
-        ) : tabIdx === 2 ? (
-          <TeacherTimeTableView />
-        ) : (
-          <TeacherDashboardView overviewData={overviewData} />
-        )}
+        <div className='layout'>
+          {tabIdx === 1 ? (
+            <TaskListView />
+          ) : tabIdx === 2 ? (
+            <TeacherTimeTableView />
+          ) : tabIdx === 5 ? (
+            <IncidentReport />
+          ) : (
+            <TeacherDashboardView
+              overviewData={overviewData}
+              handleTabChange={handleTabChange}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

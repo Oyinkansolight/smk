@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
 import logger from '@/lib/logger';
 import { useGetAdminRoles, useInviteAdmin } from '@/server/onboard';
@@ -14,45 +15,43 @@ interface propType {
 
 function AddAdmin({ onClickHandler }: propType) {
   const { data: allRoles, isLoading } = useGetAdminRoles();
-  const [role, setRole] = useState<string | number>('');
-  const [schoolEmail, setSchoolEmail] = useState<string | number>('');
+  // const [role, setRole] = useState<string | number>('');
+  // const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [options, setOptions] = useState([]);
   const { register, getValues, control } = useForm();
-  const { mutateAsync } = useInviteAdmin()
+  const { mutateAsync } = useInviteAdmin();
 
   useEffect(() => {
     if (!isLoading) {
       const allPatterns = allRoles.data.roles.map((item: any) => {
         return {
           value: item.id,
-          label: item.name
-        }
-      })
+          label: item.name,
+        };
+      });
 
       setOptions(allPatterns);
-      logger(allPatterns)
+      logger(allPatterns);
       // logger(allRoles)
     }
-  }, [allRoles, isLoading])
+  }, [allRoles, isLoading]);
 
   const handleSubmit = async () => {
-    const email: string = getValues("email")
-    const assignedRole: number = getValues("assignedRole").value
+    const email: string = getValues('email');
+    const assignedRole: number = getValues('assignedRole').value;
 
     const response = await mutateAsync({
       email,
-      role: assignedRole
-    })
+      role: assignedRole,
+    });
 
     if (response.status === 201) {
-      onClickHandler()
-      toast.success("Admin invite sent successfully")
+      onClickHandler();
+      toast.success('Admin invite sent successfully');
     } else {
-      toast.error("An error occurred")
+      toast.error('An error occurred');
     }
-
-
-  }
+  };
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
@@ -63,7 +62,7 @@ function AddAdmin({ onClickHandler }: propType) {
           </button>
         </div>
 
-        {!isLoading ?
+        {!isLoading ? (
           <div className='mt-4 space-y-4 px-10 pb-10'>
             <h1 className='text-center text-4xl font-bold'>Invite New Admin</h1>
 
@@ -93,16 +92,18 @@ function AddAdmin({ onClickHandler }: propType) {
                 control={control}
                 name='assignedRole'
                 render={({ field }) => {
-                  return <Select
-                    {...field}
-                    options={options ?? []}
-                    styles={{
-                      control: (baseStyles) => ({
-                        ...baseStyles,
-                        height: '58px',
-                      }),
-                    }}
-                  />;
+                  return (
+                    <Select
+                      {...field}
+                      options={options ?? []}
+                      styles={{
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          height: '58px',
+                        }),
+                      }}
+                    />
+                  );
                 }}
               />
             </div>
@@ -115,15 +116,12 @@ function AddAdmin({ onClickHandler }: propType) {
                 Send Invite
               </button>
             </div>
-          </div> : (
-            <div className='flex justify-center items-center h-[45vh] mt-4 px-5 pb-10'>
-              <FallingLines
-                color="#4fa94d"
-                width="100"
-                visible={true}
-              />
-            </div>
-          )}
+          </div>
+        ) : (
+          <div className='flex justify-center items-center h-[45vh] mt-4 px-5 pb-10'>
+            <FallingLines color='#4fa94d' width='100' visible={true} />
+          </div>
+        )}
       </div>
     </div>
   );

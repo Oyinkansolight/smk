@@ -20,7 +20,7 @@ export default function StudentProfile({
   };
 
   return (
-    <div className='flex max-w-[18rem] flex-col items-center pr-3'>
+    <div className='hidden lg:flex max-w-[18rem] flex-col items-center pr-3'>
       <div className='flex w-full justify-between'>
         <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
         <CircleButton icon={<SlOptions className='h-4 w-4' />} />

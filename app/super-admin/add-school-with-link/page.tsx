@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 const AddSchoolLink = () => {
   const [stage] = useState(1);
   const [schoolName, setSchoolName] = useState<string | number>('');

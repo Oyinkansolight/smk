@@ -1,18 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import AddAdmin from '@/components/modal/addAdmin';
+import { useGetAdminList } from '@/server/Permission';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Role = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isOpen, setisOpen] = useState(false);
-
-
+  const { data, isLoading } = useGetAdminList();
   function handleModal() {
     setisOpen(!isOpen);
   }
+
   return (
     <div>
       <div className='flex justify-end items-center space-x-4 my-5'>
@@ -37,47 +49,54 @@ const Role = () => {
         </div>
 
         <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
-          <div className='col-span-2'>Name</div>
-          <div className='col-span-3'>Username/Email</div>
+          <div className='col-span-5'>Name</div>
+          <div className='col-span-4'>Username/Email</div>
           <div className='col-span-2'>Role</div>
-          <div className='col-span-2'>Status</div>
         </div>
-        {[1, 2, 3, 4, 5].map((role, idx) => (
-          <div className='grid grid-cols-12 p-4 border-b' key={idx}>
-            <div className='col-span-2'>John Doe</div>
-            <div className='col-span-3'>johndoe@mail.com</div>
-            <div className='col-span-2'>Guidance Counselors</div>
-            <div className='col-span-2'>Pending</div>
-            <div className='col-span-3 justify-center flex'>
-              <button
-                onClick={() => {
-                  setAction(idx + 1);
-                }}
-                className='relative'
-              >
-                <BsThreeDotsVertical />
-                {action == idx + 1 && (
-                  <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                    <button className='p-4 hover:bg-gray-200 w-full'>
-                      Delete Account
-                    </button>
-                    <button className='p-4 hover:bg-gray-200 w-full'>
-                      Edit Permission
-                    </button>
-                  </div>
-                )}
-              </button>
-              {action && (
-                <div
-                  className='fixed inset-0 z-[1]'
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          (data ?? []).map((item: any, idx: number) => (
+            <div className='grid grid-cols-12 p-4 border-b' key={idx}>
+              <div className='col-span-5'>
+                {item?.user?.firstName || 'N/A'} {item?.user?.lastName || 'N/A'}
+              </div>
+              <div className='col-span-4'>{item?.user?.email || 'N/A'}</div>
+              <div className='col-span-2'> {item?.type || 'N/A'} ADMIN </div>
+              <div className='col-span-1 justify-center flex'>
+                <button
                   onClick={() => {
-                    setAction(null);
+                    setAction(idx + 1);
                   }}
-                ></div>
-              )}
+                  className='relative'
+                >
+                  <BsThreeDotsVertical />
+                  {action == idx + 1 && (
+                    <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                      <button className='p-4 hover:bg-gray-200 w-full'>
+                        Delete Account
+                      </button>
+                      <button className='p-4 hover:bg-gray-200 w-full'>
+                        Edit Permission
+                      </button>
+                    </div>
+                  )}
+                </button>
+                {action && (
+                  <div
+                    className='fixed inset-0 z-[1]'
+                    onClick={() => {
+                      setAction(null);
+                    }}
+                  ></div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
+        {!isLoading && data?.length === 0 && (
+          <div className='text-red-500 py-4 text-center'>No record found</div>
+        )}
 
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>

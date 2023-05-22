@@ -48,7 +48,7 @@ const Page = () => {
         <SchoolTotalCard count={data?.Total_Schools ?? 0} />
         <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
           <IndividualTotal
-            count={data?.data?.Total_ECCDE ?? 0}
+            count={data?.Total_ECCDE ?? 0}
             name='ECCDE'
             variant='secondary'
             link='/super-admin/eccde'
@@ -62,7 +62,7 @@ const Page = () => {
           <IndividualTotal
             count={data?.Total_Secondary ?? 0}
             name='Secondary School'
-            link='/super-admin/eccde'
+            link='/super-admin/secondary'
             variant='secondary'
           />
           <IndividualTotal

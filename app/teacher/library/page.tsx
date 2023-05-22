@@ -1,16 +1,50 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import StaffProfileCard from '@/components/cards/StaffProfile';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import Files from '@/components/views/admin/Library/Files';
+import Files from '@/components/views/super-admin/Library/Files';
+import logger from '@/lib/logger';
+import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TeacherLibrary = () => {
+  const GovtFilesData = useGetAllFiles('');
+  const schoolFilesData: any = [];
+  const teacherFilesData: any = [];
+  const { data, isLoading } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
 
+  logger('data', data);
+
+  data &&
+    data.forEach((element: any) => {
+      if (element.userTypes.includes('Institutions')) {
+        schoolFilesData.push(element);
+      }
+      if (element.userTypes.includes('Teachers')) {
+        teacherFilesData.push(element);
+      }
+    });
   return (
     <div className='layout flex'>
       <StaffProfileCard />
@@ -43,9 +77,23 @@ const TeacherLibrary = () => {
           </div>
         </div>
 
-        {tabIdx === 0 && <Files />}
-        {tabIdx === 1 && <Files />}
-        {tabIdx === 2 && <Files />}
+        {tabIdx === 0 && (
+          <Files data={data} isLoading={isLoading} variant='secondary' />
+        )}
+        {tabIdx === 1 && (
+          <Files
+            data={schoolFilesData}
+            isLoading={isLoading}
+            variant='secondary'
+          />
+        )}
+        {tabIdx === 2 && (
+          <Files
+            data={teacherFilesData}
+            isLoading={isLoading}
+            variant='secondary'
+          />
+        )}
       </div>
     </div>
   );

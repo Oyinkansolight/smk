@@ -17,7 +17,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
@@ -34,6 +33,10 @@ const AddSchool = () => {
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();
   let googleAddress: GeoCodeResponse[] = [];
+  const [googleAddressState, setGoogleAddressState] = useState<
+    GeoCodeResponse[]
+  >([]);
+  const [instituteType, setInstituteType] = useState('');
 
   const geocode = useGeocoding();
 
@@ -60,6 +63,8 @@ const AddSchool = () => {
           toast.error('Invalid address');
           return;
         }
+        setGoogleAddressState(googleAddress);
+
         setStage(3);
       }
     }
@@ -106,7 +111,7 @@ const AddSchool = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>Create School</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Create Institution</h1>
 
       <Stepper
         variant='#008146'
@@ -118,9 +123,11 @@ const AddSchool = () => {
       <div className='table-add-student mt-7 md:px-20 px-4 py-10 pb-4 bg-white'>
         {stage === 1 && (
           <General
-            schoolEmail={schoolEmail}
             imageName={imageName}
             schoolName={schoolName}
+            schoolEmail={schoolEmail}
+            instituteType={instituteType}
+            setInstituteType={setInstituteType}
             setImageData={(v) => setImageData(v)}
             setImageName={(v) => setImageName(v ?? '')}
             setSchoolEmail={setSchoolEmail}
@@ -185,16 +192,17 @@ const AddSchool = () => {
                     if (array) {
                       await uploadDocument(p, array);
                     }
+
                     const response = createInstitution.mutateAsync({
                       instituteLat:
-                        googleAddress[0].geometry?.location?.lat?.toString(),
+                        googleAddressState[0].geometry?.location?.lat?.toString(),
                       instituteLong:
-                        googleAddress[0].geometry?.location?.lng?.toString(),
+                        googleAddressState[0].geometry?.location?.lng?.toString(),
                       instituteAddress: location as string,
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,
                       instituteLogo: p,
-                      instituteType: 'SECONDARY',
+                      instituteType: instituteType,
                       town: town?.id,
                       email: schoolEmail as string,
                       password: password,
