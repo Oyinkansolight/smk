@@ -1,9 +1,11 @@
-import { BasicCard } from '@/components/cards';
 import NextImage from '@/components/NextImage';
+import { BasicCard } from '@/components/cards';
+import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
 import clsxm from '@/lib/clsxm';
 import { DashboardOverview } from '@/types';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import { BiUser } from 'react-icons/bi';
 
 const StreamChart = dynamic(() => import('../../charts/Stream'), {
   ssr: false,
@@ -54,6 +56,32 @@ export default function TeacherDashboardView({
 }: TeacherDashboardViewProps) {
   return (
     <div className='flex flex-col'>
+      <div className='flex p-6 justify-between bg-white rounded-lg my-4'>
+        <SmallTeacherCard
+          icon={<BiUser className='h-16 w-16 text-[#008146]' />}
+          subtitle='Total Students'
+          title='50'
+          className='bg-[#E3FFF5]'
+        />
+        <SmallTeacherCard
+          icon={<BiUser className='h-16 w-16 text-[#7D8FB3]' />}
+          subtitle='Total Students'
+          title='47'
+          className='bg-[#F4F9FF]'
+        />
+        <SmallTeacherCard
+          icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
+          subtitle='Total Students'
+          title='3'
+          className='bg-[#F9F3FF]'
+        />
+        <SmallTeacherCard
+          icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
+          subtitle='Total Students'
+          title='3'
+          className='bg-[#FFF3F3]'
+        />
+      </div>
       <div className='grid grid-cols-2 gap-10'>
         <div className='grid grid-rows-2 gap-6'>
           <BasicCard className='flex flex-col gap-4 w-[476px] !rounded-2xl'>
@@ -88,14 +116,15 @@ export default function TeacherDashboardView({
   );
 }
 
-
 const NextClassCard = ({ isActive = false }) => {
   const [active] = useState(isActive);
   return (
-    <BasicCard className={clsxm(
-      active ? '!bg-[#6A2B56] text-[#EFF7F6]' : '!bg-[#EFF7F6]',
-      '!rounded-[5px] h-24 !px-4 !py-6'
-    )}>
+    <BasicCard
+      className={clsxm(
+        active ? '!bg-[#6A2B56] text-[#EFF7F6]' : '!bg-[#EFF7F6]',
+        '!rounded-[5px] h-24 !px-4 !py-6'
+      )}
+    >
       <div className='flex flex-row gap-6'>
         <NextImage
           width={50}
@@ -118,24 +147,27 @@ const NextClassCard = ({ isActive = false }) => {
           <div className='flex flex-col gap-1'>
             <div className='text-xs font-bold leading-[14px]'>Mathematics</div>
             <div className='text-xs font-bold leading-[14px]'>Primary 1A</div>
-            <div className='text-xs font-bold leading-[14px]'>12:00 PM - 01:00 PM</div>
+            <div className='text-xs font-bold leading-[14px]'>
+              12:00 PM - 01:00 PM
+            </div>
           </div>
 
-          <div className='flex gap-3'>
-          </div>
+          <div className='flex gap-3'></div>
         </div>
       </div>
     </BasicCard>
-  )
-}
+  );
+};
 
 const AssignmentsCard = ({ isActive = false }) => {
   const [active] = useState(isActive);
   return (
-    <BasicCard className={clsxm(
-      active ? 'border !border-[#E5002B] text-[#E5002B]' : 'text-[#746D69]',
-      '!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]'
-    )}>
+    <BasicCard
+      className={clsxm(
+        active ? 'border !border-[#E5002B] text-[#E5002B]' : 'text-[#746D69]',
+        '!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]'
+      )}
+    >
       <div className='flex flex-row gap-6'>
         <NextImage
           width={50}
@@ -158,13 +190,14 @@ const AssignmentsCard = ({ isActive = false }) => {
           <div className='flex flex-col gap-1'>
             <div className='text-xs font-bold leading-[14px]'>Mathematics</div>
             <div className='text-xs font-bold leading-[14px]'>Primary 1A</div>
-            <div className='text-xs font-bold leading-[14px]'>12:00 PM - 01:00 PM</div>
+            <div className='text-xs font-bold leading-[14px]'>
+              12:00 PM - 01:00 PM
+            </div>
           </div>
 
-          <div className='flex gap-3'>
-          </div>
+          <div className='flex gap-3'></div>
         </div>
       </div>
     </BasicCard>
-  )
-}
+  );
+};
