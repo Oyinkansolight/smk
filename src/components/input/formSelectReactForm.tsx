@@ -18,8 +18,6 @@ type HelperProps = {
 };
 type propType = {
   label: string;
-  formValue?: string | number;
-  setFormValue?: (value: string | number) => void;
   options: string[];
   register?: UseFormRegister<any>;
   validation?: RegisterOptions<any>;
@@ -27,10 +25,8 @@ type propType = {
   helper?: HelperProps;
 };
 
-const Input = ({
+const ReactFormSelect = ({
   label,
-  formValue,
-  setFormValue,
   options,
   register,
   validation,
@@ -42,22 +38,19 @@ const Input = ({
       <div>
         <div className='h-full flex justify-start'>
           <label htmlFor='' className='text-xs font-bold'>
-          {label}
-        </label>
+            {label}
+          </label>
         </div>
         <div className='mt-1 w-full border p-2 rounded'>
           <select
             id=''
             className='w-full border-none outline-none bg-transparent  text-gray-400'
             {...(register ? register(name as string, validation) : {})}
-            onChange={(e) => {
-              setFormValue && setFormValue(e.target.value);
-            }}
           >
             <option value=''> -- Select an option -- </option>
 
             {options.map((item, id) => (
-              <option key={id} value={item} selected={formValue === item}>
+              <option key={id} value={item}>
                 {' '}
                 {item}
               </option>
@@ -74,4 +67,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default ReactFormSelect;
