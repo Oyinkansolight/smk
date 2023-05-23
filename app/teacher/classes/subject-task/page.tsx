@@ -2,11 +2,12 @@
 
 import Button from '@/components/buttons/Button';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
+import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
 import { IoAddCircle } from 'react-icons/io5';
 
 export default function Page() {
   return (
-    <div className='px-8'>
+    <div className='layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
         {'Classes > Mathematics'}
       </div>
@@ -16,7 +17,9 @@ export default function Page() {
         PM
       </div>
       <div className='flex justify-start my-6'>
-        <Button variant='secondary'>Take Attendance</Button>
+        <TakeAttendanceModal>
+          <Button variant='secondary'>Take Attendance</Button>
+        </TakeAttendanceModal>
       </div>
       <div className='flex items-start gap-10'>
         <div className='flex-1 h-96 rounded-lg bg-white'></div>

@@ -10,6 +10,7 @@ import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import { useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 
 

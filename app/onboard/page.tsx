@@ -10,10 +10,7 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
-import {
-  useCompleteInstitutionOnboarding,
-  useOnboardVerification,
-} from '@/server/institution';
+import { useCompleteInstitutionOnboarding, useOnboardVerification } from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import Image from 'next/image';
@@ -25,7 +22,17 @@ import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
+
+
 import '/src/styles/globals.css';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -76,12 +83,14 @@ export default function Page() {
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
-  const { register, getValues, control } = useForm({
+  const { register, getValues, control, watch } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
 
   let token = '';
+
+  const localGovernment = watch('localGovernmentId');
 
   if (typeof window !== 'undefined') {
     const query = window.location.search.substring(1);
@@ -309,11 +318,7 @@ export default function Page() {
                         locals.data?.find(
                           (v) =>
                             v.id ===
-                            (
-                              getValues(
-                                'localGovernmentId'
-                              ) as LocalGovernmentArea
-                            )?.id
+                            (localGovernment as LocalGovernmentArea)?.id
                         )?.towns
                       }
                       {...field}

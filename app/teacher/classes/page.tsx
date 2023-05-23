@@ -15,9 +15,9 @@ export default function Page() {
   return (
     <div className=''>
       <div className='text-[#D4D5D7] py-8 text-2xl mx-16'>Classes</div>
-      <div className='bg-white'>
-        <div className='font-bold mx-8 py-8 text-4xl'>My Subjects</div>
-        <div className='grid grid-cols-4 gap-4 justify-items-center'>
+      <div className='bg-white '>
+        <div className='font-bold mx-8 py-8 text-4xl layout'><div>My Subjects</div></div>
+        <div className='grid grid-cols-4 gap-4 justify-items-center layout'>
           {Array(8)
             .fill(0)
             .map((v, i) => (
