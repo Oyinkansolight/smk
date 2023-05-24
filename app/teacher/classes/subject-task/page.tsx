@@ -1,11 +1,18 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
+import PageCounter from '@/components/counter/PageCounter';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
+import { useState } from 'react';
 import { IoAddCircle } from 'react-icons/io5';
+import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function Page() {
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   return (
     <div className='layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
@@ -22,7 +29,23 @@ export default function Page() {
         </TakeAttendanceModal>
       </div>
       <div className='flex items-start gap-10'>
-        <div className='flex-1 h-96 rounded-lg bg-white'></div>
+        <div className='flex-1 mb-8 rounded-lg bg-white'>
+          <div className='flex justify-center p-8'>
+            <PageCounter
+              page={currentPage}
+              maxPage={numberOfPages}
+              onChange={setCurrentPage}
+            />
+          </div>
+          <Document
+            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FAmna%20Hasan.pdf?alt=media&token=75018044-7be0-43ff-bd4e-398004dd38ec'
+            onLoadSuccess={(v) => {
+              setNumberOfPages(v.numPages);
+            }}
+          >
+            <DocPage pageNumber={currentPage} />
+          </Document>
+        </div>
         <div className='bg-white p-4 flex flex-col gap-4 rounded-lg'>
           <div className='text-xl font-bold'>Lesson Tasks</div>
           <div className='flex justify-between rounded-md bg-[#F7F8FA] p-5'>
