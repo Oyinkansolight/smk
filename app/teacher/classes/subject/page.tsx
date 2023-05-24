@@ -7,7 +7,7 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 export default function Page() {
   const router = useRouter();
   return (
-    <div className='px-8'>
+    <div className='px-8 layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
         {'Classes > Mathematics'}
       </div>

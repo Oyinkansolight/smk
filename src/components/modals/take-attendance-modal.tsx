@@ -48,7 +48,7 @@ export default function TakeAttendanceModal({
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-h-[618px] max-w-7xl transform overflow-auto rounded-2xl bg-white p-6 shadow-xl transition-all'>
+                <Dialog.Panel className='w-full max-h-[618px] max-w-7xl text-start transform overflow-auto rounded-2xl bg-white p-6 shadow-xl transition-all'>
                   <TakeAttendanceView />
                 </Dialog.Panel>
               </Transition.Child>

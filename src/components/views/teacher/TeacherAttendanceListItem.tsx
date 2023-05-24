@@ -12,7 +12,7 @@ export default function TeacherAttendanceListItem({
   return (
     <div
       className={clsxm(
-        'flex py-4 px-6 rounded-md border bg-white items-center gap-8',
+        'flex py-2 px-6 rounded-md border bg-white items-center gap-8',
         isPresent === 'present' && 'border-green-500',
         isPresent === 'absent' && 'border-red-500'
       )}
@@ -24,14 +24,14 @@ export default function TeacherAttendanceListItem({
       {(!isPresent || (isPresent && isPresent === 'present')) && (
         <button
           onClick={() => setIsPresent('present')}
-          className='py-4 px-12 rounded-md bg-green-500 font-bold text-white'
+          className='py-3 px-12 rounded-sm bg-green-500 font-bold text-white'
         >
           Present
         </button>
       )}
       {(!isPresent || (isPresent && isPresent === 'absent')) && (
         <button
-          className='py-4 px-12 rounded-md bg-red-500 font-bold text-white'
+          className='py-3 px-12 rounded-sm bg-red-500 font-bold text-white'
           onClick={() => setIsPresent('absent')}
         >
           Absent
