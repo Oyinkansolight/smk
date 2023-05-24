@@ -20,14 +20,14 @@ export default function SmallTeacherSubjectCard({
     <div
       onClick={onClick}
       className={clsxm(
-        'flex flex-col items-center max-w-xs gap-5 cursor-pointer self-center w-full',
+        'flex flex-col items-center max-w-xs gap-2 cursor-pointer self-center w-full',
         className
       )}
     >
       <div className='flex w-full justify-end'>
         <div
           className={clsxm(
-            'py-2 px-4 mx-4 rounded-md my-6 bg-[#6A2B56] font-bold text-white',
+            'py-2 px-4 mx-4 rounded-md my-2 bg-[#6A2B56] font-bold text-white',
             !isNext && 'opacity-0'
           )}
         >

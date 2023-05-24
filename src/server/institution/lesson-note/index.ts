@@ -1,5 +1,4 @@
 import request from '@/server';
-import { CreateInstitutionParams } from '@/server/institution';
 import { useMutation } from 'react-query';
 
 export interface CreateAssignmentParams {
@@ -14,7 +13,7 @@ export interface CreateAssignmentParams {
 export function useCreateAssignment() {
   const mutation = useMutation({
     mutationKey: 'create_assignment',
-    mutationFn: (params: CreateInstitutionParams) =>
+    mutationFn: (params: CreateAssignmentParams) =>
       request.post('/v1/institutions/lessons/create-assignment', params, {
         withCredentials: true,
       }),
