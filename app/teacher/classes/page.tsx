@@ -1,6 +1,7 @@
 'use client';
 
 import SmallTeacherSubjectCard from '@/components/views/teacher/SmallTeacherSubjectCard';
+import { useGetGovernmentSubjectList } from '@/server/government/classes_and_subjects';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
@@ -12,27 +13,32 @@ export default function Page() {
   ];
   const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
+  const { data } = useGetGovernmentSubjectList();
   return (
     <div className=''>
       <div className='text-[#D4D5D7] py-8 text-2xl mx-16'>Classes</div>
       <div className='bg-white '>
-        <div className='font-bold mx-8 py-8 text-4xl layout'><div>My Subjects</div></div>
+        <div className='font-bold mx-8 py-8 text-4xl layout'>
+          <div>My Subjects</div>
+        </div>
         <div className='grid grid-cols-4 gap-4 justify-items-center layout'>
-          {Array(8)
-            .fill(0)
-            .map((v, i) => (
+          {data ? (
+            data.map((v, i) => (
               <SmallTeacherSubjectCard
                 onClick={() => {
-                  router.push('/teacher/classes/subject');
+                  router.push(`/teacher/classes/subject?id=${v.id}`);
                 }}
                 key={i}
                 isNext={i == 0}
-                subject={subjects[i % subjects.length]}
+                subject={v.name ?? '[NULL]'}
                 assignmentDue={2}
                 tasks={4}
                 className={colors[i % colors.length]}
               />
-            ))}
+            ))
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>

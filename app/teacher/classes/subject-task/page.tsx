@@ -38,7 +38,7 @@ export default function Page() {
             />
           </div>
           <Document
-            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FAmna%20Hasan.pdf?alt=media&token=75018044-7be0-43ff-bd4e-398004dd38ec'
+            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FMy%20Resume.pdf?alt=media&token=000ff73f-7e69-4672-8eb7-6b417a31504f'
             onLoadSuccess={(v) => {
               setNumberOfPages(v.numPages);
             }}

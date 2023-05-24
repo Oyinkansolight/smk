@@ -35,3 +35,8 @@ export interface InviteAdminParams {
   email?: string;
   role?: number;
 }
+
+export interface PaginationParams {
+  limit?: number;
+  page?: number;
+}

@@ -1,11 +1,13 @@
 'use client';
 
 import SmallTeacherSubjectListItem from '@/components/views/teacher/SmallTeacherSubjectListItem';
+import { useGetInstituteClass } from '@/server/institution/class';
 import { useRouter } from 'next/navigation';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 export default function Page() {
   const router = useRouter();
+  const { data } = useGetInstituteClass('');
   return (
     <div className='px-8 layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
@@ -30,16 +32,18 @@ export default function Page() {
       <div className=''>
         <div className='font-bold py-8 text-4xl'>Mathematics</div>
         <div className='flex flex-col  gap-4'>
-          {Array(8)
-            .fill(0)
-            .map((v, i) => (
+          {data ? (
+            data.map((v, i) => (
               <SmallTeacherSubjectListItem
                 onClick={() => router.push('/teacher/classes/subject-task')}
                 key={i}
-                cl='Primary 1A'
+                cl={v.name}
                 time='12:00 PM - 01:00 PM'
               />
-            ))}
+            ))
+          ) : (
+            <div />
+          )}
         </div>
       </div>
       <div className='flex justify-center gap-4 my-4'>

@@ -3,6 +3,7 @@ export interface Subject {
   id?: number;
   name?: string;
   description?: string;
+  classes?: any[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -101,3 +102,17 @@ export interface IncidentReportType {
   reportAttachment?: string;
   institutionId: number;
 }
+
+export interface InstituteClass {
+  id: number;
+  name: string;
+  startTime: null;
+  endTime: null;
+  curriculum: string;
+  institutionType: string;
+  createdAt: Date;
+  updatedAt: Date;
+  staff: null;
+  subjects: any[];
+}
+
