@@ -42,7 +42,7 @@ const Sidebar = () => {
           open={false}
           icon={<BiBookContent className='#C3CAD9' />}
           title='Classes'
-          href='/teacher'
+          href='/teacher/classes'
         />
 
         <SideBarButton
@@ -70,7 +70,7 @@ const Sidebar = () => {
           open={false}
           icon={<TbTimelineEvent className='#C3CAD9' />}
           title='Timetable'
-          href='/teacher'
+          href='/teacher/timetable'
         />
 
         <SideBarButton
