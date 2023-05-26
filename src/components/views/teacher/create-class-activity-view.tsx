@@ -8,11 +8,7 @@ import InputReactForm from '@/components/input/formReactInput';
 import ReactFormSelect from '@/components/input/formSelectReactForm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import {
-  useCreateAssignment,
-  useCreateClasswork,
-  useCreateQuiz,
-} from '@/server/institution/lesson-note';
+import { useCreateAssignment, useCreateClasswork, useCreateQuiz } from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -21,6 +17,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
 
 const EditorComponent = ({
   onChange,
@@ -70,7 +67,7 @@ export default function CreateClassActivityView() {
     reValidateMode: 'onChange',
   });
   const format = watch('format');
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState('[NO_BODY]');
   const createQuiz = useCreateQuiz();
   const createAssignment = useCreateAssignment();
   const createClasswork = useCreateClasswork();
