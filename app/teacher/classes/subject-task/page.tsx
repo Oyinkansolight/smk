@@ -38,7 +38,7 @@ export default function Page() {
             />
           </div>
           <Document
-            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FMy%20Resume.pdf?alt=media&token=000ff73f-7e69-4672-8eb7-6b417a31504f'
+            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FBig%20Data%20Engineer%20Mastery%20Award%20for%20Students%20(2018)_certificate.pdf?alt=media&token=eb294817-116b-4051-b3b5-87ca46497553'
             onLoadSuccess={(v) => {
               setNumberOfPages(v.numPages);
             }}
