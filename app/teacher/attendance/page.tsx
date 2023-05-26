@@ -1,4 +1,3 @@
-import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttendanceListItem';
 import ViewAttendanceListItem from '@/components/views/teacher/ViewAttendanceListItem';
 
 export default function Page() {
