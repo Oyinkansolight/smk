@@ -63,7 +63,7 @@ const Sidebar = () => {
           open={false}
           icon={<TbMessage className='#C3CAD9' />}
           title='Attendance'
-          href='/teacher'
+          href='/teacher/attendance'
         />
 
         <SideBarButton
