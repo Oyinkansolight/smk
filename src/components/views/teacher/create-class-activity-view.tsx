@@ -21,6 +21,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
 const EditorComponent = ({
   onChange,
 }: {
@@ -79,32 +80,35 @@ export default function CreateClassActivityView() {
     try {
       const type = data.type;
       if (type === 'Assignment') {
-        await createAssignment.mutateAsync({
+        const res = await createAssignment.mutateAsync({
           body,
           subject: 1,
-          title: '',
+          title: data.type,
           lessonNote: 1,
           classes: 1,
           dueDate: data.dueDate,
         });
+        toast.success(res.data.data.message);
       }
       if (type === 'Class Work') {
-        await createClasswork.mutateAsync({
+        const res = await createClasswork.mutateAsync({
           body,
           subject: 1,
-          title: '',
+          title: data.type,
           lessonNote: 1,
           classes: 1,
         });
+        toast.success(res.data.data.message);
       }
       if (type === 'Pop Quiz') {
-        await createQuiz.mutateAsync({
+        const res = await createQuiz.mutateAsync({
           body,
           subject: 1,
-          title: '',
+          title: data.type,
           lessonNote: 1,
           classes: 1,
         });
+        toast.success(res.data.data.message);
       }
     } catch (error) {
       toast.error(getErrMsg(error));

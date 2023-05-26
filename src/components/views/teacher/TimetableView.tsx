@@ -25,7 +25,7 @@ export default function TimetableView() {
   ];
   return (
     <div className='flex bg-blue-500 rounded-2xl'>
-      <div className='w-36 grid-cols-1 grid gap-4'>
+      <div className='grid-cols-1 px-8 grid gap-2'>
         <div className='h-20' />
         {Array(8)
           .fill(0)
@@ -38,20 +38,21 @@ export default function TimetableView() {
             </div>
           ))}
       </div>
-      <div className='bg-white rounded-2xl px-6'>
-        <div className='h-12' />
-        <div className='grid grid-cols-5 gap-4'>
+      <div className='flex-1 bg-white rounded-2xl px-6'>
+        <div className='flex flex-col items-center'>
+          <div className='h-12' />
+        <div className='grid grid-cols-5 gap-2'>
           {days.map((d, i) => (
             <div
               key={i}
-              className='flex items-center justify-center w-full h-full font-bold text-lg'
+              className='flex items-center justify-center w-36 h-full font-bold text-lg'
             >
               <div>{d}</div>
             </div>
           ))}
         </div>
         <div className='h-1 w-full bg-[#E7E7E5] my-6' />
-        <div className='grid grid-cols-5 gap-4'>
+        <div className='grid grid-cols-5 gap-2'>
           <div className='col-span-5 h-32 rounded-md border p-3'>
             <div className='h-full w-full text-4xl flex font-bold items-center justify-center bg-[#C0EAD3]'>
               <div>Assembly</div>
@@ -82,6 +83,7 @@ export default function TimetableView() {
                 }
               />
             ))}
+        </div>
         </div>
       </div>
     </div>
