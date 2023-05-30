@@ -1,6 +1,8 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
 import { getFromLocalStorage } from '@/lib/helper';
+import { useGetProfile } from '@/server/auth';
+import { userAgent } from 'next/server';
 import * as React from 'react';
 import { GoBell, GoThreeBars } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
@@ -14,12 +16,7 @@ interface StudentHeaderProps {
 
 export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
   const [isOpen, setisOpen] = React.useState(false);
-  const userData = getFromLocalStorage('user');
-  let user;
-
-  if (userData) {
-    user = JSON.parse(userData);
-  }
+  const { data, error, isLoading } = useGetProfile();
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-white'>
@@ -47,15 +44,13 @@ export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {user?.name === 'null null'
-                    ? user?.email.split('@')[0]
-                    : user?.name}
+                  {data?.email ? data?.email.split('@')[0] : data?.firstName}
                 </div>
                 <Pill
                   text={
-                    user?.name === 'null null'
-                      ? user?.email.split('@')[0]
-                      : user?.name
+                    data?.email
+                      ? data?.email.split('@')[0]
+                      : data?.firstName ?? '[NULL]'
                   }
                   variant='primary'
                 />
