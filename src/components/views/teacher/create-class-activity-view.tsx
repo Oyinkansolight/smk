@@ -1,14 +1,12 @@
 'use client';
 
-import BaseAccordion from '@/components/accordions/BaseAccordion';
 import Button from '@/components/buttons/Button';
-import TextArea from '@/components/input/TextArea';
-import Input from '@/components/input/formInput';
+import MultiChoiceQuestion from '@/components/input/MultiChoiceQuestion';
 import InputReactForm from '@/components/input/formReactInput';
 import ReactFormSelect from '@/components/input/formSelectReactForm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useCreateAssignment, useCreateClasswork, useCreateQuiz } from '@/server/institution/lesson-note';
+import { Question, useCreateClassActivity } from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -18,6 +16,18 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
+
+
+const activityTypes = [
+  { key: 'ASSIGNMENT', value: 'Assignment' },
+  { key: 'CLASS_WORK', value: 'Class Work' },
+  { key: 'POP_QUIZ', value: 'Pop Quiz' },
+];
+
+const activityFormats = [
+  { key: 'MULTIPLECHOICE', value: 'Multiple Choice' },
+  { key: 'SUBJECTIVE', value: 'Subjective' },
+];
 
 const EditorComponent = ({
   onChange,
@@ -68,45 +78,26 @@ export default function CreateClassActivityView() {
   });
   const format = watch('format');
   const [body, setBody] = useState('[NO_BODY]');
-  const createQuiz = useCreateQuiz();
-  const createAssignment = useCreateAssignment();
-  const createClasswork = useCreateClasswork();
+  const create = useCreateClassActivity();
+  const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      const type = data.type;
-      if (type === 'Assignment') {
-        const res = await createAssignment.mutateAsync({
-          body,
-          subject: 1,
-          title: data.type,
-          lessonNote: 1,
-          classes: 1,
-          dueDate: data.dueDate,
-        });
-        toast.success(res.data.data.message);
-      }
-      if (type === 'Class Work') {
-        const res = await createClasswork.mutateAsync({
-          body,
-          subject: 1,
-          title: data.type,
-          lessonNote: 1,
-          classes: 1,
-        });
-        toast.success(res.data.data.message);
-      }
-      if (type === 'Pop Quiz') {
-        const res = await createQuiz.mutateAsync({
-          body,
-          subject: 1,
-          title: data.type,
-          lessonNote: 1,
-          classes: 1,
-        });
-        toast.success(res.data.data.message);
-      }
+      const type = activityTypes.find(
+        (v) => v.value === data.typeOfActivity
+      )?.key;
+      const form = activityFormats.find((v) => v.value === data.format)?.key;
+      const res = await create.mutateAsync({
+        ...data,
+        typeOfActivity: type,
+        format: form,
+        questions,
+        classes: 1,
+        lessonNote: 1,
+        subject: 1,
+      });
+      toast.success(res.data.data.message);
     } catch (error) {
       toast.error(getErrMsg(error));
     }
@@ -118,15 +109,15 @@ export default function CreateClassActivityView() {
         <div className='grid grid-cols-2 gap-2'>
           <ReactFormSelect
             register={register}
-            name='type'
+            name='typeOfActivity'
             label='Type of Activity'
-            options={['Assignment', 'Class Work', 'Pop Quiz']}
+            options={activityTypes.map((v) => v.value)}
           />
           <ReactFormSelect
             register={register}
             name='format'
             label='Format'
-            options={['Multiple Choice', 'Subjective']}
+            options={activityFormats.map((v) => v.value)}
           />
           <InputReactForm
             register={register}
@@ -144,69 +135,17 @@ export default function CreateClassActivityView() {
         </div>
         {format === 'Multiple Choice' && (
           <>
-            <BaseAccordion
-              title='Question 1'
-              length={250}
-              className='bg-[#EFF7F6] rounded-lg'
-            >
-              <div>
-                <TextArea
-                  label=''
-                  name='question'
-                  placeholder='Input question here'
-                />
-                <div className='h-4' />
-                <div className='grid grid-cols-2 gap-5'>
-                  {Array(4)
-                    .fill(0)
-                    .map((v, i) => (
-                      <Input key={i} label='' placeholder={`Option ${i + 1}`} />
-                    ))}
-                </div>
-              </div>
-            </BaseAccordion>
-            <BaseAccordion
-              title='Question 2'
-              length={250}
-              className='bg-[#EFF7F6] rounded-lg'
-            >
-              <div>
-                <TextArea
-                  label=''
-                  name='question'
-                  placeholder='Input question here'
-                />
-                <div className='h-4' />
-                <div className='grid grid-cols-2 gap-5'>
-                  {Array(4)
-                    .fill(0)
-                    .map((v, i) => (
-                      <Input key={i} label='' placeholder={`Option ${i + 1}`} />
-                    ))}
-                </div>
-              </div>
-            </BaseAccordion>
-            <BaseAccordion
-              title='Question 3'
-              length={250}
-              className='bg-[#EFF7F6] rounded-lg'
-            >
-              <div>
-                <TextArea
-                  label=''
-                  name='question'
-                  placeholder='Input question here'
-                />
-                <div className='h-4' />
-                <div className='grid grid-cols-2 gap-5'>
-                  {Array(4)
-                    .fill(0)
-                    .map((v, i) => (
-                      <Input key={i} label='' placeholder={`Option ${i + 1}`} />
-                    ))}
-                </div>
-              </div>
-            </BaseAccordion>
+            {questions.map((v, i) => (
+              <MultiChoiceQuestion
+                key={i}
+                value={questions[i]}
+                onChange={(v) => {
+                  const newQ = [...questions];
+                  newQ[i] = v;
+                  setQuestions(newQ);
+                }}
+              />
+            ))}
           </>
         )}
         {format === 'Subjective' && (

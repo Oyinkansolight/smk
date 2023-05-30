@@ -1,5 +1,5 @@
 import request from '@/server';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 export interface SignUpParams {
   email: string;
@@ -41,6 +41,30 @@ export function useResetPassword() {
     mutationKey: 'reset_password',
     mutationFn: (params: SignInParams) =>
       request.post('/auth/reset-password', params),
+  });
+  return mutation;
+}
+
+export interface UserProfile {
+  id?: number;
+  firstName?: null;
+  lastName?: null;
+  deviceToken?: null;
+  phoneNumber?: null;
+  email?: string;
+  address?: null;
+  type?: string;
+  suspended?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export function useGetProfile() {
+  const mutation = useQuery({
+    queryKey: 'reset_password',
+    queryFn: async () =>
+      (await request.get('/v1/authentication/profile')).data.data
+        .data as UserProfile,
   });
   return mutation;
 }

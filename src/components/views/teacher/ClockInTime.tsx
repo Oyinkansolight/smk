@@ -2,8 +2,13 @@ import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
-import { useClockIn, useClockOut } from '@/server/teacher';
+import { getErrMsg } from '@/server';
+import {
+  useClockIn,
+  useClockOut,
+} from '@/server/institution/clock-in-clock-out';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useGeoLocation } from 'use-geo-location';
 
 export default function ClockInTime() {
@@ -26,23 +31,28 @@ export default function ClockInTime() {
   const long = institute?.instituteLong ?? '3.3488896';
 
   const handleClockIn = async () => {
-    const res = await clockIn.mutateAsync({
-      clockInTime: `${Date()}`,
-      teacherId: 1
-    });
-    console.log(res);
-
-    // setClockedIn(true)
-  }
+    try {
+      const res = await clockIn.mutateAsync({
+        clockInTime: `${Date()}`,
+      });
+      toast.success(res.data.data.message);
+      setClockedIn(true);
+    } catch (error) {
+      toast.error(getErrMsg(error));
+    }
+  };
 
   const handleClockOut = async () => {
-    const res = await clockOut.mutateAsync({
-      clockOutTime: `${Date()}`,
-      teacherId: 1
-    });
-    console.log(res);
-    // setClockedIn(false);
-  }
+    try {
+      const res = await clockOut.mutateAsync({
+        clockOutTime: `${Date()}`,
+      });
+      toast.success(res.data.data.message);
+      setClockedIn(false);
+    } catch (error) {
+      toast.error(getErrMsg(error));
+    }
+  };
 
   useEffect(() => {
     setIsLoading(loading);
@@ -50,7 +60,7 @@ export default function ClockInTime() {
     if (latitude && longitude) {
       const d = calculateEarthDistance(latitude, longitude, lat, long);
       setDistance(d.toFixed(2));
-      if (d < 100) {
+      if (d < 10000) {
         setInArea(true);
         setIsLoading(false);
       }
