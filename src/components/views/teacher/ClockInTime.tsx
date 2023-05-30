@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useGeoLocation } from 'use-geo-location';
 
+
 export default function ClockInTime() {
   const clockIn = useClockIn();
   const clockOut = useClockOut();
@@ -33,7 +34,7 @@ export default function ClockInTime() {
   const handleClockIn = async () => {
     try {
       const res = await clockIn.mutateAsync({
-        clockInTime: `${Date()}`,
+        clockInTime: `${new Date().toISOString()}`,
       });
       toast.success(res.data.data.message);
       setClockedIn(true);
@@ -45,7 +46,7 @@ export default function ClockInTime() {
   const handleClockOut = async () => {
     try {
       const res = await clockOut.mutateAsync({
-        clockOutTime: `${Date()}`,
+        clockOutTime: `${new Date().toISOString()}`,
       });
       toast.success(res.data.data.message);
       setClockedIn(false);

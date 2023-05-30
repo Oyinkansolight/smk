@@ -4,7 +4,7 @@ import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import { useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
-import { BiListCheck } from 'react-icons/bi';
+import { BiChevronDown, BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
 import { HiUsers } from 'react-icons/hi';
 import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
@@ -17,6 +17,7 @@ interface StudentTeacherProfileCardProps {
   school: string;
   id: string;
   student: boolean;
+  showAcademicYear?: boolean;
 }
 
 export default function StudentTeacherProfileCard({
@@ -24,6 +25,7 @@ export default function StudentTeacherProfileCard({
   name,
   school,
   student,
+  showAcademicYear,
 }: StudentTeacherProfileCardProps) {
   const [currentGrid, setCurrentGrid] = useState(0);
 
@@ -54,6 +56,13 @@ export default function StudentTeacherProfileCard({
       <div className='text-[#007AFF] text-center text-xs font-bold mt-4 mb-8'>
         {student ? 'View Student ID Card' : 'View Staff ID Card'}
       </div>
+
+      {showAcademicYear && (
+        <div className='w-full border rounded-sm my-4 items-center bg-[#EFFFF6] py-2 px-4 flex'>
+          <div className='flex-1 font-bold'>Academic Year 2022/2023</div>
+          <BiChevronDown className='h-5 w-5' />
+        </div>
+      )}
 
       <GridTabBar
         variant='primary'
