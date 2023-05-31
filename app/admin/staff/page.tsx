@@ -8,7 +8,7 @@ import UploadDocument from '@/components/views/admin/Library/Files';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
-import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
+import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
 import { useRouter } from 'next/navigation';
@@ -24,8 +24,8 @@ const Page = () => {
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
-        image='/images/test_student.png'
-        name='Akani Egbherve'
+        image='/images/teacher_1.png'
+        name='Staff Name'
         school='Avril Price School'
         id=''
         student
@@ -127,7 +127,7 @@ const Page = () => {
                 </Button>
               </div>
               <div className='bg-white px-8'>
-                <StudentBioDetailsAlt
+                <TeacherBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
                 />
@@ -168,7 +168,7 @@ const Page = () => {
                   Download Report
                 </Button>
               </div>
-              <SubjectList />
+              <SubjectList subjectCount={1} />
             </>
           )}
         </div>

@@ -19,7 +19,7 @@ export default function AccordionAlt({
     <div>
       <div
         onClick={() => setExpanded(!expanded)}
-        className='flex gap-2 cursor-pointer items-center rounded-md bg-white p-4 shadow-sm'
+        className={clsxm('flex gap-2 cursor-pointer items-center rounded-md bg-white z-50 p-4 shadow-sm', bordered && 'shadow-none border-2')}
       >
         <BsArrowDownCircle
           className={clsxm(
@@ -34,9 +34,9 @@ export default function AccordionAlt({
           height: expanded ? `${length}px` : '0px',
         }}
         className={clsxm(
-          'overflow-hidden transition-all duration-200 overflow-y-auto',
-          expanded ? '' : '',
-          expanded && bordered ? 'border border-[#E3E3E3] px-6' : ''
+          'overflow-hidden -z-50 transition-all duration-200 -mt-1 overflow-y-auto',
+          expanded ? 'py-[5px]' : '',
+          expanded && bordered ? 'border-x border-b border-[#E3E3E3] px-6' : ''
         )}
       >
         {children}

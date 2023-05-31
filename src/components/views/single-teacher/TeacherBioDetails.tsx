@@ -4,7 +4,7 @@ import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import { Controller, useForm } from 'react-hook-form';
 import { RiImageAddFill } from 'react-icons/ri';
 
-export default function StudentBioDetailsAlt({
+export default function TeacherBioDetails({
   isEditing,
   setIsEditing,
 }: {
@@ -12,6 +12,7 @@ export default function StudentBioDetailsAlt({
   setIsEditing: (value: boolean) => void;
 }) {
   const { control, handleSubmit } = useForm();
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const onSubmit = (data: any) => {
     setIsEditing(false);
   };
@@ -90,43 +91,6 @@ export default function StudentBioDetailsAlt({
               />
             )}
           />
-          <Controller
-            control={control}
-            name='parentalStatus'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parental Status'
-                placeholder='Enter Parental Status'
-                {...field.field}
-              />
-            )}
-          />
-          <div />
-          <Controller
-            control={control}
-            name='parentName'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parent Name'
-                placeholder='Enter Parent Name'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='parentOccupation'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parent Occupation'
-                placeholder='Enter Parent Occupation'
-                {...field.field}
-              />
-            )}
-          />
         </div>
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Contact Details
@@ -134,24 +98,24 @@ export default function StudentBioDetailsAlt({
         <div className='grid grid-cols-2 gap-4'>
           <Controller
             control={control}
-            name='studentEmail'
+            name='phone'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Email Address'
-                placeholder='Enter Email Address'
+                label='Phone Number'
+                placeholder='Enter Phone Number'
                 {...field.field}
               />
             )}
           />
           <Controller
             control={control}
-            name='studentPhone'
+            name='email'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Phone Number'
-                placeholder='Enter Phone Number'
+                label='Email'
+                placeholder='Enter Email'
                 {...field.field}
               />
             )}
@@ -180,44 +144,160 @@ export default function StudentBioDetailsAlt({
               />
             )}
           />
+          <Controller
+            control={control}
+            name='nextOfKin'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Name of Next of Kin'
+                placeholder='Enter Name of Next of Kin'
+                {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='relationshipNextOfKin'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Relationship Of Next Of Kin'
+                placeholder='Enter Relationship Of Next Of Kin'
+                {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='addressNextOfKin'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Address Of Next Of Kin'
+                placeholder='Enter Local Address Of Next Of Kin'
+                {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='phoneNextOfKin'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Local Phone Number Of Next Of Kin'
+                placeholder='Enter Local Phone Number Of Next Of Kin'
+                {...field.field}
+              />
+            )}
+          />
         </div>
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
-          Educational Details
+          Training History
         </div>
         <div className='grid grid-cols-2 gap-4'>
           <Controller
             control={control}
-            name='school'
+            name='name1'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='School'
-                placeholder='Enter School'
+                label='Name/Title of Training'
+                placeholder='Enter Name/Title of Training'
                 {...field.field}
               />
             )}
           />
           <Controller
             control={control}
-            name='class'
+            name='year1'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Class'
-                placeholder='Enter Class'
+                label='Year'
+                placeholder='Enter Year'
                 {...field.field}
               />
             )}
           />
           <Controller
             control={control}
-            name='classTeacher'
+            name='name2'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Class Teacher'
-                placeholder='Enter Class Teacher'
+                label='Name/Title of Training'
+                placeholder='Enter Name/Title of Training'
                 {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='year2'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Year'
+                placeholder='Enter Year'
+                {...field.field}
+              />
+            )}
+          />
+        </div>
+        <div className='font-bold text-2xl text-[#6B7A99] my-8'>
+          Employment Details
+        </div>
+        <div className='grid grid-cols-2 gap-4'>
+          <Controller
+            control={control}
+            name='datePosted'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                type='date'
+                label='Date Posted to Current School'
+                placeholder='Enter Date Posted to Current School'
+                {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='highestQualification'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Highest Qualification'
+                placeholder='Enter Highest Qualification'
+                {...field.field}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='dateOfAppointment'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Date of First Appointment'
+                placeholder='Enter Date of First Appointment'
+                {...field.field}
+                type='date'
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name='retirementDate'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Retirement Date'
+                placeholder='Enter Retirement Date'
+                {...field.field}
+                type='date'
               />
             )}
           />

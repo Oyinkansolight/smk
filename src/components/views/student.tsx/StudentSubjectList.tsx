@@ -5,7 +5,11 @@ import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
 
 
-export default function StudentSubjectList() {
+export default function SubjectList({
+  subjectCount = 16,
+}: {
+  subjectCount?: number;
+}) {
   const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
   const [currentView, setCurrentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
@@ -36,7 +40,7 @@ export default function StudentSubjectList() {
             </div>
             <div className='h-12' />
             <div className='grid grid-cols-4 gap-4'>
-              {Array(16)
+              {Array(subjectCount)
                 .fill(0)
                 .map((v, i) => (
                   <div
@@ -99,6 +103,7 @@ export default function StudentSubjectList() {
                 .map((v, i) => (
                   <AccordionAlt
                     key={i}
+                    bordered
                     title={
                       <div className='flex text-[#6B7A99] items-center'>
                         <div className='font-extrabold'>Week {i + 1}</div>
