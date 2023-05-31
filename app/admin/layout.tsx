@@ -1,8 +1,8 @@
 'use client';
 
 import Header from '@/components/layout/Header';
+import InstituteSidebar from '@/components/layout/InstituteSidebar';
 import RightSidebar from '@/components/layout/RightSidebar';
-import Sidebar from '@/components/layout/Sidebar';
 import { usePathname } from 'next/navigation';
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -27,7 +27,7 @@ export default function RootLayout({
             <div>{children}</div>
           </main>
 
-          <Sidebar />
+          <InstituteSidebar />
 
           {routeDetails === '/admin' && <RightSidebar />}
         </div>

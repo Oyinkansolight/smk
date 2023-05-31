@@ -2,7 +2,12 @@
 'use client';
 
 import clsxm from '@/lib/clsxm';
+import { HTMLInputTypeAttribute } from 'react';
 import { RegisterOptions, UseFormRegister } from 'react-hook-form';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -32,7 +37,7 @@ type propType = {
   placeholder: string;
   formValue?: string | number;
   setFormValue?: (value: string | number) => void;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   disabled?: boolean;
   register?: UseFormRegister<any>;
   validation?: RegisterOptions<any>;

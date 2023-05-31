@@ -2,7 +2,6 @@ import { StudentTeacherBadge } from '@/components/badges';
 import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
-import { useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiChevronDown, BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -18,6 +17,8 @@ interface StudentTeacherProfileCardProps {
   id: string;
   student: boolean;
   showAcademicYear?: boolean;
+  currentGridIdx?: number;
+  setGridIdx?: (value: number) => void;
 }
 
 export default function StudentTeacherProfileCard({
@@ -26,13 +27,9 @@ export default function StudentTeacherProfileCard({
   school,
   student,
   showAcademicYear,
+  currentGridIdx,
+  setGridIdx,
 }: StudentTeacherProfileCardProps) {
-  const [currentGrid, setCurrentGrid] = useState(0);
-
-  const handleToggleGrid = (index: number) => {
-    setCurrentGrid(index);
-  };
-
   return (
     <div className='flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
@@ -66,8 +63,8 @@ export default function StudentTeacherProfileCard({
 
       <GridTabBar
         variant='primary'
-        selected={currentGrid}
-        onSelect={handleToggleGrid}
+        selected={currentGridIdx}
+        onSelect={setGridIdx}
         items={[
           {
             icon: <BiListCheck className='h-7 w-7' />,
@@ -79,7 +76,7 @@ export default function StudentTeacherProfileCard({
           },
           {
             icon: <HiUsers className='h-5 w-5' />,
-            label: 'Contacts',
+            label: student ? 'Manage Subject' : 'Contacts',
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,
