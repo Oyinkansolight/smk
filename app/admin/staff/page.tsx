@@ -28,7 +28,7 @@ const Page = () => {
         name='Staff Name'
         school='Avril Price School'
         id=''
-        student
+        student={false}
         showAcademicYear
         currentGridIdx={gridTabIdx}
         setGridIdx={(v) => {
