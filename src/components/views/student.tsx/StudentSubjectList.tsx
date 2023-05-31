@@ -1,7 +1,9 @@
 import AccordionAlt from '@/components/accordions/AccordionAlt';
+import PeriodStatusModal from '@/components/modals/period-status-modal';
 import { useState } from 'react';
 import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
+
 
 export default function StudentSubjectList() {
   const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
@@ -120,19 +122,18 @@ export default function StudentSubjectList() {
                       {Array(4)
                         .fill(0)
                         .map((v, i) => (
-                          <div
-                            key={i}
-                            className='grid grid-cols-4 py-4 border-y'
-                          >
-                            <div>Period 1</div>
-                            <div className='text-[#6B7A99]'>
-                              Title:{' '}
-                              <span className='font-bold'>Even Numbers</span>
+                          <PeriodStatusModal key={i}>
+                            <div className='grid grid-cols-4 cursor-pointer py-4 border-y'>
+                              <div>Period 1</div>
+                              <div className='text-[#6B7A99]'>
+                                Title:{' '}
+                                <span className='font-bold'>Even Numbers</span>
+                              </div>
+                              <div className='flex text-[#6B7A99] col-span-2 justify-end'>
+                                <div className='cursor-pointer'>View</div>
+                              </div>
                             </div>
-                            <div className='flex text-[#6B7A99] col-span-2 justify-end'>
-                              <div className='cursor-pointer'>View</div>
-                            </div>
-                          </div>
+                          </PeriodStatusModal>
                         ))}
                     </div>
                   </AccordionAlt>
