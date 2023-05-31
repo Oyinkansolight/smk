@@ -1,6 +1,7 @@
 'use client';
 
 import { BasicSearch } from '@/components/search';
+import ROUTES from '@/constant/routes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -58,16 +59,18 @@ const AllClasses = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <div className='flex items-center space-x-4'>
-        <Image
-          src='/svg/back.svg'
-          width={10}
-          height={10}
-          alt='back'
-          className='h-4 w-4'
-        />
-        <h3 className='text-[10px] font-medium'>Dashboard</h3>
-      </div>
+      <Link href={ROUTES.ADMIN}>
+        <div className='flex items-center space-x-4'>
+          <Image
+            src='/svg/back.svg'
+            width={10}
+            height={10}
+            alt='back'
+            className='h-4 w-4'
+          />
+          <h3 className='text-[10px] font-medium'>Dashboard</h3>
+        </div>
+      </Link>
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>All Classes</h1>
 

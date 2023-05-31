@@ -1,6 +1,7 @@
 'use client';
 
 import { BasicSearch } from '@/components/search';
+import ROUTES from '@/constant/routes';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetStudentsList } from '@/server/institution';
@@ -13,53 +14,6 @@ import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
 const AllStudent = () => {
-  // const mockData = [
-  //   {
-  //     logo: 1,
-  //     name: 'Akani Egbherve',
-  //     numberOfStudent: '12, 500',
-  //     Student_ID: '#123-BN',
-  //     type: 'Primary',
-  //     school: 'Avril Price School',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 2,
-  //     name: 'Ibrahim Wilson',
-  //     numberOfStudent: '12,500',
-  //     Student_ID: '#123-BN',
-  //     type: 'Tertiary',
-  //     school: 'Scaling Heights School',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 3,
-  //     name: 'Norma Russell',
-  //     numberOfStudent: '12,500',
-  //     Student_ID: '#123-BN',
-  //     type: 'Secondary',
-  //     school: 'Black Dash School',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 4,
-  //     name: 'Regina Askiya',
-  //     numberOfStudent: '12,500',
-  //     Student_ID: '#123-BN',
-  //     type: 'ECCDE',
-  //     school: 'Reaction Primary ',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 5,
-  //     name: 'Akani Egbherve',
-  //     numberOfStudent: '12,500',
-  //     Student_ID: '#123-BN',
-  //     type: 'Primary',
-  //     school: 'Victory International  School',
-  //     location: 'Benin',
-  //   },
-  // ];
   const { data, error, isLoading } = useGetStudentsList();
 
   const [students, setstudents] = useState(data ?? []);
@@ -83,7 +37,7 @@ const AllStudent = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <Link href='/super-admin'>
+      <Link href={ROUTES.ADMIN}>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -138,7 +92,7 @@ const AllStudent = () => {
               <div className='col-span-1'>#{idx + 1} </div>
               <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
                 <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                <Link href='/super-admin/student'>
+                <Link href='/admin/student'>
                   <h2 className='text-sm font-medium capitalize'>
                     {item.user[0].firstName} {item.user[0].lastName}
                   </h2>

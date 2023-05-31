@@ -13,53 +13,6 @@ import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
 const AllStudent = () => {
-  const mockData = [
-    {
-      logo: 1,
-      name: 'Akani Egbherve',
-      numberOfStudent: '12, 500',
-      Student_ID: '#123-BN',
-      type: 'Primary',
-      school: 'Avril Price School',
-      location: 'Benin',
-    },
-    {
-      logo: 2,
-      name: 'Ibrahim Wilson',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Tertiary',
-      school: 'Scaling Heights School',
-      location: 'Benin',
-    },
-    {
-      logo: 3,
-      name: 'Norma Russell',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Secondary',
-      school: 'Black Dash School',
-      location: 'Benin',
-    },
-    {
-      logo: 4,
-      name: 'Regina Askiya',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'ECCDE',
-      school: 'Reaction Primary ',
-      location: 'Benin',
-    },
-    {
-      logo: 5,
-      name: 'Akani Egbherve',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Primary',
-      school: 'Victory International  School',
-      location: 'Benin',
-    },
-  ];
   const { data, error, isLoading } = useGetStudentsList();
 
   const [students, setstudents] = useState(data ?? []);

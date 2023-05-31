@@ -5,6 +5,7 @@ import commaNumber from 'comma-number';
 import React from 'react';
 
 interface CountCardProps {
+  url?: string;
   count?: number;
   text?: string;
   title: string;
@@ -13,6 +14,7 @@ interface CountCardProps {
 }
 
 const CountCard = ({
+  url,
   count,
   text,
   title,
@@ -40,7 +42,7 @@ const CountCard = ({
         </div>
 
         {variant !== 'basic' && (
-          <UnstyledLink href='#' className='text-[14px]'>
+          <UnstyledLink href={url ?? '#'} className='text-[14px]'>
             Manage All
           </UnstyledLink>
         )}

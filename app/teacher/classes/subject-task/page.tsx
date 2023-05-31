@@ -38,7 +38,7 @@ export default function Page() {
             />
           </div>
           <Document
-            file='https://firebasestorage.googleapis.com/v0/b/smk-project-d0ff1.appspot.com/o/institute_materials%2FBig%20Data%20Engineer%20Mastery%20Award%20for%20Students%20(2018)_certificate.pdf?alt=media&token=eb294817-116b-4051-b3b5-87ca46497553'
+            file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
             onLoadSuccess={(v) => {
               setNumberOfPages(v.numPages);
             }}
@@ -46,7 +46,7 @@ export default function Page() {
             <DocPage pageNumber={currentPage} />
           </Document>
         </div>
-        <div className='bg-white p-4 flex flex-col gap-4 rounded-lg'>
+        <div className='bg-white p-4 flex flex-col gap-4 rounded-lg layout'>
           <div className='text-xl font-bold'>Lesson Tasks</div>
           <div className='flex justify-between rounded-md bg-[#F7F8FA] p-5'>
             <div className=''>Home Work</div>

@@ -55,8 +55,8 @@ export default function TeacherDashboardView({
   handleTabChange,
 }: TeacherDashboardViewProps) {
   return (
-    <div className='flex flex-col'>
-      <div className='flex p-6 justify-between bg-white rounded-lg my-4'>
+    <div className='flex flex-col layout'>
+      <div className='flex py-4 px-6 justify-between bg-white rounded-lg my-4 w-full'>
         <SmallTeacherCard
           icon={<BiUser className='h-16 w-16 text-[#008146]' />}
           subtitle='Total Students'
@@ -65,33 +65,33 @@ export default function TeacherDashboardView({
         />
         <SmallTeacherCard
           icon={<BiUser className='h-16 w-16 text-[#7D8FB3]' />}
-          subtitle='Total Students'
+          subtitle='Present today'
           title='47'
           className='bg-[#F4F9FF]'
         />
         <SmallTeacherCard
           icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
-          subtitle='Total Students'
+          subtitle='Absent today'
           title='3'
           className='bg-[#F9F3FF]'
         />
         <SmallTeacherCard
           icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
-          subtitle='Total Students'
+          subtitle='Late Students'
           title='3'
           className='bg-[#FFF3F3]'
         />
       </div>
-      <div className='grid grid-cols-2 gap-10'>
-        <div className='grid grid-rows-2 gap-6'>
-          <BasicCard className='flex flex-col gap-4 w-[476px] !rounded-2xl'>
+      <div className='grid grid-cols-2 gap-10 w-full'>
+        <div className='grid grid-rows-2 gap-6 w-full'>
+          <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>
             <NextClassCard isActive />
             <NextClassCard />
             <div className='font-bold text-right'>See all</div>
           </BasicCard>
 
-          <BasicCard className='flex flex-col gap-4 w-[476px] !rounded-2xl'>
+          <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='relative'>
               <div className='h4'>Unread Messages</div>
               <div className='absolute w-[6px] h-[6px] bg-[#E5002B] rounded-full top-0 ml-40' />
@@ -102,10 +102,10 @@ export default function TeacherDashboardView({
           </BasicCard>
         </div>
 
-        <BasicCard className='flex flex-col gap-4 w-[476px] !rounded-2xl'>
+        <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
           <div className='h4'>Assignments</div>
           <AssignmentsCard />
-          <AssignmentsCard isActive />
+          <AssignmentsCard today isActive />
           <AssignmentsCard />
           <AssignmentsCard />
           <AssignmentsCard />
@@ -159,7 +159,7 @@ const NextClassCard = ({ isActive = false }) => {
   );
 };
 
-const AssignmentsCard = ({ isActive = false }) => {
+const AssignmentsCard = ({ isActive = false, today = false }) => {
   const [active] = useState(isActive);
   return (
     <BasicCard
@@ -197,6 +197,15 @@ const AssignmentsCard = ({ isActive = false }) => {
 
           <div className='flex gap-3'></div>
         </div>
+
+        {today ? (
+          <div className='text-[#E5002B] ml-6 flex justify-center items-center font-bold'>Today</div>
+        ) : (
+          <div className='flex flex-col text-white bg-[#6A2B56] items-center justify-center p-1 rounded-[9px] w-12 h-12 ml-6'>
+            <div className='text-[14px]'>Tue</div>
+            <div className='font-semibold'>29</div>
+          </div>
+        )}
       </div>
     </BasicCard>
   );

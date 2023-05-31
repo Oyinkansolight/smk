@@ -154,7 +154,7 @@ export default function CreateClassActivityView() {
             <EditorComponent onChange={setBody} />
           </>
         )}
-        <Button type='submit'>Submit</Button>
+        <Button className='flex justify-center w-full' type='submit'>Submit</Button>
       </div>
     </form>
   );

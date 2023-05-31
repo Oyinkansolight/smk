@@ -7,6 +7,7 @@ import { BarChart, StreamChart } from '@/components/charts';
 import { CircularCounter } from '@/components/counter';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { InstitutionSlider } from '@/components/sliders';
+import { ADMIN_ROUTES } from '@/constant/routes';
 import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
 import commaNumber from 'comma-number';
 import { GoChevronRight } from 'react-icons/go';
@@ -74,19 +75,22 @@ const Page = () => {
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
       <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px]'>
         <CountCard
-          count={data?.Total_Students ?? 0}
-          title='Total Students'
           variant='primary'
+          title='Total Students'
+          url={ADMIN_ROUTES.ALL_STUDENTS}
+          count={data?.Total_Students ?? 0}
         />
         <CountCard
-          count={data?.Total_Staff ?? 0}
-          title='Total Staff'
           variant='secondary'
+          title='Total Staff'
+          url={ADMIN_ROUTES.ALL_STAFF}
+          count={data?.Total_Staff ?? 0}
         />
         <CountCard
-          count={data?.Total_Grades ?? 0}
-          title='Total Grades'
           variant='tertiary'
+          title='Total Grades'
+          url={ADMIN_ROUTES.ALL_GRADES}
+          count={data?.Total_Grades ?? 0}
         />
       </div>
 
