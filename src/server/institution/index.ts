@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
+import { PaginationParams } from '@/types';
 import { Student, Subject } from '@/types/institute';
 import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 
 export interface CreateInstitutionParams {
   instituteName?: string;
@@ -129,14 +131,14 @@ export function useGetStudentsList() {
   return query;
 }
 
-export function useGetTeachersList() {
+export function useGetTeachersList(params?: PaginationParams) {
   const query = useQuery({
     queryKey: 'get_teachers_list',
     queryFn: async () => {
       try {
-        const d = await request.get(
-          '/v1/government/teachers/get-staffs?limit=100'
-        );
+        const d = await request.get('/v1/government/teachers/get-staffs', {
+          params,
+        });
         return d.data.data.data as PaginatedData<Staff>;
       } catch (error) {
         logger(error);

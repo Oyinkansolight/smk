@@ -11,21 +11,39 @@ import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetai
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { getErrMsg } from '@/server';
+import { useGetTeachersList } from '@/server/institution';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 const Page = () => {
+  const router = useRouter();
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
-  const router = useRouter();
+  const p = useSearchParams();
+  const { data, error, isLoading } = useGetTeachersList({
+    id: p?.get('staff'),
+  });
+
+  const staff = data?.data[0];
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
+
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
-        image='/images/teacher_1.png'
-        name='Staff Name'
+        image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
+        name={`${(staff?.user ?? [])[0]?.firstName} ${
+          (staff?.user ?? [])[0]?.lastName
+        }`}
         school='Avril Price School'
         id=''
         student={false}

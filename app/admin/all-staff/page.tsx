@@ -150,7 +150,7 @@ const AllStudent = () => {
           </tr>
           {data?.data.map((v, i) => (
             <tr
-              onClick={() => router.push('/admin/staff')}
+              onClick={() => router.push(`/admin/staff?staff=${v.id}`)}
               className='h-14 border-y cursor-pointer'
               key={i}
             >

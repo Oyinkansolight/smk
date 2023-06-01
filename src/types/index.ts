@@ -37,6 +37,7 @@ export interface InviteAdminParams {
 }
 
 export interface PaginationParams {
+  id?: any;
   limit?: number;
   page?: number;
 }
