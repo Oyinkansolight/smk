@@ -1,21 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { getErrMsg } from '@/server';
+import { useUpdateStaff } from '@/server/government/staff';
+import { Staff } from '@/types/institute';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { RiImageAddFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 export default function TeacherBioDetails({
   isEditing,
   setIsEditing,
+  initStaff,
 }: {
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
+  initStaff?: Staff;
 }) {
-  const { control, handleSubmit } = useForm();
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const onSubmit = (data: any) => {
+  const { control, setValue, handleSubmit } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const update = useUpdateStaff();
+  const onSubmit = async (data: any) => {
+    if (initStaff?.id) {
+      setIsLoading(true);
+      try {
+        await update.mutateAsync({
+          email: data.studentEmail,
+          id: initStaff?.id,
+          phoneNumber: data.studentPhone,
+          firstName: (data.fullName as string).split(' ')[0],
+          lastName: (data.fullName as string).split(' ')[1],
+        });
+      } catch (error) {
+        toast.error(getErrMsg(error));
+      } finally {
+        setIsLoading(false);
+      }
+    }
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    console.log('Student Changed', initStaff);
+    if (initStaff) {
+      setValue('email', (initStaff?.user ?? [])[0]?.email);
+      setValue('phone', (initStaff?.user ?? [])[0]?.phoneNumber);
+      setValue('gender', initStaff?.gender);
+      setValue(
+        'fullName',
+        `${(initStaff?.user ?? [])[0]?.firstName} ${
+          (initStaff?.user ?? [])[0]?.lastName
+        }`
+      );
+      setValue('dateOfBirth', initStaff.dob);
+      setValue('address', (initStaff?.user ?? [])[0]?.address);
+      setValue('school', initStaff?.institution?.instituteName);
+    }
+  }, [initStaff, setValue]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
