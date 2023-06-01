@@ -11,22 +11,38 @@ import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { getErrMsg } from '@/server';
+import { useGetStudentList } from '@/server/government/student';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
-
+import { toast } from 'react-toastify';
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const router = useRouter();
+  const p = useSearchParams();
+  const { data, error, isLoading } = useGetStudentList({
+    id: p?.get('id'),
+  });
+
+  const student = data?.data[0];
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/test_student.png'
-        name='Akani Egbherve'
+        name={`${(student?.user ?? [])[0]?.firstName} ${
+          (student?.user ?? [])[0]?.lastName
+        }`}
         school='Avril Price School'
         id=''
         student
@@ -131,6 +147,7 @@ const Page = () => {
                 <StudentBioDetailsAlt
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
+                  initStudent={student}
                 />
               </div>
             </>
@@ -198,7 +215,7 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <>
-              <StudentLibrary/>
+              <StudentLibrary />
             </>
           )}
         </div>

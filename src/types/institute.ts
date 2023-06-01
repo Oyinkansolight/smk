@@ -9,15 +9,16 @@ export interface Subject {
 }
 
 export interface Student {
-  id: number;
-  gender: string;
-  dob: Date;
-  height: string;
-  weight: string;
-  parentName: string;
-  parentOccupation: string;
-  user: User[];
-  institution: any;
+  id?: number;
+  gender?: string;
+  dob?: Date;
+  height?: string;
+  weight?: string;
+  parentName?: string;
+  parentOccupation?: string;
+  user?: User[];
+  institution?: Institution;
+  class?: any;
 }
 
 export interface User {

@@ -1,26 +1,73 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { getErrMsg } from '@/server';
+import { useUpdateStudent } from '@/server/government/student';
+import { Student } from '@/types/institute';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { RiImageAddFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 export default function StudentBioDetailsAlt({
   isEditing,
   setIsEditing,
+  initStudent,
 }: {
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
+  initStudent?: Student;
 }) {
-  const { control, handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
+  const { control, setValue, handleSubmit } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
+  const update = useUpdateStudent();
+  const onSubmit = async (data: any) => {
+    if (initStudent?.id) {
+      setIsLoading(true);
+      try {
+        await update.mutateAsync({
+          email: data.studentEmail,
+          id: initStudent?.id,
+          phoneNumber: data.studentPhone,
+          firstName: (data.fullName as string).split(' ')[0],
+          lastName: (data.fullName as string).split(' ')[1],
+        });
+      } catch (error) {
+        toast.error(getErrMsg(error));
+      } finally {
+        setIsLoading(false);
+      }
+    }
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    console.log('Student Changed', initStudent);
+    if (initStudent) {
+      setValue('studentEmail', (initStudent?.user ?? [])[0]?.email);
+      setValue('email', (initStudent?.user ?? [])[0]?.email);
+      setValue('studentPhone', (initStudent?.user ?? [])[0]?.phoneNumber);
+      setValue('gender', initStudent?.gender);
+      setValue('parentName', initStudent?.parentName);
+      setValue('parentOccupation', initStudent?.parentOccupation);
+      setValue(
+        'fullName',
+        `${(initStudent?.user ?? [])[0]?.firstName} ${
+          (initStudent?.user ?? [])[0]?.lastName
+        }`
+      );
+      setValue('dateOfBirth', initStudent.dob);
+      setValue('address', (initStudent?.user ?? [])[0]?.address);
+      setValue('school', initStudent?.institution?.instituteName);
+    }
+  }, [initStudent, setValue]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         {isEditing && (
           <div className='flex justify-end my-5'>
-            <Button type='submit' variant='secondary'>
+            <Button disabled={isLoading} type='submit' variant='secondary'>
               Update Changes
             </Button>
           </div>

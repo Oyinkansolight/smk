@@ -19,6 +19,7 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+
 const Page = () => {
   const router = useRouter();
   const [tabIdx, setTabIdx] = useState(0);
@@ -26,8 +27,10 @@ const Page = () => {
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();
   const { data, error, isLoading } = useGetTeachersList({
-    id: p?.get('staff'),
+    id: p?.get('id'),
   });
+
+  console.log(data);
 
   const staff = data?.data[0];
 
