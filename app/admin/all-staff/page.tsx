@@ -4,9 +4,53 @@
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import { BasicSearch } from '@/components/search';
 import ROUTES from '@/constant/routes';
+import { getErrMsg } from '@/server';
+import { useGetTeachersList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -53,6 +97,12 @@ const AllStudent = () => {
   //   setstudents(result);
   // };
   const router = useRouter();
+  const { data, error, isLoading } = useGetTeachersList();
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
   return (
     <section className='md:px-[60px] px-5 py-6'>
       <Link href={ROUTES.ADMIN}>
@@ -90,7 +140,7 @@ const AllStudent = () => {
         </div>
       </div>
       <div className='bg-white'>
-        <table className='w-full'>
+        {isLoading ? <div>Loading...</div> : <table className='w-full'>
           <tr className='bg-[#F6F9FC] border-b-2 h-14'>
             <th className='text-start'>Number</th>
             <th className='text-start'>Name</th>
@@ -98,24 +148,24 @@ const AllStudent = () => {
             <th className='text-start'>Date of Posted to Current School</th>
             <th className='text-start'>Status</th>
           </tr>
-          {staff.map((v, i) => (
+          {data?.data.map((v, i) => (
             <tr
               onClick={() => router.push('/admin/staff')}
               className='h-14 border-y cursor-pointer'
               key={i}
             >
-              <td>#{v.n}</td>
-              <td>{v.name}</td>
-              <td>{v.type}</td>
-              <td>{v.date}</td>
+              <td>#{v.id}</td>
+              <td>{(v?.user ?? [])[0].firstName}</td>
+              <td>{v.staffType}</td>
+              <td>{(v?.employmentHistory ?? [])[0].employmentYear}</td>
               <td>
                 <div className='flex justify-start'>
-                  <OnlineStatus status={v.status as any} />
+                  <OnlineStatus status="online" />
                 </div>
               </td>
             </tr>
           ))}
-        </table>
+        </table>}
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}

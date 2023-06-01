@@ -4,10 +4,10 @@ import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import UploadDocument from '@/components/views/admin/Library/Files';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
+import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -197,7 +198,7 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <>
-              <UploadDocument />
+              <StudentLibrary/>
             </>
           )}
         </div>

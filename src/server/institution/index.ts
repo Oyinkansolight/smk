@@ -2,6 +2,8 @@
 import logger from '@/lib/logger';
 import request from '@/server';
 import { Student, Subject } from '@/types/institute';
+import { Staff } from '@/types/institute';
+import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface CreateInstitutionParams {
@@ -135,7 +137,7 @@ export function useGetTeachersList() {
         const d = await request.get(
           '/v1/government/teachers/get-staffs?limit=100'
         );
-        return d.data.data.data as any;
+        return d.data.data.data as PaginatedData<Staff>;
       } catch (error) {
         logger(error);
         throw error;

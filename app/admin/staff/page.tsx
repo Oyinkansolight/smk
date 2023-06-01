@@ -4,11 +4,11 @@ import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import UploadDocument from '@/components/views/admin/Library/Files';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
+import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
 import { useRouter } from 'next/navigation';
@@ -197,7 +197,7 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <>
-              <UploadDocument />
+              <TeacherLibrary />
             </>
           )}
         </div>

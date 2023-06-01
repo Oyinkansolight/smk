@@ -35,18 +35,19 @@ export interface User {
 }
 
 export interface Staff {
-  id: number;
-  gender: string;
-  dob: Date;
-  height: string;
-  weight: string;
-  staffType: string;
-  teacherEducation: TeacherEducation[];
-  employmentHistory: EmploymentHistory[];
-  document: Document;
-  class: any[];
-  subject: any[];
-  user: User[];
+  id?: number;
+  gender?: string;
+  dob?: string;
+  height?: string;
+  weight?: string;
+  staffType?: string;
+  institution?: Institution;
+  teacherEducation?: TeacherEducation[];
+  employmentHistory?: EmploymentHistory[];
+  document?: Document;
+  class?: any[];
+  subject?: any[];
+  user?: User[];
 }
 
 export interface Document {
@@ -65,7 +66,7 @@ export interface EmploymentHistory {
   employerName: string;
   role: string;
   employmentType: string;
-  employmentYear: Date;
+  employmentYear: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -115,4 +116,20 @@ export interface InstituteClass {
   staff: null;
   subjects: any[];
 }
+
+interface Institution {
+  id?: number;
+  instituteName?: string;
+  instituteEmail?: string;
+  instituteLogo?: null;
+  instituteType?: string;
+  instituteAddress?: null;
+  instituteLat?: null;
+  instituteLong?: null;
+  isOnboardingCompleted?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+
 
