@@ -1,6 +1,6 @@
 import request from '@/server';
 import { PaginationParams } from '@/types';
-import { Staff, Student } from '@/types/institute';
+import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -42,8 +42,8 @@ export function useUpdateStaff() {
         })
       ).data.data.data,
     onSettled: (data) => {
-      console.log('Staff Id: ', data);
-      client.refetchQueries(`get_staff_list_${data.staff.id ?? ''}`);
+      console.log('Staff Id: ', data?.id);
+      client.refetchQueries(`get_staff_list_${data?.id ?? ''}`);
     },
   });
   return mutation;

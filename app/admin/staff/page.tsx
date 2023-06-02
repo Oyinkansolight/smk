@@ -30,8 +30,6 @@ const Page = () => {
     id: p?.get('id'),
   });
 
-  console.log(data);
-
   const staff = data?.data[0];
 
   useEffect(() => {
@@ -151,6 +149,7 @@ const Page = () => {
                 <TeacherBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
+                  initStaff={staff}
                 />
               </div>
             </>

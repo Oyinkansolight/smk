@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { RiImageAddFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+
 export default function TeacherBioDetails({
   isEditing,
   setIsEditing,
@@ -33,6 +34,7 @@ export default function TeacherBioDetails({
           lastName: (data.fullName as string).split(' ')[1],
         });
       } catch (error) {
+        console.log(error);
         toast.error(getErrMsg(error));
       } finally {
         setIsLoading(false);
@@ -42,7 +44,7 @@ export default function TeacherBioDetails({
   };
 
   useEffect(() => {
-    console.log('Student Changed', initStaff);
+    console.log('Staff Changed', initStaff);
     if (initStaff) {
       setValue('email', (initStaff?.user ?? [])[0]?.email);
       setValue('phone', (initStaff?.user ?? [])[0]?.phoneNumber);
