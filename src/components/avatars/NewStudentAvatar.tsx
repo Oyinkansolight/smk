@@ -3,7 +3,7 @@ import Avatar from '~/svg/avatar.svg';
 
 export default function NewStudentAvatar() {
   return (
-    <div className='flex min-w-max rounded-full gap-2 items-center border bg-[#FFF6E7] py-1 px-2'>
+    <div className='flex min-w-max text-xs rounded-full gap-2 items-center border bg-[#FFF6E7] py-1 px-1 pr-8'>
       <Avatar className='h-10 w-10' />
       <div className='font-bold flex flex-col'>
         <div className='text-[#615E83]'>Johny Makelele</div>

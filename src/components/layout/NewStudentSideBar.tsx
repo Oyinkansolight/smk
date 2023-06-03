@@ -40,7 +40,7 @@ const items = [
 ];
 export default function NewStudentSidebar() {
   return (
-    <div className='flex bg-[#f5f9ff] flex-col gap-2 w-32 items-center py-4'>
+    <div className='flex bg-[#f5f9ff] flex-col gap-2 w-40 items-center py-4'>
       {items.map((v, i) => (
         <div
           key={i}

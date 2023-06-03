@@ -1,3 +1,4 @@
+import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
 export default function NewStudentSmallTimetable() {
@@ -8,7 +9,8 @@ export default function NewStudentSmallTimetable() {
           23 May, 2023
         </div>
       </div>
-      <div>
+      <div className='h-4' />
+      <div className='flex gap-4 flex-col'>
         {Array(3)
           .fill(0)
           .map((v, i) => (
@@ -37,9 +39,19 @@ function TimetableItem({
   img: string;
 }) {
   return (
-    <div className='rounded-t-lg p-5 bg-[#FFFCF8] border-b-2 flex'>
+    <div
+      className={clsxm(
+        'rounded-t-lg p-5 relative bg-[#FFFCF8] border-b-2 flex',
+        isCurrent && 'border border-blue-500 bg-[#EFF2F7] shadow-xl'
+      )}
+    >
+      {isCurrent && (
+        <div className='py-1 px-3 rounded text-white bg-[#3361FF] absolute -top-2 left-0'>
+          Current Period
+        </div>
+      )}
       <div className='text-bold text-xl flex-1'>
-        <div>{title}</div>
+        <div className={clsxm(isCurrent && 'text-xl')}>{title}</div>
         <div className='text-[#808080]'>{subtitle}</div>
       </div>
       <div>

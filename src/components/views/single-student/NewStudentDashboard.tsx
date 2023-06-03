@@ -1,11 +1,11 @@
 import StudentActionCard from '@/components/cards/StudentActionCard';
+import NewStudentClock from '@/components/views/single-student/NewStudentClock';
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
 
-
 export default function NewStudentDashboard() {
   return (
-    <div className='flex'>
+    <div className='flex gap-8'>
       <div className='w-full flex flex-col gap-8'>
         <div className='p-4 rounded-xl border bg-[#FAFAFA]'>
           <div className='font-bold text-xl'>Next Period</div>
@@ -26,9 +26,11 @@ export default function NewStudentDashboard() {
           </div>
         </div>
       </div>
-      <div className='max-w-sm w-full'>
+
+      <div className='max-w-sm w-full flex flex-col gap-8'>
+        <NewStudentClock />
         <div className='p-4 rounded-xl border bg-[#FAFAFA]'>
-          <div className='font-bold text-xl'>Today's Timetable</div>
+          <div className='font-bold text-xl '>Today's Timetable</div>
           <NewStudentSmallTimetable />
         </div>
       </div>
