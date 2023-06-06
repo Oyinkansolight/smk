@@ -11,7 +11,7 @@ export default function AssignmentQuestionView({
 }) {
   const [selectedOption, setSelectedOption] = useState<number>();
   return (
-    <div>
+    <div className='bg-white px-4 py-[18px] rounded-[9px]'>
       <div className='font-bold text-xl'>{question}</div>
       <div className='h-8' />
       <div className='grid grid-cols-2 gap-4'>

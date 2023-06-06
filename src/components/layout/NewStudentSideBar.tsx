@@ -30,23 +30,19 @@ const items = [
     label: 'Grade Book',
   },
   {
-    img: '/images/sidebar-icons/Dashboard-3.png',
-    label: 'School Fees',
-  },
-  {
     img: '/images/sidebar-icons/Dashboard-4.png',
     label: 'Settings',
   },
 ];
 export default function NewStudentSidebar() {
   return (
-    <div className='flex bg-[#f5f9ff] flex-col gap-2 w-40 items-center py-4'>
+    <div className='flex bg-[#f5f9ff] flex-col gap-8 w-40 items-center justify-center py-4 border-r'>
       {items.map((v, i) => (
         <div
           key={i}
-          className='flex flex-col gap-1 text-[#CACACA] hover:text-extrabold hover:text-[#3361FF] items-center hover:border hover:bg-[#F5F8FF] h-16 w-24 justify-center rounded-lg cursor-pointer border-[#3361FF]'
+          className='flex flex-col whitespace-nowrap p-6 gap-1 text-[#CACACA] hover:text-extrabold hover:text-[#3361FF] items-center hover:border hover:bg-[#F5F8FF] h-16 w-24 justify-center rounded-lg cursor-pointer border-[#3361FF]'
         >
-          <Image src={v.img} alt={v.img} height={30} width={30} />
+          <Image src={v.img} alt={v.img} height={49} width={52} />
           <div className=' text-sm'>{v.label}</div>
         </div>
       ))}

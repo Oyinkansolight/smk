@@ -83,7 +83,7 @@ export default function StudentTeacherProfileCard({
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,
-            label: 'Documents',
+            label: 'Library',
           },
         ]}
       />

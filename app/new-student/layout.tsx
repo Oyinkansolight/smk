@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html>
       <head />
-      <div className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
+      <div className='flex h-screen min-h-screen flex-col'>
         <NewHeader />
         <div className='flex flex-1 flex-row overflow-y-hidden'>
           <NewStudentSidebar />
