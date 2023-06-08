@@ -1,6 +1,7 @@
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
+
 export default function SmallTeacherSubjectCard({
   isNext,
   subject,
@@ -8,6 +9,7 @@ export default function SmallTeacherSubjectCard({
   tasks,
   className,
   onClick,
+  showTasks = true,
 }: {
   isNext: boolean;
   subject: string;
@@ -15,6 +17,7 @@ export default function SmallTeacherSubjectCard({
   tasks: number;
   className?: string;
   onClick?: () => void;
+  showTasks?: boolean;
 }) {
   return (
     <div
@@ -43,16 +46,18 @@ export default function SmallTeacherSubjectCard({
         />
       </div>
       <div className='font-bold text-2xl'>{subject}</div>
-      <div className='w-full p-2'>
-        <div className='w-full h-[90px] rounded-lg bg-white p-4'>
-          <div>
-            <span className='font-bold'>{assignmentDue}</span> Assignment Due
-          </div>
-          <div>
-            <span className='font-bold'>{tasks}</span> Tasks This Week
+      {showTasks && (
+        <div className='w-full p-2'>
+          <div className='w-full h-[90px] rounded-lg bg-white p-4'>
+            <div>
+              <span className='font-bold'>{assignmentDue}</span> Assignment Due
+            </div>
+            <div>
+              <span className='font-bold'>{tasks}</span> Tasks This Week
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

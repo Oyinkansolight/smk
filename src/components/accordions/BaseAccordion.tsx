@@ -3,14 +3,18 @@ import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { BiChevronDown } from 'react-icons/bi';
 
+
 export default function BaseAccordion({
   title,
   arrowIcon = <BiChevronDown className='h-6 w-6' />,
   className,
   children,
+  titleClassName,
   length = 500,
 }: {
   title: string | JSX.Element;
+  titleClassName?: string;
+  bodyClassName?: string;
   children: JSX.Element;
   arrowIcon?: JSX.Element;
   length?: number;
@@ -21,7 +25,10 @@ export default function BaseAccordion({
     <div className={clsxm(className)}>
       <div
         onClick={() => setExpanded(!expanded)}
-        className='flex flex-row-reverse justify-between cursor-pointer items-center p-4'
+        className={clsxm(
+          'flex flex-row-reverse justify-between cursor-pointer items-center p-4',
+          titleClassName
+        )}
       >
         <div
           className={clsxm(

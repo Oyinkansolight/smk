@@ -77,7 +77,7 @@ const Sidebar = () => {
           open={false}
           icon={<FaRegIdCard className='#C3CAD9' />}
           title='Grades'
-          href='/teacher'
+          href='/teacher/grades'
         />
 
         <SideBarButton
