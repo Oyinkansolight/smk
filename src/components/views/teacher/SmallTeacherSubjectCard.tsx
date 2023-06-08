@@ -20,7 +20,7 @@ export default function SmallTeacherSubjectCard({
     <div
       onClick={onClick}
       className={clsxm(
-        'flex flex-col items-center max-w-xs gap-2 cursor-pointer self-center w-full',
+        'flex flex-col items-center w-[240px] h-[284px] gap-2 cursor-pointer self-center rounded-lg',
         className
       )}
     >
@@ -44,7 +44,7 @@ export default function SmallTeacherSubjectCard({
       </div>
       <div className='font-bold text-2xl'>{subject}</div>
       <div className='w-full p-2'>
-        <div className='w-full h-24 rounded-lg bg-white p-4'>
+        <div className='w-full h-[90px] rounded-lg bg-white p-4'>
           <div>
             <span className='font-bold'>{assignmentDue}</span> Assignment Due
           </div>

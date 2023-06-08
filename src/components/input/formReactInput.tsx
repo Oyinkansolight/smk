@@ -53,6 +53,7 @@ type propType = {
   validation?: RegisterOptions<any>;
   name?: string;
   helper?: HelperProps;
+  className?: string;
 };
 
 const InputReactForm = ({
@@ -64,6 +65,7 @@ const InputReactForm = ({
   validation,
   name,
   helper,
+  className,
 }: propType) => {
   return (
     <div className=''>
@@ -73,7 +75,10 @@ const InputReactForm = ({
             {label}
           </label>
         </div>
-        <div className={clsxm('mt-1 w-full border p-2 rounded')}>
+        <div className={clsxm(
+          className,
+          'mt-1 w-full border p-2 rounded'
+        )}>
           <input
             disabled={disabled}
             type={type}

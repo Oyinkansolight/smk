@@ -34,9 +34,7 @@ export default function GridTabBar({
               : 'text-[#C3CAD9]',
             selected === i && variant === 'primary' && 'text-[#3361FF]',
             selected === i && variant === 'secondary' && 'text-[#008146]',
-            selected === i &&
-              variant === 'secondary' &&
-              'border border-[#008146]'
+            selected === i && variant === 'secondary' && 'border'
           )}
         >
           <div>{item.icon}</div>

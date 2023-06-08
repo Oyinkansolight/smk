@@ -46,7 +46,7 @@ export default function Page() {
             <DocPage pageNumber={currentPage} />
           </Document>
         </div>
-        <div className='bg-white p-4 flex flex-col gap-4 rounded-lg layout'>
+        <div className='bg-white p-4 flex flex-col gap-4 rounded-lg max-w-[318px] w-full'>
           <div className='text-xl font-bold'>Lesson Tasks</div>
           <div className='flex justify-between rounded-md bg-[#F7F8FA] p-5'>
             <div className=''>Home Work</div>

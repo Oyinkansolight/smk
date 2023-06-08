@@ -13,7 +13,7 @@ export default function MultiChoiceQuestion({
   const options: (keyof Option)[] = ['a', 'b', 'c', 'd'];
   return (
     <BaseAccordion
-      title='Question 3'
+      title='Question'
       length={250}
       className='bg-[#EFF7F6] rounded-lg'
     >

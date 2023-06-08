@@ -27,7 +27,7 @@ type propType = {
   helper?: HelperProps;
 };
 
-const Input = ({
+const Select = ({
   label,
   formValue,
   setFormValue,
@@ -58,7 +58,6 @@ const Input = ({
 
             {options.map((item, id) => (
               <option key={id} value={item} selected={formValue === item}>
-                {' '}
                 {item}
               </option>
             ))}
@@ -74,4 +73,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Select;

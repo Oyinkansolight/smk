@@ -18,6 +18,10 @@ export interface UpdateFileSubjectParams {
   schoolType: string;
 }
 
+export interface NewFolderParams {
+  folderName: string;
+}
+
 export function useUploadFile() {
   const mutation = useMutation({
     mutationKey: 'upload-file',
@@ -54,6 +58,23 @@ export function useGetAllFiles(type?: string) {
   return query;
 }
 
+export function useGetAllFolders() {
+  const query = useQuery({
+    queryKey: 'get_all_folders',
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/government/library/get-folders');
+        return d.data.data.data;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  return query;
+}
+
 export function useAssignSubjectsToFile() {
   const client = useQueryClient();
 
@@ -64,6 +85,23 @@ export function useAssignSubjectsToFile() {
         '/v1/government/library/assign-to-subject',
         params
       );
+    },
+    onSettled: () => {
+      client.refetchQueries('get_all_files');
+    },
+  });
+  return mutation;
+}
+
+export function useCreateFolder(name: string) {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'create-folder',
+    mutationFn: async () => {
+      return await request.post('/v1/government/library/create-folder', {
+        folderName: name,
+      });
     },
     onSettled: () => {
       client.refetchQueries('get_all_files');

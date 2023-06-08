@@ -14,37 +14,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -60,6 +31,8 @@ const AddStaff = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
+  const [loading, setloading] = useState(false);
+
   const [publishData, setpublishData] = useState(null);
 
   const [imageName, setImageName] = useState<string>('');
@@ -155,15 +128,18 @@ const AddStaff = () => {
       setpublishData(data);
 
       try {
+        setloading(true);
         const response = await handleCreateStaff.mutateAsync(data);
 
         if (response) {
           toast.success('Staff Added successful');
+          setloading(false);
 
           //2 Second - Open Success Modal
           setisOpen(true);
         }
       } catch (error) {
+        setloading(false);
         toast.error((error as Error).message);
       }
     }
@@ -277,7 +253,7 @@ const AddStaff = () => {
               </button>
               {stage <= 6 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
-                  Next
+                  {loading ? <ImSpinner2 className='animate-spin' /> : 'Next'}
                 </button>
               )}
               {stage === 7 && (

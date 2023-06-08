@@ -7,6 +7,7 @@ import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoDocumentOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import Calendar_icon from '~/svg/calendar_icon.svg';
 import PieChart from '~/svg/chart_pie_slice.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
@@ -92,6 +93,20 @@ const AdminSidebar = () => {
           title='Students'
           href='/super-admin/all-student'
           active={routeDetails && routeDetails.includes('student') && true}
+        />
+        <SideBarButton
+          open={open}
+          icon={
+            <Calendar_icon
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
+          title='Academic Timetable'
+          href='/super-admin/academic-calendar'
+          active={routeDetails && routeDetails.includes('calendar') && true}
         />
         <SideBarButton
           open={open}

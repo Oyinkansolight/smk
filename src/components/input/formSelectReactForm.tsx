@@ -1,5 +1,6 @@
 'use client';
 
+import clsxm from '@/lib/clsxm';
 import { RegisterOptions, UseFormRegister } from 'react-hook-form';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -23,6 +24,7 @@ type propType = {
   validation?: RegisterOptions<any>;
   name?: string;
   helper?: HelperProps;
+  className?: string;
 };
 
 const ReactFormSelect = ({
@@ -32,6 +34,7 @@ const ReactFormSelect = ({
   validation,
   name,
   helper,
+  className,
 }: propType) => {
   return (
     <div className=''>
@@ -41,7 +44,10 @@ const ReactFormSelect = ({
             {label}
           </label>
         </div>
-        <div className='mt-1 w-full border p-2 rounded'>
+        <div className={clsxm(
+          className,
+          'mt-1 w-full border p-2 rounded'
+        )}>
           <select
             id=''
             className='w-full border-none outline-none bg-transparent  text-gray-400'

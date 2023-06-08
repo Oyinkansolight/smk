@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import BasicModal from '@/components/modal/Basic';
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
-import { useAssignSubjectsToFile } from '@/server/library';
+import logger from '@/lib/logger';
+import { useAssignSubjectsToFile, useGetAllFolders } from '@/server/library';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import { useForm } from 'react-hook-form';
+import { BiFolderOpen } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import User from '~/svg/user1.svg';
-import logger from '@/lib/logger';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -35,6 +38,10 @@ const UploadDocument = ({
   const [loading, setLoading] = useState(false);
   // const [path, setPath] = useState<string>();
   const [url, setUrl] = useState<string | any>();
+  const { data: folderData } = useGetAllFolders();
+
+  console.log(folderData);
+
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -241,6 +248,77 @@ const UploadDocument = ({
             <div className='col-span-2'>Date Added</div>
             <div className='col-span-2'>Size</div>
           </div>
+
+          {/* Mapping for folders */}
+          {folderData &&
+            folderData.length > 0 &&
+            folderData.map((item: any, idx: number) => (
+              <div
+                key={idx}
+                className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+              >
+                <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
+                  <div>
+                    <BiFolderOpen className='h-6 w-6' />
+                  </div>
+                  <h2 className='text-sm font-medium'>{item?.folderName}</h2>
+                </div>
+                <div className='col-span-2'>
+                  -
+                </div>
+                <div className='col-span-2'>{item?.createdBy} </div>
+                <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
+                  <User alt='avril' className='h-8 w-8 rounded-full' />
+                  <h2 className='text-sm font-normal'>
+                    {moment(item?.createdAt).format('ll')}
+                  </h2>
+                </div>
+                <div className='col-span-2 justify-between pr-5 flex items-center'>
+                  <div>{item?.size ?? '-'}</div>
+                  <button
+                    onClick={() => {
+                      setAction(idx + 1);
+                    }}
+                    className='relative'
+                  >
+                    <BsThreeDotsVertical className='text-lg' />
+
+                    {action == idx + 1 && (
+                      <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                          Manage Access
+                        </button>
+                        <button
+                          onClick={() => {
+                            setisAssign(!isAssign);
+                            setFileId(item?.id);
+                          }}
+                          className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                        >
+                          Assign to a Subject
+                        </button>
+                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                          Rename
+                        </button>
+                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </button>
+                  {action && (
+                    <div
+                      className='fixed inset-0 z-[1]'
+                      onClick={() => {
+                        setAction(null);
+                      }}
+                    ></div>
+                  )}
+                </div>
+              </div>
+            ))}
+
+          {/* Mapping for files */}
           {content &&
             content.length > 0 &&
             content.map((item: any, idx: number) => (
@@ -252,7 +330,8 @@ const UploadDocument = ({
                   <div>
                     <FileContent className='h-6 w-6' />
                   </div>
-                  <BasicModal
+                  <h2 className='text-sm font-medium'>{item?.filename}</h2>
+                  {/* <BasicModal
                     className='!w-[40vw] h-[80vh]'
                     content={
                       <DocViewer
@@ -271,7 +350,7 @@ const UploadDocument = ({
                     }
                   >
                     <h2 className='text-sm font-medium'>{item?.filename}</h2>
-                  </BasicModal>
+                  </BasicModal> */}
                 </div>
                 <div className='col-span-2'>
                   {item?.subject?.length > 0 ? item?.subject[0].subject : '-'}{' '}

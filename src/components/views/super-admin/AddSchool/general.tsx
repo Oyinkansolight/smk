@@ -8,6 +8,10 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface BiodataProps {
   schoolName: string | number;
   setSchoolName: (v: string | number) => void;

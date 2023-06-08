@@ -11,7 +11,7 @@ export function useGetStudentList(params: PaginationParams) {
       const d = await request.get('/v1/government/students/get-students', {
         params,
       });
-      console.log(d.data.data.data);
+
       return d.data.data.data as PaginatedData<Student>;
     },
   });

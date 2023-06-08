@@ -6,6 +6,7 @@ import { DashboardOverview } from '@/types';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
+import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 
 const StreamChart = dynamic(() => import('../../charts/Stream'), {
   ssr: false,
@@ -96,8 +97,8 @@ export default function TeacherDashboardView({
               <div className='h4'>Unread Messages</div>
               <div className='absolute w-[6px] h-[6px] bg-[#E5002B] rounded-full top-0 ml-40' />
             </div>
-            <NextClassCard />
-            <NextClassCard isActive />
+            <MessageCard />
+            <MessageCard />
             <div className='font-bold text-right'>See all</div>
           </BasicCard>
         </div>
@@ -111,6 +112,10 @@ export default function TeacherDashboardView({
           <AssignmentsCard />
           <div className='font-bold text-right'>View all</div>
         </BasicCard>
+      </div>
+
+      <div className='mt-[23px]'>
+        <AcademicCalendar />
       </div>
     </div>
   );
@@ -206,6 +211,25 @@ const AssignmentsCard = ({ isActive = false, today = false }) => {
             <div className='font-semibold'>29</div>
           </div>
         )}
+      </div>
+    </BasicCard>
+  );
+};
+
+const MessageCard = () => {
+  return (
+    <BasicCard
+      className={clsxm(
+        '!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]'
+      )}
+    >
+      <div className='flex flex-row justify-between items-center'>
+        <div className='flex flex-col gap-2'>
+          <div className='text-[10px] leading-[12px] font-bold'>Tola Ogunjimi</div>
+          <div className='text-[10px] leading-[12px]'>I am writing to inform you that my assignment will...</div>
+        </div>
+
+        <div>3 hrs ago</div>
       </div>
     </BasicCard>
   );
