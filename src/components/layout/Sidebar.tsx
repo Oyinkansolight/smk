@@ -72,7 +72,7 @@ const Sidebar = () => {
           open={false}
           icon={<FaRegIdCard className='#C3CAD9' />}
           title='Assignment'
-          href='/teacher/#'
+          href='/teacher/assignment'
         />
 
         <SideBarButton
