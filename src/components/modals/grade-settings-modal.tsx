@@ -3,6 +3,7 @@ import Button from '@/components/buttons/Button';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
+import ReactSelect from 'react-select';
 
 export default function GradeSettingsModal({
   children,
@@ -63,102 +64,81 @@ export default function GradeSettingsModal({
 }
 
 function GradeSettingsView() {
+  const items = [
+    { title: 'Continuous assessment (CA) 1', percent: 15 },
+    { title: 'Continuous assessment (CA) 2', percent: 15 },
+    { title: 'Examination', percent: 15 },
+  ];
+  const [count, setCount] = useState([2, 2, 2]);
   return (
     <div className='flex flex-col gap-4'>
       <div className='font-bold text-xl'>Grade Settings</div>
-      <AccordionAlt
-        titleClassName='bg-[#EFF7F6]'
-        length={100}
-        title={
-          <div className='flex items-center justify-between'>
-            <div className='flex gap-10'>
-              <div>Continuous Assessment(CA) 2</div>
-              <div>15%</div>
-            </div>
-            <Button
-              variant='outline'
-              className='border-blue-500 text-xs text-blue-500 hover:bg-blue-100 bg-white'
-            >
-              Add Assessment
-            </Button>
-          </div>
-        }
-      >
-        <div className='my-4 mx-4 flex flex-col gap-4'>
-          {Array(2)
-            .fill(0)
-            .map((v, i) => (
-              <div key={i} className='flex gap-12 text-xs'>
-                <div>Class Work</div>
-                <div>50%</div>
-                <div className='flex-1' />
-                <FiEdit3 className='h-5 w-5 text-[#746D69]' />
+      {items.map((v, i) => (
+        <AccordionAlt
+          key={i}
+          titleClassName='bg-[#EFF7F6]'
+          length={56 * count[i] + 100}
+          title={
+            <div className='flex items-center justify-between'>
+              <div className='grid w-full grid-cols-2 gap-12'>
+                <div>{v.title}</div>
+                <div>{v.percent}%</div>
               </div>
-            ))}
-        </div>
-      </AccordionAlt>
-      <AccordionAlt
-        titleClassName='bg-[#EFF7F6]'
-        length={100}
-        title={
-          <div className='flex items-center justify-between'>
-            <div className='flex gap-10'>
-              <div>Continuous Assessment(CA) 2</div>
-              <div>15%</div>
             </div>
-            <Button
-              variant='outline'
-              className='border-blue-500 text-xs text-blue-500 hover:bg-blue-100 bg-white'
-            >
-              Add Assessment
-            </Button>
-          </div>
-        }
-      >
-        <div className='my-4 mx-4 flex flex-col gap-4'>
-          {Array(2)
-            .fill(0)
-            .map((v, i) => (
-              <div key={i} className='flex gap-12 text-xs'>
-                <div>Class Work</div>
-                <div>50%</div>
-                <div className='flex-1' />
-                <FiEdit3 className='h-5 w-5 text-[#746D69]' />
-              </div>
-            ))}
-        </div>
-      </AccordionAlt>
-      <AccordionAlt
-        titleClassName='bg-[#EFF7F6]'
-        length={100}
-        title={
-          <div className='flex items-center justify-between'>
-            <div className='flex gap-10'>
-              <div>Examinations</div>
-              <div>15%</div>
+          }
+        >
+          <div className='my-4 mx-4 flex flex-col gap-4'>
+            {Array(count[i])
+              .fill(0)
+              .map((v, i) => (
+                <EditableForm key={i} />
+              ))}
+            <div>
+              <Button
+                onClick={() => {
+                  const n = [...count];
+                  n[i] = n[i] + 1;
+                  setCount(n);
+                }}
+                variant='outline'
+                className='border-blue-500 text-blue-500 hover:bg-blue-200 active:bg-blue-800'
+              >
+                Add Assessment
+              </Button>
             </div>
-            <Button
-              variant='outline'
-              className='border-blue-500 text-xs text-blue-500 hover:bg-blue-100 bg-white'
-            >
-              Add Assessment
-            </Button>
           </div>
-        }
-      >
-        <div className='my-4 mx-4 flex flex-col gap-4'>
-          {Array(2)
-            .fill(0)
-            .map((v, i) => (
-              <div key={i} className='flex gap-12 text-xs'>
-                <div>Class Work</div>
-                <div>50%</div>
-                <div className='flex-1' />
-                <FiEdit3 className='h-5 w-5 text-[#746D69]' />
-              </div>
-            ))}
-        </div>
-      </AccordionAlt>
+        </AccordionAlt>
+      ))}
+    </div>
+  );
+}
+
+function EditableForm() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [percent, setPercent] = useState('50');
+  const [category, setCategory] = useState({ label: 'Class Work' });
+  return isEditing ? (
+    <div className='flex gap-12 h-10'>
+      <ReactSelect
+        value={category}
+        onChange={(v) => setCategory({ label: v?.label ?? '' })}
+        options={[{ label: 'Class Work' }]}
+      />
+      <input
+        className='rounded border'
+        value={percent}
+        onChange={(v) => setPercent(v.currentTarget.value)}
+      />
+    </div>
+  ) : (
+    <div className='flex gap-12 text-xs h-10 items-center'>
+      <div>{category.label}</div>
+      <div>{percent}%</div>
+      <div className='flex-1' />
+      <FiEdit3
+        onClick={() => setIsEditing(true)}
+        className='h-5 w-5 text-[#746D69]'
+      />
     </div>
   );
 }
