@@ -41,22 +41,17 @@ const Sidebar = () => {
         <SideBarButton
           open={false}
           icon={<BiBookContent className='#C3CAD9' />}
-          title='Classes'
+          title='My Subjects'
           href='/teacher/classes'
         />
 
-        <SideBarButton
-          open={false}
-          icon={<BiBookContent className='#C3CAD9' />}
-          title='Messages'
-          href='/teacher'
-        />
+
 
         <SideBarButton
           open={false}
           icon={<BiBookContent className='#C3CAD9' />}
-          title='Assignments'
-          href='/teacher'
+          title='Test and Exams'
+          href='/teacher/test-and-examination'
         />
 
         <SideBarButton
@@ -76,8 +71,22 @@ const Sidebar = () => {
         <SideBarButton
           open={false}
           icon={<FaRegIdCard className='#C3CAD9' />}
-          title='Grades'
+          title='Assignment'
+          href='/teacher/#'
+        />
+
+        <SideBarButton
+          open={false}
+          icon={<FaRegIdCard className='#C3CAD9' />}
+          title='Grade Book'
           href='/teacher/grades'
+        />
+
+        <SideBarButton
+          open={false}
+          icon={<BiBookContent className='#C3CAD9' />}
+          title='Messages'
+          href='/teacher'
         />
 
         <SideBarButton

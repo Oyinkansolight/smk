@@ -1,14 +1,15 @@
 import clsxm from '@/lib/clsxm';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
+
 export default function PaginatedCounter({
   pageCount,
   currentPage,
   onChange,
 }: {
   pageCount: number;
-  currentPage: number;
-  onChange: (idx: number) => void;
+  currentPage?: number;
+  onChange?: (idx: number) => void;
 }) {
   return (
     <div className='flex justify-center gap-4 my-4'>
@@ -16,7 +17,7 @@ export default function PaginatedCounter({
         className='rounded-full border cursor-pointer bg-white h-10 w-10 flex items-center justify-center'
         onClick={() => {
           if (currentPage === 0) return;
-          onChange(currentPage - 1);
+          if (onChange) onChange((currentPage ?? 0) - 1);
         }}
       >
         <IoChevronBack />
@@ -25,7 +26,7 @@ export default function PaginatedCounter({
         .fill(0)
         .map((v, i) => (
           <div
-            onClick={() => onChange(i)}
+            onClick={() => onChange && onChange(i)}
             key={i}
             className={clsxm(
               'rounded-full bg-white border cursor-pointer h-10 w-10 flex items-center justify-center',
@@ -39,7 +40,7 @@ export default function PaginatedCounter({
       <div
         onClick={() => {
           if (currentPage === pageCount - 1) return;
-          onChange(currentPage + 1);
+          onChange && onChange((currentPage ?? 0) + 1);
         }}
         className='rounded-full border cursor-pointer bg-white h-10 w-10 flex items-center justify-center'
       >
