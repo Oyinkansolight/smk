@@ -2,6 +2,7 @@ import BaseAccordion from '@/components/accordions/BaseAccordion';
 import TextAreaWithOnChange from '@/components/input/TextAreaWithOnChange';
 import Input from '@/components/input/formInput';
 import { Option, Question } from '@/server/institution/lesson-note';
+import ReactSelect from 'react-select';
 
 export default function MultiChoiceQuestion({
   value,
@@ -14,7 +15,7 @@ export default function MultiChoiceQuestion({
   return (
     <BaseAccordion
       title='Question'
-      length={250}
+      length={300}
       className='bg-[#EFF7F6] rounded-lg'
     >
       <div>
@@ -51,6 +52,13 @@ export default function MultiChoiceQuestion({
                 }}
               />
             ))}
+        </div>
+        <div className='flex items-center justify-between pt-4'>
+          <div className='font-bold text-[#746D69]'>Select An Answer</div>
+          <ReactSelect
+            className='min-w-[20rem]'
+            options={options.map((v) => ({ label: v }))}
+          />
         </div>
       </div>
     </BaseAccordion>

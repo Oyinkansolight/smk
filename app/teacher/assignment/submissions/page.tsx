@@ -61,7 +61,7 @@ function AssignmentListItem({
   dateSubmitted: string;
 }) {
   return (
-    <Link href='#'>
+    <Link href='/teacher/assignment/submissions/grade'>
       <div
         className={clsxm(
           'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
