@@ -12,7 +12,7 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   return (
     <div className='h-full layout'>
-      <div className='text-[#D4D5D7] py-8 text-2xl'>Grade Book/Mathematics</div>
+      <div className='text-[#D4D5D7] py-8 text-xl'>Grade Book {">"} Mathematics</div>
       <div className='font-bold text-2xl'>Mathematics</div>
       <TextTabBar
         tabs={Array(6)
@@ -23,10 +23,20 @@ export default function Page() {
       />
       <div className='flex justify-end gap-4 mb-4'>
         <GradeSettingsModal>
-          <Button variant='secondary'>Grade Settings</Button>
+          <Button
+            variant='secondary'
+            className='flex justify-center h-[46px] bg-[#1A8FE3] min-w-[186px] w-full font-semibold !text-xs rounded-lg'
+          >
+            Grade Settings
+          </Button>
         </GradeSettingsModal>
         <Link href='/teacher/grades/grade-book'>
-          <Button variant='secondary'>Grade List</Button>
+          <Button
+            variant='secondary'
+            className='flex justify-center h-[46px] bg-[#1A8FE3] min-w-[186px] w-full font-semibold !text-xs rounded-lg'
+          >
+            Grade List
+          </Button>
         </Link>
       </div>
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>

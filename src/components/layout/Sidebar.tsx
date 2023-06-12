@@ -143,7 +143,7 @@ export const SideBarButton = ({
       active
         ? 'bg-[#1A8FE3] font-bold text-white'
         : 'bg-transparent text-gray-400',
-      'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600'
+      'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg'
     )}
   >
     <div className='flex flex-row items-center gap-[14.25px]'>

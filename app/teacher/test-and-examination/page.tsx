@@ -1,6 +1,6 @@
 'use client';
 
-import SmallTeacherSubjectCard from '@/components/views/teacher/SmallTeacherSubjectCard';
+import GradeSubjectCard from '@/components/views/teacher/GradeSubjectCard';
 import { useGetGovernmentSubjectList } from '@/server/government/classes_and_subjects';
 import { useRouter } from 'next/navigation';
 
@@ -28,16 +28,12 @@ export default function Page() {
         <div className='flex flex-wrap gap-4 justify-items-center'>
           {subjects ? (
             subjects.map((v, i) => (
-              <SmallTeacherSubjectCard
+              <GradeSubjectCard
                 onClick={() => {
                   router.push(`/teacher/test-and-examination/subject?id=${v}`);
                 }}
                 key={i}
-                isNext={false}
-                showTasks={false}
                 subject={v ?? '[NULL]'}
-                assignmentDue={2}
-                tasks={4}
                 className={colors[i % colors.length]}
               />
             ))

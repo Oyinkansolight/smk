@@ -84,7 +84,7 @@ export default function Page() {
       </div>
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>
-        <div className='bg-[#EFF7F6]'>
+        <div className='bg-[#EFF7F6] p-6'>
           <table className='w-full'>
             <tr className='text-[#746D69] text-lg'>
               <th>Subjects</th>
