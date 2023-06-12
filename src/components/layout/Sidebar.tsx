@@ -100,7 +100,7 @@ const Sidebar = () => {
           open={false}
           icon={<FaUsers className='#C3CAD9' />}
           title='Account and Settings'
-          href='/teacher'
+          href='/teacher/account-and-settings'
         />
 
         <div className='pt-20'>

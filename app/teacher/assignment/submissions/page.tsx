@@ -23,9 +23,10 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
+        <Link href="/teacher/assignment/late-submissions">
         <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
           View Late Submissions
-        </Button>
+        </Button></Link>
       </div>
       <div className='h-4' />
       <div className='grid p-4 text-[#746D69] font-bold text-base grid-cols-5'>
