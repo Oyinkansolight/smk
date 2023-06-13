@@ -6,6 +6,7 @@ import clsxm from '@/lib/clsxm';
 import Link from 'next/link';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 
+
 export default function Page() {
   return (
     <div className='h-full layout'>
@@ -23,10 +24,11 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
-        <Link href="/teacher/assignment/late-submissions">
-        <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
-          View Late Submissions
-        </Button></Link>
+        <Link href='/teacher/assignment/late-submissions'>
+          <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
+            View Late Submissions
+          </Button>
+        </Link>
       </div>
       <div className='h-4' />
       <div className='grid p-4 text-[#746D69] font-bold text-base grid-cols-5'>
@@ -41,7 +43,7 @@ export default function Page() {
           .map((v, i) => (
             <AssignmentListItem
               title='Ighosa Ahmed'
-              dateSubmitted='June 24, 2023'
+              dateSubmitted={i === 3 || i === 2 ? undefined : 'June 24, 2023'}
               key={i}
               id={i + 1}
             />
@@ -55,11 +57,11 @@ export default function Page() {
 function AssignmentListItem({
   id,
   title,
-  dateSubmitted: subject,
+  dateSubmitted,
 }: {
   id: number;
   title: string;
-  dateSubmitted: string;
+  dateSubmitted?: string;
 }) {
   return (
     <Link href='/teacher/assignment/submissions/grade'>
@@ -73,10 +75,13 @@ function AssignmentListItem({
           <div className='relative rounded-full border h-16 w-16 bg-gray-300 '></div>
           <div>{title}</div>
         </div>
-        <div>{subject}</div>
+        <div>{dateSubmitted ? dateSubmitted : '-'}</div>
         <div>Primary 1</div>
         <div className='flex justify-end '>
-          <Button className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] text-xs py-3 active:bg-[#126eb0] justify-center'>
+          <Button
+            disabled={!dateSubmitted}
+            className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
+          >
             Grade
           </Button>
         </div>

@@ -118,7 +118,7 @@ function EditableForm() {
   const [percent, setPercent] = useState('50');
   const [category, setCategory] = useState({ label: 'Class Work' });
   return isEditing ? (
-    <div className='flex gap-12 h-10'>
+    <div className='flex gap-8 h-10'>
       <ReactSelect
         value={category}
         onChange={(v) => setCategory({ label: v?.label ?? '' })}
@@ -129,9 +129,14 @@ function EditableForm() {
         value={percent}
         onChange={(v) => setPercent(v.currentTarget.value)}
       />
+      <div className='flex-1'/>
+      <Button
+
+            className='bg-[#1A8FE3] px-5 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
+      onClick={()=>setIsEditing(false)}>Submit</Button>
     </div>
   ) : (
-    <div className='flex gap-12 text-xs h-10 items-center'>
+    <div className='flex gap-8 text-xs h-10 items-center'>
       <div>{category.label}</div>
       <div>{percent}%</div>
       <div className='flex-1' />
