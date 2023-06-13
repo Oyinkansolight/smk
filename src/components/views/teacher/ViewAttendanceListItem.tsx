@@ -22,7 +22,7 @@ export default function ViewAttendanceListItem({
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1
+        term: 1,
       });
 
       toast.success(`Student "${name}" marked as present`);
@@ -42,7 +42,7 @@ export default function ViewAttendanceListItem({
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1
+        term: 1,
       });
 
       toast.success(`Student "${name}" marked as absent`);
@@ -62,13 +62,12 @@ export default function ViewAttendanceListItem({
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1
+        term: 1,
       });
       toast.success(`Student "${name}" marked as late`);
     } catch (error) {
       toast.error(`Error marking "${name}" as late`);
     }
-
   };
 
   return (
@@ -81,13 +80,22 @@ export default function ViewAttendanceListItem({
       <div className='min-w-[64px] h-16 w-16 rounded-full bg-gray-300'></div>
       <div className='font-bold'>{name}</div>
       <div className='flex-1' />
-      <button onClick={handlePresent} className='w-full rounded-sm bg-green-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'>
+      <button
+        onClick={handlePresent}
+        className='w-full rounded-sm bg-green-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
+      >
         Present
       </button>
-      <button onClick={handleAbsent} className='w-full rounded-sm bg-red-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'>
+      <button
+        onClick={handleAbsent}
+        className='w-full rounded-sm bg-red-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
+      >
         Absent
       </button>
-      <button onClick={handleLate} className='w-full rounded-sm bg-[#E5A500] font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'>
+      <button
+        onClick={handleLate}
+        className='w-full rounded-sm bg-[#E5A500] font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
+      >
         Late
       </button>
     </div>

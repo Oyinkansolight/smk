@@ -1,7 +1,6 @@
 import clsxm from '@/lib/clsxm';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
-
 export default function PaginatedCounter({
   pageCount,
   currentPage,

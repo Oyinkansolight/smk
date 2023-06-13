@@ -1,8 +1,6 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
-import { getFromLocalStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
-import { userAgent } from 'next/server';
 import * as React from 'react';
 import { GoBell, GoThreeBars } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
@@ -16,7 +14,7 @@ interface StudentHeaderProps {
 
 export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
   const [isOpen, setisOpen] = React.useState(false);
-  const { data, error, isLoading } = useGetProfile();
+  const { data } = useGetProfile();
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-white'>

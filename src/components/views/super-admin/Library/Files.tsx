@@ -24,6 +24,8 @@ import User from '~/svg/user1.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const UploadDocument = ({
   data,
   isLoading,
@@ -40,8 +42,7 @@ const UploadDocument = ({
   const [url, setUrl] = useState<string | any>();
   const { data: folderData } = useGetAllFolders();
 
-  console.log(folderData);
-
+  // console.log(folderData);
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -263,9 +264,7 @@ const UploadDocument = ({
                   </div>
                   <h2 className='text-sm font-medium'>{item?.folderName}</h2>
                 </div>
-                <div className='col-span-2'>
-                  -
-                </div>
+                <div className='col-span-2'>-</div>
                 <div className='col-span-2'>{item?.createdBy} </div>
                 <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
                   <User alt='avril' className='h-8 w-8 rounded-full' />
@@ -425,8 +424,9 @@ const UploadDocument = ({
               </svg>
             </div>
             <div
-              className={`${variant !== 'primary' ? 'bg-blue-500' : 'bg-[#016938] '
-                }  grid h-7 w-7 place-content-center rounded-full border bg-variant p-2 text-white`}
+              className={`${
+                variant !== 'primary' ? 'bg-blue-500' : 'bg-[#016938] '
+              }  grid h-7 w-7 place-content-center rounded-full border bg-variant p-2 text-white`}
             >
               1
             </div>

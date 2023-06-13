@@ -12,8 +12,8 @@ export default function OnlineStatus({
         status === 'online'
           ? 'bg-[#4AAF05]'
           : status === 'away'
-            ? 'bg-orange-500'
-            : 'bg-gray-400'
+          ? 'bg-orange-500'
+          : 'bg-gray-400'
       )}
     >
       {status}

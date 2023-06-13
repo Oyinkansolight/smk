@@ -37,7 +37,7 @@ export function useUpdateStudent() {
         })
       ).data.data.data,
     onSettled: (data) => {
-      console.log('Student Id: ', data.student.id);
+      // console.log('Student Id: ', data.student.id);
       client.refetchQueries(`get_student_list_${data.student.id ?? ''}`);
     },
   });

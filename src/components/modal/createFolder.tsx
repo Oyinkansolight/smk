@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
+import logger from '@/lib/logger';
 import { useCreateFolder } from '@/server/library';
 import React, { useState } from 'react';
 import Close from '~/svg/close.svg';
-import Folder from '~/svg/folder.svg';
 
 interface propType {
   onClickHandler: () => void;
@@ -15,23 +15,22 @@ function CreateFolder({ onClickHandler, addNewFolder }: propType) {
   const { mutateAsync, isLoading } = useCreateFolder(name);
 
   async function addFolder() {
-    const content = {
-      name: name,
-      class: '-',
-      created_by: 'Super Admin',
-      date_added: Date.now(),
-      size: '1kb',
-      image: <Folder className='h-6 w-6' />,
-      type: 'Folder',
-    };
+    // const content = {
+    //   name: name,
+    //   class: '-',
+    //   created_by: 'Super Admin',
+    //   date_added: Date.now(),
+    //   size: '1kb',
+    //   image: <Folder className='h-6 w-6' />,
+    //   type: 'Folder',
+    // };
     if (addNewFolder) {
       // addNewFolder(content);
       try {
         const response = await mutateAsync();
-        console.log(response);
-
+        logger(response);
       } catch (error) {
-        console.log(error);
+        logger(error);
       }
 
       onClickHandler();

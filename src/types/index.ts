@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface DashboardOverview {
   Total_Students?: number;
   Total_Staff?: number;

@@ -10,6 +10,8 @@ import { useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcadamicCalendar = () => {
   const [isOpenActivity, setisOpenActivity] = useState(false);
 

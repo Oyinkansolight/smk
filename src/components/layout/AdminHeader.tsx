@@ -1,6 +1,5 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
-import { getFromLocalStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import Image from 'next/image';
 import * as React from 'react';
@@ -10,7 +9,7 @@ import AdminNotification from './AdminNotification';
 
 export default function AdminHeader() {
   const [isOpen, setisOpen] = React.useState(false);
-  const { data, error, isLoading } = useGetProfile();
+  const { data } = useGetProfile();
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>

@@ -129,11 +129,13 @@ function EditableForm() {
         value={percent}
         onChange={(v) => setPercent(v.currentTarget.value)}
       />
-      <div className='flex-1'/>
+      <div className='flex-1' />
       <Button
-
-            className='bg-[#1A8FE3] px-5 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
-      onClick={()=>setIsEditing(false)}>Submit</Button>
+        className='bg-[#1A8FE3] px-5 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
+        onClick={() => setIsEditing(false)}
+      >
+        Submit
+      </Button>
     </div>
   ) : (
     <div className='flex gap-8 text-xs h-10 items-center'>

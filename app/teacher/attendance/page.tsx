@@ -2,7 +2,7 @@
 
 import ViewAttendanceListItem from '@/components/views/teacher/ViewAttendanceListItem';
 import { useGetStudentsList } from '@/server/institution';
-import { uniqueId } from 'lodash'
+import { uniqueId } from 'lodash';
 import moment from 'moment';
 
 export default function Page() {
@@ -19,20 +19,27 @@ export default function Page() {
         </div>
 
         <div className='bg-white rounded-xl py-[26px] px-[50px]'>
-          <div className='mb-[18px] text-xl font-semibold text-[#262626]'>List of students</div>
+          <div className='mb-[18px] text-xl font-semibold text-[#262626]'>
+            List of students
+          </div>
           <div className='flex flex-col gap-4'>
-            {data && data.length > 0 &&
+            {data &&
+              data.length > 0 &&
               data.map((student, i) => {
-                const userName = student.user[0].lastName + ', ' + student.user[0].firstName;
+                const userName =
+                  student.user[0].lastName + ', ' + student.user[0].firstName;
                 const studentId = student.user[0].id;
                 return (
-                  <ViewAttendanceListItem key={uniqueId()} index={studentId} name={userName} />
-                )
+                  <ViewAttendanceListItem
+                    key={uniqueId()}
+                    index={studentId}
+                    name={userName}
+                  />
+                );
               })}
           </div>
         </div>
       </div>
-
     </div>
   );
 }

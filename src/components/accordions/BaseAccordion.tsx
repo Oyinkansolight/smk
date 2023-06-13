@@ -3,7 +3,6 @@ import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { BiChevronDown } from 'react-icons/bi';
 
-
 export default function BaseAccordion({
   title,
   arrowIcon = <BiChevronDown className='h-6 w-6' />,

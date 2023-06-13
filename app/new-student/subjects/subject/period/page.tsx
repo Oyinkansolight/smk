@@ -1,14 +1,14 @@
 'use client';
 
+import NextImage from '@/components/NextImage';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import PageCounter from '@/components/counter/PageCounter';
 import TabBar from '@/components/layout/TabBar';
-import NextImage from '@/components/NextImage';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import clsxm from '@/lib/clsxm';
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiDashboardFill } from 'react-icons/ri';
@@ -27,7 +27,8 @@ const Page = () => {
         <div className='flex flex-col gap-5 w-full'>
           <div
             onClick={() => router.back()}
-            className='flex items-center space-x-4'>
+            className='flex items-center space-x-4'
+          >
             <Image
               src='/svg/back_yellow.svg'
               width={10}
@@ -73,8 +74,12 @@ const Page = () => {
           </div>
 
           <div className='flex flex-col my-5 gap-[14px] bg-[#F9F9F9] rounded-[5px] px-5 pb-5 pt-[14px] max-w-[817px] w-full h-[97px]'>
-            <div className='text-[#818181] font-semibold text-[14px] leading-5'>Topic</div>
-            <div className='text-[#746D69] font-bold text-2xl'>Introduction to  Prime Numbers</div>
+            <div className='text-[#818181] font-semibold text-[14px] leading-5'>
+              Topic
+            </div>
+            <div className='text-[#746D69] font-bold text-2xl'>
+              Introduction to Prime Numbers
+            </div>
           </div>
 
           <hr className='-mb-8' />
@@ -102,7 +107,7 @@ const Page = () => {
             ]}
           />
 
-          {page === 0 &&
+          {page === 0 && (
             <div className='flex-1 mb-8 rounded-lg bg-white'>
               <div className='flex justify-center p-8'>
                 <PageCounter
@@ -120,13 +125,16 @@ const Page = () => {
                 <DocPage pageNumber={currentPage} />
               </Document>
             </div>
-          }
+          )}
 
           {page === 1 && (
             <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
               <div className='h3'>Class Work</div>
               <div className='flex flex-col gap-[14px]'>
-                <AssignmentCard title='Introduction to Prime Numbers' status='completed' />
+                <AssignmentCard
+                  title='Introduction to Prime Numbers'
+                  status='completed'
+                />
                 <AssignmentCard title='Introduction to Atoms' />
               </div>
             </div>
@@ -167,26 +175,28 @@ const Page = () => {
 
         <div className='flex flex-col gap-10'>
           <div className='flex flex-col items-center justify-between w-[296px] h-[256px] rounded border border-[#3361FF] py-5'>
-            <div className='text-[#3361FF] text-[14px] font-semibold leading-5'>Teacher</div>
+            <div className='text-[#3361FF] text-[14px] font-semibold leading-5'>
+              Teacher
+            </div>
             <BigAvatar src='/images/teacher_1.png' />
             <div className='h4 font-semibold'>Santos Igbhosa</div>
           </div>
 
           <div className='flex flex-col items-center justify-between w-[296px] h-[111px] rounded border border-[#3361FF] py-5'>
-            <div className='text-[#3361FF] text-[14px] font-semibold leading-5'>Attendance Status</div>
+            <div className='text-[#3361FF] text-[14px] font-semibold leading-5'>
+              Attendance Status
+            </div>
             <div className='h4 font-semibold text-[#9FE2C3]'>Present</div>
           </div>
         </div>
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
 interface AssignmentCardProps {
-  title: string
-  status?: 'completed' | 'pending' | 'overdue'
+  title: string;
+  status?: 'completed' | 'pending' | 'overdue';
 }
 
 function AssignmentCard({ title, status = 'pending' }: AssignmentCardProps) {
@@ -202,12 +212,16 @@ function AssignmentCard({ title, status = 'pending' }: AssignmentCardProps) {
           />
 
           <div className='flex flex-col gap-1'>
-            <div className='text-[#615E83] font-bold text-2xl leading-7'>{title}</div>
-            <div className={clsxm(
-              status === 'completed' && 'bg-[#08643A]',
-              status === 'pending' && 'bg-[#E0A03B]',
-              'flex items-center justify-center w-[109px] h-[24px] rounded text-white text-[10px] font-semibold capitalize'
-            )}>
+            <div className='text-[#615E83] font-bold text-2xl leading-7'>
+              {title}
+            </div>
+            <div
+              className={clsxm(
+                status === 'completed' && 'bg-[#08643A]',
+                status === 'pending' && 'bg-[#E0A03B]',
+                'flex items-center justify-center w-[109px] h-[24px] rounded text-white text-[10px] font-semibold capitalize'
+              )}
+            >
               {status}
             </div>
           </div>
@@ -218,8 +232,7 @@ function AssignmentCard({ title, status = 'pending' }: AssignmentCardProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-
-export default Page
+export default Page;

@@ -6,7 +6,6 @@ import clsxm from '@/lib/clsxm';
 import Link from 'next/link';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 
-
 export default function Page() {
   return (
     <div className='h-full layout'>

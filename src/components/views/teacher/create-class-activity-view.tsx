@@ -6,7 +6,10 @@ import InputReactForm from '@/components/input/formReactInput';
 import ReactFormSelect from '@/components/input/formSelectReactForm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { Question, useCreateClassActivity } from '@/server/institution/lesson-note';
+import {
+  Question,
+  useCreateClassActivity,
+} from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -16,8 +19,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
-
-
 
 const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
@@ -89,6 +90,8 @@ export default function CreateClassActivityView() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    logger(body);
+
     try {
       const type = activityTypes.find(
         (v) => v.value === data.typeOfActivity
@@ -152,13 +155,10 @@ export default function CreateClassActivityView() {
                   icons={false}
                   className='custom-toggle'
                   defaultChecked={addToGradeList}
-                  onChange={handleAddToGradeList} />
+                  onChange={handleAddToGradeList}
+                />
 
-                <span>{addToGradeList ? (
-                  <div>Yes</div>
-                ) : (
-                  <div>No</div>
-                )}</span>
+                <span>{addToGradeList ? <div>Yes</div> : <div>No</div>}</span>
               </div>
             </label>
           </div>
@@ -188,7 +188,13 @@ export default function CreateClassActivityView() {
           </>
         )}
         <div className='flex flex-row justify-end'>
-          <Button variant='secondary' className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]' type='submit'>Submit</Button>
+          <Button
+            variant='secondary'
+            className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
+            type='submit'
+          >
+            Submit
+          </Button>
         </div>
       </div>
     </form>

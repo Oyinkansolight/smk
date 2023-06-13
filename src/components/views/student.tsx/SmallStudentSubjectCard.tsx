@@ -28,7 +28,8 @@ export default function SmallStudentSubjectCard({
       <div className='font-bold text-xl'>{subject}</div>
       <div
         onClick={onClick}
-        className='text-[#3361FF] text-xs font-semibold cursor-pointer'>
+        className='text-[#3361FF] text-xs font-semibold cursor-pointer'
+      >
         View
       </div>
     </div>

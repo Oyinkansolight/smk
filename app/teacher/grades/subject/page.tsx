@@ -12,7 +12,9 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   return (
     <div className='h-full layout'>
-      <div className='text-[#D4D5D7] py-8 text-xl'>Grade Book {">"} Mathematics</div>
+      <div className='text-[#D4D5D7] py-8 text-xl'>
+        Grade Book {'>'} Mathematics
+      </div>
       <div className='font-bold text-2xl'>Mathematics</div>
       <TextTabBar
         tabs={Array(6)

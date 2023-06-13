@@ -41,49 +41,49 @@ export default function TimetableView() {
       <div className='flex-1 bg-white rounded-2xl px-6'>
         <div className='flex flex-col items-center'>
           <div className='h-12' />
-        <div className='grid grid-cols-5 gap-2'>
-          {days.map((d, i) => (
-            <div
-              key={i}
-              className='flex items-center justify-center w-36 h-full font-bold text-lg'
-            >
-              <div>{d}</div>
-            </div>
-          ))}
-        </div>
-        <div className='h-1 w-full bg-[#E7E7E5] my-6' />
-        <div className='grid grid-cols-5 gap-2'>
-          <div className='col-span-5 h-32 rounded-md border p-3'>
-            <div className='h-full w-full text-4xl flex font-bold items-center justify-center bg-[#C0EAD3]'>
-              <div>Assembly</div>
-            </div>
-          </div>
-          {Array(15)
-            .fill(0)
-            .map((v, i) => (
-              <TimetableListItem
+          <div className='grid grid-cols-5 gap-2'>
+            {days.map((d, i) => (
+              <div
                 key={i}
-                subject={
-                  subjects[Math.floor(Math.random() * subjects.length - 1)]
-                }
-              />
+                className='flex items-center justify-center w-36 h-full font-bold text-lg'
+              >
+                <div>{d}</div>
+              </div>
             ))}
-          <div className='col-span-5 h-32 rounded-md border p-3'>
-            <div className='h-full w-full flex text-4xl font-bold items-center justify-center bg-[#C0D1EA]'>
-              <div>Break</div>
-            </div>
           </div>
-          {Array(15)
-            .fill(0)
-            .map((v, i) => (
-              <TimetableListItem
-                key={i}
-                subject={
-                  subjects[Math.floor(Math.random() * subjects.length - 1)]
-                }
-              />
-            ))}
-        </div>
+          <div className='h-1 w-full bg-[#E7E7E5] my-6' />
+          <div className='grid grid-cols-5 gap-2'>
+            <div className='col-span-5 h-32 rounded-md border p-3'>
+              <div className='h-full w-full text-4xl flex font-bold items-center justify-center bg-[#C0EAD3]'>
+                <div>Assembly</div>
+              </div>
+            </div>
+            {Array(15)
+              .fill(0)
+              .map((v, i) => (
+                <TimetableListItem
+                  key={i}
+                  subject={
+                    subjects[Math.floor(Math.random() * subjects.length - 1)]
+                  }
+                />
+              ))}
+            <div className='col-span-5 h-32 rounded-md border p-3'>
+              <div className='h-full w-full flex text-4xl font-bold items-center justify-center bg-[#C0D1EA]'>
+                <div>Break</div>
+              </div>
+            </div>
+            {Array(15)
+              .fill(0)
+              .map((v, i) => (
+                <TimetableListItem
+                  key={i}
+                  subject={
+                    subjects[Math.floor(Math.random() * subjects.length - 1)]
+                  }
+                />
+              ))}
+          </div>
         </div>
       </div>
     </div>

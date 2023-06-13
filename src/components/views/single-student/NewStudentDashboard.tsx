@@ -9,13 +9,16 @@ export default function NewStudentDashboard() {
       <div className='w-full flex flex-col gap-8 mt-8 px-7'>
         <div className='flex flex-col gap-2'>
           <div className='h3'>Hello, Johnny</div>
-          <div className='text-sm text-[#888]'>Monitor your Periodroom and activities here</div>
+          <div className='text-sm text-[#888]'>
+            Monitor your Periodroom and activities here
+          </div>
           <div className='bg-black h-px mt-3' />
         </div>
 
-
         <div className='p-4 rounded-xl border bg-[#FAFAFA]'>
-          <div className='font-bold text-xl text-[#746D69] mb-[14px]'>Next Period</div>
+          <div className='font-bold text-xl text-[#746D69] mb-[14px]'>
+            Next Period
+          </div>
           <NextPeriod />
         </div>
 

@@ -29,6 +29,8 @@ import { RegisterOptions, UseFormRegister } from 'react-hook-form';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export enum HelperType {
   info = 'info',
   warning = 'warning',
@@ -75,10 +77,7 @@ const InputReactForm = ({
             {label}
           </label>
         </div>
-        <div className={clsxm(
-          className,
-          'mt-1 w-full border p-2 rounded'
-        )}>
+        <div className={clsxm(className, 'mt-1 w-full border p-2 rounded')}>
           <input
             disabled={disabled}
             type={type}

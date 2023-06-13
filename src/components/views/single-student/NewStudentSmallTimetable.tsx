@@ -51,10 +51,12 @@ function TimetableItem({
         </div>
       )}
       <div className='flex-1'>
-        <div className={clsxm(
-          isCurrent && 'text-lg',
-          'text-[#160537] font-semibold text-sm'
-        )}>
+        <div
+          className={clsxm(
+            isCurrent && 'text-lg',
+            'text-[#160537] font-semibold text-sm'
+          )}
+        >
           {title}
         </div>
         <div className='text-[#808080]'>{subtitle}</div>

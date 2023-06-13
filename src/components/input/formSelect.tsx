@@ -42,8 +42,8 @@ const Select = ({
       <div>
         <div className='h-full flex justify-start'>
           <label htmlFor='' className='text-xs font-bold'>
-          {label}
-        </label>
+            {label}
+          </label>
         </div>
         <div className='mt-1 w-full border p-2 rounded'>
           <select

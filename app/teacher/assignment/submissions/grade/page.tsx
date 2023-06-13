@@ -93,9 +93,20 @@ function EditStudentGrade() {
       </div>
       <div className='flex items-center justify-center py-4'>
         {isEditing ? (
-          <Button variant='secondary' className='bg-[#1A8FE3] text-xs w-36 justify-center' onClick={() => setIsEditing(!isEditing)}>Submit</Button>
+          <Button
+            variant='secondary'
+            className='bg-[#1A8FE3] text-xs w-36 justify-center'
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            Submit
+          </Button>
         ) : (
-          <Button className='bg-black hover:bg-gray-900 text-xs w-36 justify-center' onClick={() => setIsEditing(!isEditing)}>Edit</Button>
+          <Button
+            className='bg-black hover:bg-gray-900 text-xs w-36 justify-center'
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            Edit
+          </Button>
         )}
       </div>
     </div>

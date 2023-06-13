@@ -15,6 +15,8 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // import { useGetTeachersList } from '@/server/institution';
 // import { useState } from 'react';
 

@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const mockData = [
     {

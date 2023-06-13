@@ -11,7 +11,7 @@ export function useGetStaffList(params: PaginationParams) {
       const d = await request.get('/v1/government/teachers/get-staffs', {
         params,
       });
-      console.log(d.data.data.data);
+      // console.log(d.data.data.data);
       return d.data.data.data as PaginatedData<Staff>;
     },
   });
@@ -42,7 +42,7 @@ export function useUpdateStaff() {
         })
       ).data.data.data,
     onSettled: (data) => {
-      console.log('Staff Id: ', data?.id);
+      // console.log('Staff Id: ', data?.id);
       client.refetchQueries(`get_staff_list_${data?.id ?? ''}`);
     },
   });

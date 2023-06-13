@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
@@ -22,7 +23,6 @@ const Sidebar = () => {
   };
   return (
     <aside className='order-first flex h-screen w-[301px] flex-col items-center overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'>
-
       <div className='flex flex-col items-center'>
         <BigAvatar src='/images/teacher_1.png' />
         <div className='mb-1 h4 font-semibold'>Santos Igbhosa</div>
@@ -44,8 +44,6 @@ const Sidebar = () => {
           title='My Subjects'
           href='/teacher/classes'
         />
-
-
 
         <SideBarButton
           open={false}
@@ -132,7 +130,7 @@ export const SideBarButton = ({
   title,
   href,
   active = false,
-  open = false,
+  // open = false,
   onClick,
 }: SideBarButtonProps) => (
   <ButtonLink

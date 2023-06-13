@@ -25,7 +25,6 @@ export default function RootLayout({
           <main className='hideScroll flex-1 overflow-y-auto text-xs'>
             <div>{children}</div>
           </main>
-
         </div>
       </body>
     </html>

@@ -1,13 +1,12 @@
 import NewStudentAvatar from '@/components/avatars/NewStudentAvatar';
 import { BasicSearch } from '@/components/search';
-import { useGetProfile } from '@/server/auth';
 import * as React from 'react';
 import { CiMenuBurger } from 'react-icons/ci';
 import Badge from '~/svg/badge_1.svg';
 
 export default function NewHeader() {
-  const [isOpen, setisOpen] = React.useState(false);
-  const { data, error, isLoading } = useGetProfile();
+  // const [isOpen, setisOpen] = React.useState(false);
+  // const { data, error, isLoading } = useGetProfile();
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>

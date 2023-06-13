@@ -7,7 +7,6 @@ import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;

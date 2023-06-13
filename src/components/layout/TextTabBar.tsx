@@ -1,6 +1,5 @@
 import clsxm from '@/lib/clsxm';
 
-
 export default function TextTabBar({
   tabs,
   selectedIdx,

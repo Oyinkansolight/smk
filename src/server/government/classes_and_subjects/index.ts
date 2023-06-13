@@ -2,7 +2,6 @@ import request from '@/server';
 import { Subject } from '@/types/institute';
 import { useQuery } from 'react-query';
 
-
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
     queryKey: 'get_subject_list_gov',
