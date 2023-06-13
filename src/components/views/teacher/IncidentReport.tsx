@@ -34,18 +34,14 @@ const IncidentReport = () => {
   const { mutateAsync } = useCreateReport();
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string>();
-  const {
-    register,
-    control,
-    handleSubmit,
-  } = useForm({
+  const { register, control, handleSubmit } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
 
   const onSubmit = async (data: any) => {
     toast.info('Uploading file...');
-    const institution = localStorage.getItem('institution') ?? "";
+    const institution = localStorage.getItem('institution') ?? '';
     const institutionId = JSON.parse(institution).id;
 
     if (fileName && fileData?.arrayBuffer && institutionId) {
@@ -70,12 +66,9 @@ const IncidentReport = () => {
           router.refresh();
         }, 2000);
       }
-
     } else {
-      toast.error('Something went wrong. Please try again.')
+      toast.error('Something went wrong. Please try again.');
     }
-
-
   };
 
   return (
@@ -143,7 +136,9 @@ const IncidentReport = () => {
             <span>File type: doc,pdf,types of images</span>
           </p>
           <div>
-            <Button type='submit' className='w-full justify-center'>Upload</Button>
+            <Button type='submit' className='w-full justify-center'>
+              Upload
+            </Button>
           </div>
         </form>
       </div>

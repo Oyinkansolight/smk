@@ -27,7 +27,7 @@ type propType = {
   helper?: HelperProps;
 };
 
-const Input = ({
+const Select = ({
   label,
   formValue,
   setFormValue,
@@ -42,8 +42,8 @@ const Input = ({
       <div>
         <div className='h-full flex justify-start'>
           <label htmlFor='' className='text-xs font-bold'>
-          {label}
-        </label>
+            {label}
+          </label>
         </div>
         <div className='mt-1 w-full border p-2 rounded'>
           <select
@@ -58,7 +58,6 @@ const Input = ({
 
             {options.map((item, id) => (
               <option key={id} value={item} selected={formValue === item}>
-                {' '}
                 {item}
               </option>
             ))}
@@ -74,4 +73,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Select;

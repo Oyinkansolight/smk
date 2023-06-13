@@ -11,7 +11,7 @@ export function useGetStudentList(params: PaginationParams) {
       const d = await request.get('/v1/government/students/get-students', {
         params,
       });
-      console.log(d.data.data.data);
+
       return d.data.data.data as PaginatedData<Student>;
     },
   });
@@ -37,7 +37,7 @@ export function useUpdateStudent() {
         })
       ).data.data.data,
     onSettled: (data) => {
-      console.log('Student Id: ', data.student.id);
+      // console.log('Student Id: ', data.student.id);
       client.refetchQueries(`get_student_list_${data.student.id ?? ''}`);
     },
   });

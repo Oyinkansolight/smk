@@ -6,10 +6,13 @@ import { BsArrowDownCircle } from 'react-icons/bs';
 export default function AccordionAlt({
   title,
   children,
+  titleClassName,
   length = 300,
   bordered = false,
 }: {
   title: JSX.Element;
+  titleClassName?: string;
+  bodyClassName?: string;
   children: JSX.Element;
   length?: number;
   bordered?: boolean;
@@ -19,7 +22,11 @@ export default function AccordionAlt({
     <div>
       <div
         onClick={() => setExpanded(!expanded)}
-        className={clsxm('flex gap-2 cursor-pointer items-center rounded-md bg-white z-50 p-4 shadow-sm', bordered && 'shadow-none border-2')}
+        className={clsxm(
+          'flex gap-2 cursor-pointer items-center rounded-md bg-white z-50 p-4 shadow-sm',
+          bordered && 'shadow-none border-2',
+          titleClassName
+        )}
       >
         <BsArrowDownCircle
           className={clsxm(

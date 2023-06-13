@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateStaff } from '@/server/government/staff';
 import { Staff } from '@/types/institute';
@@ -23,6 +24,7 @@ export default function TeacherBioDetails({
   const update = useUpdateStaff();
   const onSubmit = async (data: any) => {
     if (initStaff?.id) {
+      logger(isLoading);
       setIsLoading(true);
       try {
         await update.mutateAsync({
@@ -33,6 +35,7 @@ export default function TeacherBioDetails({
           lastName: (data.fullName as string).split(' ')[1],
         });
       } catch (error) {
+        logger(error);
         toast.error(getErrMsg(error));
       } finally {
         setIsLoading(false);
@@ -42,7 +45,7 @@ export default function TeacherBioDetails({
   };
 
   useEffect(() => {
-    console.log('Student Changed', initStaff);
+    // console.log('Staff Changed', initStaff);
     if (initStaff) {
       setValue('email', (initStaff?.user ?? [])[0]?.email);
       setValue('phone', (initStaff?.user ?? [])[0]?.phoneNumber);

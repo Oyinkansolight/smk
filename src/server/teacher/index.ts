@@ -1,6 +1,6 @@
 import request from '@/server';
-import { IncidentReportType } from '@/types/institute';
-import { useMutation } from 'react-query';
+import { IncidentReportType, Subject } from '@/types/institute';
+import { useMutation, useQuery } from 'react-query';
 
 interface ClockInParams {
   clockInTime: string;
@@ -10,6 +10,16 @@ interface ClockInParams {
 interface ClockOutParams {
   clockOutTime: string;
   teacherId: number;
+}
+
+interface AttendanceParams {
+  lessonId: number;
+  institutionId: number;
+  classId: number;
+  studentId: number;
+  sessionId: number;
+  term: number;
+  status: string;
 }
 
 export function useCreateReport() {
@@ -39,6 +49,30 @@ export function useClockOut() {
     mutationKey: 'create-report',
     mutationFn: (params: ClockOutParams) =>
       request.post('/v1/institutions/clock/teacher-clock-out', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+
+export function useGetTeachersSubjectList() {
+  const query = useQuery({
+    queryKey: 'get_subject_list_teacher',
+    queryFn: async () => {
+      const d = await request.get(
+        '/v1/government/classes-subjects/teacher-subjects?limit=100&&id=1'
+      );
+      return d.data.data.data as Subject[];
+    },
+  });
+  return query;
+}
+
+export function useTakeAttendance() {
+  const mutation = useMutation({
+    mutationKey: 'take_attendance',
+    mutationFn: (params: AttendanceParams) =>
+      request.post('/v1/institutions/institutes/take-attendance', params, {
         withCredentials: true,
       }),
   });

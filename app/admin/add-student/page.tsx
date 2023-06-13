@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
 export default function AddStudent() {
@@ -25,6 +26,7 @@ export default function AddStudent() {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
+  const [loading, setloading] = useState(false);
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState('http://placeimg.com/640/480');
 
@@ -88,15 +90,18 @@ export default function AddStudent() {
       setpublishData(data);
 
       try {
+        setloading(true);
         const response = await handleCreateStudent.mutateAsync(data);
 
         if (response) {
           toast.success('Student Added successfully');
+          setloading(false);
 
           //2 Second - Open Success Modal
           setisOpen(true);
         }
       } catch (error) {
+        setloading(false);
         toast.error((error as Error).message);
       }
     }
@@ -200,7 +205,7 @@ export default function AddStudent() {
               </button>
               {stage <= 5 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
-                  Next
+                  {loading ? <ImSpinner2 className='animate-spin' /> : 'Next'}
                 </button>
               )}
               {stage === 6 && (

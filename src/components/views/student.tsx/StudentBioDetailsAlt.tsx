@@ -42,7 +42,7 @@ export default function StudentBioDetailsAlt({
   };
 
   useEffect(() => {
-    console.log('Student Changed', initStudent);
+    // console.log('Student Changed', initStudent);
     if (initStudent) {
       setValue('studentEmail', (initStudent?.user ?? [])[0]?.email);
       setValue('email', (initStudent?.user ?? [])[0]?.email);

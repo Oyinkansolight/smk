@@ -1,7 +1,6 @@
 import request from '@/server';
 import { useMutation } from 'react-query';
 
-
 export interface CreateAssignmentParams {
   title?: string;
   body?: string;

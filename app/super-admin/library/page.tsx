@@ -14,6 +14,12 @@ import Folder from '~/svg/folder.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
   const filesData = useGetAllFiles();
   const { data, error, isLoading } = filesData;

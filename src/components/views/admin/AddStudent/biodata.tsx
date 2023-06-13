@@ -14,6 +14,12 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -102,7 +108,7 @@ const Biodata = ({ register, errors }: Iprops) => {
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
           <FormInput
-            label='Height'
+            label='Height (cm) '
             type='number'
             placeholder='Details here'
             name='height'
@@ -120,7 +126,7 @@ const Biodata = ({ register, errors }: Iprops) => {
         </div>
         <div>
           <FormInput
-            label='Weight'
+            label='Weight(KG)'
             type='number'
             placeholder='Details here'
             name='weight'

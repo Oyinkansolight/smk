@@ -40,10 +40,6 @@ import '/src/styles/globals.css';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const stepData = [
   {
     title: 'Start',

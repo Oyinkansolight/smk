@@ -6,7 +6,10 @@ import InputReactForm from '@/components/input/formReactInput';
 import ReactFormSelect from '@/components/input/formSelectReactForm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { Question, useCreateClassActivity } from '@/server/institution/lesson-note';
+import {
+  Question,
+  useCreateClassActivity,
+} from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -15,8 +18,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-
-
+import Toggle from 'react-toggle';
 
 const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
@@ -80,9 +82,16 @@ export default function CreateClassActivityView() {
   const [body, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
+  const [addToGradeList, setAddToGradeList] = useState(true);
+
+  const handleAddToGradeList = () => {
+    setAddToGradeList(!addToGradeList);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    logger(body);
+
     try {
       const type = activityTypes.find(
         (v) => v.value === data.typeOfActivity
@@ -111,12 +120,14 @@ export default function CreateClassActivityView() {
             register={register}
             name='typeOfActivity'
             label='Type of Activity'
+            className='rounded-lg h-10 !p-0'
             options={activityTypes.map((v) => v.value)}
           />
           <ReactFormSelect
-            register={register}
             name='format'
             label='Format'
+            register={register}
+            className='rounded-lg h-10 !p-0'
             options={activityFormats.map((v) => v.value)}
           />
           <InputReactForm
@@ -125,14 +136,36 @@ export default function CreateClassActivityView() {
             label='Due Date'
             placeholder='Due date'
             type='date'
+            className='rounded-lg h-10 !p-0'
           />
           <ReactFormSelect
             register={register}
             name='timeLimit'
             label='Time Limit'
+            className='rounded-lg h-10 !p-0'
             options={['30 Mins', '1 Hour', '2 Hours']}
           />
+
+          <div className='flex flex-col gap-4 mt-6'>
+            <div>Add to grade list</div>
+
+            <label>
+              <div className='flex flex-row items-center gap-[5px]'>
+                <Toggle
+                  icons={false}
+                  className='custom-toggle'
+                  defaultChecked={addToGradeList}
+                  onChange={handleAddToGradeList}
+                />
+
+                <span>{addToGradeList ? <div>Yes</div> : <div>No</div>}</span>
+              </div>
+            </label>
+          </div>
         </div>
+
+        <div className='h-[2px] bg-[#EFF7F6] w-full mt-[30px] mb-6' />
+
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
@@ -154,7 +187,15 @@ export default function CreateClassActivityView() {
             <EditorComponent onChange={setBody} />
           </>
         )}
-        <Button className='flex justify-center w-full' type='submit'>Submit</Button>
+        <div className='flex flex-row justify-end'>
+          <Button
+            variant='secondary'
+            className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
+            type='submit'
+          >
+            Submit
+          </Button>
+        </div>
       </div>
     </form>
   );

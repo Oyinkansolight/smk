@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
@@ -22,7 +23,6 @@ const Sidebar = () => {
   };
   return (
     <aside className='order-first flex h-screen w-[301px] flex-col items-center overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'>
-
       <div className='flex flex-col items-center'>
         <BigAvatar src='/images/teacher_1.png' />
         <div className='mb-1 h4 font-semibold'>Santos Igbhosa</div>
@@ -41,22 +41,15 @@ const Sidebar = () => {
         <SideBarButton
           open={false}
           icon={<BiBookContent className='#C3CAD9' />}
-          title='Classes'
+          title='My Subjects'
           href='/teacher/classes'
         />
 
         <SideBarButton
           open={false}
           icon={<BiBookContent className='#C3CAD9' />}
-          title='Messages'
-          href='/teacher'
-        />
-
-        <SideBarButton
-          open={false}
-          icon={<BiBookContent className='#C3CAD9' />}
-          title='Assignments'
-          href='/teacher'
+          title='Test and Exams'
+          href='/teacher/test-and-examination'
         />
 
         <SideBarButton
@@ -76,7 +69,21 @@ const Sidebar = () => {
         <SideBarButton
           open={false}
           icon={<FaRegIdCard className='#C3CAD9' />}
-          title='Grades'
+          title='Assignment'
+          href='/teacher/assignment'
+        />
+
+        <SideBarButton
+          open={false}
+          icon={<FaRegIdCard className='#C3CAD9' />}
+          title='Grade Book'
+          href='/teacher/grades'
+        />
+
+        <SideBarButton
+          open={false}
+          icon={<BiBookContent className='#C3CAD9' />}
+          title='Messages'
           href='/teacher'
         />
 
@@ -91,7 +98,7 @@ const Sidebar = () => {
           open={false}
           icon={<FaUsers className='#C3CAD9' />}
           title='Account and Settings'
-          href='/teacher'
+          href='/teacher/account-and-settings'
         />
 
         <div className='pt-20'>
@@ -123,7 +130,7 @@ export const SideBarButton = ({
   title,
   href,
   active = false,
-  open = false,
+  // open = false,
   onClick,
 }: SideBarButtonProps) => (
   <ButtonLink
@@ -134,7 +141,7 @@ export const SideBarButton = ({
       active
         ? 'bg-[#1A8FE3] font-bold text-white'
         : 'bg-transparent text-gray-400',
-      'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600'
+      'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg'
     )}
   >
     <div className='flex flex-row items-center gap-[14.25px]'>

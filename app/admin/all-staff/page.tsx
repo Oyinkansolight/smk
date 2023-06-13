@@ -1,111 +1,112 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import OnlineStatus from '@/components/profile/OnlineStatus';
 import { BasicSearch } from '@/components/search';
-import ROUTES from '@/constant/routes';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetTeachersList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
+import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 
-const AllStudent = () => {
-  const staff = [
+const AllStaff = () => {
+  const mockData = [
     {
-      n: 2343,
-      name: 'Akani',
-      type: 'Teaching',
-      date: '03/03/12',
-      status: 'online',
+      logo: 1,
+      name: 'James Omokwe',
+      numberOfStudent: '12,500',
+      teacherID: '#123-BN',
+      type: 'Tertiary',
+      school: 'Scaling Heights School',
+      location: 'Benin',
     },
     {
-      n: 2343,
-      name: 'Akani',
-      type: 'Teaching',
-      date: '03/03/12',
-      status: 'online',
+      logo: 2,
+      name: 'Ibrahim Wilson ',
+      numberOfStudent: '12, 500',
+      teacherID: '#123-BN',
+      type: 'Primary',
+      school: 'Avril Price School',
+      location: 'Benin',
     },
     {
-      n: 2343,
-      name: 'Akani',
-      type: 'Teaching',
-      date: '03/03/12',
-      status: 'online',
+      logo: 3,
+      name: 'Norma Russell',
+      numberOfStudent: '12,500',
+      teacherID: '#123-BN',
+      type: 'Secondary',
+      school: 'Black Dash School',
+      location: 'Benin',
     },
     {
-      n: 2343,
-      name: 'Akani',
-      type: 'Teaching',
-      date: '03/03/12',
-      status: 'online',
+      logo: 4,
+      name: 'Regina Askiya',
+      numberOfStudent: '12,500',
+      teacherID: '#123-BN',
+      type: 'ECCDE',
+      school: 'Reaction Primary ',
+      location: 'Benin',
+    },
+    {
+      logo: 5,
+      name: 'Akani Egbherve',
+      numberOfStudent: '12,500',
+      teacherID: '#123-BN',
+      type: 'Primary',
+      school: 'Victory International  School',
+      location: 'Benin',
     },
   ];
-  // const handleSearch = (value: string) => {
-  //   const result = students.filter(
-  //     (data) =>
-  //       data.user[0].firstName.toLowerCase().includes(value.toLowerCase()) ||
-  //       data.user[0].lastName.toLowerCase().includes(value.toLowerCase())
-  //   );
-  //   setstudents(result);
-  // };
-  const router = useRouter();
+
   const { data, error, isLoading } = useGetTeachersList();
+  const [staffs, setstaffs] = useState(mockData);
+
+  const handleSearch = (value: string) => {
+    const result = mockData.filter((data) =>
+      data.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setstaffs(result);
+  };
+  logger(data);
+
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
     }
   }, [error]);
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <Link href={ROUTES.ADMIN}>
+      <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -118,54 +119,67 @@ const AllStudent = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Staff</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Teachers</h1>
 
-      <div className='mb-6 gap-8 flex justify-end items-end'>
-        <Link
-          href='#'
-          className='w-max rounded border border-[#007AFF] bg-white px-8 py-2 text-center text-xs text-[#007AFF] '
-        >
-          Download Report
-        </Link>
+      <div className='mb-6 flex justify-between items-end'>
+        <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
+          <p className='text-[#615F5F]'>Total Teacher</p>
+          <h1 className='font-semibold text-2xl'>{data?.data.length ?? 0}</h1>
+        </div>
         <Link
           href='/admin/add-staff'
-          className='w-max rounded border border-[#007AFF] bg-white px-8 py-2 text-center text-xs text-[#007AFF] '
+          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add Staff
         </Link>
       </div>
       <div className='flex justify-end'>
-        <div className='flex w-[200px] space-x-2'>
-          <BasicSearch />
+        <div className='flex w-[300px] space-x-2'>
+          <select name='' className='border-none bg-transparent outline-none'>
+            <option value=''>Filter</option>
+          </select>
+          <BasicSearch handleSearch={handleSearch} />
         </div>
       </div>
-      <div className='bg-white'>
-        {isLoading ? <div>Loading...</div> : <table className='w-full'>
-          <tr className='bg-[#F6F9FC] border-b-2 h-14'>
-            <th className='text-start'>Number</th>
-            <th className='text-start'>Name</th>
-            <th className='text-start'>Staff Type</th>
-            <th className='text-start'>Date of Posted to Current School</th>
-            <th className='text-start'>Status</th>
-          </tr>
-          {data?.data.map((v, i) => (
-            <tr
-              onClick={() => router.push(`/admin/staff?id=${v.id}`)}
-              className='h-14 border-y cursor-pointer'
-              key={i}
+
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
+          <div className='col-span-1'>No</div>
+          <div className='col-span-3'>Name</div>
+          <div className='col-span-2'>Staff ID</div>
+          <div className='col-span-1'>Type</div>
+          <div className='col-span-3'>Schools</div>
+        </div>
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          (data.data ?? []).map((item: any, idx: number) => (
+            <div
+              className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+              key={idx}
             >
-              <td>#{v.id}</td>
-              <td>{(v?.user ?? [])[0].firstName}</td>
-              <td>{v.staffType}</td>
-              <td>{(v?.employmentHistory ?? [])[0].employmentYear}</td>
-              <td>
-                <div className='flex justify-start'>
-                  <OnlineStatus status="online" />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </table>}
+              <div className='col-span-1'>#{idx + 1} </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+                <Link href='/super-admin/teacher'>
+                  <h2 className='text-sm font-medium capitalize'>
+                    {item.user[0].firstName} {item.user[0].lastName}
+                  </h2>
+                </Link>
+              </div>
+              <div className='col-span-2'>{item.id} </div>
+              <div className='col-span-1'> {item.staffType} </div>
+              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+                <h2 className='text-sm font-medium'>
+                  {item?.institution?.instituteName || 'N/A '}{' '}
+                </h2>
+              </div>{' '}
+            </div>
+          ))
+        )}
+        {!isLoading && data?.length === 0 && (
+          <div className='text-red-500 py-4 text-center'>No record found</div>
+        )}
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
             {' '}
@@ -215,4 +229,4 @@ const AllStudent = () => {
   );
 };
 
-export default AllStudent;
+export default AllStaff;

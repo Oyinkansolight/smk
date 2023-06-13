@@ -8,9 +8,12 @@ export default function BaseAccordion({
   arrowIcon = <BiChevronDown className='h-6 w-6' />,
   className,
   children,
+  titleClassName,
   length = 500,
 }: {
   title: string | JSX.Element;
+  titleClassName?: string;
+  bodyClassName?: string;
   children: JSX.Element;
   arrowIcon?: JSX.Element;
   length?: number;
@@ -21,7 +24,10 @@ export default function BaseAccordion({
     <div className={clsxm(className)}>
       <div
         onClick={() => setExpanded(!expanded)}
-        className='flex flex-row-reverse justify-between cursor-pointer items-center p-4'
+        className={clsxm(
+          'flex flex-row-reverse justify-between cursor-pointer items-center p-4',
+          titleClassName
+        )}
       >
         <div
           className={clsxm(

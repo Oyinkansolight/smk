@@ -28,6 +28,11 @@ export default function SchoolDashboardView() {
           <CountCard text='1 A' title='Class' variant='basic' />
           <CountCard text='72 %' title='Average Performance' variant='basic' />
           <CountCard count={12} title='Total Subjects' variant='basic' />
+          {/* <div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores
+            ipsum, fugiat deleniti ratione laudantium eveniet ex consequuntur
+            aut officiis id.
+          </div> */}
         </div>
       </BasicCard>
     </>

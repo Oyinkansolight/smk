@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
 
-
 export default function SubjectList({
   subjectCount = 16,
 }: {

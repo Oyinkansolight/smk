@@ -131,6 +131,3 @@ interface Institution {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-
-

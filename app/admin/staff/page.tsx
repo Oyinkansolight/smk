@@ -30,8 +30,6 @@ const Page = () => {
     id: p?.get('id'),
   });
 
-  console.log(data);
-
   const staff = data?.data[0];
 
   useEffect(() => {
@@ -43,10 +41,10 @@ const Page = () => {
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
-        image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
-        name={`${(staff?.user ?? [])[0]?.firstName} ${
-          (staff?.user ?? [])[0]?.lastName
-        }`}
+        // image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
+        image="/images/teacher_1.png"
+        name={`${(staff?.user ?? [])[0]?.firstName} ${(staff?.user ?? [])[0]?.lastName
+          }`}
         school='Avril Price School'
         id=''
         student={false}
@@ -151,6 +149,7 @@ const Page = () => {
                 <TeacherBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
+                  initStaff={staff}
                 />
               </div>
             </>

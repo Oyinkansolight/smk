@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
+import logger from '@/lib/logger';
+import { useCreateFolder } from '@/server/library';
 import React, { useState } from 'react';
 import Close from '~/svg/close.svg';
-import Folder from '~/svg/folder.svg';
 
 interface propType {
   onClickHandler: () => void;
@@ -10,20 +11,28 @@ interface propType {
 }
 
 function CreateFolder({ onClickHandler, addNewFolder }: propType) {
-  const [name, setname] = useState<string | number>('');
+  const [name, setname] = useState<any>('');
+  const { mutateAsync, isLoading } = useCreateFolder(name);
 
-  function addFolder() {
-    const content = {
-      name: name,
-      class: '-',
-      created_by: 'Super Admin',
-      date_added: Date.now(),
-      size: '1kb',
-      image: <Folder className='h-6 w-6' />,
-      type: 'Folder',
-    };
+  async function addFolder() {
+    // const content = {
+    //   name: name,
+    //   class: '-',
+    //   created_by: 'Super Admin',
+    //   date_added: Date.now(),
+    //   size: '1kb',
+    //   image: <Folder className='h-6 w-6' />,
+    //   type: 'Folder',
+    // };
     if (addNewFolder) {
-      addNewFolder(content);
+      // addNewFolder(content);
+      try {
+        const response = await mutateAsync();
+        logger(response);
+      } catch (error) {
+        logger(error);
+      }
+
       onClickHandler();
     }
   }
@@ -58,7 +67,7 @@ function CreateFolder({ onClickHandler, addNewFolder }: propType) {
               onClick={addFolder}
               className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
             >
-              Proceed
+              {isLoading ? 'Processing' : 'Proceed'}
             </button>
           </div>
         </div>
