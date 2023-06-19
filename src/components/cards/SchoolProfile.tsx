@@ -2,7 +2,6 @@ import CircleButton from '@/components/buttons/CircleButton';
 import Pill from '@/components/buttons/Pill';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
-import { useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -11,13 +10,13 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
-export default function SchoolProfileCard() {
-  const [currentGrid, setCurrentGrid] = useState(0);
-
-  const handleToggleGrid = (index: number) => {
-    setCurrentGrid(index);
-  };
-
+export default function SchoolProfileCard({
+  idx,
+  setIdx,
+}: {
+  idx: number;
+  setIdx: (idx: number) => void;
+}) {
   return (
     <div className='flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
@@ -31,8 +30,8 @@ export default function SchoolProfileCard() {
       <div className='h-8' />
       <GridTabBar
         variant='secondary'
-        selected={currentGrid}
-        onSelect={handleToggleGrid}
+        selected={idx}
+        onSelect={setIdx}
         items={[
           {
             icon: <BiListCheck className='h-7 w-7' />,

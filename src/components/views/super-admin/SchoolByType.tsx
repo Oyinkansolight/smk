@@ -1,69 +1,76 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
 'use client';
 
-import { BasicSearch } from '@/components/search';
+import Table from '@/components/tables/TableComponent';
 import logger from '@/lib/logger';
 import { useGetSchools } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-// import Back from '@/'
-// import clsxm from '@/lib/clsxm';
+import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
+const columns: TableColumn<any>[] = [
+  {
+    name: 'No',
+    selector: (item) => item.idx,
+    cell: (item) => <div>#{item.idx}</div>,
+    width: '90px',
+    sortable: true,
+  },
+  {
+    name: 'Name',
+    grow: 2,
+    selector: (item) => item.instituteName,
+    sortable: true,
+    cell: (item) => (
+      <div className='flex items-center gap-4 text-[#525F7F]'>
+        {item.instituteLogo ? (
+          <Image
+            src={
+              item.instituteLogo.includes('placeimg') ||
+              item.instituteLogo.includes('picsum')
+                ? item.instituteLogo
+                : `/${item.instituteLogo}`
+            }
+            className='h-8 w-8 rounded-full'
+            alt=''
+            width={20}
+            height={10}
+          />
+        ) : (
+          <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+        )}
+        <Link href='/super-admin/school'>
+          <h2 className='text-sm font-medium'>{item.instituteName}</h2>
+        </Link>
+      </div>
+    ),
+  },
+  {
+    name: 'Type',
+    selector: (item) => item.instituteType,
+    sortable: true,
+    cell: (item) => <div className='col-span-2'>{item.instituteType} </div>,
+  },
+  {
+    name: 'Number of Students',
+    selector: (item) => item.studentCount,
+    sortable: true,
+    cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
+  },
+  {
+    name: 'Number of Staff',
+    selector: (item) => item.studentCount,
+    sortable: true,
+    cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
+  },
+  {
+    name: 'Location',
+    selector: (item) => item.instituteAddress,
+    sortable: true,
+    cell: (item) => <div className='col-span-2'> {item.instituteAddress} </div>,
+  },
+];
 
 const SchoolList = ({
   name,
@@ -152,110 +159,15 @@ const SchoolList = ({
           <h1 className='font-semibold text-2xl'>{(data || []).length ?? 0}</h1>
         </div>
       </div>
-      <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
-            <option value=''>Filter</option>
-          </select>
-          <BasicSearch handleSearch={handleSearch} />
-        </div>
-      </div>
-
-      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
-        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-1'>No</div>
-          <div className='col-span-3'>Name</div>
-          <div className='col-span-2'>Type</div>
-          <div className='col-span-2'>Number of Students</div>
-          <div className='col-span-2'>Number of Staffs</div>
-          <div className='col-span-2'>Location</div>
-        </div>
-        {isLoading ? (
-          <div className='text-center'>Loading...</div>
-        ) : (
-          (data ?? []).map((item: any, idx: number) => (
-            <div
-              className=' min-w-[800px] table-header grid grid-cols-12 gap-4  border-b  py-4 px-1 text-[#8898AA]'
-              key={idx}
-            >
-              <div className='col-span-1'>#{idx + 1} </div>
-              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-                {item.instituteLogo ? (
-                  <Image
-                    src={
-                      item.instituteLogo.includes('placeimg') ||
-                      item.instituteLogo.includes('picsum')
-                        ? item.instituteLogo
-                        : `/${item.instituteLogo}`
-                    }
-                    className='h-8 w-8 rounded-full'
-                    alt=''
-                    width={20}
-                    height={10}
-                  />
-                ) : (
-                  <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                )}
-                <Link href='/super-admin/school'>
-                  <h2 className='text-sm font-medium'>{item.instituteName}</h2>
-                </Link>{' '}
-              </div>
-              <div className='col-span-2'>{item.instituteType} </div>
-              <div className='col-span-2'>{item.studentCount}</div>
-              <div className='col-span-2'>{item.studentCount}</div>
-              <div className='col-span-2'> {item.instituteAddress} </div>
-            </div>
-          ))
-        )}
-        {!isLoading && data.length === 0 && (
-          <div className='text-red-500 py-4 text-center'>No record found</div>
-        )}
-
-        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            {' '}
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border bg-[#008146] p-2 text-white'>
-            1
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            2
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            3
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
+      <Table
+        data={((data ?? []) as any[]).map((item, i) => ({
+          idx: i + 1,
+          ...item,
+        }))}
+        columns={columns}
+        progressPending={isLoading || !data}
+        progressComponent={<div className='font-bold'>Loading...</div>}
+      />
     </section>
   );
 };

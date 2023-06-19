@@ -9,25 +9,25 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-export default function StudentBioDetailsAlt({
+export default function InstitutionBioDetails({
   isEditing,
   setIsEditing,
-  initStudent,
+  initInstitution,
 }: {
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
-  initStudent?: Student;
+  initInstitution?: Student;
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const update = useUpdateStudent();
   const onSubmit = async (data: any) => {
-    if (initStudent?.id) {
+    if (initInstitution?.id) {
       setIsLoading(true);
       try {
         await update.mutateAsync({
           email: data.studentEmail,
-          id: initStudent?.id,
+          id: initInstitution?.id,
           phoneNumber: data.studentPhone,
           firstName: (data.fullName as string).split(' ')[0],
           lastName: (data.fullName as string).split(' ')[1],
@@ -43,24 +43,24 @@ export default function StudentBioDetailsAlt({
 
   useEffect(() => {
     // console.log('Student Changed', initStudent);
-    if (initStudent) {
-      setValue('studentEmail', (initStudent?.user ?? [])[0]?.email);
-      setValue('email', (initStudent?.user ?? [])[0]?.email);
-      setValue('studentPhone', (initStudent?.user ?? [])[0]?.phoneNumber);
-      setValue('gender', initStudent?.gender);
-      setValue('parentName', initStudent?.parentName);
-      setValue('parentOccupation', initStudent?.parentOccupation);
+    if (initInstitution) {
+      setValue('studentEmail', (initInstitution?.user ?? [])[0]?.email);
+      setValue('email', (initInstitution?.user ?? [])[0]?.email);
+      setValue('studentPhone', (initInstitution?.user ?? [])[0]?.phoneNumber);
+      setValue('gender', initInstitution?.gender);
+      setValue('parentName', initInstitution?.parentName);
+      setValue('parentOccupation', initInstitution?.parentOccupation);
       setValue(
         'fullName',
-        `${(initStudent?.user ?? [])[0]?.firstName} ${
-          (initStudent?.user ?? [])[0]?.lastName
+        `${(initInstitution?.user ?? [])[0]?.firstName} ${
+          (initInstitution?.user ?? [])[0]?.lastName
         }`
       );
-      setValue('dateOfBirth', initStudent.dob);
-      setValue('address', (initStudent?.user ?? [])[0]?.address);
-      setValue('school', initStudent?.institution?.instituteName);
+      setValue('dateOfBirth', initInstitution.dob);
+      setValue('address', (initInstitution?.user ?? [])[0]?.address);
+      setValue('school', initInstitution?.institution?.instituteName);
     }
-  }, [initStudent, setValue]);
+  }, [initInstitution, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +73,7 @@ export default function StudentBioDetailsAlt({
           </div>
         )}
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
-          Bio Details
+          General Details
         </div>
         {isEditing && (
           <div className='flex justify-start my-4'>
@@ -99,20 +99,21 @@ export default function StudentBioDetailsAlt({
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Full Name'
-                placeholder='Enter full name'
+                label='Institution Name'
+                placeholder='Enter Institution Name'
                 {...field.field}
               />
             )}
           />
+          <div />
           <Controller
             control={control}
             name='email'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Email Address'
-                placeholder='Enter Email Address'
+                label='Institution Official Email'
+                placeholder='Enter Institution Official Email'
                 {...field.field}
               />
             )}
@@ -123,91 +124,17 @@ export default function StudentBioDetailsAlt({
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Gender'
-                placeholder='Select Gender'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='dateOfBirth'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Date Of Birth'
-                placeholder='Enter Date of birth'
-                type='date'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='parentalStatus'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parental Status'
-                placeholder='Enter Parental Status'
-                {...field.field}
-              />
-            )}
-          />
-          <div />
-          <Controller
-            control={control}
-            name='parentName'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parent Name'
-                placeholder='Enter Parent Name'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='parentOccupation'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Parent Occupation'
-                placeholder='Enter Parent Occupation'
+                label='Institution Type'
+                placeholder='Select Institution Type'
                 {...field.field}
               />
             )}
           />
         </div>
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
-          Contact Details
+          Location Details
         </div>
         <div className='grid grid-cols-2 gap-4'>
-          <Controller
-            control={control}
-            name='studentEmail'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Email Address'
-                placeholder='Enter Email Address'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='studentPhone'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Phone Number'
-                placeholder='Enter Phone Number'
-                {...field.field}
-              />
-            )}
-          />
           <Controller
             control={control}
             name='address'
@@ -232,9 +159,21 @@ export default function StudentBioDetailsAlt({
               />
             )}
           />
+          <Controller
+            control={control}
+            name='town'
+            render={(field) => (
+              <EditableFormItemAlt
+                isEditing={isEditing}
+                label='Town'
+                placeholder='Enter Town'
+                {...field.field}
+              />
+            )}
+          />
         </div>
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
-          Educational Details
+          Account History
         </div>
         <div className='grid grid-cols-2 gap-4'>
           <Controller
@@ -243,32 +182,8 @@ export default function StudentBioDetailsAlt({
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='School'
+                label='Username'
                 placeholder='Enter School'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='class'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Class'
-                placeholder='Enter Class'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='classTeacher'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Class Teacher'
-                placeholder='Enter Class Teacher'
                 {...field.field}
               />
             )}
