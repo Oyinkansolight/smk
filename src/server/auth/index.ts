@@ -57,6 +57,17 @@ export interface UserProfile {
   suspended?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  staff?: {
+    id: number;
+    gender: string;
+    dob: string;
+    height: string;
+    weight: string;
+    isTeaching: string;
+    staffType: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 export function useGetProfile() {

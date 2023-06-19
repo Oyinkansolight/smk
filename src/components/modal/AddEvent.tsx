@@ -1,15 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
 import React, { useState } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
 
 interface propType {
   onClickHandler?: () => void;
+  SubmitHandler?: () => void;
+  settitle: (v: any) => void;
+  setstartDate: (v: any) => void;
+  setendDate: (v: any) => void;
+  loading: boolean;
 }
 
-function AddActivityName({ onClickHandler }: propType) {
-  function handleSubmit() {
-    onClickHandler && onClickHandler();
-  }
+function AddActivityName({
+  onClickHandler,
+  SubmitHandler,
+  settitle,
+  setendDate,
+  setstartDate,
+  loading,
+}: propType) {
+  // function handleSubmit() {
+  //   onClickHandler && onClickHandler();
+  // }
+
   const [isOpen, setIsOpen] = useState(true);
   function handleVisibility() {
     setIsOpen(!isOpen);
@@ -35,26 +50,28 @@ function AddActivityName({ onClickHandler }: propType) {
               name='Title'
               type='text'
               placeholder='Select an option'
+              setFormValue={settitle}
             />
             <div></div>
 
             <FormInput
               label='Select Start Date'
-              name='schoolType'
+              name='startDate'
               type='date'
               placeholder='Select an option'
+              setFormValue={setstartDate}
             />
             {isOpen && (
               <FormInput
                 label='Select End Date'
-                name='schoolType'
+                name='endDate'
                 type='date'
                 placeholder='Select an option'
+                setFormValue={setendDate}
               />
             )}
           </div>
           <div className='flex space-x-2 items-center'>
-            {' '}
             <input
               type='checkbox'
               className='scale-125 transform'
@@ -67,10 +84,10 @@ function AddActivityName({ onClickHandler }: propType) {
 
         <div className='flex justify-center'>
           <button
-            onClick={handleSubmit}
+            onClick={SubmitHandler}
             className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
           >
-            Proceed
+            {loading ? <ImSpinner2 className='animate-spin' /> : 'Proceed'}
           </button>
         </div>
       </div>

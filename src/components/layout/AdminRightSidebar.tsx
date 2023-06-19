@@ -1,7 +1,5 @@
 import {
-  AdminSidebarInfoCardOne,
   AdminSidebarInfoCardThree,
-  AdminSidebarInfoCardTwo,
   SidebarInfoCardOne,
 } from '@/components/cards';
 import { useGetDashboardOverview } from '@/server/dashboard';
@@ -12,8 +10,8 @@ const AdminRightSidebar = () => {
 
   return (
     <aside className='hidden w-48 space-y-[18px] overflow-y-scroll border-l-2 px-[27px] py-[21.5px] sm:w-[397px] lg:block'>
-      <AdminSidebarInfoCardOne />
-      <AdminSidebarInfoCardTwo />
+      {/* <AdminSidebarInfoCardOne />
+      <AdminSidebarInfoCardTwo /> */}
       <AdminSidebarInfoCardThree data={data} />
       <SidebarInfoCardOne />
     </aside>

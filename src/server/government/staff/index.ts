@@ -17,6 +17,17 @@ export function useGetStaffList(params: PaginationParams) {
   });
   return query;
 }
+export function useGetStaffs() {
+  const query = useQuery({
+    queryKey: `get_staffs`,
+    queryFn: async () => {
+      const d = await request.get('/v1/government/teachers/get-staffs');
+      // console.log(d.data.data.data);
+      return d.data.data.data.data as unknown;
+    },
+  });
+  return query;
+}
 
 export interface UpdateStaffParams {
   id?: number;

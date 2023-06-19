@@ -35,6 +35,8 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 
@@ -119,7 +121,7 @@ const AllStaff = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Teachers</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Staff</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
@@ -153,7 +155,8 @@ const AllStaff = () => {
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
-          (data.data ?? []).map((item: any, idx: number) => (
+          data &&
+          data.data.map((item: any, idx: number) => (
             <div
               className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
               key={idx}
@@ -177,7 +180,7 @@ const AllStaff = () => {
             </div>
           ))
         )}
-        {!isLoading && data?.length === 0 && (
+        {!isLoading && data?.data?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>

@@ -1,24 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import NextImage from '@/components/NextImage';
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
+import Image from 'next/image';
+import React, { useState } from 'react';
+import Webcam from 'react-webcam';
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 type Iprops = {
   register: any;
@@ -27,7 +55,29 @@ type Iprops = {
 
 const GenderOptions: string[] = ['MALE', 'FEMALE', 'Other'];
 const Biodata = ({ register, errors }: Iprops) => {
-  // const staffType = useGetStaffTypes();
+  const [imgSrc, setImgSrc] = React.useState(null);
+  const [isCapture, setIsCapture] = useState(false);
+  const WebcamCapture = () => {
+    const webcamRef: any = React.useRef(null);
+
+    const capture = React.useCallback(() => {
+      const imageSrc = webcamRef?.current?.getScreenshot();
+      setImgSrc(imageSrc);
+      setIsCapture(false);
+    }, [webcamRef, setImgSrc]);
+
+    return (
+      <>
+        <Webcam audio={false} ref={webcamRef} screenshotFormat='image/jpeg' />
+        <button
+          onClick={capture}
+          className='p-2 mx-auto font-medium text-xs bg-primary text-white my-4 rounded'
+        >
+          Capture photo
+        </button>
+      </>
+    );
+  };
 
   // const [] = useState<any>(staffType.data || []);
 
@@ -36,11 +86,48 @@ const Biodata = ({ register, errors }: Iprops) => {
       <h2 className='text-3xl font-bold'>Bio Details</h2>
       <p>Kindly enter the details below:</p>
 
+      <div className='my-2 grid grid-cols-2 gap-6'>
+        <div></div>
+        <div className='font-medium text-center'> Preview </div>
+      </div>
+
+      <div className='my-2 grid grid-cols-2 gap-6'>
+        <div>
+          {' '}
+          {!isCapture ? (
+            <div>
+              <h2 className='text-xs'>Capture Image</h2>
+              <div className='w-full grid place-content-center border p-10'>
+                <NextImage
+                  src='/svg/addimage_avatar.svg'
+                  width={130}
+                  height={140}
+                  alt='avatar'
+                />
+                <button
+                  onClick={() => setIsCapture(true)}
+                  type='button'
+                  className='mt-4'
+                >
+                  Click to capture image
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className=''>
+              <WebcamCapture />
+            </div>
+          )}
+        </div>
+        <div>
+          {imgSrc && <Image width={600} height={600} src={imgSrc} alt='' />}
+        </div>
+      </div>
       <div className='my-10 grid grid-cols-2 gap-6'>
         <FormSelect
           label='Staff type'
           name='staffType'
-          options={['COACH', 'TEACHER', 'PRINCIPAL']}
+          options={['TEACHING', 'NON-TEACHING']}
           register={register}
           validation={{
             required: 'Staff type is required',

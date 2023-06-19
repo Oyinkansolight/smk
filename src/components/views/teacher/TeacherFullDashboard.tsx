@@ -6,6 +6,7 @@ import IncidentReport from '@/components/views/teacher/IncidentReport';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
+import logger from '@/lib/logger';
 import { DashboardOverview } from '@/types';
 import { useState } from 'react';
 
@@ -14,9 +15,10 @@ interface TeacherFullDashboardProps {
 }
 
 const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {
-  const [tabIdx, setTabIdx] = useState(0);
+  const [tabIdx] = useState(0);
+  logger(overviewData);
 
-  const handleTabChange = (i: number) => setTabIdx(i);
+  // const handleTabChange = (i: number) => setTabIdx(i);
 
   return (
     <div className='flex'>
@@ -36,8 +38,8 @@ const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {
             <IncidentReport />
           ) : (
             <TeacherDashboardView
-              overviewData={overviewData}
-              handleTabChange={handleTabChange}
+            // overviewData={overviewData}
+            // handleTabChange={handleTabChange}
             />
           )}
         </div>

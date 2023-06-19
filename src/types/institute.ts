@@ -131,3 +131,37 @@ interface Institution {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface AcademicCalendarType {
+  id: number;
+  title: string;
+  institutionType: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    deviceToken: string | null;
+    phoneNumber: string | null;
+    email: string;
+    address: string;
+    type: string;
+    suspended: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  session: {
+    id: number;
+    session: string;
+    institutionType: string;
+    NumberOfWeeks: number;
+    NumberOfTerms: number;
+    startDate: string;
+    endDate: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}

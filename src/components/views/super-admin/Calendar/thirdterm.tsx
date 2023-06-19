@@ -1,10 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import Activityname from '@/components/modal/Activityname';
 import Activitytime from '@/components/modal/Activitytime';
 import { useState } from 'react';
 import Select_Dropdown from '~/svg/select_dropdown.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -85,7 +110,7 @@ const Firstterm = ({
           setEndDate={setEndDate}
         />
       )}
-      {isOpenActivity && (
+      {/* {isOpenActivity && (
         <Activityname
           onClickHandler={modalActivityHandler}
           start={calendar.start}
@@ -93,7 +118,7 @@ const Firstterm = ({
           setStartDate={setStartDate}
           setEndDate={setEndDate}
         />
-      )}
+      )} */}
 
       <p>Kindly enter the details below:</p>
       <div className='bg-[#F4F9FF] py-6 mt-5 text-center font-medium'>

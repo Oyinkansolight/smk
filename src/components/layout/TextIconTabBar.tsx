@@ -15,6 +15,7 @@ export default function TextIconTabBar({
         {items.map((v, i) =>
           i === idx ? (
             <div
+              key={v.label}
               onClick={() => setIdx(i)}
               className='flex flex-row gap-2 items-center cursor-pointer text-[#1a8fe3] font-[900]'
             >
@@ -25,6 +26,7 @@ export default function TextIconTabBar({
             </div>
           ) : (
             <div
+              key={v.label}
               onClick={() => setIdx(i)}
               className='flex flex-row gap-2 items-center cursor-pointer text-[#D4D5D7]'
             >

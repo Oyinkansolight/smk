@@ -14,13 +14,15 @@ const names = [
 ];
 
 export default function Page() {
+  // const params = useSearchParams();
   const [idx, setIdx] = useState(0);
+
   return (
     <div className='h-full layout'>
-      <div className='text-[#D4D5D7] text-2xl'>
-        {'Test & Examination > Mathematics'}
+      <div className='text-[#D4D5D7] text-xl mt-6'>
+        {'Test & Exam > Mathematics'}
       </div>
-      <div className='font-bold text-3xl py-8 h3'>
+      <div className='font-bold py-8 h2'>
         <div>Mathematics</div>
       </div>
       <TextTabBar

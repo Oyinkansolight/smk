@@ -55,8 +55,7 @@ const Input = ({
 
             {options.map((item: any, id: number) => (
               <option key={id} value={item.id}>
-                {item.user[0].firstName}
-                {item.user[0].lastName}
+                {`${item.user[0].firstName}  ${item.user[0].lastName}`}
               </option>
             ))}
           </select>

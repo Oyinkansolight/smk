@@ -1,8 +1,11 @@
 'use client';
 
 import SmallTeacherSubjectCard from '@/components/views/teacher/SmallTeacherSubjectCard';
-import { useGetGovernmentSubjectList } from '@/server/government/classes_and_subjects';
+import { useGetProfile } from '@/server/auth';
+import { useGetTeachersSubjectList } from '@/server/teacher';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { RotatingLines } from 'react-loader-spinner';
 
 export default function Page() {
   const colors = [
@@ -13,10 +16,20 @@ export default function Page() {
   ];
   const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
-  const { data } = useGetGovernmentSubjectList();
+  // const { data } = useGetGovernmentSubjectList();
 
   //* Actual Api to be called, response currently empty
-  // const { data: data2 } = useGetTeachersSubjectList();
+  const { data: profile, isSuccess } = useGetProfile();
+  const { data, refetch, isError } = useGetTeachersSubjectList(
+    profile?.staff?.id
+  );
+
+  useEffect(() => {
+    if (isSuccess && profile?.staff?.id) {
+      // Make the second query only when the first query data is available
+      refetch();
+    }
+  }, [isSuccess, isError, refetch, profile?.staff?.id]);
 
   return (
     <div className='h-full layout'>
@@ -26,6 +39,17 @@ export default function Page() {
           <div>My Subjects</div>
         </div>
         <div className='flex flex-wrap gap-4 justify-items-center'>
+          {(!profile || !data) && (
+            <div className='flex flex-col h-full w-full items-center justify-center p-10'>
+              <RotatingLines
+                width='100'
+                visible={true}
+                strokeWidth='5'
+                strokeColor='#4fa94d'
+                animationDuration='0.75'
+              />
+            </div>
+          )}
           {data ? (
             data.map((v, i) => (
               <SmallTeacherSubjectCard

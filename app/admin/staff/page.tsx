@@ -19,7 +19,6 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-
 const Page = () => {
   const router = useRouter();
   const [tabIdx, setTabIdx] = useState(0);
@@ -42,9 +41,10 @@ const Page = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         // image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
-        image="/images/teacher_1.png"
-        name={`${(staff?.user ?? [])[0]?.firstName} ${(staff?.user ?? [])[0]?.lastName
-          }`}
+        image='/images/teacher_1.png'
+        name={`${(staff?.user ?? [])[0]?.firstName} ${
+          (staff?.user ?? [])[0]?.lastName
+        }`}
         school='Avril Price School'
         id=''
         student={false}

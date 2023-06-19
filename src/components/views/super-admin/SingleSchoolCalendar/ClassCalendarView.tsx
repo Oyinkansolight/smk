@@ -1,8 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextImage from '@/components/NextImage';
 import Button from '@/components/buttons/Button';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function StudentDashboardView() {
+  const params = useSearchParams();
+  const [currentPath, setCurrentPath] = useState<any>(params);
+
+  useEffect(() => {
+    setCurrentPath(params);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <div className='-mt-[10px] flex flex-row items-center justify-between'>
@@ -35,10 +47,11 @@ export default function StudentDashboardView() {
             </div>
           </div>
           <Link
-            href='/super-admin/school-calendar-content'
+            href={
+              '/super-admin/school-calendar-content/' + currentPath + '&term=1'
+            }
             className='mt-14 text-primary'
           >
-            {' '}
             View
           </Link>
         </div>
@@ -55,10 +68,11 @@ export default function StudentDashboardView() {
             </div>
           </div>
           <Link
-            href='/super-admin/school-calendar-content'
+            href={
+              '/super-admin/school-calendar-content/' + currentPath + '&term=2'
+            }
             className='mt-14 text-primary'
           >
-            {' '}
             View
           </Link>
         </div>
@@ -75,10 +89,11 @@ export default function StudentDashboardView() {
             </div>
           </div>
           <Link
-            href='/super-admin/school-calendar-content'
+            href={
+              '/super-admin/school-calendar-content/' + currentPath + '&term=3'
+            }
             className='mt-14 text-primary'
           >
-            {' '}
             View
           </Link>
         </div>

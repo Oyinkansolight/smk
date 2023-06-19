@@ -8,7 +8,15 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
-export default function StudentTeacherProfileCard() {
+export default function StudentTeacherProfileCard({
+  // session,
+  sessionname,
+  schoolType,
+}: {
+  sessionname?: string | null;
+  session?: string | null;
+  schoolType?: string | null;
+}) {
   const [currentGrid, setCurrentGrid] = useState(0);
 
   const handleToggleGrid = (index: number) => {
@@ -27,7 +35,7 @@ export default function StudentTeacherProfileCard() {
         height={99}
         alt='calendar_mini'
       />
-      <div className='font-bold text-lg'>Academic Year 2022/2023</div>
+      <div className='font-bold text-lg text-center'>{sessionname}</div>
       <div className='h-20' />
 
       <GridTabBar
@@ -37,7 +45,7 @@ export default function StudentTeacherProfileCard() {
         items={[
           {
             icon: <BiListCheck className='h-7 w-7' />,
-            label: 'Primary School',
+            label: `${schoolType}`,
           },
         ]}
       />

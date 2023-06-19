@@ -9,6 +9,7 @@ import Document from '@/components/views/admin/Addstaff/document';
 import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
+import { useGetProfile } from '@/server/auth';
 import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +20,34 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddStaff = () => {
+  const { data: institutionProfile } = useGetProfile();
   const {
     register,
 
@@ -46,8 +74,8 @@ const AddStaff = () => {
   const handleCreateStaff = useCreateStaff();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(errors);
-    console.log(data);
+    // console.log(errors);
+    // console.log(data);
     if (
       stage === 1 &&
       data.firstName &&
@@ -100,6 +128,7 @@ const AddStaff = () => {
       data.weight = data.townId;
       data.height = data.townId;
       data.townId = +data.townId;
+      data.institutionId = institutionProfile?.id;
       data.teacherEducation = [
         {
           schoolAttended: data.schoolAttended,
@@ -124,6 +153,9 @@ const AddStaff = () => {
       delete data.role;
       delete data.employmentType;
       delete data.employmentyear;
+      delete data.nok;
+      delete data.rnok;
+      delete data.phoneNumberNOK;
 
       setpublishData(data);
 
@@ -145,15 +177,6 @@ const AddStaff = () => {
     }
   };
 
-  // const nextHandler = (): void => {
-  //   // handleSubmit(onSubmit);
-  //   // console.log(getValues())
-  //   // console.log(formState)
-
-  //   // if (stage >= 1 && stage <= 4) {
-  //   //   setStage(stage + 1);
-  //   // }
-  // };
   const prevHandler = (): void => {
     if (stage >= 2) {
       setStage(stage - 1);
@@ -171,18 +194,22 @@ const AddStaff = () => {
     },
     {
       stage: 3,
-      stageName: 'Educational Details',
+      stageName: 'Training History',
     },
     {
       stage: 4,
-      stageName: 'Employment History ',
+      stageName: 'Educational Details',
     },
     {
       stage: 5,
-      stageName: 'Upload Dcuments',
+      stageName: 'Employment History ',
     },
     {
       stage: 6,
+      stageName: 'Upload Dcuments',
+    },
+    {
+      stage: 7,
       stageName: 'Publish',
     },
   ];

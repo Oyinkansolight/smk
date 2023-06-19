@@ -13,12 +13,19 @@ import {
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+
+const Editor = dynamic(
+  () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
 
 const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
@@ -83,9 +90,14 @@ export default function CreateClassActivityView() {
   const create = useCreateClassActivity();
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
+  const [isOnline, setIsOnline] = useState(true);
 
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
+  };
+
+  const handleSetOnline = () => {
+    setIsOnline(!isOnline);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,7 +126,7 @@ export default function CreateClassActivityView() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col gap-4'>
-        <div className='text-2xl font-bold my-4'>Create Class Activity</div>
+        <div className='text-2xl font-bold my-4'>Add Lesson Task</div>
         <div className='grid grid-cols-2 gap-2'>
           <ReactFormSelect
             register={register}
@@ -146,21 +158,44 @@ export default function CreateClassActivityView() {
             options={['30 Mins', '1 Hour', '2 Hours']}
           />
 
-          <div className='flex flex-col gap-4 mt-6'>
-            <div>Add to grade list</div>
+          <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
+            <div className='flex flex-col gap-4 mt-6'>
+              <div>Add to grade list</div>
 
-            <label>
-              <div className='flex flex-row items-center gap-[5px]'>
-                <Toggle
-                  icons={false}
-                  className='custom-toggle'
-                  defaultChecked={addToGradeList}
-                  onChange={handleAddToGradeList}
-                />
+              <label>
+                <div className='flex flex-row items-center gap-[5px]'>
+                  <Toggle
+                    icons={false}
+                    className='custom-toggle'
+                    defaultChecked={addToGradeList}
+                    onChange={handleAddToGradeList}
+                  />
 
-                <span>{addToGradeList ? <div>Yes</div> : <div>No</div>}</span>
-              </div>
-            </label>
+                  <span className='text-[14px] font-normal'>
+                    {addToGradeList ? <div>Yes</div> : <div>No</div>}
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            <div className='flex flex-col gap-4 mt-6'>
+              <div>Online</div>
+
+              <label>
+                <div className='flex flex-row items-center gap-[5px]'>
+                  <Toggle
+                    icons={false}
+                    className='custom-toggle'
+                    defaultChecked={isOnline}
+                    onChange={handleSetOnline}
+                  />
+
+                  <span className='text-[14px] font-normal'>
+                    {addToGradeList ? <div>Yes</div> : <div>No</div>}
+                  </span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
 

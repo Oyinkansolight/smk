@@ -3,8 +3,7 @@ import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import { useState } from 'react';
 import { AiTwotoneFlag } from 'react-icons/ai';
-import { BiPaperclip } from 'react-icons/bi';
-import { BsArrowDownCircle, BsListTask } from 'react-icons/bs';
+import { BsArrowDownCircle } from 'react-icons/bs';
 import { TbClockHour4 } from 'react-icons/tb';
 
 export default function TaskAccordion({
@@ -16,7 +15,7 @@ export default function TaskAccordion({
   endDate,
   lesson,
   length = 300,
-  showIcons = true,
+  // showIcons = true,
   bordered = false,
 }: {
   taskName: string;
@@ -35,7 +34,7 @@ export default function TaskAccordion({
     <div>
       <div
         onClick={() => setExpanded(!expanded)}
-        className='flex cursor-pointer items-center rounded-md bg-white p-4 shadow-sm'
+        className='flex cursor-pointer items-center rounded-md bg-white p-4 shadow-sm mb-4'
       >
         <BsArrowDownCircle
           className={clsxm(
@@ -46,15 +45,15 @@ export default function TaskAccordion({
         <div className='w-4' />
         <div className='text-[#6B7A99]'>{taskName}</div>
         <div className='w-8' />
-        <div className='text-[#ADB8CC]'>{subName || 'Lessons'}</div>
-        {showIcons && (
+        <div className='text-[#ADB8CC]'>{subName}</div>
+        {/*  {showIcons && (
           <>
             <div className='w-3' />
             <BsListTask className='h-5 w-5 text-[#C3CAD9]' />
             <div className='w-3' />
             <BiPaperclip className='h-5 w-5 text-[#C3CAD9]' />
           </>
-        )}
+        )} */}
         <div className='flex-1' />
         {nextClass && (
           <>

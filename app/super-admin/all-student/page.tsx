@@ -18,11 +18,21 @@ const AllStudent = () => {
   const [students, setstudents] = useState(data ?? []);
 
   const handleSearch = (value: string) => {
-    const result = students.filter(
-      (data) =>
-        data.user[0].firstName.toLowerCase().includes(value.toLowerCase()) ||
-        data.user[0].lastName.toLowerCase().includes(value.toLowerCase())
-    );
+    const result =
+      students.length > 0
+        ? students.filter((data) => {
+            if (data.user) {
+              return (
+                data.user[0].firstName
+                  .toLowerCase()
+                  .includes(value.toLowerCase()) ||
+                data.user[0].lastName
+                  .toLowerCase()
+                  .includes(value.toLowerCase())
+              );
+            }
+          })
+        : [];
     setstudents(result);
   };
 
@@ -93,7 +103,8 @@ const AllStudent = () => {
                 <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
                 <Link href='/super-admin/student'>
                   <h2 className='text-sm font-medium capitalize'>
-                    {item.user[0].firstName} {item.user[0].lastName}
+                    {item.user && item.user[0].firstName}{' '}
+                    {item.user && item.user[0].lastName}
                   </h2>
                 </Link>
               </div>

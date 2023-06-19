@@ -17,54 +17,6 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable unused-imports/no-unused-vars */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
 const SchoolList = ({
   name,
   title,

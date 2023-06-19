@@ -10,17 +10,17 @@ export default function PageCounter({
   onChange: (value: number) => void;
 }) {
   return (
-    <div className='flex gap-2'>
+    <div className='flex items-center gap-10'>
       <div
         onClick={() => {
           if (page === 1) return;
           onChange(page - 1);
         }}
-        className='rounded-full flex justify-center items-center h-16 w-16 shadow-md'
+        className='rounded-full flex justify-center items-center h-8 w-8 shadow-md'
       >
         <BiChevronLeft className='h-12 w-12' />
       </div>
-      <div className='rounded-full font-bold flex justify-center items-center h-16 w-16 shadow-md'>
+      <div className='rounded-full font-bold flex justify-center items-center h-12 w-12 shadow-md'>
         <div>
           {page}/{maxPage}
         </div>
@@ -30,7 +30,7 @@ export default function PageCounter({
           if (page === maxPage) return;
           onChange(page + 1);
         }}
-        className='rounded-full flex justify-center items-center h-16 w-16 shadow-md'
+        className='rounded-full flex justify-center items-center h-8 w-8 shadow-md'
       >
         <BiChevronRight className='h-12 w-12' />
       </div>

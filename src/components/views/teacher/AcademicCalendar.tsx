@@ -1,4 +1,6 @@
 import AcademicCalendarListItem from '@/components/views/teacher/AcademicCalendarListItem';
+import { AcademicCalendarType } from '@/types/institute';
+import moment from 'moment';
 import {
   IoChevronBack,
   IoChevronDown,
@@ -7,7 +9,13 @@ import {
 
 type EventType = 'break' | 'holiday' | 'school';
 
-export default function AcademicCalendar() {
+interface AcademicCalendarProps {
+  sessionCalendarData: AcademicCalendarType[];
+}
+
+export default function AcademicCalendar({
+  sessionCalendarData,
+}: AcademicCalendarProps) {
   const events: { allEvents: string[]; type: EventType }[] = [
     { allEvents: ['Id El Maulad', 'Workers Day'], type: 'holiday' },
     { allEvents: ['Resumption'], type: 'school' },
@@ -31,6 +39,18 @@ export default function AcademicCalendar() {
         return { backgroundColor: 'bg-[#6A2B56]', textColor: 'text-white' };
     }
   };
+
+  const allDays = Array(31).fill('No Event');
+
+  // console.log(sessionCalendarData);
+
+  for (let index = 0; index < sessionCalendarData.length; index++) {
+    const element = sessionCalendarData[index];
+    const getDay = Number(moment(element.startDate).format('DD'));
+
+    allDays[getDay - 1] = element.title;
+  }
+
   return (
     <div className='w-full rounded-xl bg-white flex flex-col px-4'>
       <div className='flex justify-between px-8'>
@@ -39,7 +59,7 @@ export default function AcademicCalendar() {
           <IoChevronDown className='text-blue-500 h-5 w-5' />
         </div>
         <div className='flex items-center font-bold my-5 gap-3'>
-          <IoChevronBack className='text-blue-500 h-5 w-5' /> <div>October</div>
+          <IoChevronBack className='text-blue-500 h-5 w-5' /> <div>June</div>
           <IoChevronForward className='text-blue-500 h-5 w-5' />
         </div>
       </div>
@@ -52,23 +72,23 @@ export default function AcademicCalendar() {
       </div>
       <div className='grid grid-cols-7 gap-y-6 gap-x-4'>
         <div />
-        {Array(31)
-          .fill(0)
-          .map((v, i) => {
-            const e = events[Math.floor(Math.random() * events.length)];
-            const c = getColors(e.type);
-            return (
-              <AcademicCalendarListItem
-                key={i}
-                event={{
-                  allEvents: e.allEvents,
-                  day: `${i + 1}`,
-                  backgroundColor: c.backgroundColor,
-                  textColor: c.textColor,
-                }}
-              />
-            );
-          })}
+        {allDays.map((data, i) => {
+          const e = events[Math.floor(Math.random() * events.length)];
+          const c = getColors(e.type);
+
+          return (
+            <AcademicCalendarListItem
+              key={i}
+              event={{
+                allEvents: [data ?? ''],
+                day: `${i + 1}`,
+                backgroundColor:
+                  data === 'No Event' ? 'bg-red-200' : c.backgroundColor,
+                textColor: c.textColor,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );

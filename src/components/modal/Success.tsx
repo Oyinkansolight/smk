@@ -10,7 +10,7 @@ interface propType {
   showHome?: boolean;
 }
 
-function addStudent({
+function SuccessModal({
   title,
   description,
   link,
@@ -46,4 +46,4 @@ function addStudent({
   );
 }
 
-export default addStudent;
+export default SuccessModal;

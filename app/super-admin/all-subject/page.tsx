@@ -84,7 +84,7 @@ const AllSubjects = () => {
           <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
         </div>
         <AddSubjectModal>
-          <div className='cursor-pointer w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '>
+          <div className='cursor-pointer w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '>
             Add Subject
           </div>
         </AddSubjectModal>
@@ -98,7 +98,7 @@ const AllSubjects = () => {
         </div>
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full bg-white'>
         <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Subject Name</div>
           <div className='col-span-5'>Description</div>

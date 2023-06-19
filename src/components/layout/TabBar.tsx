@@ -17,7 +17,7 @@ export default function TabBar({
   variant = 'secondary',
 }: propTypes) {
   return (
-    <div className='flex overflow-x-auto overflow-y-hidden whitespace-nowrap'>
+    <div className='border-b-[3px] flex overflow-x-auto overflow-y-hidden whitespace-nowrap'>
       {items.map((item, i) => (
         <button
           key={i}
@@ -25,7 +25,7 @@ export default function TabBar({
             if (onSelect) onSelect(i);
           }}
           className={clsxm(
-            '-px-1 -mb-px inline-flex h-20 items-center whitespace-nowrap border-b-[3px] bg-transparent px-2 pt-2 text-center focus:outline-none sm:px-4',
+            '-px-1 -mb-px inline-flex h-[70px] items-center whitespace-nowrap  bg-transparent px-2 pt-2 text-center focus:outline-none sm:px-4',
 
             [
               variant === 'primary' && [

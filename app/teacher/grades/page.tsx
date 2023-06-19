@@ -50,7 +50,7 @@ export default function Page() {
           },
           {
             icon: <FaUsers className='h-[18px] w-[18px]' />,
-            label: 'Manage Subjects',
+            label: 'Manage Class',
           },
         ]}
       />
