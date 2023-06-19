@@ -1,4 +1,5 @@
 import Button from '@/components/buttons/Button';
+import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import Image from 'next/image';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 
@@ -12,10 +13,7 @@ export default function SmallTeacherSubjectListItem({
   onClick?: () => void;
 }) {
   return (
-    <div
-      onClick={onClick}
-      className='flex items-center gap-4 p-6 border bg-white cursor-pointer'
-    >
+    <div className='flex items-center gap-4 p-6 border bg-white'>
       <div className='relative rounded-full border h-20 w-20'>
         <Image
           alt='book-stack'
@@ -37,10 +35,15 @@ export default function SmallTeacherSubjectListItem({
         </div>
       </div>
       <div className='w-10' />
-      <Button variant='secondary'>Add Activity</Button>
+      <CreateSubjectActivityModal>
+        <Button variant='secondary'>Add Activity</Button>
+      </CreateSubjectActivityModal>
       <div className='flex-1' />
       <div className='p-4'>
-        <IoChevronForwardSharp className='h-8 w-8 text-[#D4D5D7]' />
+        <IoChevronForwardSharp
+          onClick={onClick}
+          className='h-8 w-8 text-[#D4D5D7] cursor-pointer'
+        />
       </div>
     </div>
   );

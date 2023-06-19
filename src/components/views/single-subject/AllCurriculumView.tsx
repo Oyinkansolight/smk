@@ -1,22 +1,132 @@
-import TaskAccordion from '@/components/accordions/TaskAccordion';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import { CircularCounter } from '@/components/counter';
+import Editweek from '@/components/modal/Editweek';
 import AddWeekModal from '@/components/modals/add-week-modal';
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
+import request from '@/server';
+import { useCreateCurriculum } from '@/server/Schedule';
+import { useGetAcademicSessionsTermsWeek } from '@/server/institution';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { AiTwotoneFlag } from 'react-icons/ai';
-import { SlOptionsVertical } from 'react-icons/sl';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-export default function AllCurriculumView() {
-  const router = useRouter();
+interface propType {
+  termId: number;
+  sessionId: any;
+  classId: number;
+}
 
+export default function AllCurriculumView({
+  termId,
+  sessionId,
+  classId,
+}: propType) {
+  const params = useSearchParams();
+  const [periods, setperiods] = useState<any[]>([]);
+  const [periodsList, setperiodsList] = useState<any[]>([]);
+  const [periodsUpdate, setperiodsUpdate] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [theme, settheme] = useState<string | number>('');
+  const [topic, settopic] = useState<string | number>('');
+  const [weekid, setWeekId] = useState<string | number>(0);
+
+  const id = params?.get('id') as string;
+
+  function getOccurrences(timetableData: any) {
+    const occurrences = [];
+    const periodSettings = [];
+
+    for (const entry of timetableData) {
+      const occurrence = {
+        id: entry.id,
+        title: 'No title',
+        day: entry.day,
+        startTime: entry.startTime ?? '9:00',
+        endTime: entry.endTime ?? '10:00',
+      };
+      occurrences.push(occurrence);
+
+      periodSettings.push({
+        periodId: null,
+        periodTitle: '',
+        fileId: 2,
+        teacherId: 1,
+      });
+    }
+
+    setperiodsUpdate(periodSettings);
+    return occurrences;
+  }
+
+  // "weekId": 73,
+  // "theme": "Period theme test",
+  // "topic": "Period topic test",
+  // "periods": [
+  //     {
+  //         "periodId": 235,
+  //         "periodTitle": "Period title here",
+  //         "fileId": 2,
+  //         "teacherId": 1
+  //     }
+  // ]
+  const handleCreateCurriculum = useCreateCurriculum();
+  const handleSubmit = async () => {
+    const data = {
+      weekId: weekid,
+      theme,
+      topic,
+      periods: periodsUpdate,
+    };
+    try {
+      const response = await handleCreateCurriculum.mutateAsync(data);
+      if (response) {
+        toast.success('Curricullum updated successful');
+        onClickHandler && onClickHandler();
+        location.reload();
+      }
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  function fetchPeriods(weekId: string | number) {
+    setWeekId(weekId);
+    setLoading(true);
+
+    request
+      .get(
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`
+      )
+      .then((res) => {
+        setLoading(false);
+        setperiods(res.data.data.data.data);
+        setperiodsList(getOccurrences(res.data.data.data.data));
+      })
+      .catch((err) => {
+        logger(err);
+        setLoading(false);
+      });
+  }
+
+  const { data } = useGetAcademicSessionsTermsWeek(termId);
+
+  // const router = useRouter();
+
+  const [modal, setModal] = useState(false);
+  const [showcontent, setShowContent] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const onClickHandler = () => {
+    setModal(!modal);
+  };
   const isEmpty = false;
   const count = 100;
   return (
     <div className='bg-white h-full p-4'>
       <div className='rounded-lg py-6 px-6 flex items-center bg-[#ECF4FF]'>
-        <div>First Term Primary 1 Mathematics Curriculum</div>
+        <div>First Term Curriculum</div>
         <div className='flex-1' />
         {count === 100 ? (
           <Image
@@ -46,87 +156,164 @@ export default function AllCurriculumView() {
             </AddWeekModal>
           </div>
         ) : (
-          Array(3)
-            .fill(0)
-            .map((v, i) => {
-              return (
-                <TaskAccordion
-                  bordered
-                  length={4}
-                  lesson={false}
-                  taskName={`Week ${i + 1}`}
-                  subName={
-                    <div className='flex items-center flex-1 w-full'>
-                      <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
-                      <div className='w-4' />
-                      <div>
-                        Theme: <span className='font-bold'>Prime Number</span>
-                      </div>
-                    </div>
-                  }
-                  actions={
-                    <div className='flex items-center'>
-                      <Button
-                        onClick={() => router.push('/super-admin/edit-period')}
-                      >
-                        Add Period
-                      </Button>
-                      <div className='w-2' />
-                      <SlOptionsVertical className='w-4 h-4' />
-                    </div>
-                  }
-                  showIcons={false}
-                  key={i}
+          (data?.data || []).map((v: any, i: number) => {
+            return (
+              // <TaskAccordion
+              //   bordered
+              //   length={4}
+              //   lesson={false}
+              //   taskName={v.name}
+              //   subName={
+              //     <div className='flex items-center flex-1 w-full justify-between'>
+              //       <div className='flex items-center flex-1 w-[400px]'>
+              //         <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
+              //         <div className='w-4' />
+              //         <div>
+              //           Theme: <span className='font-bold'>{v.theme}</span>
+              //         </div>
+              //       </div>
+              //       <div className='flex items-center flex-1 w-full'>
+              //         <div>
+              //           Topic/Sub-Theme:
+              //           <span className='font-bold'>{v.topic}</span>
+              //         </div>
+              //       </div>
+              //     </div>
+              //   }
+              //   actions={
+              //     <div className='flex items-center'>
+              //       <button
+              //         className='border border-primary text-primary p-2 rounded-sm'
+              //         onClick={() => {
+              //           setModal(true);
+              //         }}
+              //       >
+              //         Edit Week
+              //       </button>
+              //       <div className='w-2' />
+              //       <SlOptionsVertical className='w-4 h-4' />
+              //     </div>
+              //   }
+              //   showIcons={false}
+              //   key={i}
+              // >
+              //   <div className='flex flex-col divide-y-2 !text-xs pt-[33px]'>
+              //     {result.map((v: any, j: number) => {
+              //       return (
+              //         <div
+              //           key={j}
+              //           className={clsxm(
+              //             j === 0 && 'border-t',
+              //             j === 3 && 'border-b',
+              //             'flex flex-row justify-between py-[22px]'
+              //           )}
+              //         >
+              //           <div>Period {j + 1}</div>
+              //           <div>
+              //             <span className='text-[#8898AA]'>Title</span>:
+              //             {v.title}
+              //           </div>
+              //           <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
+              //             <div
+              //               className='cursor-pointer'
+              //               onClick={() =>
+              //                 router.push('/super-admin/view-period')
+              //               }
+              //             >
+              //               View
+              //             </div>
+              //             {/* <div
+              //                 className='cursor-pointer'
+              //                 onClick={() =>
+              //                   router.push('/super-admin/edit-period')
+              //                 }
+              //               >
+              //                 Edit
+              //               </div>
+              //               <div>Delete</div> */}
+              //           </div>
+              //         </div>
+              //       );
+              //     })}
+              //   </div>
+              // </TaskAccordion>
+              <div key={i}>
+                <div
+                  onClick={() => {
+                    setShowContent(!showcontent);
+                    setCurrentIndex(i);
+                    fetchPeriods(v.id);
+                  }}
+                  className='border-b grid grid-cols-12 gap-4 items-center py-4 cursor-pointer'
                 >
-                  <div className='flex flex-col divide-y-2 !text-xs pt-[33px]'>
-                    {Array(4)
-                      .fill(0)
-                      .map((v, j) => {
-                        return (
-                          <div
-                            key={j}
-                            className={clsxm(
-                              j === 0 && 'border-t',
-                              j === 3 && 'border-b',
-                              'flex flex-row justify-between py-[22px]'
-                            )}
-                          >
-                            <div>Period {j}</div>
-                            <div>
-                              <span className='text-[#8898AA]'>5</span>/10
-                            </div>
-                            <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
-                              <div
-                                className='cursor-pointer'
-                                onClick={() =>
-                                  router.push('/super-admin/view-period')
-                                }
-                              >
-                                View
-                              </div>
-                              <div
-                                className='cursor-pointer'
-                                onClick={() =>
-                                  router.push('/super-admin/edit-period')
-                                }
-                              >
-                                Edit
-                              </div>
-                              <div>Delete</div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                  <div className='col-span-2'>{v.name} </div>
+                  <div className='col-span-4'>
+                    Theme: <span className='font-bold'>{v.theme}</span>
                   </div>
-                </TaskAccordion>
-              );
-            })
+                  <div className='col-span-4'>
+                    Topic/Sub-Theme:
+                    <span className='font-bold'>{v.topic}</span>
+                  </div>
+                  <div className='col-span-2'>
+                    <button
+                      className='border border-primary text-primary p-2 rounded-sm'
+                      onClick={() => {
+                        setModal(true);
+                        fetchPeriods(v.id);
+                      }}
+                    >
+                      Edit Week
+                    </button>
+                  </div>
+                </div>
+                {showcontent && currentIndex === i && (
+                  <div className='w-full border duration-200 transition-all flex flex-col divide-y-2 !text-xs mt-[33px]'>
+                    {periods.map((v: any, j: number) => {
+                      return (
+                        <div
+                          key={j}
+                          className={clsxm('grid grid-cols-3 py-[22px] px-5')}
+                        >
+                          <div>Period {j + 1}</div>
+                          <div>
+                            <span className='text-[#8898AA] mr-1'>Title:</span>
+                            {v.title}
+                          </div>
+                          <div className='flex flex-row justify-end text-[#ADB3CC] gap-[10px] md:pr-10'>
+                            <div className='cursor-pointer'>View</div>
+                            {/* <div
+                                    className='cursor-pointer'
+                                    onClick={() =>
+                                      router.push('/super-admin/edit-period')
+                                    }
+                                  >
+                                    Edit
+                                  </div>
+                                  <div>Delete</div> */}
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {loading && (
+                      <div className='text-center tetx-xs'>Loading..</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })
         )}
-        <div>
-          <AddWeekModal>
-            <Button variant='outline'>Add Week</Button>
-          </AddWeekModal>
-        </div>
+        {modal && (
+          <Editweek
+            onClickHandler={onClickHandler}
+            periodsList={periodsList}
+            periodsUpdate={periodsUpdate}
+            setperiodsUpdate={setperiodsUpdate}
+            settheme={settheme}
+            settopic={settopic}
+            handleSubmit={handleSubmit}
+          />
+        )}
       </div>
     </div>
   );

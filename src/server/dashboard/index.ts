@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
 import { DashboardOverview } from '@/types';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetDashboardOverview() {
   const query = useQuery({
@@ -44,4 +45,30 @@ export function useGetStudentDashboardOverview() {
         .then((v) => v.data.data as DashboardOverview),
   });
   return query;
+}
+export function useGetAcademicSessions() {
+  const query = useQuery({
+    queryKey: 'academic_sessions',
+    queryFn: () =>
+      request
+        .get('/v1/government/session/all')
+        .then((v) => v.data.data.data as any),
+  });
+  return query;
+}
+
+export function useCreateAcademicCalendar() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'create-academic-calendar',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/session/create', params, {
+        withCredentials: true,
+      }),
+    onSettled: () => {
+      client.refetchQueries('academic_sessions');
+    },
+  });
+  return mutation;
 }

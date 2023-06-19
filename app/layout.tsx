@@ -4,9 +4,9 @@ import 'react-circular-progressbar/dist/styles.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-toggle/style.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
-import "react-toggle/style.css";
 
 import '/src/styles/globals.css';
 

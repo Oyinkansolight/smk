@@ -13,63 +13,73 @@ import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
 const AllStudent = () => {
-  const mockData = [
-    {
-      logo: 1,
-      name: 'Akani Egbherve',
-      numberOfStudent: '12, 500',
-      Student_ID: '#123-BN',
-      type: 'Primary',
-      school: 'Avril Price School',
-      location: 'Benin',
-    },
-    {
-      logo: 2,
-      name: 'Ibrahim Wilson',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Tertiary',
-      school: 'Scaling Heights School',
-      location: 'Benin',
-    },
-    {
-      logo: 3,
-      name: 'Norma Russell',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Secondary',
-      school: 'Black Dash School',
-      location: 'Benin',
-    },
-    {
-      logo: 4,
-      name: 'Regina Askiya',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'ECCDE',
-      school: 'Reaction Primary ',
-      location: 'Benin',
-    },
-    {
-      logo: 5,
-      name: 'Akani Egbherve',
-      numberOfStudent: '12,500',
-      Student_ID: '#123-BN',
-      type: 'Primary',
-      school: 'Victory International  School',
-      location: 'Benin',
-    },
-  ];
+  // const mockData = [
+  //   {
+  //     logo: 1,
+  //     name: 'Akani Egbherve',
+  //     numberOfStudent: '12, 500',
+  //     Student_ID: '#123-BN',
+  //     type: 'Primary',
+  //     school: 'Avril Price School',
+  //     location: 'Benin',
+  //   },
+  //   {
+  //     logo: 2,
+  //     name: 'Ibrahim Wilson',
+  //     numberOfStudent: '12,500',
+  //     Student_ID: '#123-BN',
+  //     type: 'Tertiary',
+  //     school: 'Scaling Heights School',
+  //     location: 'Benin',
+  //   },
+  //   {
+  //     logo: 3,
+  //     name: 'Norma Russell',
+  //     numberOfStudent: '12,500',
+  //     Student_ID: '#123-BN',
+  //     type: 'Secondary',
+  //     school: 'Black Dash School',
+  //     location: 'Benin',
+  //   },
+  //   {
+  //     logo: 4,
+  //     name: 'Regina Askiya',
+  //     numberOfStudent: '12,500',
+  //     Student_ID: '#123-BN',
+  //     type: 'ECCDE',
+  //     school: 'Reaction Primary ',
+  //     location: 'Benin',
+  //   },
+  //   {
+  //     logo: 5,
+  //     name: 'Akani Egbherve',
+  //     numberOfStudent: '12,500',
+  //     Student_ID: '#123-BN',
+  //     type: 'Primary',
+  //     school: 'Victory International  School',
+  //     location: 'Benin',
+  //   },
+  // ];
   const { data, error, isLoading } = useGetStudentsList();
 
   const [students, setstudents] = useState(data ?? []);
 
   const handleSearch = (value: string) => {
-    const result = students.filter(
-      (data) =>
-        data.user[0].firstName.toLowerCase().includes(value.toLowerCase()) ||
-        data.user[0].lastName.toLowerCase().includes(value.toLowerCase())
-    );
+    const result =
+      students.length > 0
+        ? students.filter((data) => {
+            if (data.user) {
+              return (
+                data.user[0].firstName
+                  .toLowerCase()
+                  .includes(value.toLowerCase()) ||
+                data.user[0].lastName
+                  .toLowerCase()
+                  .includes(value.toLowerCase())
+              );
+            }
+          })
+        : [];
     setstudents(result);
   };
 
@@ -140,7 +150,8 @@ const AllStudent = () => {
                 <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
                 <Link href='/super-admin/student'>
                   <h2 className='text-sm font-medium capitalize'>
-                    {item.user[0].firstName} {item.user[0].lastName}
+                    {item.user && item.user[0].firstName}{' '}
+                    {item.user && item.user[0].lastName}
                   </h2>
                 </Link>
               </div>

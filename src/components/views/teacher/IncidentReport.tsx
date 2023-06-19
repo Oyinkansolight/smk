@@ -5,7 +5,6 @@ import DragDropDocument from '@/components/input/DragDropDocument';
 import TextArea from '@/components/input/TextArea';
 import { uploadDocument } from '@/firebase/init';
 import { useCreateReport } from '@/server/teacher';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
@@ -30,7 +29,6 @@ const priorityOptions = [
 ];
 
 const IncidentReport = () => {
-  const router = useRouter();
   const { mutateAsync } = useCreateReport();
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string>();
@@ -63,7 +61,7 @@ const IncidentReport = () => {
       if (response.status === 201) {
         toast.success('Report created successfully');
         setTimeout(() => {
-          router.refresh();
+          location.reload();
         }, 2000);
       }
     } else {

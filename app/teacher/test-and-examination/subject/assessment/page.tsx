@@ -11,11 +11,11 @@ import { Page as DocPage, Document, pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
-const names = [
-  'Continuous Assessment test 1',
-  'Continuous Assessment test 2',
-  'End of term Examination',
-];
+// const names = [
+//   'Continuous Assessment test 1',
+//   'Continuous Assessment test 2',
+//   'End of term Examination',
+// ];
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
@@ -23,10 +23,10 @@ export default function Page() {
   const [numberOfPages, setNumberOfPages] = useState(0);
   return (
     <div className='h-full layout'>
-      <div className='text-[#D4D5D7] text-2xl'>
+      <div className='text-[#D4D5D7] text-xl mt-6'>
         {'Test & Examination > Mathematics'}
       </div>
-      <div className='font-bold text-3xl py-8 h3'>
+      <div className='font-bold py-8 h2'>
         <div>Mathematics</div>
       </div>
       <TextTabBar
@@ -92,7 +92,7 @@ export default function Page() {
   );
 }
 
-export function EditScore({ id }: { id: number }) {
+function EditScore({ id }: { id: number }) {
   const [score, setScore] = useState(35);
   const [isEditing, setIsEditing] = useState(true);
   return (

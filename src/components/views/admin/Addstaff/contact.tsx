@@ -2,15 +2,10 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelectOptional';
+import FormSelect from '@/components/input/formSelect';
+import FormSelectOptional from '@/components/input/formSelectOptional';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { useEffect, useState } from 'react';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -71,7 +66,7 @@ const Contact = ({ register, errors }: Iprops) => {
             name='email'
             register={register}
             validation={{
-              required: 'Email Number is required',
+              required: 'Email is required',
             }}
             helper={
               errors?.email && {
@@ -85,7 +80,7 @@ const Contact = ({ register, errors }: Iprops) => {
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
           <FormInput
-            label='Address'
+            label='Residential Address'
             placeholder='Details here'
             name='address'
             register={register}
@@ -101,8 +96,8 @@ const Contact = ({ register, errors }: Iprops) => {
           />
         </div>
         <div>
-          <FormSelect
-            label='Town'
+          <FormSelectOptional
+            label='Local Government Area'
             name='townId'
             options={Array.prototype.concat.apply([], towns)}
             register={register}
@@ -112,6 +107,91 @@ const Contact = ({ register, errors }: Iprops) => {
             helper={
               errors?.townId && {
                 message: errors?.townId?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+      <div className='border-t w-full my-4'></div>
+
+      <div className='my-10 grid grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Name of Next Of Kin'
+            type='text'
+            placeholder='Details here'
+            name='nok'
+            register={register}
+            validation={{
+              required: 'NOK is required',
+            }}
+            helper={
+              errors?.nok && {
+                message: errors?.nok?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormSelect
+            label='Relationship to Next Of Kin'
+            name='rnok'
+            options={[
+              'Husband',
+              'Wife',
+              'Brother',
+              'Mother',
+              'Sister',
+              'Daughter',
+              'Son',
+              'others',
+            ]}
+            register={register}
+            validation={{
+              required: 'Relationship NOK is required',
+            }}
+            helper={
+              errors?.rnok && {
+                message: errors?.rnok?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+      <div className='my-10 grid grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Address of Next Of Kin'
+            placeholder='Details here'
+            name='address'
+            register={register}
+            validation={{
+              required: 'Address is required',
+            }}
+            helper={
+              errors?.address && {
+                message: errors?.address?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormInput
+            label='Phone Number of Next Of kin'
+            type='number'
+            placeholder='Details here'
+            name='phoneNumberNOK'
+            register={register}
+            validation={{
+              required: 'Phone Number is required',
+            }}
+            helper={
+              errors?.phoneNumberNOK && {
+                message: errors?.phoneNumberNOK?.message,
                 type: 'danger',
               }
             }

@@ -10,9 +10,11 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 export default function Page() {
   const router = useRouter();
-  const { data } = useGetInstituteClass('');
+  // const params = useSearchParams();
+  const { data } = useGetInstituteClass();
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+
   return (
     <div className='px-8 layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>

@@ -1,9 +1,9 @@
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 const Page = () => {
   const router = useRouter();
@@ -11,7 +11,8 @@ const Page = () => {
     <div className='layout flex flex-col gap-5'>
       <div
         onClick={() => router.back()}
-        className='flex items-center space-x-4'>
+        className='flex items-center space-x-4'
+      >
         <Image
           src='/svg/back_yellow.svg'
           width={10}
@@ -41,10 +42,9 @@ const Page = () => {
       <hr />
 
       <AllWeek />
-
     </div>
-  )
-}
+  );
+};
 
 function AllWeek() {
   return (
@@ -79,7 +79,9 @@ function AllWeek() {
         <div className='text-2xl font-bold'>Week 2 - Theme</div>
 
         <div className='flex flex-wrap gap-x-[33px] gap-y-[26px] relative opacity-25 cursor-not-allowed'>
-          <div className='text-[#007AFF] font-bold text-2xl absolute top-1/2 inset-x-[40%] whitespace-nowrap'>Not yet active</div>
+          <div className='text-[#007AFF] font-bold text-2xl absolute top-1/2 inset-x-[40%] whitespace-nowrap'>
+            Not yet active
+          </div>
           <SinglePeriod />
           <SinglePeriod />
           <SinglePeriod />
@@ -89,7 +91,6 @@ function AllWeek() {
     </div>
   );
 }
-
 
 function SinglePeriod() {
   const router = useRouter();
@@ -103,8 +104,12 @@ function SinglePeriod() {
       </div>
 
       <div className='flex flex-col gap-4'>
-        <div className='text-[#808080] font-semibold text-[14px] leading-5'>Period 1</div>
-        <div className='font-semibold text-lg leading-5'>Introduction to prime Numbers</div>
+        <div className='text-[#808080] font-semibold text-[14px] leading-5'>
+          Period 1
+        </div>
+        <div className='font-semibold text-lg leading-5'>
+          Introduction to prime Numbers
+        </div>
 
         <div className='flex items-center justify-center bg-[#F0FFF9] text-[#08643A] text-[14px] leading-[18px] rounded-2xl max-w-[231px] w-full h-[50px]'>
           Completed
@@ -113,10 +118,11 @@ function SinglePeriod() {
 
       <div
         onClick={() => router.push('/new-student/subjects/subject/period')}
-        className='text-[#3361FF] text-xs font-semibold cursor-pointer text-center'>
+        className='text-[#3361FF] text-xs font-semibold cursor-pointer text-center'
+      >
         View
       </div>
     </div>
   );
 }
-export default Page
+export default Page;

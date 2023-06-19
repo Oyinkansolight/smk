@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
+import request from '@/server';
+import { useGetAcademicSessions } from '@/server/dashboard';
 import { useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
@@ -13,18 +16,34 @@ import { SlOptions } from 'react-icons/sl';
 interface StudentTeacherProfileCardProps {
   image?: string;
   name: string;
+  setschoolType?: (v: number) => void;
+  setsessionterms: (v: []) => void;
+  setacademicyear?: (v: { session: string; id: number }) => void;
 }
 
 export default function SubjectProfileCard({
   image,
   name,
+  setschoolType,
+  setsessionterms,
+  setacademicyear,
 }: StudentTeacherProfileCardProps) {
   const [currentGrid, setCurrentGrid] = useState(0);
 
   const handleToggleGrid = (index: number) => {
     setCurrentGrid(index);
+    setschoolType && setschoolType(index);
   };
+  const { data } = useGetAcademicSessions();
 
+  function Fetchterms(id: number) {
+    request
+      .get(`/v1/government/terms/session-terms?sessionId=${id}`)
+      .then((v) => {
+        const data = v.data.data.data;
+        setsessionterms(data.data || []);
+      });
+  }
   return (
     <div className='hidden md:flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
@@ -40,18 +59,33 @@ export default function SubjectProfileCard({
       )}
       <div className='h-10' />
       <div className='mb-1 text-xl font-bold'>{name}</div>
-      <div className='text-primary text-center text-xs font-bold my-2'>
-        Edit
-      </div>
 
-      <div className='h-3' />
+      <div className=''>
+        <select
+          name=''
+          id=''
+          className='bg-[#EFFFF6] rounded-md'
+          onChange={(e) => {
+            setacademicyear && setacademicyear(JSON.parse(e.target.value));
+            Fetchterms(JSON.parse(e.target.value).id);
+          }}
+        >
+          <option> - Select Academic Year - </option>
+
+          {(data?.data ?? []).map((v: any, id: number) => (
+            <option key={id} value={JSON.stringify(v)}>
+              {v.session}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className='text-[#C3CAD9] text-center font-bold mt-4 mb-8'>
         Select School
       </div>
 
       <GridTabBar
-        variant='primary'
+        variant='secondary'
         selected={currentGrid}
         onSelect={handleToggleGrid}
         items={[

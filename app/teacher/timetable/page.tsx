@@ -3,10 +3,12 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import TimetableView from '@/components/views/teacher/TimetableView';
+import { useGetSessionCalendar } from '@/server/institution/time-table';
 import { useState } from 'react';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
+  const { data: sessionCalendarData } = useGetSessionCalendar(1);
   return (
     <div className='flex justify-center'>
       <div className='w-full max-w-5xl'>
@@ -19,9 +21,9 @@ export default function Page() {
         {idx === 0 ? (
           <TimetableView />
         ) : idx === 1 ? (
-          <AcademicCalendar />
+          <AcademicCalendar sessionCalendarData={sessionCalendarData} />
         ) : (
-          <div />
+          <TimetableView />
         )}
       </div>
     </div>

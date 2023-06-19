@@ -1,6 +1,5 @@
 import NextImage from '@/components/NextImage';
 import { BasicCard } from '@/components/cards';
-import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
 import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
@@ -117,7 +116,8 @@ export default function TeacherDashboardView() {
       </div>
 
       <div className='mt-[23px]'>
-        <AcademicCalendar />
+        <div>Removed for AcademicCalendar comp for now, new changes in teacher.</div>
+        {/* <AcademicCalendar /> */}
       </div>
     </div>
   );

@@ -94,6 +94,24 @@ const AdminSidebar = () => {
           href='/super-admin/all-student'
           active={routeDetails && routeDetails.includes('student') && true}
         />
+
+        <SideBarButton
+          open={open}
+          icon={
+            <IDBadge
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
+          title='Staff'
+          href='/super-admin/all-staff'
+          active={
+            routeDetails && routeDetails.includes('teacher' || 'staff') && true
+          }
+        />
+
         <SideBarButton
           open={open}
           icon={
@@ -108,22 +126,7 @@ const AdminSidebar = () => {
           href='/super-admin/academic-calendar'
           active={routeDetails && routeDetails.includes('calendar') && true}
         />
-        <SideBarButton
-          open={open}
-          icon={
-            <IDBadge
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Teachers'
-          href='/super-admin/all-staff'
-          active={
-            routeDetails && routeDetails.includes('teacher' || 'staff') && true
-          }
-        />
+
         <SideBarButton
           open={open}
           icon={

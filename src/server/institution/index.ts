@@ -147,6 +147,21 @@ export function useGetTeachersList(params?: PaginationParams) {
   });
   return query;
 }
+export function useGetClassesList() {
+  const query = useQuery({
+    queryKey: 'get_teachers_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/institutions/institutes/get-classes');
+        return d.data.data.data as any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
 export function useGetSchools(type?: string) {
   const instituteType = type ?? '';
   const query = useQuery({
@@ -225,6 +240,17 @@ export function useCreateStudent() {
       }),
   });
   return mutation;
+}
+
+export function useGetAcademicSessionsTermsWeek(id: number) {
+  const query = useQuery({
+    queryKey: 'academic_sessions_terms',
+    queryFn: () =>
+      request
+        .get(`/v1/institutions/institutes/get-term-weeks?termId=${id}`)
+        .then((v) => v.data.data.data as any),
+  });
+  return query;
 }
 
 export function useGetIncidentReports(id?: string) {

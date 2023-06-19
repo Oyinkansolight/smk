@@ -17,6 +17,32 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TransferStudent = () => {
   const {
     register,
@@ -29,13 +55,11 @@ const TransferStudent = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
-  const [publishData, setpublishData] = useState(null);
+  const [publishData] = useState(null);
 
-  const handleCreateStaff = useCreateStaff();
+  // const handleCreateStaff = useCreateStaff();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(errors);
-    console.log(data);
     if (
       stage === 1 &&
       data.className &&

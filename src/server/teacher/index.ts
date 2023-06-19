@@ -55,12 +55,12 @@ export function useClockOut() {
   return mutation;
 }
 
-export function useGetTeachersSubjectList() {
+export function useGetTeachersSubjectList(id: number | undefined) {
   const query = useQuery({
     queryKey: 'get_subject_list_teacher',
     queryFn: async () => {
       const d = await request.get(
-        '/v1/government/classes-subjects/teacher-subjects?limit=100&&id=1'
+        `/v1/government/classes-subjects/teacher-subjects?limit=100&&id=${id}`
       );
       return d.data.data.data as Subject[];
     },

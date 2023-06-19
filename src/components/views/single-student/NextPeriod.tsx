@@ -1,31 +1,51 @@
-import Button from '@/components/buttons/Button';
+'use client';
+
+import { useGetStudentNextPeriod } from '@/server/government/student';
+import Link from 'next/link';
+import { RotatingLines } from 'react-loader-spinner';
 
 export default function NextPeriod() {
+  const { data, isLoading } = useGetStudentNextPeriod();
+
   return (
-    <div className='flex gap-8 bg-[#F2F5FF] border-2 items-center p-4 rounded-lg'>
-      <div className='h-28 w-28 rounded-lg bg-slate-400' />
-      <div className='flex flex-col gap-3 flex-1'>
-        <div className='text-[#3479EA] font-semibold text-sm leading-5'>
-          4th Period, 09:00 AM - 09:40 AM
-        </div>
-        <div className='text-[#615E83] font-bold text-2xl leading-7'>
-          Mathematics
-        </div>
-        <div>
-          <div className='text-[#615E83] font-bold'>
-            <span className='text-[#333F4859]'>Time Left:</span> 32 Mins
+    <div>
+      {!isLoading ? (
+        <div className='flex gap-8 bg-[#F2F5FF] border-2 items-center p-4 rounded-lg'>
+          <div className='h-28 w-28 rounded-lg bg-slate-400' />
+          <div className='flex flex-col gap-3 flex-1'>
+            <div className='text-[#3479EA] font-semibold text-sm leading-5'>
+              4th Period, {data.startTime} - {data.endTime}
+            </div>
+            <div className='text-[#615E83] font-bold text-2xl leading-7'>
+              {data.subject.name}
+            </div>
+            <div>
+              <div className='text-[#615E83] font-bold'>
+                <span className='text-[#333F4859]'>Time Left:</span> 32 Mins
+              </div>
+              <div className='w-full h-2 bg-[#DADADA] rounded-full overflow-hidden'>
+                <div className='w-20 h-full bg-[#FFC136]' />
+              </div>
+            </div>
           </div>
-          <div className='w-full h-2 bg-[#DADADA] rounded-full overflow-hidden'>
-            <div className='w-20 h-full bg-[#FFC136]' />
-          </div>
+          <Link
+            href={`/new-student/period/subject?name=${data.subject.name}`}
+            className='rounded-lg bg-[#3361FF] p-2 text-white text-sm font-bold max-w-[142px] max-h-[36px]'
+          >
+            Go To Period
+          </Link>
         </div>
-      </div>
-      <Button
-        className='rounded-lg bg-[#3361FF] max-w-[142px] max-h-[36px]'
-        variant='secondary'
-      >
-        Go To Period
-      </Button>
+      ) : (
+        <div className='flex justify-center'>
+          <RotatingLines
+            width='100'
+            visible={true}
+            strokeWidth='5'
+            strokeColor='#3361FF'
+            animationDuration='0.75'
+          />
+        </div>
+      )}
     </div>
   );
 }

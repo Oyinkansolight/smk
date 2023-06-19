@@ -43,3 +43,29 @@ export function useUpdateStudent() {
   });
   return mutation;
 }
+
+export function useGetStudentNextPeriod() {
+  const query = useQuery({
+    queryKey: 'get_student_next_period',
+    queryFn: () =>
+      request
+        .get(
+          '/v1/institutions/institutes/get-student-next-period?sessionId=1&termId=1&studentId=1&weekId=1'
+        )
+        .then((res) => res.data.data.data),
+  });
+  return query;
+}
+
+export function useGetStudentOngoingPeriod() {
+  const query = useQuery({
+    queryKey: 'get_student_ongoing_period',
+    queryFn: () =>
+      request
+        .get(
+          '/v1/institutions/institutes/get-student-ongoing-period?sessionId=1&termId=1&studentId=1&weekId=1'
+        )
+        .then((res) => res.data.data.data),
+  });
+  return query;
+}

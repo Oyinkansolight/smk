@@ -2,7 +2,6 @@
 
 import ViewAttendanceListItem from '@/components/views/teacher/ViewAttendanceListItem';
 import { useGetStudentsList } from '@/server/institution';
-import { uniqueId } from 'lodash';
 import moment from 'moment';
 
 export default function Page() {
@@ -26,16 +25,18 @@ export default function Page() {
             {data &&
               data.length > 0 &&
               data.map((student, i) => {
-                const userName =
-                  student.user[0].lastName + ', ' + student.user[0].firstName;
-                const studentId = student.user[0].id;
-                return (
-                  <ViewAttendanceListItem
-                    key={uniqueId()}
-                    index={studentId}
-                    name={userName}
-                  />
-                );
+                if (student.user) {
+                  const userName =
+                    student.user[0].lastName + ', ' + student.user[0].firstName;
+                  const studentId = student.user[0].id;
+                  return (
+                    <ViewAttendanceListItem
+                      key={studentId}
+                      index={studentId}
+                      name={userName}
+                    />
+                  );
+                }
               })}
           </div>
         </div>

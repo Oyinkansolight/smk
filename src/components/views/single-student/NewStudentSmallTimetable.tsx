@@ -2,11 +2,18 @@ import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
 export default function NewStudentSmallTimetable() {
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <div className='w-full max-w-[296px]'>
       <div className='flex justify-end'>
         <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-[93px] h-[30px] whitespace-nowrap'>
-          23 May, 2023
+          {formattedDate}
         </div>
       </div>
       <div className='h-4' />
