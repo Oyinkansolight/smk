@@ -20,11 +20,11 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
-import { IoMdTrendingUp } from 'react-icons/io';
 import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
-import ReactSelect from 'react-select';
+import Select from 'react-select';
+
 
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div># {row.id}</div> },
@@ -70,19 +70,15 @@ const SingleSchoolDashboard = () => {
                 },
                 {
                   icon: <RiCalendar2Fill className='h-5 w-5' />,
-                  label: 'Calendar',
+                  label: 'Timetable',
                 },
                 {
                   icon: <MdOutlineSort className='h-5 w-5' />,
-                  label: 'Assessment',
+                  label: 'Subject',
                 },
                 {
                   icon: <IoReorderThree className='h-5 w-5' />,
                   label: 'Exam Report',
-                },
-                {
-                  icon: <IoMdTrendingUp className='h-5 w-5' />,
-                  label: 'Attendance Report',
                 },
               ]}
             />
@@ -210,7 +206,10 @@ const SingleSchoolDashboard = () => {
                   <div className='text-[#6B7A99] text-xl font-bold'>
                     Student List
                   </div>
-                  <ReactSelect />
+                  <Select
+                    value={{ value: 'all', label: 'All Class Arms' }}
+                    options={[{ value: 'all', label: 'All Class Arms' }]}
+                  />
                 </div>
                 <Table
                   showFilter={false}
@@ -297,7 +296,10 @@ const SingleSchoolDashboard = () => {
                   <div className='text-[#6B7A99] text-xl font-bold'>
                     Staff List
                   </div>
-                  <ReactSelect />
+                  <Select
+                    value={{ value: 'all', label: 'Filter' }}
+                    options={[{ value: 'all', label: 'Filter' }]}
+                  />
                 </div>
                 <Table
                   showFilter={false}

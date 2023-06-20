@@ -7,16 +7,13 @@ import { TableColumn } from 'react-data-table-component';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 
+
 const columns: TableColumn<any>[] = [
   { name: 'Staff Name', cell: (row) => row.name },
   { name: 'Average Score', cell: (row) => <div>{row.score} %</div> },
   {
     name: 'Status',
-    cell: (row) => (
-      <div className='flex w-full items-center justify-center'>
-        <ScoreStatus score={row.score} />
-      </div>
-    ),
+    cell: (row) => <ScoreStatus score={row.score} />,
   },
   { name: 'Date', cell: (row) => row.date },
 ];

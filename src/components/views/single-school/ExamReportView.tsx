@@ -1,73 +1,101 @@
+import BackButton from '@/components/buttons/BackButton';
 import Button from '@/components/buttons/Button';
+import ScoreStatus from '@/components/profile/ScoreStatus';
+import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
-import moment from 'moment';
+import { useState } from 'react';
+import { TableColumn } from 'react-data-table-component';
+import { BsArrowRightCircle } from 'react-icons/bs';
+import ReactSelect from 'react-select';
+
+const columns: TableColumn<any>[] = [
+  { name: 'Subject', cell: (row) => row.name },
+  {
+    name: 'Status',
+    cell: (row) => <ScoreStatus score={row.score} />,
+  },
+  { name: 'Average Score', cell: (row) => <div>{row.score} %</div> },
+
+  { name: 'Date', cell: (row) => (row.date as Date).toDateString() },
+];
 
 export default function ExamReportView({
   report,
 }: {
   report: { name: string; score: number; date: Date }[];
 }) {
-  return (
-    <div className='bg-white p-5 rounded-[4.5px] border border-[#E5E5E5]'>
-      <div className='flex items-center justify-between border-b-[2px] py-3'>
-        <div className='text-xl font-bold text-[#6B7A99]'>Exam Report List</div>
-        <div className='flex items-center gap-[30px] font-bold'>
-          <Button variant='ghost'>View Graph</Button>
-
-          <Button
-            variant='outline'
-            className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-          >
-            Download Report
-          </Button>
-        </div>
+  const [show, setShow] = useState(false);
+  const ListItem = ({ title }: { title: string }) => {
+    return (
+      <div
+        onClick={() => setShow(true)}
+        className='flex cursor-pointer text-[#6B7A99] font-bold justify-between rounded border shadow-sm border-[#E3E3E3] items-center p-2 '
+      >
+        <div>{title}</div>
+        <BsArrowRightCircle
+          className={clsxm(
+            'h-[27px] w-[27px] text-[#C3CAD9] transition-transform duration-300'
+          )}
+        />
       </div>
-      <div className='h-8' />
-      <div className='relative overflow-x-auto'>
-        <table className='w-full text-left text-sm text-gray-500 '>
-          <thead className=' text-xs uppercase text-gray-700 '>
-            <tr className=' border-b-2 bg-[#F6F9FC]'>
-              <th className=' px-6 py-3'>Subject</th>
-              <th className='  px-6 py-3'>Status</th>
-              <th className='px-6 py-3'>Average Score</th>
-              <th className='px-6 py-3'>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {report.map((task, i) => (
-              <tr key={i} className='border-b  '>
-                <th
-                  scope='row'
-                  className='whitespace-nowrap px-6 py-4 font-medium text-gray-900'
-                >
-                  {task.name}
-                </th>
-                <td className='px-6 py-4'>
-                  <div className='flex justify-start'>
-                    <div
-                      className={clsxm(
-                        'w-48  rounded-full py-1 px-6 text-center text-white',
-                        task.score > 70
-                          ? 'bg-[#4AAF05]'
-                          : task.score > 40
-                          ? 'bg-[#FB8832]'
-                          : 'bg-[#FF5756]'
-                      )}
-                    >
-                      {task.score > 70
-                        ? 'Good'
-                        : task.score > 40
-                        ? 'Below Average'
-                        : 'Poor'}
-                    </div>
-                  </div>
-                </td>
-                <td className='px-6 py-4'>{task.score} %</td>
-                <td>{moment(task.date).format('DD/MM/YYYY')}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    );
+  };
+  return show ? (
+    <div className='flex flex-col gap-[22px]'>
+      <div className='flex gap-5 items-center justify-end'>
+        <div className='font-bold'>View Graph</div>
+        <Button
+          variant='outline'
+          className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+        >
+          Download Report
+        </Button>
+      </div>
+      <div className='bg-white p-6 rounded border flex flex-col gap-5'>
+        <div className='flex items-start gap-3'>
+          <BackButton onClick={() => setShow(false)} />
+          <div className='flex-1' />
+          <ReactSelect
+            value={{ value: 'class', label: 'All Class Arm' }}
+            options={[{ value: 'class', label: 'All Class Arm' }]}
+          />
+          <ReactSelect
+            value={{ value: 'student', label: 'First Term' }}
+            options={[{ value: 'student', label: 'First Term' }]}
+          />
+        </div>
+        <div className='rounded bg-[#F8FDFF] p-5 flex items-center justify-between'>
+          <div className='text-[#5A5A5A]'>
+            Class: <span className='font-bold text-black'>Primary 1</span>
+          </div>
+          <div className='flex flex-col'>
+            <div className='text-xl font-bold'>72%</div>
+            <div>Average Performance</div>
+          </div>
+        </div>
+        <Table
+          showFilter={false}
+          showSearch={false}
+          columns={columns}
+          data={report}
+        />
+      </div>
+    </div>
+  ) : (
+    <div className='bg-white rounded-md p-6 border'>
+      <div className='flex'>
+        <div className='text-[#6B7A99] text-xl font-bold'>Exam Report</div>
+      </div>
+      <div className='h-px bg-gray-200 my-4' />
+      <div className='flex flex-col gap-2'>
+        {Array(6)
+          .fill(0)
+          .map((v, i) => (
+            <ListItem key={i} title={`Primary ${i + 1}`} />
+          ))}
+        <ListItem title='SSS 1 - Science Class' />
+        <ListItem title='SSS 1 - Social Science Class' />
+        <ListItem title='SSS 2 - Science Class' />
       </div>
     </div>
   );
