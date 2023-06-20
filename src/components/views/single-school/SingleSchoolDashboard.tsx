@@ -7,16 +7,19 @@ import TabBar from '@/components/layout/TabBar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Table from '@/components/tables/TableComponent';
 import InstitutionBioDetails from '@/components/views/admin/InstitutionBioDetails';
+import StaffClassAttendanceReport from '@/components/views/admin/StaffClassAttendanceReport';
+import StudentClassAttendanceReport from '@/components/views/admin/StudentClassAttendanceReport';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import SchoolCalendarView from '@/components/views/single-school/SchoolCalendarView';
 import SchoolDashboardView from '@/components/views/single-school/SchoolDashboardView';
+import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
+import { useGetAllFiles } from '@/server/library';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
-import { BsArrowRightCircle } from 'react-icons/bs';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
@@ -39,11 +42,20 @@ const studentListColumns: TableColumn<any>[] = [
 const SingleSchoolDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridIdx, setGridIdx] = useState(0);
+  const GovtFilesData = useGetAllFiles('');
+  const schoolFilesData: any = [];
+  const { data, isLoading } = GovtFilesData;
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   return (
     <div className='flex'>
-      <SchoolProfileCard idx={gridIdx} setIdx={setGridIdx} />
+      <SchoolProfileCard
+        idx={gridIdx}
+        setIdx={(v) => {
+          setTabIdx(0);
+          setGridIdx(v);
+        }}
+      />
       {gridIdx === 0 && (
         <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
           <div className='flex w-full items-center justify-between'>
@@ -162,7 +174,7 @@ const SingleSchoolDashboard = () => {
               items={[
                 {
                   icon: <RiDashboardFill className='h-5 w-5' />,
-                  label: 'Account Details',
+                  label: 'Students',
                 },
                 {
                   icon: <BiTrendingUp className='h-5 w-5' />,
@@ -179,7 +191,7 @@ const SingleSchoolDashboard = () => {
           </div>
 
           {tabIdx === 0 && (
-            <div>
+            <div className='flex flex-col gap-4'>
               <div className='-mt-[10px] flex flex-row items-center justify-end'>
                 <Button
                   variant='outline'
@@ -212,6 +224,13 @@ const SingleSchoolDashboard = () => {
                       class: 'Primary 1A',
                       attendance: 88,
                     },
+                    {
+                      id: 1234,
+                      status: 'inactive',
+                      name: 'Akani Egbherve',
+                      class: 'Primary 1A',
+                      attendance: 70,
+                    },
                   ]}
                 />
               </div>
@@ -227,43 +246,131 @@ const SingleSchoolDashboard = () => {
                   Download Report
                 </Button>
               </div>
-              <div className='bg-white rounded-md p-6 border'>
-                <div className='flex'>
+              <StudentClassAttendanceReport />
+            </div>
+          )}
+        </div>
+      )}
+      {gridIdx === 3 && (
+        <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+          <div className='flex w-full items-center justify-between'>
+            <TabBar
+              variant='primary'
+              selected={tabIdx}
+              onSelect={(i) => setTabIdx(i)}
+              items={[
+                {
+                  icon: <RiDashboardFill className='h-5 w-5' />,
+                  label: 'Students',
+                },
+                {
+                  icon: <BiTrendingUp className='h-5 w-5' />,
+                  label: 'Attendance Report',
+                },
+              ]}
+            />
+
+            <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+
+            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
+              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
+            </div>
+          </div>
+
+          {tabIdx === 0 && (
+            <div className='flex flex-col gap-4'>
+              <div className='-mt-[10px] flex flex-row items-center justify-end'>
+                <Button
+                  variant='outline'
+                  className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+                >
+                  Download Report
+                </Button>
+              </div>
+              <CountCard
+                text='72 %'
+                title='Average Attendance Rate'
+                variant='basic'
+              />
+              <div className='bg-white rounded-md p-6'>
+                <div className='flex justify-between'>
                   <div className='text-[#6B7A99] text-xl font-bold'>
-                    Attendance List
+                    Staff List
                   </div>
+                  <ReactSelect />
                 </div>
-                <div className='h-px bg-gray-200 my-4' />
-                <div className='flex flex-col gap-2'>
-                  {Array(6)
-                    .fill(0)
-                    .map((v, i) => (
-                      <AttendanceListItem key={i} title={`Primary ${i + 1}`} />
-                    ))}
-                  <AttendanceListItem title='SSS 1 - Science Class' />
-                  <AttendanceListItem title='SSS 1 - Social Science Class' />
-                  <AttendanceListItem title='SSS 2 - Science Class' />
-                </div>
+                <Table
+                  showFilter={false}
+                  showSearch={false}
+                  columns={studentListColumns}
+                  data={[
+                    {
+                      id: 1234,
+                      status: 'online',
+                      name: 'Ibrahim Wilson',
+                      class: 'Primary 1A',
+                      attendance: 88,
+                    },
+                  ]}
+                />
               </div>
             </div>
+          )}
+          {tabIdx === 1 && (
+            <div className='flex flex-col'>
+              <div className='-mt-[10px] flex flex-row items-center justify-end'>
+                <Button
+                  variant='outline'
+                  className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+                >
+                  Download Report
+                </Button>
+              </div>
+              <StaffClassAttendanceReport />
+            </div>
+          )}
+        </div>
+      )}
+      {gridIdx === 4 && (
+        <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+          <div className='flex w-full items-center justify-between'>
+            <TabBar
+              variant='primary'
+              selected={tabIdx}
+              onSelect={(i) => setTabIdx(i)}
+              items={[
+                {
+                  icon: <RiDashboardFill className='h-5 w-5' />,
+                  label: 'Government Library',
+                },
+                {
+                  icon: <BiTrendingUp className='h-5 w-5' />,
+                  label: 'Institution Library',
+                },
+              ]}
+            />
+
+            <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+
+            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
+              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
+            </div>
+          </div>
+
+          {tabIdx === 0 && (
+            <Files data={data} isLoading={isLoading} variant='secondary' />
+          )}
+          {tabIdx === 1 && (
+            <Files
+              data={schoolFilesData}
+              isLoading={isLoading}
+              variant='secondary'
+            />
           )}
         </div>
       )}
     </div>
   );
 };
-
-function AttendanceListItem({ title }: { title: string }) {
-  return (
-    <div className='flex text-[#6B7A99] font-bold justify-between rounded border shadow-sm border-[#E3E3E3] items-center p-2 '>
-      <div>{title}</div>
-      <BsArrowRightCircle
-        className={clsxm(
-          'h-[27px] w-[27px] text-[#C3CAD9] transition-transform duration-300'
-        )}
-      />
-    </div>
-  );
-}
 
 export default SingleSchoolDashboard;

@@ -51,12 +51,12 @@ export default function SchoolProfileCard({
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,
-            label: 'Files',
+            label: 'Library',
           },
-          {
-            icon: <AiFillCloud className='h-5 w-5' />,
-            label: 'Settings',
-          },
+          // {
+          //   icon: <AiFillCloud className='h-5 w-5' />,
+          //   label: 'Settings',
+          // },
         ]}
       />
       <div className='h-20' />

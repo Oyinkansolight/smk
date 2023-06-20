@@ -8,9 +8,16 @@ import { BsArrowRightCircle } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 
 const columns: TableColumn<any>[] = [
-  { name: 'Student Name', cell: (row) => row.name },
+  { name: 'Staff Name', cell: (row) => row.name },
   { name: 'Average Score', cell: (row) => <div>{row.score} %</div> },
-  { name: 'Status', cell: (row) => <ScoreStatus score={row.score} /> },
+  {
+    name: 'Status',
+    cell: (row) => (
+      <div className='flex w-full items-center justify-center'>
+        <ScoreStatus score={row.score} />
+      </div>
+    ),
+  },
   { name: 'Date', cell: (row) => row.date },
 ];
 
@@ -57,7 +64,11 @@ export default function StudentClassAttendanceReport() {
         showFilter={false}
         showSearch={false}
         columns={columns}
-        data={[{ name: 'Adejoke James', score: 55, date: '03/03/12' }]}
+        data={[
+          { name: 'Adejoke James', score: 55, date: '03/03/12' },
+          { name: 'Adejoke James', score: 20, date: '03/03/12' },
+          { name: 'Adejoke James', score: 45, date: '03/03/12' },
+        ]}
       />
     </div>
   ) : (

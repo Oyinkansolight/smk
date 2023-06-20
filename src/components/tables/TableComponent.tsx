@@ -78,6 +78,8 @@ export default function Table<T>(
         }}
         {...props}
         data={filteredData}
+        pagination
+        paginationPerPage={5}
       />
     </div>
   );
