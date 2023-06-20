@@ -148,7 +148,7 @@ const AllStudent = () => {
               <div className='col-span-1'>#{idx + 1} </div>
               <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
                 <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                <Link href='/super-admin/student'>
+                <Link href='/admin/student'>
                   <h2 className='text-sm font-medium capitalize'>
                     {item.user && item.user[0].firstName}{' '}
                     {item.user && item.user[0].lastName}

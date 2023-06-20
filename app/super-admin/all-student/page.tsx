@@ -67,7 +67,7 @@ const AllStudent = () => {
           <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
         </div>
         <Link
-          href='/admin/add-student'
+          href="/admin/add-student"
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add Student
@@ -101,7 +101,7 @@ const AllStudent = () => {
               <div className='col-span-1'>#{idx + 1} </div>
               <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
                 <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                <Link href='/super-admin/student'>
+                <Link href={`/super-admin/student?id=${item.id}`}>
                   <h2 className='text-sm font-medium capitalize'>
                     {item.user && item.user[0].firstName}{' '}
                     {item.user && item.user[0].lastName}

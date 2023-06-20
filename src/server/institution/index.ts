@@ -7,6 +7,7 @@ import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -112,18 +113,38 @@ export function useGetSubjectList() {
   return query;
 }
 
-export function useGetStudentsList() {
+export function useGetStudentsList(params?: PaginationParams) {
   const query = useQuery({
     queryKey: 'get_student_list',
     queryFn: async () => {
       try {
-        const d = await request.get(
-          '/v1/government/students/get-students?limit=100'
-        );
+        const d = await request.get('/v1/government/students/get-students', {
+          params,
+        });
         return d.data.data.data.data as Student[];
       } catch (error) {
         logger(error);
         throw error;
+      }
+    },
+  });
+  return query;
+}
+
+export function useGetStudentById(params?: PaginationParams) {
+  const query = useQuery({
+    queryKey: `get_student_${params?.id}`,
+    queryFn: async () => {
+      if (params?.id) {
+        try {
+          const d = await request.get('/v1/government/students/get-students', {
+            params,
+          });
+          return d.data.data.data.data[0] as Student;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
       }
     },
   });
@@ -147,6 +168,25 @@ export function useGetTeachersList(params?: PaginationParams) {
   });
   return query;
 }
+
+export function useGetTeacherById(params?: PaginationParams) {
+  const query = useQuery({
+    queryKey: `get_teacher_${params?.id}`,
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/government/teachers/get-staffs', {
+          params,
+        });
+        return d.data.data.data.data[0] as Staff;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+
 export function useGetClassesList() {
   const query = useQuery({
     queryKey: 'get_teachers_list',
