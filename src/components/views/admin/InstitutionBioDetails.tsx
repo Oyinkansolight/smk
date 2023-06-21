@@ -3,7 +3,7 @@ import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import { getErrMsg } from '@/server';
 import { useUpdateStudent } from '@/server/government/student';
-import { Student } from '@/types/institute';
+import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ export default function InstitutionBioDetails({
 }: {
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
-  initInstitution?: Student;
+  initInstitution?: Institution;
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,21 +44,11 @@ export default function InstitutionBioDetails({
   useEffect(() => {
     // console.log('Student Changed', initStudent);
     if (initInstitution) {
-      setValue('studentEmail', (initInstitution?.user ?? [])[0]?.email);
-      setValue('email', (initInstitution?.user ?? [])[0]?.email);
-      setValue('studentPhone', (initInstitution?.user ?? [])[0]?.phoneNumber);
-      setValue('gender', initInstitution?.gender);
-      setValue('parentName', initInstitution?.parentName);
-      setValue('parentOccupation', initInstitution?.parentOccupation);
-      setValue(
-        'fullName',
-        `${(initInstitution?.user ?? [])[0]?.firstName} ${
-          (initInstitution?.user ?? [])[0]?.lastName
-        }`
-      );
-      setValue('dateOfBirth', initInstitution.dob);
-      setValue('address', (initInstitution?.user ?? [])[0]?.address);
-      setValue('school', initInstitution?.institution?.instituteName);
+      const keys = Object.keys(initInstitution) as (keyof Institution)[];
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        setValue(key, initInstitution[key]);
+      }
     }
   }, [initInstitution, setValue]);
 
@@ -95,7 +85,7 @@ export default function InstitutionBioDetails({
         <div className='grid grid-cols-2 gap-4'>
           <Controller
             control={control}
-            name='fullName'
+            name='instituteName'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
@@ -108,7 +98,7 @@ export default function InstitutionBioDetails({
           <div />
           <Controller
             control={control}
-            name='email'
+            name='instituteEmail'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
@@ -120,7 +110,7 @@ export default function InstitutionBioDetails({
           />
           <Controller
             control={control}
-            name='gender'
+            name='instituteType'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
@@ -137,7 +127,7 @@ export default function InstitutionBioDetails({
         <div className='grid grid-cols-2 gap-4'>
           <Controller
             control={control}
-            name='address'
+            name='instituteAddress'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}

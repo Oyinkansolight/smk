@@ -3,16 +3,25 @@
 
 import Table from '@/components/tables/TableComponent';
 import { useGetSchools } from '@/server/institution';
+import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
 
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const columns: TableColumn<any>[] = [
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const columns: TableColumn<Institution & { idx: string }>[] = [
   {
     name: 'No',
     selector: (item) => item.idx,
@@ -23,7 +32,7 @@ const columns: TableColumn<any>[] = [
   {
     name: 'Name',
     grow: 2,
-    selector: (item) => item.instituteName,
+    selector: (item) => item.instituteName ?? '',
     sortable: true,
     cell: (item) => (
       <div className='flex items-center gap-4 text-[#525F7F]'>
@@ -31,7 +40,7 @@ const columns: TableColumn<any>[] = [
           <Image
             src={
               item.instituteLogo.includes('placeimg') ||
-                item.instituteLogo.includes('picsum')
+              item.instituteLogo.includes('picsum')
                 ? item.instituteLogo
                 : `/${item.instituteLogo}`
             }
@@ -43,7 +52,7 @@ const columns: TableColumn<any>[] = [
         ) : (
           <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         )}
-        <Link href='/super-admin/school'>
+        <Link href={`/super-admin/school?id=${item.id}`}>
           <h2 className='text-sm font-medium'>{item.instituteName}</h2>
         </Link>
       </div>
@@ -51,25 +60,25 @@ const columns: TableColumn<any>[] = [
   },
   {
     name: 'Type',
-    selector: (item) => item.instituteType,
+    selector: (item) => item.instituteType ?? '',
     sortable: true,
     cell: (item) => <div className='col-span-2'>{item.instituteType} </div>,
   },
   {
     name: 'Number of Students',
-    selector: (item) => item.studentCount,
+    selector: (item) => item.studentCount ?? '',
     sortable: true,
     cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
   },
   {
     name: 'Number of Staff',
-    selector: (item) => item.studentCount,
+    selector: (item) => item.studentCount ?? '',
     sortable: true,
     cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
   },
   {
     name: 'Location',
-    selector: (item) => item.instituteAddress,
+    selector: (item) => item.instituteAddress ?? '',
     sortable: true,
     cell: (item) => <div className='col-span-2'> {item.instituteAddress} </div>,
   },

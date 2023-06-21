@@ -21,6 +21,44 @@ export interface Student {
   class?: any;
 }
 
+export interface FlattenedStudent {
+  id?: number;
+  gender?: string;
+  dob?: Date;
+  height?: string;
+  weight?: string;
+  parentName?: string;
+  parentOccupation?: string;
+  'user.0.id'?: number;
+  'user.0.firstName'?: string;
+  'user.0.lastName'?: string;
+  'user.0.phoneNumber'?: string;
+  'user.0.email'?: string;
+  'user.0.password'?: string;
+  'user.0.address'?: string;
+  'user.0.type'?: string;
+  'user.0.suspended'?: boolean;
+  'user.0.createdAt'?: Date;
+  'user.0.updatedAt'?: Date;
+  'institution.id'?: number;
+  'institution.instituteName'?: string;
+  'institution.instituteEmail'?: string;
+  'institution.instituteLogo'?: string;
+  'institution.instituteType'?: string;
+  'institution.instituteAddress'?: string;
+  'institution.instituteLat'?: string;
+  'institution.instituteLong'?: string;
+  'institution.isOnboardingCompleted'?: boolean;
+  'institution.createdAt'?: Date;
+  'institution.updatedAt'?: Date;
+  'class.id'?: number;
+  'class.name'?: string;
+  'class.curriculum'?: string;
+  'class.institutionType'?: string;
+  'class.createdAt'?: Date;
+  'class.updatedAt'?: Date;
+}
+
 export interface User {
   id: number;
   firstName: string;
@@ -49,6 +87,94 @@ export interface Staff {
   class?: any[];
   subject?: any[];
   user?: User[];
+}
+
+export interface FlattenedStaff {
+  id?: number;
+  gender?: string;
+  dob?: string;
+  height?: string;
+  weight?: string;
+  staffType?: string;
+  'institution.id'?: number;
+  'institution.instituteName'?: string;
+  'institution.instituteEmail'?: string;
+  'institution.instituteLogo'?: string;
+  'institution.instituteType'?: string;
+  'institution.instituteAddress'?: string;
+  'institution.instituteLat'?: string;
+  'institution.instituteLong'?: string;
+  'institution.isOnboardingCompleted'?: boolean;
+  'institution.createdAt'?: Date;
+  'institution.updatedAt'?: Date;
+  'teacherEducation.0.id'?: number;
+  'teacherEducation.0.schoolAttended'?: string;
+  'teacherEducation.0.courseAttended'?: string;
+  'teacherEducation.0.grade'?: string;
+  'teacherEducation.0.educationYear'?: string;
+  'teacherEducation.0.createdAt'?: Date;
+  'teacherEducation.0.updatedAt'?: Date;
+  'teacherEducation.1.id'?: number;
+  'teacherEducation.1.schoolAttended'?: string;
+  'teacherEducation.1.courseAttended'?: string;
+  'teacherEducation.1.grade'?: string;
+  'teacherEducation.1.educationYear'?: string;
+  'teacherEducation.1.createdAt'?: Date;
+  'teacherEducation.1.updatedAt'?: Date;
+  'teacherEducation.2.id'?: number;
+  'teacherEducation.2.schoolAttended'?: string;
+  'teacherEducation.2.courseAttended'?: string;
+  'teacherEducation.2.grade'?: string;
+  'teacherEducation.2.educationYear'?: string;
+  'teacherEducation.2.createdAt'?: Date;
+  'teacherEducation.2.updatedAt'?: Date;
+  'employmentHistory.0.id'?: number;
+  'employmentHistory.0.employerName'?: string;
+  'employmentHistory.0.role'?: string;
+  'employmentHistory.0.employmentType'?: string;
+  'employmentHistory.0.employmentYear'?: string;
+  'employmentHistory.0.createdAt'?: Date;
+  'employmentHistory.0.updatedAt'?: Date;
+  'document.id'?: number;
+  'document.idCardImage'?: string;
+  'document.firstDocumentType'?: string;
+  'document.firstUpload'?: string;
+  'document.secondDocumentType'?: string;
+  'document.secondUpload'?: string;
+  'document.createdAt'?: Date;
+  'document.updatedAt'?: Date;
+  'class.0.id'?: number;
+  'class.0.name'?: string;
+  'class.0.curriculum'?: string;
+  'class.0.institutionType'?: string;
+  'class.0.createdAt'?: Date;
+  'class.0.updatedAt'?: Date;
+  'class.1.id'?: number;
+  'class.1.name'?: string;
+  'class.1.curriculum'?: string;
+  'class.1.institutionType'?: string;
+  'class.1.createdAt'?: Date;
+  'class.1.updatedAt'?: Date;
+  'subject.0.id'?: number;
+  'subject.0.name'?: string;
+  'subject.0.description'?: string;
+  'subject.0.createdAt'?: Date;
+  'subject.0.updatedAt'?: Date;
+  'subject.1.id'?: number;
+  'subject.1.name'?: string;
+  'subject.1.description'?: string;
+  'subject.1.createdAt'?: Date;
+  'subject.1.updatedAt'?: Date;
+  'user.0.id'?: number;
+  'user.0.firstName'?: string;
+  'user.0.lastName'?: string;
+  'user.0.email'?: string;
+  'user.0.password'?: string;
+  'user.0.address'?: string;
+  'user.0.type'?: string;
+  'user.0.suspended'?: boolean;
+  'user.0.createdAt'?: Date;
+  'user.0.updatedAt'?: Date;
 }
 
 export interface Document {
@@ -118,18 +244,20 @@ export interface InstituteClass {
   subjects: any[];
 }
 
-interface Institution {
+export interface Institution {
   id?: number;
   instituteName?: string;
   instituteEmail?: string;
-  instituteLogo?: null;
+  instituteLogo?: string;
   instituteType?: string;
-  instituteAddress?: null;
-  instituteLat?: null;
-  instituteLong?: null;
+  instituteAddress?: string;
+  instituteLat?: string;
+  instituteLong?: string;
   isOnboardingCompleted?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  students?: Student[];
+  staff?: Staff[];
+  studentCount?: number;
+  staffCount?: number;
 }
 
 export interface AcademicCalendarType {

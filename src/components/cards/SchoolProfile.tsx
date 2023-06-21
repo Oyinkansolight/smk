@@ -2,6 +2,7 @@ import CircleButton from '@/components/buttons/CircleButton';
 import Pill from '@/components/buttons/Pill';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
+import { Institution } from '@/types/institute';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -10,10 +11,13 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
+
 export default function SchoolProfileCard({
   idx,
   setIdx,
+  school,
 }: {
+  school?: Institution;
   idx: number;
   setIdx: (idx: number) => void;
 }) {
@@ -25,7 +29,7 @@ export default function SchoolProfileCard({
       </div>
       <BigAvatar src='/svg/student_badge.svg' />
       <div className='h-10' />
-      <div className='mb-1 text-xl font-bold'>Avril Price School</div>
+      <div className='mb-1 text-xl font-bold'>{school?.instituteName}</div>
       <Pill text='Primary School' variant='primary' />
       <div className='h-8' />
       <GridTabBar

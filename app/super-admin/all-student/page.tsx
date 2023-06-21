@@ -1,42 +1,49 @@
 'use client';
 
-import { BasicSearch } from '@/components/search';
-import logger from '@/lib/logger';
+import Table from '@/components/tables/TableComponent';
+import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useGetStudentsList } from '@/server/institution';
+import { FlattenedStudent } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
 
+const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
+  {
+    name: 'No',
+    selector: (row) => row.idx,
+    cell: (row) => <div>#{row.idx}</div>,
+  },
+  {
+    name: 'Name',
+    selector: (row) => row['user.0.firstName'] ?? '',
+    cell: (row) => (
+      <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+        <Link href={`/super-admin/student?id=${row.id}`}>
+          <h2 className='text-sm font-medium capitalize'>
+            {row['user.0.firstName']} {row['user.0.lastName']}
+          </h2>
+        </Link>
+      </div>
+    ),
+  },
+  { name: 'Student ID', selector: (row) => row.id ?? '' },
+  { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
+  {
+    name: 'Schools',
+    selector: (row) => row['institution.instituteType'] ?? '',
+  },
+];
+
 const AllStudent = () => {
-  const { data, error, isLoading } = useGetStudentsList();
-
-  const [students, setstudents] = useState(data ?? []);
-
-  const handleSearch = (value: string) => {
-    const result =
-      students.length > 0
-        ? students.filter((data) => {
-            if (data.user) {
-              return (
-                data.user[0].firstName
-                  .toLowerCase()
-                  .includes(value.toLowerCase()) ||
-                data.user[0].lastName
-                  .toLowerCase()
-                  .includes(value.toLowerCase())
-              );
-            }
-          })
-        : [];
-    setstudents(result);
-  };
-
-  logger(students);
+  const { data: students, error, isLoading } = useGetStudentsList();
 
   useEffect(() => {
     if (error) {
@@ -64,7 +71,7 @@ const AllStudent = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{students?.length ?? 0}</h1>
         </div>
         <Link
           href='/admin/add-student'
@@ -73,53 +80,24 @@ const AllStudent = () => {
           Add Student
         </Link>
       </div>
-      <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
-            <option value=''>Filter</option>
-          </select>
-          <BasicSearch handleSearch={handleSearch} />
-        </div>
-      </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
-        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-1'>No</div>
-          <div className='col-span-3'>Name</div>
-          <div className='col-span-2'>Student ID</div>
-          <div className='col-span-1'>Type</div>
-          <div className='col-span-3'>Schools</div>
-        </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
-          (data ?? []).map((item, idx) => (
-            <div
-              className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              key={idx}
-            >
-              <div className='col-span-1'>#{idx + 1} </div>
-              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-                <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                <Link href={`/super-admin/student?id=${item.id}`}>
-                  <h2 className='text-sm font-medium capitalize'>
-                    {item.user && item.user[0].firstName}{' '}
-                    {item.user && item.user[0].lastName}
-                  </h2>
-                </Link>
-              </div>
-              <div className='col-span-2'>{item.id} </div>
-              <div className='col-span-1'>
-                {' '}
-                {item?.institution?.instituteType || 'N/A '}{' '}
-              </div>
-              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-                {item?.institution?.instituteName || 'N/A '}{' '}
-              </div>{' '}
-            </div>
-          ))
+          <Table
+            data={
+              students?.map(
+                (v, i) =>
+                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
+                    idx: number;
+                  })
+              ) ?? []
+            }
+            columns={studentListColumns}
+          />
         )}
-        {!isLoading && data?.length === 0 && (
+        {!isLoading && students?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
 

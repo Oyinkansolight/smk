@@ -16,8 +16,9 @@ import SchoolDashboardView from '@/components/views/single-school/SchoolDashboar
 import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
+import { useGetSchoolById } from '@/server/institution';
 import { useGetAllFiles } from '@/server/library';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
@@ -25,6 +26,14 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -51,9 +60,12 @@ const SingleSchoolDashboard = () => {
   const { data, isLoading } = GovtFilesData;
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
+  const params = useSearchParams();
+  const { data: school } = useGetSchoolById({ id: params?.get('id') });
   return (
     <div className='flex'>
       <SchoolProfileCard
+        school={school}
         idx={gridIdx}
         setIdx={(v) => {
           setTabIdx(0);
@@ -158,6 +170,7 @@ const SingleSchoolDashboard = () => {
                 <InstitutionBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
+                  initInstitution={school}
                 />
               </div>
             </>

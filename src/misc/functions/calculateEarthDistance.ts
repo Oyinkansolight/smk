@@ -11,3 +11,18 @@ export default function calculateEarthDistance(
     ) * 6371
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function flattenObject(obj: any, prefix = '') {
+  if (obj) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return Object.keys(obj).reduce((acc: any, k) => {
+      const pre = prefix.length ? prefix + '.' : '';
+      if (typeof obj[k] === 'object')
+        Object.assign(acc, flattenObject(obj[k], pre + k));
+      else acc[pre + k] = obj[k];
+      return acc;
+    }, {});
+  }
+  return '';
+}

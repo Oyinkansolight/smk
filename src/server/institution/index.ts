@@ -2,7 +2,7 @@
 import logger from '@/lib/logger';
 import request from '@/server';
 import { PaginationParams } from '@/types';
-import { Student, Subject } from '@/types/institute';
+import { Institution, Student, Subject } from '@/types/institute';
 import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -224,6 +224,27 @@ export function useGetSchools(type?: string) {
   });
   return query;
 }
+
+export function useGetSchoolById(params: PaginationParams) {
+  const query = useQuery({
+    queryKey: `get_school_list_${params.id}`,
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/institutes/get-institutes',
+          { params }
+        );
+        const result = d.data.data.data.data[0] as Institution;
+        return result;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+
 export function useGetStaffTypes() {
   const query = useQuery({
     queryKey: 'get_staff_type_list',
