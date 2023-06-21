@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { BasicSearch } from '@/components/search';
-import logger from '@/lib/logger';
+import Table from '@/components/tables/TableComponent';
+import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useGetTeachersList } from '@/server/institution';
+import { FlattenedStaff } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
@@ -15,7 +17,9 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -23,88 +27,45 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// import Back from '@/'
-// import clsxm from '@/lib/clsxm';
+const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
+  {
+    name: 'No',
+    selector: (row) => row.idx,
+    cell: (row) => <div>#{row.idx}</div>,
+  },
+  {
+    name: 'Name',
+    grow: 2,
+    cell: (row) => (
+      <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+        <Link href={`/admin/staff?id=${row.id}`}>
+          <h2 className='text-sm font-medium capitalize'>
+            {row['user.0.firstName']} {row['user.0.lastName']}
+          </h2>
+        </Link>
+      </div>
+    ),
+  },
+  {
+    name: 'Staff ID',
+    selector: (row) => row.id ?? '',
+    cell: (row) => <div>{row.id}</div>,
+  },
+  {
+    name: 'Type',
+    selector: (row) => row.staffType ?? '',
+    cell: (row) => <div>{row.staffType}</div>,
+  },
+  {
+    name: 'Schools',
+    selector: (row) => row['institution.instituteName'] ?? '',
+    cell: (row) => <div>{row['institution.instituteName']}</div>,
+  },
+];
 
 const AllStaff = () => {
-  const mockData = [
-    {
-      logo: 1,
-      name: 'James Omokwe',
-      numberOfStudent: '12,500',
-      teacherID: '#123-BN',
-      type: 'Tertiary',
-      school: 'Scaling Heights School',
-      location: 'Benin',
-    },
-    {
-      logo: 2,
-      name: 'Ibrahim Wilson ',
-      numberOfStudent: '12, 500',
-      teacherID: '#123-BN',
-      type: 'Primary',
-      school: 'Avril Price School',
-      location: 'Benin',
-    },
-    {
-      logo: 3,
-      name: 'Norma Russell',
-      numberOfStudent: '12,500',
-      teacherID: '#123-BN',
-      type: 'Secondary',
-      school: 'Black Dash School',
-      location: 'Benin',
-    },
-    {
-      logo: 4,
-      name: 'Regina Askiya',
-      numberOfStudent: '12,500',
-      teacherID: '#123-BN',
-      type: 'ECCDE',
-      school: 'Reaction Primary ',
-      location: 'Benin',
-    },
-    {
-      logo: 5,
-      name: 'Akani Egbherve',
-      numberOfStudent: '12,500',
-      teacherID: '#123-BN',
-      type: 'Primary',
-      school: 'Victory International  School',
-      location: 'Benin',
-    },
-  ];
-
-  const { data, error, isLoading } = useGetTeachersList();
-  const [staffs, setstaffs] = useState(mockData);
-
-  const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setstaffs(result);
-  };
-  logger(data);
+  const { data: staff, error, isLoading } = useGetTeachersList();
 
   useEffect(() => {
     if (error) {
@@ -132,7 +93,7 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{data?.data.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{staff?.data.length ?? 0}</h1>
         </div>
         <Link
           href='/admin/add-staff'
@@ -141,52 +102,21 @@ const AllStaff = () => {
           Add Staff
         </Link>
       </div>
-      <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
-            <option value=''>Filter</option>
-          </select>
-          <BasicSearch handleSearch={handleSearch} />
-        </div>
-      </div>
-
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
-        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-1'>No</div>
-          <div className='col-span-3'>Name</div>
-          <div className='col-span-2'>Staff ID</div>
-          <div className='col-span-1'>Type</div>
-          <div className='col-span-3'>Schools</div>
-        </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
-          data &&
-          data.data.map((item: any, idx: number) => (
-            <div
-              className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              key={idx}
-            >
-              <div className='col-span-1'>#{idx + 1} </div>
-              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-                <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-                <Link href='/admin/teacher'>
-                  <h2 className='text-sm font-medium capitalize'>
-                    {item.user[0].firstName} {item.user[0].lastName}
-                  </h2>
-                </Link>
-              </div>
-              <div className='col-span-2'>{item.id} </div>
-              <div className='col-span-1'> {item.staffType} </div>
-              <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-                <h2 className='text-sm font-medium'>
-                  {item?.institution?.instituteName || 'N/A '}{' '}
-                </h2>
-              </div>{' '}
-            </div>
-          ))
+          <Table
+            data={
+              staff?.data.map((v, i) => ({
+                idx: i + 1,
+                ...flattenObject(v),
+              })) ?? []
+            }
+            columns={staffColumn}
+          />
         )}
-        {!isLoading && data?.data?.length === 0 && (
+        {!isLoading && staff?.data?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
