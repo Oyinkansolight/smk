@@ -25,7 +25,7 @@ export default function RootLayout({
 
         <div className='flex flex-1 flex-row overflow-y-hidden'>
           <div className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
-            <div>{children}</div>
+            <div className='ml-20'>{children}</div>
           </div>
 
           <AdminSidebar />

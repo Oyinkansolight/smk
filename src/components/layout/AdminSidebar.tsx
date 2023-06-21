@@ -8,7 +8,6 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoDocumentOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import Calendar_icon from '~/svg/calendar_icon.svg';
-import PieChart from '~/svg/chart_pie_slice.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
 import ID from '~/svg/id_icon.svg';
@@ -39,7 +38,7 @@ const AdminSidebar = () => {
     <aside
       className={clsxm(
         open ? 'w-52' : 'w-20',
-        'order-first transition-all delay-100 flex h-screen flex-col items-center overflow-y-auto border-r-2 bg-[#F7F8FA] py-8 rtl:border-l rtl:border-r-0'
+        'absolute order-first transition-all delay-100 flex h-screen flex-col items-center overflow-y-auto border-r-2 bg-[#F7F8FA] py-8 rtl:border-l rtl:border-r-0'
       )}
     >
       <nav className='flex flex-1 flex-col space-y-3 md:space-y-6'>
@@ -76,7 +75,7 @@ const AdminSidebar = () => {
               )}
             />
           }
-          title='Schools'
+          title='Institutions'
           href='/super-admin/all-school'
           active={routeDetails && routeDetails.includes('school') && true}
         />
@@ -127,7 +126,7 @@ const AdminSidebar = () => {
           active={routeDetails && routeDetails.includes('calendar') && true}
         />
 
-        <SideBarButton
+        {/* <SideBarButton
           open={open}
           icon={
             <PieChart
@@ -140,7 +139,7 @@ const AdminSidebar = () => {
           title='Budgets'
           href='/super-admin/#'
           active={routeDetails && routeDetails.includes('budget') && true}
-        />
+        /> */}
         <SideBarButton
           open={open}
           icon={

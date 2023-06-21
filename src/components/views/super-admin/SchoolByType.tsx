@@ -31,7 +31,7 @@ const columns: TableColumn<any>[] = [
           <Image
             src={
               item.instituteLogo.includes('placeimg') ||
-              item.instituteLogo.includes('picsum')
+                item.instituteLogo.includes('picsum')
                 ? item.instituteLogo
                 : `/${item.instituteLogo}`
             }
@@ -159,6 +159,13 @@ const SchoolList = ({
           <p className='text-[#615F5F]'> {title} </p>
           <h1 className='font-semibold text-2xl'>{(data || []).length ?? 0}</h1>
         </div>
+
+        <Link
+          href='/super-admin/add-school'
+          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
+        >
+          Add Institution
+        </Link>
       </div>
       <Table
         data={((data ?? []) as any[]).map((item, i) => ({
