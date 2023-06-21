@@ -116,7 +116,9 @@ export default function TeacherDashboardView() {
       </div>
 
       <div className='mt-[23px]'>
-        <div>Removed for AcademicCalendar comp for now, new changes in teacher.</div>
+        <div>
+          Removed for AcademicCalendar comp for now, new changes in teacher.
+        </div>
         {/* <AcademicCalendar /> */}
       </div>
     </div>

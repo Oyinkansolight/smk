@@ -69,6 +69,18 @@ import Empty from '~/svg/empty.svg';
 
 /* eslint-disable unused-imports/no-unused-vars */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
 const UploadDocument = ({
   data,
   isLoading,

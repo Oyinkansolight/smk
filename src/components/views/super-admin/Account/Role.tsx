@@ -49,6 +49,12 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Role = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isOpen, setisOpen] = useState(false);

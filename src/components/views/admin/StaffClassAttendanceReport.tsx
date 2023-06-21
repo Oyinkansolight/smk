@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BackButton from '@/components/buttons/BackButton';
 import ScoreStatus from '@/components/profile/ScoreStatus';
 import Table from '@/components/tables/TableComponent';
@@ -6,7 +7,6 @@ import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BsArrowRightCircle } from 'react-icons/bs';
 import ReactSelect from 'react-select';
-
 
 const columns: TableColumn<any>[] = [
   { name: 'Staff Name', cell: (row) => row.name },

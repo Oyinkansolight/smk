@@ -27,8 +27,8 @@ const SingleTeacherDashboard = () => {
   const p = useSearchParams();
   const {
     data: staff,
-    error: staffError,
-    isLoading: isStaffLoading,
+    // error: staffError,
+    // isLoading: isStaffLoading,
   } = useGetTeacherById({
     id: p?.get('id'),
   });

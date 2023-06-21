@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -25,6 +26,9 @@ import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div># {row.id}</div> },

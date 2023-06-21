@@ -67,7 +67,7 @@ const AllStudent = () => {
           <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
         </div>
         <Link
-          href="/admin/add-student"
+          href='/admin/add-student'
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
           Add Student

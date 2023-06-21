@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BasicSearch } from '@/components/search';
 import { useMemo, useState } from 'react';
 import DataTable, { TableProps } from 'react-data-table-component';

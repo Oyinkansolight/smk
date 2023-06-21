@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import BackButton from '@/components/buttons/BackButton';
 import ScoreStatus from '@/components/profile/ScoreStatus';
 import Table from '@/components/tables/TableComponent';

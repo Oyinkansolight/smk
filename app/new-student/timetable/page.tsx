@@ -49,7 +49,11 @@ const Page = () => {
       </div>
 
       {page === 0 && <Timetable />}
-      {page === 1 && <div>Removed for AcademicCalendar comp for now, new changes in teacher.</div>}
+      {page === 1 && (
+        <div>
+          Removed for AcademicCalendar comp for now, new changes in teacher.
+        </div>
+      )}
       {page === 2 && <ExamCalendar />}
     </div>
   );

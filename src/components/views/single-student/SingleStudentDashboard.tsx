@@ -25,8 +25,8 @@ const SingleStudentDashboard = () => {
   const p = useSearchParams();
   const {
     data: student,
-    error: studentError,
-    isLoading: isStudentLoading,
+    // error: studentError,
+    // isLoading: isStudentLoading,
   } = useGetStudentById({
     id: p?.get('id'),
   });
