@@ -1,96 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { useState } from 'react';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import clsxm from '@/lib/clsxm';
 
 type propType = {
   setactivity: (v: boolean) => void;
   activity: boolean;
+  reverse?: boolean;
+  label?: { on: string; off: string };
 };
 
-const Input = ({ activity, setactivity }: propType) => {
-  const [isToggled, setisToggled] = useState(false);
-  const handleToggle = () => {
-    setisToggled(!isToggled);
-  };
+const Input = ({ activity, setactivity, label, reverse }: propType) => {
   return (
-    <div className='flex justify-end items-center space-x-3 mt-4 font-light text-base'>
-      <p>Other Activity</p>
+    <div
+      className={clsxm(
+        'flex justify-end items-center gap-x-3 font-light text-base',
+        reverse && 'flex-row-reverse'
+      )}
+    >
+      {activity ? <p>{label?.on ?? 'On'}</p> : <p>{label?.off ?? 'Off'}</p>}
       <div
         onClick={() => {
-          handleToggle();
           setactivity(!activity);
         }}
         className={`${
-          isToggled ? 'bg-primary' : 'bg-gray-500'
+          activity ? 'bg-primary' : 'bg-gray-500'
         } md:h-6 h-4 md:w-12 w-10  rounded-2xl p-1`}
       >
         <div
-          onClick={() => {
-            handleToggle();
-          }}
           className={`${
-            isToggled ? 'translate-x-6' : 'translate-x-0'
+            activity ? 'translate-x-6' : 'translate-x-0'
           } transform duration-300  md:h-4 h-6 md:w-4 w-6 bg-white rounded-full`}
         ></div>
       </div>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import AddAdmin from '@/components/modal/addAdmin';
@@ -6,54 +5,6 @@ import { useGetAdminList } from '@/server/Permission';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Role = () => {
   const [action, setAction] = useState<number | null>(null);
@@ -88,19 +39,22 @@ const Role = () => {
 
         <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
           <div className='col-span-5'>Name</div>
-          <div className='col-span-4'>Username/Email</div>
+          <div className='col-span-2'>Username/Email</div>
           <div className='col-span-2'>Role</div>
+          <div className='col-span-2'>Status</div>
         </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (data ?? []).map((item: any, idx: number) => (
             <div className='grid grid-cols-12 p-4 border-b' key={idx}>
               <div className='col-span-5'>
                 {item?.user?.firstName || 'N/A'} {item?.user?.lastName || 'N/A'}
               </div>
-              <div className='col-span-4'>{item?.user?.email || 'N/A'}</div>
+              <div className='col-span-2'>{item?.user?.email || 'N/A'}</div>
               <div className='col-span-2'> {item?.type || 'N/A'} ADMIN </div>
+              <div className='col-span-2'> {item?.status || 'N/A'} </div>
               <div className='col-span-1 justify-center flex'>
                 <button
                   onClick={() => {

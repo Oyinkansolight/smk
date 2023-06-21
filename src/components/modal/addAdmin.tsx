@@ -70,6 +70,17 @@ function AddAdmin({ onClickHandler }: propType) {
 
             <div className='w-full'>
               <FormInput
+                name='name'
+                label='Enter Name'
+                register={register}
+                // setFormValue={setSchoolEmail}
+                // formValue={schoolEmail}
+                placeholder='Details here'
+              />
+            </div>
+
+            <div className='w-full'>
+              <FormInput
                 type='email'
                 name='email'
                 label='Enter Email'
