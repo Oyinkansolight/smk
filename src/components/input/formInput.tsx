@@ -77,6 +77,8 @@ type propType = {
   validation?: RegisterOptions<any>;
   name?: string;
   helper?: HelperProps;
+  inputClassName?: string;
+  containerClassName?: string;
 };
 
 const Input = ({
@@ -90,9 +92,11 @@ const Input = ({
   validation,
   name,
   helper,
+  inputClassName,
+  containerClassName
 }: propType) => {
   return (
-    <div className=''>
+    <div className={containerClassName}>
       <div>
         <label htmlFor='' className='text-xs font-bold'>
           {label}
@@ -101,7 +105,10 @@ const Input = ({
           <input
             disabled={disabled}
             type={type}
-            className='w-full border-none outline-none'
+            className={clsxm(
+              inputClassName,
+              'w-full border-none outline-none'
+            )}
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}
             value={formValue && formValue}

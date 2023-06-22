@@ -13,24 +13,26 @@ export default function AddNewRoleSuperAdminView() {
         <div className='h-8' />
 
         <div className='flex flex-col gap-5 w-full'>
-          <div className='w-full flex gap-4'>
+          <div className='w-full flex gap-4 max-w-[312px]'>
+            <BaseInput
+              label={
+                <span>
+                  Select Access Type<span className='text-[#E5A500]'>*</span>
+                </span>
+              }
+              name='subject'
+              placeholder='Select an option'
+            />
+          </div>
+
+          <div className='w-full max-w-[312px]'>
             <BaseInput
               label={
                 <span>
                   Enter Role Name<span className='text-[#E5A500]'>*</span>
                 </span>
               }
-              name='subject'
-            />
-          </div>
-
-          <div className='w-full'>
-            <BaseInput
-              label={
-                <span>
-                  Enter Description<span className='text-[#E5A500]'>*</span>
-                </span>
-              }
+              placeholder='Name'
               name='description'
             />
           </div>

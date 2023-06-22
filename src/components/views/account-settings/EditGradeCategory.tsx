@@ -1,5 +1,6 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsTrashFill } from 'react-icons/bs';
@@ -88,45 +89,63 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
         <div className='font-bold text-3xl'>Edit Grade Category</div>
         <div>Kindly select the appropriate options below:</div>
       </div>
-      <div>
+      <div className='w-full'>
         {items.map((v, i) => (
-          <div key={i} className='flex items-end gap-3'>
-            <Controller
-              name={`category.${i}`}
-              control={control}
-              render={({ field }) => {
-                return (
-                  <Input label='Category Name' placeholder='' {...field} />
-                );
-              }}
-            />
-            <Controller
-              name={`percentage.${i}`}
-              control={control}
-              render={({ field }) => {
-                return (
-                  <Input
-                    label='Enter percentage score'
-                    placeholder=''
-                    {...field}
-                  />
-                );
-              }}
-            />
-            <div className='bg-[#FFF8F8] text-red-500 p-4 rounded-full'>
-              <BsTrashFill />
+          <React.Fragment key={i}>
+            <div className='flex items-end gap-3'>
+              <Controller
+                name={`category.${i}`}
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      label='Category Name'
+                      placeholder=''
+                      {...field}
+                      containerClassName='w-full'
+                      inputClassName="max-h-[10px]"
+                    />
+                  );
+                }}
+              />
+              <Controller
+                name={`percentage.${i}`}
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      label='Enter percentage score'
+                      placeholder=''
+                      {...field}
+                      containerClassName='w-full'
+                      inputClassName="max-h-[10px]"
+                    />
+                  );
+                }}
+              />
+              <div className='bg-[#FFF8F8] text-red-500 p-4 rounded-full'>
+                <BsTrashFill />
+              </div>
             </div>
-          </div>
+
+
+            <div className='my-6 h-[0.1px] bg-[#C3CAD9] w-10/12 mx-auto' />
+          </React.Fragment>
         ))}
       </div>
       <div className='h-4' />
       <div className='flex'>
-        <Button variant='outline' onClick={handleAddNewCategory}>
+        <Button className='!text-[10px] !font-bold' variant='outline' onClick={handleAddNewCategory}>
           Add New Grade Category
         </Button>
       </div>
-      <div className='flex w-full justify-center'>
-        <Button type='submit'>Submit</Button>
+      <div className='flex w-full justify-center mt-10'>
+        <Button
+          type='submit'
+          className='w-full max-w-[248px] !h-10 font-semibold !text-xs justify-center'
+        >
+          Submit
+        </Button>
       </div>
     </form>
   );

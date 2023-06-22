@@ -17,14 +17,17 @@ const columns: TableColumn<any>[] = [
   {
     name: '',
     cell: (row) => (
-      <div className='flex justify-end w-full gap-4'>
+      <div className='flex justify-end w-full gap-4 font-semibold underline'>
         {(row.categories as string[]).length === 0 ? (
           <div className='text-[#008146]'>Add Category</div>
         ) : (
           <>
-            <div className='text-[#008146]'>View Category</div>
-            <GeneralModal body={<EditGradeCategory />}>
-              <div className='text-[#008146]'>Edit Category</div>
+            <div className='text-[#008146] cursor-pointer'>View Category</div>
+            <GeneralModal
+              panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
+              body={<EditGradeCategory />}
+            >
+              <div className='text-[#008146] cursor-pointer'>Edit Category</div>
             </GeneralModal>
           </>
         )}

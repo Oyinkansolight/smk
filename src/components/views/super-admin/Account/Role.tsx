@@ -19,7 +19,7 @@ const Role = () => {
       <div className='flex justify-end items-center space-x-4 my-5'>
         <Link
           href='/super-admin/account/manage-access-roles'
-          className='w-max  rounded border border-[#008146] px-12 py-3 text-xs text-[#008146] '
+          className='flex max-w-[120px] w-full h-10 whitespace-nowrap justify-center rounded border border-[#008146] px-12 py-3 text-xs text-[#008146] bg-white'
         >
           Manage Roles
         </Link>
