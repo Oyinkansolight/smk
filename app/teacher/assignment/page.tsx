@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div className='h-full layout'>
       <div className='font-bold text-3xl py-8 h3'>
-        <div>Assignments</div>
+        <div>Lesson Task</div>
       </div>
       <TextTabBar
         tabs={[

@@ -69,7 +69,7 @@ const Sidebar = () => {
         <SideBarButton
           open={false}
           icon={<FaRegIdCard className='#C3CAD9' />}
-          title='Assignment'
+          title='Lesson Task'
           href='/teacher/assignment'
         />
 
