@@ -1,11 +1,19 @@
 'use client';
 
 import TextTabBar from '@/components/layout/TextTabBar';
+import EmptyView from '@/components/misc/EmptyView';
+import { getErrMsg } from '@/server';
+import {
+  useGetClassTestExam,
+  useGetSubjectTestExam,
+} from '@/server/test-and-exam';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import ReactSelect from 'react-select';
+import { toast } from 'react-toastify';
 
 const names = [
   'Continuous Assessment test 1',
@@ -14,8 +22,21 @@ const names = [
 ];
 
 export default function Page() {
-  // const params = useSearchParams();
+  const params = useSearchParams();
   const [idx, setIdx] = useState(0);
+  const { data, isLoading, error } = useGetSubjectTestExam({
+    classId: 1,
+    sessionId: 1,
+    termId: 1,
+    type: 'CA_1',
+    subjectId: params?.get('id'),
+  });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
 
   return (
     <div className='h-full layout'>
@@ -49,26 +70,33 @@ export default function Page() {
       </div>
       <div className='h-4' />
       <div className='flex flex-col gap-2'>
-        {names.map((v, i) => (
-          <Link href='/teacher/test-and-examination/subject/assessment' key={i}>
-            <div className='border rounded bg-white p-4 flex gap-4 items-center'>
-              <div className='relative rounded-full border h-16 w-16'>
-                <Image
-                  alt='book-stack'
-                  className='absolute inset-2'
-                  src='/images/book_stack.png'
-                  fill
-                />
+        {data?.data && data.data.length === 0 ? (
+          <EmptyView label='Tests and Exams haven’t been added for this term' />
+        ) : (
+          data?.data.map((v, i) => (
+            <Link
+              href='/teacher/test-and-examination/subject/assessment'
+              key={i}
+            >
+              <div className='border rounded bg-white p-4 flex gap-4 items-center'>
+                <div className='relative rounded-full border h-16 w-16'>
+                  <Image
+                    alt='book-stack'
+                    className='absolute inset-2'
+                    src='/images/book_stack.png'
+                    fill
+                  />
+                </div>
+                <div className='font-bold text-[#746D69] text-base flex gap-5 items-center'>
+                  <div className='text-xs font-normal'>Assessment: </div>
+                  <div>{v.title}</div>
+                </div>
+                <div className='flex-1' />
+                <BiChevronRight className='h-16 w-16 text-[#D4D5D7]' />
               </div>
-              <div className='font-bold text-[#746D69] text-base flex gap-5 items-center'>
-                <div className='text-xs font-normal'>Assessment: </div>
-                <div>{v}</div>
-              </div>
-              <div className='flex-1' />
-              <BiChevronRight className='h-16 w-16 text-[#D4D5D7]' />
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

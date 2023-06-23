@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
+
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',
@@ -21,9 +22,9 @@ export default function Page() {
   //* Actual Api to be called, response currently empty
   // const { data: data2 } = useGetTeachersSubjectList();
   const { data: profile, isSuccess } = useGetProfile();
-  const { data, refetch, isError } = useGetTeachersSubjectList(
-    profile?.staff?.id
-  );
+  const { data, refetch, isError } = useGetTeachersSubjectList({
+    id: profile?.staff?.id,
+  });
 
   useEffect(() => {
     if (isSuccess && profile?.staff?.id) {
