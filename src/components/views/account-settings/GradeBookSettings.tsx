@@ -1,6 +1,7 @@
 import Button from '@/components/buttons/Button';
 import GeneralModal from '@/components/modals/general-modal';
 import EditGradeCategory from '@/components/views/account-settings/EditGradeCategory';
+import ManageGradeRubric from '@/components/views/account-settings/ManageGradeRubric';
 import { useState } from 'react';
 import ReactTable, { TableColumn } from 'react-data-table-component';
 
@@ -22,10 +23,15 @@ const columns: TableColumn<any>[] = [
           <div className='text-[#008146]'>Add Category</div>
         ) : (
           <>
-            <div className='text-[#008146] cursor-pointer'>View Category</div>
             <GeneralModal
               panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
               body={<EditGradeCategory />}
+            >
+              <div className='text-[#008146] cursor-pointer'>View Category</div>
+            </GeneralModal>
+            <GeneralModal
+              panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
+              body={<EditGradeCategory isEdit />}
             >
               <div className='text-[#008146] cursor-pointer'>Edit Category</div>
             </GeneralModal>
@@ -59,7 +65,9 @@ export default function GradeBookSettings() {
   return (
     <div className='flex flex-col gap-[22px] my-[22px]'>
       <div className='flex justify-end'>
-        <Button variant='outline'>Grade Rubric Settings</Button>
+        <GeneralModal body={<ManageGradeRubric />}>
+          <Button variant='outline'>Grade Rubric Settings</Button>
+        </GeneralModal>
       </div>
       <div className='bg-white'>
         <div className='text-[#6B7A99] text-xl font-bold m-4'>
