@@ -56,7 +56,7 @@ export default function Table<T>(
             ))}
           {props.showSearch ||
             (props.showSearch === undefined && (
-              <BasicSearch handleSearch={setFilterText} />
+              <BasicSearch placeholder='Search User Name/ID' handleSearch={setFilterText} />
             ))}
         </div>
       </div>
