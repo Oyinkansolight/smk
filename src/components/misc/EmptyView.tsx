@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function EmptyView({ label }: { label: string }) {
   return (
-    <div className='bg-white h-96 flex flex-col gap-4 items-center justify-center'>
+    <div className='bg-white flex flex-col gap-4 items-center justify-center'>
       <Image
         height={128}
         width={128}
