@@ -1,14 +1,15 @@
 'use client';
 
-import FormInput from '@/components/input/formInput';
+import LocationInput from '@/components/input/Location';
 import FormSelect from '@/components/input/formSelect';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
+import { GeoCodeResponse } from '@/types/geocode';
 import { useRef, useState } from 'react';
 
 interface LocationBioProps {
-  location: string | number;
-  setLocation: (v: string | number) => void;
+  location: string | GeoCodeResponse;
+  setLocation: (v: string | GeoCodeResponse) => void;
   town: Town | undefined;
   setTown: (v: Town) => void;
   lga: LocalGovernmentArea | undefined;
@@ -25,10 +26,9 @@ const Biodata = ({
 }: LocationBioProps) => {
   const inputRef = useRef(null);
   const { data } = useGetLocalGovernments();
-  const [country, setCountry] = useState('ng')
+  const [country, setCountry] = useState('ng');
 
   //create local government array in edo state nigeria
-
 
   return (
     <section className=''>
@@ -36,18 +36,21 @@ const Biodata = ({
       <p>Kindly enter the details of the school below:</p>
 
       <div className='space-y-10 mt-10'>
-        <div className=' w-full gap-6'>
+        {/* <div className=' w-full gap-6'>
           <FormInput
             label='Enter Address'
-            setFormValue={setLocation}
-            formValue={location}
+            formValue={
+              typeof location === 'string'
+                ? location
+                : location.formatted_address
+            }
             placeholder='Details here'
           />
-        </div>
-
-        {/* <div className=' w-full gap-6'>
-          <LocationInput />
         </div> */}
+
+        <div className=' w-full gap-6'>
+          <LocationInput onChanged={(v) => setLocation(v)} />
+        </div>
 
         <div className='w-full mt-4'>
           <FormSelect

@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
@@ -29,7 +30,7 @@ const AddSchool = () => {
   // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   // const [imageName1, setImageName1] = useState<string>('');
   // const [, setImageData1] = useState();
-  const [location, setLocation] = useState<string | number>('');
+  const [location, setLocation] = useState<string | GeoCodeResponse>('');
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();
   let googleAddress: GeoCodeResponse[] = [];
@@ -48,22 +49,31 @@ const AddSchool = () => {
     if (stage === 1) {
       if (schoolName === '' || schoolEmail === '' || !instituteType) {
         toast.error('Please enter a value for all fields');
-      } else {
-        setStage(2);
+        return;
       }
+      const mailFormat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+      if (!(schoolEmail as string).match(mailFormat)) {
+        toast.error('Invalid email address');
+        return;
+      }
+      setStage(2);
     }
     if (stage === 2) {
       if (location === '' || !lga || !town) {
         toast.error('Please enter all value for all fields');
       } else {
-        googleAddress = await geocode.mutateAsync({
-          address: location as string,
-        });
-        if (googleAddress.length === 0) {
-          toast.error('Invalid address');
-          return;
+        if (typeof location === 'string') {
+          googleAddress = await geocode.mutateAsync({
+            address: location as string,
+          });
+          if (googleAddress.length === 0) {
+            toast.error('Invalid address');
+            return;
+          }
+          setGoogleAddressState(googleAddress);
+        } else {
+          setGoogleAddressState([location]);
         }
-        setGoogleAddressState(googleAddress);
 
         setStage(3);
       }
@@ -161,7 +171,11 @@ const AddSchool = () => {
           <Publish
             lga={lga}
             town={town}
-            location={location}
+            location={
+              typeof location === 'string'
+                ? location
+                : location.formatted_address ?? ''
+            }
             schoolName={schoolName}
             schoolEmail={schoolEmail}
           />
