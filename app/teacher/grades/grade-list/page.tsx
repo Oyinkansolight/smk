@@ -32,7 +32,7 @@ export default function Page() {
         </div>
         <BiSortUp className='h-6 w-6' />
       </div>
-      <div className='grid grid-cols-10 py-8 text-[#746D69] text-base'>
+      <div className='grid grid-cols-10 py-8 text-[#746D69] md:text-base text-xs'>
         <div className='col-span-3 px-4'>Title</div>
         <div>CA 1</div>
         <div>CA 2</div>
@@ -56,9 +56,9 @@ export default function Page() {
 function StudentGradeListItem({ id }: { id: number }) {
   return (
     <StudentGradeModal>
-      <div className='grid text-black grid-cols-10 items-center text-base rounded-lg border p-4 py-6 bg-white'>
+      <div className='grid text-black grid-cols-10 items-center md:text-base text-xs rounded-lg border p-4 py-6 bg-white'>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
-          <div className='rounded-full h-10 w-10 bg-gray-300' />
+          <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
           <div>Ighosa Ahmed</div>
         </div>
         <div className='text-black'>0</div>

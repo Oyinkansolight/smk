@@ -4,14 +4,11 @@ import TabBar from '@/components/layout/TabBar';
 import GradeBookSettings from '@/components/views/account-settings/GradeBookSettings';
 import Role from '@/components/views/super-admin/Account/Role';
 import { useState } from 'react';
-import { BsFilterLeft } from 'react-icons/bs';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { MdOutlineDateRange } from 'react-icons/md';
 
-
 const Account = () => {
-  const [tabIdx, setTabIdx] = useState(5);
+  const [tabIdx, setTabIdx] = useState(0);
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -26,18 +23,18 @@ const Account = () => {
           //   icon: <RiDashboardFill className='h-5 w-5' />,
           //   label: 'Account Details',
           // },
-          {
-            icon: <BsFilterLeft className='h-5 w-5' />,
-            label: 'General Settings',
-          },
+          // {
+          //   icon: <BsFilterLeft className='h-5 w-5' />,
+          //   label: 'General Settings',
+          // },
           {
             icon: <MdOutlineDateRange className='h-5 w-5' />,
             label: 'Grade Book Settings',
           },
-          {
-            icon: <GiHamburgerMenu className='h-5 w-5' />,
-            label: 'Institution Settings',
-          },
+          // {
+          //   icon: <GiHamburgerMenu className='h-5 w-5' />,
+          //   label: 'Institution Settings',
+          // },
           // {
           //   icon: <GiHamburgerMenu className='h-5 w-5' />,
           //   label: 'School Settings',
@@ -51,8 +48,8 @@ const Account = () => {
 
       {/* {tabIdx === 4 && <Schooltype />} */}
 
-      {tabIdx === 1 && <GradeBookSettings />}
-      {tabIdx === 3 && <Role />}
+      {tabIdx === 0 && <GradeBookSettings />}
+      {tabIdx === 1 && <Role />}
     </section>
   );
 };

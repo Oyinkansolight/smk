@@ -17,9 +17,11 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -31,7 +33,12 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
     selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx}</div>,
+    cell: (row) => <div>#{row.idx + 1}</div>,
+  },
+  {
+    name: 'Staff ID',
+    selector: (row) => row.id ?? '',
+    cell: (row) => <div>{row.id}</div>,
   },
   {
     name: 'Name',
@@ -39,7 +46,7 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
     cell: (row) => (
       <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        <Link href={`/admin/staff?id=${row.id}`}>
+        <Link href={`/super-admin/teacher?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
             {row['user.0.firstName']} {row['user.0.lastName']}
           </h2>
@@ -48,19 +55,19 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
     ),
   },
   {
-    name: 'Staff ID',
-    selector: (row) => row.id ?? '',
-    cell: (row) => <div>{row.id}</div>,
-  },
-  {
     name: 'Type',
     selector: (row) => row.staffType ?? '',
     cell: (row) => <div>{row.staffType}</div>,
   },
   {
-    name: 'Schools',
+    name: 'Institution',
     selector: (row) => row['institution.instituteName'] ?? '',
     cell: (row) => <div>{row['institution.instituteName']}</div>,
+  },
+  {
+    name: 'Institution Type',
+    selector: (row) => row['institution.instituteType'] ?? '',
+    cell: (row) => <div>{row['institution.instituteType']}</div>,
   },
 ];
 
@@ -119,7 +126,6 @@ const AllStaff = () => {
         {!isLoading && staff?.data?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
-
       </div>
     </section>
   );

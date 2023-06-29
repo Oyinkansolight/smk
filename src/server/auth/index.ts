@@ -74,8 +74,8 @@ export function useGetProfile() {
   const mutation = useQuery({
     queryKey: 'reset_password',
     queryFn: async () =>
-      (await request.get('/v1/authentication/profile')).data.data
-        .data as UserProfile,
+      (await request.get('/v1/authentication/profile')).data.data.data
+        .userInfo as UserProfile,
   });
   return mutation;
 }

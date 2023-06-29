@@ -113,8 +113,6 @@ const AllClasses = () => {
             <div className='col-span-6'>{item.grade} </div>
           </div>
         ))}
-
-
       </div>
     </section>
   );

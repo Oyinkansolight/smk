@@ -1,5 +1,5 @@
 import AddNewRoleModal from '@/components/modals/add-new-role-modal';
-import AccountSettingsSideBar from '@/components/views/account-settings/AccountSettingsSideBar';
+// import AccountSettingsSideBar from '@/components/views/account-settings/AccountSettingsSideBar';
 import { useState } from 'react';
 import { IoMdAdd } from 'react-icons/io';
 import { MdArrowBackIos } from 'react-icons/md';
@@ -35,7 +35,7 @@ const roles = [
 const permissions = ['Add Admin', 'Manage Permissions', 'Add School'];
 
 export default function ManageRoles({ onClose }: { onClose: () => void }) {
-  const [selectedRole, setSelectedRole] = useState(0);
+  const [selectedRole] = useState(0);
 
   return (
     <div className='h-full px-12'>
@@ -46,11 +46,11 @@ export default function ManageRoles({ onClose }: { onClose: () => void }) {
       <div className='text-3xl font-bold py-8'>Manage Access Roles</div>
       <div className='flex h-full'>
         <div>
-          <AccountSettingsSideBar
+          {/* <AccountSettingsSideBar
             items={roles.map((v) => v.role)}
             selected={selectedRole}
             onClick={(idx) => setSelectedRole(idx)}
-          />
+          /> */}
           <div className='h-8' />
           <AddNewRoleModal>
             <div className='text-[#007AFF] cursor-pointer flex items-center'>

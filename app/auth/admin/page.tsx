@@ -108,7 +108,7 @@ export default function AdminAuth() {
                       <span className='text-primary'>Teesas Education</span>
                     </div>
                   </div>
-                  <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4 py-16'>
+                  <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4'>
                     <Image
                       width={146}
                       height={146}

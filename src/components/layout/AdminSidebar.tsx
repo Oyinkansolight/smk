@@ -15,6 +15,7 @@ import IDBadge from '~/svg/identification_badge.svg';
 import NoteBook from '~/svg/notebook.svg';
 import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
+import { Tooltip } from 'react-tooltip'
 
 const AdminSidebar = () => {
   const routeDetails = usePathname();
@@ -182,7 +183,7 @@ const AdminSidebar = () => {
           href='/super-admin/account'
           active={routeDetails && routeDetails.includes('account') && true}
         />
-        <SideBarButton
+        {/* <SideBarButton
           open={open}
           icon={
             <NoteBook
@@ -195,7 +196,7 @@ const AdminSidebar = () => {
           title='Blog'
           href='/super-admin/#'
           active={routeDetails && routeDetails.includes('blog') && true}
-        />
+        /> */}
         <SideBarButton
           open={open}
           icon={
@@ -206,9 +207,11 @@ const AdminSidebar = () => {
               )}
             />
           }
-          title='Messages'
-          href='/super-admin/#'
-          active={routeDetails && routeDetails.includes('message') && true}
+          title='Communication'
+          href='/super-admin/communication'
+          active={
+            routeDetails && routeDetails.includes('communication') && true
+          }
         />
 
         <SideBarButton
@@ -248,29 +251,36 @@ export const SideBarButton = ({
   open,
   onClick,
 }: SideBarButtonProps) => (
-  <ButtonLink
-    href={href}
-    onClick={onClick}
-    className={clsxm(
-      open && 'w-[190px]',
-      active
-        ? 'bg-[#0081460D] bg-opacity-5 font-bold text-[#008146]'
-        : 'bg-transparent text-[#BDBEBE]',
-      'h-12 overflow-hidden border-0 shadow-none hover:bg-[#0081460D] hover:text-[#008146]'
-    )}
-  >
-    <div className='flex flex-row items-center gap-[14px]'>
-      {icon}
-      <div
-        className={clsxm(
-          open ? 'block' : 'hidden',
-          'whitespace-nowrap text-[14px]'
-        )}
-      >
-        {title}
+  <>
+    <ButtonLink
+      data-tooltip-id={`super-admin-tooltip-${title}`}
+      href={href}
+      onClick={onClick}
+      className={clsxm(
+        open && 'w-[190px]',
+        active
+          ? 'bg-[#0081460D] bg-opacity-5 font-bold text-[#008146]'
+          : 'bg-transparent text-[#BDBEBE]',
+        'h-12 overflow-hidden border-0 shadow-none hover:bg-[#0081460D] hover:text-[#008146]'
+      )}
+    >
+      <div className='flex flex-row items-center gap-[14px]'>
+        {icon}
+        <div
+          className={clsxm(
+            open ? 'block' : 'hidden',
+            'whitespace-nowrap text-[14px]'
+          )}
+        >
+          {title}
+        </div>
       </div>
-    </div>
-  </ButtonLink>
+    </ButtonLink>
+
+    <Tooltip id={`super-admin-tooltip-${title}`} place="top">
+      {title}
+    </Tooltip>
+  </>
 );
 
 export default AdminSidebar;

@@ -5,15 +5,15 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Biodata from '@/components/views/admin/Addstaff/biodata';
 import Contact from '@/components/views/admin/Addstaff/contact';
-import Document from '@/components/views/admin/Addstaff/document';
 import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
+import Training from '@/components/views/admin/Addstaff/training';
 import { useGetProfile } from '@/server/auth';
 import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
@@ -52,8 +52,44 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddStaff = () => {
   const { data: institutionProfile } = useGetProfile();
+  // console.log(institutionProfile);
+
   const {
     register,
 
@@ -68,16 +104,56 @@ const AddStaff = () => {
   const [loading, setloading] = useState(false);
 
   const [publishData, setpublishData] = useState(null);
+  const [trainingDetails, setTrainingDetails] = useState<
+    { name: string; year: number | null }[]
+  >([]);
+  const [assignedClassSubject, setassignedClassSubject] = useState<
+    { classId: number | null; subjectId: number | null }[]
+  >([]);
 
-  const [imageName, setImageName] = useState<string>('');
-  const [imageData, setImageData] = useState('http://placeimg.com/640/480');
-
-  const [imageName1, setImageName1] = useState<string>('');
-  const [imageData1, setImageData1] = useState('http://placeimg.com/640/480');
-
-  const [imageName2, setImageName2] = useState<string>('');
-  const [imageData2, setImageData2] = useState('http://placeimg.com/640/480');
   const handleCreateStaff = useCreateStaff();
+
+  const addTrainingDetail = () => {
+    setTrainingDetails([...trainingDetails, { name: '', year: null }]);
+  };
+  const removeTrainingDetail = (id: number) => {
+    const updatedItems = trainingDetails.filter((_, i) => i !== id);
+    setTrainingDetails(updatedItems);
+    toast.success('Record deleted');
+  };
+  const handleTrainingChange = (name: string, value: any, id: number) => {
+    const updatedItems = trainingDetails.map((item, i) => {
+      if (i === id) {
+        return { ...item, [name]: value }; // Update the name property
+      }
+      return item;
+    });
+    setTrainingDetails(updatedItems);
+  };
+  const addSubjectClass = () => {
+    setassignedClassSubject([
+      ...assignedClassSubject,
+      { classId: null, subjectId: null },
+    ]);
+  };
+  const removeRemoveSubjectClass = (id: number) => {
+    const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
+    setassignedClassSubject(updatedItems);
+    toast.success('Record deleted');
+  };
+  const handleSubjectClassChange = (name: string, value: any, id: number) => {
+    const updatedItems = assignedClassSubject.map((item, i) => {
+      if (i === id) {
+        return { ...item, [name]: value }; // Update the name property
+      }
+      return item;
+    });
+    setassignedClassSubject(updatedItems);
+  };
+  useEffect(() => {
+    addTrainingDetail();
+    addSubjectClass();
+  }, []);
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     // console.log(errors);
@@ -101,26 +177,28 @@ const AddStaff = () => {
     ) {
       setStage(stage + 1);
     }
-    if (
-      stage === 3 &&
-      data.schoolAttended &&
-      data.courseAttended &&
-      data.grade &&
-      data.year
-    ) {
+    if (stage === 3) {
       setStage(stage + 1);
     }
+
     if (
       stage === 4 &&
-      data.employerName &&
-      data.role &&
-      data.employmentType &&
-      data.employmentyear
+      data.schoolname &&
+      data.staffId &&
+      data.dateposted &&
+      data.qualification &&
+      data.dateappointed &&
+      data.jobTitle &&
+      data.retirementDate &&
+      data.salarygrade
     ) {
       setStage(stage + 1);
     }
+    if (stage === 5) {
+      setStage(stage + 1);
+    }
     if (
-      stage === 5 &&
+      stage === 6 &&
       data.idCardImage &&
       data.firstDocumentType &&
       data.firstUpload &&
@@ -202,20 +280,17 @@ const AddStaff = () => {
       stage: 3,
       stageName: 'Training History',
     },
+
     {
       stage: 4,
-      stageName: 'Educational Details',
+      stageName: 'Employment Details ',
     },
     {
       stage: 5,
-      stageName: 'Employment History ',
+      stageName: 'Subjects and Classes',
     },
     {
       stage: 6,
-      stageName: 'Upload Dcuments',
-    },
-    {
-      stage: 7,
       stageName: 'Publish',
     },
   ];
@@ -256,23 +331,26 @@ const AddStaff = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && <Biodata register={register} errors={errors} />}
           {stage === 2 && <Contact register={register} errors={errors} />}
-          {stage === 3 && <Education register={register} errors={errors} />}
-          {stage === 4 && <Employment register={register} errors={errors} />}
-          {stage === 5 && (
-            <Document
+          {stage === 3 && (
+            <Training
               register={register}
               errors={errors}
-              setImageData={(v) => setImageData(v)}
-              imageName={imageName}
-              setImageName={(v) => setImageName(v ?? '')}
-              setImageData1={(v) => setImageData1(v)}
-              imageName1={imageName1}
-              setImageName1={(v) => setImageName1(v ?? '')}
-              setImageData2={(v) => setImageData2(v)}
-              imageName2={imageName2}
-              setImageName2={(v) => setImageName2(v ?? '')}
+              removeTrainingDetail={removeTrainingDetail}
+              addTrainingDetail={addTrainingDetail}
+              trainingDetails={trainingDetails}
+              handleTrainingChange={handleTrainingChange}
             />
           )}
+          {stage === 4 && <Employment register={register} errors={errors} />}
+          {stage === 5 && (
+            <Education
+              removeRemoveSubjectClass={removeRemoveSubjectClass}
+              addSubjectClass={addSubjectClass}
+              assignedClassSubject={assignedClassSubject}
+              handleSubjectClassChange={handleSubjectClassChange}
+            />
+          )}
+
           {stage === 6 ||
             (stage === 7 && <Publish publishData={publishData} />)}
           <div className='mb-6 flex justify-end'>

@@ -46,7 +46,7 @@ const AddSchool = () => {
 
   const nextHandler = async () => {
     if (stage === 1) {
-      if (schoolName === '' || schoolEmail === '' || !imageData) {
+      if (schoolName === '' || schoolEmail === '' || !instituteType) {
         toast.error('Please enter a value for all fields');
       } else {
         setStage(2);

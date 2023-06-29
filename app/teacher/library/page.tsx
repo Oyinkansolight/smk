@@ -26,24 +26,6 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const TeacherLibrary = () => {
   const GovtFilesData = useGetAllFiles('');
   const schoolFilesData: any = [];
@@ -63,7 +45,7 @@ const TeacherLibrary = () => {
       }
     });
   return (
-    <div className='layout flex'>
+    <div className='w-full'>
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <div className='flex w-full items-center justify-between'>
           <TabBar
@@ -88,9 +70,9 @@ const TeacherLibrary = () => {
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
 
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
+          {/* <div className='h-full border-b-[2px] border-[#EDEFF2]'>
             <SearchInput placeholder='Search Files' className='pt-[14px]' />
-          </div>
+          </div> */}
         </div>
 
         {tabIdx === 0 && (

@@ -22,30 +22,6 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface BiodataProps {
   schoolName: string | number;
   setSchoolName: (v: string | number) => void;
@@ -108,6 +84,9 @@ const Biodata = ({
             setFormValue={setSchoolEmail}
             formValue={schoolEmail}
             placeholder='Details here'
+            validation={{
+              required: 'Valid email is required',
+            }}
           />
         </div>
 

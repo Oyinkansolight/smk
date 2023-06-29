@@ -19,7 +19,7 @@ export default function Page() {
         </div>
         <BiSortUp className='h-6 w-6' />
       </div>
-      <div className='grid grid-cols-8 py-8 text-[#746D69] text-base'>
+      <div className='grid grid-cols-8 py-8 text-[#746D69]  text-xs md:text-base'>
         <div />
         <div className='col-span-3 px-4'>Student</div>
         <div>Group</div>
@@ -41,10 +41,10 @@ export default function Page() {
 function StudentGradeListItem({ id }: { id: number }) {
   return (
     <Link href='/teacher/grades/grade-book-student'>
-      <div className='grid text-black grid-cols-8 items-center text-base rounded-lg border p-4 py-6 bg-white'>
+      <div className='grid text-black grid-cols-8 items-center text-xs md:text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
-          <div className='rounded-full h-10 w-10 bg-gray-300' />
+          <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
           <div>Ighosa Ahmed</div>
         </div>
         <div className='text-black'>Group Name</div>

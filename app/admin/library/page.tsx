@@ -4,7 +4,6 @@
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
-import logger from '@/lib/logger';
 import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -13,44 +12,6 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiWhatsappFill } from 'react-icons/ri';
 import Folder from '~/svg/folder.svg';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

@@ -122,8 +122,6 @@ const AlltransferRequestStaff = () => {
             <div className='col-span-2'> {item.location} </div>
           </div>
         ))}
-
-
       </div>
     </section>
   );

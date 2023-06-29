@@ -1,6 +1,5 @@
 'use client';
 
-import Button from '@/components/buttons/Button';
 import Pill from '@/components/buttons/Pill';
 import {
   BasicCard,
@@ -13,7 +12,6 @@ import AddSingleSchool from '@/components/modal/addSchool';
 import { AdSlider } from '@/components/sliders';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
-import { BsPlus } from 'react-icons/bs';
 import StudentBadge from '~/svg/student_badge.svg';
 
 const Page = () => {
@@ -21,21 +19,14 @@ const Page = () => {
 
   const { data } = useGetDashboardOverview();
 
+  const handleSetOpen = (value: boolean) => setIsOpen(value);
+
   return (
     <div className='layout flex flex-col gap-[27px] px-4 pt-6'>
-      <div className='flex justify-end'>
-        <Button
-          className='max-w-[169px] text-right'
-          onClickHandler={() => {
-            setIsOpen(true);
-          }}
-        >
-          <div className='flex flex-row items-center gap-2'>
-            <BsPlus className='h-[20px] w-[20px]' />
-            <div>Add School</div>
-          </div>
-        </Button>
+      <div className='flex h1 mb-7'>
+        Welcome
       </div>
+
       {isOpen && (
         <AddSingleSchool
           onClickHandler={() => {
@@ -44,33 +35,38 @@ const Page = () => {
         />
       )}
 
-      <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
-        <SchoolTotalCard count={data?.Total_Schools ?? 0} />
-        <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
-          <IndividualTotal
-            count={data?.Total_ECCDE ?? 0}
-            name='ECCDE'
-            variant='secondary'
-            link='/super-admin/eccde'
-          />
-          <IndividualTotal
-            count={data?.Total_Primary ?? 0}
-            name='Primary School'
-            link='/super-admin/primary'
-            variant='secondary'
-          />
-          <IndividualTotal
-            count={data?.Total_Secondary ?? 0}
-            name='Secondary School'
-            link='/super-admin/secondary'
-            variant='secondary'
-          />
-          <IndividualTotal
-            count={data?.Total_Tertiary ?? 0}
-            name='Tertiary School'
-            link='/super-admin/tertiary'
-            variant='tertiary'
-          />
+      <div className='flex flex-col gap-[10px] bg-white rounded-[10px] p-5'>
+        <div className='font-bold text-[28px] leading-[27px]'>Dashboard Statistic</div>
+
+        <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
+
+          <SchoolTotalCard count={data?.Total_Schools ?? 0} handleSetOpen={handleSetOpen} />
+          <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
+            <IndividualTotal
+              count={data?.Total_ECCDE ?? 0}
+              name='ECCDE'
+              variant='secondary'
+              link='/super-admin/eccde'
+            />
+            <IndividualTotal
+              count={data?.Total_Primary ?? 0}
+              name='Primary School'
+              link='/super-admin/primary'
+              variant='secondary'
+            />
+            <IndividualTotal
+              count={data?.Total_Secondary ?? 0}
+              name='Secondary School'
+              link='/super-admin/secondary'
+              variant='secondary'
+            />
+            <IndividualTotal
+              count={data?.Total_Tertiary ?? 0}
+              name='Tertiary School'
+              link='/super-admin/tertiary'
+              variant='tertiary'
+            />
+          </div>
         </div>
       </div>
 
@@ -122,7 +118,7 @@ const Page = () => {
 
                   <div className='flex w-full flex-row items-center justify-between'>
                     <div className='flex flex-col gap-2'>
-                      <div className='font-bold text-[#4D5E80]'>Class 1</div>
+                      <div className='font-bold text-[#4D5E80]'>Institution 1</div>
                       <div className='font-bold text-[#E5A500]'>70%</div>
                     </div>
 
@@ -138,7 +134,7 @@ const Page = () => {
 
                   <div className='flex w-full flex-row items-center justify-between'>
                     <div className='flex flex-col gap-2'>
-                      <div className='font-bold text-[#4D5E80]'>Class 2</div>
+                      <div className='font-bold text-[#4D5E80]'>Institution 2</div>
                       <div className='font-bold text-[#E5A500]'>55%</div>
                     </div>
 

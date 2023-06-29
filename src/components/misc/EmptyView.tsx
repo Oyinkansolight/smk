@@ -6,8 +6,8 @@ export default function EmptyView({ label }: { label: string }) {
       <Image
         height={128}
         width={128}
-        src={'/images/empty_box.png'}
-        alt={'empty box'}
+        src='/images/empty_box.png'
+        alt='empty box'
       />
       <div>{label}</div>
     </div>

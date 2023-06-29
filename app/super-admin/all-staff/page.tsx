@@ -16,7 +16,12 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
     selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx}</div>,
+    cell: (row) => <div>#{row.idx + 1}</div>,
+  },
+  {
+    name: 'Staff ID',
+    selector: (row) => row.id ?? '',
+    cell: (row) => <div>{row.id}</div>,
   },
   {
     name: 'Name',
@@ -33,21 +38,25 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
     ),
   },
   {
-    name: 'Staff ID',
-    selector: (row) => row.id ?? '',
-    cell: (row) => <div>{row.id}</div>,
-  },
-  {
     name: 'Type',
     selector: (row) => row.staffType ?? '',
     cell: (row) => <div>{row.staffType}</div>,
   },
   {
-    name: 'Schools',
+    name: 'Institution',
     selector: (row) => row['institution.instituteName'] ?? '',
     cell: (row) => <div>{row['institution.instituteName']}</div>,
   },
+  {
+    name: 'Institution Type',
+    selector: (row) => row['institution.instituteType'] ?? '',
+    cell: (row) => <div>{row['institution.instituteType']}</div>,
+  },
 ];
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStaff = () => {
   const { data: staff, error, isLoading } = useGetTeachersList();
@@ -80,12 +89,6 @@ const AllStaff = () => {
           <p className='text-[#615F5F]'>Total Teacher</p>
           <h1 className='font-semibold text-2xl'>{staff?.data.length ?? 0}</h1>
         </div>
-        <Link
-          href='/admin/add-staff'
-          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Staff
-        </Link>
       </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
@@ -105,7 +108,6 @@ const AllStaff = () => {
         {!isLoading && staff?.data.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
-
       </div>
     </section>
   );

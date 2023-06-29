@@ -11,7 +11,7 @@ export default function NewStudentDashboard() {
   const { data, isLoading } = useGetStudentOngoingPeriod();
 
   return (
-    <div className='flex justify-between gap-8'>
+    <div className='flex md:flex-row flex-col md:justify-between gap-8'>
       <div className='w-full flex flex-col gap-8 mt-8 px-7'>
         <div className='flex flex-col gap-2'>
           <div className='h3'>Hello, Johnny</div>
@@ -55,7 +55,7 @@ export default function NewStudentDashboard() {
         </div>
       </div>
 
-      <div className='max-w-sm flex flex-col gap-8 pr-11 pt-[35px]'>
+      <div className='px-7 md:px-0  md:max-w-sm flex md:flex-col flex-row gap-8 md:pr-11 pt-[35px]'>
         <NewStudentClock />
         <div className='flex flex-col gap-y-[14px] p-4 rounded-xl border bg-[#FAFAFA] w-full max-w-[296px]'>
           <div className='font-bold text-xl '>Today's Timetable</div>

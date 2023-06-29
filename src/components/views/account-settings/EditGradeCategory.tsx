@@ -103,7 +103,7 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
                       placeholder=''
                       {...field}
                       containerClassName='w-full'
-                      inputClassName="max-h-[10px]"
+                      inputClassName='max-h-[10px]'
                     />
                   );
                 }}
@@ -118,7 +118,7 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
                       placeholder=''
                       {...field}
                       containerClassName='w-full'
-                      inputClassName="max-h-[10px]"
+                      inputClassName='max-h-[10px]'
                     />
                   );
                 }}
@@ -128,14 +128,17 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
               </div>
             </div>
 
-
             <div className='my-6 h-[0.1px] bg-[#C3CAD9] w-10/12 mx-auto' />
           </React.Fragment>
         ))}
       </div>
       <div className='h-4' />
       <div className='flex'>
-        <Button className='!text-[10px] !font-bold' variant='outline' onClick={handleAddNewCategory}>
+        <Button
+          className='!text-[10px] !font-bold'
+          variant='outline'
+          onClick={handleAddNewCategory}
+        >
           Add New Grade Category
         </Button>
       </div>

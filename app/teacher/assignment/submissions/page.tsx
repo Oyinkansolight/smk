@@ -30,7 +30,7 @@ export default function Page() {
         </Link>
       </div>
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold text-base grid-cols-5'>
+      <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
         <div className='col-span-2'>Name</div>
         <div>Date Submitted</div>
         <div>Due Date</div>
@@ -71,7 +71,7 @@ function AssignmentListItem({
       >
         <div className='flex items-center col-span-2 gap-8'>
           <div>{id}.</div>
-          <div className='relative rounded-full border h-16 w-16 bg-gray-300 '></div>
+          <div className='relative rounded-full border h-16 w-16 bg-gray-300 md:block hidden '></div>
           <div>{title}</div>
         </div>
         <div>{dateSubmitted ? dateSubmitted : '-'}</div>

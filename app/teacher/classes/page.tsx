@@ -14,7 +14,7 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  const subjects = ['Mathematics', 'Science', 'English', 'History'];
+  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
   // const { data } = useGetGovernmentSubjectList();
 
@@ -23,6 +23,7 @@ export default function Page() {
   const { data, refetch, isError } = useGetTeachersSubjectList(
     profile?.staff?.id
   );
+  // console.log(profile?.staff?.id);
 
   useEffect(() => {
     if (isSuccess && profile?.staff?.id) {

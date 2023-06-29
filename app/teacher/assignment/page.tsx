@@ -35,7 +35,7 @@ export default function Page() {
         <BiSortUp className='h-6 w-6' />
       </div>
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold text-base grid-cols-6'>
+      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-6'>
         <div className='col-span-2'>Title</div>
         <div>Subject</div>
         <div>Class</div>
@@ -54,7 +54,7 @@ export default function Page() {
             />
           ))}
       </div>
-      <PaginatedCounter pageCount={10} currentPage={3} />
+      <PaginatedCounter pageCount={5} currentPage={2} />
     </div>
   );
 }
@@ -77,7 +77,7 @@ function AssignmentListItem({
         )}
       >
         <div className='flex items-center col-span-2 gap-4'>
-          <div className='relative rounded-full border h-16 w-16 '>
+          <div className='relative rounded-full border md:block hidden h-16 w-16 '>
             <Image
               alt='book-stack'
               className='absolute inset-2'

@@ -29,7 +29,7 @@ export default function Page() {
           <div className='text-blue-500 cursor-pointer'>Request Edit</div>
         </div>
         <div className='h-px bg-gray-300' />
-        <div className='p-8 bg-white rounded-lg grid gap-5 grid-cols-3'>
+        <div className='p-8 bg-white rounded-lg grid gap-5 sm:grid-cols-2 md:grid-cols-3'>
           {profileDetails.map((v, i) => (
             <div key={i}>
               <div className='text-[#B1B1B1]'>{v.title}</div>
@@ -44,7 +44,7 @@ export default function Page() {
           <div className='text-blue-500 cursor-pointer'>Request Edit</div>
         </div>
         <div className='h-px bg-gray-300' />
-        <div className='p-8 bg-white rounded-lg grid gap-5 grid-cols-3'>
+        <div className='p-8 bg-white rounded-lg grid gap-5 sm:grid-cols-2 md:grid-cols-3'>
           {contactDetails.map((v, i) => (
             <div key={i}>
               <div className='text-[#B1B1B1]'>{v.title}</div>

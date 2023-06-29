@@ -58,7 +58,7 @@ import { BiUser } from 'react-icons/bi';
 export default function TeacherDashboardView() {
   return (
     <div className='flex flex-col layout'>
-      <div className='flex py-4 px-6 justify-between bg-white rounded-lg my-4 w-full'>
+      <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 py-4 px-6  bg-white rounded-lg my-4 w-full'>
         <SmallTeacherCard
           icon={<BiUser className='h-16 w-16 text-[#008146]' />}
           subtitle='Total Students'
@@ -84,7 +84,7 @@ export default function TeacherDashboardView() {
           className='bg-[#FFF3F3]'
         />
       </div>
-      <div className='grid grid-cols-2 gap-10 w-full'>
+      <div className='grid lg:grid-cols-2 gap-10 w-full'>
         <div className='grid grid-rows-2 gap-6 w-full'>
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>

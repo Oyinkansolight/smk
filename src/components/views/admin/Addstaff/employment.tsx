@@ -38,25 +38,18 @@ import FormSelect from '@/components/input/formSelect';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 type Iprops = {
   register: any;
   errors: any;
 };
-const employmentOptions: string[] = ['Part Time', 'Full Time'];
+const qaulifications: string[] = [
+  'NCE',
+  'OND',
+  'HND',
+  'Bachelors Degree',
+  'Masters Degree',
+  'Doctoral Degree',
+];
 
 const Education = ({ register, errors }: Iprops) => {
   return (
@@ -64,19 +57,19 @@ const Education = ({ register, errors }: Iprops) => {
       <h2 className='text-3xl font-bold'>Employment History</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid grid-cols-2 gap-6 pb-3 border-b'>
         <div>
           <FormInput
-            label='Name of Employer'
+            label='Name of School'
             placeholder='Details here'
-            name='employerName'
+            name='schoolname'
             register={register}
             validation={{
-              required: 'Employer Name is required',
+              required: 'School Name is required',
             }}
             helper={
-              errors?.employerName && {
-                message: errors?.employerName?.message,
+              errors?.schoolname && {
+                message: errors?.schoolname?.message,
                 type: 'danger',
               }
             }
@@ -84,16 +77,54 @@ const Education = ({ register, errors }: Iprops) => {
         </div>
         <div>
           <FormInput
-            label='Role'
+            label='Staff ID'
             placeholder='Details here'
-            name='role'
+            name='staffId'
             register={register}
             validation={{
-              required: 'Role is required',
+              required: 'Satff ID is required',
             }}
             helper={
-              errors?.role && {
-                message: errors?.role?.message,
+              errors?.staffId && {
+                message: errors?.staffId?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+
+      <div className='my-10 grid grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Date Posted to Current School'
+            placeholder='Details here'
+            name='dateposted'
+            type='date'
+            register={register}
+            validation={{
+              required: 'Date Posted is required',
+            }}
+            helper={
+              errors?.dateposted && {
+                message: errors?.dateposted?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormSelect
+            label='Highest Qualification'
+            name='qualification'
+            options={qaulifications}
+            register={register}
+            validation={{
+              required: 'Highest Qualificationis required',
+            }}
+            helper={
+              errors?.qualification && {
+                message: errors?.qualification?.message,
                 type: 'danger',
               }
             }
@@ -102,8 +133,84 @@ const Education = ({ register, errors }: Iprops) => {
       </div>
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
-          <FormSelect
-            label='Employment Type'
+          <FormInput
+            label='Date of First Appointment'
+            placeholder='Details here'
+            name='dateappointed'
+            type='date'
+            register={register}
+            validation={{
+              required: 'Date PostAppointeded is required',
+            }}
+            helper={
+              errors?.dateappointed && {
+                message: errors?.dateappointed?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormInput
+            label='Retirement Date'
+            placeholder='Details here'
+            name='retirementDate'
+            type='date'
+            register={register}
+            validation={{
+              required: 'Retirement Date is required',
+            }}
+            helper={
+              errors?.retirementDate && {
+                message: errors?.retirementDate?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+      <div className='my-10 grid grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Salary Grade Level'
+            placeholder='Details here'
+            name='salarygrade'
+            type='text'
+            register={register}
+            validation={{
+              required: 'Salary Grade Level is required',
+            }}
+            helper={
+              errors?.salarygrade && {
+                message: errors?.salarygrade?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormInput
+            label='Job Title '
+            placeholder='Details here'
+            name='jobTitle'
+            type='text'
+            register={register}
+            validation={{
+              required: 'Retirement Date is required',
+            }}
+            helper={
+              errors?.jobTitle && {
+                message: errors?.jobTitle?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+
+      {/* 
+      <FormSelect
+            label='Date Posted to Current School'
             name='employmentType'
             options={employmentOptions}
             register={register}
@@ -116,78 +223,7 @@ const Education = ({ register, errors }: Iprops) => {
                 type: 'danger',
               }
             }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Employment year'
-            placeholder='Details here'
-            name='employmentyear'
-            type='date'
-            register={register}
-            validation={{
-              required: 'Employment Year is required',
-            }}
-            helper={
-              errors?.employmentyear && {
-                message: errors?.employmentyear?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-
-      {/*    <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            School Attended
-          </label>
-          <input
-            type='text'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
-          />
-        </div>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Course Attended
-          </label>
-          <input
-            type='email'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Grade
-          </label>
-          <div className='mt-1 w-full border p-4'>
-            <select name='' id='' className='outline-none'>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Year
-          </label>
-          <div className='mt-1 w-full border p-4'>
-            <select name='' id='' className='outline-none'>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-            </select>
-          </div>
-        </div>
-      </div> */}
+          /> */}
     </section>
   );
 };

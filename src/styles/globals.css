@@ -92,6 +92,11 @@
   }
 }
 
+.react-pdf__Page__canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 @layer utilities {
   .animated-underline {
     background-image: linear-gradient(#33333300, #33333300),

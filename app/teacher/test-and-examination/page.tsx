@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
-
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',

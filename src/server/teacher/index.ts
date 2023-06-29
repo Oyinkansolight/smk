@@ -1,5 +1,4 @@
 import request from '@/server';
-import { PaginationParams } from '@/types';
 import { IncidentReportType, Subject } from '@/types/institute';
 import { useMutation, useQuery } from 'react-query';
 
@@ -56,7 +55,7 @@ export function useClockOut() {
   return mutation;
 }
 
-export function useGetTeachersSubjectList(params: PaginationParams) {
+export function useGetTeachersSubjectList(params: unknown) {
   const query = useQuery({
     queryKey: 'get_subject_list_teacher',
     queryFn: async () => {

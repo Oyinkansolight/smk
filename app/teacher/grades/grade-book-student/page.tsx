@@ -28,7 +28,7 @@ export default function Page() {
   return (
     <div className='h-full layout flex flex-col gap-6'>
       <div className='text-black font-bold py-8 text-2xl'>Grade Book</div>
-      <div className='flex gap-4'>
+      <div className='flex md:flex-row flex-col gap-4'>
         <div className='flex w-[313px] flex-col justify-center items-center bg-white rounded-lg'>
           <div className='h-20 rounded-full w-20 bg-slate-300' />
           <div className='text-lg font-bold'>
@@ -47,7 +47,7 @@ export default function Page() {
           </div>
         </div>
         <div className='flex-1' />
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-2 gap-4'>
           <FlashCard
             title={
               <div>
@@ -84,8 +84,8 @@ export default function Page() {
       </div>
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>
-        <div className='bg-[#EFF7F6] p-6'>
-          <table className='w-full'>
+        <div className='bg-[#EFF7F6] p-6 overflow-y-auto w-full'>
+          <table className='min-w-[800px]'>
             <tr className='text-[#746D69] text-lg'>
               <th>Subjects</th>
               <th>Assignment 1</th>

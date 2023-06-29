@@ -26,8 +26,6 @@ import { useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface Iprops {
   session: string | number;
   schoolType: string | number;

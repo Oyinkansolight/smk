@@ -170,8 +170,6 @@ function AccountSettings() {
             </div>
           </div>
         ))}
-
-
       </div>
     </>
   );

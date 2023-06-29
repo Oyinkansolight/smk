@@ -33,26 +33,6 @@ import { RegisterOptions, UseFormRegister } from 'react-hook-form';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export enum HelperType {
   info = 'info',
   warning = 'warning',
@@ -77,6 +57,7 @@ type propType = {
   validation?: RegisterOptions<any>;
   name?: string;
   helper?: HelperProps;
+  onclick?: () => void;
   inputClassName?: string;
   containerClassName?: string;
 };
@@ -93,7 +74,7 @@ const Input = ({
   name,
   helper,
   inputClassName,
-  containerClassName
+  containerClassName,
 }: propType) => {
   return (
     <div className={containerClassName}>
@@ -105,10 +86,7 @@ const Input = ({
           <input
             disabled={disabled}
             type={type}
-            className={clsxm(
-              inputClassName,
-              'w-full border-none outline-none'
-            )}
+            className={clsxm(inputClassName, 'w-full border-none outline-none')}
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}
             value={formValue && formValue}

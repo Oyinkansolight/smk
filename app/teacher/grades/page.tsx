@@ -107,7 +107,7 @@ function StudentGradeListItem({ id }: { id: number }) {
       <div className='grid text-black grid-cols-8 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
-          <div className='rounded-full h-10 w-10 bg-gray-300' />
+          <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
           <div>Ighosa Ahmed</div>
         </div>
         <div className='text-black'>Group Name</div>

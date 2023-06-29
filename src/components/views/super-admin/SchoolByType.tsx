@@ -9,10 +9,6 @@ import Link from 'next/link';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
 
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -25,7 +21,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
   {
     name: 'No',
     selector: (item) => item.idx,
-    cell: (item) => <div>#{item.idx}</div>,
+    cell: (item) => <div>#{item.idx + 1}</div>,
     width: '90px',
     sortable: true,
   },
@@ -34,29 +30,31 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
     grow: 2,
     selector: (item) => item.instituteName ?? '',
     sortable: true,
-    cell: (item) => (
-      <div className='flex items-center gap-4 text-[#525F7F]'>
-        {item.instituteLogo ? (
-          <Image
-            src={
-              item.instituteLogo.includes('placeimg') ||
-              item.instituteLogo.includes('picsum')
-                ? item.instituteLogo
-                : `/${item.instituteLogo}`
-            }
-            className='h-8 w-8 rounded-full'
-            alt=''
-            width={20}
-            height={10}
-          />
-        ) : (
-          <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        )}
-        <Link href={`/super-admin/school?id=${item.id}`}>
-          <h2 className='text-sm font-medium'>{item.instituteName}</h2>
-        </Link>
-      </div>
-    ),
+    cell: (item) => {
+      return (
+        <div className='flex items-center gap-4 text-[#525F7F]'>
+          {item.instituteLogo && !item.instituteLogo?.includes('profile_picture') ? (
+            <Image
+              src={
+                item.instituteLogo.includes('placeimg') ||
+                  item.instituteLogo.includes('picsum')
+                  ? item.instituteLogo
+                  : `/${item.instituteLogo}`
+              }
+              className='h-8 w-8 rounded-full'
+              alt=''
+              width={20}
+              height={10}
+            />
+          ) : (
+            <AvrilImage alt='avril' className='h-8 w-8 min-w-[32px] min-h-[32px] rounded-full' />
+          )}
+          <Link href={`/super-admin/school?id=${item.id}`}>
+            <h2 className='text-sm font-medium'>{item.instituteName}</h2>
+          </Link>
+        </div>
+      )
+    },
   },
   {
     name: 'Type',

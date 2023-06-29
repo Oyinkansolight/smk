@@ -42,8 +42,6 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);

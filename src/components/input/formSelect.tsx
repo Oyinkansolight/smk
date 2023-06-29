@@ -20,7 +20,7 @@ type propType = {
   label: string;
   formValue?: string | number;
   setFormValue?: (value: string | number) => void;
-  options: string[];
+  options: string[] | number[];
   register?: UseFormRegister<any>;
   validation?: RegisterOptions<any>;
   name?: string;

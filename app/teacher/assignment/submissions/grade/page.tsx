@@ -26,8 +26,8 @@ export default function Page() {
         <div className='h-10 w-10 rounded-full bg-gray-200' />
         <div>Ighosa Ahmed</div>
       </div>
-      <div className='flex gap-4'>
-        <div className='flex-1 rounded-lg p-2 bg-white'>
+      <div className='flex lg:flex-row flex-col gap-4'>
+        <div className='flex-1 rounded-lg p-2 w-full bg-white'>
           <div className='flex justify-center p-8'>
             <PageCounter
               page={currentPage}
@@ -44,7 +44,7 @@ export default function Page() {
             <DocPage pageNumber={currentPage} />
           </Document>
         </div>
-        <div className='rounded-lg bg-white p-2'>
+        <div className=' rounded-lg bg-white p-2'>
           <div className='font-bold text-xl'>Grade Assessment</div>
           <div className='flex flex-col gap-4 mt-6'>
             <div>Add to grade list</div>

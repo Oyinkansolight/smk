@@ -36,7 +36,14 @@ export default function SmallTeacherSubjectListItem({
       </div>
       <div className='w-10' />
       <CreateSubjectActivityModal>
-        <Button variant='secondary'>Add Activity</Button>
+        <Button variant='secondary'>
+          {' '}
+          <div>
+            {' '}
+            <span className='md:hidden block'>+</span>{' '}
+            <span className='hidden md:block'>Add Activity</span>{' '}
+          </div>{' '}
+        </Button>
       </CreateSubjectActivityModal>
       <div className='flex-1' />
       <div className='p-4'>

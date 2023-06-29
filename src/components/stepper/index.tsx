@@ -16,8 +16,8 @@ interface propType {
 
 function Index({ currentStage, variant, data, section }: propType) {
   return (
-    <div>
-      <div className='my-4 flex space-x-6 '>
+    <div className='w-full overflow-x-auto'>
+      <div className='my-4 flex space-x-6'>
         {data.map((item, idx) => (
           <div className='flex items-center space-x-4' key={idx}>
             <div

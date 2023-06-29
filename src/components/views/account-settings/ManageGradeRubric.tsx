@@ -15,7 +15,7 @@ export default function ManageGradeRubric() {
         <div className='bg-[#F4F9FF] flex flex-col items-center py-4 mb-5'>
           <Index
             variant='#008146'
-            section={''}
+            section=''
             data={[
               { stage: 1, stageName: 'Add Rubric Label' },
               { stage: 2, stageName: 'Select Rubric Range' },
@@ -28,9 +28,9 @@ export default function ManageGradeRubric() {
           </div>
         </div>
       </div>
-      {a.map((v, i) => (
-        <div>
-          <div key={i} className='flex items-end gap-3'>
+      {a.map((v: unknown, i: number) => (
+        <div key={i}>
+          <div className='flex items-end gap-3'>
             <Input
               label='Category Name'
               placeholder=''

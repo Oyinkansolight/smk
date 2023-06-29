@@ -3,7 +3,7 @@
 
 import AddSession from '@/components/modal/AddSession';
 import { BasicSearch } from '@/components/search';
-import logger from '@/lib/logger';
+// import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
   useCreateAcademicCalendar,
@@ -33,28 +33,9 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AcadamicCalendar = () => {
   const handdleCreateAcademicCalendar = useCreateAcademicCalendar();
-  const { data, error, isLoading } = useGetAcademicSessions();
-  console.log(data?.data);
+  const { data, isLoading } = useGetAcademicSessions();
 
   const [isOpen, setIsOpen] = useState(false);
   const [session, setsession] = useState<string | number>('');
@@ -76,6 +57,19 @@ const AcadamicCalendar = () => {
   function handleModal() {
     setIsOpen(!isOpen);
   }
+  // function getWeeksBetweenDates(startDate: string, endDate: string) {
+  //   const start = new Date(startDate).getTime();
+  //   const end = new Date(endDate).getTime();
+
+  //   // Calculate the difference in milliseconds
+  //   const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
+  //   const diffInMilliseconds = Math.abs(end - start);
+
+  //   // Calculate the number of weeks
+  //   const weeks = Math.floor(diffInMilliseconds / millisecondsPerWeek);
+
+  //   return weeks;
+  // }
 
   const SubmitHandler = async () => {
     const data = {

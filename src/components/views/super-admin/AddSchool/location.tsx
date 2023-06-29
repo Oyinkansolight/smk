@@ -4,6 +4,7 @@ import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
+import { useRef, useState } from 'react';
 
 interface LocationBioProps {
   location: string | number;
@@ -22,9 +23,12 @@ const Biodata = ({
   setLocation,
   setTown,
 }: LocationBioProps) => {
+  const inputRef = useRef(null);
   const { data } = useGetLocalGovernments();
+  const [country, setCountry] = useState('ng')
 
   //create local government array in edo state nigeria
+
 
   return (
     <section className=''>
@@ -40,6 +44,10 @@ const Biodata = ({
             placeholder='Details here'
           />
         </div>
+
+        {/* <div className=' w-full gap-6'>
+          <LocationInput />
+        </div> */}
 
         <div className='w-full mt-4'>
           <FormSelect

@@ -11,7 +11,6 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
-
 export default function SchoolProfileCard({
   idx,
   setIdx,

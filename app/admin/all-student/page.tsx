@@ -18,15 +18,16 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   {
     name: 'No',
     selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx}</div>,
+    cell: (row) => <div>#{row.idx + 1}</div>,
   },
+  { name: 'Student ID', selector: (row) => row.id ?? '' },
   {
     name: 'Name',
     selector: (row) => row['user.0.firstName'] ?? '',
     cell: (row) => (
       <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        <Link href={`/admin/student?id=${row.id}`}>
+        <Link href={`/super-admin/student?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
             {row['user.0.firstName']} {row['user.0.lastName']}
           </h2>
@@ -34,10 +35,13 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
       </div>
     ),
   },
-  { name: 'Student ID', selector: (row) => row.id ?? '' },
   { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
   {
-    name: 'Schools',
+    name: 'Institution',
+    selector: (row) => row['institution.instituteName'] ?? '',
+  },
+  {
+    name: 'Institution Type',
     selector: (row) => row['institution.instituteType'] ?? '',
   },
 ];
@@ -100,8 +104,6 @@ const AllStudent = () => {
         {!isLoading && students?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
-
-
       </div>
     </section>
   );

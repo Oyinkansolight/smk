@@ -1,48 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useGetClassesList, useGetSubjectList } from '@/server/institution';
+import { BsPlus } from 'react-icons/bs';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -53,147 +14,100 @@ import FormSelect from '@/components/input/formSelect';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
-  register: any;
-  errors: any;
+  addSubjectClass: () => void;
+  removeRemoveSubjectClass: (id: number) => void;
+  handleSubjectClassChange: (name: string, value: any, id: number) => void;
+  assignedClassSubject: { classId: number | null; subjectId: number | null }[];
 };
-const gradeOptions: string[] = [
-  'First Class',
-  'Second Class Honours (Upper Division)',
-  'Second Class Honours (Lower Division)',
-  'Third Class Honours',
-  'Pass degree',
-];
 
-const Education = ({ register, errors }: Iprops) => {
+const Education = ({
+  addSubjectClass,
+  assignedClassSubject,
+  removeRemoveSubjectClass,
+  handleSubjectClassChange,
+}: Iprops) => {
+  const { data: allSubjects, isLoading } = useGetSubjectList();
+  const { data: allclasses } = useGetClassesList();
+
   return (
     <section className=''>
-      <h2 className='text-3xl font-bold'>Education Details</h2>
+      <h2 className='text-3xl font-bold'>Subjects and Classes</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      {!isLoading ? (
         <div>
-          <FormInput
-            label='School Attended'
-            placeholder='Details here'
-            name='schoolAttended'
-            register={register}
-            validation={{
-              required: 'School Attended is required',
-            }}
-            helper={
-              errors?.schoolAttended && {
-                message: errors?.schoolAttended?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Course Attended'
-            placeholder='Details here'
-            name='courseAttended'
-            register={register}
-            validation={{
-              required: 'Course Attended is required',
-            }}
-            helper={
-              errors?.courseAttended && {
-                message: errors?.courseAttended?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <FormSelect
-            label='Grade'
-            name='grade'
-            options={gradeOptions}
-            register={register}
-            validation={{
-              required: 'Grade is required',
-            }}
-            helper={
-              errors?.grade && {
-                message: errors?.grade?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Select Year'
-            placeholder='Details here'
-            name='year'
-            type='date'
-            register={register}
-            validation={{
-              required: 'Year is required',
-            }}
-            helper={
-              errors?.year && {
-                message: errors?.year?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
+          {assignedClassSubject.map((v: any, i: number) => (
+            <div key={i} className='my-10 grid grid-cols-12 gap-6 items-center'>
+              <div className='col-span-5'>
+                <label htmlFor='' className='text-xs font-bold'>
+                  Assign Subject
+                </label>
+                <div className='mt-1 w-full border p-2 rounded'>
+                  <select
+                    id=''
+                    className='w-full border-none outline-none bg-transparent  text-gray-400'
+                    onChange={(e) => {
+                      handleSubjectClassChange('classId', e.target.value, i);
+                    }}
+                  >
+                    <option value=''> -- Select an option -- </option>
 
-      {/*    <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            School Attended
-          </label>
-          <input
-            type='text'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
-          />
+                    {(allSubjects ?? []).map((item, id) => (
+                      <option key={id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className='col-span-5'>
+                <label htmlFor='' className='text-xs font-bold'>
+                  Assign Class
+                </label>
+                <div className='mt-1 w-full border p-2 rounded'>
+                  <select
+                    id=''
+                    className='w-full border-none outline-none bg-transparent  text-gray-400'
+                    onChange={(e) => {
+                      handleSubjectClassChange('subjectId', e.target.value, i);
+                    }}
+                  >
+                    <option value=''> -- Select an option -- </option>
+
+                    {(allclasses?.data ?? []).map((item: any, id: number) => (
+                      <option key={id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className='col-span-2 pt-4'>
+                <button
+                  type='button'
+                  onClick={() => {
+                    removeRemoveSubjectClass(i);
+                  }}
+                  className='bg-[#FFF8F8] rounded-[22px] flex space-x-2 p-3'
+                >
+                  <RiDeleteBin6Line size={20} className='text-red-500' />{' '}
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            type='button'
+            onClick={addSubjectClass}
+            className=' mt-4  rounded-[22px] flex space-x-2 p-3'
+          >
+            <BsPlus size={20} className='text-blue-500' />{' '}
+            <span>Add Another</span>
+          </button>
         </div>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Course Attended
-          </label>
-          <input
-            type='email'
-            className='mt-1 w-full border p-4'
-            placeholder='Details here'
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Grade
-          </label>
-          <div className='mt-1 w-full border p-4'>
-            <select name='' id='' className='outline-none'>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label htmlFor='' className='text-xs font-bold'>
-            Select Year
-          </label>
-          <div className='mt-1 w-full border p-4'>
-            <select name='' id='' className='outline-none'>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-              <option value='Select an option'>Select an option</option>
-            </select>
-          </div>
-        </div>
-      </div> */}
+      ) : (
+        <div className='flex justify-center'>Loading....</div>
+      )}
     </section>
   );
 };
