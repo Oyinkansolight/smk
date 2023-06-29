@@ -3,6 +3,7 @@
 import AdminHeader from '@/components/layout/AdminHeader';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -15,6 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const routeDetails = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const handleToggle = () => setOpen(!open);
+
+  useEffect(() => {
+    //* Used to Close Sidebar when navigating to another route.
+    setOpen(false);
+  }, [routeDetails])
+
 
   return (
     <html>
@@ -27,7 +37,7 @@ export default function RootLayout({
             <div className='ml-20'>{children}</div>
           </div>
 
-          <AdminSidebar />
+          <AdminSidebar open={open} handleToggle={handleToggle} />
           {/* {routeDetails === '/super-admin' && <AdminRightSidebar />} */}
         </div>
       </body>

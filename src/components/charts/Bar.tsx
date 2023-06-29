@@ -174,7 +174,7 @@ const BarChart = () => {
       margin={{ top: 0, right: 30, bottom: 30, left: 30 }}
       padding={0.4}
       valueScale={{ type: 'linear' }}
-      colors='#8833FF'
+      colors='#7F0CA7'
       animate={false}
       enableLabel={false}
       axisTop={null}
@@ -185,7 +185,7 @@ const BarChart = () => {
         tickRotation: 0,
         legend: '',
         legendPosition: 'middle',
-        legendOffset: +40,
+        legendOffset: +1,
       }}
       legends={[
         {

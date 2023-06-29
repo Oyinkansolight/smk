@@ -2,7 +2,7 @@
 import ButtonLink from '@/components/links/ButtonLink';
 import clsxm from '@/lib/clsxm';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoDocumentOutline } from 'react-icons/io5';
@@ -17,11 +17,13 @@ import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
 import { Tooltip } from 'react-tooltip'
 
-const AdminSidebar = () => {
-  const routeDetails = usePathname();
-  const [open, setOpen] = useState(false);
+interface AdminSidebarProps {
+  open: boolean;
+  handleToggle: () => void;
+};
 
-  const handleToggle = () => setOpen(!open);
+const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
+  const routeDetails = usePathname();
 
   const handleLogout = () => {
     // eslint-disable-next-line no-alert

@@ -91,48 +91,6 @@ const SchoolList = ({
   title: string;
   type?: string;
 }) => {
-  // const mockData = [
-  //   {
-  //     logo: 1,
-  //     name: 'Avril Price School',
-  //     numberOfStudent: '12,500',
-  //     type: 'Primary',
-  //     staff: '',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 2,
-  //     name: 'Scaling Heights School',
-  //     numberOfStudent: '12,500',
-  //     type: 'Primary',
-  //     staff: '',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 3,
-  //     name: 'Black Dash School',
-  //     numberOfStudent: '12,500',
-  //     type: 'Primary',
-  //     staff: '',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 4,
-  //     name: 'Reaction Primary ',
-  //     numberOfStudent: '12,500',
-  //     type: 'Primary',
-  //     staff: '',
-  //     location: 'Benin',
-  //   },
-  //   {
-  //     logo: 5,
-  //     name: 'Victory International  School',
-  //     numberOfStudent: '12,500',
-  //     type: 'Primary',
-  //     staff: '',
-  //     location: 'Benin',
-  //   },
-  // ];
   const { data, isLoading } = useGetSchools(type ? type : '');
 
   // const [allSchool, setallSchool] = useState(mockData);

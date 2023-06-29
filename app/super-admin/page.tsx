@@ -2,12 +2,14 @@
 
 import Pill from '@/components/buttons/Pill';
 import {
-  BasicCard,
   IndividualTotal,
   SchoolTotalCard,
   ToggleCard,
 } from '@/components/cards';
+import GenericChart from '@/components/cards/GenericChart';
 import { BarChart, StreamChart } from '@/components/charts';
+import AttendanceRate from '@/components/charts/AttendanceRate';
+import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
 import AddSingleSchool from '@/components/modal/addSchool';
 import { AdSlider } from '@/components/sliders';
 import { useGetDashboardOverview } from '@/server/dashboard';
@@ -41,7 +43,8 @@ const Page = () => {
         <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
 
           <SchoolTotalCard count={data?.Total_Schools ?? 0} handleSetOpen={handleSetOpen} />
-          <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[21px]'>
+
+          <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[10px] bg-[#EDF5F2] p-5 rounded-[10px] max-w-[537px]'>
             <IndividualTotal
               count={data?.Total_ECCDE ?? 0}
               name='ECCDE'
@@ -64,88 +67,137 @@ const Page = () => {
               count={data?.Total_Tertiary ?? 0}
               name='Tertiary School'
               link='/super-admin/tertiary'
-              variant='tertiary'
+              variant='secondary'
+            />
+          </div>
+
+          <div className='grid w-full grid-cols-1 gap-x-6 gap-y-[10px] bg-[#FFF6EC] p-5 rounded-[10px] max-w-[276px]'>
+            <IndividualTotal
+              count={data?.Total_Students ?? 0}
+              name='Total Students'
+              variant='primary'
+              link='/super-admin/all-student'
+            />
+            <IndividualTotal
+              count={data?.Total_Teachers ?? 0}
+              name='Total Teachers'
+              variant='primary'
+              link='/super-admin/all-staff'
             />
           </div>
         </div>
       </div>
 
       <div className='flex flex-col'>
-        <div className='mb-[31px] text-right'>
-          <select className='border-0 bg-transparent text-[14px] text-[#1C1C1C]'>
-            <option value='Manage Widgets'>Manage Widgets</option>
-          </select>
-        </div>
-
-        <div className='grid grid-cols-2 gap-6'>
-          <IndividualTotal
-            count={data?.Total_Students ?? 0}
-            name='Total Students'
-            variant='primary'
-            link='/super-admin/all-student'
-          />
-          <IndividualTotal
-            count={data?.Total_Teachers ?? 0}
-            name='Total Teachers'
-            variant='primary'
-            link='/super-admin/all-staff'
-          />
-        </div>
-
         <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
-          <div className='flex flex-col justify-between'>
-            <BasicCard className='min-h-[269px] w-full !rounded-[10px] !bg-[#F6EFFF]'>
-              <div className='flex flex-col gap-y-8'>
-                <div className='text-lg font-bold text-[#450065]'>
-                  Attendance Tracker
-                </div>
+          <div className='flex flex-col gap-y-7'>
+            <GenericChart
+              title='Attendance Tracker'
+              content={<BarChart />}
+            />
 
-                <div className='h-[150px]'>
-                  <BarChart />
-                </div>
-              </div>
-            </BasicCard>
+            <GenericChart
+              title='Attendance Rate'
+              content={<AttendanceRate />}
+            />
+
+            <GenericChart
+              title='Enrolment Analysis'
+              content={<EnrolmentAnalysis />}
+            />
           </div>
 
           <div className='flex flex-col gap-y-7'>
-            <ToggleCard
-              className='min-h-[269px] w-full !rounded-[9px] !px-9 !py-6 shadow-sm lg:max-w-[486px]'
-              title='Recently Added'
-            >
-              <div className='flex flex-col gap-y-5'>
-                <div className='flex flex-row items-center gap-x-[22.5px]'>
-                  <StudentBadge className='h-[60px] w-[60px]' />
+            <GenericChart
+              title='Recently Added Institutions'
+              content={<EnrolmentAnalysis />}
+            />
 
-                  <div className='flex w-full flex-row items-center justify-between'>
-                    <div className='flex flex-col gap-2'>
-                      <div className='font-bold text-[#4D5E80]'>Institution 1</div>
-                      <div className='font-bold text-[#E5A500]'>70%</div>
-                    </div>
+            <GenericChart
+              title='Recently Added Institutions'
+              content={(
+                <div className='flex flex-col gap-y-5'>
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
 
-                    <div className='font-bold'>
-                      <span className='text-[#4D5E80]'>35/</span>
-                      <span className='text-[#BBBFC8]'>50</span>
-                    </div>
-                  </div>
-                </div>
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>Institution 1</div>
+                        <div className='font-bold text-[#E5A500]'>70%</div>
+                      </div>
 
-                <div className='flex flex-row items-center gap-x-[22.5px]'>
-                  <StudentBadge className='h-[60px] w-[60px]' />
-
-                  <div className='flex w-full flex-row items-center justify-between'>
-                    <div className='flex flex-col gap-2'>
-                      <div className='font-bold text-[#4D5E80]'>Institution 2</div>
-                      <div className='font-bold text-[#E5A500]'>55%</div>
-                    </div>
-
-                    <div className='font-bold'>
-                      <span className='text-[#4D5E80]'>24/</span>
-                      <span className='text-[#BBBFC8]'>25</span>
+                      <div className='font-bold'>
+                        <span className='text-[#4D5E80]'>35/</span>
+                        <span className='text-[#BBBFC8]'>50</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </ToggleCard>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#E5A500]'>55%</div>
+                      </div>
+
+                      <div className='font-bold'>
+                        <span className='text-[#4D5E80]'>24/</span>
+                        <span className='text-[#BBBFC8]'>25</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#E5A500]'>55%</div>
+                      </div>
+
+                      <div className='font-bold'>
+                        <span className='text-[#4D5E80]'>24/</span>
+                        <span className='text-[#BBBFC8]'>25</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#E5A500]'>55%</div>
+                      </div>
+
+                      <div className='font-bold'>
+                        <span className='text-[#4D5E80]'>24/</span>
+                        <span className='text-[#BBBFC8]'>25</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#E5A500]'>55%</div>
+                      </div>
+
+                      <div className='font-bold'>
+                        <span className='text-[#4D5E80]'>24/</span>
+                        <span className='text-[#BBBFC8]'>25</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>)}
+            />
           </div>
         </div>
 
