@@ -167,7 +167,8 @@ const data = [
 
 const BarChart = () => {
   return (
-    <ResponsiveBar
+    <div className='h-80'>
+      <ResponsiveBar
       data={data}
       keys={['days']}
       indexBy='day'
@@ -212,6 +213,7 @@ const BarChart = () => {
         },
       ]}
     />
+    </div>
   );
 };
 

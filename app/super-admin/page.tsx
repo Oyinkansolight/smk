@@ -1,20 +1,22 @@
 'use client';
 
 import Pill from '@/components/buttons/Pill';
-import {
-  IndividualTotal,
-  SchoolTotalCard,
-  ToggleCard,
-} from '@/components/cards';
+import { IndividualTotal, SchoolTotalCard, ToggleCard } from '@/components/cards';
 import GenericChart from '@/components/cards/GenericChart';
 import { BarChart, StreamChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
 import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
+import GenderDistribution from '@/components/charts/GenderDistribution';
 import AddSingleSchool from '@/components/modal/addSchool';
 import { AdSlider } from '@/components/sliders';
+import EventCalendarTable from '@/components/tables/EventCalendarTable';
+import LoginLogsTable from '@/components/tables/LoginLogsTable';
+import TransferRequestsTable from '@/components/tables/TransferRequestsTable';
+import DataGenerator from '@/components/views/admin/DataGenerator';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
 import StudentBadge from '~/svg/student_badge.svg';
+
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,9 +27,7 @@ const Page = () => {
 
   return (
     <div className='layout flex flex-col gap-[27px] px-4 pt-6'>
-      <div className='flex h1 mb-7'>
-        Welcome
-      </div>
+      <div className='flex h1 mb-7'>Welcome</div>
 
       {isOpen && (
         <AddSingleSchool
@@ -38,11 +38,15 @@ const Page = () => {
       )}
 
       <div className='flex flex-col gap-[10px] bg-white rounded-[10px] p-5'>
-        <div className='font-bold text-[28px] leading-[27px]'>Dashboard Statistic</div>
+        <div className='font-bold text-[28px] leading-[27px]'>
+          Dashboard Statistic
+        </div>
 
         <div className='flex flex-col gap-3 md:gap-[20px] lg:flex-row xl:gap-[24px]'>
-
-          <SchoolTotalCard count={data?.Total_Schools ?? 0} handleSetOpen={handleSetOpen} />
+          <SchoolTotalCard
+            count={data?.Total_Schools ?? 0}
+            handleSetOpen={handleSetOpen}
+          />
 
           <div className='grid w-full grid-cols-2 gap-x-6 gap-y-[10px] bg-[#EDF5F2] p-5 rounded-[10px] max-w-[537px]'>
             <IndividualTotal
@@ -87,20 +91,20 @@ const Page = () => {
           </div>
         </div>
       </div>
-
+      <DataGenerator />
       <div className='flex flex-col'>
         <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
           <div className='flex flex-col gap-y-7'>
-            <GenericChart
-              title='Attendance Tracker'
-              content={<BarChart />}
-            />
+            <GenericChart title='Attendance Tracker' content={<BarChart />} />
 
             <GenericChart
               title='Attendance Rate'
               content={<AttendanceRate />}
             />
-
+            <GenericChart
+              title='Gender Distribution'
+              content={<GenderDistribution />}
+            />
             <GenericChart
               title='Enrolment Analysis'
               content={<EnrolmentAnalysis />}
@@ -115,14 +119,16 @@ const Page = () => {
 
             <GenericChart
               title='Recently Added Institutions'
-              content={(
+              content={
                 <div className='flex flex-col gap-y-5'>
                   <div className='flex flex-row items-center gap-x-[22.5px]'>
                     <StudentBadge className='h-[60px] w-[60px]' />
 
                     <div className='flex w-full flex-row items-center justify-between'>
                       <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>Institution 1</div>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Institution 1
+                        </div>
                         <div className='font-bold text-[#E5A500]'>70%</div>
                       </div>
 
@@ -138,7 +144,9 @@ const Page = () => {
 
                     <div className='flex w-full flex-row items-center justify-between'>
                       <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Institution 2
+                        </div>
                         <div className='font-bold text-[#E5A500]'>55%</div>
                       </div>
 
@@ -154,7 +162,9 @@ const Page = () => {
 
                     <div className='flex w-full flex-row items-center justify-between'>
                       <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Institution 2
+                        </div>
                         <div className='font-bold text-[#E5A500]'>55%</div>
                       </div>
 
@@ -170,7 +180,9 @@ const Page = () => {
 
                     <div className='flex w-full flex-row items-center justify-between'>
                       <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Institution 2
+                        </div>
                         <div className='font-bold text-[#E5A500]'>55%</div>
                       </div>
 
@@ -186,7 +198,9 @@ const Page = () => {
 
                     <div className='flex w-full flex-row items-center justify-between'>
                       <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>Institution 2</div>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Institution 2
+                        </div>
                         <div className='font-bold text-[#E5A500]'>55%</div>
                       </div>
 
@@ -196,7 +210,20 @@ const Page = () => {
                       </div>
                     </div>
                   </div>
-                </div>)}
+                </div>
+              }
+            />
+            <GenericChart
+              title='Event/Calendar'
+              content={<EventCalendarTable />}
+            />
+            <GenericChart
+              title='Transfer Requests'
+              content={<TransferRequestsTable />}
+            />
+            <GenericChart
+              title='Admin Login Log'
+              content={<LoginLogsTable />}
             />
           </div>
         </div>

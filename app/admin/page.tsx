@@ -109,7 +109,7 @@ const Page = () => {
           />
         </div>
       </div>
-      <DataGenerator />
+      <DataGenerator variant='secondary'/>
       <div className='p-[20px] bg-white'>
         <div className='flex justify-end'>
           <ReactSelect placeholder='Manage Widgets' />

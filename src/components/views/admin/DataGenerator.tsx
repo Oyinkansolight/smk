@@ -1,8 +1,12 @@
-import Button from '@/components/buttons/Button';
+import Button, { ButtonVariant } from '@/components/buttons/Button';
 import Link from 'next/link';
 import ReactSelect from 'react-select';
 
-export default function DataGenerator() {
+export default function DataGenerator({
+  variant,
+}: {
+  variant?: (typeof ButtonVariant)[number];
+}) {
   return (
     <div className='flex flex-col gap-8 p-[30px]'>
       <div className='flex justify-between'>
@@ -33,7 +37,7 @@ export default function DataGenerator() {
             options={[{ value: 'all_classes', label: 'Ally' }]}
           />
         </div>
-        <Button className='justify-center' variant='secondary'>
+        <Button className='justify-center' variant={variant}>
           Apply
         </Button>
       </div>
