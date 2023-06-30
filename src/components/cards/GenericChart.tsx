@@ -41,7 +41,7 @@ const GenericChart = ({ title, content }: GenericChartProps) => {
         </div>
 
 
-        <div className='h-full min-h-[250px] overflow-hidden px-7'>
+        <div className='h-full min-h-[250px] overflow-hidden'>
           {content}
         </div>
       </div>

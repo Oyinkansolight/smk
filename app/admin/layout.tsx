@@ -2,20 +2,21 @@
 
 import Header from '@/components/layout/Header';
 import InstituteSidebar from '@/components/layout/InstituteSidebar';
-import RightSidebar from '@/components/layout/RightSidebar';
-import { usePathname } from 'next/navigation';
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
+
+
 import '/src/styles/globals.css';
+
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const routeDetails = usePathname();
+  // const routeDetails = usePathname();
   return (
     <html>
       <head />
@@ -29,7 +30,7 @@ export default function RootLayout({
 
           <InstituteSidebar />
 
-          {routeDetails === '/admin' && <RightSidebar />}
+          {/* {routeDetails === '/admin' && <RightSidebar />} */}
         </div>
       </div>
     </html>

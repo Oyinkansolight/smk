@@ -5,12 +5,18 @@ import CountCardAlt from '@/components/cards/CountAlt';
 import GenericChart from '@/components/cards/GenericChart';
 import AdminAttendanceRate from '@/components/charts/AdminAttendanceRate';
 import AttendanceTracker from '@/components/charts/AttendanceTracker';
+import ClassPerformanceRate from '@/components/charts/ClassPerformanceRate';
 import GenderDistribution from '@/components/charts/GenderDistribution';
 import EmptyView from '@/components/misc/EmptyView';
+import ClockInClockOutTable from '@/components/tables/ClockInClockOutTable';
+import EventCalendarTable from '@/components/tables/EventCalendarTable';
+import LoginLogsTable from '@/components/tables/LoginLogsTable';
+import TimeTable from '@/components/tables/TimeTable';
+import TransferRequestsTable from '@/components/tables/TransferRequestsTable';
+import DataGenerator from '@/components/views/admin/DataGenerator';
 import { ADMIN_ROUTES } from '@/constant/routes';
 import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
 import ReactSelect from 'react-select';
-
 
 // const timeLineData = [
 //   {
@@ -103,30 +109,57 @@ const Page = () => {
           />
         </div>
       </div>
+      <DataGenerator />
       <div className='p-[20px] bg-white'>
         <div className='flex justify-end'>
           <ReactSelect placeholder='Manage Widgets' />
         </div>
-        <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-2 gap-[20px]'>
           <div>
-            <GenericChart
-              title='Attendance Tracker'
-              content={<AttendanceTracker />}
-            />
-            <GenericChart
-              title='Attendance Rate'
-              content={<AdminAttendanceRate />}
-            />
-            <GenericChart
-              title='Gender Distribution'
-              content={<GenderDistribution />}
-            />
+            <div className='rounded-xl p-[20px] gap-[20px] flex flex-col bg-[#F4F9F6]'>
+              <GenericChart
+                title='Attendance Tracker'
+                content={<AttendanceTracker />}
+              />
+              <GenericChart
+                title='Attendance Rate'
+                content={<AdminAttendanceRate />}
+              />
+              <GenericChart
+                title='Gender Distribution'
+                content={<GenderDistribution />}
+              />
+              <GenericChart
+                title='Enrolment Analysis'
+                content={<EmptyView label='Not Applicable' />}
+              />
+            </div>
           </div>
           <div>
-            <GenericChart
-              title='Recently Added Student'
-              content={<EmptyView label='Not Applicable' />}
-            />
+            <div className='rounded-xl p-[20px] gap-[20px] flex flex-col bg-[#F4F9FF]'>
+              <GenericChart
+                title='Recently Added Student'
+                content={<EmptyView label='Not Applicable' />}
+              />
+              <GenericChart
+                title='Event/Calendar'
+                content={<EventCalendarTable />}
+              />
+              <GenericChart title='Time Table' content={<TimeTable />} />
+              <GenericChart
+                title='Transfer Requests'
+                content={<TransferRequestsTable />}
+              />
+              <GenericChart title='Login Logs' content={<LoginLogsTable />} />
+              <GenericChart
+                title='Click In/Clock Out Logs'
+                content={<ClockInClockOutTable />}
+              />
+              <GenericChart
+                title='Event/Calendar'
+                content={<ClassPerformanceRate />}
+              />
+            </div>
           </div>
         </div>
       </div>
