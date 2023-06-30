@@ -114,6 +114,7 @@ const Page = () => {
         <div className='flex justify-end'>
           <ReactSelect placeholder='Manage Widgets' />
         </div>
+        <div className='h-[20px]'/>
         <div className='grid grid-cols-2 gap-[20px]'>
           <div>
             <div className='rounded-xl p-[20px] gap-[20px] flex flex-col bg-[#F4F9F6]'>
@@ -156,7 +157,11 @@ const Page = () => {
                 content={<ClockInClockOutTable />}
               />
               <GenericChart
-                title='Event/Calendar'
+                title='Class Performance Rate'
+                content={<ClassPerformanceRate />}
+              />
+              <GenericChart
+                title='Subject Performance Rate'
                 content={<ClassPerformanceRate />}
               />
             </div>

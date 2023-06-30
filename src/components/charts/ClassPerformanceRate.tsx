@@ -65,7 +65,7 @@ const d = [
 
 export default function ClassPerformanceRate({ data }: { data?: typeof d }) {
   return (
-    <div className='h-96'>
+    <div className='h-[35rem]'>
       <ResponsiveBar
         data={data ?? d}
         keys={[
@@ -78,7 +78,7 @@ export default function ClassPerformanceRate({ data }: { data?: typeof d }) {
         ].reverse()}
         indexBy='subject'
         margin={{ top: 50, right: 60, bottom: 100, left: 60 }}
-        padding={0.3}
+        padding={0.6}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'red_yellow_green' }}
@@ -120,8 +120,8 @@ export default function ClassPerformanceRate({ data }: { data?: typeof d }) {
             justify: false,
             translateX: 0,
             translateY: 80,
-            itemsSpacing: 2,
-            itemWidth: 100,
+            itemsSpacing: 0,
+            itemWidth: 80,
             itemHeight: 20,
             itemDirection: 'left-to-right',
             itemOpacity: 0.85,

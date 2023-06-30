@@ -1,31 +1,27 @@
 import { ResponsiveBar } from '@nivo/bar';
 
+
 const d = [
   {
     gender: 'Male',
-    male: 429386,
-    maleColor: '#0C4AA7',
-    female: 0,
-    femaleColor: '#0C4AA7',
+    value: 429386,
+    valueColor: '#0C4AA7',
   },
   {
     gender: 'Female',
-    male: 0,
-    maleColor: '#0C4AA7',
-    female: 500000,
-    femaleColor: '#AA0DAD',
+    value: 500000,
+    valueColor: '#AA0DAD',
   },
 ];
 
 const AttendanceTracker = ({ data }: { data?: typeof d }) => (
-  <div className='h-80'>
+  <div className='h-[35rem]'>
     <ResponsiveBar
       data={data ?? d}
       enableGridY={false}
-      keys={['male', 'female']}
       indexBy='gender'
       margin={{ top: 0, right: 20, bottom: 100, left: 60 }}
-      padding={0.3}
+      padding={0.6}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
       colors={(t) => {
@@ -53,13 +49,10 @@ const AttendanceTracker = ({ data }: { data?: typeof d }) => (
       }}
       labelSkipWidth={12}
       labelSkipHeight={12}
-      labelTextColor={{
-        from: 'color',
-        modifiers: [['darker', 1.6]],
-      }}
+      labelTextColor='#ffffff'
       legends={[
         {
-          dataFrom: 'keys',
+          dataFrom: 'indexes',
           anchor: 'bottom',
           direction: 'row',
           justify: false,
