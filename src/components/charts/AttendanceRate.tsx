@@ -24,14 +24,14 @@ const d = [
 
 const AttendanceRate = ({ data }: { data?: typeof d }) => (
   // <ChartWrapper className='bg-[#EDF5F2]' title='Attendance Rate'>
-  <div className='flex gap-1 justify-center'>
+  <div className='flex gap-1 justify-between px-6'>
     {
       <div className='flex flex-col items-center text-center'>
-        <div className=' text-2xl'>Staff Attendance</div>
-        <div className='h-80 w-80'>
+        <div className=' text-lg'>Staff Attendance</div>
+        <div className='h-80 w-56'>
           <ResponsivePie
             data={data ?? d}
-            margin={{ top: 40, right: 5, bottom: 80, left: 80 }}
+            margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
             colors={(p) => p.data.color}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             activeOuterRadiusOffset={8}
@@ -53,10 +53,10 @@ const AttendanceRate = ({ data }: { data?: typeof d }) => (
                 anchor: 'bottom',
                 direction: 'row',
                 justify: false,
-                translateX: 20,
+                translateX: 0,
                 translateY: 56,
                 itemsSpacing: 0,
-                itemWidth: 100,
+                itemWidth: 70,
                 itemHeight: 18,
                 itemTextColor: '#999',
                 itemDirection: 'left-to-right',
@@ -79,11 +79,11 @@ const AttendanceRate = ({ data }: { data?: typeof d }) => (
     }
     {
       <div className='flex flex-col items-center text-center'>
-        <div className=' text-2xl'>Student Attendance</div>
-        <div className='h-80 w-80'>
+        <div className=' text-lg'>Student Attendance</div>
+        <div className='h-80 w-56'>
           <ResponsivePie
             data={data ?? d}
-            margin={{ top: 40, right: 80, bottom: 80, left: 5 }}
+            margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
             colors={(p) => p.data.color}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             activeOuterRadiusOffset={8}
@@ -100,31 +100,31 @@ const AttendanceRate = ({ data }: { data?: typeof d }) => (
             arcLabelsSkipAngle={10}
             arcLabelsTextColor='#ffffff'
             enableArcLinkLabels={false}
-            // legends={[
-            //   {
-            //     anchor: 'bottom',
-            //     direction: 'row',
-            //     justify: false,
-            //     translateX: 0,
-            //     translateY: 56,
-            //     itemsSpacing: 0,
-            //     itemWidth: 100,
-            //     itemHeight: 18,
-            //     itemTextColor: '#999',
-            //     itemDirection: 'left-to-right',
-            //     itemOpacity: 1,
-            //     symbolSize: 18,
-            //     symbolShape: 'circle',
-            //     effects: [
-            //       {
-            //         on: 'hover',
-            //         style: {
-            //           itemTextColor: '#000',
-            //         },
-            //       },
-            //     ],
-            //   },
-            // ]}
+            legends={[
+              {
+                anchor: 'bottom',
+                direction: 'row',
+                justify: false,
+                translateX: 0,
+                translateY: 56,
+                itemsSpacing: 0,
+                itemWidth: 70,
+                itemHeight: 18,
+                itemTextColor: '#999',
+                itemDirection: 'left-to-right',
+                itemOpacity: 1,
+                symbolSize: 18,
+                symbolShape: 'circle',
+                effects: [
+                  {
+                    on: 'hover',
+                    style: {
+                      itemTextColor: '#000',
+                    },
+                  },
+                ],
+              },
+            ]}
           />
         </div>
       </div>

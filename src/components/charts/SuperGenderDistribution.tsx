@@ -2,58 +2,37 @@
 // yarn add @nivo/core @nivo/bar
 import { ResponsiveBar } from '@nivo/bar';
 
-
 const data = [
   {
-    day: 'M',
+    gender: 'Male',
     staff: 59,
     staffColor: '#7F0CA7',
     student: 10,
     studentColor: '#00CABE',
   },
   {
-    day: 'T',
+    gender: 'Female',
     staff: 61,
     staffColor: '#7F0CA7',
     student: 37,
     studentColor: '#00CABE',
   },
-  {
-    day: 'W',
-    staff: 55,
-    staffColor: '#7F0CA7',
-    student: 30,
-    studentColor: '#00CABE',
-  },
-  {
-    day: 'TH',
-    staff: 78,
-    staffColor: '#7F0CA7',
-    student: 20,
-    studentColor: '#00CABE',
-  },
-  {
-    day: 'F',
-    staff: 71,
-    staffColor: '#7F0CA7',
-    student: 30,
-    studentColor: '#00CABE',
-  },
 ];
 
-const BarChart = () => {
+const SuperGenderDistribution = () => {
   return (
     <div className='h-80'>
       <ResponsiveBar
         data={data}
         keys={['student', 'staff']}
-        indexBy='day'
-        margin={{ top: 0, right: 30, bottom: 60, left: 30 }}
+        indexBy='gender'
+        margin={{ top: 0, right: 30, bottom: 60, left: 60 }}
         padding={0.7}
         valueScale={{ type: 'linear' }}
         colors={(p) =>
           p.data[`${p.id}Color` as keyof (typeof data)[number]] as string
         }
+        layout='horizontal'
         animate={false}
         enableLabel={false}
         axisTop={null}
@@ -96,4 +75,4 @@ const BarChart = () => {
   );
 };
 
-export default BarChart;
+export default SuperGenderDistribution;

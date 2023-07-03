@@ -1,22 +1,20 @@
 'use client';
 
-import Pill from '@/components/buttons/Pill';
-import { IndividualTotal, SchoolTotalCard, ToggleCard } from '@/components/cards';
+import { IndividualTotal, SchoolTotalCard } from '@/components/cards';
 import GenericChart from '@/components/cards/GenericChart';
-import { BarChart, StreamChart } from '@/components/charts';
+import { BarChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
 import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
 import GenderDistribution from '@/components/charts/GenderDistribution';
+import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution';
 import AddSingleSchool from '@/components/modal/addSchool';
-import { AdSlider } from '@/components/sliders';
 import EventCalendarTable from '@/components/tables/EventCalendarTable';
 import LoginLogsTable from '@/components/tables/LoginLogsTable';
-import TransferRequestsTable from '@/components/tables/TransferRequestsTable';
+import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions';
+import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable';
 import DataGenerator from '@/components/views/admin/DataGenerator';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
-import StudentBadge from '~/svg/student_badge.svg';
-
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -95,15 +93,24 @@ const Page = () => {
       <div className='flex flex-col'>
         <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
           <div className='flex flex-col gap-y-7'>
-            <GenericChart title='Attendance Tracker' content={<BarChart />} />
+            <GenericChart
+              titleClassName='bg-[#DADEE6]'
+              title='Attendance Tracker'
+              content={<BarChart />}
+            />
 
             <GenericChart
               title='Attendance Rate'
               content={<AttendanceRate />}
+              className='border-[#EDF5F2]'
+              titleClassName='bg-[#EDF5F2]'
             />
             <GenericChart
               title='Gender Distribution'
               content={<GenderDistribution />}
+              className='border-[#E8ECF2]'
+              titleClassName='bg-[#E8ECF2]'
+              contentClassName='bg-[#EBF5F6]'
             />
             <GenericChart
               title='Enrolment Analysis'
@@ -113,124 +120,43 @@ const Page = () => {
 
           <div className='flex flex-col gap-y-7'>
             <GenericChart
-              title='Recently Added Institutions'
-              content={<EnrolmentAnalysis />}
+              title='Gender Distribution'
+              content={<SuperGenderDistribution />}
+              className='border-[#E6FFF7]'
+              titleClassName='bg-[#E6FFF7]'
             />
 
             <GenericChart
               title='Recently Added Institutions'
-              content={
-                <div className='flex flex-col gap-y-5'>
-                  <div className='flex flex-row items-center gap-x-[22.5px]'>
-                    <StudentBadge className='h-[60px] w-[60px]' />
-
-                    <div className='flex w-full flex-row items-center justify-between'>
-                      <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>
-                          Institution 1
-                        </div>
-                        <div className='font-bold text-[#E5A500]'>70%</div>
-                      </div>
-
-                      <div className='font-bold'>
-                        <span className='text-[#4D5E80]'>35/</span>
-                        <span className='text-[#BBBFC8]'>50</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex flex-row items-center gap-x-[22.5px]'>
-                    <StudentBadge className='h-[60px] w-[60px]' />
-
-                    <div className='flex w-full flex-row items-center justify-between'>
-                      <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>
-                          Institution 2
-                        </div>
-                        <div className='font-bold text-[#E5A500]'>55%</div>
-                      </div>
-
-                      <div className='font-bold'>
-                        <span className='text-[#4D5E80]'>24/</span>
-                        <span className='text-[#BBBFC8]'>25</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex flex-row items-center gap-x-[22.5px]'>
-                    <StudentBadge className='h-[60px] w-[60px]' />
-
-                    <div className='flex w-full flex-row items-center justify-between'>
-                      <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>
-                          Institution 2
-                        </div>
-                        <div className='font-bold text-[#E5A500]'>55%</div>
-                      </div>
-
-                      <div className='font-bold'>
-                        <span className='text-[#4D5E80]'>24/</span>
-                        <span className='text-[#BBBFC8]'>25</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex flex-row items-center gap-x-[22.5px]'>
-                    <StudentBadge className='h-[60px] w-[60px]' />
-
-                    <div className='flex w-full flex-row items-center justify-between'>
-                      <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>
-                          Institution 2
-                        </div>
-                        <div className='font-bold text-[#E5A500]'>55%</div>
-                      </div>
-
-                      <div className='font-bold'>
-                        <span className='text-[#4D5E80]'>24/</span>
-                        <span className='text-[#BBBFC8]'>25</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='flex flex-row items-center gap-x-[22.5px]'>
-                    <StudentBadge className='h-[60px] w-[60px]' />
-
-                    <div className='flex w-full flex-row items-center justify-between'>
-                      <div className='flex flex-col gap-2'>
-                        <div className='font-bold text-[#4D5E80]'>
-                          Institution 2
-                        </div>
-                        <div className='font-bold text-[#E5A500]'>55%</div>
-                      </div>
-
-                      <div className='font-bold'>
-                        <span className='text-[#4D5E80]'>24/</span>
-                        <span className='text-[#BBBFC8]'>25</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
+              content={<RecentlyAddedInstitutions />}
+              className='border-[#FFF6EC]'
+              titleClassName='bg-[#FFF6EC]'
             />
+
             <GenericChart
               title='Event/Calendar'
               content={<EventCalendarTable />}
+              titleClassName='bg-[#E6FFF7]'
+              className='border-[#E6FFF7]'
             />
             <GenericChart
               title='Transfer Requests'
-              content={<TransferRequestsTable />}
+              content={<SuperTransferRequestsTable />}
+              titleClassName='bg-[#E8ECF2]'
+              className='border-[#E8ECF2]'
             />
             <GenericChart
               title='Admin Login Log'
               content={<LoginLogsTable />}
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
             />
           </div>
         </div>
 
-        <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
+        {/* <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
           <div className='flex flex-col gap-y-7'>
-            {/* <BasicCard className='h-fit !bg-[#FFDC4F]'>
+            <BasicCard className='h-fit !bg-[#FFDC4F]'>
               <div className='mb-7 text-lg font-bold text-[#450065]'>
                 Info Tracker
               </div>
@@ -251,7 +177,7 @@ const Page = () => {
                   </div>
                 ))}
               </div>
-            </BasicCard> */}
+            </BasicCard>
 
             <div className='flex flex-col gap-[23px] rounded-[10px] bg-white px-[33px] py-4'>
               <div className='text-lg font-bold text-[#450065]'>
@@ -338,7 +264,7 @@ const Page = () => {
               </div>
             </ToggleCard>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
