@@ -24,12 +24,12 @@ const Account = ({
   password,
   setPassword,
 }: // password
-// setPassword
-AccountProps) => {
+  // setPassword
+  AccountProps) => {
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>Account Details</h2>
-      <p>Kindly enter the details of the school below:</p>
+      <p>Kindly enter the details of the institution below:</p>
 
       <div className='my-10 gap-6'>
         <FormInput

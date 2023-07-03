@@ -4,60 +4,52 @@ import { BiChevronRight } from 'react-icons/bi';
 
 const data = [
   {
-    institutionName: 'Avril Price Institution',
+    name: 'Avril Price Institution',
     time: '10:11 pm',
   },
   {
-    institutionName: 'Avril Price Institution',
+    name: 'Avril Price Institution',
     time: '10:30 pm',
   },
   {
-    institutionName: 'Auchi Polytechnic',
+    name: 'Avril Price Institution',
     time: '9:00 am',
   },
   {
-    institutionName: 'Auchi Polytechnic',
+    name: 'Avril Price Institution',
     time: '9:00 am',
   },
   {
-    institutionName: 'Auchi Polytechnic',
+    name: 'Avril Price Institution',
     time: '9:00 am',
   },
 ];
 
 const columns: TableColumn<(typeof data)[number]>[] = [
   {
-    name: 'Institution From',
-    selector: (event) => event.institutionName,
+    name: 'Institution Name',
+    selector: (event) => event.name,
     grow: 3,
     cell: (event) => (
       <div className='text-lg flex items-center gap-2 font-semibold whitespace-nowrap overflow-hidden'>
         <div className='h-6 w-6 rounded-full bg-gray-200' />
-        <div className='max-w-[141px] text-ellipsis'>{event.institutionName}</div>
+        <div>{event.name}</div>
+        <div className='bg-[#42BBFF] text-xs font-normal text-white py-1 px-2 rounded-full'>
+          Primary
+        </div>
       </div>
     ),
   },
   {
-    name: 'Institution To',
-    selector: (event) => event.institutionName,
-    grow: 3,
-    cell: (event) => (
-      <div className='text-lg flex items-center gap-2 font-semibold whitespace-nowrap overflow-hidden'>
-        <div className='h-6 w-6 rounded-full bg-gray-200' />
-        <div className='max-w-[141px] text-ellipsis overflow-hidden'>{event.institutionName}</div>
-      </div>
-    ),
-  },
-  {
-    name: 'Time',
+    name: <div className='ml-16'>Time</div>,
     selector: (event) => event.time,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{event.time}</div>
+      <div className='font-bold text-[#ADB8CC] ml-10'>{event.time}</div>
     ),
   },
 ];
 
-export default function TransferRequestsTable() {
+export default function RecentInstitutionTable() {
   return (
     <div>
       <Table columns={columns} data={data} />

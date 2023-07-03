@@ -37,7 +37,7 @@ export default function DataGenerator({
             options={[{ value: 'all_classes', label: 'Ally' }]}
           />
         </div>
-        <Button className='justify-center' variant={variant}>
+        <Button className='justify-center max-w-[160px]' variant={variant}>
           Apply
         </Button>
       </div>

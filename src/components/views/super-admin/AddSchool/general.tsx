@@ -51,11 +51,11 @@ const Biodata = ({
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>General Details</h2>
-      <p>Kindly enter the details of the school below:</p>
+      <p>Kindly enter the details of the institution below:</p>
 
       <div className='my-10 grid grid-cols-2 gap-6'>
         <FormInput
-          label='School Name*'
+          label='Institution Name*'
           setFormValue={setSchoolName}
           formValue={schoolName}
           placeholder='Details here'
@@ -72,7 +72,7 @@ const Biodata = ({
           <Dragdrop
             setImageName={setImageName}
             imageName={imageName}
-            label='Upload School Logo*'
+            label='Upload Institution Logo*'
             setImageData={setImageData}
           />
         </div>
@@ -80,7 +80,7 @@ const Biodata = ({
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div className='w-full'>
           <FormInput
-            label='School Official Email*'
+            label='Institution Official Email*'
             setFormValue={setSchoolEmail}
             formValue={schoolEmail}
             placeholder='Details here'

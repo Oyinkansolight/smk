@@ -17,6 +17,7 @@ import DataGenerator from '@/components/views/admin/DataGenerator';
 import { ADMIN_ROUTES } from '@/constant/routes';
 import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
 import ReactSelect from 'react-select';
+import StudentBadge from '~/svg/student_badge.svg';
 
 // const timeLineData = [
 //   {
@@ -83,7 +84,7 @@ const Page = () => {
         <Button variant='secondary'>Add Student +</Button>
       </div>
       <div className='bg-white p-[20px] rounded-[10px]'>
-        <div className='text-[#333333] font-bold text-2xl'>
+        <div className='text-[#333333] font-bold text-2xl mb-5'>
           Your Dashboard Statistic
         </div>
         <div className='grid grid-cols-3 gap-3 md:gap-[20px] xl:gap-[27px]'>
@@ -109,12 +110,12 @@ const Page = () => {
           />
         </div>
       </div>
-      <DataGenerator variant='secondary'/>
+      <DataGenerator variant='secondary' />
       <div className='p-[20px] bg-white'>
         <div className='flex justify-end'>
           <ReactSelect placeholder='Manage Widgets' />
         </div>
-        <div className='h-[20px]'/>
+        <div className='h-[20px]' />
         <div className='grid grid-cols-2 gap-[20px]'>
           <div>
             <div className='rounded-xl p-[20px] gap-[20px] flex flex-col bg-[#F4F9F6]'>
@@ -133,6 +134,42 @@ const Page = () => {
               <GenericChart
                 title='Enrolment Analysis'
                 content={<EmptyView label='Not Applicable' />}
+              />
+              <GenericChart
+                title='Low Batteries Notifications'
+                content={(
+                  <div className='flex flex-col gap-y-5 px-5'>
+                    <div className='flex flex-row items-center gap-x-[22.5px]'>
+                      <StudentBadge className='h-[60px] w-[60px]' />
+
+                      <div className='flex w-full flex-row items-center justify-between'>
+                        <div className='flex flex-col gap-2'>
+                          <div className='font-bold text-[#4D5E80]'>
+                            Victor Akanni
+                          </div>
+                          <div className='font-bold text-[#ADB8CC]'>Primary 1</div>
+                        </div>
+
+                        <span className='text-lg font-bold text-[#F5365C]'>05%</span>
+                      </div>
+                    </div>
+
+                    <div className='flex flex-row items-center gap-x-[22.5px]'>
+                      <StudentBadge className='h-[60px] w-[60px]' />
+
+                      <div className='flex w-full flex-row items-center justify-between'>
+                        <div className='flex flex-col gap-2'>
+                          <div className='font-bold text-[#4D5E80]'>
+                            Oluwaseyi Owolabi
+                          </div>
+                          <div className='font-bold text-[#ADB8CC]'>Primary 2</div>
+                        </div>
+
+                        <span className='text-lg font-bold text-[#F5365C]'>01%</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               />
             </div>
           </div>

@@ -33,7 +33,7 @@ const Biodata = ({
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>Location Details</h2>
-      <p>Kindly enter the details of the school below:</p>
+      <p>Kindly enter the details of the institution below:</p>
 
       <div className='space-y-10 mt-10'>
         {/* <div className=' w-full gap-6'>
