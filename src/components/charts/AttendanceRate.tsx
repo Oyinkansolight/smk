@@ -1,6 +1,5 @@
 import { ResponsivePie } from '@nivo/pie';
 
-
 const d = [
   {
     id: 'present',
@@ -27,7 +26,7 @@ const AttendanceRate = ({ data }: { data?: typeof d }) => (
   <div className='flex gap-1 justify-between px-6'>
     {
       <div className='flex flex-col items-center text-center'>
-        <div className=' text-lg'>Staff Attendance</div>
+        <div className='h4'>Staff Attendance</div>
         <div className='h-80 w-56'>
           <ResponsivePie
             data={data ?? d}
@@ -79,7 +78,7 @@ const AttendanceRate = ({ data }: { data?: typeof d }) => (
     }
     {
       <div className='flex flex-col items-center text-center'>
-        <div className=' text-lg'>Student Attendance</div>
+        <div className='h4'>Student Attendance</div>
         <div className='h-80 w-56'>
           <ResponsivePie
             data={data ?? d}

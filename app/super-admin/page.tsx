@@ -15,6 +15,7 @@ import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequest
 import DataGenerator from '@/components/views/admin/DataGenerator';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
+import StudentBadge from '~/svg/student_badge.svg';
 
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -98,6 +99,10 @@ const Page = () => {
               title='Attendance Tracker'
               content={<BarChart />}
             />
+            {/* <GenericChart
+              title='Attendance Tracker'
+              content={<AttendanceTracker />}
+            /> */}
 
             <GenericChart
               title='Attendance Rate'
@@ -115,6 +120,50 @@ const Page = () => {
             <GenericChart
               title='Enrolment Analysis'
               content={<EnrolmentAnalysis />}
+            />
+            <GenericChart
+              title='Low Batteries Notifications'
+              content={
+                <div className='flex flex-col gap-y-5 px-5'>
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Victor Akanni
+                        </div>
+                        <div className='font-bold text-[#ADB8CC]'>
+                          Primary 1
+                        </div>
+                      </div>
+
+                      <span className='text-lg font-bold text-[#F5365C]'>
+                        05%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Oluwaseyi Owolabi
+                        </div>
+                        <div className='font-bold text-[#ADB8CC]'>
+                          Primary 2
+                        </div>
+                      </div>
+
+                      <span className='text-lg font-bold text-[#F5365C]'>
+                        01%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              }
             />
           </div>
 
@@ -187,7 +236,7 @@ const Page = () => {
             </div>
           </div>
 
-          <div className='flex flex-col gap-7'>
+          {/* <div className='flex flex-col gap-7'>
             <ToggleCard
               toggle={false}
               title='Login Logs'

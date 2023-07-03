@@ -27,6 +27,7 @@ const LocationInput = ({
     <LoadScript
       googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY ?? 'NULL'}
       libraries={['places']}
+      region='ng'
     >
       <StandaloneSearchBox
         onLoad={(ref) => (inputRef.current = ref)}

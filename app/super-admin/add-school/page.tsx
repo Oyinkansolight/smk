@@ -239,9 +239,9 @@ const AddSchool = () => {
       {isOpen && (
         <Success
           title='Institution created successfully'
-          description='Login details would be generated and sent to the school’s official email.'
+          description='Login details would be generated and sent to the institution’s official email.'
           link='/super-admin/all-school'
-          textLink='Manage School'
+          textLink='Manage Institution'
         />
       )}
     </section>

@@ -121,7 +121,7 @@ export default function ClassPerformanceRate({ data }: { data?: typeof d }) {
             translateX: 0,
             translateY: 80,
             itemsSpacing: 0,
-            itemWidth: 80,
+            itemWidth: 75,
             itemHeight: 20,
             itemDirection: 'left-to-right',
             itemOpacity: 0.85,

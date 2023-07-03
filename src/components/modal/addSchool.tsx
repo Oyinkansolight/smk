@@ -7,8 +7,6 @@ interface propType {
   onClickHandler?: () => void;
 }
 
-//Change to trigger build
-
 function AddSingleSchool({ onClickHandler }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
@@ -34,17 +32,17 @@ function AddSingleSchool({ onClickHandler }: propType) {
               Send a link
             </Link>
             <p className='text-gray-400'>
-              You can send a link directly to the school so they can register
-              there details.
+              You can send a link directly to the institution so they can register
+              their details.
             </p>
           </div>
           <div className='flex flex-col space-y-5 rounded bg-[#F4F9FF] p-4'>
             <Star className='h-10 w-10  ' />
             <Link href='/super-admin/add-school' className='text-md font-bold'>
-              Register School
+              Register Institution
             </Link>
             <p className='text-gray-400'>
-              Enter the details and register a school directly here.
+              Enter the details and register an institution directly here.
             </p>
           </div>
         </div>
