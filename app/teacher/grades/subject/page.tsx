@@ -85,10 +85,10 @@ export default function Page() {
         <div>CA 1</div>
         <div>CA 2</div>
         <div>Exam</div>
-        <div>Total</div>
+        <div>Total(100%)</div>
         <div>Grade</div>
         <div>Remark</div>
-        <div>Standing</div>
+        <div>Subject Position</div>
       </div>
       {isLoading ? (
         <div className='text-center'>Loading...</div>

@@ -3,6 +3,7 @@ import clsxm from '@/lib/clsxm';
 import { useMemo, useState } from 'react';
 import { BsArrowDownCircle } from 'react-icons/bs';
 
+
 export default function AccordionAlt({
   title,
   children,
@@ -13,7 +14,7 @@ export default function AccordionAlt({
   length = 300,
   bordered = false,
   reversHeader = false,
-  isExpanded = false,
+  isExpanded,
 }: {
   title: JSX.Element;
   titleClassName?: string;
