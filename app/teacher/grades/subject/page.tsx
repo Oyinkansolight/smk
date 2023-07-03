@@ -2,20 +2,49 @@
 
 import Button from '@/components/buttons/Button';
 import TextTabBar from '@/components/layout/TextTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
+import { getErrMsg } from '@/server';
+import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
+  const params = useSearchParams();
+  const {
+    data: gradeList,
+    refetch,
+    error,
+    isLoading,
+  } = useGetSubjectGradeBook({
+    subjectId: params?.get('id') as string,
+    classId: `${idx + 1}`,
+    institutionId: '1',
+    sessionId: '1',
+    termId: '1',
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [idx, refetch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
+
   return (
     <div className='h-full layout'>
       <div className='text-[#D4D5D7] py-8 text-xl'>
-        Grade Book {'>'} Mathematics
+        Grade Book {'>'} {params?.get('subjectName')}
       </div>
-      <div className='font-bold text-2xl'>Mathematics</div>
+      <div className='font-bold text-2xl'>{params?.get('subjectName')}</div>
       <TextTabBar
         tabs={Array(6)
           .fill(0)
@@ -61,13 +90,19 @@ export default function Page() {
         <div>Remark</div>
         <div>Standing</div>
       </div>
-      <div className='flex flex-col gap-4'>
-        {Array(10)
-          .fill(0)
-          .map((v, i) => (
-            <StudentGradeListItem key={i} id={i + 1} />
-          ))}
-      </div>
+      {isLoading ? (
+        <div className='text-center'>Loading...</div>
+      ) : gradeList && gradeList.length > 0 ? (
+        <div className='flex flex-col gap-4'>
+          {Array(10)
+            .fill(0)
+            .map((v, i) => (
+              <StudentGradeListItem key={i} id={i + 1} />
+            ))}
+        </div>
+      ) : (
+        <EmptyView label='No Grade List' />
+      )}
     </div>
   );
 }

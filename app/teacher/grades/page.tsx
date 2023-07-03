@@ -11,6 +11,7 @@ import { BiBookContent } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
 
+
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',
@@ -18,7 +19,7 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  const subjects = ['Mathematics', 'Science', 'English', 'History'];
+  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
   const { data } = useGetGovernmentSubjectList();
 
@@ -65,7 +66,9 @@ export default function Page() {
               data.map((v, i) => (
                 <GradeSubjectCard
                   onClick={() => {
-                    router.push(`/teacher/grades/subject?id=${v.id}`);
+                    router.push(
+                      `/teacher/grades/subject?id=${v.id}&subjectName=${v.name}`
+                    );
                   }}
                   key={i}
                   subject={v.name ?? '[NULL]'}
