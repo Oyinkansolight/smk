@@ -31,29 +31,18 @@ export default function AdminAuth() {
       const response = await mutateAsync(data);
 
       if (response) {
-        toast.success(response.data.data.message);
-        toast.info('Redirecting to dashboard...');
-        setLoading(false);
 
         if (response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
           router.push(ROUTES.SUPER_ADMIN);
-        } else if (
-          response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
-        ) {
-          router.push(ROUTES.ADMIN);
-        } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(
-              'institution',
-              JSON.stringify(response.data.data.data.staff.institution)
-            );
-          }
-          router.push(ROUTES.TEACHER);
-        } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
-          router.push(ROUTES.STUDENT);
         } else {
           toast.error('Invalid user role');
+          setLoading(false);
+          return;
         }
+
+        toast.success(response.data.data.message);
+        toast.info('Redirecting to dashboard...');
+        setLoading(false);
 
         const name =
           response.data.data.data.firstName +

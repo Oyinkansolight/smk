@@ -42,9 +42,9 @@ const columns: TableColumn<(typeof data)[number]>[] = [
         <div className='text-[#525F7F]'>{event.institutionName}</div>
         <div
           className={clsxm(
-            'text-xs px-1 font-normal text-white rounded-full',
+            event.type === 'primary' && 'bg-[#FF7C33]',
             event.type === 'tertiary' && 'bg-[#42BBFF]',
-            event.type === 'primary' && 'bg-[#FF7C33]'
+            'flex items-center text-[10px] px-[5px] h-4 font-normal text-white rounded-full capitalize',
           )}
         >
           {event.type}

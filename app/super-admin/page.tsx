@@ -162,6 +162,21 @@ const Page = () => {
                       </span>
                     </div>
                   </div>
+
+                  <div className='flex flex-row items-center gap-x-[22.5px]'>
+                    <StudentBadge className='h-[60px] w-[60px]' />
+
+                    <div className='flex w-full flex-row items-center justify-between'>
+                      <div className='flex flex-col gap-2'>
+                        <div className='font-bold text-[#4D5E80]'>
+                          Okafor Chidinma
+                        </div>
+                        <div className='font-bold text-[#ADB8CC]'>Primary 5</div>
+                      </div>
+
+                      <span className='text-lg font-bold text-[#F5365C]'>09%</span>
+                    </div>
+                  </div>
                 </div>
               }
             />

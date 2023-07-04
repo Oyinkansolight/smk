@@ -16,6 +16,7 @@ import TransferRequestsTable from '@/components/tables/TransferRequestsTable';
 import DataGenerator from '@/components/views/admin/DataGenerator';
 import { ADMIN_ROUTES } from '@/constant/routes';
 import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
+import Link from 'next/link';
 import ReactSelect from 'react-select';
 import StudentBadge from '~/svg/student_badge.svg';
 
@@ -81,7 +82,9 @@ const Page = () => {
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
       <div className='font-bold text-4xl'>Welcome</div>
       <div className='flex justify-end'>
-        <Button variant='secondary'>Add Student +</Button>
+        <Link href='/admin/add-student'>
+          <Button variant='secondary'>Add Student +</Button>
+        </Link>
       </div>
       <div className='bg-white p-[20px] rounded-[10px]'>
         <div className='text-[#333333] font-bold text-2xl mb-5'>
@@ -166,6 +169,21 @@ const Page = () => {
                         </div>
 
                         <span className='text-lg font-bold text-[#F5365C]'>01%</span>
+                      </div>
+                    </div>
+
+                    <div className='flex flex-row items-center gap-x-[22.5px]'>
+                      <StudentBadge className='h-[60px] w-[60px]' />
+
+                      <div className='flex w-full flex-row items-center justify-between'>
+                        <div className='flex flex-col gap-2'>
+                          <div className='font-bold text-[#4D5E80]'>
+                            Okafor Chidinma
+                          </div>
+                          <div className='font-bold text-[#ADB8CC]'>Primary 5</div>
+                        </div>
+
+                        <span className='text-lg font-bold text-[#F5365C]'>09%</span>
                       </div>
                     </div>
                   </div>

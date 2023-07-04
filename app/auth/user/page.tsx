@@ -5,26 +5,70 @@ import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
+import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function StudentAuth() {
+  const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
-    mode: 'onChange',
+    mode: 'all',
   });
-  const signIn = useSignIn();
+
+  const { mutateAsync } = useSignIn();
   const onSubmit = async (data: SignInParams) => {
+    setLoading(true);
+
     try {
-      const r = await signIn.mutateAsync(data);
-      toast.success(r.data.message);
+      const response = await mutateAsync(data);
+
+      if (response) {
+        if (
+          response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
+        ) {
+          router.push(ROUTES.ADMIN);
+        } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem(
+              'institution',
+              JSON.stringify(response.data.data.data.staff.institution)
+            );
+          }
+          router.push(ROUTES.TEACHER);
+        } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
+          router.push(ROUTES.STUDENT);
+        } else {
+          toast.error('Invalid user role');
+          setLoading(false);
+          return;
+        }
+
+        toast.success(response.data.data.message);
+        toast.info('Redirecting to dashboard...');
+        setLoading(false);
+
+        const name =
+          response.data.data.data.firstName +
+          ' ' +
+          response.data.data.data.lastName;
+        const role = response.data.data.data.type;
+        const email = response.data.data.data.email;
+        const userDetails = { name, role, email };
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(userDetails));
+        }
+      }
     } catch (error) {
       toast.error(getErrMsg(error as Error));
+      setLoading(false);
     }
   };
   return (
@@ -50,22 +94,24 @@ export default function StudentAuth() {
                 >
                   <div className='h2'>Sign in</div>
                   <BaseInput
-                    placeholder='Enter username here'
-                    label='Username'
                     name='email'
+                    type='email'
+                    label='Username'
                     register={register}
+                    placeholder='Enter username here'
                   />
 
                   <BaseInput
-                    placeholder='Enter password here'
                     label='Password'
                     name='password'
                     type='password'
                     register={register}
+                    placeholder='Enter password here'
                   />
 
                   <Button
                     type='submit'
+                    isLoading={loading}
                     variant='secondary'
                     className='h-[54px] justify-center'
                   >

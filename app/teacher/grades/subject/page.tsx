@@ -82,13 +82,13 @@ export default function Page() {
       <div className='grid grid-cols-11 py-8 text-[#746D69] text-base'>
         <div />
         <div className='col-span-3 px-4'>Student</div>
-        <div>CA 1</div>
-        <div>CA 2</div>
-        <div>Exam</div>
-        <div>Total(100%)</div>
-        <div>Grade</div>
-        <div>Remark</div>
-        <div>Subject Position</div>
+        <div className='whitespace-nowrap'>CA 1</div>
+        <div className='whitespace-nowrap'>CA 2</div>
+        <div className='whitespace-nowrap'>Exam</div>
+        <div className='whitespace-nowrap'>Total(100%)</div>
+        <div className='whitespace-nowrap'>Grade</div>
+        <div className='whitespace-nowrap'>Remark</div>
+        <div className='whitespace-nowrap'>Subject Position</div>
       </div>
       {isLoading ? (
         <div className='text-center'>Loading...</div>
