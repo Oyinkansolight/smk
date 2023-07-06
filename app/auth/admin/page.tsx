@@ -31,12 +31,16 @@ export default function AdminAuth() {
       const response = await mutateAsync(data);
 
       if (response) {
-
         if (response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
           router.push(ROUTES.SUPER_ADMIN);
         } else {
-          toast.error('Invalid user role');
           setLoading(false);
+          toast.info('Invalid user role');
+          toast.info('Redirecting...');
+          setTimeout(() => {
+            router.push(ROUTES.USER_AUTH);
+          }, 2000);
+
           return;
         }
 
@@ -52,7 +56,7 @@ export default function AdminAuth() {
         const email = response.data.data.data.email;
         const userDetails = { name, role, email };
         if (typeof window !== 'undefined') {
-          localStorage.setItem('user', JSON.stringify(userDetails));
+          sessionStorage.setItem('user', JSON.stringify(userDetails));
         }
       }
     } catch (error) {

@@ -2,13 +2,15 @@
 
 import NextImage from '@/components/NextImage';
 import PageCounter from '@/components/counter/PageCounter';
-import { BigAvatar } from '@/components/profile/BigAvatar';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -18,6 +20,7 @@ const Page = () => {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [title, settitle] = useState<string | null>('');
+  const [url, setUrl] = useState<string | any>();
 
   useEffect(() => {
     // Create a URLSearchParams object with the query string
@@ -26,8 +29,15 @@ const Page = () => {
     // Extract the values of subject name parameters
     const subjectName = searchParams.get('name');
     settitle(subjectName);
+    const getFileURL = async () => {
+      // const url = await getURL(path);
+      // setUrl(url);
+      await getURL('institute_materials/5.pdf').then((v) => setUrl(v));
+      logger(url);
+    };
+    getFileURL();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [url]);
   return (
     <div className='layout flex flex-col gap-5'>
       <div className='flex flex-row gap-8 justify-between'>
@@ -104,14 +114,19 @@ const Page = () => {
                 onChange={setCurrentPage}
               />
             </div>
-            <div className='grid justify-center'>
+            <div className=''>
               <Document
-                file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+                file='/pdfs/Assignment samples.pdf'
+                // file={url}
                 onLoadSuccess={(v) => {
                   setNumberOfPages(v.numPages);
                 }}
               >
-                <DocPage pageNumber={currentPage} className='w-full' />
+                <DocPage
+                  pageNumber={currentPage}
+                  renderTextLayer={false}
+                  className='w-full'
+                />
               </Document>
             </div>
           </div>

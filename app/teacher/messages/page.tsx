@@ -11,11 +11,10 @@ import React, { useState } from 'react';
 // import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import { BasicSearch } from '@/components/search';
-import { BsFillReplyFill, BsTrash3Fill } from 'react-icons/bs';
+import { BsTrash3Fill } from 'react-icons/bs';
 import { GoSearch } from 'react-icons/go';
 import { ImBoxAdd } from 'react-icons/im';
 import { MdOutlineAddTask } from 'react-icons/md';
-import { RiShareForwardFill } from 'react-icons/ri';
 import { RxEnvelopeOpen } from 'react-icons/rx';
 
 const AllNotification = () => {
@@ -141,7 +140,7 @@ const AllNotification = () => {
   };
 
   return (
-    <section className='p-6'>
+    <section className='p-6 layout'>
       {composeMessage && (
         <div className='fixed z-[99999] bg-[#000]/50 inset-0 grid place-content-center'>
           <div className='bg-white rounded-lg p-10'>

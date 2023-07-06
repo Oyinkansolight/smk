@@ -23,7 +23,8 @@ export function useGetStaffs() {
     queryFn: async () => {
       const d = await request.get('/v1/government/teachers/get-staffs');
       // console.log(d.data.data.data);
-      return d.data.data.data.data as unknown;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return d.data.data.data.data as any;
     },
   });
   return query;

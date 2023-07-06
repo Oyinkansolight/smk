@@ -68,14 +68,14 @@ const GenericChart = ({
 
 interface FilterButtonProps {
   title: string;
-};
+}
 
 const FilterButton = ({ title }: FilterButtonProps) => {
   return (
     <div className='flex overflow-hidden items-center text-[#333333] py-[2px] px-[6px] bg-[#FFFCF5] rounded-[2px] border-[0.5px] border-[#BEBEBE] cursor-pointer'>
       {title}
     </div>
-  )
-}
+  );
+};
 
-export default GenericChart
+export default GenericChart;

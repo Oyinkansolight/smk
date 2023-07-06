@@ -59,8 +59,8 @@ const Publish = ({
           Note
         </h2>
         <p className='text-center'>
-          Login details would be generated and sent to the institution’s official
-          email.
+          Login details would be generated and sent to the institution’s
+          official email.
         </p>
       </div>
     </section>

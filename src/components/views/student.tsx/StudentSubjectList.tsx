@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AccordionAlt from '@/components/accordions/AccordionAlt';
 import PeriodStatusModal from '@/components/modals/period-status-modal';
 import { useState } from 'react';
@@ -5,11 +6,12 @@ import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
 
 export default function SubjectList({
-  subjectCount = 16,
+  studentSubjectsList,
 }: {
-  subjectCount?: number;
+  // subjectCount?: number
+  studentSubjectsList?: any[];
 }) {
-  const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
+  // const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
   const [currentView, setCurrentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
   return (
@@ -23,7 +25,7 @@ export default function SubjectList({
             <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
               <div className='flex items-center gap-8'>
                 <div>Class:</div>
-                <div className='text-bold text-2xl text-[#5A5A5A]'>
+                <div className='text-bold text-sm text-[#5A5A5A]'>
                   Primary 1
                 </div>
               </div>
@@ -31,30 +33,29 @@ export default function SubjectList({
                 <div className='text-end'>Class Teacher:</div>
                 <div className='flex gap-4 items-center'>
                   <div className='bg-gray-500 rounded-full h-10 w-10' />
-                  <div className='text-[#8898AA] font-bold text-lg'>
+                  <div className='text-[#8898AA] font-bold text-sm'>
                     James Grace
                   </div>
                 </div>
               </div>
             </div>
             <div className='h-12' />
-            <div className='grid grid-cols-4 gap-4'>
-              {Array(subjectCount)
-                .fill(0)
-                .map((v, i) => (
+            <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+              {studentSubjectsList &&
+                studentSubjectsList.map((v, i) => (
                   <div
                     key={i}
                     onClick={() => {
                       setCurrentView(1);
-                      setSubjectName(subjects[i % subjects.length]);
+                      setSubjectName(v.name);
                     }}
                     className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square'
                   >
                     <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
-                      <div>{subjects[i % subjects.length].substring(0, 1)}</div>
+                      <div>{v.name.substring(0, 1)}</div>
                     </div>
                     <div className='font-bold text-center text-lg'>
-                      {subjects[i % subjects.length]}
+                      {v.name}
                     </div>
                   </div>
                 ))}

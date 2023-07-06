@@ -3,15 +3,14 @@
 
 import Button from '@/components/buttons/Button';
 import { CountCard, SchoolProfileCard } from '@/components/cards';
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Table from '@/components/tables/TableComponent';
 import InstitutionBioDetails from '@/components/views/admin/InstitutionBioDetails';
 import StaffClassAttendanceReport from '@/components/views/admin/StaffClassAttendanceReport';
 import StudentClassAttendanceReport from '@/components/views/admin/StudentClassAttendanceReport';
+import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
-import SchoolCalendarView from '@/components/views/single-school/SchoolCalendarView';
 import SchoolDashboardView from '@/components/views/single-school/SchoolDashboardView';
 import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
@@ -26,6 +25,24 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -96,10 +113,6 @@ const SingleSchoolDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && <SchoolDashboardView />}
@@ -133,10 +146,6 @@ const SingleSchoolDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -193,10 +202,6 @@ const SingleSchoolDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -283,10 +288,6 @@ const SingleSchoolDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -366,10 +367,6 @@ const SingleSchoolDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (

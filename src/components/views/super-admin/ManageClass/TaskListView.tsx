@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TaskAccordion from '@/components/accordions/TaskAccordion';
-import Button from '@/components/buttons/Button';
 import { CurriculumCard } from '@/components/cards';
-import AddSubjectModal from '@/components/modals/add-subject-modal';
 import TimeTable from '@/components/views/super-admin/SingleSchoolCalendar/Timetable';
 import Image from 'next/image';
 import { useState } from 'react';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { BsArrowRight } from 'react-icons/bs';
 
 interface timetableArg {
   classId: number;
@@ -18,6 +16,7 @@ interface propType {
   sessionId: string | null;
   classList: any;
   sessionterms?: any;
+  currentTermId: number;
 }
 export default function TaskListView({
   schoolType,
@@ -25,6 +24,7 @@ export default function TaskListView({
   classList,
   sessionterms,
   sessionId,
+  currentTermId,
 }: propType) {
   const ECCDE = classList.filter((x: any) =>
     x.name.toLowerCase().includes('eccde')
@@ -68,57 +68,47 @@ export default function TaskListView({
               {' '}
               {academicyear}
             </div>
-            <div className='flex justify-end'>
-              <div className='flex items-center font-bold'>
-                <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
-              </div>
-              <div className='w-8' />
-              <div className='flex gap-5'>
-                <Button
-                  variant='outline'
-                  className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-                >
-                  Download Report
-                </Button>
-
-                <AddSubjectModal>
-                  <Button
-                    variant='outline'
-                    className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-                  >
-                    Manage
-                  </Button>
-                </AddSubjectModal>
-              </div>
-            </div>
           </div>
           {schoolType?.toLowerCase()?.includes('eccde') && (
             <div className='mt-6'>
               {ECCDE.map((v: any, i: number) => {
                 return (
-                  <TaskAccordion
-                    length={1}
-                    lesson={false}
-                    taskName={v.name}
+                  // <TaskAccordion
+                  //   length={1}
+                  //   lesson={false}
+                  //   taskName={v.name}
+                  //   key={i}
+                  // >
+                  //   <div className='flex flex-wrap mt-4 gap-[27px]'>
+                  //     {sessionterms.map((value: any, id: number) => (
+                  //       <CurriculumCard
+                  //         key={id}
+                  //         name={`${value.name} Timetable`}
+                  //         count={100}
+                  //         variant={generateVariant(id)}
+                  //         onClick={() => {
+                  //           HandleTimeTable({
+                  //             classId: v.id,
+                  //             termId: value.id,
+                  //           });
+                  //         }}
+                  //       />
+                  //     ))}
+                  //   </div>
+                  // </TaskAccordion>
+                  <button
                     key={i}
+                    onClick={() => {
+                      HandleTimeTable({
+                        classId: v.id,
+                        termId: currentTermId,
+                      });
+                    }}
+                    className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
                   >
-                    <div className='flex flex-wrap mt-4 gap-[27px]'>
-                      {sessionterms.map((value: any, id: number) => (
-                        <CurriculumCard
-                          key={id}
-                          name={`${value.name} Timetable`}
-                          count={100}
-                          variant={generateVariant(id)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: value.id,
-                            });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </TaskAccordion>
+                    <div>{v.name}</div>
+                    <BsArrowRight size={20} />
+                  </button>
                 );
               })}
             </div>
@@ -187,7 +177,7 @@ export default function TaskListView({
           )}
         </div>
       ) : (
-        <div>
+        <div className='mt-2'>
           <button
             onClick={() => {
               setShowTimeTable(false);

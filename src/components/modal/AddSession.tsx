@@ -53,7 +53,7 @@ function AddActivityName({
     'Academic Year 2028/2029',
   ];
   return (
-    <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
+    <div className='fixed inset-0 z-[9999999999] py-10 grid place-content-center rounded-sm bg-black/30'>
       <div className='flex w-[800px] max-h-[700px] overflow-y-auto flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>

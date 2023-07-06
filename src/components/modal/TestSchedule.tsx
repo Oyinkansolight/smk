@@ -92,7 +92,7 @@ function AddActivityName({
         </div>
 
         <div className='mt-4 space-y-4 px-4 pb-10'>
-          <h1 className='text-center text-4xl font-bold'>Add Content</h1>
+          <h1 className='text-center text-4xl font-bold'>Add Event/Period</h1>
           <p className='text-center'>
             Kindly select the appropriate options below:
           </p>
@@ -107,14 +107,14 @@ function AddActivityName({
             <div></div>
 
             <FormInput
-              label='Select Start Date'
+              label='Select start time'
               name='schoolType'
               type='time'
               placeholder='Select an option'
               setFormValue={setStartDate}
             />
             <FormInput
-              label='Select End Date'
+              label='Select end time'
               name='schoolType'
               type='time'
               placeholder='Select an option'

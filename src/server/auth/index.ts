@@ -30,7 +30,7 @@ export function useSignIn() {
     mutationFn: (params: SignInParams) =>
       request.post('/v1/authentication/login', params),
     onSuccess: (response) => {
-      localStorage.setItem('TOKEN_KEY', response.data.data.data.token);
+      sessionStorage.setItem('TOKEN_KEY', response.data.data.data.token);
     },
   });
   return mutation;

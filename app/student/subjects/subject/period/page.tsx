@@ -4,7 +4,6 @@ import NextImage from '@/components/NextImage';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import PageCounter from '@/components/counter/PageCounter';
 import TabBar from '@/components/layout/TabBar';
-import { BigAvatar } from '@/components/profile/BigAvatar';
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -13,6 +12,7 @@ import { BiChevronRight } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiDashboardFill } from 'react-icons/ri';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -143,12 +143,12 @@ const Page = () => {
               </div>
               <div className='flex justify-center mt-4 '>
                 <Document
-                  file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+                  file='/pdfs/Assignment samples.pdf'
                   onLoadSuccess={(v) => {
                     setNumberOfPages(v.numPages);
                   }}
                 >
-                  <DocPage pageNumber={currentPage} />
+                  <DocPage pageNumber={currentPage} renderTextLayer={false} />
                 </Document>
               </div>
             </div>

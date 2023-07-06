@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
 import logger from '@/lib/logger';
@@ -9,6 +8,24 @@ import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -45,7 +62,7 @@ const TeacherLibrary = () => {
       }
     });
   return (
-    <div className='w-full'>
+    <div className='w-full layout'>
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <div className='flex w-full items-center justify-between'>
           <TabBar

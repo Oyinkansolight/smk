@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import NextImage from '@/components/NextImage';
-import Button from '@/components/buttons/Button';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,9 +7,12 @@ import { useEffect, useState } from 'react';
 export default function StudentDashboardView() {
   const params = useSearchParams();
   const [currentPath, setCurrentPath] = useState<any>(params);
+  const [schooltype, setschooltype] = useState<any>('');
 
   useEffect(() => {
     setCurrentPath(params);
+    const st = params && params.get('schooltype');
+    setschooltype(st);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -18,19 +20,7 @@ export default function StudentDashboardView() {
   return (
     <>
       <div className='-mt-[10px] flex flex-row items-center justify-between'>
-        <div className='text-[#6B7A99] font-bold text-xl'> Primary School</div>
-        <div className='flex flex-row gap-x-7'>
-          <select className='border-0 bg-transparent text-[14px] text-[#1C1C1C]'>
-            <option value='Manage Widgets'>Filter</option>
-          </select>
-
-          <Button
-            variant='outline'
-            className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-          >
-            Download Report
-          </Button>
-        </div>
+        <div className='text-[#6B7A99] font-bold text-xl'> {schooltype} </div>
       </div>
 
       <div className='bg-white rounded-md grid grid-cols-3 gap-10 px-6 py-10'>
@@ -48,7 +38,7 @@ export default function StudentDashboardView() {
           </div>
           <Link
             href={
-              '/super-admin/school-calendar-content/' + currentPath + '&term=1'
+              '/super-admin/school-calendar-content/?' + currentPath + '&term=1'
             }
             className='mt-14 text-primary'
           >
@@ -69,7 +59,7 @@ export default function StudentDashboardView() {
           </div>
           <Link
             href={
-              '/super-admin/school-calendar-content/' + currentPath + '&term=2'
+              '/super-admin/school-calendar-content/?' + currentPath + '&term=2'
             }
             className='mt-14 text-primary'
           >
@@ -90,7 +80,7 @@ export default function StudentDashboardView() {
           </div>
           <Link
             href={
-              '/super-admin/school-calendar-content/' + currentPath + '&term=3'
+              '/super-admin/school-calendar-content/?' + currentPath + '&term=3'
             }
             className='mt-14 text-primary'
           >

@@ -1,5 +1,5 @@
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
+import { getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
@@ -20,7 +20,7 @@ export default function ClockInTime() {
   const [clockedIn, setClockedIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState(0);
   const { latitude, longitude, loading, error } = useGeoLocation();
-  const institutionData = getFromLocalStorage('institution');
+  const institutionData = getFromSessionStorage('institution');
   let institute;
 
   if (institutionData) {

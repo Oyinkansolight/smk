@@ -101,7 +101,10 @@ const Page = () => {
                 <div className='col-span-3'>
                   <p className=''>Subjects</p>
                 </div>
-                <div className='col-span-1'>Assessment 1</div>
+                <div className='col-span-1 transform rotate-90'>
+                  {' '}
+                  <div className=' transform rotate-90'> Assessment 1</div>
+                </div>
                 <div className='col-span-1'>Assessment 2</div>
                 <div className='col-span-1'>Examination</div>
                 <div className='col-span-1'>Total</div>
@@ -124,7 +127,7 @@ const Page = () => {
               </div>
               <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
                 <div className='col-span-3'>
-                  <p className=''>Geography</p>
+                  <p className=''>Mathematics</p>
                 </div>
                 <div className='col-span-1'>14</div>
                 <div className='col-span-1'>12</div>
@@ -136,7 +139,7 @@ const Page = () => {
               </div>
               <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
                 <div className='col-span-3'>
-                  <p className=''>Geography</p>
+                  <p className=''>Further Maths</p>
                 </div>
                 <div className='col-span-1'>14</div>
                 <div className='col-span-1'>12</div>
@@ -148,7 +151,7 @@ const Page = () => {
               </div>
               <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
                 <div className='col-span-3'>
-                  <p className=''>Geography</p>
+                  <p className=''>Government</p>
                 </div>
                 <div className='col-span-1'>14</div>
                 <div className='col-span-1'>12</div>
@@ -160,7 +163,7 @@ const Page = () => {
               </div>
               <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
                 <div className='col-span-3'>
-                  <p className=''>Geography</p>
+                  <p className=''>Social Studies</p>
                 </div>
                 <div className='col-span-1'>14</div>
                 <div className='col-span-1'>12</div>

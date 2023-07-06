@@ -7,6 +7,13 @@ import Link from 'next/link';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
+  const Names = [
+    'Ighosa Ahmed',
+    'David Keyan',
+    'Victoria Alle',
+    'Sharon Orobosa',
+  ];
+
   return (
     <div className='h-full layout'>
       <div className='text-3xl text-[#D4D5D7]'>
@@ -37,16 +44,14 @@ export default function Page() {
         <div></div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array(5)
-          .fill(0)
-          .map((v, i) => (
-            <AssignmentListItem
-              title='Ighosa Ahmed'
-              dateSubmitted={i === 3 || i === 2 ? undefined : 'June 24, 2023'}
-              key={i}
-              id={i + 1}
-            />
-          ))}
+        {Names.map((name, i) => (
+          <AssignmentListItem
+            title={name}
+            dateSubmitted={i === 3 || i === 2 ? undefined : 'June 24, 2023'}
+            key={i}
+            id={i + 1}
+          />
+        ))}
       </div>
       <PaginatedCounter pageCount={10} currentPage={3} />
     </div>

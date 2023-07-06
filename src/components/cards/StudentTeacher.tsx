@@ -4,10 +4,8 @@ import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
-import { BsFillSendFill } from 'react-icons/bs';
 import { HiUsers } from 'react-icons/hi';
-import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
-import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
+import { RiUserFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 import ReactSelect from 'react-select';
 
@@ -43,16 +41,12 @@ export default function StudentTeacherProfileCard({
 
       <div className='h-3' />
 
-      <div className='flex flex-col gap-[15px]'>
+      <div className='flex flex-col gap-[15px] mb-4'>
         <StudentTeacherBadge title='Name of School' text={school} />
         <StudentTeacherBadge
           title={student ? 'Student ID' : 'Staff ID'}
           text='#123-BNA'
         />
-      </div>
-
-      <div className='text-[#007AFF] text-center text-xs font-bold mt-4 mb-8'>
-        {student ? 'View Student ID Card' : 'View Staff ID Card'}
       </div>
 
       {showAcademicYear && (
@@ -88,15 +82,6 @@ export default function StudentTeacherProfileCard({
         ]}
       />
       <div className='h-20' />
-      <div className='text-[#ADB8CC]'>Contact School</div>
-      <div className='h-2' />
-      <div className='flex space-x-3 rounded-full border-2 border-[#EDEFF2] p-3'>
-        <MdLocalPhone className='h-5 w-5 text-[#FF6633]' />
-        <MdMail className='h-5 w-5 text-[#29CC39]' />
-        <MdChromeReaderMode className='h-5 w-5 text-[#8833FF]' />
-        <BsFillSendFill className='h-5 w-5 text-[#33BFFF]' />
-        <RiWhatsappFill className='h-5 w-5 text-green-500' />
-      </div>
     </div>
   );
 }

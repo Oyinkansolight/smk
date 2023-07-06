@@ -34,7 +34,7 @@ export default function StudentProfile({
         {[
           { title: 'Primary', subtitle: 'Grade' },
           { title: '1A', subtitle: 'Class' },
-          { title: '72%', subtitle: 'Average Performance' },
+          { title: '72%', subtitle: 'Student Average' },
           { title: '12', subtitle: 'Subjects' },
         ].map((v, i) => (
           <InfoTab key={i} title={v.title} subtitle={v.subtitle} />

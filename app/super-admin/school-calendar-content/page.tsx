@@ -1,6 +1,5 @@
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import ClassCalendarContent from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarContent';
 import ClassCalendarView from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarView';
@@ -78,7 +77,7 @@ const SingleStudentDashboard = () => {
             items={[
               {
                 icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Academic Calendar',
+                label: 'Academic Roadmap',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,
@@ -92,10 +91,6 @@ const SingleStudentDashboard = () => {
           />
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-          </div>
         </div>
 
         {tabIdx === 0 && <ClassCalendarContent />}

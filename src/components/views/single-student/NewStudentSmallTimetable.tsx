@@ -18,17 +18,15 @@ export default function NewStudentSmallTimetable() {
       </div>
       <div className='h-4' />
       <div className='flex gap-4 flex-col'>
-        {Array(3)
-          .fill(0)
-          .map((v, i) => (
-            <TimetableItem
-              key={i}
-              isCurrent={i === 0}
-              img='/images/sidebar-icons/Subjects.png'
-              subtitle='09:00 AM - 08:30 am'
-              title='English'
-            />
-          ))}
+        {['English', 'Mathematics'].map((v, i) => (
+          <TimetableItem
+            key={i}
+            isCurrent={i === 0}
+            img='/images/sidebar-icons/Subjects.png'
+            subtitle='08:00 AM - 08:30 am'
+            title={v}
+          />
+        ))}
       </div>
     </div>
   );

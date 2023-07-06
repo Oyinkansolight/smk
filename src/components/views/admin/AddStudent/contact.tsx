@@ -30,6 +30,28 @@ import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -50,46 +72,10 @@ const Contact = ({ register, errors }: Iprops) => {
 
   return (
     <section className=''>
-      <h2 className='text-3xl font-bold'>Contact Details</h2>
+      <h2 className='text-3xl font-bold'>Student Contact Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Phone Number'
-            placeholder='Details here'
-            name='phoneNumber'
-            register={register}
-            validation={{
-              required: 'Phone Number is required',
-            }}
-            helper={
-              errors?.phoneNumber && {
-                message: errors?.phoneNumber?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Email'
-            placeholder='Details here'
-            name='email'
-            register={register}
-            validation={{
-              required: 'Email Number is required',
-            }}
-            helper={
-              errors?.email && {
-                message: errors?.email?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Address'
@@ -109,7 +95,7 @@ const Contact = ({ register, errors }: Iprops) => {
         </div>
         <div>
           <FormSelect
-            label='Town'
+            label='Local Government Area'
             name='townId'
             options={Array.prototype.concat.apply([], towns)}
             register={register}
@@ -119,6 +105,26 @@ const Contact = ({ register, errors }: Iprops) => {
             helper={
               errors?.townId && {
                 message: errors?.townId?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Phone Number'
+            type='tel'
+            placeholder='Details here'
+            name='phoneNumber'
+            register={register}
+            validation={{
+              required: 'Phone Number is required',
+            }}
+            helper={
+              errors?.phoneNumber && {
+                message: errors?.phoneNumber?.message,
                 type: 'danger',
               }
             }

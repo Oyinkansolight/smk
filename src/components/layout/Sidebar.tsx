@@ -8,7 +8,7 @@ import { FaRegIdCard, FaUsers } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { TbMessage, TbTimelineEvent } from 'react-icons/tb';
 import { toast } from 'react-toastify';
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from 'react-tooltip';
 
 const Sidebar = () => {
   const routeDetails = usePathname();
@@ -23,7 +23,7 @@ const Sidebar = () => {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
       }
     }
   };
@@ -31,7 +31,7 @@ const Sidebar = () => {
     <aside
       className={clsxm(
         open ? 'w-[301px] items-center' : 'w-20 ',
-        'order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
+        'absolute order-first flex h-screen transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0 z-[100]'
       )}
     >
       <div className='flex flex-col items-center'>
@@ -40,11 +40,11 @@ const Sidebar = () => {
         <OnlineStatus status='online' /> */}
       </div>
 
-      <nav className='flex flex-1 flex-col space-y-2 mt-16'>
+      <nav className='flex flex-1 flex-col space-y-2  pl-4'>
         <div
           onClick={handleToggle}
           className={clsxm(
-            'flex w-12 justify-center cursor-pointer bg-secondary-50 bg-opacity-30 p-4 rounded-full'
+            'flex w-12 justify-center cursor-pointer bg-secondary-50 bg-opacity-30 p-4 rounded-full my-12'
           )}
         >
           <GiHamburgerMenu />
@@ -65,7 +65,7 @@ const Sidebar = () => {
           active={routeDetails && routeDetails.includes('classes') && true}
         />
 
-        <SideBarButton
+        {/* <SideBarButton
           open={open}
           icon={<BiBookContent className='#C3CAD9' />}
           title='Test and Exams'
@@ -75,7 +75,7 @@ const Sidebar = () => {
             routeDetails.includes('test-and-examination') &&
             true
           }
-        />
+        /> */}
 
         <SideBarButton
           open={open}
@@ -169,8 +169,9 @@ export const SideBarButton = ({
   open = false,
   onClick,
 }: SideBarButtonProps) => (
-  <Tooltip anchorSelect=".my-anchor-element" place="right">
+  <>
     <ButtonLink
+      data-tooltip-id={`teacher-tooltip-${title}`}
       href={href}
       onClick={onClick}
       className={clsxm(
@@ -193,8 +194,11 @@ export const SideBarButton = ({
         </div>
       </div>
     </ButtonLink>
-    {title}
-  </Tooltip>
+
+    <Tooltip id={`teacher-tooltip-${title}`} place='top'>
+      {title}
+    </Tooltip>
+  </>
 );
 
 export default Sidebar;

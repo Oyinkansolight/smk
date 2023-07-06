@@ -22,26 +22,6 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);
@@ -100,10 +80,6 @@ const SingleSubjectDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {page === 0 && (

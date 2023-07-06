@@ -5,7 +5,15 @@ import Link from 'next/link';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function NextPeriod() {
-  const { data, isLoading } = useGetStudentNextPeriod();
+  const { isLoading } = useGetStudentNextPeriod();
+
+  const data = {
+    startTime: '8:00',
+    endTime: '9:00',
+    subject: {
+      name: 'Diction',
+    },
+  };
 
   return (
     <div>

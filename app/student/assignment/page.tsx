@@ -2,33 +2,11 @@
 'use client';
 
 import NextImage from '@/components/NextImage';
-import request from '@/server';
 import { useGetAcademicSessions } from '@/server/dashboard';
 import { useGetSubjectList } from '@/server/institution';
-import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { RotatingLines } from 'react-loader-spinner';
-import Alarm from '~/svg/alarm.svg';
-import Books from '~/svg/books.svg';
-import Teacher from '~/svg/teacher.svg';
-import Tick from '~/svg/tick.svg';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

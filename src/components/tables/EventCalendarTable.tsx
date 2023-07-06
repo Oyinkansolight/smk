@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
 import { BiChevronRight } from 'react-icons/bi';
 
-
 const data = [
   {
     eventName: 'Examination Registration',
@@ -27,7 +26,7 @@ const columns: TableColumn<(typeof data)[number]>[] = [
     selector: (event) => event.eventName,
     grow: 3,
     cell: (event) => (
-      <div className='text-lg font-semibold whitespace-nowrap overflow-hidden'>
+      <div className='text-sm font-medium whitespace-nowrap overflow-hidden'>
         <div className='text-[#525F7F]'>{event.eventName}</div>
       </div>
     ),

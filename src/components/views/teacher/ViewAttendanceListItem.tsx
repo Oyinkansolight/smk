@@ -18,11 +18,11 @@ export default function ViewAttendanceListItem({
       await mutateAsync({
         studentId: index,
         status: 'PRESENT',
-        lessonId: 1,
+        periodId: 1,
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1,
+        termId: 1,
       });
 
       toast.success(`Student "${name}" marked as present`);
@@ -38,11 +38,11 @@ export default function ViewAttendanceListItem({
       await mutateAsync({
         studentId: index,
         status: 'ABSENT',
-        lessonId: 1,
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1,
+        termId: 1,
+        periodId: 1,
       });
 
       toast.success(`Student "${name}" marked as absent`);
@@ -58,11 +58,11 @@ export default function ViewAttendanceListItem({
       await mutateAsync({
         studentId: index,
         status: 'LATE',
-        lessonId: 1,
         institutionId: 1,
         classId: 1,
         sessionId: 1,
-        term: 1,
+        termId: 1,
+        periodId: 1,
       });
       toast.success(`Student "${name}" marked as late`);
     } catch (error) {

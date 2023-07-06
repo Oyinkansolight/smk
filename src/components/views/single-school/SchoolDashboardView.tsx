@@ -26,7 +26,7 @@ export default function SchoolDashboardView() {
         <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px] mt-6'>
           <CountCard text='Primary' title='Grade' variant='basic' />
           <CountCard text='1 A' title='Class' variant='basic' />
-          <CountCard text='72 %' title='Average Performance' variant='basic' />
+          <CountCard text='72 %' title='Student Average' variant='basic' />
           <CountCard count={12} title='Total Subjects' variant='basic' />
           {/* <div>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores

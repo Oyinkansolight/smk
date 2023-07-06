@@ -5,7 +5,6 @@ import { useGetProfile } from '@/server/auth';
 import { useGetTeachersSubjectList } from '@/server/teacher';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { RotatingLines } from 'react-loader-spinner';
 
 export default function Page() {
   const colors = [
@@ -14,7 +13,7 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
+  const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
   // const { data } = useGetGovernmentSubjectList();
 
@@ -40,7 +39,7 @@ export default function Page() {
           <div>My Subjects</div>
         </div>
         <div className='flex flex-wrap gap-4 justify-items-center'>
-          {(!profile || !data) && (
+          {/* {(!profile || !data) && (
             <div className='flex flex-col h-full w-full items-center justify-center p-10'>
               <RotatingLines
                 width='100'
@@ -50,24 +49,20 @@ export default function Page() {
                 animationDuration='0.75'
               />
             </div>
-          )}
-          {data ? (
-            data.map((v, i) => (
-              <SmallTeacherSubjectCard
-                onClick={() => {
-                  router.push(`/teacher/classes/subject?id=${v.id}`);
-                }}
-                key={i}
-                isNext={i == 0}
-                subject={v.name ?? '[NULL]'}
-                assignmentDue={2}
-                tasks={4}
-                className={colors[i % colors.length]}
-              />
-            ))
-          ) : (
-            <div></div>
-          )}
+          )} */}
+          {subjects.map((v, i) => (
+            <SmallTeacherSubjectCard
+              onClick={() => {
+                router.push(`/teacher/classes/subject?id=${i}`);
+              }}
+              key={i}
+              isNext={i == 0}
+              subject={v ?? '[NULL]'}
+              assignmentDue={2}
+              tasks={4}
+              className={colors[i % colors.length]}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import NextImage from '@/components/NextImage';
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import Image from 'next/image';
+import React, { useState } from 'react';
+import Webcam from 'react-webcam';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -31,14 +27,77 @@ import FormSelect from '@/components/input/formSelect';
 type Iprops = {
   register: any;
   errors: any;
+  imgSrc: any;
+  setImgSrc: (v: any) => void;
 };
 
 const GenderOptions: string[] = ['MALE', 'FEMALE', 'Others'];
-const Biodata = ({ register, errors }: Iprops) => {
+
+const Biodata = ({ register, errors, imgSrc, setImgSrc }: Iprops) => {
+  const [isCapture, setIsCapture] = useState(false);
+  const WebcamCapture = () => {
+    const webcamRef: any = React.useRef(null);
+
+    const capture = React.useCallback(() => {
+      const imageSrc = webcamRef?.current?.getScreenshot();
+      setImgSrc(imageSrc);
+      setIsCapture(false);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+      <>
+        <Webcam audio={false} ref={webcamRef} screenshotFormat='image/jpeg' />
+        <button
+          onClick={capture}
+          className='p-2 mx-auto font-medium text-xs bg-primary text-white my-4 rounded'
+        >
+          Capture photo
+        </button>
+      </>
+    );
+  };
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Bio Details</h2>
       <p>Kindly enter the details below:</p>
+
+      <div className='my-2 grid grid-cols-2 gap-6'>
+        <div></div>
+        <div className='font-medium text-center'> Preview </div>
+      </div>
+
+      <div className='my-2 grid grid-cols-2 gap-6'>
+        <div>
+          {!isCapture ? (
+            <div>
+              <h2 className='text-xs'>Capture Image</h2>
+              <div className='w-full grid place-content-center border p-10'>
+                <NextImage
+                  src='/svg/addimage_avatar.svg'
+                  width={130}
+                  height={140}
+                  alt='avatar'
+                />
+                <button
+                  onClick={() => setIsCapture(true)}
+                  type='button'
+                  className='mt-4'
+                >
+                  Click to capture image
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className=''>
+              <WebcamCapture />
+            </div>
+          )}
+        </div>
+        <div>
+          {imgSrc && <Image width={600} height={600} src={imgSrc} alt='' />}
+        </div>
+      </div>
 
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
@@ -68,8 +127,8 @@ const Biodata = ({ register, errors }: Iprops) => {
               required: 'Last Name is required',
             }}
             helper={
-              errors?.lastName && {
-                message: errors?.lastName?.message,
+              errors?.lastname && {
+                message: errors?.lastname?.message,
                 type: 'danger',
               }
             }
@@ -107,82 +166,6 @@ const Biodata = ({ register, errors }: Iprops) => {
             helper={
               errors?.dob && {
                 message: errors?.dob?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Height (cm) '
-            type='number'
-            placeholder='Details here'
-            name='height'
-            register={register}
-            validation={{
-              required: 'Height is required',
-            }}
-            helper={
-              errors?.height && {
-                message: errors?.height?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Weight(KG)'
-            type='number'
-            placeholder='Details here'
-            name='weight'
-            register={register}
-            validation={{
-              required: 'Weight is required',
-            }}
-            helper={
-              errors?.weight && {
-                message: errors?.weight?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Parent Name'
-            type='text'
-            placeholder='Details here'
-            name='parentName'
-            register={register}
-            validation={{
-              required: 'Parent Name is required',
-            }}
-            helper={
-              errors?.parentName && {
-                message: errors?.parentName?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Parent Occupation'
-            type='text'
-            placeholder='Details here'
-            name='parentOccupation'
-            register={register}
-            validation={{
-              required: 'Parent Occupation is required',
-            }}
-            helper={
-              errors?.parentOccupation && {
-                message: errors?.parentOccupation?.message,
                 type: 'danger',
               }
             }

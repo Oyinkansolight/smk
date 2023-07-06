@@ -11,7 +11,6 @@ import { BiBookContent } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
 
-
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',
@@ -27,6 +26,13 @@ export default function Page() {
 
   //* Actual Api to be called, response currently empty
   // const { data: data2 } = useGetTeachersSubjectList();
+
+  const Names = [
+    'Ighosa Ahmed',
+    'David Keyan',
+    'Victoria Alle',
+    'Sharon Orobosa',
+  ];
 
   return (
     <div className='h-full layout'>
@@ -92,11 +98,9 @@ export default function Page() {
             <div>Standing</div>
           </div>
           <div className='flex flex-col gap-4'>
-            {Array(10)
-              .fill(0)
-              .map((v, i) => (
-                <StudentGradeListItem key={i} id={i + 1} />
-              ))}
+            {Names.map((name, i) => (
+              <StudentGradeListItem key={i} id={i + 1} name={name} />
+            ))}
           </div>
         </div>
       )}
@@ -104,14 +108,14 @@ export default function Page() {
   );
 }
 
-function StudentGradeListItem({ id }: { id: number }) {
+function StudentGradeListItem({ id, name }: { id: number; name: string }) {
   return (
     <Link href='/teacher/grades/grade-book-student'>
       <div className='grid text-black grid-cols-8 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
-          <div>Ighosa Ahmed</div>
+          <div>{name}</div>
         </div>
         <div className='text-black'>Group Name</div>
         <div>24/24</div>

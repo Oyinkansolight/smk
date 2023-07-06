@@ -59,7 +59,7 @@ export default function AcademicCalendar({
           <IoChevronDown className='text-blue-500 h-5 w-5' />
         </div>
         <div className='flex items-center font-bold my-5 gap-3'>
-          <IoChevronBack className='text-blue-500 h-5 w-5' /> <div>June</div>
+          <IoChevronBack className='text-blue-500 h-5 w-5' /> <div>July</div>
           <IoChevronForward className='text-blue-500 h-5 w-5' />
         </div>
       </div>

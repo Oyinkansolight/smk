@@ -23,8 +23,7 @@ export default function RootLayout({
   useEffect(() => {
     //* Used to Close Sidebar when navigating to another route.
     setOpen(false);
-  }, [routeDetails])
-
+  }, [routeDetails]);
 
   return (
     <html>

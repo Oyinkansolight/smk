@@ -51,7 +51,7 @@ export default function StudentClassAttendanceReport() {
         </div>
         <div className='flex flex-col'>
           <div className='text-xl font-bold'>72%</div>
-          <div>Average Performance</div>
+          <div>Student Average</div>
         </div>
       </div>
       <Table

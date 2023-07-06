@@ -31,13 +31,11 @@ export default function StudentAuth() {
       const response = await mutateAsync(data);
 
       if (response) {
-        if (
-          response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
-        ) {
+        if (response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN) {
           router.push(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
           if (typeof window !== 'undefined') {
-            localStorage.setItem(
+            sessionStorage.setItem(
               'institution',
               JSON.stringify(response.data.data.data.staff.institution)
             );
@@ -46,8 +44,12 @@ export default function StudentAuth() {
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
         } else {
-          toast.error('Invalid user role');
           setLoading(false);
+          toast.info('Invalid user role');
+          toast.info('Redirecting...');
+          setTimeout(() => {
+            router.push(ROUTES.ADMIN_AUTH);
+          }, 2000);
           return;
         }
 
@@ -63,7 +65,7 @@ export default function StudentAuth() {
         const email = response.data.data.data.email;
         const userDetails = { name, role, email };
         if (typeof window !== 'undefined') {
-          localStorage.setItem('user', JSON.stringify(userDetails));
+          sessionStorage.setItem('user', JSON.stringify(userDetails));
         }
       }
     } catch (error) {

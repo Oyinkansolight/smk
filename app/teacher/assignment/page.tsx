@@ -10,6 +10,14 @@ import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
+  const Assignment = [
+    'Thermodynamics',
+    'Friction',
+    'Acceleration',
+    'Kinetic Energy',
+    'Mass',
+  ];
+
   return (
     <div className='h-full layout'>
       <div className='font-bold text-3xl py-8 h3'>
@@ -18,9 +26,9 @@ export default function Page() {
       <TextTabBar
         tabs={[
           'All',
-          ...Array(6)
+          ...Array(3)
             .fill(0)
-            .map((v, i) => `Primary ${i + 1}`),
+            .map((v, i) => `SSS ${i + 1}`),
         ]}
         onChange={setIdx}
         selectedIdx={idx}
@@ -43,16 +51,14 @@ export default function Page() {
         <div>Date Due</div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array(5)
-          .fill(0)
-          .map((v, i) => (
-            <AssignmentListItem
-              isDue={i === 0 || i === 1}
-              title='Thermodynamics'
-              subject='Physics'
-              key={i}
-            />
-          ))}
+        {Assignment.map((title, i) => (
+          <AssignmentListItem
+            isDue={i === 0 || i === 1}
+            title={title}
+            subject='Physics'
+            key={i}
+          />
+        ))}
       </div>
       <PaginatedCounter pageCount={5} currentPage={2} />
     </div>
@@ -88,10 +94,10 @@ function AssignmentListItem({
           <div>{title}</div>
         </div>
         <div>{subject}</div>
-        <div>Primary 1</div>
-        <div>June 25</div>
+        <div>SSS 1</div>
+        <div>July 3</div>
         <div className='flex justify-between items-center'>
-          <div className={clsxm(isDue && 'text-red-500')}>June 28</div>
+          <div className={clsxm(isDue && 'text-red-500')}>July 28</div>
           <BiChevronRight className='h-10 w-10' />
         </div>
       </div>
