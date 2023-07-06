@@ -7,6 +7,7 @@ import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
 import { useState } from 'react';
 import { IoAddCircle } from 'react-icons/io5';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -69,12 +70,12 @@ export default function Page() {
             {' '}
             <Document
               className='mx-auto'
-              file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+              file='/pdfs/Assignment samples.pdf'
               onLoadSuccess={(v) => {
                 setNumberOfPages(v.numPages);
               }}
             >
-              <DocPage pageNumber={currentPage} />
+              <DocPage pageNumber={currentPage} renderTextLayer={false} />
             </Document>
           </div>
         </div>

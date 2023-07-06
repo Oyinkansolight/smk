@@ -111,6 +111,23 @@ export function useGetSubjectList() {
   });
   return query;
 }
+export function useGetStudentSubjectList(id: any) {
+  const query = useQuery({
+    queryKey: 'get_student_subject_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/classes-subjects/student-subjects?id=${id}`
+        );
+        return d.data.data.data as any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
 
 export function useGetStudentsList(params?: PaginationParams) {
   const query = useQuery({
@@ -296,6 +313,26 @@ export function useCreateStudent() {
     mutationKey: 'create-student',
     mutationFn: (params: any) =>
       request.post('/v1/government/students/add-student', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useCreateBulkStudent() {
+  const mutation = useMutation({
+    mutationKey: 'create-student',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/students/upload-students', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useCreateBulkStaff() {
+  const mutation = useMutation({
+    mutationKey: 'create-student',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/teachers/upload-staff', params, {
         withCredentials: true,
       }),
   });

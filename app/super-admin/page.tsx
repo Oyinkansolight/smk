@@ -171,10 +171,14 @@ const Page = () => {
                         <div className='font-bold text-[#4D5E80]'>
                           Okafor Chidinma
                         </div>
-                        <div className='font-bold text-[#ADB8CC]'>Primary 5</div>
+                        <div className='font-bold text-[#ADB8CC]'>
+                          Primary 5
+                        </div>
                       </div>
 
-                      <span className='text-lg font-bold text-[#F5365C]'>09%</span>
+                      <span className='text-lg font-bold text-[#F5365C]'>
+                        09%
+                      </span>
                     </div>
                   </div>
                 </div>

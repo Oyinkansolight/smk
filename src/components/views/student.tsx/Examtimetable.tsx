@@ -12,6 +12,14 @@
 const AcadamicCalendar = () => {
   return (
     <section>
+      <div className='flex justify-between items-center'>
+        <h1 className='text-base text-[#6B7A99]'> TimeTable</h1>
+        <select name='' id='' className='border p-2 w-[150px] rounded text-xs'>
+          <option value=''>Class Timetable</option>
+          <option value=''>Exam Timetable</option>
+          <option value=''>Test Timetable</option>
+        </select>
+      </div>
       <div className='mt-8 p-2 rounded-md'>
         <div className='flex w-full mr-10'>
           <div className='w-[150px] font-medium  p-3  border-l border-y bg-white text-gray-500'>

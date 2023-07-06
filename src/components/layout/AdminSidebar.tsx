@@ -7,6 +7,7 @@ import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoDocumentOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 import Calendar_icon from '~/svg/calendar_icon.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
@@ -15,12 +16,11 @@ import IDBadge from '~/svg/identification_badge.svg';
 import NoteBook from '~/svg/notebook.svg';
 import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
-import { Tooltip } from 'react-tooltip'
 
 interface AdminSidebarProps {
   open: boolean;
   handleToggle: () => void;
-};
+}
 
 const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
   const routeDetails = usePathname();
@@ -32,7 +32,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
       }
     }
   };
@@ -279,7 +279,7 @@ export const SideBarButton = ({
       </div>
     </ButtonLink>
 
-    <Tooltip id={`super-admin-tooltip-${title}`} place="top">
+    <Tooltip id={`super-admin-tooltip-${title}`} place='top'>
       {title}
     </Tooltip>
   </>

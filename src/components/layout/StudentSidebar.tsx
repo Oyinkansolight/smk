@@ -1,6 +1,6 @@
 import { SideBarButton } from '@/components/layout/AdminSidebar';
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
+import { getFromSessionStorage } from '@/lib/helper';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -16,7 +16,7 @@ interface StudentSidebarProps {
 }
 
 const StudentSidebar = ({ isSidebarOpen }: StudentSidebarProps) => {
-  const userData = getFromLocalStorage('user');
+  const userData = getFromSessionStorage('user');
   let user;
 
   if (userData) {
@@ -30,7 +30,7 @@ const StudentSidebar = ({ isSidebarOpen }: StudentSidebarProps) => {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
       }
     }
   };

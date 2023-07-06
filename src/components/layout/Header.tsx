@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
       <div className='mx-auto flex h-20 items-center justify-between px-4'>
-        <div className='flex w-full flex-row gap-28'>
+        <div className='flex w-full flex-row gap-28 ml-20'>
           <BasicSearch />
         </div>
         <nav>

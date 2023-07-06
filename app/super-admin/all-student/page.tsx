@@ -87,9 +87,9 @@ const AllStudent = () => {
             data={
               students?.map(
                 (v, i) =>
-                ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
-                  idx: number;
-                })
+                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
+                    idx: number;
+                  })
               ) ?? []
             }
             columns={studentListColumns}

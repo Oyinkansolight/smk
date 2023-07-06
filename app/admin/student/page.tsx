@@ -2,7 +2,6 @@
 
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
@@ -13,6 +12,7 @@ import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import { useGetStudentList } from '@/server/government/student';
+import { useGetStudentSubjectList } from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -25,9 +25,12 @@ const Page = () => {
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const router = useRouter();
   const p = useSearchParams();
+  const studentId = p?.get('id');
   const { data, error, isLoading } = useGetStudentList({
     id: p?.get('id'),
   });
+  const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
+  console.log(studentSubjectsList);
 
   const student = data?.data[0];
 
@@ -77,10 +80,6 @@ const Page = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && <StudentDashboardView />}
@@ -113,10 +112,6 @@ const Page = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -170,23 +165,11 @@ const Page = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
             <>
-              <div className='flex justify-end'>
-                <Button
-                  variant='ghost'
-                  className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
-                >
-                  Download Report
-                </Button>
-              </div>
-              <SubjectList />
+              <SubjectList studentSubjectsList={studentSubjectsList} />
             </>
           )}
         </div>
@@ -207,10 +190,6 @@ const Page = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (

@@ -140,7 +140,7 @@ const Page = () => {
               />
               <GenericChart
                 title='Low Batteries Notifications'
-                content={(
+                content={
                   <div className='flex flex-col gap-y-5 px-5'>
                     <div className='flex flex-row items-center gap-x-[22.5px]'>
                       <StudentBadge className='h-[60px] w-[60px]' />
@@ -150,10 +150,14 @@ const Page = () => {
                           <div className='font-bold text-[#4D5E80]'>
                             Victor Akanni
                           </div>
-                          <div className='font-bold text-[#ADB8CC]'>Primary 1</div>
+                          <div className='font-bold text-[#ADB8CC]'>
+                            Primary 1
+                          </div>
                         </div>
 
-                        <span className='text-lg font-bold text-[#F5365C]'>05%</span>
+                        <span className='text-lg font-bold text-[#F5365C]'>
+                          05%
+                        </span>
                       </div>
                     </div>
 
@@ -165,10 +169,14 @@ const Page = () => {
                           <div className='font-bold text-[#4D5E80]'>
                             Oluwaseyi Owolabi
                           </div>
-                          <div className='font-bold text-[#ADB8CC]'>Primary 2</div>
+                          <div className='font-bold text-[#ADB8CC]'>
+                            Primary 2
+                          </div>
                         </div>
 
-                        <span className='text-lg font-bold text-[#F5365C]'>01%</span>
+                        <span className='text-lg font-bold text-[#F5365C]'>
+                          01%
+                        </span>
                       </div>
                     </div>
 
@@ -180,14 +188,22 @@ const Page = () => {
                           <div className='font-bold text-[#4D5E80]'>
                             Okafor Chidinma
                           </div>
-                          <div className='font-bold text-[#ADB8CC]'>Primary 5</div>
+                          <div className='font-bold text-[#ADB8CC]'>
+                            Primary 5
+                          </div>
                         </div>
 
-                        <span className='text-lg font-bold text-[#F5365C]'>09%</span>
+                        <span className='text-lg font-bold text-[#F5365C]'>
+                          09%
+                        </span>
                       </div>
                     </div>
                   </div>
-                )}
+                }
+              />
+              <GenericChart
+                title='Class Performance Rate'
+                content={<ClassPerformanceRate />}
               />
             </div>
           </div>
@@ -210,10 +226,6 @@ const Page = () => {
               <GenericChart
                 title='Click In/Clock Out Logs'
                 content={<ClockInClockOutTable />}
-              />
-              <GenericChart
-                title='Class Performance Rate'
-                content={<ClassPerformanceRate />}
               />
               <GenericChart
                 title='Subject Performance Rate'

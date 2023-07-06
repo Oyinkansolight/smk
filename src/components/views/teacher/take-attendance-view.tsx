@@ -1,6 +1,13 @@
 import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttendanceListItem';
 
 export default function TakeAttendanceView() {
+  const Names = [
+    'Ighosa Ahmed',
+    'David Keyan',
+    'Victoria Alle',
+    'Sharon Orobosa',
+  ];
+
   return (
     <div className='flex flex-col gap-10'>
       <div className='font-bold text-3xl'>Take Subject Attendance</div>
@@ -11,11 +18,9 @@ export default function TakeAttendanceView() {
       </div>
       <div className='flex flex-col gap-4'>
         <div className='font-bold'>List of students</div>
-        {Array(10)
-          .fill(0)
-          .map((v, i) => (
-            <TeacherAttendanceListItem key={i} index={i} name='Ighosa Ahmed' />
-          ))}
+        {Names.map((v, i) => (
+          <TeacherAttendanceListItem key={i} index={i} name={v} />
+        ))}
       </div>
     </div>
   );

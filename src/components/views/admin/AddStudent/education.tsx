@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import FormSelect from '@/components/input/formSelect';
+import FormSelect from '@/components/input/formSelectClass';
+import FormSelectTeacher from '@/components/input/formSelectteachers';
+import request from '@/server';
+import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -16,36 +19,24 @@ import FormSelect from '@/components/input/formSelect';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// import { useGetTeachersList } from '@/server/institution';
-// import { useState } from 'react';
 
 type Iprops = {
   register: any;
   errors: any;
+  allclasses: any;
 };
 
-const classOptions: string[] = [
-  'Primary 1',
-  'Primary 2',
-  'Primary 3',
-  'Primary 4',
-  'Primary 5',
-  'Primary 6',
-];
-
-const Education = ({ register, errors }: Iprops) => {
-  // const teachersList = useGetTeachersList();
-
-  // const [teachers] = useState<any>(teachersList || []);
+const Education = ({ register, errors, allclasses }: Iprops) => {
+  const [teachers, setteachers] = useState();
+  const getData = async () => {
+    const d = await request.get('/v1/government/teachers/get-staffs');
+    setteachers(d.data.data.data.data as any);
+  };
+  useEffect(() => {
+    getData();
+  }, [teachers]);
+  // const { data: staffsList } = useGetTeachersList();
+  // logger(staffsList);
 
   return (
     <section className=''>
@@ -55,9 +46,9 @@ const Education = ({ register, errors }: Iprops) => {
       <div className='my-10 grid grid-cols-2 gap-6'>
         <div>
           <FormSelect
-            label='Class'
+            label='Assign Class'
             name='class'
-            options={classOptions}
+            options={allclasses?.data ?? []}
             register={register}
             validation={{
               required: 'Class is required',
@@ -71,10 +62,10 @@ const Education = ({ register, errors }: Iprops) => {
           />
         </div>
         <div>
-          <FormSelect
-            label='Teacher'
+          <FormSelectTeacher
+            label='Class Teacher'
             name='teacher'
-            options={['Adams Smith', 'Augustine Steven']}
+            options={teachers ?? []}
             register={register}
             validation={{
               required: 'Teacher is required',

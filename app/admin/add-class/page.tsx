@@ -5,10 +5,20 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
+import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -36,35 +46,29 @@ const TransferStudent = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
-  const [publishData] = useState(null);
+  const [publishData, setPublishedData] = useState(null);
 
-  // const handleCreateStaff = useCreateStaff();
+  const handleCreateStaff = useCreateStaff();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    if (
-      stage === 1 &&
-      data.className &&
-      data.classTeacher &&
-      data.classCapacity
-    ) {
+    if (stage === 1 && data.name && data.classTeacher && data.classCapacity) {
+      setPublishedData(data);
       setStage(stage + 1);
     }
 
     if (stage === 2) {
-      setisOpen(true);
+      try {
+        const response = await handleCreateStaff.mutateAsync(data);
 
-      // try {
-      //   const response = await handleCreateStaff.mutateAsync(data);
+        if (response) {
+          toast.success('Login successful');
 
-      //   if (response) {
-      //     toast.success('Login successful');
-
-      //     //2 Second - Open Success Modal
-      //     setisOpen(true);
-      //   }
-      // } catch (error) {
-      //   toast.error((error as Error).message);
-      // }
+          //2 Second - Open Success Modal
+          setisOpen(true);
+        }
+      } catch (error) {
+        toast.error((error as Error).message);
+      }
     }
   };
 

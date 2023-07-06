@@ -6,10 +6,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
-
-
 import '/src/styles/globals.css';
-
 
 export default function RootLayout({
   children,

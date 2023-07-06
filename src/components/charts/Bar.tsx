@@ -2,7 +2,6 @@
 // yarn add @nivo/core @nivo/bar
 import { ResponsiveBar } from '@nivo/bar';
 
-
 const data = [
   {
     day: 'M',

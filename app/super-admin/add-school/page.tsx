@@ -17,7 +17,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);

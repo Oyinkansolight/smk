@@ -2,6 +2,7 @@
 
 import { BasicSearch } from '@/components/search';
 import ROUTES from '@/constant/routes';
+import { useGetClassesList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -56,6 +57,9 @@ const AllClasses = () => {
     );
     setstaffs(result);
   };
+  const { data: allclasses } = useGetClassesList();
+
+  console.log(allclasses);
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -79,13 +83,7 @@ const AllClasses = () => {
           href='/admin/add-class'
           className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
         >
-          Download Report
-        </Link>
-        <Link
-          href='/admin/add-class'
-          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Class
+          Add Class Arm
         </Link>
       </div>
       <div className='flex justify-end'>
@@ -98,19 +96,24 @@ const AllClasses = () => {
       </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
-        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-3'>Number</div>
-          <div className='col-span-3'>Name</div>
-          <div className='col-span-6'>Grade</div>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-white py-4 px-1 text-[#8898AA] font-semibold'>
+          <div className='col-span-3'>Class Arm</div>
+          <div className='col-span-3'>Capacity</div>
+          <div className='col-span-6'>Class Teacher</div>
         </div>
-        {staffs.map((item, idx) => (
+        {(allclasses?.data ?? []).map((item: any, idx: number) => (
           <div
-            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
+            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-white py-4 px-1 text-[#8898AA] font-semibold'
             key={idx}
           >
-            <div className='col-span-3'>#{item.id} </div>
-            <div className='col-span-3'>{item.name} </div>
-            <div className='col-span-6'>{item.grade} </div>
+            <div className='col-span-3'>
+              {' '}
+              <Link href='/admin/class?id=2'>{item.name} </Link>
+            </div>
+            <div className='col-span-3'> 55 </div>
+            <div className='col-span-6'>
+              {item?.staff?.staffName || 'Amaka James '}{' '}
+            </div>
           </div>
         ))}
       </div>

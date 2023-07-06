@@ -21,6 +21,26 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: number;
   institutionType: string | null;
@@ -39,14 +59,16 @@ const TimeTable = ({
   termId,
   schoolType,
   isClassTimeTable = true,
-  schedule,
+  examSchedule,
+  timeTableType = 'DEFAULT',
 }: {
   sessionId: any;
   classId: number;
   termId: number;
-  schedule?: any;
+  examSchedule?: any;
   isClassTimeTable?: boolean;
   schoolType: string | null;
+  timeTableType?: string;
 }) => {
   const { data, isLoading } = useGetAcademicTimetable({
     sessionId,
@@ -56,7 +78,6 @@ const TimeTable = ({
 
   const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
 
-  const [timetableData] = useState(isClassTimeTable ? data : schedule);
   const [isOpenActivity, setisOpenActivity] = useState(false);
   const [startTime, setstartDate] = useState<string | number>('');
   const [endTime, setendDate] = useState<string | number>('');
@@ -91,7 +112,7 @@ const TimeTable = ({
       institutionType: schoolType,
       classId: classId,
       term: termId,
-      timeTableType: 'DEFAULT',
+      timeTableType: timeTableType,
       type,
       periods: [
         {
@@ -137,6 +158,7 @@ const TimeTable = ({
 
       if (response) {
         toast.success('Timetable created successfully');
+        // location.reload()
         setloading(false);
         modalActivityHandler();
 
@@ -224,7 +246,7 @@ const TimeTable = ({
         {!isLoading ? (
           <div>
             <div>
-              {(timetableData?.data.reverse() ?? []).map(
+              {((isClassTimeTable ? data : examSchedule)?.data ?? []).map(
                 (item: any, id: number) => (
                   <div key={id}>
                     {item.type === 'event' ? (
@@ -307,19 +329,17 @@ const TimeTable = ({
               )}
             </div>
 
-            {isClassTimeTable && (
-              <div className='flex w-full mt-2 items-center'>
-                <div className='w-full py-5 flex justify-end px-4  border text-center'>
-                  <button
-                    onClick={modalActivityHandler}
-                    className='w-full text-center'
-                  >
-                    <p>Click to add event or period </p>
-                  </button>
-                </div>
-                <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '></div>
+            <div className='flex w-full mt-2 items-center'>
+              <div className='w-full py-5 flex justify-end px-4  border text-center'>
+                <button
+                  onClick={modalActivityHandler}
+                  className='w-full text-center'
+                >
+                  <p>Click to add event or period </p>
+                </button>
               </div>
-            )}
+              <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '></div>
+            </div>
           </div>
         ) : (
           <div className='text-center text-xs mt-5'>Loading...</div>

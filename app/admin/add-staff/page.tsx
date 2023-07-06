@@ -9,6 +9,7 @@ import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
 import Training from '@/components/views/admin/Addstaff/training';
+import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
@@ -17,58 +18,6 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -102,10 +51,11 @@ const AddStaff = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
+  const [imgSrc, setImgSrc] = useState(null);
 
   const [publishData, setpublishData] = useState(null);
   const [trainingDetails, setTrainingDetails] = useState<
-    { name: string; year: number | null }[]
+    { titleOfTraining: string; year: number | null }[]
   >([]);
   const [assignedClassSubject, setassignedClassSubject] = useState<
     { classId: number | null; subjectId: number | null }[]
@@ -114,7 +64,10 @@ const AddStaff = () => {
   const handleCreateStaff = useCreateStaff();
 
   const addTrainingDetail = () => {
-    setTrainingDetails([...trainingDetails, { name: '', year: null }]);
+    setTrainingDetails([
+      ...trainingDetails,
+      { titleOfTraining: '', year: null },
+    ]);
   };
   const removeTrainingDetail = (id: number) => {
     const updatedItems = trainingDetails.filter((_, i) => i !== id);
@@ -195,57 +148,42 @@ const AddStaff = () => {
       setStage(stage + 1);
     }
     if (stage === 5) {
-      setStage(stage + 1);
-    }
-    if (
-      stage === 6 &&
-      data.idCardImage &&
-      data.firstDocumentType &&
-      data.firstUpload &&
-      data.secondDocumentType &&
-      data.secondUpload
-    ) {
-      data.password = '12345678';
-      data.idCardImage = 'http://placeimg.com/640/480';
-      data.firstUpload = 'http://placeimg.com/640/480';
-      data.secondUpload = 'http://placeimg.com/640/480';
-      data.weight = data.townId;
-      data.height = data.townId;
-      data.townId = +data.townId;
-      data.institutionId = institutionProfile?.id;
-      data.teacherEducation = [
-        {
-          schoolAttended: data.schoolAttended,
-          courseAttended: data.courseAttended,
-          grade: 'MASTER',
-          educationYear: data.year,
+      const staffData = {
+        profileImg: 'http://placeimg.com/640/480',
+        firstName: data.firstName,
+        lastName: data.lastName,
+        staffType: data.staffType,
+        gender: data.gender,
+        dob: data.dob,
+        password: '1234',
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        lga: data.townId,
+        nextOfKin: data.nextOfKin,
+        relationshipToNextOfKin: data.relationshipToNextOfKin,
+        addressOfNextOfKin: data.addressOfNextOfKin,
+        phoneOfNextOfKin: data.phoneOfNextOfKin,
+        institutionId: institutionProfile?.id,
+        trainingDetails: trainingDetails,
+        employmentDetails: {
+          schoolName: data.schoolname,
+          staffId: data.staffId,
+          datePosted: data.dateposted,
+          highestQualification: data.qualification,
+          DateOfFirstAppointment: data.dateappointed,
+          retirementDate: data.retirementDate,
+          salaryGradeLevel: data.salarygrade,
+          jobTitle: data.jobTitle,
         },
-      ];
-      data.employmentHistory = [
-        {
-          employerName: data.employerName,
-          role: data.role,
-          employmentType: 'FULL_TIME',
-          employmentYear: data.employmentyear,
-        },
-      ];
-      delete data.schoolAttended;
-      delete data.courseAttended;
-      delete data.grade;
-      delete data.year;
-      delete data.employerName;
-      delete data.role;
-      delete data.employmentType;
-      delete data.employmentyear;
-      delete data.nok;
-      delete data.rnok;
-      delete data.phoneNumberNOK;
+        subjectAndClasses: assignedClassSubject,
+      };
 
       setpublishData(data);
 
       try {
         setloading(true);
-        const response = await handleCreateStaff.mutateAsync(data);
+        const response = await handleCreateStaff.mutateAsync(staffData);
 
         if (response) {
           toast.success('Staff Added successful');
@@ -257,6 +195,7 @@ const AddStaff = () => {
       } catch (error) {
         setloading(false);
         toast.error((error as Error).message);
+        toast.error(getErrMsg(error));
       }
     }
   };
@@ -329,7 +268,14 @@ const AddStaff = () => {
 
       <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {stage === 1 && <Biodata register={register} errors={errors} />}
+          {stage === 1 && (
+            <Biodata
+              register={register}
+              errors={errors}
+              imgSrc={imgSrc}
+              setImgSrc={setImgSrc}
+            />
+          )}
           {stage === 2 && <Contact register={register} errors={errors} />}
           {stage === 3 && (
             <Training

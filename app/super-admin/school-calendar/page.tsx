@@ -1,9 +1,8 @@
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
-import TaskListView from '@/components/views/super-admin/ManageClass/TaskListView';
-import ClassCalendarView from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarView';
+import ClassTimeTable from '@/components/views/super-admin/ManageClass/TaskListView';
+import ClassCalendarContent from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarContent';
 import ExamTimeTable from '@/components/views/super-admin/SingleSchoolCalendar/ExamTimetable';
 import Info from '@/components/views/super-admin/SingleSchoolCalendar/info';
 import request from '@/server';
@@ -20,6 +19,11 @@ const Index = () => {
   const [sessionname, setsessionname] = useState<string | null>('');
   const [schoolType, setschoolType] = useState<string | null>('');
   const [sessionterms, setsessionterms] = useState([]);
+  const [currentTermId, setCurrentTermId] = useState(0);
+
+  function handleCurrentTerm(id: number) {
+    setCurrentTermId(id);
+  }
   function Fetchterms(currrentsession: string | null) {
     request
       .get(
@@ -31,6 +35,7 @@ const Index = () => {
         const data = v.data.data.data;
         console.log(data);
         setsessionterms(data.data || []);
+        handleCurrentTerm(data.data[0].id);
       });
   }
   const allclasses = useGetClassesList();
@@ -66,6 +71,8 @@ const Index = () => {
         session={session}
         sessionname={sessionname}
         schoolType={schoolType}
+        sessionterms={sessionterms}
+        setCurrentTermId={setCurrentTermId}
       />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <div className='flex w-full items-center justify-between'>
@@ -76,7 +83,7 @@ const Index = () => {
             items={[
               {
                 icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Academic Calendar',
+                label: 'Academic Roadmap',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,
@@ -90,20 +97,17 @@ const Index = () => {
           />
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-          </div>
         </div>
 
-        {tabIdx === 0 && <ClassCalendarView />}
+        {tabIdx === 0 && <ClassCalendarContent currentTermId={currentTermId} />}
         {tabIdx === 1 && (
-          <TaskListView
+          <ClassTimeTable
             schoolType={schoolType}
             academicyear={schoolType}
             classList={classData?.data || []}
             sessionterms={sessionterms || []}
             sessionId={session}
+            currentTermId={currentTermId}
           />
         )}
         {tabIdx === 2 && (
@@ -113,6 +117,7 @@ const Index = () => {
             classList={classData?.data || []}
             sessionterms={sessionterms || []}
             sessionId={session}
+            currentTermId={currentTermId}
           />
         )}
       </div>

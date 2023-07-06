@@ -34,11 +34,13 @@ import Time from '~/svg/time.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: number;
   institutionType: string;
   classId: number;
-  term: number;
+  term: any;
   type: string | number;
   timeTableType: string | number;
   periods?: {
@@ -52,7 +54,8 @@ interface dataType {
 }
 interface timetableArg {
   classId: number;
-  termId: number;
+  termId: any;
+  type: string;
 }
 interface propType {
   schoolType: string | null;
@@ -60,13 +63,20 @@ interface propType {
   sessionId: string | null;
   classList: any;
   sessionterms?: any;
+  currentTermId?: number;
 }
 const AcademicCalendar = ({
   schoolType,
   classList,
   sessionterms,
   sessionId,
+  currentTermId,
 }: propType) => {
+  const [showTimeTable, setShowTimeTable] = useState(false);
+  const [classId, setclassId] = useState<number>(0);
+  const [termId, settermId] = useState<any>(null);
+  const [ExamOrTest, setExamOrTest] = useState('');
+  const [testTable, setTestTable] = useState('');
   // const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
   // const { data, error, isLoading } = useGetAcademicTimetable(1, 1, 1);
 
@@ -92,15 +102,30 @@ const AcademicCalendar = ({
   };
   // const router = useRouter();
 
-  const [showTimeTable, setShowTimeTable] = useState(false);
-  const [classId, setclassId] = useState<number>(0);
-  const [termId, settermId] = useState<any>(null);
+  const fetchTestTimeTable = () => {
+    request
+      .get(
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=EXAM`
+      )
+      .then((res) => {
+        setschedule(res.data.data.data);
+      });
+    request
+      .get(
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`
+      )
+      .then((res) => {
+        setTestTable(res.data.data.data);
+      });
+  };
 
-  function HandleTimeTable({ classId, termId }: timetableArg) {
+  function HandleTimeTable({ classId, termId, type }: timetableArg) {
     setShowTimeTable(true);
 
     setclassId(classId);
     settermId(termId);
+    setExamOrTest(type);
+    fetchTestTimeTable();
   }
   const [schedule, setschedule] = useState<dataType[]>([]);
   const [isOpenActivity, setisOpenActivity] = useState(false);
@@ -125,7 +150,7 @@ const AcademicCalendar = ({
   const [activity3, setactivity3] = useState(false);
   const [activity4, setactivity4] = useState(false);
   const [activity5, setactivity5] = useState(false);
-  const [typeDropdown, settypeDropdown] = useState(false);
+  // const [typeDropdown, settypeDropdown] = useState(false);
 
   const modalActivityHandler = (type?: string) => {
     setisOpenActivity(!isOpenActivity);
@@ -136,22 +161,12 @@ const AcademicCalendar = ({
 
   const handleCreateTestTimetable = useCreateTestTimeTable();
 
-  const fetchTestTimeTable = () => {
-    request
-      .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=8&classId=2&term=13&type=EXAM`
-      )
-      .then((res) => {
-        setschedule(res.data.data.data);
-      });
-  };
-
   const SubmitHandler = async () => {
     const data: dataType = {
       sessionId: 8,
       institutionType: 'ECCDE',
       classId: 2,
-      term: 13,
+      term: currentTermId,
       type,
       periods: [
         {
@@ -198,7 +213,7 @@ const AcademicCalendar = ({
       if (response) {
         toast.success('Timetable updated successfully');
         setloading(false);
-        settypeDropdown(false);
+        // settypeDropdown(false);
         fetchTestTimeTable();
         modalActivityHandler();
 
@@ -211,6 +226,7 @@ const AcademicCalendar = ({
 
   useEffect(() => {
     fetchTestTimeTable();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -252,7 +268,7 @@ const AcademicCalendar = ({
           activityname5={activityname5}
         />
       )}
-      <div className='flex justify-end relative'>
+      {/* <div className='flex justify-end relative'>
         <button
           onClick={() => {
             settypeDropdown(!typeDropdown);
@@ -277,7 +293,7 @@ const AcademicCalendar = ({
             </button>
           </div>
         )}
-      </div>
+      </div> */}
       <div className='bg-[#F4F9FF] py-6 mt-5 flex items-center justify-between font-medium rounded-md px-4'>
         <h1 className='text-sm text-[#5A5A5A]'>
           {schoolType} - Exam/Test Timetable
@@ -366,20 +382,30 @@ const AcademicCalendar = ({
                       key={i}
                     >
                       <div className='flex flex-wrap mt-4 gap-[27px]'>
-                        {sessionterms.map((value: any, id: number) => (
-                          <CurriculumCard
-                            key={id}
-                            name={`${value.name} Timetable`}
-                            count={100}
-                            variant={generateVariant(id)}
-                            onClick={() => {
-                              HandleTimeTable({
-                                classId: v.id,
-                                termId: value.id,
-                              });
-                            }}
-                          />
-                        ))}
+                        <CurriculumCard
+                          name='Exam Timetable'
+                          count={100}
+                          variant={generateVariant(0)}
+                          onClick={() => {
+                            HandleTimeTable({
+                              classId: v.id,
+                              termId: currentTermId,
+                              type: 'EXAM',
+                            });
+                          }}
+                        />
+                        <CurriculumCard
+                          name='Test Timetable'
+                          count={100}
+                          variant={generateVariant(1)}
+                          onClick={() => {
+                            HandleTimeTable({
+                              classId: v.id,
+                              termId: currentTermId,
+                              type: 'TEST',
+                            });
+                          }}
+                        />
                       </div>
                     </TaskAccordion>
                   );
@@ -407,6 +433,7 @@ const AcademicCalendar = ({
                               HandleTimeTable({
                                 classId: v.id,
                                 termId: id + 1,
+                                type: 'TEST',
                               });
                             }}
                           />
@@ -438,6 +465,7 @@ const AcademicCalendar = ({
                               HandleTimeTable({
                                 classId: v.id,
                                 termId: id + 1,
+                                type: 'TEST',
                               });
                             }}
                           />
@@ -450,7 +478,7 @@ const AcademicCalendar = ({
             )}
           </div>
         ) : (
-          <div>
+          <div className='mt-2'>
             <button
               onClick={() => {
                 setShowTimeTable(false);
@@ -472,7 +500,8 @@ const AcademicCalendar = ({
               classId={classId}
               termId={termId}
               isClassTimeTable={false}
-              schedule={schedule}
+              examSchedule={ExamOrTest === 'EXAM' ? schedule : testTable}
+              timeTableType={ExamOrTest}
             />
           </div>
         )}

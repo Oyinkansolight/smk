@@ -1,10 +1,9 @@
 'use client';
 
-import request from '@/server';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { RotatingLines } from 'react-loader-spinner';
 import Alarm from '~/svg/alarm.svg';
@@ -26,7 +25,7 @@ const Page = () => {
 
   useEffect(() => {
     const sessionInfo = JSON.parse(
-      localStorage.getItem('currentSession') || '{}'
+      sessionStorage.getItem('currentSession') || '{}'
     );
   }, []);
 

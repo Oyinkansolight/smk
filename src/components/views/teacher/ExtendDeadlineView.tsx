@@ -1,3 +1,4 @@
+import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 
 export default function ExtendDeadlineView() {
@@ -12,6 +13,14 @@ export default function ExtendDeadlineView() {
         <div className='flex-1'>
           <Input label='New Due Date' placeholder='New Due date ' type='date' />
         </div>
+      </div>
+      <div>
+        <Button
+          className='w-full mt-4 flex items-center justify-center'
+          variant='secondary'
+        >
+          Extend
+        </Button>
       </div>
     </div>
   );

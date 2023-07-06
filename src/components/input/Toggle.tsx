@@ -13,7 +13,7 @@ const Input = ({ activity, setactivity, label, reverse }: propType) => {
   return (
     <div
       className={clsxm(
-        'flex justify-end items-center gap-x-3 font-light text-base',
+        'flex justify-end items-center gap-x-3 mt-1 font-light text-base',
         reverse && 'flex-row-reverse'
       )}
     >

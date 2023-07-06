@@ -8,6 +8,12 @@ import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import ReactSelect from 'react-select';
 
 export default function Page() {
+  const Names = [
+    'Ighosa Ahmed',
+    'David Keyan',
+    'Victoria Alle',
+    'Sharon Orobosa',
+  ];
   return (
     <div className='h-full layout'>
       <div className='text-3xl text-[#D4D5D7]'>
@@ -29,6 +35,16 @@ export default function Page() {
             Extend Deadline
           </Button>
         </ExtendDeadlineModal>
+
+        <div className='flex justify-end items-center gap-4'>
+          <div>Penalty</div>
+          <ReactSelect
+            className='w-[5rem]'
+            options={Array(11)
+              .fill(0)
+              .map((v, i) => ({ label: i - 5 }))}
+          />
+        </div>
       </div>
       <div className='h-4' />
       <div className='grid p-4 text-[#746D69] font-bold text-base grid-cols-4'>
@@ -37,13 +53,11 @@ export default function Page() {
         <div></div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array(5)
-          .fill(0)
-          .map((v, i) => (
-            <AssignmentListItem title='Ighosa Ahmed' key={i} id={i + 1} />
-          ))}
+        {Names.map((name, i) => (
+          <AssignmentListItem title={name} key={i} id={i + 1} />
+        ))}
       </div>
-      <PaginatedCounter pageCount={10} currentPage={3} />
+      <PaginatedCounter pageCount={10} currentPage={0} />
     </div>
   );
 }
@@ -61,15 +75,6 @@ function AssignmentListItem({ id, title }: { id: number; title: string }) {
         <div>{title}</div>
       </div>
       <div>June 25, 2023</div>
-      <div className='flex justify-end items-center gap-4'>
-        <div>Priority</div>
-        <ReactSelect
-          className='w-[5rem]'
-          options={Array(11)
-            .fill(0)
-            .map((v, i) => ({ label: i - 5 }))}
-        />
-      </div>
     </div>
   );
 }

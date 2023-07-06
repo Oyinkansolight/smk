@@ -3,7 +3,6 @@ import * as React from 'react';
 import { IconType } from 'react-icons';
 import { ImSpinner2 } from 'react-icons/im';
 
-
 export const ButtonVariant = [
   'primary',
   'secondary',

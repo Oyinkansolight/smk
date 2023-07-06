@@ -2,6 +2,17 @@
 'use client';
 
 import logger from '@/lib/logger';
+import { useGetStaffs } from '@/server/government/staff';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -29,6 +40,11 @@ import logger from '@/lib/logger';
 
 const Publish = ({ publishData }: any) => {
   logger(publishData);
+  const { data: staffs } = useGetStaffs();
+
+  const getTeacher = (staffs ?? []).find(
+    (v: any) => v.id === Number(publishData.classTeacher)
+  );
 
   return (
     <section className=''>
@@ -41,19 +57,26 @@ const Publish = ({ publishData }: any) => {
         <div className='grid grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Class Name</h2>
-            <p>1 a</p>
+            <p>{publishData.name} </p>
+          </div>
+          <div className='col-span-4'>
+            <h2 className='text-xs mb-2 font-medium'>Class Arm</h2>
+            <p>{getTeacher.classArm}</p>
           </div>
         </div>
 
         <div className='grid grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Capacity</h2>
-            <p>50</p>
+            <p>{publishData.classCapacity}</p>
           </div>
 
           <div className='col-span-4'>
             <h2 className='text-xs mb-2 font-medium'>Class Teacher</h2>
-            <p>Victor Asamoah</p>
+            <p>
+              {getTeacher?.user[0].firstName || ''}{' '}
+              {getTeacher?.user[0].lastName || ''}
+            </p>
           </div>
         </div>
       </div>

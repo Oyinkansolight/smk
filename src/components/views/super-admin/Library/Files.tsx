@@ -34,6 +34,24 @@ import User from '~/svg/user1.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const UploadDocument = ({
   data,
   isLoading,
@@ -213,7 +231,7 @@ const UploadDocument = ({
 
         <div className='table-add-student mt-3 overflow-x-auto pb-4 bg-white'>
           <div className=' min-w-[800px] flex justify-end text-base space-x-4 font-semibold border-b p-3'>
-            <div className='border shadow rounded'>
+            {/* <div className='border shadow rounded'>
               <select
                 name='file_type'
                 id='file_type'
@@ -246,7 +264,7 @@ const UploadDocument = ({
                 id=''
                 className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
               />
-            </div>
+            </div> */}
           </div>
 
           <div className='min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md  border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
@@ -345,7 +363,7 @@ const UploadDocument = ({
                         pluginRenderers={DocViewerRenderers}
                         documents={[
                           {
-                            uri: '/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf',
+                            uri: '/pdfs/Assignment samples.pdf',
                             fileType: 'pdf',
                           },
                           {

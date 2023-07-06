@@ -1,5 +1,6 @@
 import { CountCard } from '@/components/cards';
 import AttendanceHistory from '@/components/views/admin/student/AttendanceHistory';
+import { useState } from 'react';
 import Calendar from 'react-widgets/Calendar';
 import 'react-widgets/styles.css';
 
@@ -33,6 +34,7 @@ import '../../../../styles/calendar.css';
 //   },
 // ];
 export default function SingleStudentAttendanceTracker() {
+  const [value, setValue] = useState(new Date());
   return (
     <div className='bg-white'>
       <div className='text-2xl font-bold text-[#6B7A99] py-4 px-2 border-b-2'>
@@ -54,7 +56,7 @@ export default function SingleStudentAttendanceTracker() {
 
         <div className='flex items-start justify-between gap-10 py-8'>
           <div className='max-w-xs'>
-            <Calendar />
+            <Calendar value={value} onChange={(value) => setValue(value)} />
           </div>
           <AttendanceHistory />
         </div>

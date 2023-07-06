@@ -21,6 +21,26 @@ import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -48,7 +68,7 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormInput
             label='Phone Number'
-            type='number'
+            type='tel'
             placeholder='Details here'
             name='phoneNumber'
             register={register}
@@ -125,14 +145,14 @@ const Contact = ({ register, errors }: Iprops) => {
             label='Name of Next Of Kin'
             type='text'
             placeholder='Details here'
-            name='nok'
+            name='nextOfKin'
             register={register}
             validation={{
-              required: 'NOK is required',
+              required: 'next Of kin is required',
             }}
             helper={
-              errors?.nok && {
-                message: errors?.nok?.message,
+              errors?.nextOfKin && {
+                message: errors?.nextOfKin?.message,
                 type: 'danger',
               }
             }
@@ -141,7 +161,7 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormSelect
             label='Relationship to Next Of Kin'
-            name='rnok'
+            name='relationshipToNextOfKin'
             options={[
               'Husband',
               'Wife',
@@ -157,8 +177,8 @@ const Contact = ({ register, errors }: Iprops) => {
               required: 'Relationship NOK is required',
             }}
             helper={
-              errors?.rnok && {
-                message: errors?.rnok?.message,
+              errors?.relationshipToNextOfKin && {
+                message: errors?.relationshipToNextOfKin?.message,
                 type: 'danger',
               }
             }
@@ -170,14 +190,14 @@ const Contact = ({ register, errors }: Iprops) => {
           <FormInput
             label='Address of Next Of Kin'
             placeholder='Details here'
-            name='address'
+            name='addressOfNextOfKin'
             register={register}
             validation={{
-              required: 'Address is required',
+              required: 'address of next of kin is required',
             }}
             helper={
-              errors?.address && {
-                message: errors?.address?.message,
+              errors?.addressOfNextOfKin && {
+                message: errors?.addressOfNextOfKin?.message,
                 type: 'danger',
               }
             }
@@ -186,16 +206,16 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormInput
             label='Phone Number of Next Of kin'
-            type='number'
+            type='tel'
             placeholder='Details here'
-            name='phoneNumberNOK'
+            name='phoneOfNextOfKin'
             register={register}
             validation={{
-              required: 'Phone Number is required',
+              required: 'Phonenumber  of next of kin is required',
             }}
             helper={
-              errors?.phoneNumberNOK && {
-                message: errors?.phoneNumberNOK?.message,
+              errors?.phoneOfNextOfKin && {
+                message: errors?.phoneOfNextOfKin?.message,
                 type: 'danger',
               }
             }

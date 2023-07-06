@@ -32,7 +32,7 @@ export default function NewStudentDashboard() {
           <div className='h4 text-[#746D69]'>Your Actions</div>
           {!isLoading ? (
             <div className='flex flex-wrap gap-4 mt-2'>
-              {(data ?? []).map((v: unknown, i: number) => (
+              {(data ?? [1, 2]).map((v: unknown, i: number) => (
                 <StudentActionCard
                   key={i}
                   ongoing={i === 0}

@@ -1,6 +1,5 @@
 import { ResponsiveBar } from '@nivo/bar';
 
-
 const d = [
   {
     gender: 'Male',

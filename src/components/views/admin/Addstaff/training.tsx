@@ -28,13 +28,35 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
   addTrainingDetail: () => void;
   removeTrainingDetail: (id: number) => void;
-  handleTrainingChange: (name: string, value: any, id: number) => void;
-  trainingDetails: { name: string; year: number | null }[];
+  handleTrainingChange: (
+    titleOfTraining: string,
+    value: any,
+    id: number
+  ) => void;
+  trainingDetails: { titleOfTraining: string; year: number | null }[];
 };
 function generateYears() {
   const currentYear = new Date().getFullYear();
@@ -69,7 +91,7 @@ const Education = ({
                 className='w-full border-none outline-none'
                 placeholder='Enter details here'
                 onChange={(e) => {
-                  handleTrainingChange('name', e.target.value, i);
+                  handleTrainingChange('titleOfTraining', e.target.value, i);
                 }}
               />
             </div>

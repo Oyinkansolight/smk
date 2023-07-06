@@ -58,40 +58,15 @@ import Webcam from 'react-webcam';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
 type Iprops = {
   register: any;
   errors: any;
+  imgSrc: any;
+  setImgSrc: (v: any) => void;
 };
 
 const GenderOptions: string[] = ['MALE', 'FEMALE', 'Other'];
-const Biodata = ({ register, errors }: Iprops) => {
-  const [imgSrc, setImgSrc] = React.useState(null);
+const Biodata = ({ register, errors, imgSrc, setImgSrc }: Iprops) => {
   const [isCapture, setIsCapture] = useState(false);
   const WebcamCapture = () => {
     const webcamRef: any = React.useRef(null);
@@ -163,7 +138,16 @@ const Biodata = ({ register, errors }: Iprops) => {
         <FormSelect
           label='Staff type'
           name='staffType'
-          options={['TEACHING', 'NON-TEACHING']}
+          options={[
+            'BUS_DRIVER',
+            'COACH',
+            'TEACHER',
+            'PRINCIPAL',
+            'HOD',
+            'HEADMASTER',
+            'HEADMISTRESS',
+            'DEFAULT',
+          ]}
           register={register}
           validation={{
             required: 'Staff type is required',

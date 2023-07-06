@@ -6,7 +6,7 @@ import React from 'react';
 
 interface CountCardProps {
   url?: string;
-  count?: number;
+  count?: number | string;
   text?: string;
   title: string;
   variant: 'primary' | 'secondary' | 'tertiary' | 'basic';

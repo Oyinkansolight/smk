@@ -2,16 +2,18 @@
 
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
+import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
-import SchoolCalendarView from '@/components/views/single-school/SchoolCalendarView';
 import StudentDashboardView from '@/components/views/single-school/SchoolDashboardView';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
-import { useGetStudentById } from '@/server/institution';
+import {
+  useGetStudentById,
+  useGetStudentSubjectList,
+} from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import router from 'next/router';
 import { useState } from 'react';
@@ -23,6 +25,8 @@ const SingleStudentDashboard = () => {
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();
+  const studentId = p?.get('id');
+
   const {
     data: student,
     // error: studentError,
@@ -30,6 +34,9 @@ const SingleStudentDashboard = () => {
   } = useGetStudentById({
     id: p?.get('id'),
   });
+
+  const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
+
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
@@ -70,10 +77,6 @@ const SingleStudentDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && <StudentDashboardView />}
@@ -106,10 +109,6 @@ const SingleStudentDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -163,23 +162,11 @@ const SingleStudentDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
             <>
-              <div className='flex justify-end'>
-                <Button
-                  variant='ghost'
-                  className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
-                >
-                  Download Report
-                </Button>
-              </div>
-              <SubjectList />
+              <SubjectList studentSubjectsList={studentSubjectsList} />
             </>
           )}
         </div>
@@ -200,10 +187,6 @@ const SingleStudentDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (

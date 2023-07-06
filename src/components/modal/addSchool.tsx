@@ -32,8 +32,8 @@ function AddSingleSchool({ onClickHandler }: propType) {
               Send a link
             </Link>
             <p className='text-gray-400'>
-              You can send a link directly to the institution so they can register
-              their details.
+              You can send a link directly to the institution so they can
+              register their details.
             </p>
           </div>
           <div className='flex flex-col space-y-5 rounded bg-[#F4F9FF] p-4'>

@@ -5,20 +5,20 @@ import AddEvent from '@/components/modal/AddEvent';
 import EditEvent from '@/components/modal/EditEvent';
 import { useCreateAcademicEvent, useGetAcademicEvent } from '@/server/Schedule';
 import moment from 'moment';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
-export default function StudentDashboardView() {
+export default function StudentDashboardView({ currentTermId }: any) {
+  const [schoolType, setschoolType] = useState<string | null>('');
+
   const queryString = useSearchParams();
   const handdleCreateAcademicCalendar = useCreateAcademicEvent();
   const { data, isLoading } = useGetAcademicEvent();
   const [loading, setloading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const [term, setterm] = useState<string | null>('');
   const [session, setsession] = useState<string | null>('');
   const [title, settitle] = useState('');
   const [institutionType] = useState('Primary');
@@ -26,24 +26,23 @@ export default function StudentDashboardView() {
   const [endDate, setendDate] = useState('');
   // const [events, setEvents] = useState([]);
 
-  const [termname, settermname] = useState('');
   function handleModal() {
     setIsOpen(!isOpen);
   }
   function handleModalEdit() {
     setIsOpenEdit(!isOpenEdit);
   }
-  function back() {
-    if (typeof window !== 'undefined') {
-      window.history.back();
-    }
-  }
+  // function back() {
+  //   if (typeof window !== 'undefined') {
+  //     window.history.back();
+  //   }
+  // }
 
   const SubmitHandler = async () => {
     const data = {
       sessionId: session,
       institutionType,
-      term,
+      term: currentTermId,
       title,
       startDate,
       endDate,
@@ -71,18 +70,12 @@ export default function StudentDashboardView() {
 
     // Extract the values of session and term parameters
     const currrentsession = searchParams.get('session');
-    const currrentterm = searchParams.get('term');
-    setterm(currrentterm);
-    setsession(currrentsession);
+    // const currrentterm = searchParams.get('term');
+    const st = queryString && queryString.get('schooltype');
 
-    // let termname;
-    if (currrentterm === '1') {
-      settermname('First Term');
-    } else if (currrentterm === '2') {
-      settermname('Second Term');
-    } else {
-      settermname('Third Term');
-    }
+    setschoolType(st);
+    // setterm(currrentterm);
+    setsession(currrentsession);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -95,8 +88,8 @@ export default function StudentDashboardView() {
 
   return (
     <>
-      <div className='-mt-[10px] flex flex-row items-center justify-between'>
-        <button
+      <div className='-mt-[10px] flex flex-row items-center justify-end'>
+        {/* <button
           onClick={back}
           className='bg-[#EDEFF2] font-normal text-[10px] px-2 py-1 flex space-x-1 items-center'
         >
@@ -108,12 +101,8 @@ export default function StudentDashboardView() {
             className='h-4 w-4'
           />
           <span>Back</span>
-        </button>
+        </button> */}
         <div className='flex flex-row gap-x-7'>
-          <select className='border-0 bg-transparent text-[14px] text-[#1C1C1C]'>
-            <option value='Manage Widgets'>Filter</option>
-          </select>
-          <button className='text-primary'>Preview Calendar</button>
           <Button
             onClick={handleModal}
             variant='outline'
@@ -139,7 +128,7 @@ export default function StudentDashboardView() {
         <div className='bg-[#ECF4FF] rounded-lg pr-10 pl-5 py-8'>
           <div className='flex justify-between items-center text-[10px]'>
             <div className='font-semibold text-[#5A5A5A] text-xs'>
-              Primary School - {termname} Calendar
+              {schoolType} - Academic Roadmap
             </div>
 
             {/* <p className='font-bold'>

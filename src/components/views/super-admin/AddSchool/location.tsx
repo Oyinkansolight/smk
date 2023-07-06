@@ -5,7 +5,6 @@ import FormSelect from '@/components/input/formSelect';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
-import { useRef, useState } from 'react';
 
 interface LocationBioProps {
   location: string | GeoCodeResponse;
@@ -17,16 +16,14 @@ interface LocationBioProps {
 }
 
 const Biodata = ({
-  location,
+  // location,
   town,
   lga,
   setLga,
   setLocation,
   setTown,
 }: LocationBioProps) => {
-  const inputRef = useRef(null);
   const { data } = useGetLocalGovernments();
-  const [country, setCountry] = useState('ng');
 
   //create local government array in edo state nigeria
 

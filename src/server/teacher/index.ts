@@ -13,13 +13,13 @@ interface ClockOutParams {
 }
 
 interface AttendanceParams {
-  lessonId: number;
   institutionId: number;
   classId: number;
   studentId: number;
   sessionId: number;
-  term: number;
+  termId: number;
   status: string;
+  periodId: number;
 }
 
 export function useCreateReport() {

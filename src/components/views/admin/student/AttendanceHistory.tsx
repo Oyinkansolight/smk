@@ -1,6 +1,5 @@
 import {
   BsExclamationCircleFill,
-  BsFillCalendarWeekFill,
   BsFillCheckCircleFill,
   BsXCircleFill,
 } from 'react-icons/bs';
@@ -33,12 +32,6 @@ export default function AttendanceHistory() {
       <div className='flex justify-between items-center py-4 border-b-2'>
         <div className='text-xl font-bold text-[#6B7A99] '>
           Attendance History
-        </div>
-        <div className='border-2 rounded-sm gap-3 py-1 px-2 flex items-center border-[#9E7200] bg-[#FFFCF5]'>
-          <div>
-            <BsFillCalendarWeekFill className='h-5 w-5 text-[#DCA007]' />
-          </div>
-          <div>18/10/2023</div>
         </div>
       </div>
       <table className='w-full'>

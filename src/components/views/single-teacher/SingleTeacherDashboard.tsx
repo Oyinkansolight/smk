@@ -2,12 +2,12 @@
 
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
+import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
-import SchoolCalendarView from '@/components/views/single-school/SchoolCalendarView';
 import StudentDashboardView from '@/components/views/single-school/SchoolDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
+import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
@@ -80,10 +80,6 @@ const SingleTeacherDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && <StudentDashboardView />}
@@ -97,8 +93,9 @@ const SingleTeacherDashboard = () => {
               ]}
             />
           )}
-          {tabIdx === 2 && <SchoolCalendarView />}
-          {tabIdx === 3 && <TaskListView />}
+          {tabIdx === 2 && <ExamTimetable />}
+          {tabIdx === 3 && <SchoolCalendarView />}
+          {tabIdx === 4 && <TaskListView />}
         </div>
       )}
       {gridIdx === 1 && (
@@ -117,10 +114,6 @@ const SingleTeacherDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -174,10 +167,6 @@ const SingleTeacherDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (
@@ -190,7 +179,7 @@ const SingleTeacherDashboard = () => {
                   Download Report
                 </Button>
               </div>
-              <SubjectList subjectCount={1} />
+              <SubjectList studentSubjectsList={[]} />
             </>
           )}
         </div>
@@ -211,10 +200,6 @@ const SingleTeacherDashboard = () => {
             />
 
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-            <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-              <SearchInput placeholder='Search Tasks' className='pt-[14px]' />
-            </div>
           </div>
 
           {tabIdx === 0 && (

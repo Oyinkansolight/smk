@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { RiBookReadLine } from 'react-icons/ri';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -79,12 +80,12 @@ export default function Page() {
             />
           </div>
           <Document
-            file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+            file='/pdfs/Assignment samples.pdf'
             onLoadSuccess={(v) => {
               setNumberOfPages(v.numPages);
             }}
           >
-            <DocPage pageNumber={currentPage} />
+            <DocPage pageNumber={currentPage} renderTextLayer={false} />
           </Document>
         </div>
       )}

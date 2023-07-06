@@ -31,7 +31,7 @@ const columns: TableColumn<(typeof data)[number]>[] = [
     selector: (event) => event.name,
     grow: 3,
     cell: (event) => (
-      <div className='text-lg flex items-center gap-2 font-semibold whitespace-nowrap overflow-hidden'>
+      <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap overflow-hidden'>
         <div className='h-6 w-6 rounded-full bg-gray-200' />
         <div>{event.name}</div>
         <div className='bg-[#FFF3EF] text-xs font-normal text-[#FF6633] py-1 px-2 rounded-full'>

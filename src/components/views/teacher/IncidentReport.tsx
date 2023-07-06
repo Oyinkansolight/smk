@@ -39,7 +39,7 @@ const IncidentReport = () => {
 
   const onSubmit = async (data: any) => {
     toast.info('Uploading file...');
-    const institution = localStorage.getItem('institution') ?? '';
+    const institution = sessionStorage.getItem('institution') ?? '';
     const institutionId = JSON.parse(institution).id;
 
     if (fileName && fileData?.arrayBuffer && institutionId) {

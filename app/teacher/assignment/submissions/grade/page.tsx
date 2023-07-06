@@ -5,6 +5,7 @@ import PageCounter from '@/components/counter/PageCounter';
 import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
 import ReactSelect from 'react-select';
 import Toggle from 'react-toggle';
 
@@ -36,12 +37,12 @@ export default function Page() {
             />
           </div>
           <Document
-            file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+            file='/pdfs/Assignment samples.pdf'
             onLoadSuccess={(v) => {
               setNumberOfPages(v.numPages);
             }}
           >
-            <DocPage pageNumber={currentPage} />
+            <DocPage pageNumber={currentPage} renderTextLayer={false} />
           </Document>
         </div>
         <div className=' rounded-lg bg-white p-2'>

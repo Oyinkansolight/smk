@@ -5,13 +5,11 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
-import { getErrMsg } from '@/server';
 import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
-import { toast } from 'react-toastify';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
@@ -33,11 +31,18 @@ export default function Page() {
     refetch();
   }, [idx, refetch]);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(getErrMsg(error));
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(getErrMsg(error));
+  //   }
+  // }, [error]);
+
+  const Names = [
+    'Ighosa Ahmed',
+    'David Keyan',
+    'Victoria Alle',
+    'Sharon Orobosa',
+  ];
 
   return (
     <div className='h-full layout'>
@@ -92,13 +97,11 @@ export default function Page() {
       </div>
       {isLoading ? (
         <div className='text-center'>Loading...</div>
-      ) : gradeList && gradeList.length > 0 ? (
+      ) : !gradeList ? (
         <div className='flex flex-col gap-4'>
-          {Array(10)
-            .fill(0)
-            .map((v, i) => (
-              <StudentGradeListItem key={i} id={i + 1} />
-            ))}
+          {Names.map((name, i) => (
+            <StudentGradeListItem key={i} id={i + 1} name={name} />
+          ))}
         </div>
       ) : (
         <EmptyView label='No Grade List' />
@@ -107,14 +110,14 @@ export default function Page() {
   );
 }
 
-function StudentGradeListItem({ id }: { id: number }) {
+function StudentGradeListItem({ id, name }: { id: number; name: string }) {
   return (
     <StudentGradeModal>
       <div className='grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
           <div className='rounded-full h-10 w-10 bg-gray-300' />
-          <div>Ighosa Ahmed</div>
+          <div>{name}</div>
         </div>
         <div className='text-black'>0</div>
         <div className='text-black'>0</div>

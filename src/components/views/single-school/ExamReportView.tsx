@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BackButton from '@/components/buttons/BackButton';
-import Button from '@/components/buttons/Button';
 import ScoreStatus from '@/components/profile/ScoreStatus';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BsArrowRightCircle } from 'react-icons/bs';
-import ReactSelect from 'react-select';
 
 const columns: TableColumn<any>[] = [
   { name: 'Subject', cell: (row) => row.name },
@@ -43,27 +41,10 @@ export default function ExamReportView({
   };
   return show ? (
     <div className='flex flex-col gap-[22px]'>
-      <div className='flex gap-5 items-center justify-end'>
-        <div className='font-bold'>View Graph</div>
-        <Button
-          variant='outline'
-          className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-        >
-          Download Report
-        </Button>
-      </div>
       <div className='bg-white p-6 rounded border flex flex-col gap-5'>
         <div className='flex items-start gap-3'>
           <BackButton onClick={() => setShow(false)} />
           <div className='flex-1' />
-          <ReactSelect
-            value={{ value: 'class', label: 'All Class Arm' }}
-            options={[{ value: 'class', label: 'All Class Arm' }]}
-          />
-          <ReactSelect
-            value={{ value: 'student', label: 'First Term' }}
-            options={[{ value: 'student', label: 'First Term' }]}
-          />
         </div>
         <div className='rounded bg-[#F8FDFF] p-5 flex items-center justify-between'>
           <div className='text-[#5A5A5A]'>
@@ -71,7 +52,7 @@ export default function ExamReportView({
           </div>
           <div className='flex flex-col'>
             <div className='text-xl font-bold'>72%</div>
-            <div>Average Performance</div>
+            <div>Student Average</div>
           </div>
         </div>
         <Table

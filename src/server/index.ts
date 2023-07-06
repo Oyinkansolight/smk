@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getFromLocalStorage } from '@/lib/helper';
+import { getFromSessionStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
 export const TOKEN_KEY = 'TOKEN_KEY';
@@ -21,7 +21,7 @@ export function getErrMsg(error: any) {
 request.interceptors.request.use(function (
   config: AxiosRequestConfig<any>
 ): InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>> {
-  const token = getFromLocalStorage(TOKEN_KEY);
+  const token = getFromSessionStorage(TOKEN_KEY);
   config.headers = {
     Authorization: token ? `Bearer ${token}` : '',
   };

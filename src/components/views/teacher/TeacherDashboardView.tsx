@@ -5,57 +5,9 @@ import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
 
-// const StreamChart = dynamic(() => import('../../charts/Stream'), {
-//   ssr: false,
-// });
-
-// const timeLineData = [
-//   {
-//     image: '/images/teacher_step_1.png',
-//     title: 'MR. Gbadamosi’s Class',
-//     details: '1:32 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_2.png',
-//     title: 'Mrs. Erhveba’s Class',
-//     details: '1:32 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_3.png',
-//     title: 'Submitted a bug',
-//     details: 'Yesterday 12:39 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_4.png',
-//     title: 'Modified A data in Page X',
-//     details: 'Aug 11',
-//   },
-//   {
-//     image: '/images/teacher_step_2.png',
-//     title: 'Mrs. Erhveba’s Class',
-//     details: '3:30 PM',
-//   },
-// ];
-
-// const quickActions = [
-//   'New Report',
-//   'Add Item',
-//   'Mange Schedule',
-//   'Mark Assignment',
-// ];
-
-// interface TeacherDashboardViewProps {
-//   overviewData: DashboardOverview | undefined;
-//   handleTabChange: (tab: number) => void;
-// }
-
-// Removed props:
-// {
-//   overviewData,
-//   handleTabChange,
-// }: TeacherDashboardViewProps
-
 export default function TeacherDashboardView() {
+  // const { data: sessionCalendarData } = useGetSessionCalendar(1);
+
   return (
     <div className='flex flex-col layout'>
       <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 py-4 px-6  bg-white rounded-lg my-4 w-full'>
@@ -116,10 +68,10 @@ export default function TeacherDashboardView() {
       </div>
 
       <div className='mt-[23px]'>
-        <div>
+        {/* <div>
           Removed for AcademicCalendar comp for now, new changes in teacher.
-        </div>
-        {/* <AcademicCalendar /> */}
+        </div> */}
+        {/* <AcademicCalendar sessionCalendarData={sessionCalendarData} /> */}
       </div>
     </div>
   );

@@ -36,8 +36,8 @@ export default function AllCurriculumView({
   const id = params?.get('id') as string;
 
   function getOccurrences(timetableData: any) {
-    const occurrences = [];
-    const periodSettings = [];
+    const occurrences: any[] = [];
+    const periodSettings: any[] = [];
 
     for (const entry of timetableData) {
       const occurrence = {
