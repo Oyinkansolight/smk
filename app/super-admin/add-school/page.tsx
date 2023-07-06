@@ -212,7 +212,7 @@ const AddSchool = () => {
                         googleAddressState[0].geometry?.location?.lat?.toString(),
                       instituteLong:
                         googleAddressState[0].geometry?.location?.lng?.toString(),
-                      instituteAddress: location as string,
+                      instituteAddress: googleAddressState[0].formatted_address,
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,
                       instituteLogo: p,

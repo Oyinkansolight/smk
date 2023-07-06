@@ -3,6 +3,7 @@
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
+import LocationInput from '@/components/input/Location';
 import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
@@ -16,6 +17,7 @@ import {
 } from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
+import { GeoCodeResponse } from '@/types/geocode';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
@@ -25,7 +27,37 @@ import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
+
+
 import '/src/styles/globals.css';
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -88,7 +120,7 @@ export default function Page() {
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
-  const { register, getValues, control, watch } = useForm({
+  const { register, getValues, setValue, control, watch } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
@@ -173,7 +205,11 @@ export default function Page() {
                     d[0].geometry?.location?.lat?.toString() ?? '0',
                   email: user?.instituteEmail ?? 'e@mail.com',
                   instituteLogo: p,
-                  instituteAddress: getValues('instituteAddress'),
+                  instituteAddress:
+                    typeof getValues('instituteAddress') === 'string'
+                      ? getValues('instituteAddress')
+                      : (getValues('instituteAddress') as GeoCodeResponse)
+                          .formatted_address,
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
@@ -291,13 +327,19 @@ export default function Page() {
           <div className='p'>Kindly enter the details of the school below</div>
 
           <div className='mt-4 flex flex-col gap-10'>
-            <BaseInput
+            {/* <BaseInput
               label='Enter Address'
               name='instituteAddress'
               placeholder='Details here'
               register={register}
               value={user?.instituteAddress}
-            />
+            /> */}
+
+            <div className=' w-full gap-6'>
+              <LocationInput
+                onChanged={(v) => setValue('instituteAddress', v)}
+              />
+            </div>
 
             <div className='flex flex-col'>
               <div>Select LGA</div>
@@ -487,6 +529,13 @@ export default function Page() {
   };
 
   const StepSeven = () => {
+    const address = () => {
+      const v = getValues('instituteAddress');
+      if (typeof v === 'string') {
+        return v;
+      }
+      return (v as GeoCodeResponse | undefined)?.formatted_address;
+    };
     return (
       <StepperLayout>
         <section className=''>
@@ -506,7 +555,7 @@ export default function Page() {
 
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>Address</h2>
-                <p>{getValues('instituteAddress')}</p>
+                <p>{address()}</p>
               </div>
             </div>
 
@@ -519,14 +568,14 @@ export default function Page() {
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>Local Govt</h2>
                 {/* <p>{getValues("localGovernmentId") ?? "Etsako"}</p> */}
-                <p>Etsako</p>
+                <p>{getValues('localGovernmentId').name}</p>
               </div>
             </div>
             <div className='grid grid-cols-12 gap-4  items-center mb-10'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>Town</h2>
                 {/* <p>{getValues("townId") ?? "Agbor"}</p> */}
-                <p>Agbor</p>
+                <p>{getValues('townId').name}</p>
               </div>
             </div>
 
