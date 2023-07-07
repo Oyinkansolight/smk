@@ -4,7 +4,6 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import DragDropGeneric from '@/components/input/DragDropGeneric';
-import LocationInput from '@/components/input/Location';
 import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
@@ -12,10 +11,14 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
-import { useCompleteInstitutionOnboarding, useOnboardVerification } from '@/server/institution';
+import {
+  useCompleteInstitutionOnboarding,
+  useOnboardVerification,
+} from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
@@ -33,99 +36,22 @@ import '/src/styles/globals.css';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const LocationInput = dynamic(
+  () => import('../../src/components/input/Location'),
+  {
+    loading: () => <p>Loading...</p>,
+  }
+);
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -174,7 +100,14 @@ export default function Page() {
 
   const handleStepChange = (step: number) => setStep(step);
   const handleBack = () => step > 0 && setStep(step - 1);
-  const { register, getValues, setValue, control, watch } = useForm({
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    setValue,
+    control,
+    watch,
+  } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
@@ -230,19 +163,52 @@ export default function Page() {
           onClick={async () => {
             const password = getValues('password');
             const con = getValues('confirm_password');
-            if (step === 3) {
+            if (step === 5) {
               if (password !== con) {
                 toast.error('Password mismatch');
                 return;
               }
             }
+            if (step === 1) {
+              if (!type) {
+                toast.error('Please select institution type');
+                return;
+              }
+            }
+
+            if (step === 2) {
+              const instituteAddress = getValues('instituteAddress');
+              const localGovernmentId = getValues('localGovernmentId');
+              const townId = getValues('townId');
+              let hasError = false;
+              if (!instituteAddress || instituteAddress.length < 1) {
+                toast.error('Please enter institute address');
+                hasError = true;
+              }
+              if (!localGovernmentId || localGovernmentId.length < 1) {
+                toast.error('Please select local government');
+                hasError = true;
+              }
+              if (!townId || townId.length < 1) {
+                toast.error('Please select town');
+                hasError = true;
+              }
+              if (hasError) return;
+            }
+
             if (step < steps.length - 1) {
               handleStepChange(step + 1);
             } else {
               try {
-                const d = await geo.mutateAsync({
-                  address: getValues('instituteAddress'),
-                });
+                let d: GeoCodeResponse[] = []
+                if (typeof getValues('instituteAddress') === 'string') {
+                  d = await geo.mutateAsync({
+                    address: getValues('instituteAddress'),
+                  });
+                }
+                else{
+                  d = [getValues('instituteAddress')]
+                }
                 if (d.length === 0) {
                   toast.error('Invalid address. Re enter your address');
                 }
@@ -320,47 +286,45 @@ export default function Page() {
           <div className='h2'>General Details</div>
           <div className='p'>Kindly enter the details of the school below</div>
 
-          <div className='mt-4 flex flex-col gap-10'>
-            <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
-              <BaseInput
-                label='Institution Name'
-                name='name'
-                placeholder='Name'
-                register={register}
-                value={user?.instituteName}
-              />
+          <div className='mt-4 grid grid-cols-1 lg:grid-cols-2 gap-10'>
+            <BaseInput
+              label='Institution Name'
+              name='name'
+              placeholder='Name'
+              register={register}
+              value={user?.instituteName}
+              validation={{ required: true }}
+              helper={errors['name']}
+            />
 
-              <Dragdrop
-                className='max-h-10 items-center flex'
-                setImageName={setImageName}
-                imageName={imageName}
-                label='Upload School Logo*'
-                setImageData={setImageData}
-              />
-            </div>
+            <Dragdrop
+              className='max-h-10 items-center flex'
+              setImageName={setImageName}
+              imageName={imageName}
+              label='Upload School Logo*'
+              setImageData={setImageData}
+            />
 
-            <div className='grid grid-cols-1 gap-x-[30px] gap-y-4 md:w-fit lg:grid-cols-2'>
-              <BaseInput
-                label='Institution Official Email'
-                name='email'
-                placeholder='Details here'
-                register={register}
-                value={user?.instituteEmail}
-              />
-              <div>
-                <div
-                  className={clsxm(
-                    'block text-sm font-semibold mb-2 text-gray-400 text-left'
-                  )}
-                >
-                  Select Institution Type
-                </div>
-                <Select
-                  value={type}
-                  onChange={(v) => setType(v)}
-                  options={institutions}
-                />
+            <BaseInput
+              label='Institution Official Email'
+              name='email'
+              placeholder='Details here'
+              register={register}
+              value={user?.instituteEmail}
+            />
+            <div>
+              <div
+                className={clsxm(
+                  'block text-sm font-semibold mb-2 text-gray-400 text-left'
+                )}
+              >
+                Select Institution Type
               </div>
+              <Select
+                value={type}
+                onChange={(v) => setType(v)}
+                options={institutions}
+              />
             </div>
           </div>
         </div>
@@ -394,6 +358,10 @@ export default function Page() {
 
             <div className=' w-full gap-6'>
               <LocationInput
+                value={
+                  (getValues('instituteAddress') as GeoCodeResponse)
+                    ?.formatted_address
+                }
                 onChanged={(v) => setValue('instituteAddress', v)}
               />
             </div>
