@@ -1,3 +1,4 @@
+import FirebaseLogo from '@/components/avatars/FirebaseLogo';
 import CircleButton from '@/components/buttons/CircleButton';
 import Pill from '@/components/buttons/Pill';
 import GridTabBar from '@/components/layout/GridTabBar';
@@ -26,7 +27,15 @@ export default function SchoolProfileCard({
         <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
         <CircleButton icon={<SlOptions className='h-4 w-4' />} />
       </div>
-      <BigAvatar src='/svg/student_badge.svg' />
+      {school?.instituteLogo ? (
+        <FirebaseLogo
+          path={school?.instituteLogo}
+          sizePixels={100}
+          fromFirebase={school.instituteLogo.includes('profile_picture')}
+        />
+      ) : (
+        <BigAvatar src='/svg/student_badge.svg' />
+      )}
       <div className='h-10' />
       <div className='mb-1 text-xl font-bold'>{school?.instituteName}</div>
       <Pill text='Primary School' variant='primary' />

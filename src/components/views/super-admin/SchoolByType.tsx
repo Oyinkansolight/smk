@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import FirebaseLogo from '@/components/avatars/FirebaseLogo';
 import Table from '@/components/tables/TableComponent';
 import { useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
@@ -8,6 +9,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -51,8 +58,12 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
     cell: (item) => {
       return (
         <div className='flex items-center gap-4 text-[#525F7F]'>
-          {item.instituteLogo &&
-          !item.instituteLogo?.includes('profile_picture') ? (
+          {!item.instituteLogo ? (
+            <AvrilImage
+              alt='avril'
+              className='h-8 w-8 min-w-[32px] min-h-[32px] rounded-full'
+            />
+          ) : !item.instituteLogo?.includes('profile_picture') ? (
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
@@ -66,10 +77,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
               height={10}
             />
           ) : (
-            <AvrilImage
-              alt='avril'
-              className='h-8 w-8 min-w-[32px] min-h-[32px] rounded-full'
-            />
+            <FirebaseLogo path={item.instituteLogo} sizePixels={32} />
           )}
           <Link href={`/super-admin/school?id=${item.id}`}>
             <h2 className='text-sm font-medium'>{item.instituteName}</h2>

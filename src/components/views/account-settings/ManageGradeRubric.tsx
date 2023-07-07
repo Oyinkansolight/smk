@@ -1,15 +1,40 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import Index from '@/components/stepper';
-import { useState } from 'react';
+import { getErrMsg } from '@/server';
+import {
+  CreateRubricParams,
+  useCreateRubric,
+} from '@/server/institution/grade';
+import { useCallback, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
+import { toast } from 'react-toastify';
+
 
 
 export default function ManageGradeRubric() {
-  const [a, setA] = useState([0, 0, 0, 0]);
-  // const [rubrics, setRubrics] = useState([]);
+  const [rubrics, setRubrics] = useState<CreateRubricParams['rubrics']>([
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+  ]);
   const [currentStage, setCurrentStage] = useState(0);
+  const { mutateAsync: createRubric, isLoading } = useCreateRubric();
+  const handleCreateRubric = useCallback(async () => {
+    try {
+      const response = await createRubric({
+        institutionType: 'PRIMARY',
+        rubrics: rubrics,
+        sessionId: '1',
+        termId: '1',
+      });
+      toast.success(response.data.data.message ?? 'Success');
+    } catch (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [rubrics, createRubric]);
   return (
     <div>
       <div className='text-center'>
@@ -33,7 +58,7 @@ export default function ManageGradeRubric() {
       </div>
       {currentStage === 0 && (
         <div>
-          {a.map((v: unknown, i: number) => (
+          {rubrics.map((v: unknown, i: number) => (
             <div key={i}>
               <div className='flex items-end gap-3'>
                 <Input
@@ -41,6 +66,12 @@ export default function ManageGradeRubric() {
                   placeholder=''
                   containerClassName='w-full'
                   inputClassName='max-h-[10px]'
+                  formValue={rubrics[i].remark}
+                  setFormValue={(v) => {
+                    const n = [...rubrics];
+                    n[i].remark = v as string;
+                    setRubrics(n);
+                  }}
                 />
                 <Input
                   label='Enter percentage score'
@@ -49,7 +80,7 @@ export default function ManageGradeRubric() {
                   inputClassName='max-h-[10px]'
                 />
                 <div
-                  onClick={() => setA(Array(a.length - 1).fill(0))}
+                  onClick={() => setRubrics(Array(rubrics.length - 1).fill(0))}
                   className='bg-[#FFF8F8] cursor-pointer text-red-500 p-4 rounded-full'
                 >
                   <BsTrashFill />
@@ -59,7 +90,14 @@ export default function ManageGradeRubric() {
             </div>
           ))}
           <div className='flex justify-start'>
-            <Button onClick={() => setA([...a, 0])}>
+            <Button
+              onClick={() =>
+                setRubrics([
+                  ...rubrics,
+                  { label: '', maxRange: 0, minRange: 0, remark: '' },
+                ])
+              }
+            >
               Add New Rubric Label
             </Button>
           </div>
@@ -67,26 +105,70 @@ export default function ManageGradeRubric() {
       )}
       {currentStage === 1 && (
         <div>
-          {a.map((v: unknown, i: number) => (
+          {rubrics.map((v: unknown, i: number) => (
             <div key={i}>
               <div className='grid grid-cols-4 gap-3'>
                 <div className='flex-1 col-span-2'>
                   <div className='font-bold text-xs my-1'>
                     Select Rubric Label
                   </div>
-                  <ReactSelect options={[]} placeholder='Select Rubric Label' />
+                  <ReactSelect
+                    value={{ value: rubrics[i].label, label: rubrics[i].label }}
+                    options={[
+                      { label: 'A', value: 'A' },
+                      { label: 'B', value: 'B' },
+                      { label: 'C', value: 'C' },
+                      { label: 'D', value: 'D' },
+                      { label: 'E', value: 'E' },
+                      { label: 'F', value: 'F' },
+                    ]}
+                    onChange={(value) => {
+                      const n = [...rubrics];
+                      n[i].label = value?.value ?? '';
+                      setRubrics(n);
+                    }}
+                    placeholder='Select Rubric Label'
+                  />
                 </div>
                 <div className='flex-1'>
                   <div className='font-bold text-xs my-1'>
                     Minimum Percentage
                   </div>
-                  <ReactSelect options={[]} placeholder='' />
+                  <ReactSelect
+                    value={{
+                      value: rubrics[i].minRange,
+                      label: rubrics[i].minRange,
+                    }}
+                    options={Array(10)
+                      .fill(0)
+                      .map((v, i) => ({
+                        label: i * 10,
+                        value: i * 10,
+                      }))}
+                    onChange={(value) => {
+                      const n = [...rubrics];
+                      n[i].minRange = value?.value ?? 0;
+                      setRubrics(n);
+                    }}
+                  />
                 </div>
                 <div className='flex-1'>
                   <div className='font-bold text-xs my-1'>
                     Maximum Percentage
                   </div>
-                  <ReactSelect options={[]} placeholder='' />
+                  <ReactSelect
+                    options={Array(10)
+                      .fill(0)
+                      .map((v, i) => ({
+                        label: (i + 1) * 10,
+                        value: (i + 1) * 10,
+                      }))}
+                    onChange={(value) => {
+                      const n = [...rubrics];
+                      n[i].maxRange = value?.value ?? 0;
+                      setRubrics(n);
+                    }}
+                  />
                 </div>
               </div>
               <div className='h-px my-4 bg-gray-100' />
@@ -105,8 +187,11 @@ export default function ManageGradeRubric() {
         </Button>
         <Button
           onClick={() =>
-            currentStage === 0 ? setCurrentStage(currentStage + 1) : null
+            currentStage === 0
+              ? setCurrentStage(currentStage + 1)
+              : handleCreateRubric()
           }
+          disabled={isLoading}
         >
           {currentStage === 1 ? 'Submit' : 'Next'}
         </Button>

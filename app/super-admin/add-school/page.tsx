@@ -1,5 +1,6 @@
 'use client';
 
+import DragDropGeneric from '@/components/input/DragDropGeneric';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Account from '@/components/views/super-admin/AddSchool/account';
@@ -25,6 +26,8 @@ const AddSchool = () => {
   const [imageName, setImageName] = useState<string>('');
   const [imageData, setImageData] = useState<File | undefined>();
   const [password, setPassword] = useState('');
+  const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
+  const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
   // const [schoolName1, setSchoolName1] = useState<string | number>('');
   // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
   // const [imageName1, setImageName1] = useState<string>('');
@@ -77,8 +80,8 @@ const AddSchool = () => {
         setStage(3);
       }
     }
-    if (stage === 3) {
-      setStage(4);
+    if (stage > 2) {
+      setStage(stage + 1);
     }
   };
   const prevHandler = (): void => {
@@ -97,10 +100,18 @@ const AddSchool = () => {
     },
     {
       stage: 3,
-      stageName: 'Account Details',
+      stageName: 'Staff Details',
     },
     {
       stage: 4,
+      stageName: 'Student Details',
+    },
+    {
+      stage: 5,
+      stageName: 'Account Details',
+    },
+    {
+      stage: 6,
       stageName: 'Publish',
     },
   ];
@@ -154,6 +165,28 @@ const AddSchool = () => {
           />
         )}
         {stage === 3 && (
+          <div>
+            <h2 className='text-2xl font-bold'>Staff Details</h2>
+            <div>Kindly enter the details of the school below:</div>
+            <DragDropGeneric
+              label='Upload Staff List CSV'
+              value={staffDetailsFile}
+              onChange={setStaffDetailsFile}
+            />
+          </div>
+        )}
+        {stage === 4 && (
+          <div>
+            <h2 className='text-2xl font-bold'>Student Details</h2>
+            <div>Kindly enter the details of the school below:</div>
+            <DragDropGeneric
+              label='Upload Student List CSV'
+              value={studentDetailsFile}
+              onChange={setStudentDetailsFile}
+            />
+          </div>
+        )}
+        {stage === 5 && (
           <Account
             schoolEmail={schoolEmail}
             imageName={imageName}
@@ -166,7 +199,7 @@ const AddSchool = () => {
             setPassword={setPassword}
           />
         )}
-        {stage === 4 && (
+        {stage === 6 && (
           <Publish
             lga={lga}
             town={town}
@@ -188,7 +221,7 @@ const AddSchool = () => {
             >
               Prev
             </button>
-            {stage <= 3 ? (
+            {stage <= 5 ? (
               <button
                 onClick={nextHandler}
                 className='w-full rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
@@ -201,11 +234,10 @@ const AddSchool = () => {
                   try {
                     toast.info('Creating Institution...');
                     const array = await imageData?.arrayBuffer();
-                    const p = `profile_pictures/${imageName}`;
+                    let p = `profile_pictures/${imageName}`;
                     if (array) {
-                      await uploadDocument(p, array);
+                      p = await uploadDocument(p, array);
                     }
-
                     const response = createInstitution.mutateAsync({
                       instituteLat:
                         googleAddressState[0].geometry?.location?.lat?.toString(),

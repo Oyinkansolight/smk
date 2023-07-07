@@ -7,8 +7,8 @@ export function BigAvatar({ src }: { src: string }) {
       <div className='absolute inset-2 overflow-hidden rounded-full'>
         <NextImage
           src={src}
-          width={99}
-          height={99}
+          width={100}
+          height={100}
           alt='student-profile-picture'
         />
       </div>

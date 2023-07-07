@@ -1,13 +1,14 @@
 import request from '@/server';
 import { useMutation } from 'react-query';
 
-interface CreateRubricParams {
+
+export interface CreateRubricParams {
   institutionType: string;
   rubrics: {
     label: string;
     remark: string;
-    minRange: string;
-    maxRange: string;
+    minRange: number;
+    maxRange: number;
   }[];
   sessionId: string;
   termId: string;

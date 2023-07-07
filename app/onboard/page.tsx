@@ -3,6 +3,7 @@
 
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
+import DragDropGeneric from '@/components/input/DragDropGeneric';
 import LocationInput from '@/components/input/Location';
 import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
@@ -11,10 +12,7 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
-import {
-  useCompleteInstitutionOnboarding,
-  useOnboardVerification,
-} from '@/server/institution';
+import { useCompleteInstitutionOnboarding, useOnboardVerification } from '@/server/institution';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
@@ -35,9 +33,41 @@ import '/src/styles/globals.css';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -110,6 +140,12 @@ const stepData = [
     title: 'Location Details',
   },
   {
+    title: 'Staff Details',
+  },
+  {
+    title: 'Student Details',
+  },
+  {
     title: 'Account Details',
   },
   {
@@ -155,6 +191,9 @@ export default function Page() {
   const create = useCompleteInstitutionOnboarding();
   const verification = useOnboardVerification();
   const geo = useGeocoding();
+
+  const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
+  const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
 
   useEffect(() => {
     setIsLoading(true);
@@ -208,9 +247,9 @@ export default function Page() {
                   toast.error('Invalid address. Re enter your address');
                 }
                 const buffer = await imageData?.arrayBuffer();
-                const p = `profile_picture/${imageName}`;
+                let p = `profile_picture/${imageName}`;
                 if (buffer) {
-                  uploadDocument(p, buffer);
+                  p = await uploadDocument(p, buffer);
                 }
                 await create.mutateAsync({
                   // ...getValues(),
@@ -586,14 +625,14 @@ export default function Page() {
               <div className='col-span-4'>
                 <h2 className='text-xs mb-2 font-medium'>Local Govt</h2>
                 {/* <p>{getValues("localGovernmentId") ?? "Etsako"}</p> */}
-                <p>{getValues('localGovernmentId').name}</p>
+                <p>{getValues('localGovernmentId')?.name}</p>
               </div>
             </div>
             <div className='grid grid-cols-12 gap-4  items-center mb-10'>
               <div className='col-span-8'>
                 <h2 className='text-xs mb-2 font-medium'>Town</h2>
                 {/* <p>{getValues("townId") ?? "Agbor"}</p> */}
-                <p>{getValues('townId').name}</p>
+                <p>{getValues('townId')?.name}</p>
               </div>
             </div>
 
@@ -616,6 +655,24 @@ export default function Page() {
     <StepOne key={0} />,
     <StepTwo key={1} />,
     <StepThree key={2} />,
+    <StepperLayout key={3}>
+      <h2 className='text-2xl font-bold'>Staff Details</h2>
+      <div>Kindly enter the details of the school below:</div>
+      <DragDropGeneric
+        label='Upload Staff List CSV'
+        value={staffDetailsFile}
+        onChange={setStaffDetailsFile}
+      />
+    </StepperLayout>,
+    <StepperLayout key={4}>
+      <h2 className='text-2xl font-bold'>Student Details</h2>
+      <div>Kindly enter the details of the school below:</div>
+      <DragDropGeneric
+        label='Upload Student List CSV'
+        value={studentDetailsFile}
+        onChange={setStudentDetailsFile}
+      />
+    </StepperLayout>,
     <StepSix key={5} />,
     <StepSeven key={6} />,
   ];
