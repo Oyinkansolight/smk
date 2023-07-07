@@ -116,7 +116,7 @@ const Page = () => {
             </div>
             <div className=''>
               <Document
-                file='/pdfs/Assignment samples.pdf'
+                file='/pdfs/lesson note.pdf'
                 // file={url}
                 onLoadSuccess={(v) => {
                   setNumberOfPages(v.numPages);

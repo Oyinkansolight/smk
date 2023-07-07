@@ -143,7 +143,7 @@ const Page = () => {
               </div>
               <div className='flex justify-center mt-4 '>
                 <Document
-                  file='/pdfs/Assignment samples.pdf'
+                  file='/pdfs/lesson note.pdf'
                   onLoadSuccess={(v) => {
                     setNumberOfPages(v.numPages);
                   }}
