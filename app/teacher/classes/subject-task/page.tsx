@@ -70,7 +70,7 @@ export default function Page() {
             {' '}
             <Document
               className='mx-auto'
-              file='/pdfs/EDO LANGUAGE SS2 3RD TERM WEEK 3.pdf'
+              file='/pdfs/CHEMISTRY SS2 3RD TERM WEEK 3.pdf'
               onLoadSuccess={(v) => {
                 setNumberOfPages(v.numPages);
               }}
