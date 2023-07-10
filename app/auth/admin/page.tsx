@@ -35,7 +35,6 @@ export default function AdminAuth() {
           router.push(ROUTES.SUPER_ADMIN);
         } else {
           setLoading(false);
-          toast.info('Invalid user role');
           toast.info('Redirecting...');
           setTimeout(() => {
             router.push(ROUTES.USER_AUTH);
@@ -152,7 +151,7 @@ export default function AdminAuth() {
                         <div className='w-auto p-2'>
                           <Link
                             className='text-sm font-medium hover:text-primary'
-                            href='/auth/admin/'
+                            href='/auth/forgotpassword/'
                           >
                             Forgot Password?
                           </Link>

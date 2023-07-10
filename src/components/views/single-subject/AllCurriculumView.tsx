@@ -6,6 +6,7 @@ import AddWeekModal from '@/components/modals/add-week-modal';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import request from '@/server';
+import { getErrMsg } from '@/server';
 import { useCreateCurriculum } from '@/server/Schedule';
 import { useGetAcademicSessionsTermsWeek } from '@/server/institution';
 import Image from 'next/image';
@@ -88,7 +89,7 @@ export default function AllCurriculumView({
         location.reload();
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error));
     }
   };
 

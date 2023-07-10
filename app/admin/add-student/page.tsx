@@ -113,7 +113,7 @@ export default function AddStudent() {
       } catch (error) {
         setloading(false);
         toast.error(getErrMsg(error));
-        toast.error((error as Error).message);
+        toast.error(getErrMsg(error));
       }
     }
   };

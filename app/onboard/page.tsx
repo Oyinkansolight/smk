@@ -10,6 +10,7 @@ import { VerticalStepper } from '@/components/stepper';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
 import { useGeocoding } from '@/server/geocoding';
 import {
   useCompleteInstitutionOnboarding,
@@ -23,26 +24,21 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
-
-
 import '/src/styles/globals.css';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -52,6 +48,10 @@ const LocationInput = dynamic(
     loading: () => <p>Loading...</p>,
   }
 );
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -95,6 +95,7 @@ export default function Page() {
   const [imageData, setImageData] = useState<File>();
   // const [permissions, setPermissions] = useState(new Set<number>());
   const [isComplete, setIsComplete] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   logger(imageData);
 
@@ -200,14 +201,13 @@ export default function Page() {
               handleStepChange(step + 1);
             } else {
               try {
-                let d: GeoCodeResponse[] = []
+                let d: GeoCodeResponse[] = [];
                 if (typeof getValues('instituteAddress') === 'string') {
                   d = await geo.mutateAsync({
                     address: getValues('instituteAddress'),
                   });
-                }
-                else{
-                  d = [getValues('instituteAddress')]
+                } else {
+                  d = [getValues('instituteAddress')];
                 }
                 if (d.length === 0) {
                   toast.error('Invalid address. Re enter your address');
@@ -217,6 +217,7 @@ export default function Page() {
                 if (buffer) {
                   p = await uploadDocument(p, buffer);
                 }
+                setLoading(true);
                 await create.mutateAsync({
                   // ...getValues(),
                   town: (getValues('townId') as Town | undefined)?.id,
@@ -237,19 +238,24 @@ export default function Page() {
                   // permissions: Array.from(permissions.values()).join(','),
                 });
                 setIsComplete(true);
+                setLoading(false);
               } catch (error) {
                 logger(error);
-                // toast.error('Error');
-                // router
+                setLoading(false);
+
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                toast.error(error as any);
+                toast.error(getErrMsg(error));
               }
             }
           }}
           variant='secondary'
           className='!h-10 w-[120px] justify-center'
         >
-          {step === steps.length - 1 ? 'Complete' : 'Next'}
+          {loading ? (
+            <ImSpinner2 className='animate-spin' />
+          ) : (
+            <div> {step === steps.length - 1 ? 'Complete' : 'Next'}</div>
+          )}
         </Button>
       </div>
     </div>
@@ -678,7 +684,7 @@ export default function Page() {
               showHome={false}
               title='Account created successfully'
               description='You can now access your account.'
-              link='/auth/admin'
+              link='/auth/user'
               textLink='Go to Access Portal'
             />
           )}

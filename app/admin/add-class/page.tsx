@@ -5,12 +5,17 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
+import { getErrMsg } from '@/server';
 import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -67,7 +72,7 @@ const TransferStudent = () => {
           setisOpen(true);
         }
       } catch (error) {
-        toast.error((error as Error).message);
+        toast.error(getErrMsg(error));
       }
     }
   };

@@ -11,8 +11,6 @@ import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 
-
-
 export default function ManageGradeRubric() {
   const [rubrics, setRubrics] = useState<CreateRubricParams['rubrics']>([
     { label: '', maxRange: 0, minRange: 0, remark: '' },

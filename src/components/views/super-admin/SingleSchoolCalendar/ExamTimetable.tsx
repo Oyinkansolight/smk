@@ -6,11 +6,16 @@ import { CurriculumCard } from '@/components/cards';
 import AddActivityName from '@/components/modal/TestSchedule';
 import TimeTable from '@/components/views/super-admin/SingleSchoolCalendar/Timetable';
 import request from '@/server';
+import { getErrMsg } from '@/server';
 import { useCreateTestTimeTable } from '@/server/Schedule';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Time from '~/svg/time.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -220,7 +225,7 @@ const AcademicCalendar = ({
         // location.reload();
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error));
     }
   };
 

@@ -12,21 +12,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
-// import Back from '@/'
-// import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   { name: 'Student ID', selector: (row) => row.id ?? '' },
@@ -122,6 +108,7 @@ const AllStudent = () => {
             }}
             setfile={setfile}
             file={files}
+            link='/pdfs/StudentOnboarding.xlsx'
             bulkStudentUpload={bulkStudentUpload}
           />
         )}
@@ -195,9 +182,9 @@ const AllStudent = () => {
             data={
               students?.map(
                 (v, i) =>
-                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
-                    idx: number;
-                  })
+                ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
+                  idx: number;
+                })
               ) ?? []
             }
             columns={studentListColumns}

@@ -26,6 +26,10 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
@@ -73,13 +77,14 @@ const AllStaff = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [files, setfile] = useState<any>(null);
+  const [files, setfile] = useState<File | undefined>(undefined);
 
   const handleCreateBulkStudent = useCreateBulkStaff();
   const bulkStudentUpload = async () => {
     const formData = new FormData();
-    formData.append('file', files);
-
+    if (files) {
+      formData.append('file', files);
+    }
     try {
       setLoading(true);
       const response = await handleCreateBulkStudent.mutateAsync(formData);
@@ -135,6 +140,7 @@ const AllStaff = () => {
             setfile={setfile}
             file={files}
             bulkStudentUpload={bulkStudentUpload}
+            link='/pdfs/StaffOnboarding.xlsx'
           />
         )}
         <div className='mb-6 flex justify-end items-end relative'>

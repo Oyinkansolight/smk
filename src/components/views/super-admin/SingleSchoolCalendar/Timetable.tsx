@@ -2,12 +2,17 @@
 'use client';
 
 import AddActivityName from '@/components/modal/TestSchedule';
+import { getErrMsg } from '@/server';
 import {
   useCreateAcademicTimeTable,
   useGetAcademicTimetable,
 } from '@/server/Schedule';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -166,7 +171,7 @@ const TimeTable = ({
       }
     } catch (error) {
       setloading(false);
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error));
     }
   };
 

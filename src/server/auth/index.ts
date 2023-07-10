@@ -8,6 +8,10 @@ export interface SignUpParams {
   username?: string;
   fullName: string;
 }
+export interface ResetParams {
+  password: string;
+  token: string | null;
+}
 
 export type SignInParams = Omit<SignUpParams, 'fullName'>;
 
@@ -22,11 +26,7 @@ export function useSignUp() {
 export function useSignIn() {
   const mutation = useMutation({
     mutationKey: 'sign_in',
-    // mutationFn: (params: SignInParams) =>
-    //   request.post('/v1/government/authentication/login', {
-    //     email: 'John.Mathew@xyz.com',
-    //     password: 'John@Mathew',
-    //   }),
+
     mutationFn: (params: SignInParams) =>
       request.post('/v1/authentication/login', params),
     onSuccess: (response) => {
@@ -35,15 +35,33 @@ export function useSignIn() {
   });
   return mutation;
 }
-
-export function useResetPassword() {
+export function useForgotPassword() {
   const mutation = useMutation({
-    mutationKey: 'reset_password',
+    mutationKey: 'forgotpassword',
+
     mutationFn: (params: SignInParams) =>
-      request.post('/auth/reset-password', params),
+      request.post('/v1/authentication/forgot-password', params),
   });
   return mutation;
 }
+export function useResetPassword() {
+  const mutation = useMutation({
+    mutationKey: 'resetassword',
+
+    mutationFn: (params: ResetParams) =>
+      request.post('/v1/authentication/reset-password', params),
+  });
+  return mutation;
+}
+
+// export function useResetPassword() {
+//   const mutation = useMutation({
+//     mutationKey: 'reset_password',
+//     mutationFn: (params: SignInParams) =>
+//       request.post('/auth/reset-password', params),
+//   });
+//   return mutation;
+// }
 
 export interface UserProfile {
   id?: number;

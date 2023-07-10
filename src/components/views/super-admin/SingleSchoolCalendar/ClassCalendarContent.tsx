@@ -3,6 +3,7 @@ import NextImage from '@/components/NextImage';
 import Button from '@/components/buttons/Button';
 import AddEvent from '@/components/modal/AddEvent';
 import EditEvent from '@/components/modal/EditEvent';
+import { getErrMsg } from '@/server';
 import { useCreateAcademicEvent, useGetAcademicEvent } from '@/server/Schedule';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
@@ -60,7 +61,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
       }
     } catch (error) {
       setloading(false);
-      toast.error((error as Error).message);
+      toast.error(getErrMsg(error));
     }
   };
 

@@ -2,14 +2,17 @@ import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 import { DragEventHandler, useState } from 'react';
 import { TbTrash } from 'react-icons/tb';
+import { toast } from 'react-toastify';
 
 export default function DragDropGeneric({
   onChange,
   value,
   label,
+  link,
 }: {
   value?: File;
   label?: string;
+  link?: string;
   onChange: (file?: File) => void;
 }) {
   const [isFileOver, setIsFileOver] = useState(false);
@@ -30,7 +33,16 @@ export default function DragDropGeneric({
           e.preventDefault();
           const { files } = e.dataTransfer;
           if (files && files.length > 0) {
-            onChange(files[0]);
+            if (
+              files[0].name.toLowerCase().includes('.xlsx') ||
+              files[0].name.toLowerCase().includes('.xls') ||
+              files[0].name.toLowerCase().includes('.csv')
+            ) {
+              onChange(files[0]);
+            } else {
+              toast.error('Please upload an excel or csv format file');
+              return;
+            }
           }
           setIsFileOver(false);
         }}
@@ -73,16 +85,31 @@ export default function DragDropGeneric({
                 id='file-upload-input_drag_drop_generic'
                 onChange={(e) => {
                   if (e.currentTarget?.files && e.currentTarget?.files[0]) {
-                    onChange(e.currentTarget?.files[0]);
+                    if (
+                      e.currentTarget?.files[0].name
+                        .toLowerCase()
+                        .includes('.xlsx') ||
+                      e.currentTarget?.files[0].name
+                        .toLowerCase()
+                        .includes('.xls') ||
+                      e.currentTarget?.files[0].name
+                        .toLowerCase()
+                        .includes('.csv')
+                    ) {
+                      onChange(e.currentTarget?.files[0]);
+                    } else {
+                      toast.error('Please upload an excel or csv format file');
+                      return;
+                    }
                   }
                 }}
               />
             </div>
             <div>Max 6MB</div>
-            <div>Recommended size 1024x576</div>
-            <div className='text-[#008146] cursor-pointer'>
+            {/* <div>Recommended size 1024x576</div> */}
+            <a href={link} download className='text-[#008146] cursor-pointer'>
               Download Sample FIle
-            </div>
+            </a>
           </>
         )}
       </div>
