@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(3);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
@@ -172,6 +172,7 @@ const AddSchool = () => {
               label='Upload Staff List CSV'
               value={staffDetailsFile}
               onChange={setStaffDetailsFile}
+              link='/pdfs/StaffOnboarding.csv'
             />
           </div>
         )}
@@ -183,6 +184,7 @@ const AddSchool = () => {
               label='Upload Student List CSV'
               value={studentDetailsFile}
               onChange={setStudentDetailsFile}
+              link='/pdfs/StudentOnboarding.xlsx'
             />
           </div>
         )}

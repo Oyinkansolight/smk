@@ -35,6 +35,10 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddStaff = () => {
   const { data: institutionProfile } = useGetProfile();
   // console.log(institutionProfile);
@@ -194,7 +198,6 @@ const AddStaff = () => {
         }
       } catch (error) {
         setloading(false);
-        toast.error((error as Error).message);
         toast.error(getErrMsg(error));
       }
     }

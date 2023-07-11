@@ -45,7 +45,6 @@ export default function StudentAuth() {
           router.push(ROUTES.STUDENT);
         } else {
           setLoading(false);
-          toast.info('Invalid user role');
           toast.info('Redirecting...');
           setTimeout(() => {
             router.push(ROUTES.ADMIN_AUTH);

@@ -50,6 +50,8 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [page, setPage] = useState(0);
   const { data: allSession } = useGetAcademicSessions();

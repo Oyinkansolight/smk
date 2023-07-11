@@ -40,6 +40,10 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface BiodataProps {
   schoolName: string | number;
   setSchoolName: (v: string | number) => void;
@@ -71,7 +75,7 @@ const Biodata = ({
       <h2 className='text-2xl font-bold'>General Details</h2>
       <p>Kindly enter the details of the institution below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <FormInput
           label='Institution Name*'
           setFormValue={setSchoolName}
@@ -95,7 +99,7 @@ const Biodata = ({
           />
         </div>
       </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div className='w-full'>
           <FormInput
             label='Institution Official Email*'

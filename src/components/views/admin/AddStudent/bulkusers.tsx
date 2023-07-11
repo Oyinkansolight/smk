@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import DragDropGeneric from '@/components/input/DragDropGeneric';
 import React from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
-import Upload_icon from '~/svg/upload_icon.svg';
+
+// import Upload_icon from '~/svg/upload_icon.svg';
 
 interface propType {
   onClickHandler?: () => void;
-  setfile: (v: any) => void;
+  setfile: (file?: File) => void;
   bulkStudentUpload: () => void;
   loading: boolean;
-  file: File | null;
+  file: File | undefined;
+  link?: string;
 }
 
 function AddActivityName({
@@ -18,6 +21,7 @@ function AddActivityName({
   file,
   bulkStudentUpload,
   loading = false,
+  link,
 }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
@@ -32,7 +36,7 @@ function AddActivityName({
           </button>
         </div>
 
-        <div className='mt-4  px-10 py-10'>
+        {/* <div className='mt-4  px-10 py-10'>
           <div className='rounded-md flex flex-col justify-center items-center py-10 border'>
             <p className='text-center text-lg font-medium text-[#333840]'>
               Upload your document
@@ -68,7 +72,8 @@ function AddActivityName({
               Download sample template
             </a>
           </div>
-        </div>
+        </div> */}
+        <DragDropGeneric value={file} onChange={setfile} link={link} />
 
         <div className='flex justify-center mt-2'>
           <button

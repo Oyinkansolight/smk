@@ -4,6 +4,7 @@ import FormInput from '@/components/input/formInput';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
 import { useInviteInstitution } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -86,14 +87,10 @@ const AddSchoolLink = () => {
 
                   if (response.data) {
                     setisOpen(true);
-                    // setTimeout(() => {
-                    //   router.push(
-                    //     `/onboard?token=${response.data.data.data.token}`
-                    //   );
-                    // }, 3000);
                   }
                 } catch (error) {
                   logger(error);
+                  toast.error(getErrMsg(error));
                 }
               }}
               className='w-full rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '

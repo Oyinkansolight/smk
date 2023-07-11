@@ -1,6 +1,7 @@
 import clsxm from '@/lib/clsxm';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useState } from 'react';
 import { BiExit } from 'react-icons/bi';
@@ -15,6 +16,7 @@ import Trend from '~/svg/trend_up.svg';
 
 const InstituteSidebar = () => {
   const routeDetails = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
@@ -26,6 +28,7 @@ const InstituteSidebar = () => {
       if (typeof window !== 'undefined') {
         sessionStorage.removeItem('user');
       }
+      router.push('/auth/user');
     }
   };
   const handleToggle = () => setOpen(!open);
@@ -115,8 +118,9 @@ const InstituteSidebar = () => {
           )}
         >
           <div
-            className={` ${open ? ' justify-between px-2' : 'justify-center'
-              } flex w-full items-center gap-[14.25px] `}
+            className={` ${
+              open ? ' justify-between px-2' : 'justify-center'
+            } flex w-full items-center gap-[14.25px] `}
           >
             <div className='flex items-center justify-center space-x-2'>
               <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
@@ -171,8 +175,9 @@ export const SideBarButton = ({
     )}
   >
     <div
-      className={` ${open ? ' justify-between px-2' : 'justify-center'
-        } flex w-full items-center gap-[14.25px] `}
+      className={` ${
+        open ? ' justify-between px-2' : 'justify-center'
+      } flex w-full items-center gap-[14.25px] `}
     >
       <div className='flex items-center justify-center space-x-2'>
         {icon}

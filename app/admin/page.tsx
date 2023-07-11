@@ -20,61 +20,6 @@ import Link from 'next/link';
 import ReactSelect from 'react-select';
 import StudentBadge from '~/svg/student_badge.svg';
 
-// const timeLineData = [
-//   {
-//     image: '/images/teacher_step_1.png',
-//     title: 'MR. Gbadamosi’s Class',
-//     details: '1:32 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_2.png',
-//     title: 'Mrs. Erhveba’s Class',
-//     details: '1:32 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_3.png',
-//     title: 'Submitted a bug',
-//     details: 'Yesterday 12:39 AM',
-//   },
-//   {
-//     image: '/images/teacher_step_4.png',
-//     title: 'Modified A data in Page X',
-//     details: 'Aug 11',
-//   },
-//   {
-//     image: '/images/teacher_step_2.png',
-//     title: 'Mrs. Erhveba’s Class',
-//     details: '3:30 PM',
-//   },
-// ];
-
-// const percentageData = [
-//   {
-//     title: 'Class 1',
-//     percentage: 70,
-//   },
-//   {
-//     title: 'Class 2',
-//     percentage: 50,
-//   },
-//   {
-//     title: 'Class 3',
-//     percentage: 90,
-//   },
-//   {
-//     title: 'Class 4',
-//     percentage: 10,
-//   },
-//   {
-//     title: 'Class 5',
-//     percentage: 28,
-//   },
-//   {
-//     title: 'Class 6',
-//     percentage: 55,
-//   },
-// ];
-
 const Page = () => {
   const { data } = useGetInstitutionDashboardOverview();
 
@@ -101,7 +46,7 @@ const Page = () => {
             count={data?.Total_Staff ?? 0}
             title='Total Staff'
             viewAllLabel='View All Staff'
-            url={ADMIN_ROUTES.ALL_STUDENTS}
+            url={ADMIN_ROUTES.ALL_STAFF}
             variant={1}
           />
           <CountCardAlt
