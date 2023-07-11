@@ -3,12 +3,14 @@ import ButtonLink from '@/components/links/ButtonLink';
 import clsxm from '@/lib/clsxm';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
-import { BiBookContent, BiDownload, BiExit, BiIdCard } from 'react-icons/bi';
+import { BiBookContent, BiDownload, BiIdCard } from 'react-icons/bi';
 import { FaRegIdCard, FaUsers } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { PiChatsTeardropDuotone } from 'react-icons/pi';
 import { TbMessage, TbTimelineEvent } from 'react-icons/tb';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip';
+
 
 const Sidebar = () => {
   const routeDetails = usePathname();
@@ -65,7 +67,7 @@ const Sidebar = () => {
           active={routeDetails && routeDetails.includes('classes') && true}
         />
 
-        {/* <SideBarButton
+        <SideBarButton
           open={open}
           icon={<BiBookContent className='#C3CAD9' />}
           title='Test and Exams'
@@ -75,7 +77,7 @@ const Sidebar = () => {
             routeDetails.includes('test-and-examination') &&
             true
           }
-        /> */}
+        />
 
         <SideBarButton
           open={open}
@@ -140,8 +142,19 @@ const Sidebar = () => {
         <div className='pt-20'>
           <SideBarButton
             open={open}
-            icon={<BiExit className={clsxm('fill-red-500 w-6 h-6')} />}
-            title='Logout'
+            icon={<PiChatsTeardropDuotone />}
+            className='bg-transparent text-[#746D69] border border-black'
+            title='Support'
+            href='/auth/admin'
+            onClick={handleLogout}
+            active={undefined}
+          />
+          <div className='h-4' />
+          <SideBarButton
+            open={open}
+            icon={<div></div>}
+            className='bg-black text-white'
+            title='Clock Out'
             href='/auth/admin'
             onClick={handleLogout}
             active={undefined}
@@ -159,6 +172,7 @@ interface SideBarButtonProps {
   active?: boolean | any;
   open?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 export const SideBarButton = ({
@@ -168,6 +182,7 @@ export const SideBarButton = ({
   active = false,
   open = false,
   onClick,
+  className,
 }: SideBarButtonProps) => (
   <>
     <ButtonLink
@@ -179,7 +194,8 @@ export const SideBarButton = ({
         active
           ? 'bg-[#1A8FE3] font-bold text-white'
           : 'bg-transparent text-gray-400',
-        'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg'
+        'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg',
+        className
       )}
     >
       <div className='flex flex-row items-center gap-[14.25px]'>

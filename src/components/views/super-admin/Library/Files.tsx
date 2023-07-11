@@ -291,7 +291,7 @@ const UploadDocument = ({
                   <h2 className='text-sm font-medium'>{item?.folderName}</h2>
                 </div>
                 <div className='col-span-2'>-</div>
-                <div className='col-span-2'>{item?.createdBy} </div>
+                <div className='col-span-2'>{item?.createdBy.firstName} {item?.createdBy.lastName}</div>
                 <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
                   <User alt='avril' className='h-8 w-8 rounded-full' />
                   <h2 className='text-sm font-normal'>
@@ -380,7 +380,7 @@ const UploadDocument = ({
                 <div className='col-span-2'>
                   {item?.subject?.length > 0 ? item?.subject[0].subject : '-'}{' '}
                 </div>
-                <div className='col-span-2'>{item?.createdBy} </div>
+                <div className='col-span-2'>{item?.createdBy.firstName} {item?.createdBy.lastName}</div>
                 <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
                   <User alt='avril' className='h-8 w-8 rounded-full' />
                   <h2 className='text-sm font-normal'>

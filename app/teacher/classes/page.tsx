@@ -50,14 +50,14 @@ export default function Page() {
               />
             </div>
           )} */}
-          {subjects.map((v, i) => (
+          {data?.map((v, i) => (
             <SmallTeacherSubjectCard
               onClick={() => {
                 router.push(`/teacher/classes/subject?id=${i}`);
               }}
               key={i}
               isNext={i == 0}
-              subject={v ?? '[NULL]'}
+              subject={v.name ?? '[NULL]'}
               assignmentDue={2}
               tasks={4}
               className={colors[i % colors.length]}

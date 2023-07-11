@@ -3,10 +3,7 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
-import {
-  useGetClassTestExam,
-  useGetSubjectTestExam,
-} from '@/server/test-and-exam';
+import { useGetSubjectTestExam } from '@/server/test-and-exam';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -25,10 +22,8 @@ export default function Page() {
   const params = useSearchParams();
   const [idx, setIdx] = useState(0);
   const { data, isLoading, error } = useGetSubjectTestExam({
-    classId: 1,
     sessionId: 1,
     termId: 1,
-    type: 'CA_1',
     subjectId: params?.get('id'),
   });
 

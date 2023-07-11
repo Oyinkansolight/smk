@@ -1,12 +1,14 @@
 import NextImage from '@/components/NextImage';
 import { BasicCard } from '@/components/cards';
+import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
 import clsxm from '@/lib/clsxm';
+import { useGetSessionCalendar } from '@/server/institution/time-table';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
 
 export default function TeacherDashboardView() {
-  // const { data: sessionCalendarData } = useGetSessionCalendar(1);
+  const { data: sessionCalendarData } = useGetSessionCalendar(1);
 
   return (
     <div className='flex flex-col layout'>
@@ -68,10 +70,10 @@ export default function TeacherDashboardView() {
       </div>
 
       <div className='mt-[23px]'>
-        {/* <div>
+        <div>
           Removed for AcademicCalendar comp for now, new changes in teacher.
-        </div> */}
-        {/* <AcademicCalendar sessionCalendarData={sessionCalendarData} /> */}
+        </div>
+        <AcademicCalendar sessionCalendarData={[]} />
       </div>
     </div>
   );

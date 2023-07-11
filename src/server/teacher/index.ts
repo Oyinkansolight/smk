@@ -1,4 +1,5 @@
 import request from '@/server';
+import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
 import { useMutation, useQuery } from 'react-query';
 
@@ -78,4 +79,33 @@ export function useTakeAttendance() {
       }),
   });
   return mutation;
+}
+
+export interface GetTeacherNextClassParams {
+  teacherId?: number;
+  sessionId?: number;
+  termId?: number;
+  weekId?: number;
+  day?:
+    | 'Monday'
+    | 'Tuesday'
+    | 'Wednesday'
+    | 'Thursday'
+    | 'Friday'
+    | 'Saturday'
+    | 'Sunday';
+}
+
+export function useGetTeacherNextClass(params: GetTeacherNextClassParams) {
+  const query = useQuery({
+    queryKey: 'get_teacher_next_class',
+    queryFn: async () => {
+      const d = await request.get(
+        `/v1/government/teachers/teacher-next-class`,
+        { params }
+      );
+      return d.data.data.data as TeacherNextClass;
+    },
+  });
+  return query;
 }

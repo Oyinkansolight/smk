@@ -1,6 +1,7 @@
 import request from '@/server';
 import { useMutation } from 'react-query';
 
+
 export interface CreateAssignmentParams {
   title?: string;
   body?: string;
@@ -63,6 +64,7 @@ export function useCreateClasswork() {
 
 export interface CreateClassActivityParams {
   typeOfActivity?: string;
+  mode?: 'OFFLINE' | 'ONLINE';
   format?: string;
   timeLimit?: string;
   questions?: Question[];
@@ -90,6 +92,29 @@ export function useCreateClassActivity() {
     mutationKey: 'create_activity',
     mutationFn: (params: CreateClassActivityParams) =>
       request.post('/v1/institutions/lessons/create-class-activty', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export interface CreateLessonNoteParams {
+  title?: string;
+  instructionalTeachingActivity?: string;
+  uploadUrl?: string;
+  classId?: number;
+  subjectId?: number;
+  sessionId?: number;
+  termId?: number;
+  weekId?: number;
+  periodId?: number;
+  teacherId?: number;
+}
+
+export function useCreateLessonNote() {
+  const mutation = useMutation({
+    mutationKey: 'create_lesson_note',
+    mutationFn: (params: CreateLessonNoteParams) =>
+      request.post('/v1/institutions/lessons/create-lesson-note', params, {
         withCredentials: true,
       }),
   });

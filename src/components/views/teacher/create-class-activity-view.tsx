@@ -4,21 +4,29 @@ import Button from '@/components/buttons/Button';
 import MultiChoiceQuestion from '@/components/input/MultiChoiceQuestion';
 import InputReactForm from '@/components/input/formReactInput';
 import ReactFormSelect from '@/components/input/formSelectReactForm';
+import TextTabBar from '@/components/layout/TextTabBar';
+import { uploadDocument } from '@/firebase/init';
+import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import {
-  Question,
-  useCreateClassActivity,
-} from '@/server/institution/lesson-note';
+import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+
+
+
+import BookSVG from '../../../../public/svg/book.svg';
+import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
+import TakePictureSVG from '../../../../public/svg/take_picture.svg';
+
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
@@ -31,7 +39,7 @@ const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
   { key: 'CLASS_WORK', value: 'Class Work' },
   { key: 'POP_QUIZ', value: 'Pop Quiz' },
-  { key: 'CLASS_WORK', value: 'Lesson Note' },
+  { key: 'LESSON_NOTE', value: 'Lesson Note' },
 ];
 
 const activityFormats = [
@@ -87,8 +95,11 @@ export default function CreateClassActivityView() {
     reValidateMode: 'onChange',
   });
   const format = watch('format');
+  const type = watch('typeOfActivity');
+  const [subjectiveType, setSubjectiveType] = useState(0);
   const [body, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
+  const {mutateAsync: createLessonNote} = useCreateLessonNote();
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
@@ -110,9 +121,23 @@ export default function CreateClassActivityView() {
         (v) => v.value === data.typeOfActivity
       )?.key;
       const form = activityFormats.find((v) => v.value === data.format)?.key;
+      let path: string | null = null;
+      if (
+        data['lesson-note-file-upload'] &&
+        data['lesson-note-file-upload'][0]
+      ) {
+        const f = data['lesson-note-file-upload'][0] as File;
+        path = await uploadDocument(
+          `/teacher-lesson-note/${f.name}`,
+          await f.arrayBuffer()
+        );
+      }
+      if (type === activityTypes[3].value){
+        await createLessonNote({uploadUrl: path ?? ''})
+      }
       const res = await create.mutateAsync({
         ...data,
-        typeOfActivity: type,
+        mode: isOnline ? 'ONLINE' : 'OFFLINE',
         format: form,
         questions,
         classes: 1,
@@ -217,11 +242,74 @@ export default function CreateClassActivityView() {
             ))}
           </>
         )}
-        {format === 'Subjective' && (
-          <>
-            <div className='font-bold'>Type Your Question Here</div>
-            <EditorComponent onChange={setBody} />
-          </>
+        {format === 'Subjective' && type !== activityTypes[3].value && <div><EditorComponent onChange={setBody} /></div> }
+        {format === 'Subjective' && type === activityTypes[3].value && (
+          <div>
+            <TextTabBar
+              tabs={[
+                <div className='flex items-center gap-2' key={0}>
+                  <BookSVG
+                    className={clsxm(
+                      subjectiveType === 0 ? 'fill-[#1A8FE3]' : 'fill-[#D4D5D7]'
+                    )}
+                  />
+                  <div>Input Lesson Note </div>
+                </div>,
+                <div className='flex items-center gap-2' key={1}>
+                  <ComputerUploadSVG
+                    className={clsxm(
+                      subjectiveType === 1
+                        ? 'fill-[#1A8FE3] stroke-[#1A8FE3]'
+                        : 'fill-[#D4D5D7] stroke-[#D4D5D7]'
+                    )}
+                    style={{}}
+                  />
+                  <div>Upload From Computer </div>
+                </div>,
+                <div className='flex items-center gap-2' key={2}>
+                  <TakePictureSVG
+                    className={clsxm(
+                      subjectiveType === 2 ? 'fill-[#1A8FE3]' : 'fill-[#D4D5D7]'
+                    )}
+                  />
+                  <div>Take a Picture to Upload</div>
+                </div>,
+              ]}
+              onChange={setSubjectiveType}
+              selectedIdx={subjectiveType}
+              activeClassName='text-[#1A8FE3]'
+            />
+            {subjectiveType === 0 && <EditorComponent onChange={setBody} />}
+            {subjectiveType === 1 && (
+              <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
+                <label
+                  className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
+                  htmlFor='lesson-note-file-upload'
+                >
+                  Browse
+                </label>
+                <input type="file" id='lesson-note-file-upload'  className='hidden' {...register('lesson-note-file-upload')}/>
+                <div>Or drag a file here.</div>
+              </div>
+            )}
+            {subjectiveType === 2 && (
+              <div className='border rounded-2xl h-80 flex gap-2 flex-col items-center justify-center'>
+                <Image
+                  src='/images/webcam.png'
+                  alt='webcam'
+                  height={50}
+                  width={50}
+                />
+                <Button
+                  variant='secondary'
+                  className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
+                  type='submit'
+                >
+                  Take Photo
+                </Button>
+              </div>
+            )}
+          </div>
         )}
         <div className='flex flex-row justify-end'>
           <Button

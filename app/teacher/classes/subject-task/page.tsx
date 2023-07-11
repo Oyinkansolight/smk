@@ -58,7 +58,7 @@ export default function Page() {
       </div>
 
       <div className='flex items-start gap-10'>
-        <div className='flex-1 mb-8 rounded-lg bg-white'>
+        <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem]'>
           <div className='flex justify-center p-8'>
             <PageCounter
               page={currentPage}

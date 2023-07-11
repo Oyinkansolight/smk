@@ -68,7 +68,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-google-autocomplete": "^2.7.3",
     "react-hook-form": "^7.43.8",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.10.1",
     "react-loader-spinner": "^5.3.4",
     "react-pdf": "^7.0.1",
     "react-query": "^3.39.3",

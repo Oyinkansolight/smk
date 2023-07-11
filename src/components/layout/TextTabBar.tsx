@@ -12,7 +12,7 @@ export default function TextTabBar({
   activeClassName?: string;
 }) {
   return (
-    <div className='flex  p-5 rounded-xl bg-white my-4'>
+    <div className='flex p-5 rounded-xl bg-white my-4'>
       {tabs.map((v, i) => (
         <div
           onClick={() => onChange(i)}
