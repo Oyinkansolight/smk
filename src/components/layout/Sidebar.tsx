@@ -99,8 +99,8 @@ const Sidebar = () => {
           open={open}
           icon={<FaRegIdCard className='#C3CAD9' />}
           title='Lesson Task'
-          href='/teacher/assignment'
-          active={routeDetails && routeDetails.includes('assignment') && true}
+          href='/teacher/lesson-note'
+          active={routeDetails && routeDetails.includes('lesson-note') && true}
         />
 
         <SideBarButton

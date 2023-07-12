@@ -177,7 +177,7 @@ const AllStaff = () => {
           {isOpen && (
             <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[200px] h-max absolute top-12 right-0 z-10'>
               <Link
-                href='/admin/add-satff'
+                href='/admin/add-staff'
                 className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
               >
                 Add Single Staff
