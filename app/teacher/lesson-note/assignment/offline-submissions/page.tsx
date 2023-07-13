@@ -40,7 +40,7 @@ export default function Page() {
               studentName='Johnson David'
             />
           ))}
-        <div className='flex items-end'>
+        <div className='flex justify-end'>
           <Button className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] text-xs py-3 active:bg-[#126eb0] justify-center'>
             Submit
           </Button>
