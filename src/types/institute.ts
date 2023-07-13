@@ -1,3 +1,11 @@
+import {
+  Class,
+  Session,
+  Teacher,
+  Term,
+  Week,
+} from '@/types/classes-and-subjects';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Subject {
   id?: number;
@@ -292,4 +300,35 @@ export interface AcademicCalendarType {
     createdAt: string;
     updatedAt: string;
   };
+}
+
+export interface ClassActivity {
+  id?: number;
+  title?: string;
+  theme?: string;
+  subTheme?: string;
+  instructionalObjective?: string;
+  teachingMethod?: string;
+  teachingTheme?: string;
+  teacherPreparationForLesson?: string;
+  instructionalMaterial?: string;
+  lessonProcedure?: string;
+  startTime?: string;
+  endTime?: string;
+  day?: string;
+  eventName?: string;
+  institutionType?: string;
+  teacherActivity?: string;
+  lessonInstructionalObjective?: string;
+  lessonTopic?: string;
+  lessonNotes?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  week?: Week;
+  session?: Session;
+  file?: null;
+  term?: Term;
+  class?: Class;
+  teacher?: Teacher;
+  subject?: Subject;
 }

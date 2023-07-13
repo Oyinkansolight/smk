@@ -30,7 +30,7 @@ export default function AdminHeader() {
                 height={40}
                 alt='Profile Picture'
                 src={
-                  (data?.firstName ?? '') ===
+                  (data?.userInfo?.firstName ?? '') ===
                   ('Godwin Nogheghase Obaseki' as string)
                     ? '/images/governor.png'
                     : '/images/avatar.png'
@@ -39,9 +39,9 @@ export default function AdminHeader() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#333333]'>
-                  {data?.email ? data?.email.split('@')[0] : data?.firstName}
+                  {data?.userInfo?.email ? data?.userInfo?.email.split('@')[0] : data?.userInfo?.firstName}
                 </div>
-                <Pill text={data?.type ?? 'User Role'} variant='primary' />
+                <Pill text={data?.userInfo?.type ?? 'User Role'} variant='primary' />
               </div>
             </div>
           </div>

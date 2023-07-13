@@ -75,7 +75,7 @@ function AssignmentListItem({
   subject: string;
 }) {
   return (
-    <Link href='/teacher/assignment/submissions'>
+    <Link href='/teacher/lesson-note/assignment/submissions'>
       <div
         className={clsxm(
           'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',

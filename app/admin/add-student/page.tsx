@@ -17,6 +17,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
+
 export default function AddStudent() {
   const { data: allclasses } = useGetClassesList();
   const { data: institutionProfile } = useGetProfile();
@@ -94,7 +95,7 @@ export default function AddStudent() {
         },
         classId: +data.class,
         classTeacherId: +data.teacher,
-        institutionId: institutionProfile?.id,
+        institutionId: institutionProfile?.userInfo?.id,
       };
 
       setpublishData(data);

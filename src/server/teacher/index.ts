@@ -1,16 +1,16 @@
 import request from '@/server';
 import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 
 interface ClockInParams {
-  clockInTime: string;
-  teacherId: number;
+  sessionId: number;
+  termId: number;
 }
 
 interface ClockOutParams {
   clockOutTime: string;
-  teacherId: number;
 }
 
 interface AttendanceParams {
@@ -25,7 +25,7 @@ interface AttendanceParams {
 
 export function useCreateReport() {
   const mutation = useMutation({
-    mutationKey: 'create-report',
+    mutationKey: 'create_report',
     mutationFn: (params: IncidentReportType) =>
       request.post('/v1/government/report/create-report', params, {
         withCredentials: true,
@@ -35,23 +35,32 @@ export function useCreateReport() {
 }
 
 export function useClockIn() {
+  const client = useQueryClient();
   const mutation = useMutation({
-    mutationKey: 'create-report',
-    mutationFn: (params: ClockInParams) =>
-      request.post('/v1/institutions/clock/teacher-clock-in', params, {
+    mutationKey: 'clock_in',
+    mutationFn: async (params: ClockInParams) => {
+      return await request.post('/v1/institutions/clock/clock-in', params, {
         withCredentials: true,
-      }),
+      });
+    },
+    onSettled: async () => {
+      await client.refetchQueries('get_clock_info');
+    },
   });
   return mutation;
 }
 
 export function useClockOut() {
+  const client = useQueryClient();
   const mutation = useMutation({
-    mutationKey: 'create-report',
+    mutationKey: 'clock_out',
     mutationFn: (params: ClockOutParams) =>
-      request.post('/v1/institutions/clock/teacher-clock-out', params, {
+      request.post('/v1/institutions/clock/clock-out', params, {
         withCredentials: true,
       }),
+    onSettled: async () => {
+      await client.refetchQueries('get_clock_info');
+    },
   });
   return mutation;
 }

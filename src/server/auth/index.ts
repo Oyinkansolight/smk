@@ -1,4 +1,5 @@
 import request from '@/server';
+import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
 
 export interface SignUpParams {
@@ -37,7 +38,7 @@ export function useSignIn() {
 }
 export function useForgotPassword() {
   const mutation = useMutation({
-    mutationKey: 'forgotpassword',
+    mutationKey: 'forgot_password',
 
     mutationFn: (params: SignInParams) =>
       request.post('/v1/authentication/forgot-password', params),
@@ -46,7 +47,7 @@ export function useForgotPassword() {
 }
 export function useResetPassword() {
   const mutation = useMutation({
-    mutationKey: 'resetassword',
+    mutationKey: 'reset_password',
 
     mutationFn: (params: ResetParams) =>
       request.post('/v1/authentication/reset-password', params),
@@ -63,37 +64,12 @@ export function useResetPassword() {
 //   return mutation;
 // }
 
-export interface UserProfile {
-  id?: number;
-  firstName?: null;
-  lastName?: null;
-  deviceToken?: null;
-  phoneNumber?: null;
-  email?: string;
-  address?: null;
-  type?: string;
-  suspended?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-  staff?: {
-    id: number;
-    gender: string;
-    dob: string;
-    height: string;
-    weight: string;
-    isTeaching: string;
-    staffType: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
-
 export function useGetProfile() {
   const mutation = useQuery({
-    queryKey: 'reset_password',
+    queryKey: 'get_profile',
     queryFn: async () =>
-      (await request.get('/v1/authentication/profile')).data.data.data
-        .userInfo as UserProfile,
+      (await request.get('/v1/authentication/profile')).data.data
+        .data as UserProfile,
   });
   return mutation;
 }

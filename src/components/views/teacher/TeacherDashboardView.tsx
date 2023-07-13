@@ -70,9 +70,6 @@ export default function TeacherDashboardView() {
       </div>
 
       <div className='mt-[23px]'>
-        <div>
-          Removed for AcademicCalendar comp for now, new changes in teacher.
-        </div>
         <AcademicCalendar sessionCalendarData={[]} />
       </div>
     </div>

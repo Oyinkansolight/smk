@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
+
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',
@@ -22,15 +23,15 @@ export default function Page() {
   // const { data: data2 } = useGetTeachersSubjectList();
   const { data: profile, isSuccess } = useGetProfile();
   const { data, refetch, isError } = useGetTeachersSubjectList({
-    id: profile?.staff?.id,
+    id: profile?.userInfo?.staff?.id,
   });
 
   useEffect(() => {
-    if (isSuccess && profile?.staff?.id) {
+    if (isSuccess && profile?.userInfo?.staff?.id) {
       // Make the second query only when the first query data is available
       refetch();
     }
-  }, [isSuccess, isError, refetch, profile?.staff?.id]);
+  }, [isSuccess, isError, refetch, profile?.userInfo?.staff?.id]);
 
   return (
     <div className='h-full layout'>

@@ -42,13 +42,13 @@ export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {data?.email ? data?.email.split('@')[0] : data?.firstName}
+                  {data?.userInfo?.email ? data?.userInfo?.email.split('@')[0] : data?.userInfo?.firstName}
                 </div>
                 <Pill
                   text={
-                    data?.email
-                      ? data?.email.split('@')[0]
-                      : data?.firstName ?? '[NULL]'
+                    data?.userInfo?.email
+                      ? data?.userInfo?.email.split('@')[0]
+                      : data?.userInfo?.firstName ?? '[NULL]'
                   }
                   variant='primary'
                 />

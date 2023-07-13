@@ -30,7 +30,7 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
-        <Link href='/teacher/assignment/late-submissions'>
+        <Link href='/teacher/lesson-note/class-work/late-submissions'>
           <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
             View Late Submissions
           </Button>
@@ -68,7 +68,7 @@ function AssignmentListItem({
   dateSubmitted?: string;
 }) {
   return (
-    <Link href='/teacher/assignment/submissions/grade'>
+    <Link href='/teacher/lesson-note/class-work/submissions/grade'>
       <div
         className={clsxm(
           'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'

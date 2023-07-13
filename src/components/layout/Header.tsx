@@ -24,9 +24,9 @@ export default function Header() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {data?.email ? data?.email?.split('@')[0] : data?.firstName}
+                  {data?.userInfo?.email ? data?.userInfo?.email?.split('@')[0] : data?.userInfo?.firstName}
                 </div>
-                <Pill text={data?.type ?? 'User Role'} variant='primary' />
+                <Pill text={data?.userInfo?.type ?? 'User Role'} variant='primary' />
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
+
 export default function SmallTeacherSubjectCard({
   isNext,
   subject,
@@ -12,8 +13,8 @@ export default function SmallTeacherSubjectCard({
 }: {
   isNext: boolean;
   subject: string;
-  assignmentDue: number;
-  tasks: number;
+  assignmentDue?: number;
+  tasks?: number;
   className?: string;
   onClick?: () => void;
   showTasks?: boolean;
@@ -22,7 +23,7 @@ export default function SmallTeacherSubjectCard({
     <div
       onClick={onClick}
       className={clsxm(
-        'flex flex-col items-center w-[240px] h-[284px] gap-2 cursor-pointer self-center rounded-lg',
+        'flex flex-col items-center w-[240px] h-[284px] justify-center gap-2 cursor-pointer self-center rounded-lg',
         className
       )}
     >

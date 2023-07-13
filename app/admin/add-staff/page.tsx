@@ -19,6 +19,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -168,7 +172,7 @@ const AddStaff = () => {
         relationshipToNextOfKin: data.relationshipToNextOfKin,
         addressOfNextOfKin: data.addressOfNextOfKin,
         phoneOfNextOfKin: data.phoneOfNextOfKin,
-        institutionId: institutionProfile?.id,
+        institutionId: institutionProfile?.userInfo?.id,
         trainingDetails: trainingDetails,
         employmentDetails: {
           schoolName: data.schoolname,

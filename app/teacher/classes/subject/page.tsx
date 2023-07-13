@@ -2,23 +2,43 @@
 
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import SmallTeacherSubjectListItem from '@/components/views/teacher/SmallTeacherSubjectListItem';
-import { useGetInstituteClass } from '@/server/institution/class';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useGetProfile } from '@/server/auth';
+import { useGetSubjectById } from '@/server/institution';
+import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
 export default function Page() {
   const router = useRouter();
-  // const params = useSearchParams();
-  const { data } = useGetInstituteClass();
+  const params = useSearchParams();
+  const { data: profile } = useGetProfile();
+  const { data, refetch: refetchPeriods } = useGetWeekPeriodsBySubject({
+    classId: 1,
+    sessionId: profile?.currentSession?.id,
+    subjectId: params?.get('id')
+      ? Number.parseInt(params.get('id') as string)
+      : undefined,
+    termId: 1,
+    weekId: 1,
+  });
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const { data: subject } = useGetSubjectById(params?.get('id') as string);
+
+  useEffect(() => {
+    if (profile) {
+      refetchPeriods();
+    }
+  }, [profile, refetchPeriods]);
 
   return (
     <div className='px-8 layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
-        {'Classes > Mathematics'}
+        {`Classes > ${(subject ?? [])[0]?.name}`}
       </div>
       <TextTabBar
         tabs={[
@@ -40,17 +60,26 @@ export default function Page() {
         </div>
       </div>
       <div className=''>
-        <div className='font-bold py-8 text-4xl'>Mathematics</div>
+        <div className='font-bold py-8 text-4xl'>
+          {(subject ?? [])[0]?.name}
+        </div>
         <div className='flex flex-col  gap-4'>
           {data ? (
-            data.map((v, i) => (
-              <SmallTeacherSubjectListItem
-                onClick={() => router.push('/teacher/classes/subject-task')}
-                key={i}
-                cl={v.name}
-                time='12:00 PM - 01:00 PM'
+            data.data.length > 0 ? (
+              data.data.map((v, i) => (
+                <SmallTeacherSubjectListItem
+                  onClick={() => router.push('/teacher/classes/subject-task')}
+                  key={i}
+                  cl={v.eventName ?? 'NULL'}
+                  time='12:00 PM - 01:00 PM'
+                />
+              ))
+            ) : (
+              <EmptyView
+                useStandardHeight
+                label='No periods for this subject'
               />
-            ))
+            )
           ) : (
             <div />
           )}

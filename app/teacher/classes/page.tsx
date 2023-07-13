@@ -1,8 +1,9 @@
 'use client';
 
+import EmptyView from '@/components/misc/EmptyView';
 import SmallTeacherSubjectCard from '@/components/views/teacher/SmallTeacherSubjectCard';
 import { useGetProfile } from '@/server/auth';
-import { useGetTeachersSubjectList } from '@/server/teacher';
+import { useGetSubjectsAssignedToTeacher } from '@/server/government/classes_and_subjects';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -13,23 +14,24 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  const subjects = ['Mathematics', 'Science', 'English', 'History'];
+  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
   const router = useRouter();
   // const { data } = useGetGovernmentSubjectList();
 
   //* Actual Api to be called, response currently empty
   const { data: profile, isSuccess } = useGetProfile();
-  const { data, refetch, isError } = useGetTeachersSubjectList(
-    profile?.staff?.id
+
+  const { data, refetch, isError } = useGetSubjectsAssignedToTeacher(
+    profile?.userInfo?.staff?.id
   );
-  // console.log(profile?.staff?.id);
+  // console.log(profile?.userInfo?.staff?.id);
 
   useEffect(() => {
-    if (isSuccess && profile?.staff?.id) {
+    if (profile?.userInfo?.staff?.id) {
       // Make the second query only when the first query data is available
       refetch();
     }
-  }, [isSuccess, isError, refetch, profile?.staff?.id]);
+  }, [refetch, profile]);
 
   return (
     <div className='h-full layout'>
@@ -50,19 +52,25 @@ export default function Page() {
               />
             </div>
           )} */}
-          {data?.map((v, i) => (
-            <SmallTeacherSubjectCard
-              onClick={() => {
-                router.push(`/teacher/classes/subject?id=${i}`);
-              }}
-              key={i}
-              isNext={i == 0}
-              subject={v.name ?? '[NULL]'}
-              assignmentDue={2}
-              tasks={4}
-              className={colors[i % colors.length]}
-            />
-          ))}
+          {data?.length === 0 ? (
+            <div className='w-full h-full flex items-center justify-center'>
+              <EmptyView label='No subjects assigned to you' />
+            </div>
+          ) : (
+            data?.map((v, i) => (
+              <SmallTeacherSubjectCard
+                onClick={() => {
+                  router.push(`/teacher/classes/subject?id=${v.id}`);
+                }}
+                key={i}
+                isNext={i == 0}
+                subject={v.name ?? '[NULL]'}
+                assignmentDue={2}
+                tasks={4}
+                className={colors[i % colors.length]}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
