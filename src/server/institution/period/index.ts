@@ -3,6 +3,7 @@ import { ClassActivity } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useQuery } from 'react-query';
 
+
 export interface GetTeacherClassPeriodParams {
   sessionId?: number;
   teacherId?: number;
@@ -38,13 +39,14 @@ export function useGetWeekPeriodsBySubject(
   const query = useQuery({
     queryKey: 'get_week_periods_by_subject',
     queryFn: () =>
-      params.sessionId && params.subjectId
-        ? request
-            .get(`/v1/institutions/institutes/get-week-periods-by-subject`, {
-              params,
-            })
-            .then((v) => v.data.data.data as PaginatedData<ClassActivity>)
-        : undefined,
+      // true || (params.sessionId && params.subjectId)
+      // ?
+      request
+        .get(`/v1/institutions/institutes/get-week-periods`, {
+          params,
+        })
+        .then((v) => v.data.data.data as PaginatedData<ClassActivity>),
+    // : undefined,
   });
   return query;
 }

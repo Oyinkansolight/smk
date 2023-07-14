@@ -11,18 +11,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 
+
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
   const { data: profile } = useGetProfile();
   const { data, refetch: refetchPeriods } = useGetWeekPeriodsBySubject({
-    classId: 1,
-    sessionId: profile?.currentSession?.id,
-    subjectId: params?.get('id')
-      ? Number.parseInt(params.get('id') as string)
-      : undefined,
-    termId: 1,
-    weekId: 1,
+    // classId: 9,
+    // sessionId: profile?.currentSession?.id,
+    // subjectId: params?.get('id')
+    //   ? Number.parseInt(params.get('id') as string)
+    //   : undefined,
+    // termId: 6,
+    weekId: 2,
   });
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -70,7 +71,7 @@ export default function Page() {
                 <SmallTeacherSubjectListItem
                   onClick={() => router.push('/teacher/classes/subject-task')}
                   key={i}
-                  cl={v.eventName ?? 'NULL'}
+                  cl={v.class?.arm ?? 'NULL'}
                   time='12:00 PM - 01:00 PM'
                 />
               ))
