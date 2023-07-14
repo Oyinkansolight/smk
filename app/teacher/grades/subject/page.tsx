@@ -104,7 +104,7 @@ export default function Page() {
           ))}
         </div>
       ) : (
-        <EmptyView label='No Grade List' />
+        <EmptyView label='No Grade List' useStandardHeight />
       )}
     </div>
   );

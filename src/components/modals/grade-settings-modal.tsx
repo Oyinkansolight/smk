@@ -1,7 +1,9 @@
 import AccordionAlt from '@/components/accordions/AccordionAlt';
 import Button from '@/components/buttons/Button';
+import { useGetProfile } from '@/server/auth';
+import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import ReactSelect from 'react-select';
 
@@ -11,6 +13,7 @@ export default function GradeSettingsModal({
   children: JSX.Element;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: profile } = useGetProfile();
 
   function closeModal() {
     setIsOpen(false);
@@ -52,7 +55,12 @@ export default function GradeSettingsModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-h-[618px] max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all'>
-                  <GradeSettingsView />
+                  <GradeSettingsView
+                    institutionType={
+                      profile?.userInfo?.staff?.institution?.instituteType ?? ''
+                    }
+                    sessionId={profile?.currentSession?.id ?? 1}
+                  />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
@@ -63,17 +71,32 @@ export default function GradeSettingsModal({
   );
 }
 
-function GradeSettingsView() {
-  const items = [
-    { title: 'Continuous assessment (CA) 1', percent: 15 },
-    { title: 'Continuous assessment (CA) 2', percent: 15 },
-    { title: 'Examination', percent: 15 },
-  ];
+function GradeSettingsView({
+  institutionType,
+  sessionId,
+}: {
+  institutionType: string;
+  sessionId: number;
+}) {
+  const { data: items, refetch } = useGetCategoryByInstitutionType({
+    institutionType: 'PRIMARY',
+    sessionId: 1,
+    termId: 1,
+  });
+  useEffect(() => {
+    refetch();
+  }, [institutionType, refetch, sessionId]);
+
   const [count, setCount] = useState([2, 2, 2]);
+
+  useEffect(() => {
+    setCount(Array(items?.data.length).fill(2));
+  }, [items]);
+
   return (
     <div className='flex flex-col gap-4'>
       <div className='font-bold text-xl'>Grade Settings</div>
-      {items.map((v, i) => (
+      {items?.data.map((v, i) => (
         <AccordionAlt
           key={i}
           titleClassName='bg-[#EFF7F6]'
@@ -81,8 +104,8 @@ function GradeSettingsView() {
           title={
             <div className='flex items-center justify-between'>
               <div className='grid w-full grid-cols-2 gap-12'>
-                <div>{v.title}</div>
-                <div>{v.percent}%</div>
+                <div>{v.categoryName}</div>
+                <div>{v.percentageScore}%</div>
               </div>
             </div>
           }

@@ -1,12 +1,13 @@
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
+
 export default function EmptyView({
   label,
   useStandardHeight,
 }: {
   label: string;
-  useStandardHeight: boolean;
+  useStandardHeight?: boolean;
 }) {
   return (
     <div
