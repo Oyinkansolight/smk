@@ -332,3 +332,14 @@ export interface ClassActivity {
   teacher?: Teacher;
   subject?: Subject;
 }
+
+export interface GradeCategory {
+  id?: number;
+  institutionType?: string;
+  percentageScore?: number;
+  categoryName?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  term?: Term;
+  session?: Session;
+}

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
+
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const Assignment = [
@@ -21,7 +22,7 @@ export default function Page() {
   return (
     <div className='h-full layout'>
       <div className='font-bold text-3xl py-8 h3'>
-        <div>Classwork</div>
+        <div>Class Work</div>
       </div>
       <TextTabBar
         tabs={[
@@ -52,8 +53,9 @@ export default function Page() {
       </div>
       <div className='flex flex-col gap-2'>
         {Assignment.map((title, i) => (
-          <AssignmentListItem
+          <LessonTaskListItem
             isDue={i === 0 || i === 1}
+            isOfflineSubmission={i === 4}
             title={title}
             subject='Physics'
             key={i}
@@ -65,17 +67,25 @@ export default function Page() {
   );
 }
 
-function AssignmentListItem({
+export function LessonTaskListItem({
   isDue,
   title,
   subject,
+  isOfflineSubmission,
 }: {
   isDue: boolean;
+  isOfflineSubmission?: boolean;
   title: string;
   subject: string;
 }) {
   return (
-    <Link href='/teacher/lesson-note/class-work/submissions'>
+    <Link
+      href={
+        isOfflineSubmission
+          ? '/teacher/lesson-note/class-work/offline-submissions'
+          : '/teacher/lesson-note/class-work/submissions'
+      }
+    >
       <div
         className={clsxm(
           'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',
@@ -92,6 +102,11 @@ function AssignmentListItem({
             />
           </div>
           <div>{title}</div>
+          {isOfflineSubmission && (
+            <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
+              Offline
+            </div>
+          )}
         </div>
         <div>{subject}</div>
         <div>SSS 1</div>

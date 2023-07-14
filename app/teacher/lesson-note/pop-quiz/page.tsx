@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
-
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const Assignment = [
@@ -22,7 +21,7 @@ export default function Page() {
   return (
     <div className='h-full layout'>
       <div className='font-bold text-3xl py-8 h3'>
-        <div>Assignment</div>
+        <div>Pop Quiz</div>
       </div>
       <TextTabBar
         tabs={[
@@ -82,8 +81,8 @@ export function LessonTaskListItem({
     <Link
       href={
         isOfflineSubmission
-          ? '/teacher/lesson-note/assignment/offline-submissions'
-          : '/teacher/lesson-note/assignment/submissions'
+          ? '/teacher/lesson-note/pop-quiz/offline-submissions'
+          : '/teacher/lesson-note/pop-quiz/submissions'
       }
     >
       <div

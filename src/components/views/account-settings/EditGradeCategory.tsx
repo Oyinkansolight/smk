@@ -1,54 +1,75 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
+import { getErrMsg } from '@/server';
+import { useCreateCategory, useGetCategoryByInstitutionType } from '@/server/institution/grade';
+import { GradeCategory } from '@/types/institute';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsTrashFill } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
-export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
-  const [items, setItems] = useState<
-    { category: string; percentage: number }[]
-  >([
-    {
-      category: 'CA 1',
-      percentage: 60,
-    },
-    {
-      category: 'CA 2',
-      percentage: 60,
-    },
-    {
-      category: 'Examination',
-      percentage: 60,
-    },
-  ]);
-  const [isEditing, setIsEditing] = useState(isEdit ?? false);
+
+
+export default function EditGradeCategory({
+  state,
+  institutionType,
+}: {
+  state?: 'add' | 'edit' | 'view';
+  institutionType?: string;
+}) {
+  const [items, setItems] = useState<GradeCategory[]>([]);
+
+  const { data: categories } = useGetCategoryByInstitutionType({
+    institutionType,
+    sessionId: 1,
+    termId: 1,
+  });
+
+  const { mutateAsync: createCategory } = useCreateCategory();
+
+  useEffect(() => {
+    if (categories) {
+      setItems(categories.data);
+    }
+  }, [categories]);
+
+  const [isEditing, setIsEditing] = useState(
+    state === 'edit' || state === 'add'
+  );
   const { handleSubmit, setValue, control } = useForm({
     reValidateMode: 'onChange',
     mode: 'all',
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
-    const newI = [...items];
-    for (let i = 0; i < items.length; i++) {
-      newI[i] = {
-        category: data[`category.${i}`],
-        percentage: data[`percentage.${i}`],
-      };
+  const onSubmit = async (data: any) => {
+    try {
+      await createCategory({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        gradeCategory: (data.category as any[]).map((v, i) => ({
+          categoryName: v,
+          percentageScore: Number.parseInt(data.percentage[i]),
+        })),
+        institutionType,
+        sessionId: 1,
+        termId: 1,
+      });
+      toast.success('Grade categories created successfully');
+    } catch (error) {
+      toast.error(getErrMsg(error));
     }
-    setItems(newI);
   };
 
   const handleAddNewCategory = () => {
-    setItems([...items, { category: '', percentage: 0 }]);
+    setItems([...items, { categoryName: '', percentageScore: 0 }]);
   };
 
   useEffect(() => {
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
-      setValue(`category.${i}`, it.category);
-      setValue(`percentage.${i}`, it.percentage, { shouldDirty: true });
+      setValue(`category.${i}`, it.categoryName);
+      setValue(`percentage.${i}`, it.percentageScore, { shouldDirty: true });
     }
   }, [items, setValue]);
 
@@ -64,11 +85,11 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
           <div key={i} className='flex p-4 border items-start rounded'>
             <div className='flex-1 '>
               <div className='text-[#A5A5A5]'>Category Name</div>
-              <div>{v.category}</div>
+              <div>{v.categoryName}</div>
             </div>
             <div className='flex-1'>
               <div className='text-[#A5A5A5]'>Percentage</div>
-              <div>{v.category}%</div>
+              <div>{v.percentageScore}%</div>
             </div>
           </div>
         ))}
@@ -86,7 +107,9 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
   ) : (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='text-center'>
-        <div className='font-bold text-3xl'>Edit Grade Category</div>
+        <div className='font-bold text-3xl capitalize'>
+          {state} Grade Category
+        </div>
         <div>Kindly select the appropriate options below:</div>
       </div>
       <div className='w-full'>
@@ -101,7 +124,8 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
                     <Input
                       label='Category Name'
                       placeholder=''
-                      {...field}
+                      formValue={field.value}
+                      setFormValue={field.onChange}
                       containerClassName='w-full'
                       inputClassName='max-h-[10px]'
                     />
@@ -116,7 +140,8 @@ export default function EditGradeCategory({ isEdit }: { isEdit?: boolean }) {
                     <Input
                       label='Enter percentage score'
                       placeholder=''
-                      {...field}
+                      formValue={field.value}
+                      setFormValue={field.onChange}
                       containerClassName='w-full'
                       inputClassName='max-h-[10px]'
                     />

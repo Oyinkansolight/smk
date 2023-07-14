@@ -11,12 +11,15 @@ import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 
+
 export default function ManageGradeRubric() {
-  const [rubrics, setRubrics] = useState<CreateRubricParams['rubrics']>([
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
+  const [rubrics, setRubrics] = useState<
+    (CreateRubricParams['rubrics'][number] & { baseLabel: string })[]
+  >([
+    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
   ]);
   const [currentStage, setCurrentStage] = useState(0);
   const { mutateAsync: createRubric, isLoading } = useCreateRubric();
@@ -39,15 +42,17 @@ export default function ManageGradeRubric() {
         <div className='text-2xl font-bold'>Manage Grade Rubric</div>
         <div>Kindly select the appropriate options below:</div>
         <div className='bg-[#F4F9FF] flex flex-col items-center py-4 mb-5'>
-          <Index
-            variant='#008146'
-            section=''
-            data={[
-              { stage: 1, stageName: 'Add Rubric Label' },
-              { stage: 2, stageName: 'Select Rubric Range' },
-            ]}
-            currentStage={currentStage + 1}
-          />
+          <div className='max-w-min'>
+            <Index
+              variant='#008146'
+              section=''
+              data={[
+                { stage: 1, stageName: 'Add Rubric Label' },
+                { stage: 2, stageName: 'Select Rubric Range' },
+              ]}
+              currentStage={currentStage + 1}
+            />
+          </div>
           <div>
             <span className='font-bold'>Note:</span> Once a Rubric label is
             changed, you would have to choose the range again.
@@ -61,7 +66,19 @@ export default function ManageGradeRubric() {
               <div className='flex items-end gap-3'>
                 <Input
                   label='Category Name'
-                  placeholder=''
+                  placeholder='eg. A'
+                  containerClassName='w-full'
+                  inputClassName='max-h-[10px]'
+                  formValue={rubrics[i].baseLabel}
+                  setFormValue={(v) => {
+                    const n = [...rubrics];
+                    n[i].baseLabel = v as string;
+                    setRubrics(n);
+                  }}
+                />
+                <Input
+                  label='Remark'
+                  placeholder='Enter Details. eg. Excellent'
                   containerClassName='w-full'
                   inputClassName='max-h-[10px]'
                   formValue={rubrics[i].remark}
@@ -70,12 +87,6 @@ export default function ManageGradeRubric() {
                     n[i].remark = v as string;
                     setRubrics(n);
                   }}
-                />
-                <Input
-                  label='Enter percentage score'
-                  placeholder=''
-                  containerClassName='w-full'
-                  inputClassName='max-h-[10px]'
                 />
                 <div
                   onClick={() => setRubrics(Array(rubrics.length - 1).fill(0))}
@@ -92,7 +103,13 @@ export default function ManageGradeRubric() {
               onClick={() =>
                 setRubrics([
                   ...rubrics,
-                  { label: '', maxRange: 0, minRange: 0, remark: '' },
+                  {
+                    label: '',
+                    maxRange: 0,
+                    minRange: 0,
+                    remark: '',
+                    baseLabel: '',
+                  },
                 ])
               }
             >
@@ -112,14 +129,12 @@ export default function ManageGradeRubric() {
                   </div>
                   <ReactSelect
                     value={{ value: rubrics[i].label, label: rubrics[i].label }}
-                    options={[
-                      { label: 'A', value: 'A' },
-                      { label: 'B', value: 'B' },
-                      { label: 'C', value: 'C' },
-                      { label: 'D', value: 'D' },
-                      { label: 'E', value: 'E' },
-                      { label: 'F', value: 'F' },
-                    ]}
+                    options={rubrics
+                      .map((v) => ({
+                        value: v.baseLabel,
+                        label: v.baseLabel,
+                      }))
+                      .filter((v) => v.label !== '')}
                     onChange={(value) => {
                       const n = [...rubrics];
                       n[i].label = value?.value ?? '';

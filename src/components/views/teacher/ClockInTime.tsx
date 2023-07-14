@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useGeoLocation } from 'use-geo-location';
 
+
 export default function ClockInTime() {
   const clockIn = useClockIn();
   const clockOut = useClockOut();
@@ -70,9 +71,9 @@ export default function ClockInTime() {
   useEffect(() => {
     setTimeout(() => {
       if (clockInfo?.isClockedIn && clockInfo?.clockInTime) {
-        const duration = moment.duration(
-          moment().diff(moment(clockInfo?.clockInTime))
-        );
+        const duration = moment
+          .duration(moment().diff(moment(clockInfo?.clockInTime)))
+          .add(1, 'hour');
         setClockedInTime(duration);
       }
     }, 1000);

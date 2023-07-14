@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
 import clsxm from '@/lib/clsxm';
+import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
+import { useClockOut } from '@/server/teacher';
+import moment from 'moment';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { BiBookContent, BiDownload, BiIdCard } from 'react-icons/bi';
@@ -17,6 +20,9 @@ const Sidebar = () => {
   const [open, setOpen] = useState(false);
 
   const handleToggle = () => setOpen(!open);
+
+  const { data: clockInfo } = useGetClockInfo();
+  const { mutateAsync: clockOut } = useClockOut();
 
   const handleLogout = () => {
     // eslint-disable-next-line no-alert
@@ -150,15 +156,17 @@ const Sidebar = () => {
             active={undefined}
           />
           <div className='h-4' />
-          <SideBarButton
-            open={open}
-            icon={<div></div>}
-            className='bg-black text-white'
-            title='Clock Out'
-            href='/auth/admin'
-            onClick={handleLogout}
-            active={undefined}
-          />
+          {clockInfo?.isClockedIn && (
+            <SideBarButton
+              open={open}
+              icon={<div></div>}
+              href='#'
+              className='bg-black text-white'
+              title='Clock Out'
+              onClick={() => clockOut({ clockOutTime: moment().toISOString() })}
+              active={undefined}
+            />
+          )}
         </div>
       </nav>
     </aside>

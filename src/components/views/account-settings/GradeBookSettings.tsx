@@ -2,43 +2,21 @@ import Button from '@/components/buttons/Button';
 import GeneralModal from '@/components/modals/general-modal';
 import EditGradeCategory from '@/components/views/account-settings/EditGradeCategory';
 import ManageGradeRubric from '@/components/views/account-settings/ManageGradeRubric';
+import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { useState } from 'react';
 import ReactTable, { TableColumn } from 'react-data-table-component';
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columns: TableColumn<any>[] = [
   { name: 'Institution Type', cell: (row) => row.type },
   {
     name: 'Grade Category',
-    cell: (row) =>
-      (row.categories as string[]).length === 0
-        ? '-'
-        : (row.categories as string[]).join(','),
+    cell: (row) => <RenderGradeCategories institutionType={row.type} />,
   },
   {
     name: '',
-    cell: (row) => (
-      <div className='flex justify-end w-full gap-4 font-semibold underline'>
-        {(row.categories as string[]).length === 0 ? (
-          <div className='text-[#008146]'>Add Category</div>
-        ) : (
-          <>
-            <GeneralModal
-              panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
-              body={<EditGradeCategory />}
-            >
-              <div className='text-[#008146] cursor-pointer'>View Category</div>
-            </GeneralModal>
-            <GeneralModal
-              panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
-              body={<EditGradeCategory isEdit />}
-            >
-              <div className='text-[#008146] cursor-pointer'>Edit Category</div>
-            </GeneralModal>
-          </>
-        )}
-      </div>
-    ),
+    cell: (row) => <RenderGradeCategoryActions institutionType={row.type} />,
   },
 ];
 
@@ -50,15 +28,15 @@ export default function GradeBookSettings() {
       categories: [],
     },
     {
-      type: 'Primary',
+      type: 'PRIMARY',
       categories: ['CA 1', 'CA 2', 'Examination'],
     },
     {
-      type: 'Secondary',
+      type: 'SECONDARY',
       categories: [],
     },
     {
-      type: 'Tertiary',
+      type: 'TERTIARY',
       categories: ['Test', 'Attendance', 'Examination'],
     },
   ]);
@@ -75,6 +53,71 @@ export default function GradeBookSettings() {
         </div>
         <ReactTable columns={columns} data={data}></ReactTable>
       </div>
+    </div>
+  );
+}
+
+function RenderGradeCategories({
+  institutionType,
+}: {
+  institutionType: string;
+}) {
+  const { data } = useGetCategoryByInstitutionType({
+    institutionType,
+    sessionId: 1,
+    termId: 1,
+  });
+  return (
+    <div>
+      {!data?.data || data.data.length < 1
+        ? '-'
+        : data?.data.map((v) => v.categoryName).join(', ')}
+    </div>
+  );
+}
+
+function RenderGradeCategoryActions({
+  institutionType,
+}: {
+  institutionType: string;
+}) {
+  const { data } = useGetCategoryByInstitutionType({
+    institutionType,
+    sessionId: 1,
+    termId: 1,
+  });
+  return (
+    <div className='flex w-full justify-end font-bold gap-3'>
+      {!data?.data || data.data.length < 1 ? (
+        <GeneralModal
+          panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
+          body={
+            <EditGradeCategory state='add' institutionType={institutionType} />
+          }
+        >
+          <div className='text-[#008146] cursor-pointer'>Add Category</div>
+        </GeneralModal>
+      ) : (
+        <>
+          <GeneralModal
+            panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
+            body={<EditGradeCategory institutionType={institutionType} />}
+          >
+            <div className='text-[#008146] cursor-pointer'>View Category</div>
+          </GeneralModal>
+          <GeneralModal
+            panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
+            body={
+              <EditGradeCategory
+                institutionType={institutionType}
+                state='edit'
+              />
+            }
+          >
+            <div className='text-[#008146] cursor-pointer'>Edit Category</div>
+          </GeneralModal>
+        </>
+      )}
     </div>
   );
 }
