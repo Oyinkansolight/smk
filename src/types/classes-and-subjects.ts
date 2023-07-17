@@ -73,7 +73,9 @@ export interface Term {
   endDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  session?: Session;
 }
+
 
 export interface TeacherNextClass {
   id?: number;

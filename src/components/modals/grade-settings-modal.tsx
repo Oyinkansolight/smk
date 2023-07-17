@@ -1,11 +1,16 @@
 import AccordionAlt from '@/components/accordions/AccordionAlt';
 import Button from '@/components/buttons/Button';
+import { activityTypes } from '@/components/views/teacher/create-class-activity-view';
+import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
+import { useCreateGradeSettings } from '@/server/government/classes_and_subjects';
+import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import ReactSelect from 'react-select';
+
 
 export default function GradeSettingsModal({
   children,
@@ -14,6 +19,9 @@ export default function GradeSettingsModal({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: profile } = useGetProfile();
+  const { data: terms, refetch: refetchTerms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
 
   function closeModal() {
     setIsOpen(false);
@@ -22,6 +30,10 @@ export default function GradeSettingsModal({
   function openModal() {
     setIsOpen(true);
   }
+
+  useEffect(() => {
+    refetchTerms();
+  }, [profile, refetchTerms]);
 
   return (
     <>
@@ -54,12 +66,15 @@ export default function GradeSettingsModal({
                 leaveFrom='opacity-100 scale-100'
                 leaveTo='opacity-0 scale-95'
               >
-                <Dialog.Panel className='w-full max-h-[618px] max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all'>
+                <Dialog.Panel className='w-full max-h-[618px] max-w-2xl transform overflow-auto rounded-2xl bg-white p-6 shadow-xl transition-all'>
                   <GradeSettingsView
                     institutionType={
                       profile?.userInfo?.staff?.institution?.instituteType ?? ''
                     }
                     sessionId={profile?.currentSession?.id ?? 1}
+                    subjectId={2}
+                    termId={terms?.data[0].id ?? 1}
+                    institutionId={382}
                   />
                 </Dialog.Panel>
               </Transition.Child>
@@ -74,9 +89,15 @@ export default function GradeSettingsModal({
 function GradeSettingsView({
   institutionType,
   sessionId,
+  termId,
+  subjectId,
+  institutionId,
 }: {
+  institutionId: number;
   institutionType: string;
   sessionId: number;
+  termId: number;
+  subjectId: number;
 }) {
   const { data: items, refetch } = useGetCategoryByInstitutionType({
     institutionType: 'PRIMARY',
@@ -87,83 +108,180 @@ function GradeSettingsView({
     refetch();
   }, [institutionType, refetch, sessionId]);
 
-  const [count, setCount] = useState([2, 2, 2]);
+  const [count, setCount] = useState<
+    {
+      percent: string;
+      category: { label: string };
+    }[][]
+  >([]);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { mutateAsync: createSettings } = useCreateGradeSettings();
+
+  const handleSubmit = async () => {
+    for (let i = 0; i < count.length; i++) {
+      const e = count[i];
+      await createSettings({
+        classId: 1,
+        institutionId,
+        subjectId,
+        termId,
+        sessionId,
+        gradeType: items?.data[i].categoryName ?? '',
+        gradeList: e.map((v) => ({
+          gradeListType: v.category.label,
+          percentage: v.percent,
+        })),
+      });
+    }
+  };
 
   useEffect(() => {
-    setCount(Array(items?.data.length).fill(2));
+    setCount(
+      Array(items?.data.length)
+        .fill(0)
+        .map(() => [
+          {
+            percent: '50',
+            category: { label: 'Class Work' },
+          },
+        ])
+    );
   }, [items]);
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='font-bold text-xl'>Grade Settings</div>
-      {items?.data.map((v, i) => (
-        <AccordionAlt
-          key={i}
-          titleClassName='bg-[#EFF7F6]'
-          length={56 * count[i] + 100}
-          title={
-            <div className='flex items-center justify-between'>
-              <div className='grid w-full grid-cols-2 gap-12'>
-                <div>{v.categoryName}</div>
-                <div>{v.percentageScore}%</div>
+      <div className='font-bold text-xl '>Grade Settings</div>
+      {items?.data.length === count.length &&
+        items?.data.map((v, i) => (
+          <AccordionAlt
+            key={i}
+            titleClassName='bg-[#EFF7F6]'
+            length={
+              (isEditing ? 88 : 40) * count[i].length +
+              (16 * count[i].length - 1) +
+              100
+            }
+            title={
+              <div className='flex items-center justify-between'>
+                <div className='grid w-full grid-cols-2 gap-12'>
+                  <div>{v.categoryName}</div>
+                  <div>{v.percentageScore}%</div>
+                </div>
+              </div>
+            }
+          >
+            <div className='my-4 mx-4 flex flex-col gap-4'>
+              {Array(count[i].length)
+                .fill(0)
+                .map((v, j) => (
+                  <EditableForm
+                    index={j}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    value={count[i][j]}
+                    setValue={(k) => {
+                      const c = [...count];
+                      c[i][j] = k;
+                      setCount(c);
+                    }}
+                    removeMe={(idx) => {
+                      const c = [...count];
+                      c[i].splice(idx, 1);
+                      setCount(c);
+                    }}
+                    key={j}
+                  />
+                ))}
+              <div>
+                <Button
+                  onClick={() => {
+                    const n = [...count];
+                    n[i].push({
+                      category: { label: 'Class Work' },
+                      percent: '50',
+                    });
+                    setCount(n);
+                  }}
+                  variant='outline'
+                  className='border-blue-500 text-blue-500 hover:bg-blue-200 active:bg-blue-800'
+                >
+                  Add Assessment
+                </Button>
               </div>
             </div>
-          }
+          </AccordionAlt>
+        ))}
+      <div className='flex justify-center'>
+        <Button
+          onClick={() => handleSubmit}
+          variant='secondary'
+          className='w-[260px] justify-center'
         >
-          <div className='my-4 mx-4 flex flex-col gap-4'>
-            {Array(count[i])
-              .fill(0)
-              .map((v, i) => (
-                <EditableForm key={i} />
-              ))}
-            <div>
-              <Button
-                onClick={() => {
-                  const n = [...count];
-                  n[i] = n[i] + 1;
-                  setCount(n);
-                }}
-                variant='outline'
-                className='border-blue-500 text-blue-500 hover:bg-blue-200 active:bg-blue-800'
-              >
-                Add Assessment
-              </Button>
-            </div>
-          </div>
-        </AccordionAlt>
-      ))}
+          Submit
+        </Button>
+      </div>
     </div>
   );
 }
 
-function EditableForm() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [percent, setPercent] = useState('50');
-  const [category, setCategory] = useState({ label: 'Class Work' });
+function EditableForm({
+  index,
+  removeMe,
+  isEditing,
+  setIsEditing,
+  value,
+  setValue,
+}: {
+  index: number;
+  removeMe: (idx: number) => void;
+  isEditing: boolean;
+  setIsEditing: (value: boolean) => void;
+  value: { percent: string; category: { label: string } };
+  setValue: (value: { percent: string; category: { label: string } }) => void;
+}) {
   return isEditing ? (
-    <div className='flex gap-8 h-10'>
-      <ReactSelect
-        value={category}
-        onChange={(v) => setCategory({ label: v?.label ?? '' })}
-        options={[{ label: 'Class Work' }]}
-      />
-      <input
-        className='rounded border'
-        value={percent}
-        onChange={(v) => setPercent(v.currentTarget.value)}
-      />
-      <div className='flex-1' />
-      <Button
-        className='bg-[#1A8FE3] px-5 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
-        onClick={() => setIsEditing(false)}
-      >
-        Submit
-      </Button>
+    <div className='grid grid-cols-2 gap-8'>
+      <div>
+        <div className='font-semibold text-xs'>Select Percentage</div>
+        <ReactSelect
+          classNames={{ control: () => 'h-10' }}
+          value={value.category}
+          onChange={(v) =>
+            setValue({ ...value, category: { label: v?.label ?? '' } })
+          }
+          options={activityTypes.map((v) => ({ label: v.value, value: v.key }))}
+        />
+      </div>
+      <div>
+        <div className='font-semibold text-xs'>Choose from grade list</div>
+        <input
+          className='rounded border w-full h-10'
+          value={value.percent}
+          onChange={(v) =>
+            setValue({ ...value, percent: v.currentTarget.value })
+          }
+        />
+        <div
+          className={clsxm(
+            'text-xs text-end my-2 hover:underline cursor-pointer',
+            index === 0 ? 'text-[#CACACA]' : 'text-red-500'
+          )}
+          onClick={() => {
+            if (index !== 0) {
+              removeMe(index);
+            }
+          }}
+        >
+          Delete Assessment
+        </div>
+      </div>
     </div>
   ) : (
     <div className='flex gap-8 text-xs h-10 items-center'>
-      <div>{category.label}</div>
-      <div>{percent}%</div>
+      <div>{value.category.label}</div>
+      <div>{value.percent}%</div>
       <div className='flex-1' />
       <FiEdit3
         onClick={() => setIsEditing(true)}

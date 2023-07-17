@@ -35,7 +35,7 @@ const Editor = dynamic(
   }
 );
 
-const activityTypes = [
+export const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
   { key: 'CLASS_WORK', value: 'Class Work' },
   { key: 'POP_QUIZ', value: 'Pop Quiz' },

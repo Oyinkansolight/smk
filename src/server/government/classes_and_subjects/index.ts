@@ -1,7 +1,7 @@
 import request from '@/server';
 import { GradeListItem } from '@/types/classes-and-subjects';
 import { Subject } from '@/types/institute';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 
 export function useGetGovernmentSubjectList() {
@@ -67,4 +67,36 @@ export function useGetSubjectsAssignedToTeacher(id?: number) {
     },
   });
   return query;
+}
+
+export interface CreateGradeSettingsParams {
+  gradeType?: string;
+  gradeList?: GradeList[];
+  classId?: number;
+  subjectId?: number;
+  sessionId?: number;
+  termId?: number;
+  institutionId?: number;
+}
+
+export interface GradeList {
+  gradeListType?: string;
+  percentage?: string;
+}
+
+export function useCreateGradeSettings() {
+  const mutation = useMutation({
+    mutationKey: 'create_grade_book',
+    mutationFn: async (params: CreateGradeSettingsParams) =>
+      (
+        await request.post(
+          '/v1/institutions/grade-book/create-grade-book',
+          params,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data.data.data,
+  });
+  return mutation;
 }
