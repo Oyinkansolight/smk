@@ -39,6 +39,14 @@ import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -74,7 +82,7 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormInput
             label='Phone Number'
-            type='number'
+            type='tel'
             placeholder='Details here'
             name='parentphoneNumber'
             register={register}

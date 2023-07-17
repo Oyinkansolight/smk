@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TaskAccordion from '@/components/accordions/TaskAccordion';
-import Button from '@/components/buttons/Button';
+// import Button from '@/components/buttons/Button';
 import { CurriculumCard } from '@/components/cards';
-import AddSubjectModal from '@/components/modals/add-subject-modal';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+
+// import AddSubjectModal from '@/components/modals/add-subject-modal';
+// import { MdKeyboardArrowDown } from 'react-icons/md';
 
 export default function TaskListView({
   curriculumClicked,
-  schoolType,
   academicyear,
   classList,
   sessionterms,
@@ -22,15 +22,15 @@ export default function TaskListView({
   classList: any;
   sessionterms: any;
 }) {
-  const ECCDE = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('eccde')
-  );
-  const Primary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('primary')
-  );
-  const Secondary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('ss')
-  );
+  // const ECCDE = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('eccde')
+  // );
+  // const Primary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('primary')
+  // );
+  // const Secondary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('ss')
+  // );
   const generateVariant = (id: number) => {
     if (id === 0) {
       return 'primary';
@@ -48,7 +48,7 @@ export default function TaskListView({
       <div className='flex justify-between items-center'>
         <div className='text-[#6B7A99] font-bold text-xl'> {academicyear}</div>
         <div className='flex justify-end'>
-          <div className='flex items-center font-bold'>
+          {/* <div className='flex items-center font-bold'>
             <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
           </div>
           <div className='w-8' />
@@ -68,10 +68,10 @@ export default function TaskListView({
                 Manage
               </Button>
             </AddSubjectModal>
-          </div>
+          </div> */}
         </div>
       </div>
-      {schoolType === 0 && (
+      {/* {schoolType === 0 && (
         <div>
           {ECCDE.map((v: any, i: number) => {
             return (
@@ -130,37 +130,36 @@ export default function TaskListView({
             );
           })}
         </div>
-      )}
-      {schoolType === 2 && (
-        <div>
-          {Secondary.map((v: any, i: number) => {
-            return (
-              <TaskAccordion
-                length={1}
-                lesson={false}
-                taskName={v.name}
-                key={i}
-              >
-                <div className='flex flex-wrap mt-4 gap-[27px]'>
-                  {sessionterms.map((value: any, id: number) => (
-                    <CurriculumCard
-                      key={id}
-                      name={`${value.name} Curriculum`}
-                      count={100}
-                      variant={generateVariant(id)}
-                      onClick={() => {
-                        curriculumClicked(i);
-                        settermId(value.id);
-                        setclassId(v.id);
-                      }}
-                    />
-                  ))}
-                </div>
-              </TaskAccordion>
-            );
-          })}
-        </div>
-      )}
+      )} */}
+
+      <div>
+        {classList.map((v: any, i: number) => {
+          return (
+            <TaskAccordion
+              length={1}
+              lesson={false}
+              taskName={`${v.class.name} ${v.arm}`}
+              key={i}
+            >
+              <div className='flex flex-wrap mt-4 gap-[27px]'>
+                {sessionterms.map((value: any, id: number) => (
+                  <CurriculumCard
+                    key={id}
+                    name={`${value.name} Curriculum`}
+                    count={100}
+                    variant={generateVariant(id)}
+                    onClick={() => {
+                      curriculumClicked(i);
+                      settermId(value.id);
+                      setclassId(v.id);
+                    }}
+                  />
+                ))}
+              </div>
+            </TaskAccordion>
+          );
+        })}
+      </div>
     </div>
   );
 }

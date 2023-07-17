@@ -3,13 +3,12 @@ import { GradeListItem } from '@/types/classes-and-subjects';
 import { Subject } from '@/types/institute';
 import { useMutation, useQuery } from 'react-query';
 
-
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
     queryKey: 'get_subject_list_gov',
     queryFn: async () => {
       const d = await request.get(
-        '/v1/government/classes-subjects/get-subjects?limit=100'
+        '/v1/government/classes-subjects/get-subjects?limit=10000000'
       );
       return d.data.data.data.data as Subject[];
     },

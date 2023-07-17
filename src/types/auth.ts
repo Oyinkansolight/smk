@@ -34,8 +34,21 @@ export interface UserInfo {
   suspended?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
-  esgAdmin?: null;
-  esiAdmin?: null;
+  esgAdmin?: unknown;
+  esiAdmin?: {
+    createdAt: string;
+    email: string;
+    id: number;
+    instituteAddress: string;
+    instituteEmail: string;
+    instituteLat: string;
+    instituteLogo: string;
+    instituteLong: string;
+    instituteName: string;
+    instituteType: string;
+    isOnboardingCompleted: boolean;
+    updatedAt: string;
+  };
   staff?: Staff;
   student?: null;
 }

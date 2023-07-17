@@ -3,7 +3,6 @@ import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 interface ClockInParams {
   sessionId: number;
   termId: number;

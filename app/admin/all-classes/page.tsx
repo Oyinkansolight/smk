@@ -1,65 +1,31 @@
 'use client';
 
-import { BasicSearch } from '@/components/search';
 import ROUTES from '@/constant/routes';
-import { useGetClassesList } from '@/server/institution';
+import { getFromLocalStorage } from '@/lib/helper';
+import { useGetStaffs } from '@/server/government/staff';
+import { useGetInstituteClassArms } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
 
 const AllClasses = () => {
-  const mockData = [
-    {
-      id: 2458,
-      name: '1A',
-      grade: 'Primary',
-    },
-    {
-      id: 3468,
-      name: '2B',
-      grade: 'ECCDE',
-    },
-    {
-      id: 2458,
-      name: '1A',
-      grade: 'Secondary',
-    },
-    {
-      id: 2458,
-      name: '2A',
-      grade: 'Tertiary',
-    },
-    {
-      id: 1659,
-      name: '1A',
-      grade: 'Primary',
-    },
-    {
-      id: 2458,
-      name: '1A',
-      grade: 'Secondary',
-    },
-    {
-      id: 2458,
-      name: '1A',
-      grade: 'Primary',
-    },
-  ];
+  const institutionId = getFromLocalStorage('institutionId');
+  const currentSessionId = getFromLocalStorage('currentSessionId');
 
-  const [staffs, setstaffs] = useState(mockData);
+  const { data: allclasses, isLoading } = useGetInstituteClassArms(
+    Number(institutionId),
+    Number(currentSessionId)
+  );
 
-  const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setstaffs(result);
+  const { data: staffs } = useGetStaffs();
+  // console.log(institutionId, currentSessionId);
+
+  const getTeacher = (teacherId: number) => {
+    const teacherInfo = (staffs ?? []).find((v: any) => v.id === teacherId);
+    return `${teacherInfo?.user[0].firstName} ${teacherInfo?.user[0].lastName}`;
   };
-  const { data: allclasses } = useGetClassesList();
-
-  console.log(allclasses);
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -87,12 +53,12 @@ const AllClasses = () => {
         </Link>
       </div>
       <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
+        {/* <div className='flex w-[300px] space-x-2'>
           <select name='' className='border-none bg-transparent outline-none'>
             <option value=''>Filter</option>
           </select>
           <BasicSearch handleSearch={handleSearch} />
-        </div>
+        </div> */}
       </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
@@ -101,21 +67,28 @@ const AllClasses = () => {
           <div className='col-span-3'>Capacity</div>
           <div className='col-span-6'>Class Teacher</div>
         </div>
-        {(allclasses?.data ?? []).map((item: any, idx: number) => (
-          <div
-            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-white py-4 px-1 text-[#8898AA] font-semibold'
-            key={idx}
-          >
-            <div className='col-span-3'>
-              {' '}
-              <Link href='/admin/class?id=2'>{item.name} </Link>
-            </div>
-            <div className='col-span-3'> 55 </div>
-            <div className='col-span-6'>
-              {item?.staff?.staffName || 'Amaka James '}{' '}
-            </div>
+        {isLoading ? (
+          <div className='py-10 text-center'>Loading...</div>
+        ) : (
+          <div>
+            {(allclasses ?? []).map((item: any, idx: number) => (
+              <div
+                className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b bg-white py-4 px-1 text-[#8898AA] font-semibold'
+                key={idx}
+              >
+                <div className='col-span-3'>
+                  <Link href={`/admin/class?id=${item.id}`}>
+                    {`${item.class.name} ${item.arm}`}
+                  </Link>
+                </div>
+                <div className='col-span-3'> {item.capacity} </div>
+                <div className='col-span-6'>
+                  {getTeacher(item?.teacher?.id)}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
     </section>
   );

@@ -5,13 +5,9 @@ import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
 import logger from '@/lib/logger';
-import {
-  GetTeacherNextClassParams,
-  useGetTeacherNextClass,
-} from '@/server/teacher';
 import { DashboardOverview } from '@/types';
-import moment from 'moment';
 import { useState } from 'react';
+
 interface TeacherFullDashboardProps {
   overviewData: DashboardOverview | undefined;
 }
@@ -19,13 +15,13 @@ interface TeacherFullDashboardProps {
 const TeacherFullDashboard = ({ overviewData }: TeacherFullDashboardProps) => {
   const [tabIdx] = useState(0);
   logger(overviewData);
-  const { data: nextClassData } = useGetTeacherNextClass({
-    day: moment().format('dddd') as GetTeacherNextClassParams['day'],
-    sessionId: 1,
-    teacherId: 1,
-    termId: 1,
-    weekId: 1,
-  });
+  // const { data: nextClassData } = useGetTeacherNextClass({
+  //   day: moment().format('dddd') as GetTeacherNextClassParams['day'],
+  //   sessionId: 1,
+  //   teacherId: 1,
+  //   termId: 1,
+  //   weekId: 1,
+  // });
 
   // const handleTabChange = (i: number) => setTabIdx(i);
 

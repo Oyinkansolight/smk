@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 const AddSchool = () => {
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
@@ -29,6 +28,7 @@ const AddSchool = () => {
   const [password, setPassword] = useState('');
   const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
   const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
+
   const [location, setLocation] = useState<string | GeoCodeResponse>('');
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();

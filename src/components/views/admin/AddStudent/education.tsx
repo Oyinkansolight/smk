@@ -4,7 +4,17 @@
 import FormSelect from '@/components/input/formSelectClass';
 import FormSelectTeacher from '@/components/input/formSelectteachers';
 import request from '@/server';
+import { useGetProfile } from '@/server/auth';
+import { useGetInstituteClassArms } from '@/server/institution/class';
 import { useEffect, useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -25,10 +35,17 @@ import { useEffect, useState } from 'react';
 type Iprops = {
   register: any;
   errors: any;
-  allclasses: any;
 };
 
-const Education = ({ register, errors, allclasses }: Iprops) => {
+const Education = ({ register, errors }: Iprops) => {
+  const { data: institutionProfile } = useGetProfile();
+
+  const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
+  const currentSessionId = institutionProfile?.currentSession?.id;
+  const { data: allclasses } = useGetInstituteClassArms(
+    institutionId,
+    currentSessionId
+  );
   const [teachers, setteachers] = useState();
   const getData = async () => {
     const d = await request.get('/v1/government/teachers/get-staffs');
@@ -45,12 +62,12 @@ const Education = ({ register, errors, allclasses }: Iprops) => {
       <h2 className='text-3xl font-bold'>Educational Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 md:grid grid-cols-2 gap-6'>
         <div>
           <FormSelect
             label='Assign Class'
             name='class'
-            options={allclasses?.data ?? []}
+            options={allclasses ?? []}
             register={register}
             validation={{
               required: 'Class is required',

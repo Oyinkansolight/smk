@@ -7,9 +7,10 @@ import Contact from '@/components/views/admin/AddStudent/contact';
 import Education from '@/components/views/admin/AddStudent/education';
 import ParentContact from '@/components/views/admin/AddStudent/parentcontact';
 import Publish from '@/components/views/admin/AddStudent/publish';
+import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useCreateStudent, useGetClassesList } from '@/server/institution';
+import { useCreateStudent } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -17,9 +18,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-
 export default function AddStudent() {
-  const { data: allclasses } = useGetClassesList();
   const { data: institutionProfile } = useGetProfile();
 
   const {
@@ -34,6 +33,7 @@ export default function AddStudent() {
   const [imgSrc, setImgSrc] = useState(null);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
+  const [imageData, setImageData] = useState<File | undefined>();
 
   const [publishData, setpublishData] = useState(null);
 
@@ -44,7 +44,6 @@ export default function AddStudent() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
     if (
       stage === 1 &&
       data.firstName &&
@@ -71,9 +70,14 @@ export default function AddStudent() {
     }
     if (stage === 4 && data.teacher && data.class) {
       // setStage(stage + 1);
+      const array = await imageData?.arrayBuffer();
+      let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
+      if (array) {
+        uploadedImage = await uploadDocument(uploadedImage, array);
+      }
 
       const studentData = {
-        profileImg: 'http://placeimg.com/640/480',
+        profileImg: uploadedImage,
         firstName: data.firstName,
         lastName: data.lastName,
         gender: data.gender,
@@ -95,7 +99,7 @@ export default function AddStudent() {
         },
         classId: +data.class,
         classTeacherId: +data.teacher,
-        institutionId: institutionProfile?.userInfo?.id,
+        institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
 
       setpublishData(data);
@@ -158,7 +162,7 @@ export default function AddStudent() {
         <Success
           title='Student created successfully'
           description='School Student created successfully'
-          link='/super-admin/all-student'
+          link='/admin/all-student'
           textLink='Manage student'
         />
       )}
@@ -192,17 +196,12 @@ export default function AddStudent() {
               errors={errors}
               imgSrc={imgSrc}
               setImgSrc={setImgSrc}
+              setImageData={(v) => setImageData(v)}
             />
           )}
           {stage === 2 && <Contact register={register} errors={errors} />}
           {stage === 3 && <ParentContact register={register} errors={errors} />}
-          {stage === 4 && (
-            <Education
-              register={register}
-              errors={errors}
-              allclasses={allclasses}
-            />
-          )}
+          {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
 
           <div className='mb-6 flex justify-end'>

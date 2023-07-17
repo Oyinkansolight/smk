@@ -9,6 +9,7 @@ import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
 import Training from '@/components/views/admin/Addstaff/training';
+import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useCreateStaff } from '@/server/institution';
@@ -19,9 +20,19 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -60,6 +71,7 @@ const AddStaff = () => {
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
+  const [imageData, setImageData] = useState<File | undefined>();
 
   const [publishData, setpublishData] = useState(null);
   const [trainingDetails, setTrainingDetails] = useState<
@@ -156,8 +168,13 @@ const AddStaff = () => {
       setStage(stage + 1);
     }
     if (stage === 5) {
+      const array = await imageData?.arrayBuffer();
+      let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
+      if (array) {
+        uploadedImage = await uploadDocument(uploadedImage, array);
+      }
       const staffData = {
-        profileImg: 'http://placeimg.com/640/480',
+        profileImg: uploadedImage,
         firstName: data.firstName,
         lastName: data.lastName,
         staffType: data.staffType,
@@ -172,7 +189,7 @@ const AddStaff = () => {
         relationshipToNextOfKin: data.relationshipToNextOfKin,
         addressOfNextOfKin: data.addressOfNextOfKin,
         phoneOfNextOfKin: data.phoneOfNextOfKin,
-        institutionId: institutionProfile?.userInfo?.id,
+        institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
         trainingDetails: trainingDetails,
         employmentDetails: {
           schoolName: data.schoolname,
@@ -247,7 +264,7 @@ const AddStaff = () => {
         <Success
           title='Staff created successfully'
           description='Institution Staff created successfully'
-          link='/super-admin/all-staff'
+          link='/admin/all-staff'
           textLink='Manage staff'
         />
       )}
@@ -281,6 +298,7 @@ const AddStaff = () => {
               errors={errors}
               imgSrc={imgSrc}
               setImgSrc={setImgSrc}
+              setImageData={(v) => setImageData(v)}
             />
           )}
           {stage === 2 && <Contact register={register} errors={errors} />}

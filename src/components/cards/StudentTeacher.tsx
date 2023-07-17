@@ -13,7 +13,7 @@ interface StudentTeacherProfileCardProps {
   image: string;
   name: string;
   school: string;
-  id: string;
+  id: string | number;
   student: boolean;
   showAcademicYear?: boolean;
   currentGridIdx?: number;
@@ -25,6 +25,7 @@ export default function StudentTeacherProfileCard({
   name,
   school,
   student,
+  id,
   showAcademicYear,
   currentGridIdx,
   setGridIdx,
@@ -45,7 +46,7 @@ export default function StudentTeacherProfileCard({
         <StudentTeacherBadge title='Name of School' text={school} />
         <StudentTeacherBadge
           title={student ? 'Student ID' : 'Staff ID'}
-          text='#123-BNA'
+          text={id}
         />
       </div>
 

@@ -100,7 +100,7 @@ export function useGetSubjectList() {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list?limit=100'
+          '/v1/government/institutes/get-subject-list?limit=10000000'
         );
         return d.data.data.data.data as Subject[];
       } catch (error) {
@@ -137,6 +137,25 @@ export function useGetStudentsList(params?: PaginationParams) {
         const d = await request.get('/v1/government/students/get-students', {
           params,
         });
+        return d.data.data.data.data as Student[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetStudentsListByInstitution(
+  instituteId: number | undefined
+) {
+  const query = useQuery({
+    queryKey: 'get_student_list_By_institution',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/students/get-students-by-institution?institutionId=${instituteId}`
+        );
         return d.data.data.data.data as Student[];
       } catch (error) {
         logger(error);
@@ -184,6 +203,25 @@ export function useGetTeachersList(params?: PaginationParams) {
   });
   return query;
 }
+export function useGetTeachersListByInstitution(
+  instituteId: number | undefined
+) {
+  const query = useQuery({
+    queryKey: 'get_teachers_list_in_institution',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/teachers/institution-staffs?institutionId=${instituteId}`
+        );
+        return d.data.data.data as PaginatedData<Staff>;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
 
 export function useGetTeacherById(params?: PaginationParams) {
   const query = useQuery({
@@ -205,10 +243,14 @@ export function useGetTeacherById(params?: PaginationParams) {
 
 export function useGetClassesList() {
   const query = useQuery({
-    queryKey: 'get_teachers_list',
+    queryKey: 'get_classes_list',
     queryFn: async () => {
       try {
-        const d = await request.get('/v1/institutions/institutes/get-classes');
+        const d = await request.get('/v1/institutions/institutes/get-classes', {
+          params: {
+            limit: 10000000,
+          },
+        });
         return d.data.data.data as any;
       } catch (error) {
         logger(error);
@@ -225,7 +267,7 @@ export function useGetSchools(type?: string) {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institutes?limit=100'
+          '/v1/government/institutes/get-institutes?limit=10000000'
         );
         const result = d.data.data.data.data.filter(
           (item: any) =>
@@ -303,6 +345,16 @@ export function useCreateStaff() {
     mutationKey: 'create-staff',
     mutationFn: (params: any) =>
       request.post('/v1/government/teachers/add-teaching-staff', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useCreateClassArm() {
+  const mutation = useMutation({
+    mutationKey: 'create-classs-arm',
+    mutationFn: (params: any) =>
+      request.post('/v1/institutions/class-arm/create/', params, {
         withCredentials: true,
       }),
   });

@@ -3,6 +3,15 @@
 
 import logger from '@/lib/logger';
 import { useGetStaffs } from '@/server/government/staff';
+import { useGetClassesList } from '@/server/institution';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -43,9 +52,13 @@ import { useGetStaffs } from '@/server/government/staff';
 const Publish = ({ publishData }: any) => {
   logger(publishData);
   const { data: staffs } = useGetStaffs();
+  const { data: classes } = useGetClassesList();
 
   const getTeacher = (staffs ?? []).find(
     (v: any) => v.id === Number(publishData.classTeacher)
+  );
+  const getClass = (classes?.data ?? []).find(
+    (v: any) => v.id === Number(publishData.class)
   );
 
   return (
@@ -59,11 +72,11 @@ const Publish = ({ publishData }: any) => {
         <div className='grid grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Class Name</h2>
-            <p>{publishData.name} </p>
+            <p>{getClass?.name} </p>
           </div>
           <div className='col-span-4'>
             <h2 className='text-xs mb-2 font-medium'>Class Arm</h2>
-            <p>{getTeacher.classArm}</p>
+            <p>{publishData.classArm}</p>
           </div>
         </div>
 

@@ -5,7 +5,7 @@ import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useClockOut } from '@/server/teacher';
 import moment from 'moment';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { BiBookContent, BiDownload, BiIdCard } from 'react-icons/bi';
 import { FaRegIdCard, FaUsers } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -14,12 +14,13 @@ import { TbMessage, TbTimelineEvent } from 'react-icons/tb';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip';
 
+interface TeacherSidebarProps {
+  open: boolean;
+  handleToggle: () => void;
+}
 
-const Sidebar = () => {
+const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
   const routeDetails = usePathname();
-  const [open, setOpen] = useState(false);
-
-  const handleToggle = () => setOpen(!open);
 
   const { data: clockInfo } = useGetClockInfo();
   const { mutateAsync: clockOut } = useClockOut();

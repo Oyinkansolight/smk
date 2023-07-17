@@ -3,9 +3,13 @@
 
 import Table from '@/components/tables/TableComponent';
 import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
+import { getFromLocalStorage } from '@/lib/helper';
 import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
-import { useCreateBulkStudent, useGetStudentsList } from '@/server/institution';
+import {
+  useCreateBulkStudent,
+  useGetStudentsListByInstitution,
+} from '@/server/institution';
 import { FlattenedStudent } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,6 +17,20 @@ import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   { name: 'Student ID', selector: (row) => row.id ?? '' },
@@ -42,7 +60,19 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
 ];
 
 const AllStudent = () => {
-  const { data: students, error, isLoading } = useGetStudentsList();
+  const institutionId = getFromLocalStorage('institutionId');
+
+  // const fetchStudent = ()=>{
+  //   if (typeof window !== 'undefined') {
+  //     const institutionId = localStorage.getItem("institutionId")
+  //   }
+  // }
+
+  const {
+    data: students,
+    error,
+    isLoading,
+  } = useGetStudentsListByInstitution(Number(institutionId));
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,7 +109,7 @@ const AllStudent = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <Link href='/super-admin'>
+      <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -182,9 +212,9 @@ const AllStudent = () => {
             data={
               students?.map(
                 (v, i) =>
-                ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
-                  idx: number;
-                })
+                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
+                    idx: number;
+                  })
               ) ?? []
             }
             columns={studentListColumns}

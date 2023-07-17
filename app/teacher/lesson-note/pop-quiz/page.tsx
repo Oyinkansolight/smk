@@ -66,7 +66,7 @@ export default function Page() {
   );
 }
 
-export function LessonTaskListItem({
+function LessonTaskListItem({
   isDue,
   title,
   subject,

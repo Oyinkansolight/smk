@@ -39,9 +39,14 @@ export default function AdminHeader() {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#333333]'>
-                  {data?.userInfo?.email ? data?.userInfo?.email.split('@')[0] : data?.userInfo?.firstName}
+                  {data?.userInfo?.email
+                    ? data?.userInfo?.email.split('@')[0]
+                    : data?.userInfo?.firstName}
                 </div>
-                <Pill text={data?.userInfo?.type ?? 'User Role'} variant='primary' />
+                <Pill
+                  text={data?.userInfo?.type ?? 'User Role'}
+                  variant='primary'
+                />
               </div>
             </div>
           </div>

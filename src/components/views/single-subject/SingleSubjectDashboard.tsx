@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -8,13 +10,55 @@ import AllCurriculumView from '@/components/views/single-subject/AllCurriculumVi
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import Files from '@/components/views/super-admin/Library/Files';
 import logger from '@/lib/logger';
-import { useGetClassesList, useGetSubjectById } from '@/server/institution';
+import request from '@/server';
+import { useGetSubjectById } from '@/server/institution';
 import { useGetAllFiles } from '@/server/library';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -30,26 +74,38 @@ const SingleSubjectDashboard = () => {
   const id = params?.get('id') as string;
   const { data } = useGetSubjectById(id);
   const filesData = useGetAllFiles();
-  const allclasses = useGetClassesList();
   const [sessionterms, setsessionterms] = useState([]);
   const [schoolType, setschoolType] = useState(0);
   const [termId, settermId] = useState(0);
   const [classId, setclassId] = useState(0);
   const [academicyear, setacademicyear] = useState({ session: '', id: 0 });
+  const [allclasses, setAllClasses] = useState([]);
+
+  function Fetch_Profile_Classes() {
+    request.get('/v1/authentication/profile').then((v) => {
+      const data = v.data.data.data;
+      request
+        .get(
+          `/v1/institutions/class-arm/get-session-class-arm?sessionId=${data?.currentSession?.id}`
+        )
+        .then((v) => {
+          const classData = v.data.data.data;
+
+          setAllClasses(classData);
+        });
+    });
+  }
+
+  logger(classId);
 
   // const currentSubjectName = (data ?? [])[0]?.name;
   const { isLoading } = filesData;
-  const { data: classData } = allclasses;
 
   const dataResult: any = [];
-  // dataContent &&
-  //   dataContent.forEach((element: any) => {
-  //     element.subject.map((item: any) => {
-  //       if (item?.subject === currentSubjectName) {
-  //         dataResult.push(element);
-  //       }
-  //     });
-  //   });
+  useEffect(() => {
+    Fetch_Profile_Classes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   logger(data);
   return (
@@ -89,7 +145,7 @@ const SingleSubjectDashboard = () => {
               curriculumClicked={() => setPage(2)}
               schoolType={schoolType}
               academicyear={academicyear.session}
-              classList={classData?.data || []}
+              classList={allclasses || []}
               sessionterms={sessionterms || []}
               settermId={settermId}
               setclassId={setclassId}

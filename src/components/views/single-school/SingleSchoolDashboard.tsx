@@ -54,6 +54,14 @@ import Select from 'react-select';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div># {row.id}</div> },
   { name: 'Status', cell: (row) => <OnlineStatus status={row.status} /> },

@@ -46,6 +46,14 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: number;
   institutionType: string | null;
@@ -115,7 +123,7 @@ const TimeTable = ({
     const data: dataType = {
       sessionId: sessionId,
       institutionType: schoolType,
-      classId: classId,
+      classId: 1,
       term: termId,
       timeTableType: timeTableType,
       type,

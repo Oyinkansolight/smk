@@ -3,7 +3,6 @@ import { ClassActivity } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useQuery } from 'react-query';
 
-
 export interface GetTeacherClassPeriodParams {
   sessionId?: number;
   teacherId?: number;

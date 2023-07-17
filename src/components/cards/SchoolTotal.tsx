@@ -7,11 +7,16 @@ import { BsPlus } from 'react-icons/bs';
 import UsersThree from '~/svg/users_three.svg';
 
 interface SchoolTotalCardProps {
+  adminType?: string;
   count: number;
   handleSetOpen: (value: boolean) => void;
 }
 
-const SchoolTotalCard = ({ count, handleSetOpen }: SchoolTotalCardProps) => {
+const SchoolTotalCard = ({
+  count,
+  handleSetOpen,
+  adminType,
+}: SchoolTotalCardProps) => {
   return (
     <BasicCard
       className={clsxm(
@@ -40,17 +45,19 @@ const SchoolTotalCard = ({ count, handleSetOpen }: SchoolTotalCardProps) => {
 
         <div className='my-2' />
 
-        <Button
-          className='text-right min-h-[45px] mt-1'
-          onClickHandler={() => {
-            handleSetOpen(true);
-          }}
-        >
-          <div className='flex flex-row justify-end items-center gap-2 w-full'>
-            <div>Add Institution</div>
-            <BsPlus className='h-[25px] w-[25px]' />
-          </div>
-        </Button>
+        {adminType === 'SUPER' && (
+          <Button
+            className='text-right min-h-[45px] mt-1'
+            onClickHandler={() => {
+              handleSetOpen(true);
+            }}
+          >
+            <div className='flex flex-row justify-end items-center gap-2 w-full'>
+              <div>Add Institution</div>
+              <BsPlus className='h-[25px] w-[25px]' />
+            </div>
+          </Button>
+        )}
       </div>
     </BasicCard>
   );

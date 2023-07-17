@@ -15,6 +15,7 @@ import TimeTable from '@/components/tables/TimeTable';
 import TransferRequestsTable from '@/components/tables/TransferRequestsTable';
 import DataGenerator from '@/components/views/admin/DataGenerator';
 import { ADMIN_ROUTES } from '@/constant/routes';
+import { useGetProfile } from '@/server/auth';
 import { useGetInstitutionDashboardOverview } from '@/server/dashboard';
 import Link from 'next/link';
 import ReactSelect from 'react-select';
@@ -22,10 +23,13 @@ import StudentBadge from '~/svg/student_badge.svg';
 
 const Page = () => {
   const { data } = useGetInstitutionDashboardOverview();
+  const { data: institutionProfile } = useGetProfile();
 
   return (
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
-      <div className='font-bold text-4xl'>Welcome</div>
+      <div className='font-bold text-4xl'>
+        Welcome, {institutionProfile?.userInfo?.esiAdmin?.instituteName}
+      </div>
       <div className='flex justify-end'>
         <Link href='/admin/add-student'>
           <Button variant='secondary'>Add Student +</Button>

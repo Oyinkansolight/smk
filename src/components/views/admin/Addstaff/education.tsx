@@ -1,9 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { useGetClassesList, useGetSubjectList } from '@/server/institution';
+import { useGetProfile } from '@/server/auth';
+import { useGetSubjectList } from '@/server/institution';
+import { useGetInstituteClassArms } from '@/server/institution/class';
 import { BsPlus } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -47,8 +57,14 @@ const Education = ({
   handleSubjectClassChange,
 }: Iprops) => {
   const { data: allSubjects, isLoading } = useGetSubjectList();
-  const { data: allclasses } = useGetClassesList();
+  const { data: institutionProfile } = useGetProfile();
 
+  const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
+  const currentSessionId = institutionProfile?.currentSession?.id;
+  const { data: allclasses } = useGetInstituteClassArms(
+    institutionId,
+    currentSessionId
+  );
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Subjects and Classes</h2>
@@ -94,9 +110,9 @@ const Education = ({
                   >
                     <option value=''> -- Select an option -- </option>
 
-                    {(allclasses?.data ?? []).map((item: any, id: number) => (
+                    {(allclasses ?? []).map((item: any, id: number) => (
                       <option key={id} value={item.id}>
-                        {item.name}
+                        {`${item.class.name} ${item.arm}`}
                       </option>
                     ))}
                   </select>

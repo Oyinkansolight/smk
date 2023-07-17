@@ -6,7 +6,6 @@ import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { useState } from 'react';
 import ReactTable, { TableColumn } from 'react-data-table-component';
 
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columns: TableColumn<any>[] = [
   { name: 'Institution Type', cell: (row) => row.type },

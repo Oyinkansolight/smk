@@ -4,6 +4,8 @@ import { BasicCard } from '@/components/cards';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import ClockInTime from '@/components/views/teacher/ClockInTime';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -15,11 +17,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const routeDetails = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const handleToggle = () => setOpen(!open);
+
+  useEffect(() => {
+    //* Used to Close Sidebar when navigating to another route.
+    setOpen(false);
+  }, [routeDetails]);
+
   return (
     <html>
       <head />
       <body className='flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
-        <Sidebar />
+        <Sidebar open={open} handleToggle={handleToggle} />
 
         <div className='flex flex-1 flex-col overflow-y-hidden'>
           <Header />

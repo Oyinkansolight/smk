@@ -55,7 +55,7 @@ const Input = ({
 
             {(options ?? []).map((item: any, id: number) => (
               <option key={id} value={item.id}>
-                {item.name}
+                {`${item.class.name} ${item.arm}`}
               </option>
             ))}
           </select>

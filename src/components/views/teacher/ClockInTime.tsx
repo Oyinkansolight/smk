@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useGeoLocation } from 'use-geo-location';
 
+const institutionData = getFromSessionStorage('institution');
 
 export default function ClockInTime() {
   const clockIn = useClockIn();
@@ -22,7 +23,6 @@ export default function ClockInTime() {
   const [isLoading, setIsLoading] = useState(false);
   const [clockedInTime, setClockedInTime] = useState<Duration | undefined>();
   const { latitude, longitude, loading, error } = useGeoLocation();
-  const institutionData = getFromSessionStorage('institution');
   let institute;
 
   if (institutionData) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import TabBar from '@/components/layout/TabBar';
@@ -7,10 +8,27 @@ import ExamTimeTable from '@/components/views/super-admin/SingleSchoolCalendar/E
 import Info from '@/components/views/super-admin/SingleSchoolCalendar/info';
 import request from '@/server';
 import { useGetClassesList } from '@/server/institution';
+import { useGetInstituteSessionClassArms } from '@/server/institution/class';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Index = () => {
   const queryString = useSearchParams();
@@ -20,6 +38,7 @@ const Index = () => {
   const [schoolType, setschoolType] = useState<string | null>('');
   const [sessionterms, setsessionterms] = useState([]);
   const [currentTermId, setCurrentTermId] = useState(0);
+  const [allclasses, setAllClasses] = useState([]);
 
   function handleCurrentTerm(id: number) {
     setCurrentTermId(id);
@@ -38,15 +57,30 @@ const Index = () => {
         handleCurrentTerm(data.data[0].id);
       });
   }
-  const allclasses = useGetClassesList();
+  function FetchClasses(currrentsession: string | null) {
+    request
+      .get(
+        `/v1/institutions/class-arm/get-session-class-arm?sessionId=${Number(
+          currrentsession
+        )}`
+      )
+      .then((v) => {
+        const data = v.data.data.data;
+        console.log(data);
+        setAllClasses(data);
+      });
+  }
 
-  const { data: classData } = allclasses;
+  // const allclasses = useGetClassesList();
+
+  // const { data: classData } = allclasses;
 
   useEffect(() => {
     // Create a URLSearchParams object with the query string
     // Extract the values of session and term parameters
     const currrentsession = queryString && queryString.get('session');
     Fetchterms(currrentsession);
+    FetchClasses(currrentsession);
     const sn = queryString && queryString.get('name');
     const st = queryString && queryString.get('schooltype');
 
@@ -64,7 +98,7 @@ const Index = () => {
     // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentTermId]);
   return (
     <div className='flex'>
       <Info
@@ -104,7 +138,7 @@ const Index = () => {
           <ClassTimeTable
             schoolType={schoolType}
             academicyear={schoolType}
-            classList={classData?.data || []}
+            classList={allclasses || []}
             sessionterms={sessionterms || []}
             sessionId={session}
             currentTermId={currentTermId}
@@ -114,7 +148,7 @@ const Index = () => {
           <ExamTimeTable
             schoolType={schoolType}
             academicyear={schoolType}
-            classList={classData?.data || []}
+            classList={allclasses || []}
             sessionterms={sessionterms || []}
             sessionId={session}
             currentTermId={currentTermId}

@@ -1,12 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import FormSelectClassDefault from '@/components/input/FormSelectClassDefault';
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
-import FormSelectClass from '@/components/input/formSelectClass';
 import FormSelectTeacher from '@/components/input/formSelectteachers';
 import { useGetStaffs } from '@/server/government/staff';
 import { useGetClassesList } from '@/server/institution';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -29,7 +39,9 @@ type Iprops = {
   errors: any;
 };
 
-const Capacity: string[] = ['Below 50', 'Above 50', 'Below 100', 'Above 100'];
+const numbers = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
+
+const Capacity: string[] = numbers;
 
 const Biodata = ({ register, errors }: Iprops) => {
   const { data: staffs } = useGetStaffs();
@@ -42,7 +54,7 @@ const Biodata = ({ register, errors }: Iprops) => {
 
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
-          <FormSelectClass
+          <FormSelectClassDefault
             label='Select Class'
             name='class'
             options={allclasses?.data ?? []}
@@ -83,11 +95,11 @@ const Biodata = ({ register, errors }: Iprops) => {
           name='classArm'
           register={register}
           validation={{
-            required: 'Class Name is required',
+            required: 'Class Arm Name is required',
           }}
           helper={
             errors?.className && {
-              message: errors?.className?.message,
+              message: errors?.classArm?.message,
               type: 'danger',
             }
           }

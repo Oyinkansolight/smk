@@ -7,6 +7,7 @@ import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -31,7 +32,10 @@ export default function AdminAuth() {
       const response = await mutateAsync(data);
 
       if (response) {
-        if (response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN) {
+        if (
+          response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN ||
+          response.data.data.data.type === 'DEFAULT'
+        ) {
           router.push(ROUTES.SUPER_ADMIN);
         } else {
           setLoading(false);
@@ -53,7 +57,9 @@ export default function AdminAuth() {
           response.data.data.data.lastName;
         const role = response.data.data.data.type;
         const email = response.data.data.data.email;
+        const adminType = response.data.data.data.esgAdmin.type;
         const userDetails = { name, role, email };
+        Cookies.set('adminType', adminType);
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('user', JSON.stringify(userDetails));
         }
@@ -151,7 +157,7 @@ export default function AdminAuth() {
                         <div className='w-auto p-2'>
                           <Link
                             className='text-sm font-medium hover:text-primary'
-                            href='/auth/forgotpassword/'
+                            href='/auth/admin/forgotpassword/'
                           >
                             Forgot Password?
                           </Link>
