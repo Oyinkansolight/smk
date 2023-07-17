@@ -34,6 +34,14 @@ import { AiOutlineSearch } from 'react-icons/ai';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const { data: allSession } = useGetAcademicSessions();
   const { data: allSubject } = useGetSubjectList();

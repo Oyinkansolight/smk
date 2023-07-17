@@ -117,6 +117,21 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
         <SideBarButton
           open={open}
           icon={
+            <IoDocumentOutline
+              className={clsxm(
+                'fill-current',
+                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+              )}
+            />
+          }
+          title='Subjects'
+          href='/super-admin/all-subject'
+          active={routeDetails && routeDetails.includes('subject') && true}
+        />
+
+        <SideBarButton
+          open={open}
+          icon={
             <Calendar_icon
               className={clsxm(
                 'fill-current',
@@ -156,20 +171,6 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
           title='Library'
           href='/super-admin/library'
           active={routeDetails && routeDetails.includes('library') && true}
-        />
-        <SideBarButton
-          open={open}
-          icon={
-            <IoDocumentOutline
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Subjects'
-          href='/super-admin/all-subject'
-          active={routeDetails && routeDetails.includes('subject') && true}
         />
         <SideBarButton
           open={open}

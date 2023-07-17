@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddSchool = () => {
-  const [stage, setStage] = useState(3);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [schoolName, setSchoolName] = useState<string | number>('');
   const [schoolEmail, setSchoolEmail] = useState<string | number>('');
@@ -28,10 +28,7 @@ const AddSchool = () => {
   const [password, setPassword] = useState('');
   const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
   const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
-  // const [schoolName1, setSchoolName1] = useState<string | number>('');
-  // const [schoolEmail1, setSchoolEmail1] = useState<string | number>('');
-  // const [imageName1, setImageName1] = useState<string>('');
-  // const [, setImageData1] = useState();
+
   const [location, setLocation] = useState<string | GeoCodeResponse>('');
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();

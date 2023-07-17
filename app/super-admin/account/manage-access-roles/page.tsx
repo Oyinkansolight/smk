@@ -4,8 +4,9 @@ import Button from '@/components/buttons/Button';
 import PermissionsEditor from '@/components/input/PermissionsEditor';
 import AddNewRoleSuperAdminModal from '@/components/modals/add-new-role-super-admin-modal';
 import AccountSettingsSideBar from '@/components/views/account-settings/AccountSettingsSideBar';
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoMdAdd } from 'react-icons/io';
 import { MdArrowBackIos } from 'react-icons/md';
 
@@ -130,6 +131,16 @@ export default function Page() {
   const [selectedRole, setSelectedRole] = useState({ item: 0, child: 0 });
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const AT = Cookies.get('adminType');
+    console.log(AT);
+
+    if (AT === 'NORMAL') {
+      setSelectedRole({ item: 4, child: 0 });
+    }
+  }, []);
+
   return (
     <div className='h-full px-12'>
       <div

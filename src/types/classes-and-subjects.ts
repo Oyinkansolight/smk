@@ -108,8 +108,8 @@ export interface TeacherNextClass {
 
 export interface Class {
   id?: number;
-  name?: string;
   arm?: string;
+  name?: string;
   startTime?: null;
   endTime?: null;
   curriculum?: string;

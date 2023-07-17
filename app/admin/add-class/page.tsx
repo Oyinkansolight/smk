@@ -6,11 +6,13 @@ import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
 import { getErrMsg } from '@/server';
-import { useCreateStaff } from '@/server/institution';
+import { useGetCurrentSession, useGetProfile } from '@/server/auth';
+import { useCreateClassArm } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -39,7 +41,26 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TransferStudent = () => {
+  const { data: institutionProfile } = useGetProfile();
+  const { data: currentSessionInfo } = useGetCurrentSession();
+
   const {
     register,
 
@@ -51,32 +72,56 @@ const TransferStudent = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [publishData, setPublishedData] = useState(null);
 
-  const handleCreateStaff = useCreateStaff();
+  const handleCreateStaff = useCreateClassArm();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    if (stage === 1 && data.name && data.classTeacher && data.classCapacity) {
+    if (
+      !data.class ||
+      !data.classArm ||
+      !data.classTeacher ||
+      !data.classCapacity
+    ) {
+      toast.error('All fields must be completed');
+    }
+    if (
+      stage === 1 &&
+      data.class &&
+      data.classArm &&
+      data.classTeacher &&
+      data.classCapacity
+    ) {
       setPublishedData(data);
       setStage(stage + 1);
     }
 
     if (stage === 2) {
+      const classArmData = {
+        arm: data.classArm,
+        capacity: data.classCapacity,
+        classId: data.class,
+        teacherId: data.classTeacher,
+        sessionId: currentSessionInfo?.id,
+        institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
+      };
       try {
-        const response = await handleCreateStaff.mutateAsync(data);
+        setLoading(true);
+        const response = await handleCreateStaff.mutateAsync(classArmData);
 
         if (response) {
-          toast.success('Login successful');
-
+          toast.success('Class Arm created successfully');
+          setLoading(false);
           //2 Second - Open Success Modal
           setisOpen(true);
         }
       } catch (error) {
+        setLoading(false);
         toast.error(getErrMsg(error));
       }
     }
   };
-
   // const nextHandler = (): void => {
   //   // handleSubmit(onSubmit);
   //   // console.log(getValues())
@@ -107,7 +152,7 @@ const TransferStudent = () => {
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Class Account created successfully'
+          title='Class arm created successfully'
           description='Hurray!'
           link='/admin/all-classes'
           textLink='Manage Classes'
@@ -156,7 +201,7 @@ const TransferStudent = () => {
               )}
               {stage == 2 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
-                  Publish
+                  {loading ? <ImSpinner2 /> : 'Publish'}
                 </button>
               )}
             </div>

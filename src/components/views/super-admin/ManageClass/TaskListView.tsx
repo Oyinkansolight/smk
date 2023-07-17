@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import TaskAccordion from '@/components/accordions/TaskAccordion';
-import { CurriculumCard } from '@/components/cards';
 import TimeTable from '@/components/views/super-admin/SingleSchoolCalendar/Timetable';
+import logger from '@/lib/logger';
 import Image from 'next/image';
 import { useState } from 'react';
 import { BsArrowRight } from 'react-icons/bs';
@@ -22,30 +21,29 @@ export default function TaskListView({
   schoolType,
   academicyear,
   classList,
-  sessionterms,
   sessionId,
   currentTermId,
 }: propType) {
-  const ECCDE = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('eccde')
-  );
-  const Primary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('primary')
-  );
-  const Secondary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('ss')
-  );
-  const generateVariant = (id: number) => {
-    if (id === 0) {
-      return 'primary';
-    }
-    if (id === 1) {
-      return 'secondary';
-    }
-    if (id === 2) {
-      return 'tertiary';
-    }
-  };
+  // const ECCDE = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('eccde')
+  // );
+  // const Primary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('primary')
+  // );
+  // const Secondary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('sss')
+  // );
+  // const generateVariant = (id: number) => {
+  //   if (id === 0) {
+  //     return 'primary';
+  //   }
+  //   if (id === 1) {
+  //     return 'secondary';
+  //   }
+  //   if (id === 2) {
+  //     return 'tertiary';
+  //   }
+  // };
   // const router = useRouter();
 
   const [showTimeTable, setShowTimeTable] = useState(false);
@@ -54,7 +52,7 @@ export default function TaskListView({
 
   function HandleTimeTable({ classId, termId }: timetableArg) {
     setShowTimeTable(true);
-
+    logger(classId);
     setclassId(classId);
     settermId(termId);
   }
@@ -69,33 +67,10 @@ export default function TaskListView({
               {academicyear}
             </div>
           </div>
-          {schoolType?.toLowerCase()?.includes('eccde') && (
+          {/* {schoolType?.toLowerCase()?.includes('eccde') && (
             <div className='mt-6'>
               {ECCDE.map((v: any, i: number) => {
                 return (
-                  // <TaskAccordion
-                  //   length={1}
-                  //   lesson={false}
-                  //   taskName={v.name}
-                  //   key={i}
-                  // >
-                  //   <div className='flex flex-wrap mt-4 gap-[27px]'>
-                  //     {sessionterms.map((value: any, id: number) => (
-                  //       <CurriculumCard
-                  //         key={id}
-                  //         name={`${value.name} Timetable`}
-                  //         count={100}
-                  //         variant={generateVariant(id)}
-                  //         onClick={() => {
-                  //           HandleTimeTable({
-                  //             classId: v.id,
-                  //             termId: value.id,
-                  //           });
-                  //         }}
-                  //       />
-                  //     ))}
-                  //   </div>
-                  // </TaskAccordion>
                   <button
                     key={i}
                     onClick={() => {
@@ -117,63 +92,46 @@ export default function TaskListView({
             <div className='mt-6'>
               {Primary.map((v: any, i: number) => {
                 return (
-                  <TaskAccordion
-                    length={1}
-                    lesson={false}
-                    taskName={v.name}
+                  <button
                     key={i}
+                    onClick={() => {
+                      HandleTimeTable({
+                        classId: v.id,
+                        termId: currentTermId,
+                      });
+                    }}
+                    className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
                   >
-                    <div className='flex flex-wrap mt-4 gap-[27px]'>
-                      {sessionterms.map((value: any, id: number) => (
-                        <CurriculumCard
-                          key={id}
-                          name={`${value.name} Timetable`}
-                          count={100}
-                          variant={generateVariant(id)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: id + 1,
-                            });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </TaskAccordion>
+                    <div>{v.name}</div>
+                    <BsArrowRight size={20} />
+                  </button>
                 );
               })}
             </div>
-          )}
-          {schoolType?.toLowerCase()?.includes('ss') && (
+          )} */}
+
+          {classList.length > 0 ? (
             <div className='mt-6'>
-              {Secondary.map((v: any, i: number) => {
+              {classList.map((v: any, i: number) => {
                 return (
-                  <TaskAccordion
-                    length={1}
-                    lesson={false}
-                    taskName={v.name}
+                  <button
                     key={i}
+                    onClick={() => {
+                      HandleTimeTable({
+                        classId: v.id,
+                        termId: currentTermId,
+                      });
+                    }}
+                    className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
                   >
-                    <div className='flex flex-wrap mt-4 gap-[27px]'>
-                      {sessionterms.map((value: any, id: number) => (
-                        <CurriculumCard
-                          key={id}
-                          name={`${value.name} Timetable`}
-                          count={100}
-                          variant={generateVariant(id)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: id + 1,
-                            });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </TaskAccordion>
+                    <div>{`${v.class.name} ${v.arm}`}</div>
+                    <BsArrowRight size={20} />
+                  </button>
                 );
               })}
             </div>
+          ) : (
+            <div className='py-10 text-center'>No class arm found</div>
           )}
         </div>
       ) : (

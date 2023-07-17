@@ -41,6 +41,16 @@ import Time from '~/svg/time.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: number;
   institutionType: string;
@@ -73,7 +83,6 @@ interface propType {
 const AcademicCalendar = ({
   schoolType,
   classList,
-  sessionterms,
   sessionId,
   currentTermId,
 }: propType) => {
@@ -85,15 +94,15 @@ const AcademicCalendar = ({
   // const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
   // const { data, error, isLoading } = useGetAcademicTimetable(1, 1, 1);
 
-  const ECCDE = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('eccde')
-  );
-  const Primary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('primary')
-  );
-  const Secondary = classList.filter((x: any) =>
-    x.name.toLowerCase().includes('ss')
-  );
+  // const ECCDE = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('eccde')
+  // );
+  // const Primary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('primary')
+  // );
+  // const Secondary = classList.filter((x: any) =>
+  //   x.name.toLowerCase().includes('ss')
+  // );
   const generateVariant = (id: number) => {
     if (id === 0) {
       return 'primary';
@@ -376,7 +385,7 @@ const AcademicCalendar = ({
       <div className='flex flex-col space -y-6'>
         {!showTimeTable ? (
           <div>
-            {schoolType?.toLowerCase()?.includes('eccde') && (
+            {/* {schoolType?.toLowerCase()?.includes('eccde') && (
               <div className='mt-6'>
                 {ECCDE.map((v: any, i: number) => {
                   return (
@@ -448,38 +457,50 @@ const AcademicCalendar = ({
                   );
                 })}
               </div>
-            )}
-            {schoolType?.toLowerCase()?.includes('ss') && (
+            )} */}
+
+            {classList.length > 0 ? (
               <div className='mt-6'>
-                {Secondary.map((v: any, i: number) => {
+                {classList.map((v: any, i: number) => {
                   return (
                     <TaskAccordion
                       length={1}
                       lesson={false}
-                      taskName={v.name}
+                      taskName={`${v.class.name} ${v.arm}`}
                       key={i}
                     >
                       <div className='flex flex-wrap mt-4 gap-[27px]'>
-                        {sessionterms.map((value: any, id: number) => (
-                          <CurriculumCard
-                            key={id}
-                            name={`${value.name} Timetable`}
-                            count={100}
-                            variant={generateVariant(id)}
-                            onClick={() => {
-                              HandleTimeTable({
-                                classId: v.id,
-                                termId: id + 1,
-                                type: 'TEST',
-                              });
-                            }}
-                          />
-                        ))}
+                        <CurriculumCard
+                          name='Exam Timetable'
+                          count={100}
+                          variant={generateVariant(0)}
+                          onClick={() => {
+                            HandleTimeTable({
+                              classId: v.id,
+                              termId: currentTermId,
+                              type: 'EXAM',
+                            });
+                          }}
+                        />
+                        <CurriculumCard
+                          name='Test Timetable'
+                          count={100}
+                          variant={generateVariant(1)}
+                          onClick={() => {
+                            HandleTimeTable({
+                              classId: v.id,
+                              termId: currentTermId,
+                              type: 'TEST',
+                            });
+                          }}
+                        />
                       </div>
                     </TaskAccordion>
                   );
                 })}
               </div>
+            ) : (
+              <div className='py-10 text-center'>No class arm found</div>
             )}
           </div>
         ) : (

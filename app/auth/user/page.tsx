@@ -10,6 +10,7 @@ import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
@@ -48,7 +49,7 @@ export default function StudentAuth() {
           toast.info('Redirecting...');
           setTimeout(() => {
             router.push(ROUTES.ADMIN_AUTH);
-          }, 2000);
+          }, 1000);
           return;
         }
 
@@ -132,12 +133,12 @@ export default function StudentAuth() {
                       </div>
                     </div>
                     <div className='w-auto p-2'>
-                      <a
+                      <Link
                         className='text-sm font-medium hover:text-primary'
-                        href='#'
+                        href='/auth/user/forgotpassword/'
                       >
                         Forgot Password?
-                      </a>
+                      </Link>
                     </div>
                   </div>
 

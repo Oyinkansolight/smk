@@ -9,7 +9,11 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
+import {
+  Question,
+  useCreateClassActivity,
+  useCreateLessonNote,
+} from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -21,12 +25,9 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 
-
-
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
-
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
@@ -99,7 +100,7 @@ export default function CreateClassActivityView() {
   const [subjectiveType, setSubjectiveType] = useState(0);
   const [body, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
-  const {mutateAsync: createLessonNote} = useCreateLessonNote();
+  const { mutateAsync: createLessonNote } = useCreateLessonNote();
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
@@ -132,8 +133,8 @@ export default function CreateClassActivityView() {
           await f.arrayBuffer()
         );
       }
-      if (type === activityTypes[3].value){
-        await createLessonNote({uploadUrl: path ?? ''})
+      if (type === activityTypes[3].value) {
+        await createLessonNote({ uploadUrl: path ?? '' });
       }
       const res = await create.mutateAsync({
         ...data,
@@ -242,7 +243,11 @@ export default function CreateClassActivityView() {
             ))}
           </>
         )}
-        {format === 'Subjective' && type !== activityTypes[3].value && <div><EditorComponent onChange={setBody} /></div> }
+        {format === 'Subjective' && type !== activityTypes[3].value && (
+          <div>
+            <EditorComponent onChange={setBody} />
+          </div>
+        )}
         {format === 'Subjective' && type === activityTypes[3].value && (
           <div>
             <TextTabBar
@@ -288,7 +293,12 @@ export default function CreateClassActivityView() {
                 >
                   Browse
                 </label>
-                <input type="file" id='lesson-note-file-upload'  className='hidden' {...register('lesson-note-file-upload')}/>
+                <input
+                  type='file'
+                  id='lesson-note-file-upload'
+                  className='hidden'
+                  {...register('lesson-note-file-upload')}
+                />
                 <div>Or drag a file here.</div>
               </div>
             )}

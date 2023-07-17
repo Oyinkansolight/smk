@@ -7,10 +7,8 @@ import { useGetAcademicSessions } from '@/server/dashboard';
 import { useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
-import { BsFillSendFill } from 'react-icons/bs';
 import { HiUsers } from 'react-icons/hi';
-import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
-import { RiUserFill, RiWhatsappFill } from 'react-icons/ri';
+import { RiUserFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
 interface StudentTeacherProfileCardProps {
@@ -28,7 +26,7 @@ export default function SubjectProfileCard({
   setsessionterms,
   setacademicyear,
 }: StudentTeacherProfileCardProps) {
-  const [currentGrid, setCurrentGrid] = useState(0);
+  const [currentGrid, setCurrentGrid] = useState(2);
 
   const handleToggleGrid = (index: number) => {
     setCurrentGrid(index);
@@ -107,16 +105,6 @@ export default function SubjectProfileCard({
           },
         ]}
       />
-      <div className='h-20' />
-      <div className='text-[#ADB8CC]'>Contact School</div>
-      <div className='h-2' />
-      <div className='flex space-x-3 rounded-full border-2 border-[#EDEFF2] p-3'>
-        <MdLocalPhone className='h-5 w-5 text-[#FF6633]' />
-        <MdMail className='h-5 w-5 text-[#29CC39]' />
-        <MdChromeReaderMode className='h-5 w-5 text-[#8833FF]' />
-        <BsFillSendFill className='h-5 w-5 text-[#33BFFF]' />
-        <RiWhatsappFill className='h-5 w-5 text-green-500' />
-      </div>
     </div>
   );
 }

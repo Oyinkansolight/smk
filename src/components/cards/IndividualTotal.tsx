@@ -21,7 +21,7 @@ const IndividualTotal = ({
   return (
     <BasicCard
       className={clsxm(
-        'relative h-[95px] w-full max-w-[237px] !rounded-[6px] !px-[10px] !py-[5px] !bg-white'
+        'relative h-[95px] w-full  !rounded-[6px] !px-[10px] !py-[5px] !bg-white'
       )}
     >
       <div className='flex flex-col gap-1'>

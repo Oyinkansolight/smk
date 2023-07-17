@@ -1,15 +1,16 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import { getErrMsg } from '@/server';
-import { useCreateCategory, useGetCategoryByInstitutionType } from '@/server/institution/grade';
+import {
+  useCreateCategory,
+  useGetCategoryByInstitutionType,
+} from '@/server/institution/grade';
 import { GradeCategory } from '@/types/institute';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { BsTrashFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-
-
 
 export default function EditGradeCategory({
   state,

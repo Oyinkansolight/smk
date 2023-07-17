@@ -141,6 +141,39 @@ const InstituteSidebar = () => {
             />
           </div>
         </button>
+        <button
+          onClick={handleLogout}
+          className={clsxm(
+            open
+              ? 'w-full rounded-md justify-start'
+              : 'w-[45px] rounded-full justify-center',
+            'focus:outline-nones flex h-[45px]  items-center   bg-white shadow transition-colors duration-200 hover:bg-gray-200'
+          )}
+        >
+          <div
+            className={` ${
+              open ? ' justify-between px-2' : 'justify-center'
+            } flex w-full items-center gap-[14.25px] `}
+          >
+            <div className='flex items-center justify-center space-x-2'>
+              <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
+              <div
+                className={clsxm(
+                  open ? 'block' : 'hidden',
+                  'whitespace-nowrap text-sm text-[#6B7A99] font-black'
+                )}
+              >
+                Logout
+              </div>
+            </div>
+            <Sidebararrow
+              className={clsxm(
+                open ? 'block' : 'hidden',
+                'transform scale-125'
+              )}
+            />
+          </div>
+        </button>
       </nav>
     </aside>
   );

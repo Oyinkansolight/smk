@@ -33,6 +33,7 @@ const Page = () => {
   console.log(studentSubjectsList);
 
   const student = data?.data[0];
+  console.log(student);
 
   useEffect(() => {
     if (error) {
@@ -47,7 +48,7 @@ const Page = () => {
           (student?.user ?? [])[0]?.lastName
         }`}
         school='Avril Price School'
-        id=''
+        id={student?.id || ''}
         student
         showAcademicYear
         currentGridIdx={gridTabIdx}

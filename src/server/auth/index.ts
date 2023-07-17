@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
-import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
 
 export interface SignUpParams {
@@ -65,11 +65,27 @@ export function useResetPassword() {
 // }
 
 export function useGetProfile() {
-  const mutation = useQuery({
+  const query = useQuery({
     queryKey: 'get_profile',
-    queryFn: async () =>
-      (await request.get('/v1/authentication/profile')).data.data
-        .data as UserProfile,
+    queryFn: async () => {
+      const response = (await request.get('/v1/authentication/profile')).data
+        .data.data as any;
+
+      localStorage.setItem('institutionId', response.userInfo.esiAdmin.id);
+      localStorage.setItem('currentSessionId', response.currentSession.id);
+      return response;
+    },
   });
-  return mutation;
+  return query;
+}
+export function useGetCurrentSession() {
+  const query = useQuery({
+    queryKey: 'get_current_session',
+    queryFn: async () => {
+      const response = (await request.get('/v1/authentication/profile')).data
+        .data.data.currentSession as any;
+      return response;
+    },
+  });
+  return query;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 interface StudentTeacherProps {
   title: string;
-  text: string;
+  text: string | number;
 }
 
 const StudentTeacherBadge = ({ title, text }: StudentTeacherProps) => {

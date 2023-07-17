@@ -26,16 +26,31 @@ import Webcam from 'react-webcam';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
   imgSrc: any;
   setImgSrc: (v: any) => void;
+  setImageData: (v: any) => void;
 };
 
-const GenderOptions: string[] = ['MALE', 'FEMALE', 'Others'];
+const GenderOptions: string[] = ['Male', 'Female', 'Other'];
 
-const Biodata = ({ register, errors, imgSrc, setImgSrc }: Iprops) => {
+const Biodata = ({
+  register,
+  errors,
+  imgSrc,
+  setImgSrc,
+  setImageData,
+}: Iprops) => {
   const [isCapture, setIsCapture] = useState(false);
   const WebcamCapture = () => {
     const webcamRef: any = React.useRef(null);
@@ -43,6 +58,36 @@ const Biodata = ({ register, errors, imgSrc, setImgSrc }: Iprops) => {
     const capture = React.useCallback(() => {
       const imageSrc = webcamRef?.current?.getScreenshot();
       setImgSrc(imageSrc);
+      // const array =  imageSrc?.arrayBuffer();
+
+      if (imageSrc) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        // Create an image element and set the source
+        const image = document.createElement('img') as HTMLImageElement; // Type assertion to HTMLImageElement
+        image.src = imageSrc;
+
+        // Draw the image on the canvas
+        image.onload = () => {
+          canvas.width = image.width;
+          canvas.height = image.height;
+          context?.drawImage(image, 0, 0);
+
+          // Convert the canvas image to a File object
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const file = new File([blob], 'capturedImage.jpg', {
+                type: 'image/jpeg',
+              });
+
+              // Use the file as needed
+              setImageData(file);
+            }
+          }, 'image/jpeg');
+        };
+      }
+
       setIsCapture(false);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

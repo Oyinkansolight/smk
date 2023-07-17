@@ -15,14 +15,12 @@ export default function StudentDashboardView({ currentTermId }: any) {
   const [schoolType, setschoolType] = useState<string | null>('');
 
   const queryString = useSearchParams();
-  const handdleCreateAcademicCalendar = useCreateAcademicEvent();
   const { data, isLoading } = useGetAcademicEvent();
   const [loading, setloading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [session, setsession] = useState<string | null>('');
   const [title, settitle] = useState('');
-  const [institutionType] = useState('Primary');
   const [startDate, setstartDate] = useState('');
   const [endDate, setendDate] = useState('');
   // const [events, setEvents] = useState([]);
@@ -39,10 +37,11 @@ export default function StudentDashboardView({ currentTermId }: any) {
   //   }
   // }
 
+  const handdleCreateAcademicCalendar = useCreateAcademicEvent();
   const SubmitHandler = async () => {
     const data = {
       sessionId: session,
-      institutionType,
+      institutionType: schoolType,
       term: currentTermId,
       title,
       startDate,
@@ -74,7 +73,8 @@ export default function StudentDashboardView({ currentTermId }: any) {
     // const currrentterm = searchParams.get('term');
     const st = queryString && queryString.get('schooltype');
 
-    setschoolType(st);
+    // initial data: Secondary school, Output: "Secondary"
+    setschoolType(st && st.replace(' School', ''));
     // setterm(currrentterm);
     setsession(currrentsession);
 
@@ -83,7 +83,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
   const filteredEvents = (data?.data ?? []).filter(
     (item: any) =>
       item?.session?.id === Number(session) &&
-      item.institutionType === institutionType
+      item.institutionType.includes(schoolType)
   );
   // setEvents(filteredEvents);
 

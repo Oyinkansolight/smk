@@ -1,7 +1,6 @@
 import Button from '@/components/buttons/Button';
 import BreadCrumbs from '@/components/navigation/BreadCrumbs';
 
-
 export default function Page() {
   return (
     <div className='layout w-full flex flex-col gap-4'>

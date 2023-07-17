@@ -2,7 +2,8 @@ import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
 import { useGetProfile } from '@/server/auth';
 import * as React from 'react';
-import { GoBell, GoThreeBars } from 'react-icons/go';
+import { GoBell } from 'react-icons/go';
+import { VscThreeBars } from 'react-icons/vsc';
 import Avatar from '~/svg/avatar.svg';
 import Badge from '~/svg/eca.svg';
 
@@ -25,7 +26,7 @@ export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
               onClick={toggleSidebar}
               className='focus:outline-nones flex h-[45px] w-[45px] items-center justify-center rounded-full bg-white shadow-sm transition-colors duration-200 hover:bg-gray-200'
             >
-              <GoThreeBars className='fill-current text-[#C3CAD9]' />
+              <VscThreeBars className='fill-current text-[#C3CAD9]' />
             </div>
 
             <div className='flex h-[55px] w-[55px] items-center justify-center rounded-full border'>
@@ -42,7 +43,9 @@ export default function StudentHeader({ toggleSidebar }: StudentHeaderProps) {
 
               <div className='flex flex-col gap-2'>
                 <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
-                  {data?.userInfo?.email ? data?.userInfo?.email.split('@')[0] : data?.userInfo?.firstName}
+                  {data?.userInfo?.email
+                    ? data?.userInfo?.email.split('@')[0]
+                    : data?.userInfo?.firstName}
                 </div>
                 <Pill
                   text={
