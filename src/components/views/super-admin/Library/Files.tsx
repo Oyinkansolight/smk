@@ -238,7 +238,6 @@ const UploadDocument = ({
   canUpload?: boolean;
 }) => {
   const {
-    register,
     getValues,
     formState: { errors },
     control,
@@ -345,7 +344,6 @@ const UploadDocument = ({
         )}
         {isAssign && (
           <AssignSubject
-            register={register}
             control={control}
             errors={errors}
             loading={loading}

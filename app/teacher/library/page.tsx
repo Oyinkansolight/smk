@@ -3,11 +3,12 @@
 
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
-import logger from '@/lib/logger';
 import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -27,8 +28,6 @@ const TeacherLibrary = () => {
   const teacherFilesData: any = [];
   const { data, isLoading } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
-
-  logger('data', data);
 
   data &&
     data.forEach((element: any) => {

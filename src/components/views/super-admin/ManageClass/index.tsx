@@ -15,6 +15,24 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Empty from '~/svg/empty.svg';
 
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 /* eslint-disable unused-imports/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -200,6 +218,7 @@ const UploadDocument = ({
     register,
     getValues,
     formState: { errors },
+    control,
     // handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
@@ -211,9 +230,7 @@ const UploadDocument = ({
     try {
       const response = await handleUseAssignSubjectsToFile.mutateAsync({
         fileId,
-        subject: getValues('subject'),
-        schoolType: getValues('schoolType'),
-        classes: getValues('class'),
+        subjectId: (getValues('subject') as {value: number}[]).map((v)=>v.value),
       });
 
       if (response) {
@@ -243,7 +260,7 @@ const UploadDocument = ({
       )}
       {isAssign && (
         <AssignSubject
-          register={register}
+          control={control}
           errors={errors}
           loading={loading}
           onClickHandler={handleIsAssignModal}

@@ -8,8 +8,8 @@ import { FallingLines } from 'react-loader-spinner';
 import ReactSelect from 'react-select';
 import Close from '~/svg/close.svg';
 
+
 type Iprops = {
-  register: any;
   errors: any;
   loading?: boolean;
   onClickHandler?: () => void;

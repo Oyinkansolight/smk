@@ -13,7 +13,7 @@ import Subjects from '~/svg/subjects.svg';
 
 const Library = () => {
   const filesData = useGetAllFiles();
-  const { data, error, isLoading } = filesData;
+  const { data, isLoading } = filesData;
 
   const [tabIdx, setTabIdx] = useState(0);
   return (
@@ -57,7 +57,7 @@ const Library = () => {
 
         {tabIdx === 0 && (
           <Manageclass
-            data={data?.data}
+            data={data}
             isLoading={isLoading}
             variant='primary'
           />
