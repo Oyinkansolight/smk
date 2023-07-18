@@ -2,8 +2,11 @@
 
 import Button from '@/components/buttons/Button';
 import PageCounter from '@/components/counter/PageCounter';
+import EmptyView from '@/components/misc/EmptyView';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
+import { useGetPeriodById } from '@/server/institution/period';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { IoAddCircle } from 'react-icons/io5';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
@@ -14,6 +17,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 export default function Page() {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const params = useSearchParams();
+  const id = params?.get('id');
+  const { data: period } = useGetPeriodById(
+    id ? Number.parseInt(id) : undefined
+  );
 
   return (
     <div className='layout'>
@@ -57,28 +65,37 @@ export default function Page() {
         </div>
       </div>
 
-      <div className='flex items-start gap-10'>
-        <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem]'>
-          <div className='flex justify-center p-8'>
-            <PageCounter
-              page={currentPage}
-              maxPage={numberOfPages}
-              onChange={setCurrentPage}
+      <div className='flex items-stretch gap-10'>
+        {period?.file ? (
+          <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem]'>
+            <div className='flex justify-center p-8'>
+              <PageCounter
+                page={currentPage}
+                maxPage={numberOfPages}
+                onChange={setCurrentPage}
+              />
+            </div>
+            <div className='flex justify-center'>
+              {' '}
+              <Document
+                className='mx-auto'
+                file='/pdfs/CHEMISTRY SS2 3RD TERM WEEK 3.pdf'
+                onLoadSuccess={(v) => {
+                  setNumberOfPages(v.numPages);
+                }}
+              >
+                <DocPage pageNumber={currentPage} renderTextLayer={false} />
+              </Document>
+            </div>
+          </div>
+        ) : (
+          <div className='w-full'>
+            <EmptyView
+              label='No scripted lesson note for this period'
+              useStandardHeight
             />
           </div>
-          <div className='flex justify-center'>
-            {' '}
-            <Document
-              className='mx-auto'
-              file='/pdfs/CHEMISTRY SS2 3RD TERM WEEK 3.pdf'
-              onLoadSuccess={(v) => {
-                setNumberOfPages(v.numPages);
-              }}
-            >
-              <DocPage pageNumber={currentPage} renderTextLayer={false} />
-            </Document>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

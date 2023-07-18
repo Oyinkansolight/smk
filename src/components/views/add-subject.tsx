@@ -5,8 +5,9 @@ import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import clsxm from '@/lib/clsxm';
 import { useCreateSubject } from '@/server/institution';
+import { useGetAllClasses } from '@/server/institution/class';
 import { Label } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { toast } from 'react-toastify';
@@ -23,31 +24,46 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
   const [classes3, setClasses2] = useState(new Set());
   const [classes4, setClasses3] = useState(new Set());
 
-  const d1: Label[] = [
-    { id: 0, value: 'Daycare' },
-    { id: 1, value: 'ECCDE 1' },
-    { id: 2, value: 'ECCDE 2' },
-  ];
+  const [d1, setD1] = useState<Label[]>([]);
 
-  const d2: Label[] = [
-    { id: 3, value: 'Primary 1' },
-    { id: 4, value: 'Primary 2' },
-    { id: 5, value: 'Primary 3' },
-    { id: 6, value: 'Primary 4' },
-    { id: 7, value: 'Primary 5' },
-    { id: 8, value: 'Primary 6' },
-  ];
+  const [d2, setD2] = useState<Label[]>([]);
 
-  const d3: Label[] = [
-    { id: 9, value: 'JSS 1' },
-    { id: 10, value: 'JSS 2' },
-    { id: 11, value: 'JSS 3' },
-    { id: 12, value: 'SSC 4' },
-    { id: 13, value: 'SSC 5' },
-    { id: 14, value: 'SSC 6' },
-  ];
+  const [d3, setD3] = useState<Label[]>([]);
 
-  const d4: Label[] = [{ id: 'ex', value: 'Example' }];
+  const [d4, setD4] = useState<Label[]>([]);
+
+  const { data: classes } = useGetAllClasses();
+
+  useEffect(() => {
+    const m1: Label[] = [];
+    const m2: Label[] = [];
+    const m3: Label[] = [];
+    const m4: Label[] = [];
+    if (classes) {
+      for (let i = 0; i < classes.length; i++) {
+        const cl = classes[i];
+        if (cl.institutionType?.toLocaleLowerCase()?.includes?.('eccde')) {
+          m1.push({ id: cl.id ?? i, value: cl.name ?? '[NULL]' });
+        } else if (
+          cl.institutionType?.toLocaleLowerCase()?.includes?.('primary')
+        ) {
+          m2.push({ id: cl.id ?? i, value: cl.name ?? '[NULL]' });
+        } else if (
+          cl.institutionType?.toLocaleLowerCase()?.includes?.('secondary')
+        ) {
+          m3.push({ id: cl.id ?? i, value: cl.name ?? '[NULL]' });
+        } else if (
+          cl.institutionType?.toLocaleLowerCase()?.includes?.('tertiary')
+        ) {
+          m4.push({ id: cl.id ?? i, value: cl.name ?? '[NULL]' });
+        }
+      }
+      setD1(m1);
+      setD2(m2);
+      setD3(m3);
+      setD4(m4);
+    }
+  }, [classes]);
 
   const onSubmit = async (data: any) => {
     const ids: any[] = [];
@@ -114,7 +130,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
           <div className='w-full text-start font-bold'>
             <div>ECCDE School</div>
           </div>
-          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+          <div className='text-xs whitespace-nowrap grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
             <div
               onClick={() => {
                 const s = new Set(classes1);
@@ -123,16 +139,21 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 }
                 setClasses(s);
               }}
-              className='flex cursor-pointer items-center gap-2'
+              className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
             >
               {Array.from(classes1.entries()).length === d1.length ? (
                 <AiFillCheckCircle
                   className={clsxm('h-5 w-5 text-fun-green-500')}
                 />
               ) : (
-                <div className='h-5 w-5 rounded-full border-2' />
+                <div
+                  style={{ height: '20px', width: '20px' }}
+                  className='h-5 w-5 rounded-full border-2'
+                >
+                  <div>.</div>
+                </div>
               )}
-              <div>Select All</div>
+              <div className='col-span-2'>Select All</div>
             </div>
             {d1?.map((v, i) => (
               <div
@@ -148,7 +169,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                   }
                 }}
                 key={i}
-                className='flex cursor-pointer items-center gap-2'
+                className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
               >
                 {classes1.has(i) ? (
                   <AiFillCheckCircle
@@ -157,7 +178,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 ) : (
                   <div className='h-5 w-5 rounded-full border-2' />
                 )}
-                <div>{v.value}</div>
+                <div className='col-span-2'>{v.value}</div>
               </div>
             ))}
           </div>
@@ -165,7 +186,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
           <div className='w-full text-start font-bold'>
             <div>Primary School</div>
           </div>
-          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+          <div className='text-xs whitespace-nowrap grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
             <div
               onClick={() => {
                 const s = new Set(classes1);
@@ -174,7 +195,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 }
                 setClasses1(s);
               }}
-              className='flex cursor-pointer items-center gap-2'
+              className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
             >
               {Array.from(classes2.entries()).length === d2.length ? (
                 <AiFillCheckCircle
@@ -183,7 +204,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>Select All</div>
+              <div className='col-span-2'>Select All</div>
             </div>
             {d2?.map((v, i) => (
               <div
@@ -199,7 +220,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                   }
                 }}
                 key={i}
-                className='flex cursor-pointer items-center gap-2'
+                className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
               >
                 {classes2.has(i) ? (
                   <AiFillCheckCircle
@@ -208,7 +229,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 ) : (
                   <div className='h-5 w-5 rounded-full border-2' />
                 )}
-                <div>{v.value}</div>
+                <div className='col-span-2'>{v.value}</div>
               </div>
             ))}
           </div>
@@ -216,7 +237,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
           <div className='w-full text-start font-bold'>
             <div>Secondary School</div>
           </div>
-          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+          <div className='text-xs whitespace-nowrap grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
             <div
               onClick={() => {
                 const s = new Set(classes1);
@@ -225,7 +246,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 }
                 setClasses2(s);
               }}
-              className='flex cursor-pointer items-center gap-2'
+              className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
             >
               {Array.from(classes3.entries()).length === d3.length ? (
                 <AiFillCheckCircle
@@ -234,7 +255,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>Select All</div>
+              <div className='col-span-2'>Select All</div>
             </div>
             {d3?.map((v, i) => (
               <div
@@ -250,7 +271,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                   }
                 }}
                 key={i}
-                className='flex cursor-pointer items-center gap-2'
+                className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
               >
                 {classes3.has(i) ? (
                   <AiFillCheckCircle
@@ -259,7 +280,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 ) : (
                   <div className='h-5 w-5 rounded-full border-2' />
                 )}
-                <div>{v.value}</div>
+                <div className='col-span-2'>{v.value}</div>
               </div>
             ))}
           </div>
@@ -267,7 +288,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
           <div className='w-full text-start font-bold'>
             <div>Tertiary School</div>
           </div>
-          <div className='grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
+          <div className='text-xs whitespace-nowrap grid w-full grid-cols-1 gap-y-2 gap-x-8 md:grid-cols-4 mt-[14px]'>
             <div
               onClick={() => {
                 const s = new Set(classes1);
@@ -276,7 +297,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 }
                 setClasses3(s);
               }}
-              className='flex cursor-pointer items-center gap-2'
+              className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
             >
               {Array.from(classes4.entries()).length === d4.length ? (
                 <AiFillCheckCircle
@@ -285,7 +306,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
               ) : (
                 <div className='h-5 w-5 rounded-full border-2' />
               )}
-              <div>Select All</div>
+              <div className='col-span-2'>Select All</div>
             </div>
             {d4?.map((v, i) => (
               <div
@@ -301,7 +322,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                   }
                 }}
                 key={i}
-                className='flex cursor-pointer items-center gap-2'
+                className='grid w-full justify-items-start grid-cols-3 cursor-pointer items-center gap-2'
               >
                 {classes4.has(i) ? (
                   <AiFillCheckCircle
@@ -310,14 +331,13 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
                 ) : (
                   <div className='h-5 w-5 rounded-full border-2' />
                 )}
-                <div>{v.value}</div>
+                <div className='col-span-2'>{v.value}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className='h-8' />
-        <div className='font-bold text-[#E5A500]'>Note</div>
+        <div className='font-bold text-[#E5A500] mt-8'>Note</div>
         <div className='text-xs mt-2'>
           You would be required to add curriculum and lesson note for this
           subject in the subject settings

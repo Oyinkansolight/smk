@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
+import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
 
 export interface SignUpParams {
@@ -69,12 +70,18 @@ export function useGetProfile() {
     queryKey: 'get_profile',
     queryFn: async () => {
       const response = (await request.get('/v1/authentication/profile')).data
-        .data.data as any;
-
-      localStorage.setItem('institutionId', response.userInfo.esiAdmin.id);
-      localStorage.setItem('currentSessionId', response.currentSession.id);
+        .data.data as UserProfile;
+      localStorage.setItem(
+        'institutionId',
+        `${response.userInfo?.esiAdmin?.id}`
+      );
+      localStorage.setItem(
+        'currentSessionId',
+        `${response.currentSession?.id}`
+      );
       return response;
     },
+    refetchOnMount: false,
   });
   return query;
 }

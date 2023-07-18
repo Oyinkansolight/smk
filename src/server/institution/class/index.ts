@@ -1,5 +1,6 @@
 import request from '@/server';
 import { PaginationParams } from '@/types';
+import { Class } from '@/types/classes-and-subjects';
 import { InstituteClass } from '@/types/institute';
 import { useQuery } from 'react-query';
 
@@ -49,6 +50,18 @@ export function useGetInstituteSessionClassArms(
       );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return d.data.data.data as any;
+    },
+  });
+  return query;
+}
+
+export function useGetAllClasses() {
+  const query = useQuery({
+    queryKey: 'all_classes',
+    queryFn: async () => {
+      const d = await request.get(`/v1/utilities/all_classes`);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return d.data.data.data as Class[];
     },
   });
   return query;

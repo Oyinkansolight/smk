@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
+import { UserFile, UserFolder } from '@/types/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface UploadFileParams {
@@ -8,14 +9,14 @@ export interface UploadFileParams {
   fileUrl?: string;
   userTypes?: string[];
   subjects?: string[];
-  createdBy?: string;
+  createdBy?: string | number;
 }
 
 export interface UpdateFileSubjectParams {
   fileId?: number;
   classes?: string;
-  subject: string;
-  schoolType: string;
+  subjectId: number[];
+  schoolType?: string;
 }
 
 export interface NewFolderParams {
@@ -44,9 +45,30 @@ export function useGetAllFiles(type?: string) {
           const result = d.data.data.data.data.filter((item: any) =>
             item.userTypes.includes(sectionType)
           );
-          return result;
+          return result as UserFile[];
         } else {
-          return d.data.data.data.data;
+          return d.data.data.data.data as UserFile[];
+        }
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  return query;
+}
+
+export function useGetFileById(id?: number) {
+  const query = useQuery({
+    queryKey: `get_file_${id}`,
+    queryFn: async () => {
+      try {
+        if (id) {
+          const d = await request.get('/v1/government/library/get-file', {
+            params: { id },
+          });
+          return d.data.data as UserFile;
         }
       } catch (error) {
         logger(error);
@@ -64,7 +86,7 @@ export function useGetAllFolders() {
     queryFn: async () => {
       try {
         const d = await request.get('/v1/government/library/get-folders');
-        return d.data.data.data;
+        return d.data.data.data as UserFolder[];
       } catch (error) {
         logger(error);
         throw error;

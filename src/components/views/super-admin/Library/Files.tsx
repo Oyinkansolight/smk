@@ -1,15 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
+import Table from '@/components/tables/TableComponent';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
-import { useAssignSubjectsToFile, useGetAllFolders } from '@/server/library';
+import {
+  useAssignSubjectsToFile,
+  useGetAllFolders,
+  useGetFileById,
+} from '@/server/library';
+import { UserFile, UserFolder } from '@/types/material';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { TableColumn } from 'react-data-table-component';
 import { useForm } from 'react-hook-form';
 import { BiFolderOpen } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -18,56 +25,231 @@ import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import User from '~/svg/user1.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type TableItemData = (UserFolder | UserFile) & {
+  action: number | null;
+  setAction: (value: number | null) => void;
+  idx: number;
+  setisAssign: (value: boolean) => void;
+  isAssign: boolean;
+  setFileId: (value: number) => void;
+};
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const columns: TableColumn<TableItemData>[] = [
+  {
+    name: 'Name',
+    grow: 2,
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
+            <div>
+              <FileContent className='h-6 w-6' />
+            </div>
+            <h2 className='text-sm font-medium'>{item?.filename}</h2>
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
+            <div>
+              <BiFolderOpen className='h-6 w-6' />
+            </div>
+            <h2 className='text-sm font-medium'>{item?.folderName}</h2>
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Subject',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2'>
+            {(item?.subject?.length ?? 0) > 0
+              ? (item?.subject ?? []).map((v) => v.name).join(', ')
+              : '-'}{' '}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return <div className='col-span-2'>-</div>;
+      }
+    },
+  },
+  {
+    name: 'Created By',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2'>
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div className='col-span-2'>
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Date Added',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
+            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <h2 className='text-sm font-normal'>
+              {moment(item?.createdAt).format('ll')}
+            </h2>
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
+            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <h2 className='text-sm font-normal'>
+              {moment(item?.createdAt).format('ll')}
+            </h2>
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Size',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return <div>{item?.size ?? '-'}</div>;
+      } else if ('folderName' in item) {
+        return <div>{item?.size ?? '-'}</div>;
+      }
+    },
+  },
+  {
+    name: '',
+    grow: 0,
+    width: '20px',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div>
+            <button
+              onClick={() => {
+                item.setAction(item.idx + 1);
+              }}
+              className='relative'
+            >
+              <BsThreeDotsVertical className='text-lg' />
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+              {item.action == item.idx + 1 && (
+                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Manage Access
+                  </button>
+                  <button
+                    onClick={() => {
+                      item.setisAssign(!item.isAssign);
+                      item.setFileId(item?.id ?? 0);
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
+                    Assign to a Subject
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Rename
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </button>
+            {item.action && (
+              <div
+                className='fixed inset-0 z-[1]'
+                onClick={() => {
+                  item.setAction(null);
+                }}
+              ></div>
+            )}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div>
+            <button
+              onClick={() => {
+                item.setAction(item.idx + 1);
+              }}
+              className='relative'
+            >
+              <BsThreeDotsVertical className='text-lg' />
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+              {item.action == item.idx + 1 && (
+                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Manage Access
+                  </button>
+                  <button
+                    onClick={() => {
+                      item.setisAssign(!item.isAssign);
+                      item.setFileId(item?.id ?? 0);
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
+                    Assign to a Subject
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Rename
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </button>
+            {item.action && (
+              <div
+                className='fixed inset-0 z-[1]'
+                onClick={() => {
+                  item.setAction(null);
+                }}
+              ></div>
+            )}
+          </div>
+        );
+      }
+    },
+  },
+];
 
 const UploadDocument = ({
   data,
   isLoading,
   variant,
   canUpload = true,
-}: any) => {
+}: {
+  data?: UserFile[];
+  isLoading?: boolean;
+  variant?: string;
+  canUpload?: boolean;
+}) => {
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    control,
+    setValue,
+    reset,
+    // handleSubmit,
+  } = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setisCreateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
@@ -79,6 +261,25 @@ const UploadDocument = ({
   const { data: folderData } = useGetAllFolders();
 
   // console.log(folderData);
+
+  const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
+
+  useEffect(() => {
+    reset();
+    if (fileId) {
+      refetchFile();
+    }
+  }, [fileId, refetchFile, reset]);
+
+  useEffect(() => {
+    if (fileObject) {
+      setValue(
+        'subject',
+        fileObject.subject?.map((v) => ({ label: v.name, value: v.id })),
+        { shouldValidate: true }
+      );
+    }
+  }, [fileObject, setValue]);
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -100,25 +301,20 @@ const UploadDocument = ({
   function handleIsAssignModal() {
     setisAssign(!isAssign);
   }
-  const {
-    register,
-    getValues,
-    formState: { errors },
-    // handleSubmit,
-  } = useForm({
-    reValidateMode: 'onChange',
-    mode: 'onChange',
-  });
-  const [content, setContent] = useState([]);
+
+  const [content, setContent] = useState<UserFile[] | undefined>([]);
 
   const handleAssignSubject = async () => {
     setLoading(true);
     try {
       const response = await handleUseAssignSubjectsToFile.mutateAsync({
         fileId,
-        subject: getValues('subject'),
-        schoolType: getValues('schoolType'),
-        classes: getValues('class'),
+        subjectId:
+          (
+            getValues('subject') as
+              | { label: string; value: number }[]
+              | undefined
+          )?.map((s) => s.value ?? 0) ?? [],
       });
 
       if (response) {
@@ -150,6 +346,7 @@ const UploadDocument = ({
         {isAssign && (
           <AssignSubject
             register={register}
+            control={control}
             errors={errors}
             loading={loading}
             onClickHandler={handleIsAssignModal}
@@ -239,261 +436,23 @@ const UploadDocument = ({
           </div>
         )}
 
-        <div className='table-add-student mt-3 overflow-x-auto pb-4 bg-white'>
-          <div className=' min-w-[800px] flex justify-end text-base space-x-4 font-semibold border-b p-3'>
-            {/* <div className='border shadow rounded'>
-              <select
-                name='file_type'
-                id='file_type'
-                className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
-              >
-                {' '}
-                <option value=''>--File Type--</option>
-                <option value='file'>Only Files</option>
-                <option value='folder'>Only Folder </option>
-                <option value='media'>Only Media </option>
-              </select>
-            </div>
-            <div className='border shadow rounded'>
-              <select
-                name='file_type'
-                id='file_type'
-                className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
-              >
-                {' '}
-                <option value=''>--Selected By--</option>
-                <option value='file'>Only Files</option>
-                <option value='folder'>Only Folder </option>
-                <option value='media'>Only Media </option>
-              </select>
-            </div>
-            <div className='border shadow rounded'>
-              <input
-                type='date'
-                name=''
-                id=''
-                className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
-              />
-            </div> */}
-          </div>
-
-          <div className='min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md  border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-            <div className='col-span-4 pl-2'>Name</div>
-            {/* //!!!TODO: change Subject back to Class */}
-            <div className='col-span-2'>Subject</div>
-            <div className='col-span-2'>Created by</div>
-            <div className='col-span-2'>Date Added</div>
-            <div className='col-span-2'>Size</div>
-          </div>
-
-          {/* Mapping for folders */}
-          {folderData &&
-            folderData.length > 0 &&
-            folderData.map((item: any, idx: number) => (
-              <div
-                key={idx}
-                className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              >
-                <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
-                  <div>
-                    <BiFolderOpen className='h-6 w-6' />
-                  </div>
-                  <h2 className='text-sm font-medium'>{item?.folderName}</h2>
-                </div>
-                <div className='col-span-2'>-</div>
-                <div className='col-span-2'>
-                  {item?.createdBy.firstName} {item?.createdBy.lastName}
-                </div>
-                <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-                  <User alt='avril' className='h-8 w-8 rounded-full' />
-                  <h2 className='text-sm font-normal'>
-                    {moment(item?.createdAt).format('ll')}
-                  </h2>
-                </div>
-                <div className='col-span-2 justify-between pr-5 flex items-center'>
-                  <div>{item?.size ?? '-'}</div>
-                  <button
-                    onClick={() => {
-                      setAction(idx + 1);
-                    }}
-                    className='relative'
-                  >
-                    <BsThreeDotsVertical className='text-lg' />
-
-                    {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Manage Access
-                        </button>
-                        <button
-                          onClick={() => {
-                            setisAssign(!isAssign);
-                            setFileId(item?.id);
-                          }}
-                          className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
-                        >
-                          Assign to a Subject
-                        </button>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Rename
-                        </button>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </button>
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
-                      onClick={() => {
-                        setAction(null);
-                      }}
-                    ></div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-          {/* Mapping for files */}
-          {content &&
-            content.length > 0 &&
-            content.map((item: any, idx: number) => (
-              <div
-                key={idx}
-                className=' min-w-[800px] grid grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              >
-                <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
-                  <div>
-                    <FileContent className='h-6 w-6' />
-                  </div>
-                  <h2 className='text-sm font-medium'>{item?.filename}</h2>
-                  {/* <BasicModal
-                    className='!w-[40vw] h-[80vh]'
-                    content={
-                      <DocViewer
-                        pluginRenderers={DocViewerRenderers}
-                        documents={[
-                          {
-                            uri: '/pdfs/Assignment samples.pdf',
-                            fileType: 'pdf',
-                          },
-                          {
-                            uri: url,
-                            fileType: 'pdf',
-                          },
-                        ]}
-                      />
-                    }
-                  >
-                    <h2 className='text-sm font-medium'>{item?.filename}</h2>
-                  </BasicModal> */}
-                </div>
-                <div className='col-span-2'>
-                  {item?.subject?.length > 0 ? item?.subject[0].subject : '-'}{' '}
-                </div>
-                <div className='col-span-2'>
-                  {item?.createdBy.firstName} {item?.createdBy.lastName}
-                </div>
-                <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-                  <User alt='avril' className='h-8 w-8 rounded-full' />
-                  <h2 className='text-sm font-normal'>
-                    {moment(item?.createdAt).format('ll')}
-                  </h2>
-                </div>
-                <div className='col-span-2 justify-between pr-5 flex items-center'>
-                  <div>{item?.size ?? '-'}</div>
-                  <button
-                    onClick={() => {
-                      setAction(idx + 1);
-                    }}
-                    className='relative'
-                  >
-                    <BsThreeDotsVertical className='text-lg' />
-
-                    {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Manage Access
-                        </button>
-                        <button
-                          onClick={() => {
-                            setisAssign(!isAssign);
-                            setFileId(item?.id);
-                          }}
-                          className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
-                        >
-                          Assign to a Subject
-                        </button>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Rename
-                        </button>
-                        <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </button>
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
-                      onClick={() => {
-                        setAction(null);
-                      }}
-                    ></div>
-                  )}
-                </div>
-              </div>
-            ))}
-
-          <div className='min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
-            <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-              <svg
-                width='6'
-                height='8'
-                viewBox='0 0 6 8'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  fill-rule='evenodd'
-                  clip-rule='evenodd'
-                  d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
-                  fill='#8898AA'
-                />
-              </svg>
-            </div>
-            <div
-              className={`${
-                variant !== 'primary' ? 'bg-blue-500' : 'bg-[#016938] '
-              }  grid h-7 w-7 place-content-center rounded-full border bg-variant p-2 text-white`}
-            >
-              1
-            </div>
-            <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-              2
-            </div>
-            <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-              3
-            </div>
-            <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-              <svg
-                width='6'
-                height='8'
-                viewBox='0 0 6 8'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  fill-rule='evenodd'
-                  clip-rule='evenodd'
-                  d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
-                  fill='#8898AA'
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
+        <Table
+          columns={columns}
+          data={
+            [...(folderData ?? []), ...(content ?? [])]?.map(
+              (item, idx) =>
+                ({
+                  ...item,
+                  action,
+                  isAssign,
+                  setAction,
+                  setisAssign,
+                  idx,
+                  setFileId,
+                } as TableItemData)
+            ) ?? []
+          }
+        />
       </section>
     );
   }

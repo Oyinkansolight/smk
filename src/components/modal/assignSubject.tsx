@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import FormSelect from '@/components/input/formSelect';
 import { useGetSubjectList } from '@/server/institution';
+import { Subject } from '@/types/institute';
 import React, { useEffect, useState } from 'react';
+import { Control, Controller, FieldValues } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { FallingLines } from 'react-loader-spinner';
+import ReactSelect from 'react-select';
 import Close from '~/svg/close.svg';
 
 type Iprops = {
@@ -12,29 +14,40 @@ type Iprops = {
   loading?: boolean;
   onClickHandler?: () => void;
   handleSubmit?: () => void;
+  control?: Control<FieldValues, any>;
 };
 
 function CreateFolder({
   onClickHandler,
-  register,
-  errors,
   loading,
   handleSubmit,
+  control,
 }: Iprops) {
   const getSubjects = useGetSubjectList();
-  const [allSubjects, setAllSubjects] = useState<any[]>([]);
+  const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
 
   // const [allSubjectsData, setAllSubjectsData] = useState<any[]>([]);
 
   const options = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
+  const classesOptions = [
+    'Primary 1',
+    'Primary 2',
+    'Primary 3',
+    'Primary 4',
+    'Primary 5',
+    'Primary 6',
+    'JSS 1',
+    'JSS 2',
+    'JSS 3',
+    'SSS 1',
+    'SSS 2',
+    'SSS 3',
+  ];
 
   useEffect(() => {
     if (!getSubjects.isLoading) {
       // setAllSubjectsData(getSubjects.data);
-      getSubjects.data &&
-        getSubjects.data.map((item: any) => {
-          setAllSubjects((prev) => [...prev, item.name]);
-        });
+      getSubjects.data && setAllSubjects(getSubjects.data);
     }
   }, [getSubjects.data, getSubjects.isLoading]);
 
@@ -62,69 +75,62 @@ function CreateFolder({
             </p>
 
             <div className='w-full mb-4'>
-              <FormSelect
-                label='Select School Type'
+              <Controller
+                control={control}
                 name='schoolType'
-                options={options}
-                register={register}
-                validation={{
-                  required: 'School Type is required',
-                }}
-                helper={
-                  errors?.schoolType && {
-                    message: errors?.schoolType?.message,
-                    type: 'danger',
-                  }
-                }
+                render={({ field }) => (
+                  <div>
+                    <div>School Type </div>
+                    <ReactSelect
+                      isMulti
+                      required
+                      options={options.map((v) => ({ label: v, value: v }))}
+                      {...field}
+                    />
+                  </div>
+                )}
               />
             </div>
 
             <div className='w-full mb-4'>
-              <FormSelect
-                label='Select Class'
+              <Controller
+                control={control}
                 name='class'
-                options={[
-                  'Primary 1',
-                  'Primary 2',
-                  'Primary 3',
-                  'Primary 4',
-                  'Primary 5',
-                  'Primary 6',
-                  'JSS 1',
-                  'JSS 2',
-                  'JSS 3',
-                  'SSS 1',
-                  'SSS 2',
-                  'SSS 3',
-                ]}
-                register={register}
-                validation={{
-                  required: 'Class is required',
-                }}
-                helper={
-                  errors?.class && {
-                    message: errors?.class?.message,
-                    type: 'danger',
-                  }
-                }
+                render={({ field }) => (
+                  <div>
+                    <div>Class </div>
+                    <ReactSelect
+                      isMulti
+                      required
+                      options={classesOptions.map((v) => ({
+                        label: v,
+                        value: v,
+                      }))}
+                      {...field}
+                    />
+                  </div>
+                )}
               />
             </div>
 
             <div className='w-full mb-4'>
-              <FormSelect
-                label='Select Subject'
+              <Controller
+                control={control}
                 name='subject'
-                options={allSubjects}
-                register={register}
-                validation={{
-                  required: 'School Type is required',
-                }}
-                helper={
-                  errors?.subject && {
-                    message: errors?.subject?.message,
-                    type: 'danger',
-                  }
-                }
+                render={({ field }) => (
+                  <div>
+                    <div>Select Subject </div>
+                    <ReactSelect
+                      isMulti
+                      required
+                      options={allSubjects.map((v) => ({
+                        label: v.name,
+                        value: v.id,
+                      }))}
+                      {...field}
+                    />
+                  </div>
+                )}
               />
             </div>
 
