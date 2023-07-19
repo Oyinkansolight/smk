@@ -9,10 +9,13 @@ import DragDropDocument from '@/components/input/DragDropDocument';
 import TextArea from '@/components/input/TextArea';
 import { uploadDocument } from '@/firebase/init';
 import { useGetProfile } from '@/server/auth';
-import { UploadFileParams, useUploadFile } from '@/server/library';
-import NewMaterial from '@/types/material';
+import {
+  UploadFileParams,
+  useUploadFile,
+  useUploadFolderFile,
+} from '@/server/library';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -24,7 +27,9 @@ export default function Page() {
   const { data: profile } = useGetProfile();
   const [fileName, setFileName] = useState<string>();
   const { handleSubmit, register, control } = useForm();
-  const { mutateAsync } = useUploadFile();
+  const { mutateAsync: uploadFile } = useUploadFile();
+  const { mutateAsync: uploadFolderFile } = useUploadFolderFile();
+  const params = useSearchParams();
   const onSubmit = async (d: any) => {
     toast.info('Uploading file...');
     if (fileName && data?.arrayBuffer) {
@@ -33,14 +38,17 @@ export default function Page() {
         await data?.arrayBuffer()
       );
 
-      const toUpload: NewMaterial = { ...d, documentPath: path };
+      const folderId = params?.get('folderId');
       const fileUploadDetails: UploadFileParams = {
         filename: d.title,
         fileUrl: path,
         createdBy: profile?.userInfo?.email,
         userTypes: [],
+        folderId,
       };
-      const response = await mutateAsync(fileUploadDetails);
+      const response = folderId
+        ? await uploadFolderFile(fileUploadDetails)
+        : await uploadFile(fileUploadDetails);
 
       if (response.data.data.status) {
         toast.success('File uploaded successfully');
@@ -52,7 +60,9 @@ export default function Page() {
   };
   return (
     <form className='my-10 mx-8' onSubmit={handleSubmit(onSubmit)}>
-      <div className='h2 my-10'>Add a file</div>
+      <div className='h2 my-10'>
+        Add a file {`To ${params?.get('folderName')}`}
+      </div>
 
       <div className='grid grid-cols-4 gap-10'>
         <div>

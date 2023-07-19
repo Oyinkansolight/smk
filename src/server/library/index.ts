@@ -4,12 +4,14 @@ import request from '@/server';
 import { UserFile, UserFolder } from '@/types/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface UploadFileParams {
   filename?: string;
   fileUrl?: string;
   userTypes?: string[];
   subjects?: string[];
   createdBy?: string | number;
+  folderId?: string | number | null;
 }
 
 export interface UpdateFileSubjectParams {
@@ -28,6 +30,19 @@ export function useUploadFile() {
     mutationKey: 'upload-file',
     mutationFn: async (params: UploadFileParams) => {
       return await request.post('/v1/government/library/upload-file', params);
+    },
+  });
+  return mutation;
+}
+
+export function useUploadFolderFile() {
+  const mutation = useMutation({
+    mutationKey: 'upload_folder_file',
+    mutationFn: async (params: UploadFileParams) => {
+      return await request.post(
+        '/v1/government/library/upload-folder-file',
+        params
+      );
     },
   });
   return mutation;
@@ -69,6 +84,30 @@ export function useGetFileById(id?: number) {
             params: { id },
           });
           return d.data.data as UserFile;
+        }
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  return query;
+}
+
+export function useGetFolderFiles(folderId?: number) {
+  const query = useQuery({
+    queryKey: `get_folder_files_${folderId}`,
+    queryFn: async () => {
+      try {
+        if (folderId) {
+          const d = await request.get(
+            '/v1/government/library/get-folder-files',
+            {
+              params: { folderId },
+            }
+          );
+          return d.data.data.data as UserFile[];
         }
       } catch (error) {
         logger(error);

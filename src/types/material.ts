@@ -1,6 +1,7 @@
 import { UserInfo } from '@/types/auth';
 import { Subject } from '@/types/institute';
 
+
 export default interface NewMaterial {
   title: string;
   description: string;
@@ -17,6 +18,7 @@ export interface UserFile {
   size?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  folder?: UserFolder;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   subject?: Subject[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

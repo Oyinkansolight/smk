@@ -12,7 +12,6 @@ import Files from '@/components/views/super-admin/Library/Files';
 import logger from '@/lib/logger';
 import request from '@/server';
 import { useGetSubjectById } from '@/server/institution';
-import { useGetAllFiles } from '@/server/library';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -27,53 +26,11 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);
   const id = params?.get('id') as string;
   const { data } = useGetSubjectById(id);
-  const filesData = useGetAllFiles();
   const [sessionterms, setsessionterms] = useState([]);
   const [schoolType, setschoolType] = useState(0);
   const [termId, settermId] = useState(0);
@@ -99,9 +56,6 @@ const SingleSubjectDashboard = () => {
   logger(classId);
 
   // const currentSubjectName = (data ?? [])[0]?.name;
-  const { isLoading } = filesData;
-
-  const dataResult: any = [];
   useEffect(() => {
     Fetch_Profile_Classes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,9 +105,7 @@ const SingleSubjectDashboard = () => {
               setclassId={setclassId}
             />
           )}
-          {page === 1 && (
-            <Files data={dataResult} isLoading={isLoading} variant='primary' />
-          )}
+          {page === 1 && <Files variant='primary' />}
           {page === 2 && (
             <>
               <div className='flex w-full items-center justify-between'>

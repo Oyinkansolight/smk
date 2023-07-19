@@ -56,7 +56,7 @@ import Folder from '~/svg/folder.svg';
 const Library = () => {
   const GovtFilesData = useGetAllFiles('');
   const schoolFilesData: any = [];
-  const { data, error, isLoading } = GovtFilesData;
+  const { data } = GovtFilesData;
 
   data &&
     data.forEach((element: any) => {
@@ -108,12 +108,12 @@ const Library = () => {
         </div>
 
         {tabIdx === 0 && (
-          <Files data={data} isLoading={isLoading} variant='secondary' />
+          <Files   variant='secondary' />
         )}
         {tabIdx === 1 && (
           <Files
-            data={schoolFilesData}
-            isLoading={isLoading}
+
+
             variant='secondary'
           />
         )}

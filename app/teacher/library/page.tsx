@@ -8,6 +8,10 @@ import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -26,7 +30,7 @@ const TeacherLibrary = () => {
   const GovtFilesData = useGetAllFiles('');
   const schoolFilesData: any = [];
   const teacherFilesData: any = [];
-  const { data, isLoading } = GovtFilesData;
+  const { data } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
 
   data &&
@@ -70,19 +74,17 @@ const TeacherLibrary = () => {
         </div>
 
         {tabIdx === 0 && (
-          <Files data={data} isLoading={isLoading} variant='secondary' />
+          <Files  variant='secondary' />
         )}
         {tabIdx === 1 && (
           <Files
-            data={schoolFilesData}
-            isLoading={isLoading}
+
             variant='secondary'
           />
         )}
         {tabIdx === 2 && (
           <Files
-            data={teacherFilesData}
-            isLoading={isLoading}
+
             variant='secondary'
           />
         )}

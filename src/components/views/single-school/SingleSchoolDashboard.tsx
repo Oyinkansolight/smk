@@ -16,7 +16,6 @@ import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
 import { useGetSchoolById } from '@/server/institution';
-import { useGetAllFiles } from '@/server/library';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
@@ -25,6 +24,8 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -78,9 +79,6 @@ const studentListColumns: TableColumn<any>[] = [
 const SingleSchoolDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridIdx, setGridIdx] = useState(0);
-  const GovtFilesData = useGetAllFiles('');
-  const schoolFilesData: any = [];
-  const { data, isLoading } = GovtFilesData;
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const params = useSearchParams();
@@ -379,16 +377,8 @@ const SingleSchoolDashboard = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && (
-            <Files data={data} isLoading={isLoading} variant='secondary' />
-          )}
-          {tabIdx === 1 && (
-            <Files
-              data={schoolFilesData}
-              isLoading={isLoading}
-              variant='secondary'
-            />
-          )}
+          {tabIdx === 0 && <Files variant='secondary' />}
+          {tabIdx === 1 && <Files variant='secondary' />}
         </div>
       )}
     </div>

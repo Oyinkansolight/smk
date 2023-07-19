@@ -65,7 +65,7 @@ export default function Table<T>(
       </div>
       <DataTable
         customStyles={{
-          table: { style: { backgroundColor: 'transparent' } },
+          table: { style: { backgroundColor: 'transparent',padding: '0 0 200px 0' } },
           rows: { style: { backgroundColor: '#00000000', color: '#8898AA' } },
           headRow: {
             style: {
