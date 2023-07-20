@@ -2,10 +2,11 @@
 import { getFromSessionStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
+
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
-  baseURL: 'http://es-ems-be-staging.eu-west-2.elasticbeanstalk.com:1800/',
+  baseURL: 'http://3.8.50.233:1800/',
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Origin': '*', // For CORS support to work

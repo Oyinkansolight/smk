@@ -2,10 +2,13 @@
 import logger from '@/lib/logger';
 import request from '@/server';
 import { PaginationParams } from '@/types';
+import { Week } from '@/types/classes-and-subjects';
 import { Institution, Student, Subject } from '@/types/institute';
 import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 
 export interface CreateInstitutionParams {
   instituteName?: string;
@@ -267,7 +270,7 @@ export function useGetSchools(type?: string) {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institutes?limit=10000000'
+          '/v1/government/institutes/get-institutes?limit=10'
         );
         const result = d.data.data.data.data.filter(
           (item: any) =>
@@ -391,14 +394,24 @@ export function useCreateBulkStaff() {
   return mutation;
 }
 
-export function useGetAcademicSessionsTermsWeek(id: number) {
+export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
   const query = useQuery({
     queryKey: 'academic_sessions_terms',
     queryFn: () =>
-      request
-        .get(`/v1/institutions/institutes/get-term-weeks?termId=${id}`)
-        .then((v) => v.data.data.data as any),
+      termId
+        ? request
+            .get(`/v1/institutions/institutes/get-term-weeks`, {
+              params: { termId },
+            })
+            .then((v) => v.data.data.data as PaginatedData<Week>)
+        : undefined,
   });
+  const { refetch } = query;
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, termId]);
+
   return query;
 }
 

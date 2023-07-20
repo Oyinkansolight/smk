@@ -1,8 +1,8 @@
 import request from '@/server';
 import { ClassActivity } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-
 
 export interface GetTeacherClassPeriodParams {
   sessionId?: number;
@@ -28,9 +28,9 @@ export function useGetTeacherClassPeriod(params: GetTeacherClassPeriodParams) {
 export interface GetWeekPeriodsBySubjectParams {
   sessionId?: number;
   termId?: number;
-  weekId?: number;
-  classId?: number;
-  subjectId?: number;
+  weekId?: number | string | null;
+  classId?: number | string | null;
+  subjectId?: number | string | null;
 }
 
 export function useGetWeekPeriodsBySubject(
@@ -39,7 +39,7 @@ export function useGetWeekPeriodsBySubject(
   const query = useQuery({
     queryKey: 'get_week_periods_by_subject',
     queryFn: async () => {
-      return params.sessionId
+      return params.sessionId && params.termId && params.weekId
         ? ((
             await request.get(
               `/v1/institutions/institutes/get-week-periods-by-subject`,
@@ -51,6 +51,17 @@ export function useGetWeekPeriodsBySubject(
         : undefined;
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [
+    refetch,
+    params.sessionId,
+    params.subjectId,
+    params.termId,
+    params.weekId,
+  ]);
+
   return query;
 }
 
