@@ -17,7 +17,7 @@ type Iprops = {
   control?: Control<FieldValues, any>;
 };
 
-function CreateFolder({
+function AssignSubject({
   onClickHandler,
   loading,
   handleSubmit,
@@ -25,8 +25,6 @@ function CreateFolder({
 }: Iprops) {
   const getSubjects = useGetSubjectList();
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
-
-  // const [allSubjectsData, setAllSubjectsData] = useState<any[]>([]);
 
   const options = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
   const classesOptions = [
@@ -151,4 +149,4 @@ function CreateFolder({
   );
 }
 
-export default CreateFolder;
+export default AssignSubject;

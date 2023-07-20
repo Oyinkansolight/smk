@@ -60,21 +60,22 @@ export function useGetWeekPeriodsBySubject(
     params.subjectId,
     params.termId,
     params.weekId,
+    params.classId,
   ]);
 
   return query;
 }
 
-export function useGetPeriodById(id?: number) {
+export function useGetPeriodById(id?: string) {
   const query = useQuery({
     queryKey: 'get_week_periods_by_subject',
     queryFn: async () => {
       return id
         ? ((
-            await request.get(`/v1/institutions/institutes/get-periods`, {
-              params: { id },
+            await request.get(`/v1/institutions/institutes/get-period-by-id`, {
+              params: { periodId: id },
             })
-          ).data.data.data.data as ClassActivity)
+          ).data.data.data as ClassActivity)
         : undefined;
     },
   });

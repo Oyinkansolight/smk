@@ -8,7 +8,10 @@ export function useGetGovernmentSubjectList() {
     queryKey: 'get_subject_list_gov',
     queryFn: async () => {
       const d = await request.get(
-        '/v1/government/classes-subjects/get-subjects?limit=10000000'
+        '/v1/government/classes-subjects/get-subjects?limit=10000000',
+        {
+          withCredentials: true,
+        }
       );
       return d.data.data.data.data as Subject[];
     },
@@ -23,7 +26,7 @@ export function useGetGovernmentSubjectById(id?: string) {
       if (id) {
         const d = await request.get(
           '/v1/government/classes-subjects/get-subjects',
-          { params: { id } }
+          { params: { id }, withCredentials: true }
         );
         return d.data.data.data.data as Subject[];
       }
@@ -46,7 +49,7 @@ export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
     queryFn: async () => {
       const d = await request.get(
         '/v1/institutions/grade-book/get-subject-grade-books',
-        { params }
+        { params, withCredentials: true }
       );
       return d.data.data.data.data as GradeListItem[];
     },
@@ -60,7 +63,7 @@ export function useGetSubjectsAssignedToTeacher(id?: number) {
     queryFn: async () => {
       const d = await request.get(
         '/v1/government/classes-subjects/teacher-subjects',
-        { params: { id } }
+        { params: { id }, withCredentials: true }
       );
       return d.data.data.data as Subject[];
     },

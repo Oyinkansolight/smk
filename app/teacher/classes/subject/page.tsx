@@ -13,8 +13,10 @@ import {
 } from '@/server/institution';
 import { useGetAllClasses } from '@/server/institution/class';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
+import { Week } from '@/types/classes-and-subjects';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { RotatingLines } from 'react-loader-spinner';
 
 
 
@@ -31,20 +33,43 @@ export default function Page() {
   const { data: weeks } = useGetAcademicSessionsTermsWeek(term);
   const { data: classes } = useGetAllClasses();
   const filteredClasses = useMemo(
-    () => classes?.filter((v) => v.name?.toLowerCase().includes('secondary')),
+    () => classes?.filter((v) => v.institutionType?.toLowerCase().includes('secondary')),
     [classes]
   );
   const [currentWeek, setCurrentWeek] = useState(0);
-  const { data } = useGetWeekPeriodsBySubject({
-    classId: (filteredClasses ?? [])[idx]?.id,
-    sessionId: profile?.currentSession?.id,
-    subjectId: params?.get('id') ? params.get('id') : undefined,
+
+  const sortedWeeks: Week[] = [];
+
+  if (weeks) {
+    for (let index = weeks?.data.length - 1; index > 0; index--) {
+      sortedWeeks.push(weeks.data[index]);
+    }
+  }
+
+  const { data, isLoading } = useGetWeekPeriodsBySubject({
     termId: term,
-    weekId: weeks?.data[currentWeek]?.id,
+    sessionId: profile?.currentSession?.id,
+    weekId: sortedWeeks[currentWeek]?.id,
+    subjectId: params?.get('id') ? params.get('id') : undefined,
+    classId: idx === 0 ? undefined : (filteredClasses ?? [])[idx - 1]?.id,
   });
   const [currentPage, setCurrentPage] = useState(0);
 
   const { data: subject } = useGetSubjectById(params?.get('id') as string);
+
+  if (!data && isLoading) {
+    return (
+      <div className='flex justify-center items-center h-[40vh]'>
+        <RotatingLines
+          width='100'
+          visible={true}
+          strokeWidth='5'
+          strokeColor='#4fa94d'
+          animationDuration='0.75'
+        />
+      </div>
+    )
+  }
 
   return (
     <div className='px-8 layout'>
@@ -53,6 +78,7 @@ export default function Page() {
       </div>
       <TextTabBar
         tabs={[
+          "All",
           ...(filteredClasses ?? []).map((v) => v.name ?? '[NULL]'),
         ]}
         onChange={setIdx}
@@ -69,17 +95,18 @@ export default function Page() {
         <div className='font-bold py-8 text-4xl'>
           {(subject ?? [])[0]?.name}
         </div>
-        <div className='flex flex-col  gap-4'>
-          {data ? (
+        <div className='flex flex-col gap-4'>
+          {data && data.data ? (
             data.data.length > 0 ? (
-              data.data.map((v, i) => (
+              data.data.map((period, i) => (
                 <SmallTeacherSubjectListItem
                   onClick={() =>
-                    router.push(`/teacher/classes/subject-task?id=${v.id}`)
+                    router.push(`/teacher/classes/subject-task?id=${period.id}`)
                   }
                   key={i}
-                  cl={v?.class?.arm ?? 'NULL'}
-                  time='12:00 PM - 01:00 PM'
+                  day={period?.day}
+                  cl={period?.class?.name ?? 'NULL'}
+                  time={`${period?.startTime} - ${period?.endTime}`}
                 />
               ))
             ) : (
@@ -93,11 +120,13 @@ export default function Page() {
           )}
         </div>
       </div>
-      <PaginatedCounter
-        currentPage={currentPage}
-        onChange={setCurrentPage}
-        pageCount={6}
-      />
+      {data && data.data && data.data.length > 0 && (
+        <PaginatedCounter
+          currentPage={currentPage}
+          onChange={setCurrentPage}
+          pageCount={6}
+        />
+      )}
     </div>
   );
 }

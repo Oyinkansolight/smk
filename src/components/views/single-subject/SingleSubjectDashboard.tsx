@@ -43,7 +43,9 @@ const SingleSubjectDashboard = () => {
       const data = v.data.data.data;
       request
         .get(
-          `/v1/institutions/class-arm/get-session-class-arm?sessionId=${data?.currentSession?.id}`
+          `/v1/institutions/class-arm/get-session-class-arm?sessionId=${data?.currentSession?.id}`, {
+          withCredentials: true
+        }
         )
         .then((v) => {
           const classData = v.data.data.data;

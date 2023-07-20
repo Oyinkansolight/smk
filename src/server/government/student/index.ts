@@ -10,6 +10,7 @@ export function useGetStudentList(params: PaginationParams) {
     queryFn: async () => {
       const d = await request.get('/v1/government/students/get-students', {
         params,
+        withCredentials: true,
       });
 
       return d.data.data.data as PaginatedData<Student>;
@@ -50,7 +51,10 @@ export function useGetStudentNextPeriod() {
     queryFn: () =>
       request
         .get(
-          '/v1/institutions/institutes/get-student-next-period?sessionId=1&termId=1&studentId=1&weekId=1'
+          '/v1/institutions/institutes/get-student-next-period?sessionId=1&termId=1&studentId=1&weekId=1',
+          {
+            withCredentials: true,
+          }
         )
         .then((res) => res.data.data.data),
   });
@@ -63,7 +67,10 @@ export function useGetStudentOngoingPeriod() {
     queryFn: () =>
       request
         .get(
-          '/v1/institutions/institutes/get-student-ongoing-period?sessionId=1&termId=1&studentId=1&weekId=1'
+          '/v1/institutions/institutes/get-student-ongoing-period?sessionId=1&termId=1&studentId=1&weekId=1',
+          {
+            withCredentials: true,
+          }
         )
         .then((res) => res.data.data.data),
   });

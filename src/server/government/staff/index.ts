@@ -10,6 +10,7 @@ export function useGetStaffList(params: PaginationParams) {
     queryFn: async () => {
       const d = await request.get('/v1/government/teachers/get-staffs', {
         params,
+        withCredentials: true,
       });
       // console.log(d.data.data.data);
       return d.data.data.data as PaginatedData<Staff>;
@@ -21,7 +22,9 @@ export function useGetStaffs() {
   const query = useQuery({
     queryKey: `get_staffs`,
     queryFn: async () => {
-      const d = await request.get('/v1/government/teachers/get-staffs');
+      const d = await request.get('/v1/government/teachers/get-staffs', {
+        withCredentials: true,
+      });
       // console.log(d.data.data.data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return d.data.data.data.data as any;

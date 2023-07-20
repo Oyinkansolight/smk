@@ -84,7 +84,7 @@ export default function AllCurriculumView({
     try {
       const response = await handleCreateCurriculum.mutateAsync(data);
       if (response) {
-        toast.success('Curricullum updated successful');
+        toast.success('Curriculum updated successful');
         onClickHandler && onClickHandler();
         location.reload();
       }
@@ -99,7 +99,9 @@ export default function AllCurriculumView({
 
     request
       .get(
-        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`, {
+        withCredentials: true
+      }
       )
       .then((res) => {
         setLoading(false);
