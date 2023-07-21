@@ -111,6 +111,7 @@ export interface CreateLessonNoteParams {
   weekId?: number | string | null;
   periodId?: number | string | null;
   teacherId?: number | string | null;
+  classArmId?: number | string | null;
 }
 
 export function useCreateLessonNote() {

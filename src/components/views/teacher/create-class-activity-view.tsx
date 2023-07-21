@@ -7,10 +7,17 @@ import ReactFormSelect from '@/components/input/formSelectReactForm';
 import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
+import { getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
+import { useGetAllClassArms } from '@/server/institution/class-arm';
+import {
+  Question,
+  useCreateClassActivity,
+  useCreateLessonNote,
+} from '@/server/institution/lesson-note';
+import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -23,8 +30,6 @@ import { useForm } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
-
-
 
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
@@ -46,7 +51,7 @@ export const activityTypes = [
 ];
 
 const activityFormats = [
-  { key: 'MULTIPLECHOICE', value: 'Multiple Choice' },
+  { key: 'MULTIPLE_CHOICE', value: 'Multiple Choice' },
   { key: 'SUBJECTIVE', value: 'Subjective' },
 ];
 
@@ -96,6 +101,7 @@ export default function CreateClassActivityView({
   sessionId,
   termId,
   periodId,
+  classId,
 }: {
   sessionId?: string;
   termId?: string;
@@ -117,6 +123,17 @@ export default function CreateClassActivityView({
   const [isOnline, setIsOnline] = useState(true);
   const { data: profile } = useGetProfile();
   const params = useSearchParams();
+  const institutionString = getFromSessionStorage('institution');
+  const institution = institutionString
+    ? (JSON.parse(institutionString) as Institution)
+    : undefined;
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { data: arms } = useGetAllClassArms({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    classId: (classId as unknown as any)[0]?.id,
+    institutionId: institution?.id,
+    sessionId: profile?.currentSession?.id,
+  });
 
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
@@ -149,17 +166,20 @@ export default function CreateClassActivityView({
           termId,
           periodId,
           subjectId: params?.get('id'),
-          teacherId: profile?.userInfo?.id,
+          teacherId: profile?.userInfo?.staff?.id,
+          title: 'Title',
+          classArmId: 'd1840044-fde8-45f9-92f6-fce2cb780fc7',
         });
         toast.success(res.data.data.message);
       } else {
         const res = await create.mutateAsync({
           ...data,
+          typeOfActivity: activityTypes.find((v) => v.value === type)?.key,
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questions,
-          classes: 1, // classId,
-          subject: 1, // params?.get('id'),
+          classes: 'd1840044-fde8-45f9-92f6-fce2cb780fc7', //(arms ?? [])[0].id,
+          subject: params?.get('id'),
           sessionId,
           termId,
           periodId,
