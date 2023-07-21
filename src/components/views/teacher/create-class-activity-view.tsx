@@ -9,11 +9,8 @@ import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import {
-  Question,
-  useCreateClassActivity,
-  useCreateLessonNote,
-} from '@/server/institution/lesson-note';
+import { useGetProfile } from '@/server/auth';
+import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -29,6 +26,7 @@ import Toggle from 'react-toggle';
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
+
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
@@ -95,14 +93,13 @@ export default function CreateClassActivityView({
   sessionId,
   termId,
   periodId,
-  classId,
 }: {
   sessionId?: string;
   termId?: string;
   periodId?: string;
   classId?: string;
 }) {
-  const { register, watch, handleSubmit } = useForm({
+  const { register, watch, handleSubmit, getValues } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
@@ -115,6 +112,7 @@ export default function CreateClassActivityView({
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
+  const { data: profile } = useGetProfile();
   const params = useSearchParams();
 
   const handleAddToGradeList = () => {
@@ -130,9 +128,6 @@ export default function CreateClassActivityView({
     logger(body);
 
     try {
-      const type = activityTypes.find(
-        (v) => v.value === data.typeOfActivity
-      )?.key;
       const form = activityFormats.find((v) => v.value === data.format)?.key;
       let path: string | null = null;
       if (
@@ -145,22 +140,31 @@ export default function CreateClassActivityView({
           await f.arrayBuffer()
         );
       }
+
       if (type === activityTypes[3].value) {
-        await createLessonNote({ uploadUrl: path ?? '' });
+        const res = await createLessonNote({
+          uploadUrl: path ?? '',
+          sessionId,
+          termId,
+          periodId,
+          subjectId: params?.get('id'),
+          teacherId: profile?.userInfo?.id,
+        });
+        toast.success(res.data.data.message);
+      } else {
+        const res = await create.mutateAsync({
+          ...data,
+          mode: isOnline ? 'ONLINE' : 'OFFLINE',
+          format: form,
+          questions,
+          classes: 1, // classId,
+          subject: 1, // params?.get('id'),
+          sessionId,
+          termId,
+          periodId,
+        });
+        toast.success(res.data.data.message);
       }
-      console.log(classId);
-      const res = await create.mutateAsync({
-        ...data,
-        mode: isOnline ? 'ONLINE' : 'OFFLINE',
-        format: form,
-        questions,
-        classes: classId,
-        subject: params?.get('id'),
-        sessionId,
-        termId,
-        periodId,
-      });
-      toast.success(res.data.data.message);
     } catch (error) {
       toast.error(getErrMsg(error));
     }
@@ -302,19 +306,28 @@ export default function CreateClassActivityView({
             {subjectiveType === 0 && <EditorComponent onChange={setBody} />}
             {subjectiveType === 1 && (
               <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
-                <label
-                  className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
-                  htmlFor='lesson-note-file-upload'
-                >
-                  Browse
-                </label>
-                <input
-                  type='file'
-                  id='lesson-note-file-upload'
-                  className='hidden'
-                  {...register('lesson-note-file-upload')}
-                />
-                <div>Or drag a file here.</div>
+                {getValues('lesson-note-file-upload') ? (
+                  <div>
+                    {(getValues('lesson-note-file-upload') as FileList)[0].name}{' '}
+                    Selected
+                  </div>
+                ) : (
+                  <>
+                    <label
+                      className='flex justify-center w-full max-w-[160px] items-center text-white rounded-lg h-10 bg-[#1A8FE3]'
+                      htmlFor='lesson-note-file-upload'
+                    >
+                      <div>Browse</div>
+                    </label>
+                    <input
+                      type='file'
+                      id='lesson-note-file-upload'
+                      className='hidden'
+                      {...register('lesson-note-file-upload')}
+                    />
+                    <div>Or drag a file here.</div>
+                  </>
+                )}
               </div>
             )}
             {subjectiveType === 2 && (
@@ -328,7 +341,7 @@ export default function CreateClassActivityView({
                 <Button
                   variant='secondary'
                   className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
-                  type='submit'
+                  type='button'
                 >
                   Take Photo
                 </Button>

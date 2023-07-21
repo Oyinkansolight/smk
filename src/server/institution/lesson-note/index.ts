@@ -104,13 +104,13 @@ export interface CreateLessonNoteParams {
   title?: string;
   instructionalTeachingActivity?: string;
   uploadUrl?: string;
-  classId?: number;
-  subjectId?: number;
-  sessionId?: number;
-  termId?: number;
-  weekId?: number;
-  periodId?: number;
-  teacherId?: number;
+  classId?: number | string | null;
+  subjectId?: number | string | null;
+  sessionId?: number | string | null;
+  termId?: number | string | null;
+  weekId?: number | string | null;
+  periodId?: number | string | null;
+  teacherId?: number | string | null;
 }
 
 export function useCreateLessonNote() {

@@ -1,4 +1,6 @@
 import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttendanceListItem';
+import { useGetPeriodById } from '@/server/institution/period';
+import { useSearchParams } from 'next/navigation';
 
 export default function TakeAttendanceView() {
   const Names = [
@@ -7,14 +9,19 @@ export default function TakeAttendanceView() {
     'Victoria Alle',
     'Sharon Orobosa',
   ];
+  const params = useSearchParams();
+  const id = params?.get('id');
+  const { data: period } = useGetPeriodById(id ? id : undefined);
 
   return (
     <div className='flex flex-col gap-10'>
       <div className='font-bold text-3xl'>Take Subject Attendance</div>
       <div className='text-bold text-xl'>
-        <div>Subject: Mathematics</div>
-        <div>Date: October 16</div>
-        <div>Time: 12:00 pm - 1:00 pm</div>
+        <div>Subject: {period?.subject?.name}</div>
+        <div>Date: {period?.day}</div>
+        <div>
+          Time: {period?.startTime} - {period?.endTime}
+        </div>
       </div>
       <div className='flex flex-col gap-4'>
         <div className='font-bold'>List of students</div>
