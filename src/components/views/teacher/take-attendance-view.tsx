@@ -13,6 +13,7 @@ export default function TakeAttendanceView() {
   const id = params?.get('id');
   const { data: period } = useGetPeriodById(id ? id : undefined);
 
+
   return (
     <div className='flex flex-col gap-10'>
       <div className='font-bold text-3xl'>Take Subject Attendance</div>

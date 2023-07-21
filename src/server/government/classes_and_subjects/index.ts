@@ -1,6 +1,7 @@
 import request from '@/server';
 import { GradeListItem } from '@/types/classes-and-subjects';
-import { Subject } from '@/types/institute';
+import { Student, Subject } from '@/types/institute';
+import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery } from 'react-query';
 
 export function useGetGovernmentSubjectList() {
@@ -61,11 +62,13 @@ export function useGetSubjectsAssignedToTeacher(id?: number) {
   const query = useQuery({
     queryKey: 'get_subjects_assigned_to_teacher',
     queryFn: async () => {
-      const d = await request.get(
-        '/v1/government/classes-subjects/teacher-subjects',
-        { params: { id }, withCredentials: true }
-      );
-      return d.data.data.data as Subject[];
+      if (id) {
+        const d = await request.get(
+          '/v1/government/classes-subjects/teacher-subjects',
+          { params: { id }, withCredentials: true }
+        );
+        return d.data.data.data as Subject[];
+      }
     },
   });
   return query;
@@ -101,4 +104,26 @@ export function useCreateGradeSettings() {
       ).data.data.data,
   });
   return mutation;
+}
+
+export function useGetStudentsInTeacherClass(params: {
+  classId?: string;
+  institutionId?: string;
+}) {
+  const query = useQuery({
+    queryKey: `get_students_in_teacher_class`,
+    queryFn: async () => {
+      if (params.classId && params.institutionId) {
+        const d = await request.get(
+          '/v1/institutions/institutes/total-students-in-class-institution',
+          {
+            params,
+            withCredentials: true,
+          }
+        );
+        return d.data.data.data as PaginatedData<Student>;
+      }
+    },
+  });
+  return query;
 }
