@@ -21,164 +21,6 @@ import Empty from '~/svg/empty.svg';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-
 const UploadDocument = ({
   data,
   isLoading,
@@ -229,8 +71,10 @@ const UploadDocument = ({
     setLoading(true);
     try {
       const response = await handleUseAssignSubjectsToFile.mutateAsync({
-        fileId,
-        subjectId: (getValues('subject') as {value: number}[]).map((v)=>v.value),
+        fileId: fileId as unknown as any,
+        subjectId: (getValues('subject') as { value: number }[]).map(
+          (v) => v.value
+        ),
       });
 
       if (response) {

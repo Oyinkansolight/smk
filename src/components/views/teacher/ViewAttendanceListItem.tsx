@@ -1,5 +1,5 @@
 import clsxm from '@/lib/clsxm';
-import { useTakeAttendance } from '@/server/teacher';
+import { useTakeAttendance } from '@/server/government/student';
 import { toast } from 'react-toastify';
 
 export default function ViewAttendanceListItem({
@@ -57,7 +57,7 @@ export default function ViewAttendanceListItem({
     try {
       await mutateAsync({
         studentId: index,
-        status: 'LATE',
+        status: 'ABSENT',
         institutionId: 1,
         classId: 1,
         sessionId: 1,
