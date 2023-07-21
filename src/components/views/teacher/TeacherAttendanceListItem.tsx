@@ -1,17 +1,25 @@
 import clsxm from '@/lib/clsxm';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 
 export default function TeacherAttendanceListItem({
   index,
   name,
   onTakeAttendance,
+  status,
 }: {
   index: number;
   name: string;
+  status?: 'ABSENT' | 'PRESENT';
   onTakeAttendance?: (status: 'ABSENT' | 'PRESENT') => void;
 }) {
   const [isPresent, setIsPresent] = useState<'present' | 'absent' | null>(null);
+
+  useEffect(() => {
+    if (status) {
+      setIsPresent(status === 'ABSENT' ? 'absent' : 'present');
+    }
+  }, [status]);
+
   return (
     <div
       className={clsxm(

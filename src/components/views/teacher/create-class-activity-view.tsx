@@ -12,11 +12,7 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
-import {
-  Question,
-  useCreateClassActivity,
-  useCreateLessonNote,
-} from '@/server/institution/lesson-note';
+import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
@@ -31,10 +27,11 @@ import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 
+
+
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
-
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
@@ -130,7 +127,7 @@ export default function CreateClassActivityView({
   // eslint-disable-next-line unused-imports/no-unused-vars
   const { data: arms } = useGetAllClassArms({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    classId: (classId as unknown as any)[0]?.id,
+    classId: classId,
     institutionId: institution?.id,
     sessionId: profile?.currentSession?.id,
   });
@@ -168,7 +165,7 @@ export default function CreateClassActivityView({
           subjectId: params?.get('id'),
           teacherId: profile?.userInfo?.staff?.id,
           title: 'Title',
-          classArmId: 'd1840044-fde8-45f9-92f6-fce2cb780fc7',
+          classArmId: (arms ?? [])[0].id,
         });
         toast.success(res.data.data.message);
       } else {
@@ -178,7 +175,7 @@ export default function CreateClassActivityView({
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questions,
-          classes: 'd1840044-fde8-45f9-92f6-fce2cb780fc7', //(arms ?? [])[0].id,
+          classes: (arms ?? [])[0].id,
           subject: params?.get('id'),
           sessionId,
           termId,
@@ -265,9 +262,6 @@ export default function CreateClassActivityView({
             </div>
           </div>
         </div>
-
-        <div className='h-[2px] bg-[#EFF7F6] w-full mt-[30px] mb-6' />
-
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
@@ -317,6 +311,7 @@ export default function CreateClassActivityView({
         {format === 'Subjective' && type === activityTypes[3].value && (
           <div>
             <TextTabBar
+              className='p-0'
               tabs={[
                 <div className='flex items-center gap-2' key={0}>
                   <BookSVG
@@ -353,7 +348,7 @@ export default function CreateClassActivityView({
             {subjectiveType === 0 && <EditorComponent onChange={setBody} />}
             {subjectiveType === 1 && (
               <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
-                {getValues('lesson-note-file-upload') ? (
+                {getValues('lesson-note-file-upload')[0]?.name ? (
                   <div>
                     {(getValues('lesson-note-file-upload') as FileList)[0].name}{' '}
                     Selected

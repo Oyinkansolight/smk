@@ -1,18 +1,26 @@
 import clsxm from '@/lib/clsxm';
 
+
 export default function TextTabBar({
   tabs,
   selectedIdx,
   onChange,
   activeClassName,
+  className,
 }: {
   tabs: (string | JSX.Element)[];
   selectedIdx: number;
   onChange: (idx: number) => void;
   activeClassName?: string;
+  className?: string;
 }) {
   return (
-    <div className='flex p-5 rounded-xl bg-white my-4 overflow-hidden overflow-x-scroll hideScroll'>
+    <div
+      className={clsxm(
+        'flex p-5 rounded-xl bg-white my-4 overflow-hidden overflow-x-scroll hideScroll',
+        className
+      )}
+    >
       {tabs.map((v, i) => (
         <div
           onClick={() => onChange(i)}

@@ -2,7 +2,10 @@ import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttenda
 import { getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useGetStudentsInTeacherClass } from '@/server/government/classes_and_subjects';
+import {
+  useGetLessonAttendance,
+  useGetStudentsInTeacherClass,
+} from '@/server/government/classes_and_subjects';
 import { useTakeAttendance } from '@/server/government/student';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
@@ -10,6 +13,8 @@ import { useGetPeriodById } from '@/server/institution/period';
 import { Institution } from '@/types/institute';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
+
+
 
 export default function TakeAttendanceView() {
   const params = useSearchParams();
@@ -33,6 +38,7 @@ export default function TakeAttendanceView() {
       classArmId: arm?.id,
       institutionId: institution?.id,
     });
+  const { data: attendance } = useGetLessonAttendance({ periodId: id });
 
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.id,
@@ -55,6 +61,11 @@ export default function TakeAttendanceView() {
             <TeacherAttendanceListItem
               key={i}
               index={i}
+              status={
+                attendance?.find(
+                  (stAtt) => stAtt.student.id === (v.id as unknown as string)
+                )?.status
+              }
               name={`${v?.firstName} ${v?.lastName}`}
               onTakeAttendance={async (status) => {
                 try {

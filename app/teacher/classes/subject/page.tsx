@@ -103,7 +103,7 @@ export default function Page() {
                   sessionId = {profile?.currentSession?.id as unknown as string}
                   termId={term as unknown as string}
                   periodId={period.id as unknown as string}
-                  classId={(filteredClasses ?? []) as unknown as string}
+                  classId={(filteredClasses ?? [])[0].id as unknown as string}
                   onClick={() =>
                     router.push(`/teacher/classes/subject-task?id=${period.id}`)
                   }
