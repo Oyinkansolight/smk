@@ -1,12 +1,15 @@
 import clsxm from '@/lib/clsxm';
 import { useState } from 'react';
 
+
 export default function TeacherAttendanceListItem({
   index,
   name,
+  onTakeAttendance,
 }: {
   index: number;
   name: string;
+  onTakeAttendance?: (status: 'ABSENT' | 'PRESENT') => void;
 }) {
   const [isPresent, setIsPresent] = useState<'present' | 'absent' | null>(null);
   return (
@@ -23,7 +26,10 @@ export default function TeacherAttendanceListItem({
       <div className='flex-1' />
       {(!isPresent || (isPresent && isPresent === 'present')) && (
         <button
-          onClick={() => setIsPresent('present')}
+          onClick={() => {
+            setIsPresent('present');
+            onTakeAttendance && onTakeAttendance('PRESENT');
+          }}
           className='py-3 px-12 rounded-sm bg-green-500 font-bold text-white'
         >
           Present
@@ -32,7 +38,10 @@ export default function TeacherAttendanceListItem({
       {(!isPresent || (isPresent && isPresent === 'absent')) && (
         <button
           className='py-3 px-12 rounded-sm bg-red-500 font-bold text-white'
-          onClick={() => setIsPresent('absent')}
+          onClick={() => {
+            setIsPresent('absent');
+            onTakeAttendance && onTakeAttendance('ABSENT');
+          }}
         >
           Absent
         </button>

@@ -1,7 +1,7 @@
 import request from '@/server';
 import { GradeListItem } from '@/types/classes-and-subjects';
-import { Student, Subject } from '@/types/institute';
-import { PaginatedData } from '@/types/pagination';
+import { Subject, User } from '@/types/institute';
+import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 export function useGetGovernmentSubjectList() {
@@ -107,13 +107,13 @@ export function useCreateGradeSettings() {
 }
 
 export function useGetStudentsInTeacherClass(params: {
-  classId?: string;
-  institutionId?: string;
+  classArmId?: string | number;
+  institutionId?: string | number;
 }) {
   const query = useQuery({
     queryKey: `get_students_in_teacher_class`,
     queryFn: async () => {
-      if (params.classId && params.institutionId) {
+      if (params.classArmId && params.institutionId) {
         const d = await request.get(
           '/v1/institutions/institutes/total-students-in-class-institution',
           {
@@ -121,9 +121,13 @@ export function useGetStudentsInTeacherClass(params: {
             withCredentials: true,
           }
         );
-        return d.data.data.data as PaginatedData<Student>;
+        return d.data.data.data.studentsInClass as User[];
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params.classArmId, params.institutionId, refetch]);
   return query;
 }

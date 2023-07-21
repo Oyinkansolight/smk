@@ -166,3 +166,17 @@ export interface Week {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ClassArm {
+  id?: string;
+  arm?: string;
+  capacity?: number;
+  curriculum?: string;
+  institutionType?: null;
+  createdAt?: Date;
+  updatedAt?: Date;
+  class?: Class;
+  teacher?: Teacher;
+  session?: Session;
+  institution?: Institution;
+}

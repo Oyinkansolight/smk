@@ -30,6 +30,7 @@ import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
 
+
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
   {
@@ -108,7 +109,7 @@ export default function CreateClassActivityView({
   const format = watch('format');
   const type = watch('typeOfActivity');
   const [subjectiveType, setSubjectiveType] = useState(0);
-  const [body, setBody] = useState('[NO_BODY]');
+  const [, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
   const { mutateAsync: createLessonNote } = useCreateLessonNote();
   const [questions, setQuestions] = useState<Question[]>([{}]);
@@ -127,8 +128,6 @@ export default function CreateClassActivityView({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    logger(body);
-
     try {
       const form = activityFormats.find((v) => v.value === data.format)?.key;
       let path: string | null = null;
@@ -270,7 +269,7 @@ export default function CreateClassActivityView({
                     newQ.splice(i, 1);
                     setQuestions(newQ);
                   }}
-                  className='cursor-pointer flex items-center w-14 rounded justify-center bg-red-100'
+                  className='cursor-pointer flex items-center w-14 h-14 rounded justify-center bg-red-100'
                 >
                   <MdDelete className='text-red-500 h-5 w-5' />
                 </div>

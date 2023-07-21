@@ -4,6 +4,7 @@ import { Student } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export function useGetStudentList(params: PaginationParams) {
   const query = useQuery({
     queryKey: `get_student_list_${params.id ?? ''}`,
@@ -75,4 +76,32 @@ export function useGetStudentOngoingPeriod() {
         .then((res) => res.data.data.data),
   });
   return query;
+}
+
+interface TakeAttendanceParams {
+  periodId?: string | number | null;
+  institutionId?: string | number | null;
+  sessionId?: string | number | null;
+  termId?: string | number | null;
+  classId?: string | number | null;
+  studentId?: string | number | null;
+  classArmId?: string | number | null;
+  status?: 'PRESENT' | 'ABSENT';
+}
+
+export function useTakeAttendance() {
+  const mutation = useMutation({
+    mutationKey: 'take_attendance',
+    mutationFn: async (params: TakeAttendanceParams) =>
+      (
+        await request.post(
+          '/v1/institutions/institutes/take-attendance',
+          params,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data.data.data,
+  });
+  return mutation;
 }
