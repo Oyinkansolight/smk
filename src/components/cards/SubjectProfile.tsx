@@ -36,7 +36,9 @@ export default function SubjectProfileCard({
 
   function Fetchterms(id: number) {
     request
-      .get(`/v1/government/terms/session-terms?sessionId=${id}`)
+      .get(`/v1/government/terms/session-terms?sessionId=${id}`, {
+        withCredentials: true,
+      })
       .then((v) => {
         const data = v.data.data.data;
         setsessionterms(data.data || []);

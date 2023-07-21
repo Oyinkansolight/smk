@@ -216,3 +216,9 @@
 .custom-toggle.react-toggle--checked .react-toggle-track {
   background-color: #1a8fe33d;
 }
+
+.react-pdf__Page__canvas {
+  margin: 0 auto;
+  width: 60vw !important;
+  height: 100% !important;
+}

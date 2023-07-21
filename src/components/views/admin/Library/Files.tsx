@@ -1,308 +1,495 @@
 'use client';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
-import { useState } from 'react';
+import Table from '@/components/tables/TableComponent';
+import clsxm from '@/lib/clsxm';
+import {
+  useAssignSubjectsToFile,
+  useGetAllFiles,
+  useGetAllFolders,
+  useGetFileById,
+  useGetFolderFiles,
+} from '@/server/library';
+import { UserFile, UserFolder } from '@/types/material';
+import moment from 'moment';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { TableColumn } from 'react-data-table-component';
 import { useForm } from 'react-hook-form';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { MdArrowBackIos } from 'react-icons/md';
+import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
-import Folder from '~/svg/folder.svg';
-import Media from '~/svg/media.svg';
 import User from '~/svg/user1.svg';
+import Folder from '~/svg/folder.svg';
 
-const UploadDocument = () => {
+
+type TableItemData = (UserFolder | UserFile) & {
+  action: number | null;
+  setAction: (value: number | null) => void;
+  idx: number;
+  setisAssign: (value: boolean) => void;
+  isAssign: boolean;
+  setFileId: (value: number) => void;
+  onFolderClick: (folderId: UserFolder) => void;
+};
+
+const columns: TableColumn<TableItemData>[] = [
+  {
+    name: 'Name',
+    grow: 2,
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
+            <div>
+              <FileContent className='h-6 w-6' />
+            </div>
+            <h2 className='text-sm font-medium'>{item?.filename}</h2>
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div
+            onClick={() => item.id && item.onFolderClick(item)}
+            className='col-span-4 cursor-pointer w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'
+          >
+            <div>
+              <Folder className='h-6 w-6' />
+            </div>
+            <h2 className='text-sm font-medium'>{item?.folderName}</h2>
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Subject',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2'>
+            {(item?.subject?.length ?? 0) > 0
+              ? (item?.subject ?? []).map((v) => v.name).join(', ')
+              : '-'}{' '}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return <div className='col-span-2'>-</div>;
+      }
+    },
+  },
+  {
+    name: 'Created By',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2'>
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div className='col-span-2'>
+            {item?.createdBy?.firstName} {item?.createdBy?.lastName}
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Date Added',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
+            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <h2 className='text-sm font-normal'>
+              {moment(item?.createdAt).format('ll')}
+            </h2>
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
+            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <h2 className='text-sm font-normal'>
+              {moment(item?.createdAt).format('ll')}
+            </h2>
+          </div>
+        );
+      }
+    },
+  },
+  {
+    name: 'Size',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return <div>{item?.size ?? '-'}</div>;
+      } else if ('folderName' in item) {
+        return <div>{item?.size ?? '-'}</div>;
+      }
+    },
+  },
+  {
+    name: '',
+    grow: 0,
+    width: '20px',
+    cell: (item) => {
+      if ('fileUrl' in item) {
+        return (
+          <div>
+            <button
+              onClick={() => {
+                item.setAction(item.idx + 1);
+              }}
+              className='relative'
+            >
+              <BsThreeDotsVertical className='text-lg' />
+
+              {item.action == item.idx + 1 && (
+                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                  <button
+                    onClick={() => {
+                      item.setisAssign(!item.isAssign);
+                      item.setFileId(item?.id ?? 0);
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
+                    Assign to a Subject
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Rename
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </button>
+            {item.action && (
+              <div
+                className='fixed inset-0 z-[1]'
+                onClick={() => {
+                  item.setAction(null);
+                }}
+              ></div>
+            )}
+          </div>
+        );
+      } else if ('folderName' in item) {
+        return (
+          <div>
+            <button
+              onClick={() => {
+                item.setAction(item.idx + 1);
+              }}
+              className='relative'
+            >
+              <BsThreeDotsVertical className='text-lg' />
+
+              {item.action == item.idx + 1 && (
+                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                  <button
+                    onClick={() => {
+                      item.setisAssign(!item.isAssign);
+                      item.setFileId(item?.id ?? 0);
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
+                    Assign to a Subject
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Rename
+                  </button>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Delete
+                  </button>
+                </div>
+              )}
+            </button>
+            {item.action && (
+              <div
+                className='fixed inset-0 z-[1]'
+                onClick={() => {
+                  item.setAction(null);
+                }}
+              ></div>
+            )}
+          </div>
+        );
+      }
+    },
+  },
+];
+
+const UploadDocument = ({
+  variant,
+  canUpload = true,
+}: {
+  variant?: string;
+  canUpload?: boolean;
+}) => {
+  const {
+    getValues,
+    formState: { errors },
+    control,
+    setValue,
+    reset,
+    // handleSubmit,
+  } = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onChange',
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setisCreateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
+  const [fileId, setFileId] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  // const [path, setPath] = useState<string>();
+  // const [url, setUrl] = useState<string | any>();
+  const { data: folderData } = useGetAllFolders();
+  const { data, isLoading: isLoadingFiles } = useGetAllFiles();
 
-  const mockData = [
-    {
-      name: 'Primary 1 Maths Text Book',
-      class: 'Primary 2',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '500kb',
-      image: <Folder className='h-6 w-6' />,
-    },
-    {
-      name: 'Calculus Introduction',
-      class: 'Primary 2',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '450kb',
-      image: <FileContent className='h-6 w-6' />,
-    },
-    {
-      name: 'Tutorial on Addition',
-      class: 'Primary 3',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '300kb',
-      image: <Media className='h-6 w-6' />,
-    },
-    {
-      name: 'Primary 1 Maths Text Book',
-      class: 'Primary 4',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '803kb',
-      image: <Folder className='h-6 w-6' />,
-    },
-    {
-      name: 'Tutorial on Addition',
-      class: 'Primary 5',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '262kb',
-      image: <FileContent className='h-6 w-6' />,
-    },
-    {
-      name: 'Calculus Introduction',
-      class: 'Primary 6',
-      created_by: 'James Grace',
-      date_added: 'Nov 2, 2022',
-      size: '642kb',
-      image: <Media className='h-6 w-6' />,
-    },
-  ];
+  const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
+
+  const {
+    data: folderContent,
+    refetch: refetchFolderFiles,
+    isLoading: isLoadingFolderFiles,
+  } = useGetFolderFiles(folderTrail[folderTrail.length - 1]?.id);
+
+  // console.log(folderData);
+
+  const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
+
+  useEffect(() => {
+    reset();
+    if (fileId) {
+      refetchFile();
+    }
+  }, [fileId, refetchFile, reset]);
+
+  useEffect(() => {
+    if (fileObject) {
+      setValue(
+        'subject',
+        fileObject.subject?.map((v) => ({ label: v.name, value: v.id })),
+        { shouldValidate: true }
+      );
+    }
+  }, [fileObject, setValue]);
+
+  const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
+
   function handleIsCreateFolderModal() {
     setisCreateFolder(!isCreateFolder);
   }
   function handleIsAssignModal() {
     setisAssign(!isAssign);
   }
-  const {
-    register,
 
-    formState: { errors },
-    // handleSubmit,
-  } = useForm({
-    reValidateMode: 'onChange',
-    mode: 'onChange',
-  });
-  return (
-    <section>
-      {isCreateFolder && (
-        <CreateFolder onClickHandler={handleIsCreateFolderModal} />
-      )}
-      {isAssign && (
-        <AssignSubject
-          register={register}
-          errors={errors}
-          onClickHandler={handleIsAssignModal}
-        />
-      )}
+  const [content, setContent] = useState<UserFile[] | undefined>([]);
 
-      <div className='mb-6 flex justify-end items-end relative'>
-        <button
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-          className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
-        >
-          Add Document
-          <span className='ml-4'>
-            <svg
-              width='9'
-              height='6'
-              viewBox='0 0 9 6'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M0.136086 0.607068C0.300449 0.43941 0.557649 0.424168 0.738891 0.561343L0.790815 0.607068L4.50049 4.3913L8.21016 0.607068C8.37452 0.43941 8.63172 0.424168 8.81296 0.561343L8.86489 0.607068C9.02925 0.774727 9.04419 1.03708 8.90972 1.22196L8.86489 1.27493L4.82785 5.39293C4.66349 5.56059 4.40629 5.57583 4.22505 5.43866L4.17312 5.39293L0.136086 1.27493C-0.0447111 1.0905 -0.0447111 0.791493 0.136086 0.607068Z'
-                fill='#3361FF'
-              />
-            </svg>
-          </span>
-        </button>
-        {isOpen && (
-          <div
-            className='fixed inset-0 z-[9]'
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
+  const handleAssignSubject = async () => {
+    setLoading(true);
+    try {
+      const response = await handleUseAssignSubjectsToFile.mutateAsync({
+        fileId,
+        subjectId:
+          (
+            getValues('subject') as
+            | { label: string; value: number }[]
+            | undefined
+          )?.map((s) => s.value ?? 0) ?? [],
+      });
+
+      if (response) {
+        toast.success('File assigned successful');
+        setLoading(false);
+        setisAssign(!isAssign);
+      }
+    } catch (error) {
+      toast.error('An error occured');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoadingFiles) {
+      setContent(data);
+    }
+  }, [data, isLoadingFiles]);
+
+  if (!isLoadingFiles && !isLoadingFolderFiles) {
+    return (
+      <section className='transition-all ease-in-out delay-1000 w-full max-w-[40rem] lg:max-w-full'>
+        {isCreateFolder && (
+          <CreateFolder
+            onClickHandler={handleIsCreateFolderModal}
+            addNewFolder={() => 'true'}
           />
         )}
-        {isOpen && (
-          <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-12 right-0 z-10'>
-            <button
-              onClick={() => {
-                setisCreateFolder(!isCreateFolder);
-              }}
-              className='p-3 hover:bg-slate-100  text-left font-medium w-full'
-            >
-              Create Folder
-            </button>
-            <input type='file' name='upload_file' id='upload_file' hidden />
-            <label
-              htmlFor='upload_file'
-              className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-            >
-              Upload File
-            </label>
-            <input type='file' name='upload_folder' id='upload_folder' hidden />
-
-            <label
-              htmlFor='upload_folder'
-              className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-            >
-              Upload Folder
-            </label>
-          </div>
+        {isAssign && (
+          <AssignSubject
+            control={control}
+            errors={errors}
+            loading={loading}
+            onClickHandler={handleIsAssignModal}
+            handleSubmit={handleAssignSubject}
+          />
         )}
-      </div>
 
-      <div className='table-add-student mt-3  pb-4 bg-white'>
-        <div className='flex justify-end text-base space-x-4 font-semibold border-b p-3'>
-          <div className='border shadow rounded'>
-            <select
-              name='file_type'
-              id='file_type'
-              className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
+        <div className='mb-6 flex  items-end relative'>
+          {folderTrail.length > 0 && (
+            <div
+              onClick={() => {
+                const c = [...folderTrail];
+                c.pop();
+                setFolderTrail(c);
+              }}
+              className='flex gap-4 font-bold items-center cursor-pointer rounded bg-gray-200 py-1 px-3'
             >
-              {' '}
-              <option value=''>--File Type--</option>
-              <option value='file'>Only Files</option>
-              <option value='folder'>Only Folder </option>
-              <option value='media'>Only Media </option>
-            </select>
-          </div>
-          <div className='border shadow rounded'>
-            <select
-              name='file_type'
-              id='file_type'
-              className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
-            >
-              {' '}
-              <option value=''>--Selected By--</option>
-              <option value='file'>Only Files</option>
-              <option value='folder'>Only Folder </option>
-              <option value='media'>Only Media </option>
-            </select>
-          </div>
-          <div className='border shadow rounded'>
-            <input
-              type='date'
-              name=''
-              id=''
-              className='w-full border-none outline-none bg-transparent text-xs font-normal text-gray-400'
-            />
-          </div>
-        </div>
+              <MdArrowBackIos className='h-5 w-5' /> <div>Back</div>
+            </div>
+          )}
 
-        <div className='table-header grid grid-cols-12 gap-4 rounded-t-md  border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
-          <div className='col-span-4 pl-2'>Name</div>
-          <div className='col-span-2'>Class</div>
-          <div className='col-span-2'>Created by</div>
-          <div className='col-span-2'>Date Added</div>
-          <div className='col-span-2'>Size</div>
-        </div>
-        {mockData.map((item, idx) => (
-          <div
-            className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
-            key={idx}
-          >
-            <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
-              <div>{item.image}</div>
-              <h2 className='text-sm font-medium'>{item.name}</h2>
-            </div>
-            <div className='col-span-2'>{item.class} </div>
-            <div className='col-span-2'>{item.created_by} </div>
-            <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-              <User alt='avril' className='h-8 w-8 rounded-full' />
-              <h2 className='text-sm font-normal'>{item.date_added}</h2>
-            </div>
-            <div className='col-span-2 justify-between pr-5 flex items-center'>
-              <div>{item.size}</div>
+          <div className='flex-1' />
+          {canUpload && (
+            <div>
               <button
                 onClick={() => {
-                  setAction(idx + 1);
+                  setIsOpen(!isOpen);
                 }}
-                className='relative'
-              >
-                <BsThreeDotsVertical className='text-lg' />
-
-                {action == idx + 1 && (
-                  <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                      Manage Access
-                    </button>
-                    <button
-                      onClick={() => {
-                        setisAssign(!isAssign);
-                      }}
-                      className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
-                    >
-                      Assign to a Subject
-                    </button>
-                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                      Rename
-                    </button>
-                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                      Delete
-                    </button>
-                  </div>
+                className={clsxm(
+                  variant === 'secondary' && '!border-blue-500 text-blue-500',
+                  variant === 'primary' && 'border-[#016938] text-[#016938]',
+                  'w-max flex items-center rounded border  px-6 py-3 text-center text-xs font-medium'
                 )}
+              >
+                Add Document
+                <span className='ml-4'>
+                  <svg
+                    width='10'
+                    height='7'
+                    viewBox='0 0 10 7'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      d='M0.635629 1.10707C0.799992 0.93941 1.05719 0.924168 1.23843 1.06134L1.29036 1.10707L5.00003 4.8913L8.7097 1.10707C8.87407 0.93941 9.13127 0.924168 9.31251 1.06134L9.36443 1.10707C9.52879 1.27473 9.54374 1.53708 9.40926 1.72196L9.36443 1.77493L5.32739 5.89293C5.16303 6.06059 4.90583 6.07583 4.72459 5.93866L4.67267 5.89293L0.635629 1.77493C0.454831 1.5905 0.454831 1.29149 0.635629 1.10707Z'
+                      fill='#016938'
+                    />
+                  </svg>
+                </span>
               </button>
-              {action && (
+              {isOpen && (
                 <div
-                  className='fixed inset-0 z-[1]'
+                  className='fixed inset-0 z-[9]'
                   onClick={() => {
-                    setAction(null);
+                    setIsOpen(!isOpen);
                   }}
-                ></div>
+                />
+              )}
+              {isOpen && (
+                <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-12 right-0 z-10'>
+                  <button
+                    onClick={() => {
+                      setisCreateFolder(!isCreateFolder);
+                    }}
+                    className='p-3 hover:bg-slate-100  text-left font-medium w-full'
+                  >
+                    Create Folder
+                  </button>
+                  {/* <input
+                type='file'
+                onChange={(e) => {
+                  addNewFile(e);
+                }}
+                name='upload_file'
+                id='upload_file'
+                hidden
+              /> */}
+                  <Link
+                    href={`/super-admin/add-material${folderTrail.length > 0 &&
+                      `?folderId=${folderTrail[folderTrail.length - 1].id
+                      }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                      }`
+                      }`}
+                  >
+                    <label
+                      htmlFor='upload_file'
+                      className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
+                    >
+                      Upload File{' '}
+                      {folderTrail.length > 0 &&
+                        `To ${folderTrail[folderTrail.length - 1].folderName}`}
+                    </label>
+                  </Link>
+
+                  <input
+                    type='file'
+                    name='upload_folder'
+                    id='upload_folder'
+                    hidden
+                  />
+
+                  <label
+                    htmlFor='upload_folder'
+                    className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
+                  >
+                    Upload Folder
+                  </label>
+                </div>
               )}
             </div>
-          </div>
-        ))}
-
-        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border bg-secondary p-2 text-white'>
-            1
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            2
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            3
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
-          </div>
+          )}
         </div>
-      </div>
-    </section>
+
+        <Table
+          columns={columns}
+          data={
+            [
+              ...(folderTrail.length < 1 ? folderData ?? [] : []),
+              ...(folderTrail.length < 1 ? content ?? [] : folderContent ?? []),
+            ]?.map(
+              (item, idx) =>
+              ({
+                ...item,
+                action,
+                isAssign,
+                setAction,
+                setisAssign,
+                idx,
+                setFileId,
+                onFolderClick: (folder) => {
+                  const c = [...folderTrail];
+                  c.push(folder);
+                  setFolderTrail(c);
+                  refetchFolderFiles();
+                },
+              } as TableItemData)
+            ) ?? []
+          }
+        />
+      </section>
+    );
+  }
+
+  return (
+    <div className='flex justify-center items-center h-[40vh]'>
+      <RotatingLines
+        width='100'
+        visible={true}
+        strokeWidth='5'
+        strokeColor='#4fa94d'
+        animationDuration='0.75'
+      />
+    </div>
   );
 };
 

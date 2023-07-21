@@ -26,7 +26,9 @@ const SingleStudentDashboard = () => {
 
   function Fetchterms() {
     request
-      .get(`/v1/government/terms/session-terms?sessionId=${Number(session)}`)
+      .get(`/v1/government/terms/session-terms?sessionId=${Number(session)}`, {
+        withCredentials: true,
+      })
       .then((v) => {
         const data = v.data.data.data;
         setsessionterms(data.data || []);

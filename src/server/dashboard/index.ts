@@ -8,7 +8,9 @@ export function useGetDashboardOverview() {
     queryKey: 'dashboard_overview',
     queryFn: () =>
       request
-        .get('/v1/government/dashboards/get-government-dashboard')
+        .get('/v1/government/dashboards/get-government-dashboard', {
+          withCredentials: true,
+        })
         .then((v) => v.data.data.data as DashboardOverview),
   });
   return query;
@@ -19,7 +21,9 @@ export function useGetInstitutionDashboardOverview() {
     queryKey: 'institute_dashboard_overview',
     queryFn: () =>
       request
-        .get('/v1/government/dashboards/get-institution-dashboard')
+        .get('/v1/government/dashboards/get-institution-dashboard', {
+          withCredentials: true,
+        })
         .then((v) => v.data.data.data as DashboardOverview),
   });
   return query;
@@ -30,7 +34,9 @@ export function useGetStaffDashboardOverview() {
     queryKey: 'staff_dashboard_overview',
     queryFn: () =>
       request
-        .get('/v1/government/dashboards/get-staff-dashboard')
+        .get('/v1/government/dashboards/get-staff-dashboard', {
+          withCredentials: true,
+        })
         .then((v) => v.data.data as DashboardOverview),
   });
   return query;
@@ -41,7 +47,9 @@ export function useGetStudentDashboardOverview() {
     queryKey: 'student_dashboard_overview',
     queryFn: () =>
       request
-        .get('/v1/government/dashboards/get-student-dashboard')
+        .get('/v1/government/dashboards/get-student-dashboard', {
+          withCredentials: true,
+        })
         .then((v) => v.data.data as DashboardOverview),
   });
   return query;
@@ -51,7 +59,9 @@ export function useGetAcademicSessions() {
     queryKey: 'academic_sessions',
     queryFn: () =>
       request
-        .get('/v1/government/session/all')
+        .get('/v1/government/session/all', {
+          withCredentials: true,
+        })
         .then((v) => v.data.data.data as any),
   });
   return query;

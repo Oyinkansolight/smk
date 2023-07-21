@@ -4,7 +4,6 @@ import request from '@/server';
 import { UserFile, UserFolder } from '@/types/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface UploadFileParams {
   filename?: string;
   fileUrl?: string;
@@ -15,7 +14,7 @@ export interface UploadFileParams {
 }
 
 export interface UpdateFileSubjectParams {
-  fileId?: number;
+  fileId?: string;
   classes?: string;
   subjectId: number[];
   schoolType?: string;
@@ -74,7 +73,7 @@ export function useGetAllFiles(type?: string) {
   return query;
 }
 
-export function useGetFileById(id?: number) {
+export function useGetFileById(id?: string) {
   const query = useQuery({
     queryKey: `get_file_${id}`,
     queryFn: async () => {

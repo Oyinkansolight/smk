@@ -7,8 +7,6 @@ import ClassCalendarContent from '@/components/views/super-admin/SingleSchoolCal
 import ExamTimeTable from '@/components/views/super-admin/SingleSchoolCalendar/ExamTimetable';
 import Info from '@/components/views/super-admin/SingleSchoolCalendar/info';
 import request from '@/server';
-import { useGetClassesList } from '@/server/institution';
-import { useGetInstituteSessionClassArms } from '@/server/institution/class';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -48,7 +46,9 @@ const Index = () => {
       .get(
         `/v1/government/terms/session-terms?sessionId=${Number(
           currrentsession
-        )}`
+        )}`, {
+        withCredentials: true,
+      }
       )
       .then((v) => {
         const data = v.data.data.data;
@@ -62,7 +62,9 @@ const Index = () => {
       .get(
         `/v1/institutions/class-arm/get-session-class-arm?sessionId=${Number(
           currrentsession
-        )}`
+        )}`, {
+        withCredentials: true,
+      }
       )
       .then((v) => {
         const data = v.data.data.data;

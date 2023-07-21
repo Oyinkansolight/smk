@@ -9,7 +9,6 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -103,7 +102,10 @@ export function useGetSubjectList() {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list?limit=10000000'
+          '/v1/government/institutes/get-subject-list?limit=10000000',
+          {
+            withCredentials: true,
+          }
         );
         return d.data.data.data.data as Subject[];
       } catch (error) {
@@ -331,7 +333,7 @@ export function useGetSubjectById(id?: string) {
         if (id) {
           const d = await request.get(
             '/v1/government/institutes/get-subject-list',
-            { params: { id } }
+            { params: { id }, withCredentials: true }
           );
           return d.data.data.data.data as Subject[];
         }

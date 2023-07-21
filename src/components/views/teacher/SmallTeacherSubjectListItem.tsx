@@ -6,6 +6,7 @@ import { IoChevronForwardSharp } from 'react-icons/io5';
 
 export default function SmallTeacherSubjectListItem({
   cl,
+  day,
   time,
   onClick,
   sessionId,
@@ -13,6 +14,7 @@ export default function SmallTeacherSubjectListItem({
   termId,
   classId,
 }: {
+  day?: string;
   cl: string;
   time: string;
   onClick?: () => void;
@@ -40,7 +42,7 @@ export default function SmallTeacherSubjectListItem({
         <div className='flex'>
           <div>Time:</div>
           <div className='w-6' />
-          <div className='font-bold'>{time}</div>
+          <div className='font-bold'>{`${day} - ${time}`}</div>
         </div>
       </div>
       <div className='w-10' />

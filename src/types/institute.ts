@@ -326,7 +326,7 @@ export interface ClassActivity {
   updatedAt?: Date;
   week?: Week;
   session?: Session;
-  file?: null;
+  file?: FileInterface | null;
   term?: Term;
   class?: Class;
   teacher?: Teacher;
@@ -342,4 +342,14 @@ export interface GradeCategory {
   updatedAt?: Date;
   term?: Term;
   session?: Session;
+}
+
+export interface FileInterface {
+  createdAt: string;
+  createdBy: string;
+  fileUrl: string;
+  filename: string;
+  id: string;
+  updatedAt: string;
+  userTypes: [];
 }

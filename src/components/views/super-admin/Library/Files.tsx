@@ -4,9 +4,7 @@
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import Table from '@/components/tables/TableComponent';
-import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
 import {
   useAssignSubjectsToFile,
   useGetAllFiles,
@@ -20,13 +18,13 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { useForm } from 'react-hook-form';
-import { BiFolderOpen } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import User from '~/svg/user1.svg';
+import Folder from '~/svg/folder.svg';
 
 
 type TableItemData = (UserFolder | UserFile) & {
@@ -35,7 +33,7 @@ type TableItemData = (UserFolder | UserFile) & {
   idx: number;
   setisAssign: (value: boolean) => void;
   isAssign: boolean;
-  setFileId: (value: number) => void;
+  setFileId: (value: string) => void;
   onFolderClick: (folderId: UserFolder) => void;
 };
 
@@ -60,7 +58,7 @@ const columns: TableColumn<TableItemData>[] = [
             className='col-span-4 cursor-pointer w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'
           >
             <div>
-              <BiFolderOpen className='h-6 w-6' />
+              <Folder className='h-6 w-6' />
             </div>
             <h2 className='text-sm font-medium'>{item?.folderName}</h2>
           </div>
@@ -144,7 +142,7 @@ const columns: TableColumn<TableItemData>[] = [
       if ('fileUrl' in item) {
         return (
           <div>
-            <button
+            <div
               onClick={() => {
                 item.setAction(item.idx + 1);
               }}
@@ -154,13 +152,10 @@ const columns: TableColumn<TableItemData>[] = [
 
               {item.action == item.idx + 1 && (
                 <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                    Manage Access
-                  </button>
                   <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? 0);
+                      item.setFileId(item?.id ?? "");
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
@@ -174,7 +169,7 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                 </div>
               )}
-            </button>
+            </div>
             {item.action && (
               <div
                 className='fixed inset-0 z-[1]'
@@ -188,7 +183,7 @@ const columns: TableColumn<TableItemData>[] = [
       } else if ('folderName' in item) {
         return (
           <div>
-            <button
+            <div
               onClick={() => {
                 item.setAction(item.idx + 1);
               }}
@@ -198,18 +193,15 @@ const columns: TableColumn<TableItemData>[] = [
 
               {item.action == item.idx + 1 && (
                 <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                    Manage Access
-                  </button>
-                  <button
+                  {/* <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? 0);
+                      item.setFileId(item?.id ?? "");
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
                     Assign to a Subject
-                  </button>
+                  </button> */}
                   <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
                     Rename
                   </button>
@@ -218,7 +210,7 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                 </div>
               )}
-            </button>
+            </div>
             {item.action && (
               <div
                 className='fixed inset-0 z-[1]'
@@ -247,6 +239,7 @@ const UploadDocument = ({
     control,
     setValue,
     reset,
+
     // handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
@@ -257,10 +250,10 @@ const UploadDocument = ({
   const [isCreateFolder, setisCreateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
-  const [fileId, setFileId] = useState<number>(0);
+  const [fileId, setFileId] = useState<string>("");
   const [loading, setLoading] = useState(false);
   // const [path, setPath] = useState<string>();
-  const [url, setUrl] = useState<string | any>();
+  // const [url, setUrl] = useState<string | any>();
   const { data: folderData } = useGetAllFolders();
   const { data, isLoading: isLoadingFiles } = useGetAllFiles();
 
@@ -277,7 +270,11 @@ const UploadDocument = ({
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
   useEffect(() => {
-    reset();
+    reset({
+      class: [],
+      subject: [],
+      schoolType: [],
+    });
     if (fileId) {
       refetchFile();
     }
@@ -292,18 +289,6 @@ const UploadDocument = ({
       );
     }
   }, [fileObject, setValue]);
-
-  useEffect(() => {
-    const getFileURL = async () => {
-      // const url = await getURL(path);
-      // setUrl(url);
-      await getURL('institute_materials/AITEO_Catering_20210106.pdf').then(
-        (v) => setUrl(v)
-      );
-      logger(url);
-    };
-    getFileURL();
-  }, [url]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
 
@@ -324,8 +309,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+            | { label: string; value: number }[]
+            | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -436,14 +421,11 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${
-                      folderTrail.length > 0 &&
-                      `?folderId=${
-                        folderTrail[folderTrail.length - 1].id
-                      }&folderName=${
-                        folderTrail[folderTrail.length - 1].folderName
+                    href={`/super-admin/add-material${folderTrail.length > 0 &&
+                      `?folderId=${folderTrail[folderTrail.length - 1].id
+                      }&folderName=${folderTrail[folderTrail.length - 1].folderName
                       }`
-                    }`}
+                      }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -482,21 +464,21 @@ const UploadDocument = ({
               ...(folderTrail.length < 1 ? content ?? [] : folderContent ?? []),
             ]?.map(
               (item, idx) =>
-                ({
-                  ...item,
-                  action,
-                  isAssign,
-                  setAction,
-                  setisAssign,
-                  idx,
-                  setFileId,
-                  onFolderClick: (folder) => {
-                    const c = [...folderTrail];
-                    c.push(folder);
-                    setFolderTrail(c);
-                    refetchFolderFiles();
-                  },
-                } as TableItemData)
+              ({
+                ...item,
+                action,
+                isAssign,
+                setAction,
+                setisAssign,
+                idx,
+                setFileId,
+                onFolderClick: (folder) => {
+                  const c = [...folderTrail];
+                  c.push(folder);
+                  setFolderTrail(c);
+                  refetchFolderFiles();
+                },
+              } as TableItemData)
             ) ?? []
           }
         />

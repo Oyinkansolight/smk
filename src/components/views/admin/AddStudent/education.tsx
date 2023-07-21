@@ -48,7 +48,9 @@ const Education = ({ register, errors }: Iprops) => {
   );
   const [teachers, setteachers] = useState();
   const getData = async () => {
-    const d = await request.get('/v1/government/teachers/get-staffs');
+    const d = await request.get('/v1/government/teachers/get-staffs', {
+      withCredentials: true,
+    });
     setteachers(d.data.data.data.data as any);
   };
   useEffect(() => {

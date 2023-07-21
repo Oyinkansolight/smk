@@ -5,39 +5,71 @@ import PageCounter from '@/components/counter/PageCounter';
 import EmptyView from '@/components/misc/EmptyView';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
+import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoAddCircle } from 'react-icons/io5';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
+import { getURL } from '@/firebase/init';
+import { RotatingLines } from 'react-loader-spinner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function Page() {
+  const [url, setUrl] = useState("");
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const params = useSearchParams();
   const id = params?.get('id');
-  const { data: period } = useGetPeriodById(
-    id ? Number.parseInt(id) : undefined
+  const { data: period, isLoading } = useGetPeriodById(
+    id ? id : undefined
   );
+
+  useEffect(() => {
+    if (period && period?.file?.fileUrl) {
+      const getFileURL = async () => {
+        const path = period?.file?.fileUrl ?? "";
+
+        await getURL(path).then(
+          (v) => setUrl(v)
+        );
+        logger(url);
+      };
+      getFileURL();
+    }
+  }, [period, url]);
+
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center items-center h-[40vh]'>
+        <RotatingLines
+          width='100'
+          visible={true}
+          strokeWidth='5'
+          strokeColor='#4fa94d'
+          animationDuration='0.75'
+        />
+      </div>
+    )
+  }
 
   return (
     <div className='layout'>
       <div className='text-[#D4D5D7] py-8 text-2xl'>
-        {'Classes > Mathematics'}
+        {`Classes > ${period?.subject?.name}`}
       </div>
 
       <div className='grid grid-cols-2'>
         <div>
           {' '}
           <div className='font-bold py-8 text-2xl md:text-4xl'>
-            Mathematics - Primary 1
+            {`${period?.subject?.name} - ${period?.class?.name}`}
           </div>
           <div className=' text-xl md:text-2xl'>
-            <span className='font-bold'>Period: </span>October 16, 12:00 PM -
-            1:00 PM
+            <span className='font-bold'>Period: </span>{`${period?.day} ${period?.startTime} - ${period?.endTime}`}
           </div>
           <div className='flex justify-start my-6'>
             <TakeAttendanceModal>
@@ -67,7 +99,7 @@ export default function Page() {
 
       <div className='flex items-stretch gap-10'>
         {period?.file ? (
-          <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem]'>
+          <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll'>
             <div className='flex justify-center p-8'>
               <PageCounter
                 page={currentPage}
@@ -78,8 +110,8 @@ export default function Page() {
             <div className='flex justify-center'>
               {' '}
               <Document
+                file={url}
                 className='mx-auto'
-                file='/pdfs/CHEMISTRY SS2 3RD TERM WEEK 3.pdf'
                 onLoadSuccess={(v) => {
                   setNumberOfPages(v.numPages);
                 }}

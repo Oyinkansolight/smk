@@ -119,14 +119,19 @@ const AcademicCalendar = ({
   const fetchTestTimeTable = () => {
     request
       .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=EXAM`
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=EXAM`,
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setschedule(res.data.data.data);
       });
     request
       .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`, {
+        withCredentials: true,
+      }
       )
       .then((res) => {
         setTestTable(res.data.data.data);

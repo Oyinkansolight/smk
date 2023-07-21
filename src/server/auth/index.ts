@@ -69,8 +69,11 @@ export function useGetProfile() {
   const query = useQuery({
     queryKey: 'get_profile',
     queryFn: async () => {
-      const response = (await request.get('/v1/authentication/profile')).data
-        .data.data as UserProfile;
+      const response = (
+        await request.get('/v1/authentication/profile', {
+          withCredentials: true,
+        })
+      ).data.data.data as UserProfile;
       localStorage.setItem(
         'institutionId',
         `${response.userInfo?.esiAdmin?.id}`
@@ -89,8 +92,11 @@ export function useGetCurrentSession() {
   const query = useQuery({
     queryKey: 'get_current_session',
     queryFn: async () => {
-      const response = (await request.get('/v1/authentication/profile')).data
-        .data.data.currentSession as any;
+      const response = (
+        await request.get('/v1/authentication/profile', {
+          withCredentials: true,
+        })
+      ).data.data.data.currentSession as any;
       return response;
     },
   });
