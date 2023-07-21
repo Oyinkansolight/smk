@@ -20,13 +20,15 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
+import { MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+
+
 
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
-
 
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
@@ -109,7 +111,7 @@ export default function CreateClassActivityView({
   const [body, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
   const { mutateAsync: createLessonNote } = useCreateLessonNote();
-  const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
+  const [questions, setQuestions] = useState<Question[]>([{}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
   const { data: profile } = useGetProfile();
@@ -250,16 +252,42 @@ export default function CreateClassActivityView({
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
-              <MultiChoiceQuestion
-                key={i}
-                value={questions[i]}
-                onChange={(v) => {
+              <div key={i} className='flex gap-4'>
+                <div className='flex-1'>
+                  <MultiChoiceQuestion
+                    value={questions[i]}
+                    onChange={(v) => {
+                      const newQ = [...questions];
+                      newQ[i] = v;
+                      setQuestions(newQ);
+                    }}
+                  />
+                </div>
+                <div
+                  onClick={() => {
+                    if (questions.length < 2) return;
+                    const newQ = [...questions];
+                    newQ.splice(i, 1);
+                    setQuestions(newQ);
+                  }}
+                  className='cursor-pointer flex items-center w-14 rounded justify-center bg-red-100'
+                >
+                  <MdDelete className='text-red-500 h-5 w-5' />
+                </div>
+              </div>
+            ))}
+            <div>
+              <Button
+                variant='secondary'
+                onClick={() => {
                   const newQ = [...questions];
-                  newQ[i] = v;
+                  newQ.push({});
                   setQuestions(newQ);
                 }}
-              />
-            ))}
+              >
+                Add Question
+              </Button>
+            </div>
           </>
         )}
         {format === 'Subjective' && type !== activityTypes[3].value && (
