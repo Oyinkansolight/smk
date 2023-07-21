@@ -3,14 +3,23 @@ import CreateSubjectActivityModal from '@/components/modals/create-subject-activ
 import Image from 'next/image';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 
+
 export default function SmallTeacherSubjectListItem({
   cl,
   time,
   onClick,
+  sessionId,
+  periodId,
+  termId,
+  classId,
 }: {
   cl: string;
   time: string;
   onClick?: () => void;
+  sessionId?: string;
+  termId?: string;
+  periodId?: string;
+  classId?: string;
 }) {
   return (
     <div className='flex items-center gap-4 p-6 border bg-white'>
@@ -35,7 +44,12 @@ export default function SmallTeacherSubjectListItem({
         </div>
       </div>
       <div className='w-10' />
-      <CreateSubjectActivityModal>
+      <CreateSubjectActivityModal
+        sessionId={sessionId}
+        periodId={periodId}
+        termId={termId}
+        classId={classId}
+      >
         <Button variant='secondary'>
           {' '}
           <div>

@@ -19,6 +19,7 @@ import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useForm } from 'react-hook-form';
@@ -90,7 +91,17 @@ const EditorComponent = ({
   );
 };
 
-export default function CreateClassActivityView() {
+export default function CreateClassActivityView({
+  sessionId,
+  termId,
+  periodId,
+  classId,
+}: {
+  sessionId?: string;
+  termId?: string;
+  periodId?: string;
+  classId?: string;
+}) {
   const { register, watch, handleSubmit } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -104,6 +115,7 @@ export default function CreateClassActivityView() {
   const [questions, setQuestions] = useState<Question[]>([{}, {}, {}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
+  const params = useSearchParams();
 
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
@@ -136,14 +148,17 @@ export default function CreateClassActivityView() {
       if (type === activityTypes[3].value) {
         await createLessonNote({ uploadUrl: path ?? '' });
       }
+      console.log(classId);
       const res = await create.mutateAsync({
         ...data,
         mode: isOnline ? 'ONLINE' : 'OFFLINE',
         format: form,
         questions,
-        classes: 1,
-        lessonNote: 1,
-        subject: 1,
+        classes: classId,
+        subject: params?.get('id'),
+        sessionId,
+        termId,
+        periodId,
       });
       toast.success(res.data.data.message);
     } catch (error) {

@@ -1,6 +1,7 @@
 import request from '@/server';
 import { useMutation } from 'react-query';
 
+
 export interface CreateAssignmentParams {
   title?: string;
   body?: string;
@@ -64,6 +65,9 @@ export function useCreateClasswork() {
 export interface CreateClassActivityParams {
   typeOfActivity?: string;
   mode?: 'OFFLINE' | 'ONLINE';
+  sessionId?: string;
+  termId?: string;
+  periodId?: string;
   format?: string;
   timeLimit?: string;
   questions?: Question[];

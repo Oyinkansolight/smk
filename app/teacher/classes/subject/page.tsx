@@ -74,6 +74,10 @@ export default function Page() {
             data.data.length > 0 ? (
               data.data.map((v, i) => (
                 <SmallTeacherSubjectListItem
+                  sessionId = {profile?.currentSession?.id as unknown as string}
+                  termId={term as unknown as string}
+                  periodId={v.id as unknown as string}
+                  classId={(filteredClasses ?? [])[idx]?.id as unknown as string}
                   onClick={() =>
                     router.push(`/teacher/classes/subject-task?id=${v.id}`)
                   }
