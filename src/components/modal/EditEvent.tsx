@@ -17,7 +17,7 @@ function AddActivityName({ onClickHandler }: propType) {
 
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[800px] flex-col space-y-4 bg-white p-4'>
+      <div className='flex md:w-[800px] w-[500px] flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />

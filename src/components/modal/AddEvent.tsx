@@ -31,8 +31,8 @@ function AddActivityName({
   }
 
   return (
-    <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[800px] flex-col space-y-4 bg-white p-4'>
+    <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
+      <div className='flex md:w-[800px] w-[500px] flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />
@@ -44,7 +44,7 @@ function AddActivityName({
           <p className='text-center'>
             Kindly select the appropriate options below:
           </p>
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormInput
               label='Title*'
               name='Title'

@@ -19,9 +19,13 @@ import { BiListCheck } from 'react-icons/bi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -71,7 +75,7 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 const Page = () => {
   const GovtFilesData = useGetAllFiles('');
-  const { data } = GovtFilesData;
+  const { data, isLoading } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
   const [currentGrid, setCurrentGrid] = useState(0);
   const studentFilesData: any = [];

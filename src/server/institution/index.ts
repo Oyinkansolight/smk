@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
+import { useGetAdminRoles } from '@/server/onboard';
 import { PaginationParams } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import { Institution, Student, Subject } from '@/types/institute';
@@ -31,13 +32,21 @@ export interface CreateSubjectParams {
 }
 
 export function useCreateInstitution() {
+  const { data } = useGetAdminRoles();
+  const admin = data?.find((item) => item.name === 'Admin') ?? '';
+
   const mutation = useMutation({
     mutationKey: 'create_institution',
     mutationFn: (params: CreateInstitutionParams) =>
-      request.post('/v1/government/institutes/add-institute', params, {
-        withCredentials: true,
-      }),
+      request.post(
+        '/v1/government/institutes/add-institute',
+        { ...params, role: admin.id },
+        {
+          withCredentials: true,
+        }
+      ),
   });
+
   return mutation;
 }
 
@@ -116,6 +125,7 @@ export function useGetSubjectList() {
   });
   return query;
 }
+
 export function useGetStudentSubjectList(id: any) {
   const query = useQuery({
     queryKey: 'get_student_subject_list',
@@ -151,9 +161,7 @@ export function useGetStudentsList(params?: PaginationParams) {
   });
   return query;
 }
-export function useGetStudentsListByInstitution(
-  instituteId: number | undefined
-) {
+export function useGetStudentsListByInstitution(instituteId: any) {
   const query = useQuery({
     queryKey: 'get_student_list_By_institution',
     queryFn: async () => {
@@ -208,9 +216,7 @@ export function useGetTeachersList(params?: PaginationParams) {
   });
   return query;
 }
-export function useGetTeachersListByInstitution(
-  instituteId: number | undefined
-) {
+export function useGetTeachersListByInstitution(instituteId: any) {
   const query = useQuery({
     queryKey: 'get_teachers_list_in_institution',
     queryFn: async () => {

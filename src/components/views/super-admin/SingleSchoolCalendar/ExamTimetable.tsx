@@ -51,6 +51,18 @@ import Time from '~/svg/time.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: number;
   institutionType: string;
@@ -129,9 +141,10 @@ const AcademicCalendar = ({
       });
     request
       .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`, {
-        withCredentials: true,
-      }
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`,
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setTestTable(res.data.data.data);
@@ -471,7 +484,7 @@ const AcademicCalendar = ({
                     <TaskAccordion
                       length={1}
                       lesson={false}
-                      taskName={`${v.class.name} ${v.arm}`}
+                      taskName={`${v.name}`}
                       key={i}
                     >
                       <div className='flex flex-wrap mt-4 gap-[27px]'>
@@ -505,7 +518,7 @@ const AcademicCalendar = ({
                 })}
               </div>
             ) : (
-              <div className='py-10 text-center'>No class arm found</div>
+              <div className='py-10 text-center'>No class found</div>
             )}
           </div>
         ) : (

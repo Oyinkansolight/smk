@@ -63,6 +63,12 @@ import Select from 'react-select';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div># {row.id}</div> },
   { name: 'Status', cell: (row) => <OnlineStatus status={row.status} /> },
@@ -79,6 +85,7 @@ const studentListColumns: TableColumn<any>[] = [
 const SingleSchoolDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridIdx, setGridIdx] = useState(0);
+
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const params = useSearchParams();

@@ -56,7 +56,8 @@ export function useGetAdminRoles() {
   const query = useQuery({
     queryKey: 'get_all_admin_roles',
     queryFn: async () =>
-      (await request.get(`/v1/government/roles/get-roles`)).data.data,
+      (await request.get(`/v1/government/roles/get-roles`)).data.data.data
+        .roles,
   });
 
   return query;

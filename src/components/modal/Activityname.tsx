@@ -42,8 +42,8 @@ function AddActivityName({
   const { data } = useGetSubjectList();
 
   return (
-    <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[701px] max-h-[600px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
+    <div className='fixed inset-0z-[999]grid place-content-center rounded-sm bg-black/30'>
+      <div className='flex md:w-[800px] w-[500px]  max-h-[600px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />
@@ -56,7 +56,7 @@ function AddActivityName({
             Kindly select the appropriate options below:
           </p>
 
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormSelect
               label='Select Type'
               name='schoolType'
@@ -83,7 +83,7 @@ function AddActivityName({
           {type === 'period' ? (
             <div>
               {data && (
-                <div className='w-full grid grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
+                <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                   <div className='bg-white border rounded p-4'>
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Monday</h1>
@@ -143,7 +143,7 @@ function AddActivityName({
               )}
             </div>
           ) : (
-            <div className='w-full grid grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
+            <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
               <div className='bg-white border rounded p-4'>
                 <div className='border-b py-1 mb-2'>
                   <h1 className='text-lg text-[#A5A5A5]'>All Week</h1>

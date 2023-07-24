@@ -60,7 +60,7 @@ export default function NewStudentSidebar() {
     <div
       className={clsxm(
         open ? 'w-40 ' : 'w-16 ',
-        'hideScroll overflow-y-auto flex bg-[#f5f9ff] flex-col gap-8 transition-all duration-200 items-center  py-4 border-r '
+        'absolute hideScroll overflow-y-auto flex bg-[#f5f9ff] flex-col gap-8 transition-all duration-200 items-center  py-4 border-r '
       )}
     >
       <div

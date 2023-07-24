@@ -1,0 +1,66 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - Staging
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERSION_TAG: v1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Clear dependencies and cache
+        run: |
+          echo Clearing dependencies and cache.......
+          rm -rf node_modules
+          rm package-lock.json
+          rm -rf dist
+
+      - name: Install dependencies
+        run: |
+          echo Installing dependencies.......
+          npm install
+
+      - name: Lint fix
+        run: npm run lint:fix
+
+      - name: Lint
+        run: npm run lint:strict
+
+      - name: Test frontend application
+        run: |
+          echo Testing application.......
+          npm run test
+
+      - name: Build frontend application
+        run: |
+          echo Building application.......
+          npm run build
+
+      - name: Generate deployment package
+        run: zip -r deploy-ems-fe.zip . -x \*node_modules\* -x \*.next\*
+
+      - name: Deploy to Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: ${{secrets.AWS_EB_ACCESS_KEY_ID}}
+          aws_secret_key: ${{secrets.AWS_EB_SECRET_ACCESS_KEY}}
+          application_name: es-ems-fe-staging
+          environment_name: ES-EMS-FE-Staging-env
+          region: ${{secrets.AWS_EB_REGION}}
+          version_label: 'v1.1.${{ github.run_number }}'
+          deployment_package: deploy-ems-fe.zip
+
+      - name: Deployed!!!!
+        run: echo App deployed to ELB Instance

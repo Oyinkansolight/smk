@@ -55,6 +55,7 @@ export default function AllCurriculumView({
         periodTitle: '',
         fileId: 2,
         teacherId: 1,
+        subjectId: id,
       });
     }
 
@@ -99,9 +100,10 @@ export default function AllCurriculumView({
 
     request
       .get(
-        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`, {
-        withCredentials: true
-      }
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`,
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setLoading(false);
@@ -161,85 +163,6 @@ export default function AllCurriculumView({
         ) : (
           (data?.data || []).map((v: any, i: number) => {
             return (
-              // <TaskAccordion
-              //   bordered
-              //   length={4}
-              //   lesson={false}
-              //   taskName={v.name}
-              //   subName={
-              //     <div className='flex items-center flex-1 w-full justify-between'>
-              //       <div className='flex items-center flex-1 w-[400px]'>
-              //         <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
-              //         <div className='w-4' />
-              //         <div>
-              //           Theme: <span className='font-bold'>{v.theme}</span>
-              //         </div>
-              //       </div>
-              //       <div className='flex items-center flex-1 w-full'>
-              //         <div>
-              //           Topic/Sub-Theme:
-              //           <span className='font-bold'>{v.topic}</span>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   }
-              //   actions={
-              //     <div className='flex items-center'>
-              //       <button
-              //         className='border border-primary text-primary p-2 rounded-sm'
-              //         onClick={() => {
-              //           setModal(true);
-              //         }}
-              //       >
-              //         Edit Week
-              //       </button>
-              //       <div className='w-2' />
-              //       <SlOptionsVertical className='w-4 h-4' />
-              //     </div>
-              //   }
-              //   showIcons={false}
-              //   key={i}
-              // >
-              //   <div className='flex flex-col divide-y-2 !text-xs pt-[33px]'>
-              //     {result.map((v: any, j: number) => {
-              //       return (
-              //         <div
-              //           key={j}
-              //           className={clsxm(
-              //             j === 0 && 'border-t',
-              //             j === 3 && 'border-b',
-              //             'flex flex-row justify-between py-[22px]'
-              //           )}
-              //         >
-              //           <div>Period {j + 1}</div>
-              //           <div>
-              //             <span className='text-[#8898AA]'>Title</span>:
-              //             {v.title}
-              //           </div>
-              //           <div className='flex flex-row text-[#ADB3CC] gap-[10px]'>
-              //             <div
-              //               className='cursor-pointer'
-              //               onClick={() =>
-              //                 router.push('/super-admin/view-period')
-              //               }
-              //             >
-              //               View
-              //             </div>
-              //             {/* <div
-              //                 className='cursor-pointer'
-              //                 onClick={() =>
-              //                   router.push('/super-admin/edit-period')
-              //                 }
-              //               >
-              //                 Edit
-              //               </div>
-              //               <div>Delete</div> */}
-              //           </div>
-              //         </div>
-              //       );
-              //     })}
-              //   </div>
-              // </TaskAccordion>
               <div key={i}>
                 <div
                   onClick={() => {
@@ -284,15 +207,6 @@ export default function AllCurriculumView({
                           </div>
                           <div className='flex flex-row justify-end text-[#ADB3CC] gap-[10px] md:pr-10'>
                             <div className='cursor-pointer'>View</div>
-                            {/* <div
-                                    className='cursor-pointer'
-                                    onClick={() =>
-                                      router.push('/super-admin/edit-period')
-                                    }
-                                  >
-                                    Edit
-                                  </div>
-                                  <div>Delete</div> */}
                           </div>
                         </div>
                       );

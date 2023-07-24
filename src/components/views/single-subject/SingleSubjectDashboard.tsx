@@ -10,8 +10,7 @@ import AllCurriculumView from '@/components/views/single-subject/AllCurriculumVi
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import Files from '@/components/views/super-admin/Library/Files';
 import logger from '@/lib/logger';
-import request from '@/server';
-import { useGetSubjectById } from '@/server/institution';
+import { useGetClassesList, useGetSubjectById } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -26,6 +25,16 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);
@@ -36,30 +45,11 @@ const SingleSubjectDashboard = () => {
   const [termId, settermId] = useState(0);
   const [classId, setclassId] = useState(0);
   const [academicyear, setacademicyear] = useState({ session: '', id: 0 });
-  const [allclasses, setAllClasses] = useState([]);
-
-  function Fetch_Profile_Classes() {
-    request.get('/v1/authentication/profile').then((v) => {
-      const data = v.data.data.data;
-      request
-        .get(
-          `/v1/institutions/class-arm/get-session-class-arm?sessionId=${data?.currentSession?.id}`, {
-          withCredentials: true
-        }
-        )
-        .then((v) => {
-          const classData = v.data.data.data;
-
-          setAllClasses(classData);
-        });
-    });
-  }
+  const { data: allclasses } = useGetClassesList();
 
   logger(classId);
 
-  // const currentSubjectName = (data ?? [])[0]?.name;
   useEffect(() => {
-    Fetch_Profile_Classes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -101,7 +91,7 @@ const SingleSubjectDashboard = () => {
               curriculumClicked={() => setPage(2)}
               schoolType={schoolType}
               academicyear={academicyear.session}
-              classList={allclasses || []}
+              classList={allclasses?.data || []}
               sessionterms={sessionterms || []}
               settermId={settermId}
               setclassId={setclassId}

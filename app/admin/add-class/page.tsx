@@ -57,6 +57,14 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TransferStudent = () => {
   const { data: institutionProfile } = useGetProfile();
   const { data: currentSessionInfo } = useGetCurrentSession();
@@ -155,6 +163,7 @@ const TransferStudent = () => {
           title='Class arm created successfully'
           description='Hurray!'
           link='/admin/all-classes'
+          homeLink='/admin'
           textLink='Manage Classes'
         />
       )}

@@ -32,6 +32,14 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   { name: 'Student ID', selector: (row) => row.id ?? '' },
   {
@@ -72,7 +80,7 @@ const AllStudent = () => {
     data: students,
     error,
     isLoading,
-  } = useGetStudentsListByInstitution(Number(institutionId));
+  } = useGetStudentsListByInstitution(institutionId);
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);

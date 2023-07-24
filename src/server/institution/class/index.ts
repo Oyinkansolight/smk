@@ -54,7 +54,6 @@ export function useGetInstituteSessionClassArms(
   });
   return query;
 }
-
 export function useGetAllClasses() {
   const query = useQuery({
     queryKey: 'all_classes',

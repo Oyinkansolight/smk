@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const columns: TableColumn<Institution & { idx: string }>[] = [
   {
     name: 'No',

@@ -3,6 +3,11 @@ const nextConfig = {
   eslint: {
     dirs: ['src'],
   },
+  modularizeImports: {
+    'react-icons': {
+      transform: 'react-icons/{{member}}',
+    },
+  },
 
   reactStrictMode: true,
   swcMinify: true,
@@ -12,12 +17,12 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/auth/admin',
+        destination: '/auth/user',
         permanent: true,
       },
       {
         source: '/login',
-        destination: '/auth/admin',
+        destination: '/auth/user',
         permanent: true,
       },
     ];

@@ -78,6 +78,22 @@ import Webcam from 'react-webcam';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -86,7 +102,7 @@ type Iprops = {
   setImageData: (v: any) => void;
 };
 
-const GenderOptions: string[] = ['Male', 'Female', 'Other'];
+const GenderOptions: string[] = ['MALE', 'FEMALE', 'Other'];
 const Biodata = ({
   register,
   errors,
@@ -196,6 +212,7 @@ const Biodata = ({
             'BUS_DRIVER',
             'COACH',
             'TEACHER',
+            'TEACHING',
             'PRINCIPAL',
             'HOD',
             'HEADMASTER',

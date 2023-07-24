@@ -36,7 +36,7 @@ const InstituteSidebar = () => {
     <aside
       className={clsxm(
         open ? 'w-[280px] ' : 'w-20 ',
-        'order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
+        'absolute order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
       )}
     >
       <nav className='flex flex-1 flex-col space-y-6 pl-4 pr-2'>

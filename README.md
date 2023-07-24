@@ -120,3 +120,9 @@ You can easily add expansion such as React Hook Form + Components, Storybook, an
 https://user-images.githubusercontent.com/55318172/146631994-e1cac137-1664-4cfe-950b-a96decc1eaa6.mp4
 
 Check out the [expansion pack repository](https://github.com/theodorusclarence/expansion-pack) for the commands
+
+## For Staging Deployment
+
+- npm (not yarn) package manager in use
+- Husky is not included in package.json
+- The build script in package.json is NODE_OPTIONS=--max_old_space_size=2048 next build

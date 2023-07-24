@@ -52,9 +52,11 @@ function AddActivityName({
     'Academic Year 2027/2028',
     'Academic Year 2028/2029',
   ];
+  const numbers = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
+
   return (
     <div className='fixed inset-0 z-[9999999999] py-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[800px] max-h-[700px] overflow-y-auto flex-col space-y-4 bg-white p-4'>
+      <div className='flex md:w-[800px] w-[500px] max-h-[700px] overflow-y-auto flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />
@@ -67,7 +69,7 @@ function AddActivityName({
             Kindly select the appropriate options below:
           </p>
 
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormSelect
               label='Select Session'
               name='schoolType'
@@ -103,11 +105,11 @@ function AddActivityName({
             />
           </div>
           <h1 className='text-lg text-[#A5A5A5]'>First Term</h1>
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormSelect
               label='Select Number of Weeks'
               name='schoolType'
-              options={['5', '10', '15', '20']}
+              options={numbers}
               setFormValue={setfirstnoofweeks}
             />
             <div></div>
@@ -127,11 +129,11 @@ function AddActivityName({
             />
           </div>
           <h1 className='text-lg text-[#A5A5A5]'>Second Term</h1>
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormSelect
               label='Select Number of Weeks'
               name='schoolType'
-              options={['5', '10', '15', '20']}
+              options={numbers}
               setFormValue={setsecondnoofweeks}
             />
             <div></div>
@@ -151,11 +153,11 @@ function AddActivityName({
             />
           </div>
           <h1 className='text-lg text-[#A5A5A5]'>Third Term</h1>
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormSelect
               label='Select Number of Weeks'
               name='schoolType'
-              options={['5', '10', '15', '20']}
+              options={numbers}
               setFormValue={setthirdnofweeks}
             />
             <div></div>

@@ -15,8 +15,8 @@ const AllClasses = () => {
   const currentSessionId = getFromLocalStorage('currentSessionId');
 
   const { data: allclasses, isLoading } = useGetInstituteClassArms(
-    Number(institutionId),
-    Number(currentSessionId)
+    institutionId,
+    currentSessionId
   );
 
   const { data: staffs } = useGetStaffs();

@@ -54,6 +54,14 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddStaff = () => {
   const { data: institutionProfile } = useGetProfile();
   // console.log(institutionProfile);
@@ -67,7 +75,7 @@ const AddStaff = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(5);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
@@ -78,7 +86,7 @@ const AddStaff = () => {
     { titleOfTraining: string; year: number | null }[]
   >([]);
   const [assignedClassSubject, setassignedClassSubject] = useState<
-    { classId: number | null; subjectId: number | null }[]
+    { classArmId: number | null; subjectId: number | null }[]
   >([]);
 
   const handleCreateStaff = useCreateStaff();
@@ -106,7 +114,7 @@ const AddStaff = () => {
   const addSubjectClass = () => {
     setassignedClassSubject([
       ...assignedClassSubject,
-      { classId: null, subjectId: null },
+      { classArmId: null, subjectId: null },
     ]);
   };
   const removeRemoveSubjectClass = (id: number) => {
@@ -157,7 +165,6 @@ const AddStaff = () => {
     if (
       stage === 4 &&
       data.schoolname &&
-      data.staffId &&
       data.dateposted &&
       data.qualification &&
       data.dateappointed &&
@@ -193,7 +200,6 @@ const AddStaff = () => {
         trainingDetails: trainingDetails,
         employmentDetails: {
           schoolName: data.schoolname,
-          staffId: data.staffId,
           datePosted: data.dateposted,
           highestQualification: data.qualification,
           DateOfFirstAppointment: data.dateappointed,
@@ -201,7 +207,8 @@ const AddStaff = () => {
           salaryGradeLevel: data.salarygrade,
           jobTitle: data.jobTitle,
         },
-        subjectAndClasses: assignedClassSubject,
+        // subjectAndClasses: assignedClassSubject,
+        subjectAndClasses: [],
       };
 
       setpublishData(data);
@@ -266,6 +273,7 @@ const AddStaff = () => {
           description='Institution Staff created successfully'
           link='/admin/all-staff'
           textLink='Manage staff'
+          homeLink='/admin'
         />
       )}
       <Link href='/admin'>

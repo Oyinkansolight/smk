@@ -78,7 +78,7 @@ export default function AccordionAlt({
           height: expanded ? `${length}px` : '0px',
         }}
         className={clsxm(
-          ' -z-50 transition-all duration-200 overflow-hidden',
+          'overflow-hidden -z-50 transition-all duration-200 overflow-y-hidden',
           expanded ? '' : '',
           expanded && bordered ? 'border-x border-b border-[#E3E3E3] px-6' : ''
         )}

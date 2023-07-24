@@ -22,11 +22,21 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
     selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx + 1}</div>,
+    cell: (row) => <div>#{row.idx}</div>,
   },
   {
     name: 'Staff ID',
@@ -71,7 +81,7 @@ const AllStaff = () => {
     data: staff,
     error,
     isLoading,
-  } = useGetTeachersListByInstitution(Number(institutionId));
+  } = useGetTeachersListByInstitution(institutionId);
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);

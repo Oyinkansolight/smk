@@ -138,7 +138,7 @@ export default function TaskListView({
             <TaskAccordion
               length={1}
               lesson={false}
-              taskName={`${v.class.name} ${v.arm}`}
+              taskName={`${v.name} `}
               key={i}
             >
               <div className='flex flex-wrap mt-4 gap-[27px]'>

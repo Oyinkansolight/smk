@@ -43,11 +43,22 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   addSubjectClass: () => void;
   removeRemoveSubjectClass: (id: number) => void;
   handleSubjectClassChange: (name: string, value: any, id: number) => void;
-  assignedClassSubject: { classId: number | null; subjectId: number | null }[];
+  assignedClassSubject: {
+    classArmId: number | null;
+    subjectId: number | null;
+  }[];
 };
 
 const Education = ({

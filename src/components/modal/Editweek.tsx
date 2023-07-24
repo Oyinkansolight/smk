@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
-import FormSelectFiles from '@/components/input/formSelectFiles';
-import FormSelectTeacher from '@/components/input/formSelectteachers';
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
-import { useGetStaffs } from '@/server/government/staff';
-import { useGetSubjectList } from '@/server/institution';
+import {
+  useGetSubjectList,
+  useGetTeachersListByInstitution,
+} from '@/server/institution';
 import { useGetAllFiles } from '@/server/library';
 import React from 'react';
 import Close from '~/svg/close.svg';
@@ -33,7 +34,9 @@ function AddActivityName({
 }: propType) {
   const { data } = useGetSubjectList();
   const { data: files } = useGetAllFiles();
-  const { data: staffs } = useGetStaffs();
+  const institutionId = getFromLocalStorage('institutionId');
+
+  const { data: staffs } = useGetTeachersListByInstitution(institutionId);
   logger(staffs);
   const updateObjectInArray = (index: number, newValue: any) => {
     setperiodsUpdate((prevArray: any) => {
@@ -44,8 +47,8 @@ function AddActivityName({
   };
 
   return (
-    <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex w-[700px] max-h-[700px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
+    <div className='fixed inset-0 z-[99] grid place-content-center rounded-sm bg-black/30'>
+      <div className='flex md:w-[800px] w-[500px] max-h-[700px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
         <div className='flex item-center justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />
@@ -58,7 +61,7 @@ function AddActivityName({
             Kindly select the appropriate options below:
           </p>
 
-          <div className='w-full grid grid-cols-2 gap-4'>
+          <div className='w-full grid md:grid-cols-2 gap-4'>
             <FormInput
               label='Theme*'
               name='schoolType'
@@ -77,7 +80,7 @@ function AddActivityName({
 
           <div>
             {data && (
-              <div className='w-full grid grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
+              <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                 {periodsList.map((v: any, i: number) => (
                   <div key={i} className='bg-white border rounded p-4'>
                     <div className='border-b py-1 mb-2 flex items-center justify-between'>
@@ -108,16 +111,64 @@ function AddActivityName({
                           />
                         </div>
                       </div>
-                      <FormSelectFiles
-                        label='Attach File to Period*'
-                        name='file'
-                        options={files ?? []}
-                      />
-                      <FormSelectTeacher
-                        label='Attach Teacher to Period*'
-                        name='file'
-                        options={staffs ?? []}
-                      />
+                      <div>
+                        <label htmlFor='' className='text-xs font-bold'>
+                          Attach File to Period*
+                        </label>
+                        <div
+                          className={clsxm('mt-1 w-full border p-2 rounded')}
+                        >
+                          <select
+                            id=''
+                            className='w-full border-none outline-none bg-transparent  text-gray-400'
+                            onChange={(e) => {
+                              updateObjectInArray(i, {
+                                ...periodsUpdate[i],
+                                fileId: e.target.value,
+                              });
+                            }}
+                          >
+                            <option value=''> -- Select an option -- </option>
+
+                            {(files ?? []).map((item: any, id: number) => (
+                              <option key={id} value={item.id}>
+                                {item.filename}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label htmlFor='' className='text-xs font-bold'>
+                          Attach Teacher to Period*
+                        </label>
+                        <div
+                          className={clsxm('mt-1 w-full border p-2 rounded')}
+                        >
+                          <select
+                            id=''
+                            className='w-full border-none outline-none bg-transparent  text-gray-400'
+                            onChange={(e) => {
+                              updateObjectInArray(i, {
+                                ...periodsUpdate[i],
+                                teacherId: e.target.value,
+                              });
+                            }}
+                          >
+                            <option value=''> -- Select an option -- </option>
+
+                            {(staffs?.data ?? []).map(
+                              (item: any, id: number) => (
+                                <option key={id} value={item.id}>
+                                  {`${item.user[0]?.firstName || ''}  ${
+                                    item.user[0]?.lastName || ''
+                                  }`}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}

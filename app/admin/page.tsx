@@ -27,7 +27,7 @@ const Page = () => {
 
   return (
     <div className='layout flex flex-col gap-[31px] px-4 pt-6'>
-      <div className='font-bold text-4xl'>
+      <div className='font-bold text-4xl truncate sm:max-w-[450px] md:max-w-max'>
         Welcome, {institutionProfile?.userInfo?.esiAdmin?.instituteName}
       </div>
       <div className='flex justify-end'>
@@ -39,7 +39,7 @@ const Page = () => {
         <div className='text-[#333333] font-bold text-2xl mb-5'>
           Your Dashboard Statistic
         </div>
-        <div className='grid grid-cols-3 gap-3 md:gap-[20px] xl:gap-[27px]'>
+        <div className='grid md:grid-cols-3 sm:grid-cols-2  gap-3 md:gap-[20px] xl:gap-[27px]'>
           <CountCardAlt
             count={data?.Total_Students ?? 0}
             title='Total Students'
@@ -68,7 +68,7 @@ const Page = () => {
           <ReactSelect placeholder='Manage Widgets' />
         </div>
         <div className='h-[20px]' />
-        <div className='grid grid-cols-2 gap-[20px]'>
+        <div className='grid md:grid-cols-2 gap-[20px]'>
           <div>
             <div className='rounded-xl p-[20px] gap-[20px] flex flex-col bg-[#F4F9F6]'>
               <GenericChart
