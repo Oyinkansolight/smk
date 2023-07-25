@@ -18,9 +18,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
-
-
-
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
@@ -100,7 +97,7 @@ export default function Page() {
             data.data.length > 0 ? (
               data.data.map((period, i) => (
                 <SmallTeacherSubjectListItem
-                  sessionId = {profile?.currentSession?.id as unknown as string}
+                  sessionId={profile?.currentSession?.id as unknown as string}
                   termId={term as unknown as string}
                   periodId={period.id as unknown as string}
                   classId={(filteredClasses ?? [])[0].id as unknown as string}

@@ -14,8 +14,6 @@ import { Institution } from '@/types/institute';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-
-
 export default function TakeAttendanceView() {
   const params = useSearchParams();
   const id = params?.get('id');
