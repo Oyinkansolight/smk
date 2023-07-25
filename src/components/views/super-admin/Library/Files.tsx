@@ -421,10 +421,10 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${folderTrail.length > 0 &&
+                    href={`/super-admin/add-material${folderTrail.length > 0 ?
                       `?folderId=${folderTrail[folderTrail.length - 1].id
                       }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                      }`
+                      }` : ''
                       }`}
                   >
                     <label
