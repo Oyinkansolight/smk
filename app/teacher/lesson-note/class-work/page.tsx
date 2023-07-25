@@ -2,21 +2,50 @@
 
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
+import { getFromSessionStorage } from '@/lib/helper';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetAllClasses } from '@/server/institution/class';
+import { useGetAllClassArms } from '@/server/institution/class-arm';
+import { useGetClassActivity } from '@/server/institution/lesson-note';
+import { Institution } from '@/types/classes-and-subjects';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
-  const Assignment = [
-    'Thermodynamics',
-    'Friction',
-    'Acceleration',
-    'Kinetic Energy',
-    'Mass',
-  ];
+  const { data: classes } = useGetAllClasses();
+  const filteredClasses = useMemo(
+    () =>
+      classes?.filter((v) =>
+        v.institutionType?.toLowerCase().includes('secondary')
+      ),
+    [classes]
+  );
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  const institutionString = getFromSessionStorage('institution');
+  const institution = institutionString
+    ? (JSON.parse(institutionString) as Institution)
+    : undefined;
+  const term = terms?.data[0]?.id;
+  const { data: arms } = useGetAllClassArms({
+    classId: (classes ?? [])[idx]?.id as unknown as string,
+    institutionId: institution?.id,
+    sessionId: profile?.currentSession?.id,
+  });
+  const { data: activities } = useGetClassActivity({
+    typeOfActivity: 'CLASS_WORK',
+    classArmId: (arms ?? [])[idx]?.id as unknown as string,
+    termId: term as unknown as string,
+    sessionId: profile?.currentSession?.id,
+  });
 
   return (
     <div className='h-full layout'>
@@ -26,9 +55,7 @@ export default function Page() {
       <TextTabBar
         tabs={[
           'All',
-          ...Array(3)
-            .fill(0)
-            .map((v, i) => `SSS ${i + 1}`),
+          ...(filteredClasses ?? []).map((v) => v.name ?? '[NULL]'),
         ]}
         onChange={setIdx}
         selectedIdx={idx}
@@ -51,15 +78,23 @@ export default function Page() {
         <div>Date Due</div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Assignment.map((title, i) => (
-          <LessonTaskListItem
-            isDue={i === 0 || i === 1}
-            isOfflineSubmission={i === 4}
-            title={title}
-            subject='Physics'
-            key={i}
-          />
-        ))}
+        {activities?.data &&
+          (activities?.data.length === 0 ? (
+            <EmptyView
+              useStandardHeight
+              label='No assignments created for this class.'
+            />
+          ) : (
+            activities?.data?.map((activity, i) => (
+              <LessonTaskListItem
+                isDue={i === 0 || i === 1}
+                isOfflineSubmission={i === 4}
+                title={activity.eventName ?? '[NULL]'}
+                subject='Physics'
+                key={i}
+              />
+            ))
+          ))}
       </div>
       <PaginatedCounter pageCount={5} currentPage={2} />
     </div>
@@ -81,8 +116,8 @@ function LessonTaskListItem({
     <Link
       href={
         isOfflineSubmission
-          ? '/teacher/lesson-note/class-work/offline-submissions'
-          : '/teacher/lesson-note/class-work/submissions'
+          ? '/teacher/lesson-note/assignment/offline-submissions'
+          : '/teacher/lesson-note/assignment/submissions'
       }
     >
       <div

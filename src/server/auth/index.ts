@@ -3,6 +3,7 @@ import request from '@/server';
 import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
 
+
 export interface SignUpParams {
   email: string;
   phoneNumber?: string;
@@ -67,6 +68,7 @@ export function useResetPassword() {
 
 export function useGetProfile() {
   const query = useQuery({
+    staleTime: Number.POSITIVE_INFINITY,
     queryKey: 'get_profile',
     queryFn: async () => {
       const response = (

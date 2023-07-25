@@ -10,6 +10,7 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -405,13 +406,13 @@ export function useCreateBulkStaff() {
 export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
   const query = useQuery({
     queryKey: 'academic_sessions_terms',
-    queryFn: () =>
+    queryFn: async () =>
       termId
-        ? request
-            .get(`/v1/institutions/institutes/get-term-weeks`, {
+        ? ((
+            await request.get(`/v1/institutions/institutes/get-term-weeks`, {
               params: { termId },
             })
-            .then((v) => v.data.data.data as PaginatedData<Week>)
+          ).data.data.data as PaginatedData<Week>)
         : undefined,
   });
   const { refetch } = query;

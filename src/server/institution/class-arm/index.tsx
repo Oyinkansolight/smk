@@ -3,6 +3,7 @@ import { ClassArm } from '@/types/classes-and-subjects';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
+
 export function useGetAllClassArms(params: {
   classId?: string | number;
   institutionId?: string | number;
@@ -22,9 +23,7 @@ export function useGetAllClassArms(params: {
   });
   const { refetch } = query;
   useEffect(() => {
-    return () => {
-      refetch();
-    };
+    refetch();
   }, [params.classId, params.institutionId, params.sessionId, refetch]);
   return query;
 }

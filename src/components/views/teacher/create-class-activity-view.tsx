@@ -33,12 +33,20 @@ import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
 
+
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
   {
     loading: () => <p>Loading...</p>,
   }
 );
+
+export const ACTIVITY_TYPES = [
+  'ASSIGNMENT',
+  'CLASS_WORK',
+  'POP_QUIZ',
+  'LESSON_NOTE',
+] as const;
 
 export const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
@@ -311,7 +319,6 @@ export default function CreateClassActivityView({
         {format === 'Subjective' && type === activityTypes[3].value && (
           <div>
             <TextTabBar
-              className='p-0'
               tabs={[
                 <div className='flex items-center gap-2' key={0}>
                   <BookSVG

@@ -1,6 +1,9 @@
+import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import request from '@/server';
-import { useMutation } from 'react-query';
-
+import { ClassActivity } from '@/types/institute';
+import { PaginatedData } from '@/types/pagination';
+import { useEffect } from 'react';
+import { useMutation, useQuery } from 'react-query';
 
 export interface CreateAssignmentParams {
   title?: string;
@@ -123,4 +126,42 @@ export function useCreateLessonNote() {
       }),
   });
   return mutation;
+}
+
+export interface GetClassActivity {
+  typeOfActivity?: (typeof ACTIVITY_TYPES)[number];
+  classArmId?: string | number | null;
+  termId?: string | number | null;
+  sessionId?: string | number | null;
+}
+
+export function useGetClassActivity(params: GetClassActivity) {
+  const query = useQuery({
+    queryKey: 'get_class_activity',
+    queryFn: async () =>
+      params.classArmId &&
+      params.sessionId &&
+      params.termId &&
+      params.typeOfActivity
+        ? ((
+            await request.get(
+              `/v1/institutions/lessons/get-class-class-activty`,
+              {
+                params,
+              }
+            )
+          ).data.data.data as PaginatedData<ClassActivity>)
+        : undefined,
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [
+    params.classArmId,
+    params.sessionId,
+    params.termId,
+    params.typeOfActivity,
+    refetch,
+  ]);
+  return query;
 }
