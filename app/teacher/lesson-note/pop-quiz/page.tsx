@@ -82,7 +82,7 @@ export default function Page() {
           (activities?.data.length === 0 ? (
             <EmptyView
               useStandardHeight
-              label='No assignments created for this class.'
+              label='No pop quiz created for this class.'
             />
           ) : (
             activities?.data?.map((activity, i) => (
