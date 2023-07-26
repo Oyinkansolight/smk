@@ -1,5 +1,5 @@
 import request from '@/server';
-import { ClassActivity } from '@/types/institute';
+import { LessonNoteObject } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -20,7 +20,7 @@ export function useGetTeacherClassPeriod(params: GetTeacherClassPeriodParams) {
         .get(`/v1/institutions/institutes/get-teacher-class-periods`, {
           params,
         })
-        .then((v) => v.data.data.data as PaginatedData<ClassActivity>),
+        .then((v) => v.data.data.data as PaginatedData<LessonNoteObject>),
   });
   return query;
 }
@@ -47,7 +47,7 @@ export function useGetWeekPeriodsBySubject(
                 params,
               }
             )
-          ).data.data.data as PaginatedData<ClassActivity>)
+          ).data.data.data as PaginatedData<LessonNoteObject>)
         : undefined;
     },
   });
@@ -75,7 +75,7 @@ export function useGetPeriodById(id?: string) {
             await request.get(`/v1/institutions/institutes/get-period-by-id`, {
               params: { periodId: id },
             })
-          ).data.data.data as ClassActivity)
+          ).data.data.data as LessonNoteObject)
         : undefined;
     },
   });

@@ -1,9 +1,10 @@
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import request from '@/server';
-import { ClassActivity } from '@/types/institute';
+import { ClassActivity1, SubmittedActivity } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
+
 
 export interface CreateAssignmentParams {
   title?: string;
@@ -150,7 +151,7 @@ export function useGetClassActivity(params: GetClassActivity) {
                 params,
               }
             )
-          ).data.data.data as PaginatedData<ClassActivity>)
+          ).data.data.data as PaginatedData<ClassActivity1>)
         : undefined,
   });
   const { refetch } = query;
@@ -161,6 +162,43 @@ export function useGetClassActivity(params: GetClassActivity) {
     params.sessionId,
     params.termId,
     params.typeOfActivity,
+    refetch,
+  ]);
+  return query;
+}
+
+export interface GetStudentSubmittedActivity {
+  type?: (typeof ACTIVITY_TYPES)[number];
+  classArmId?: string | number | null;
+  studentId?: string | number | null;
+  subjectId?: string | number | null;
+}
+
+export function useGetStudentSubmittedActivity(
+  params: GetStudentSubmittedActivity
+) {
+  const query = useQuery({
+    queryKey: 'get_student_submitted_activity',
+    queryFn: async () =>
+      params.classArmId && params.subjectId && params.studentId && params.type
+        ? ((
+            await request.get(
+              `/v1/institutions/lessons/get-submittted-class-activties-by-subject`,
+              {
+                params,
+              }
+            )
+          ).data.data.data as SubmittedActivity[])
+        : undefined,
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [
+    params.classArmId,
+    params.subjectId,
+    params.studentId,
+    params.type,
     refetch,
   ]);
   return query;

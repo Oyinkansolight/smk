@@ -1,3 +1,4 @@
+import { Question } from '@/server/institution/lesson-note';
 import {
   Class,
   Session,
@@ -302,7 +303,7 @@ export interface AcademicCalendarType {
   };
 }
 
-export interface ClassActivity {
+export interface LessonNoteObject {
   id?: number;
   title?: string;
   theme?: string;
@@ -331,6 +332,65 @@ export interface ClassActivity {
   class?: Class;
   teacher?: Teacher;
   subject?: Subject;
+}
+
+export interface ClassActivity1 {
+  typeOfActivity: string;
+  format: string;
+  timeLimit: string;
+  questions: Question[];
+  dueDate: Date;
+  teacher: Teacher;
+  lessonNote: null;
+  classes: Class;
+  subject: Subject;
+  period: Period;
+  session: Session;
+  term: Term;
+  mode: string;
+  id: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Period {
+  id: string;
+  title: string;
+  theme: string;
+  subTheme: string;
+  instructionalObjective: string;
+  teachingMethod: string;
+  teachingTheme: string;
+  teacherPreparationForLesson: string;
+  instructionalMaterial: string;
+  lessonProcedure: string;
+  startTime: string;
+  endTime: string;
+  day: string;
+  eventName: string;
+  institutionType: string;
+  teacherActivity: string;
+  lessonInstructionalObjective: string;
+  lessonTopic: string;
+  lessonNotes: string;
+  createdAt: Date;
+  updatedAt: Date;
+  classActivities: any[];
+}
+
+export interface SubmittedActivity {
+  id: string;
+  score: null;
+  typeOfActivity: string;
+  status: string;
+  questions: Question[];
+  createdAt: Date;
+  updatedAt: Date;
+  class: Class;
+  student: User;
+  activity: ClassActivity1;
+  period: Period;
 }
 
 export interface GradeCategory {

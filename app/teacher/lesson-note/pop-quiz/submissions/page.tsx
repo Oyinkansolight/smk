@@ -2,23 +2,25 @@
 
 import Button from '@/components/buttons/Button';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
+import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
+import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
+import moment from 'moment';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
-  const Names = [
-    'Ighosa Ahmed',
-    'David Keyan',
-    'Victoria Alle',
-    'Sharon Orobosa',
-  ];
-
+  const params = useSearchParams();
+  const { data: submissions } = useGetStudentSubmittedActivity({
+    classArmId: params?.get('classArmId'),
+    subjectId: params?.get('subjectId'),
+    type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
+    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
+  });
   return (
     <div className='h-full layout'>
-      <div className='text-3xl text-[#D4D5D7]'>
-        {'Assignments > Submissions'}
-      </div>
+      <div className='text-3xl text-[#D4D5D7]'>{'Pop Quiz > Submissions'}</div>
       <div className='font-bold text-3xl py-8 h3'>
         <div>Submissions</div>
       </div>
@@ -44,10 +46,11 @@ export default function Page() {
         <div></div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Names.map((name, i) => (
+        {submissions?.map((submission, i) => (
           <AssignmentListItem
-            title={name}
-            dateSubmitted={i === 3 || i === 2 ? undefined : 'June 24, 2023'}
+            title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
+            dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
+            dueDate={submission.activity.dueDate}
             key={i}
             id={i + 1}
           />
@@ -62,10 +65,12 @@ function AssignmentListItem({
   id,
   title,
   dateSubmitted,
+  dueDate,
 }: {
   id: number;
   title: string;
   dateSubmitted?: string;
+  dueDate?: Date;
 }) {
   return (
     <Link href='/teacher/lesson-note/pop-quiz/submissions/grade'>
@@ -80,7 +85,7 @@ function AssignmentListItem({
           <div>{title}</div>
         </div>
         <div>{dateSubmitted ? dateSubmitted : '-'}</div>
-        <div>Primary 1</div>
+        <div>{moment(dueDate).format('MMMM DD')}</div>
         <div className='flex justify-end '>
           <Button
             disabled={!dateSubmitted}

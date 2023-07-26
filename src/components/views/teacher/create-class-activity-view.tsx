@@ -44,14 +44,14 @@ const Editor = dynamic(
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
   'CLASS_WORK',
-  'POP_QUIZ',
+  'QUIZ',
   'LESSON_NOTE',
 ] as const;
 
 export const activityTypes = [
   { key: 'ASSIGNMENT', value: 'Assignment' },
   { key: 'CLASS_WORK', value: 'Class Work' },
-  { key: 'POP_QUIZ', value: 'Pop Quiz' },
+  { key: 'QUIZ', value: 'Pop Quiz' },
   { key: 'LESSON_NOTE', value: 'Lesson Note' },
 ];
 
@@ -355,7 +355,7 @@ export default function CreateClassActivityView({
             {subjectiveType === 0 && <EditorComponent onChange={setBody} />}
             {subjectiveType === 1 && (
               <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
-                {getValues('lesson-note-file-upload')[0]?.name ? (
+                {(getValues('lesson-note-file-upload') ?? [])[0]?.name ? (
                   <div>
                     {(getValues('lesson-note-file-upload') as FileList)[0].name}{' '}
                     Selected

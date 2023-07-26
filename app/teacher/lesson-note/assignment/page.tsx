@@ -4,40 +4,25 @@ import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
-import { getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
-import { useGetAllClasses } from '@/server/institution/class';
-import { useGetAllClassArms } from '@/server/institution/class-arm';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetClassActivity } from '@/server/institution/lesson-note';
-import { Institution } from '@/types/classes-and-subjects';
+import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
-  const { data: classes } = useGetAllClasses();
-  const filteredClasses = useMemo(
-    () =>
-      classes?.filter((v) =>
-        v.institutionType?.toLowerCase().includes('secondary')
-      ),
-    [classes]
-  );
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.id,
   });
-  const institutionString = getFromSessionStorage('institution');
-  const institution = institutionString
-    ? (JSON.parse(institutionString) as Institution)
-    : undefined;
   const term = terms?.data[0]?.id;
-  const { data: arms } = useGetAllClassArms({
-    classId: (classes ?? [])[idx]?.id as unknown as string,
-    institutionId: institution?.id,
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.id,
   });
   const { data: activities } = useGetClassActivity({
@@ -54,8 +39,9 @@ export default function Page() {
       </div>
       <TextTabBar
         tabs={[
-          'All',
-          ...(filteredClasses ?? []).map((v) => v.name ?? '[NULL]'),
+          ...(arms ?? []).map((arm) =>
+            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
+          ),
         ]}
         onChange={setIdx}
         selectedIdx={idx}
@@ -86,13 +72,35 @@ export default function Page() {
             />
           ) : (
             activities?.data?.map((activity, i) => (
-              <LessonTaskListItem
-                isDue={i === 0 || i === 1}
-                isOfflineSubmission={i === 4}
-                title={activity.eventName ?? '[NULL]'}
-                subject='Physics'
+              <Link
                 key={i}
-              />
+                href={
+                  !activity.id
+                    ? '/teacher/lesson-note/assignment/offline-submissions'
+                    : `/teacher/lesson-note/assignment/submissions?subjectId=${
+                        activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${
+                        activity.typeOfActivity
+                      }`
+                }
+              >
+                <LessonTaskListItem
+                  isDue={false}
+                  isOfflineSubmission={false}
+                  title={activity.typeOfActivity ?? '[NULL]'}
+                  subject={activity.subject.name ?? '[NULL]'}
+                  classString={
+                    (arms ?? [])[idx].arm
+                      ? `${(arms ?? [])[idx].class?.name} ${
+                          (arms ?? [])[idx].arm
+                        }`
+                      : '[NULL]'
+                  }
+                  dueDate={activity.dueDate}
+                  dateCreated={activity.createdAt}
+                  key={i}
+                />
+              </Link>
             ))
           ))}
       </div>
@@ -106,50 +114,50 @@ function LessonTaskListItem({
   title,
   subject,
   isOfflineSubmission,
+  classString,
+  dueDate,
+  dateCreated,
 }: {
   isDue: boolean;
   isOfflineSubmission?: boolean;
   title: string;
   subject: string;
+  classString: string;
+  dueDate: Date;
+  dateCreated: Date;
 }) {
   return (
-    <Link
-      href={
-        isOfflineSubmission
-          ? '/teacher/lesson-note/assignment/offline-submissions'
-          : '/teacher/lesson-note/assignment/submissions'
-      }
+    <div
+      className={clsxm(
+        'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',
+        isDue && 'border-red-500'
+      )}
     >
-      <div
-        className={clsxm(
-          'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',
-          isDue && 'border-red-500'
-        )}
-      >
-        <div className='flex items-center col-span-2 gap-4'>
-          <div className='relative rounded-full border md:block hidden h-16 w-16 '>
-            <Image
-              alt='book-stack'
-              className='absolute inset-2'
-              src='/images/book_stack.png'
-              fill
-            />
+      <div className='flex items-center col-span-2 gap-4'>
+        <div className='relative rounded-full border md:block hidden h-16 w-16 '>
+          <Image
+            alt='book-stack'
+            className='absolute inset-2'
+            src='/images/book_stack.png'
+            fill
+          />
+        </div>
+        <div>{title}</div>
+        {isOfflineSubmission && (
+          <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
+            Offline
           </div>
-          <div>{title}</div>
-          {isOfflineSubmission && (
-            <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
-              Offline
-            </div>
-          )}
-        </div>
-        <div>{subject}</div>
-        <div>SSS 1</div>
-        <div>July 3</div>
-        <div className='flex justify-between items-center'>
-          <div className={clsxm(isDue && 'text-red-500')}>July 28</div>
-          <BiChevronRight className='h-10 w-10' />
-        </div>
+        )}
       </div>
-    </Link>
+      <div>{subject}</div>
+      <div>{classString}</div>
+      <div>{moment(dateCreated).format('MMMM DD')}</div>
+      <div className='flex justify-between items-center'>
+        <div className={clsxm(isDue && 'text-red-500')}>
+          {moment(dueDate).format('MMMM DD')}
+        </div>
+        <BiChevronRight className='h-10 w-10' />
+      </div>
+    </div>
   );
 }

@@ -27,3 +27,29 @@ export function useGetAllClassArms(params: {
   }, [params.classId, params.institutionId, params.sessionId, refetch]);
   return query;
 }
+
+export function useGetTeacherClassArms(params: {
+  teacherId?: string | number;
+  sessionId?: string | number;
+}) {
+  const query = useQuery({
+    queryKey: `get_teacher_class_arms`,
+    queryFn: async () => {
+      if (params.teacherId && params.sessionId) {
+        const d = await request.get(
+          '/v1/institutions/institutes/get-teacher-classarms',
+          {
+            params,
+            withCredentials: true,
+          }
+        );
+        return d.data.data.data as ClassArm[];
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params.teacherId, params.sessionId, refetch]);
+  return query;
+}
