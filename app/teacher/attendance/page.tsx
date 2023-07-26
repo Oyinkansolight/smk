@@ -24,7 +24,7 @@ export default function Page() {
           <div className='flex flex-col gap-4'>
             {data &&
               data.length > 0 &&
-              data.map((student, i) => {
+              data.map((student) => {
                 if (student.user) {
                   const userName =
                     student.user[0].lastName + ', ' + student.user[0].firstName;

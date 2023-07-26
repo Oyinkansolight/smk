@@ -33,7 +33,7 @@ export default function AccountSettingsSideBar({
             titleExpandedClassName='border border-l-4 border-[#016938] rounded'
             key={i}
             titleClassName='rounded-none border border-l-4 border-transparent'
-            title={<div>{v.role}</div>}
+            title={<div className='min-w-[245px]'>{v.role}</div>}
             icon={<BiChevronDown className='h-5 w-5 ' />}
           >
             <div>
