@@ -42,8 +42,8 @@ function AddActivityName({
   const { data } = useGetSubjectList();
 
   return (
-    <div className='fixed inset-0z-[999]grid place-content-center rounded-sm bg-black/30'>
-      <div className='flex md:w-[800px] w-[500px]  max-h-[600px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
+    <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
+      <div className='flex md:w-[800px] w-[500px] max-h-[600px] rounded overflow-y-auto flex-col space-y-4 bg-white p-4'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>
             <Close className='h-3 w-3 ' />

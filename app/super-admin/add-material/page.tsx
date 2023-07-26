@@ -60,28 +60,28 @@ export default function Page() {
   };
   return (
     <form className='my-10 mx-8' onSubmit={handleSubmit(onSubmit)}>
-      <div className='h2 my-10'>
-        Add a file {`To ${params?.get('folderName')}`}
-      </div>
-
       <div className='grid grid-cols-4 gap-10'>
         <div>
-          <div className='flex flex-col items-center flex-1 justify-start h-full gap-6'>
+          <div className='flex flex-col items-center flex-1 justify-center h-full gap-6 -mt-10'>
             <Image
               src='/images/document_upload.png'
               alt='document-upload'
               height={200}
               width={150}
             />
-            <div>Upload documents on Subjects</div>
+            <div className='h4'>Upload documents</div>
           </div>
         </div>
         <div className='col-span-3'>
+          <div className='h2 mb-6'>
+            Add a file {params?.get('folderName') && `To ${params?.get('folderName')}`}
+          </div>
+
           <BaseInput label='Title' name='title' register={register} />
           <div className='my-4'>
             <TextArea
               className='min-h-[10rem]'
-              label='Description'
+              label='Description (optional)'
               name='description'
               register={register}
             />

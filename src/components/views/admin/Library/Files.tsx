@@ -32,7 +32,7 @@ type TableItemData = (UserFolder | UserFile) & {
   idx: number;
   setisAssign: (value: boolean) => void;
   isAssign: boolean;
-  setFileId: (value: number) => void;
+  setFileId: (value: string) => void;
   onFolderClick: (folderId: UserFolder) => void;
 };
 
@@ -154,7 +154,7 @@ const columns: TableColumn<TableItemData>[] = [
                   <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? 0);
+                      item.setFileId(item?.id ?? "");
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
@@ -192,15 +192,15 @@ const columns: TableColumn<TableItemData>[] = [
 
               {item.action == item.idx + 1 && (
                 <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                  <button
+                  {/* <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? 0);
+                      item.setFileId(item?.id ?? "");
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
                     Assign to a Subject
-                  </button>
+                  </button> */}
                   <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
                     Rename
                   </button>
@@ -248,7 +248,7 @@ const UploadDocument = ({
   const [isCreateFolder, setisCreateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
-  const [fileId, setFileId] = useState<number>(0);
+  const [fileId, setFileId] = useState<string>("");
   const [loading, setLoading] = useState(false);
   // const [path, setPath] = useState<string>();
   // const [url, setUrl] = useState<string | any>();

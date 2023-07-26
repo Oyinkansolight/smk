@@ -14,7 +14,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
-
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
