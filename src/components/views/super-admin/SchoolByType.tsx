@@ -37,7 +37,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
-                item.instituteLogo.includes('picsum')
+                  item.instituteLogo.includes('picsum')
                   ? item.instituteLogo
                   : `/${item.instituteLogo}`
               }
@@ -92,15 +92,6 @@ const SchoolList = ({
   type?: string;
 }) => {
   const { data, isLoading } = useGetSchools(type ? type : '');
-
-  // const [allSchool, setallSchool] = useState(mockData);
-
-  // const handleSearch = (value: string) => {
-  //   const result = mockData.filter((data) =>
-  //     data.name.toLowerCase().includes(value.toLowerCase())
-  //   );
-  //   setallSchool(result);
-  // };
 
   return (
     <section className='md:px-[60px] px-5 py-6'>

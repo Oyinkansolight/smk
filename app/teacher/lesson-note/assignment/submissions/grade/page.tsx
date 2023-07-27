@@ -17,7 +17,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 export default function Page() {
   const [addToGradeList, setAddToGradeList] = useState(false);
-  const [currentPage, setCurrentPage] = useState(2);
+  const [currentPage, setCurrentPage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const params = useSearchParams();
   const { data: submissions } = useGetStudentSubmittedActivity({

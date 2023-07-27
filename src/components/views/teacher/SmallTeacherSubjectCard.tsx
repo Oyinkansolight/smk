@@ -8,7 +8,7 @@ export default function SmallTeacherSubjectCard({
   tasks,
   className,
   onClick,
-  showTasks = true,
+  showTasks = false,
 }: {
   isNext: boolean;
   subject: string;
@@ -22,7 +22,8 @@ export default function SmallTeacherSubjectCard({
     <div
       onClick={onClick}
       className={clsxm(
-        'flex flex-col items-center w-[240px] h-[284px] justify-center gap-2 cursor-pointer self-center rounded-lg',
+        showTasks ? 'h-[284px]' : 'h-[220px]',
+        'flex flex-col items-center w-[240px] justify-center gap-2 cursor-pointer self-center rounded-lg',
         className
       )}
     >

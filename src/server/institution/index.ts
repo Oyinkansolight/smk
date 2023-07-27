@@ -10,7 +10,6 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -279,7 +278,7 @@ export function useGetSchools(type?: string) {
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institutes?limit=10'
+          '/v1/government/institutes/get-institutes?limit=100000'
         );
         const result = d.data.data.data.data.filter(
           (item: any) =>
