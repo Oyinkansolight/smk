@@ -1,4 +1,4 @@
-import { Question } from '@/server/institution/lesson-note';
+import { Question, SubmittedQuestion } from '@/server/institution/lesson-note';
 import {
   Class,
   Session,
@@ -384,7 +384,7 @@ export interface SubmittedActivity {
   score: null;
   typeOfActivity: string;
   status: string;
-  questions: Question[];
+  questions: SubmittedQuestion[];
   createdAt: Date;
   updatedAt: Date;
   class: Class;

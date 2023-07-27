@@ -1,10 +1,11 @@
+'use client';
+
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import request from '@/server';
 import { ClassActivity1, SubmittedActivity } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
-
 
 export interface CreateAssignmentParams {
   title?: string;
@@ -92,6 +93,20 @@ export interface Option {
   c?: string;
   d?: string;
   e?: string;
+}
+
+export interface SubmittedQuestion {
+  question?: string;
+  options?: SubmittedOption[];
+}
+
+export interface SubmittedOption {
+  A?: string;
+  B?: string;
+  C?: string;
+  D?: string;
+  E?: string;
+  answer?: 'A' | 'B' | 'C' | 'D' | 'E';
 }
 
 export function useCreateClassActivity() {

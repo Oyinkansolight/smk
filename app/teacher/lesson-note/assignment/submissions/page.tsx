@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 
+
 export default function Page() {
   const params = useSearchParams();
   const { data: submissions } = useGetStudentSubmittedActivity({
@@ -49,13 +50,22 @@ export default function Page() {
       </div>
       <div className='flex flex-col gap-2'>
         {submissions?.map((submission, i) => (
-          <AssignmentListItem
-            title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
-            dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
-            dueDate={submission.activity.dueDate}
+          <Link
+            href={`/teacher/lesson-note/assignment/submissions/grade?subjectId=${params?.get(
+              'subjectId'
+            )}&classArmId=${params?.get('classArmId')}&type=${params?.get(
+              'type'
+            )}`}
             key={i}
-            id={i + 1}
-          />
+          >
+            <AssignmentListItem
+              title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
+              dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
+              dueDate={submission.activity.dueDate}
+              key={i}
+              id={i + 1}
+            />
+          </Link>
         ))}
       </div>
       <PaginatedCounter pageCount={10} currentPage={3} />
@@ -75,28 +85,26 @@ function AssignmentListItem({
   dueDate?: Date;
 }) {
   return (
-    <Link href='/teacher/lesson-note/assignment/submissions/grade'>
-      <div
-        className={clsxm(
-          'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
-        )}
-      >
-        <div className='flex items-center col-span-2 gap-8'>
-          <div>{id}.</div>
-          <div className='relative rounded-full border h-16 w-16 bg-gray-300 md:block hidden '></div>
-          <div>{title}</div>
-        </div>
-        <div>{dateSubmitted ? dateSubmitted : '-'}</div>
-        <div>{moment(dueDate).format('MMMM DD')}</div>
-        <div className='flex justify-end '>
-          <Button
-            disabled={!dateSubmitted}
-            className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
-          >
-            Grade
-          </Button>
-        </div>
+    <div
+      className={clsxm(
+        'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
+      )}
+    >
+      <div className='flex items-center col-span-2 gap-8'>
+        <div>{id}.</div>
+        <div className='relative rounded-full border h-16 w-16 bg-gray-300 md:block hidden '></div>
+        <div>{title}</div>
       </div>
-    </Link>
+      <div>{dateSubmitted ? dateSubmitted : '-'}</div>
+      <div>{moment(dueDate).format('MMMM DD')}</div>
+      <div className='flex justify-end '>
+        <Button
+          disabled={!dateSubmitted}
+          className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
+        >
+          Grade
+        </Button>
+      </div>
+    </div>
   );
 }

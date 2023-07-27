@@ -75,8 +75,12 @@ export default function Page() {
               <Link
                 key={i}
                 href={
-                  !activity.id
-                    ? '/teacher/lesson-note/assignment/offline-submissions'
+                  activity.format === 'MULTIPLE_CHOICE'
+                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
+                        activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${
+                        activity.typeOfActivity
+                      }`
                     : `/teacher/lesson-note/assignment/submissions?subjectId=${
                         activity.subject.id
                       }&classArmId=${(arms ?? [])[idx].id}&type=${

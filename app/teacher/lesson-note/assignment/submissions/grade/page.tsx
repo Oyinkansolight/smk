@@ -2,7 +2,11 @@
 
 import Button from '@/components/buttons/Button';
 import PageCounter from '@/components/counter/PageCounter';
+import SubmittedQuestionView from '@/components/views/teacher/SubmittedQuestionView';
+import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
+import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Page as DocPage, Document, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
@@ -15,6 +19,13 @@ export default function Page() {
   const [addToGradeList, setAddToGradeList] = useState(false);
   const [currentPage, setCurrentPage] = useState(2);
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const params = useSearchParams();
+  const { data: submissions } = useGetStudentSubmittedActivity({
+    classArmId: params?.get('classArmId'),
+    subjectId: params?.get('subjectId'),
+    type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
+    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
+  });
   return (
     <div className='h-full layout'>
       <div className='text-3xl text-[#D4D5D7]'>
@@ -25,31 +36,40 @@ export default function Page() {
       </div>
       <div className='font-bold pb-4 flex items-center gap-4'>
         <div className='h-10 w-10 rounded-full bg-gray-200' />
-        <div>Ighosa Ahmed</div>
+        <div>{`${(submissions ?? [])[0]?.student.lastName} ${
+          (submissions ?? [])[0]?.student.firstName
+        }`}</div>
       </div>
       <div className='flex lg:flex-row flex-col gap-4'>
-        <div className='flex-1 rounded-lg p-2 w-full bg-white'>
-          <div className='flex justify-center p-8'>
-            <PageCounter
-              page={currentPage}
-              maxPage={numberOfPages}
-              onChange={setCurrentPage}
-            />
+        {(submissions ?? [])[0]?.questions ? (
+          <div className='flex-1 gap-y-4 flex flex-col rounded-lg p-2 w-full bg-white'>
+            {(submissions ?? [])[0]?.questions.map((v, i) => (
+              <SubmittedQuestionView index={i} question={v} key={i} />
+            ))}
           </div>
-          <Document
-            file='/pdfs/Assignment samples.pdf'
-            onLoadSuccess={(v) => {
-              setNumberOfPages(v.numPages);
-            }}
-          >
-            <DocPage pageNumber={currentPage} renderTextLayer={false} />
-          </Document>
-        </div>
+        ) : (
+          <div className='flex-1 grid grid-cols-1 rounded-lg p-2 w-full bg-white'>
+            <div className='flex justify-center p-8'>
+              <PageCounter
+                page={currentPage}
+                maxPage={numberOfPages}
+                onChange={setCurrentPage}
+              />
+            </div>
+            <Document
+              file='/pdfs/Assignment samples.pdf'
+              onLoadSuccess={(v) => {
+                setNumberOfPages(v.numPages);
+              }}
+            >
+              <DocPage pageNumber={currentPage} renderTextLayer={false} />
+            </Document>
+          </div>
+        )}
         <div className=' rounded-lg bg-white p-2'>
           <div className='font-bold text-xl'>Grade Assessment</div>
           <div className='flex flex-col gap-4 mt-6'>
             <div>Add to grade list</div>
-
             <label>
               <div className='flex flex-row items-center gap-[5px]'>
                 <Toggle
