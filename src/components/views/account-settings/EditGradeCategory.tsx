@@ -1,10 +1,9 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import { getErrMsg } from '@/server';
-import {
-  useCreateCategory,
-  useGetCategoryByInstitutionType,
-} from '@/server/institution/grade';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { useCreateCategory, useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { GradeCategory } from '@/types/institute';
 import React from 'react';
 import { useEffect, useState } from 'react';
@@ -21,10 +20,15 @@ export default function EditGradeCategory({
 }) {
   const [items, setItems] = useState<GradeCategory[]>([]);
 
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+
   const { data: categories } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: 1,
-    termId: 1,
+    sessionId: profile?.currentSession?.id,
+    termId: (terms?.data ?? [])[0].id,
   });
 
   const { mutateAsync: createCategory } = useCreateCategory();
@@ -53,8 +57,8 @@ export default function EditGradeCategory({
           percentageScore: Number.parseInt(data.percentage[i]),
         })),
         institutionType,
-        sessionId: 1,
-        termId: 1,
+        sessionId: profile?.currentSession?.id,
+        termId: (terms?.data ?? [])[0].id,
       });
       toast.success('Grade categories created successfully');
     } catch (error) {

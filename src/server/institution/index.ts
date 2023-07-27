@@ -10,6 +10,7 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -196,6 +197,11 @@ export function useGetStudentById(params?: PaginationParams) {
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.id, refetch]);
+
   return query;
 }
 

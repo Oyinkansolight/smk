@@ -2,6 +2,8 @@ import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import Index from '@/components/stepper';
 import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
 import {
   CreateRubricParams,
   useCreateRubric,
@@ -10,6 +12,8 @@ import { useCallback, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
+
+
 
 export default function ManageGradeRubric() {
   const [rubrics, setRubrics] = useState<
@@ -22,19 +26,23 @@ export default function ManageGradeRubric() {
   ]);
   const [currentStage, setCurrentStage] = useState(0);
   const { mutateAsync: createRubric, isLoading } = useCreateRubric();
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
   const handleCreateRubric = useCallback(async () => {
     try {
       const response = await createRubric({
         institutionType: 'PRIMARY',
         rubrics: rubrics,
-        sessionId: '1',
-        termId: '1',
+        sessionId: profile?.currentSession?.id as unknown as string,
+        termId: (terms?.data ?? [])[0]?.id as unknown as string,
       });
       toast.success(response.data.data.message ?? 'Success');
     } catch (error) {
       toast.error(getErrMsg(error));
     }
-  }, [rubrics, createRubric]);
+  }, [createRubric, rubrics, profile?.currentSession?.id, terms?.data]);
   return (
     <div>
       <div className='text-center'>

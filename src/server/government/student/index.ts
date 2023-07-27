@@ -86,7 +86,7 @@ interface TakeAttendanceParams {
   classId?: string | number | null;
   studentId?: string | number | null;
   classArmId?: string | number | null;
-  status?: 'PRESENT' | 'ABSENT';
+  status?: 'PRESENT' | 'ABSENT' | 'LATE';
 }
 
 export function useTakeAttendance() {

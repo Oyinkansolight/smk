@@ -2,6 +2,8 @@ import Button from '@/components/buttons/Button';
 import GeneralModal from '@/components/modals/general-modal';
 import EditGradeCategory from '@/components/views/account-settings/EditGradeCategory';
 import ManageGradeRubric from '@/components/views/account-settings/ManageGradeRubric';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { useState } from 'react';
 import ReactTable, { TableColumn } from 'react-data-table-component';
@@ -61,10 +63,14 @@ function RenderGradeCategories({
 }: {
   institutionType: string;
 }) {
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: 1,
-    termId: 1,
+    sessionId: profile?.currentSession?.id,
+    termId: (terms?.data ?? [])[0].id,
   });
   return (
     <div>
@@ -80,10 +86,14 @@ function RenderGradeCategoryActions({
 }: {
   institutionType: string;
 }) {
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: 1,
-    termId: 1,
+    sessionId: profile?.currentSession?.id,
+    termId: (terms?.data ?? [])[0]?.id,
   });
   return (
     <div className='flex w-full justify-end font-bold gap-3'>

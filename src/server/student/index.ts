@@ -2,12 +2,13 @@
 import request from '@/server';
 import { useQuery } from 'react-query';
 
+
 interface timetableArg {
-  sessionId: any;
-  classId: number;
-  termId: number;
-  weekid: number;
-  day: string;
+  sessionId?: any;
+  classId?: number | string;
+  termId?: number | string;
+  weekid?: number | string;
+  day?: string;
 }
 
 export function useGetTodaysPeriod({

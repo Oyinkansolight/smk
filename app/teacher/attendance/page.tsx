@@ -24,15 +24,16 @@ export default function Page() {
           <div className='flex flex-col gap-4'>
             {data &&
               data.length > 0 &&
-              data.map((student) => {
+              data.map((student, index) => {
                 if (student.user) {
                   const userName =
                     student.user[0].lastName + ', ' + student.user[0].firstName;
                   const studentId = student.user[0].id;
                   return (
                     <ViewAttendanceListItem
+                      studentId={studentId as unknown as string}
                       key={studentId}
-                      index={studentId}
+                      index={index + 1}
                       name={userName}
                     />
                   );

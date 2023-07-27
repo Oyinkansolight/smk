@@ -1,5 +1,7 @@
 'use client';
 
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
@@ -10,6 +12,7 @@ import Alarm from '~/svg/alarm.svg';
 import Books from '~/svg/books.svg';
 import Teacher from '~/svg/teacher.svg';
 import Tick from '~/svg/tick.svg';
+
 
 const Page = () => {
   // const [isEdit, setIsEdit] = useState(false);
@@ -24,15 +27,18 @@ const Page = () => {
   // }
 
   useEffect(() => {
-    const sessionInfo = JSON.parse(
-      sessionStorage.getItem('currentSession') || '{}'
-    );
+    // const sessionInfo = JSON.parse(
+    //   sessionStorage.getItem('currentSession') || '{}'
+    // );
   }, []);
-
-  const { data, isLoading } = useGetTodaysPeriod({
-    sessionId: 1,
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  const { isLoading } = useGetTodaysPeriod({
+    sessionId: profile?.currentSession?.id,
     classId: 1,
-    termId: 1,
+    termId: (terms?.data ?? [])[0].id,
     day: 'Wednesday',
     weekid: 1,
   });

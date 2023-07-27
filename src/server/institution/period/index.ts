@@ -4,6 +4,7 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
+
 export interface GetTeacherClassPeriodParams {
   sessionId?: number;
   teacherId?: number;
@@ -29,7 +30,7 @@ export interface GetWeekPeriodsBySubjectParams {
   sessionId?: number;
   termId?: number;
   weekId?: number | string | null;
-  classId?: number | string | null;
+  classArmId?: number | string | null;
   subjectId?: number | string | null;
 }
 
@@ -60,7 +61,7 @@ export function useGetWeekPeriodsBySubject(
     params.subjectId,
     params.termId,
     params.weekId,
-    params.classId,
+    params.classArmId,
   ]);
 
   return query;

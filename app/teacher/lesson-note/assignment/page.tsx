@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
+
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
@@ -91,7 +92,13 @@ export default function Page() {
                 <LessonTaskListItem
                   isDue={false}
                   isOfflineSubmission={false}
-                  title={activity.typeOfActivity ?? '[NULL]'}
+                  title={
+                    activity.typeOfActivity
+                      ? `${activity.typeOfActivity} -  ${activity.format}`
+                          .replace('_', ' ')
+                          .toLowerCase()
+                      : '[NULL]'
+                  }
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
@@ -146,7 +153,7 @@ function LessonTaskListItem({
             fill
           />
         </div>
-        <div>{title}</div>
+        <div className='capitalize'>{title}</div>
         {isOfflineSubmission && (
           <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
             Offline

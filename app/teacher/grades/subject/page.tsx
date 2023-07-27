@@ -5,26 +5,34 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
+import { useGetProfile } from '@/server/auth';
 import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { Institution } from '@/types/institute';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
+import { useSessionStorage } from 'usehooks-ts';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const params = useSearchParams();
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  const [institution] = useSessionStorage('institution', {} as Institution);
   const {
     data: gradeList,
     refetch,
-    error,
     isLoading,
   } = useGetSubjectGradeBook({
     subjectId: params?.get('id') as string,
     classId: `${idx + 1}`,
-    institutionId: '1',
-    sessionId: '1',
-    termId: '1',
+    institutionId: institution?.id,
+    sessionId: profile?.currentSession?.id,
+    termId: (terms?.data ?? [])[0].id,
   });
 
   useEffect(() => {

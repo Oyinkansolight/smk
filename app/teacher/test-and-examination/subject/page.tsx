@@ -3,6 +3,8 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetSubjectTestExam } from '@/server/test-and-exam';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,18 +14,16 @@ import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 
-const names = [
-  'Continuous Assessment test 1',
-  'Continuous Assessment test 2',
-  'End of term Examination',
-];
-
 export default function Page() {
   const params = useSearchParams();
   const [idx, setIdx] = useState(0);
-  const { data, isLoading, error } = useGetSubjectTestExam({
-    sessionId: 1,
-    termId: 1,
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  const { data, error } = useGetSubjectTestExam({
+    sessionId: profile?.currentSession?.id,
+    termId: (terms?.data ?? [])[0].id,
     subjectId: params?.get('id'),
   });
 

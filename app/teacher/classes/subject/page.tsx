@@ -11,12 +11,14 @@ import {
   useGetAcademicSessionsTermsWeek,
   useGetSubjectById,
 } from '@/server/institution';
-import { useGetAllClasses } from '@/server/institution/class';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+
+
 
 export default function Page() {
   const router = useRouter();
@@ -28,12 +30,12 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   const term = terms?.data[0]?.id;
   const { data: weeks } = useGetAcademicSessionsTermsWeek(term);
-  const { data: classes } = useGetAllClasses();
-  const filteredClasses = useMemo(
-    () => classes?.filter((v) => v.institutionType?.toLowerCase().includes('secondary')),
-    [classes]
-  );
   const [currentWeek, setCurrentWeek] = useState(0);
+
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.id,
+  });
 
   const sortedWeeks: Week[] = [];
 
@@ -48,7 +50,7 @@ export default function Page() {
     sessionId: profile?.currentSession?.id,
     weekId: sortedWeeks[currentWeek]?.id,
     subjectId: params?.get('id') ? params.get('id') : undefined,
-    classId: idx === 0 ? undefined : (filteredClasses ?? [])[idx - 1]?.id,
+    classArmId: idx === 0 ? undefined : (arms ?? [])[idx - 1]?.id,
   });
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -65,7 +67,7 @@ export default function Page() {
           animationDuration='0.75'
         />
       </div>
-    )
+    );
   }
 
   return (
@@ -75,8 +77,10 @@ export default function Page() {
       </div>
       <TextTabBar
         tabs={[
-          "All",
-          ...(filteredClasses ?? []).map((v) => v.name ?? '[NULL]'),
+          'All',
+          ...(arms ?? []).map((arm) =>
+            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
+          ),
         ]}
         onChange={setIdx}
         selectedIdx={idx}
@@ -100,7 +104,7 @@ export default function Page() {
                   sessionId={profile?.currentSession?.id as unknown as string}
                   termId={term as unknown as string}
                   periodId={period.id as unknown as string}
-                  classId={(filteredClasses ?? [])[0].id as unknown as string}
+                  classId={(arms ?? [])[0].id as unknown as string}
                   onClick={() =>
                     router.push(`/teacher/classes/subject-task?id=${period.id}`)
                   }

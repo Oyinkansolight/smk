@@ -38,11 +38,11 @@ export function useGetGovernmentSubjectById(id?: string) {
 }
 
 export interface GetSubjectGradeBookParams {
-  sessionId?: string;
-  termId?: string;
-  institutionId?: string;
-  classId?: string;
-  subjectId?: string;
+  sessionId?: string | number;
+  termId?: string | number;
+  institutionId?: string | number;
+  classId?: string | number;
+  subjectId?: string | number;
 }
 
 export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {

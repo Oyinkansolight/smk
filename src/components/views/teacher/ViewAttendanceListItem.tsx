@@ -1,72 +1,44 @@
 import clsxm from '@/lib/clsxm';
+import { useGetProfile } from '@/server/auth';
 import { useTakeAttendance } from '@/server/government/student';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { Institution } from '@/types/institute';
 import { toast } from 'react-toastify';
+import { useSessionStorage } from 'usehooks-ts';
+
 
 export default function ViewAttendanceListItem({
   index,
   name,
+  studentId,
 }: {
   index: number;
   name: string;
+  studentId?: string;
 }) {
   const { mutateAsync } = useTakeAttendance();
-
-  const handlePresent = async () => {
-    toast.info(`Marking "${name}" as present...`);
-
+  const [institution] = useSessionStorage('institution', {} as Institution);
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  // const { data: student } = useGetStudentById({ id: studentId });
+  const handlePresent = async (status: 'PRESENT' | 'ABSENT' | 'LATE') => {
+    toast.info(`Marking "${name}" as ${status.toLowerCase()}...`);
     try {
       await mutateAsync({
-        studentId: index,
-        status: 'PRESENT',
+        studentId,
+        status: status,
         periodId: 1,
-        institutionId: 1,
+        institutionId: institution.id,
         classId: 1,
-        sessionId: 1,
-        termId: 1,
+        sessionId: profile?.currentSession?.id,
+        termId: (terms?.data ?? [])[0].id,
       });
 
-      toast.success(`Student "${name}" marked as present`);
+      toast.success(`Student "${name}" marked as ${status.toLowerCase()}`);
     } catch (error) {
-      toast.error(`Error marking "${name}" as present`);
-    }
-  };
-
-  const handleAbsent = async () => {
-    toast.info(`Marking "${name}" as absent...`);
-
-    try {
-      await mutateAsync({
-        studentId: index,
-        status: 'ABSENT',
-        institutionId: 1,
-        classId: 1,
-        sessionId: 1,
-        termId: 1,
-        periodId: 1,
-      });
-
-      toast.success(`Student "${name}" marked as absent`);
-    } catch (error) {
-      toast.error(`Error marking "${name}" as absent`);
-    }
-  };
-
-  const handleLate = async () => {
-    toast.info(`Marking "${name}" as late...`);
-
-    try {
-      await mutateAsync({
-        studentId: index,
-        status: 'ABSENT',
-        institutionId: 1,
-        classId: 1,
-        sessionId: 1,
-        termId: 1,
-        periodId: 1,
-      });
-      toast.success(`Student "${name}" marked as late`);
-    } catch (error) {
-      toast.error(`Error marking "${name}" as late`);
+      toast.error(`Error marking "${name}" as ${status.toLowerCase()}`);
     }
   };
 
@@ -81,19 +53,19 @@ export default function ViewAttendanceListItem({
       <div className='font-bold'>{name}</div>
       <div className='flex-1' />
       <button
-        onClick={handlePresent}
+        onClick={() => handlePresent('PRESENT')}
         className='w-full rounded-sm bg-green-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
       >
         Present
       </button>
       <button
-        onClick={handleAbsent}
+        onClick={() => handlePresent('ABSENT')}
         className='w-full rounded-sm bg-red-500 font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
       >
         Absent
       </button>
       <button
-        onClick={handleLate}
+        onClick={() => handlePresent('LATE')}
         className='w-full rounded-sm bg-[#E5A500] font-bold text-white min-w-[60px] max-w-[131px] justify-center h-10'
       >
         Late
