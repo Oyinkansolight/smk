@@ -153,7 +153,7 @@ export function useGetStudentsList(params?: PaginationParams) {
         const d = await request.get('/v1/government/students/get-students', {
           params,
         });
-        return d.data.data.data.data as Student[];
+        return d.data.data.data as PaginatedData<Student>;
       } catch (error) {
         logger(error);
         throw error;
@@ -220,6 +220,11 @@ export function useGetTeachersList(params?: PaginationParams) {
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.limit, params?.page, params?.id, refetch]);
+
   return query;
 }
 export function useGetTeachersListByInstitution(instituteId: any) {

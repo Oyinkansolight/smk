@@ -2,6 +2,7 @@
 import logger from '@/lib/logger';
 import request from '@/server';
 import { UserFile, UserFolder } from '@/types/material';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface UploadFileParams {
@@ -114,6 +115,32 @@ export function useGetFolderFiles(folderId?: number) {
       }
     },
   });
+
+  return query;
+}
+
+export function useGetFolderAndFiles(folderId?: number) {
+  const query = useQuery({
+    queryKey: `get_folder_files_${folderId ?? 'root'}`,
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/library/get-folders-and-files',
+          {
+            params: { id: folderId },
+          }
+        );
+        return d.data.data.data as (UserFile | UserFolder)[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [refetch, folderId]);
 
   return query;
 }

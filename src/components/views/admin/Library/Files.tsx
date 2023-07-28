@@ -1,16 +1,11 @@
 'use client';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
-import {
-  useAssignSubjectsToFile,
-  useGetAllFiles,
-  useGetAllFolders,
-  useGetFileById,
-  useGetFolderFiles,
-} from '@/server/library';
+import { useAssignSubjectsToFile, useGetFileById, useGetFolderAndFiles } from '@/server/library';
 import { UserFile, UserFolder } from '@/types/material';
 import moment from 'moment';
 import Link from 'next/link';
@@ -22,8 +17,8 @@ import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
-import User from '~/svg/user1.svg';
 import Folder from '~/svg/folder.svg';
+import User from '~/svg/user1.svg';
 
 
 type TableItemData = (UserFolder | UserFile) & {
@@ -141,7 +136,7 @@ const columns: TableColumn<TableItemData>[] = [
       if ('fileUrl' in item) {
         return (
           <div>
-            <button
+            <div
               onClick={() => {
                 item.setAction(item.idx + 1);
               }}
@@ -154,7 +149,7 @@ const columns: TableColumn<TableItemData>[] = [
                   <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? "");
+                      item.setFileId(item?.id ?? '');
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
@@ -168,7 +163,7 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                 </div>
               )}
-            </button>
+            </div>
             {item.action && (
               <div
                 className='fixed inset-0 z-[1]'
@@ -182,7 +177,7 @@ const columns: TableColumn<TableItemData>[] = [
       } else if ('folderName' in item) {
         return (
           <div>
-            <button
+            <div
               onClick={() => {
                 item.setAction(item.idx + 1);
               }}
@@ -209,7 +204,7 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                 </div>
               )}
-            </button>
+            </div>
             {item.action && (
               <div
                 className='fixed inset-0 z-[1]'
@@ -238,6 +233,7 @@ const UploadDocument = ({
     control,
     setValue,
     reset,
+
     // handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
@@ -248,12 +244,12 @@ const UploadDocument = ({
   const [isCreateFolder, setisCreateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
-  const [fileId, setFileId] = useState<string>("");
+  const [fileId, setFileId] = useState<string>('');
   const [loading, setLoading] = useState(false);
   // const [path, setPath] = useState<string>();
   // const [url, setUrl] = useState<string | any>();
-  const { data: folderData } = useGetAllFolders();
-  const { data, isLoading: isLoadingFiles } = useGetAllFiles();
+  // const { data: folderData } = useGetAllFolders();
+  // const { data, isLoading: isLoadingFiles } = useGetAllFiles();
 
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
 
@@ -261,14 +257,18 @@ const UploadDocument = ({
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderFiles(folderTrail[folderTrail.length - 1]?.id);
+  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id);
 
   // console.log(folderData);
 
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
   useEffect(() => {
-    reset();
+    reset({
+      class: [],
+      subject: [],
+      schoolType: [],
+    });
     if (fileId) {
       refetchFile();
     }
@@ -293,7 +293,7 @@ const UploadDocument = ({
     setisAssign(!isAssign);
   }
 
-  const [content, setContent] = useState<UserFile[] | undefined>([]);
+  // const [content, setContent] = useState<UserFile[] | undefined>([]);
 
   const handleAssignSubject = async () => {
     setLoading(true);
@@ -303,8 +303,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-            | { label: string; value: number }[]
-            | undefined
+              | { label: string; value: number }[]
+              | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -319,13 +319,7 @@ const UploadDocument = ({
     }
   };
 
-  useEffect(() => {
-    if (!isLoadingFiles) {
-      setContent(data);
-    }
-  }, [data, isLoadingFiles]);
-
-  if (!isLoadingFiles && !isLoadingFolderFiles) {
+  if (!isLoadingFolderFiles) {
     return (
       <section className='transition-all ease-in-out delay-1000 w-full max-w-[40rem] lg:max-w-full'>
         {isCreateFolder && (
@@ -415,11 +409,15 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${folderTrail.length > 0 &&
-                      `?folderId=${folderTrail[folderTrail.length - 1].id
-                      }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                      }`
-                      }`}
+                    href={`/super-admin/add-material${
+                      folderTrail.length > 0
+                        ? `?folderId=${
+                            folderTrail[folderTrail.length - 1].id
+                          }&folderName=${
+                            folderTrail[folderTrail.length - 1].folderName
+                          }`
+                        : ''
+                    }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -453,27 +451,28 @@ const UploadDocument = ({
         <Table
           columns={columns}
           data={
-            [
-              ...(folderTrail.length < 1 ? folderData ?? [] : []),
-              ...(folderTrail.length < 1 ? content ?? [] : folderContent ?? []),
-            ]?.map(
-              (item, idx) =>
-              ({
-                ...item,
-                action,
-                isAssign,
-                setAction,
-                setisAssign,
-                idx,
-                setFileId,
-                onFolderClick: (folder) => {
-                  const c = [...folderTrail];
-                  c.push(folder);
-                  setFolderTrail(c);
-                  refetchFolderFiles();
-                },
-              } as TableItemData)
-            ) ?? []
+            [...(folderContent ?? [])]
+              ?.filter(
+                (item) => item.id !== folderTrail[folderTrail.length - 1]?.id
+              )
+              ?.map(
+                (item, idx) =>
+                  ({
+                    ...item,
+                    action,
+                    isAssign,
+                    setAction,
+                    setisAssign,
+                    idx,
+                    setFileId,
+                    onFolderClick: (folder) => {
+                      const c = [...folderTrail];
+                      c.push(folder);
+                      setFolderTrail(c);
+                      refetchFolderFiles();
+                    },
+                  } as TableItemData)
+              ) ?? []
           }
         />
       </section>

@@ -7,10 +7,11 @@ import { useGetTeachersList } from '@/server/institution';
 import { FlattenedStaff } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
+
 
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
@@ -20,8 +21,8 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   },
   {
     name: 'Staff ID',
-    selector: (row) => row.id ?? '',
-    cell: (row) => <div>{row.id}</div>,
+    selector: (row) => row.staffId ?? '',
+    cell: (row) => <div>{row.staffId}</div>,
   },
   {
     name: 'Name',
@@ -54,12 +55,13 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   },
 ];
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AllStaff = () => {
-  const { data: staff, error, isLoading } = useGetTeachersList();
+  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
+  const {
+    data: staff,
+    error,
+    isLoading,
+  } = useGetTeachersList({ ...pagingData });
 
   useEffect(() => {
     if (error) {
@@ -87,7 +89,9 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{staff?.data.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {pagingData.limit * (staff?.paging.totalPage ?? 0)}
+          </h1>
         </div>
       </div>
 
@@ -98,11 +102,21 @@ const AllStaff = () => {
           <Table
             data={
               staff?.data.map((v, i) => ({
-                idx: i + 1,
+                idx: pagingData.page * pagingData.limit - pagingData.limit + i,
                 ...flattenObject(v),
               })) ?? []
             }
             columns={staffColumn}
+            paginationServer
+            paginationTotalRows={
+              pagingData.limit * (staff?.paging.totalPage ?? 0)
+            }
+            onChangePage={(page) => {
+              setPagingData({ page, limit: pagingData.limit });
+            }}
+            onChangeRowsPerPage={(limit, page) => {
+              setPagingData({ page, limit });
+            }}
           />
         )}
         {!isLoading && staff?.data.length === 0 && (

@@ -15,10 +15,6 @@ export default function Table<T>(
   const [filterText, setFilterText] = useState('');
 
   const filteredData = useMemo(() => {
-    const n3 = 3;
-    if (n3 === 3) {
-      return props.data;
-    }
     if (filterText.length > 2) {
       const nData: T[] = [];
       for (let j = 0; j < props.data.length; j++) {
