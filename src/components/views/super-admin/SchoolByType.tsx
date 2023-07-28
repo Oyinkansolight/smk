@@ -106,7 +106,7 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'> {title} </p>
           <h1 className='font-semibold text-2xl'>
-            {(data?.data || []).length ?? 0}
+            {pagingData.limit * (data?.paging.totalPage ?? 0)}
           </h1>
         </div>
 
@@ -119,7 +119,7 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
       </div>
       <Table
         data={((data?.data ?? []) as any[]).map((item, i) => ({
-          idx: i + 1,
+          idx: (pagingData.page * pagingData.limit - pagingData.limit) + i,
           ...item,
         }))}
         columns={columns}

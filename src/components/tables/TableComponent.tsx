@@ -3,18 +3,20 @@ import { BasicSearch } from '@/components/search';
 import { useMemo, useState } from 'react';
 import DataTable, { TableProps } from 'react-data-table-component';
 
+
 export default function Table<T>(
   props: TableProps<T> & {
     filterFields?: (keyof T)[];
     showFilter?: boolean;
     showSearch?: boolean;
+    bottomPadding?: number;
   }
 ) {
   const [filterText, setFilterText] = useState('');
 
   const filteredData = useMemo(() => {
     const n3 = 3;
-    if (n3 === 3){
+    if (n3 === 3) {
       return props.data;
     }
     if (filterText.length > 2) {
@@ -69,7 +71,12 @@ export default function Table<T>(
       </div>
       <DataTable
         customStyles={{
-          table: { style: { backgroundColor: 'transparent',padding: '0 0 200px 0' } },
+          table: {
+            style: {
+              backgroundColor: 'transparent',
+              padding: `0 0 ${props.bottomPadding ?? 0}px 0`,
+            },
+          },
           rows: { style: { backgroundColor: '#00000000', color: '#8898AA' } },
           headRow: {
             style: {
