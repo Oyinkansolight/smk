@@ -3,19 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
 
-export default function CreateSubjectActivityModal({
-  children,
-  sessionId,
-  periodId,
-  termId,
-  classId,
-}: {
-  children: JSX.Element;
-  sessionId?: string;
-  termId?: string;
-  periodId?: string;
-  classId?: string;
-}) {
+export default function CreateSubjectActivityModal({ children }: { children: JSX.Element }) {
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -58,12 +46,7 @@ export default function CreateSubjectActivityModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-h-[800px] max-w-[744px] transform overflow-x-auto rounded-2xl bg-white p-6 text-start shadow-xl transition-all'>
-                  <CreateClassActivityView
-                    sessionId={sessionId}
-                    termId={termId}
-                    periodId={periodId}
-                    classId={classId}
-                  />
+                  <CreateClassActivityView />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

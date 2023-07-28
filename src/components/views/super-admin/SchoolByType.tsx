@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FirebaseLogo from '@/components/avatars/FirebaseLogo';
 import Table from '@/components/tables/TableComponent';
 import { useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const columns: TableColumn<Institution & { idx: string }>[] = [
   {
@@ -37,7 +36,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
-                  item.instituteLogo.includes('picsum')
+                item.instituteLogo.includes('picsum')
                   ? item.instituteLogo
                   : `/${item.instituteLogo}`
               }
@@ -82,16 +81,9 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
   },
 ];
 
-const SchoolList = ({
-  name,
-  title,
-  type,
-}: {
-  name: string;
-  title: string;
-  type?: string;
-}) => {
-  const { data, isLoading } = useGetSchools(type ? type : '');
+const SchoolList = ({ name, title }: { name: string; title: string }) => {
+  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
+  const { data, isLoading } = useGetSchools({ ...pagingData });
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -113,7 +105,9 @@ const SchoolList = ({
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'> {title} </p>
-          <h1 className='font-semibold text-2xl'>{(data || []).length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {(data?.data || []).length ?? 0}
+          </h1>
         </div>
 
         <Link
@@ -124,13 +118,21 @@ const SchoolList = ({
         </Link>
       </div>
       <Table
-        data={((data ?? []) as any[]).map((item, i) => ({
+        data={((data?.data ?? []) as any[]).map((item, i) => ({
           idx: i + 1,
           ...item,
         }))}
         columns={columns}
         progressPending={isLoading || !data}
         progressComponent={<div className='font-bold'>Loading...</div>}
+        paginationServer
+        paginationTotalRows={pagingData.limit * (data?.paging.totalPage ?? 0)}
+        onChangePage={(page) => {
+          setPagingData({ page, limit: pagingData.limit });
+        }}
+        onChangeRowsPerPage={(limit, page) => {
+          setPagingData({ page, limit });
+        }}
       />
     </section>
   );

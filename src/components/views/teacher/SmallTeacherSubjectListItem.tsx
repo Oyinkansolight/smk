@@ -1,7 +1,10 @@
 import Button from '@/components/buttons/Button';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
+import { CreateClassActivityParams } from '@/server/institution/lesson-note';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { IoChevronForwardSharp } from 'react-icons/io5';
+import { useSessionStorage } from 'usehooks-ts';
 
 
 export default function SmallTeacherSubjectListItem({
@@ -23,6 +26,13 @@ export default function SmallTeacherSubjectListItem({
   periodId?: string;
   classId?: string;
 }) {
+  const params = useSearchParams();
+  const subject = params?.get('id');
+  const [, setCreateActivityParams] = useSessionStorage(
+    'create_activity_params',
+    {} as CreateClassActivityParams
+  );
+
   return (
     <div className='flex items-center gap-4 p-6 border bg-white'>
       <div className='relative rounded-full border h-20 w-20'>
@@ -46,13 +56,19 @@ export default function SmallTeacherSubjectListItem({
         </div>
       </div>
       <div className='w-10' />
-      <CreateSubjectActivityModal
-        sessionId={sessionId}
-        periodId={periodId}
-        termId={termId}
-        classId={classId}
-      >
-        <Button variant='secondary'>
+      <CreateSubjectActivityModal>
+        <Button
+          onClick={() => {
+            setCreateActivityParams({
+              classes: classId,
+              subject,
+              periodId,
+              sessionId,
+              termId,
+            });
+          }}
+          variant='secondary'
+        >
           {' '}
           <div>
             {' '}
@@ -64,7 +80,16 @@ export default function SmallTeacherSubjectListItem({
       <div className='flex-1' />
       <div className='p-4'>
         <IoChevronForwardSharp
-          onClick={onClick}
+          onClick={() => {
+            setCreateActivityParams({
+              classes: classId,
+              subject,
+              periodId,
+              sessionId,
+              termId,
+            });
+            onClick && onClick();
+          }}
           className='h-8 w-8 text-[#D4D5D7] cursor-pointer'
         />
       </div>

@@ -3,7 +3,6 @@
 import Button from '@/components/buttons/Button';
 import MultiChoiceQuestion from '@/components/input/MultiChoiceQuestion';
 import InputReactForm from '@/components/input/formReactInput';
-import ReactFormSelect from '@/components/input/formSelectReactForm';
 import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
@@ -12,20 +11,26 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
-import { Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
+import {
+  CreateClassActivityParams,
+  Question,
+  useCreateClassActivity,
+  useCreateLessonNote,
+} from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
+import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+import { useSessionStorage } from 'usehooks-ts';
 
 
 
@@ -102,23 +107,13 @@ const EditorComponent = ({
   );
 };
 
-export default function CreateClassActivityView({
-  sessionId,
-  termId,
-  periodId,
-  classId,
-}: {
-  sessionId?: string;
-  termId?: string;
-  periodId?: string;
-  classId?: string;
-}) {
-  const { register, watch, handleSubmit, getValues } = useForm({
+export default function CreateClassActivityView() {
+  const { register, watch, handleSubmit, getValues, control } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
   });
-  const format = watch('format');
-  const type = watch('typeOfActivity');
+  const format = watch('format')?.label;
+  const type = watch('typeOfActivity')?.label;
   const [subjectiveType, setSubjectiveType] = useState(0);
   const [, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
@@ -127,15 +122,18 @@ export default function CreateClassActivityView({
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
   const { data: profile } = useGetProfile();
-  const params = useSearchParams();
   const institutionString = getFromSessionStorage('institution');
+  const [createActivityParams] = useSessionStorage(
+    'create_activity_params',
+    {} as CreateClassActivityParams
+  );
   const institution = institutionString
     ? (JSON.parse(institutionString) as Institution)
     : undefined;
   // eslint-disable-next-line unused-imports/no-unused-vars
   const { data: arms } = useGetAllClassArms({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    classId: classId,
+    classId: createActivityParams.classes,
     institutionId: institution?.id,
     sessionId: profile?.currentSession?.id,
   });
@@ -151,7 +149,7 @@ export default function CreateClassActivityView({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      const form = activityFormats.find((v) => v.value === data.format)?.key;
+      const form = data.format.value;
       let path: string | null = null;
       if (
         data['lesson-note-file-upload'] &&
@@ -167,27 +165,24 @@ export default function CreateClassActivityView({
       if (type === activityTypes[3].value) {
         const res = await createLessonNote({
           uploadUrl: path ?? '',
-          sessionId,
-          termId,
-          periodId,
-          subjectId: params?.get('id'),
+          sessionId: createActivityParams.sessionId,
+          termId: createActivityParams.termId,
+          periodId: createActivityParams.periodId,
+          subjectId: createActivityParams.subject,
           teacherId: profile?.userInfo?.staff?.id,
           title: 'Title',
-          classArmId: (arms ?? [])[0].id,
+          classArmId: createActivityParams.classes,
         });
         toast.success(res.data.data.message);
       } else {
         const res = await create.mutateAsync({
           ...data,
-          typeOfActivity: activityTypes.find((v) => v.value === type)?.key,
+          ...createActivityParams,
+          timeLimit: data.timeLimit.value,
+          typeOfActivity: data.typeOfActivity.value,
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questions,
-          classes: (arms ?? [])[0].id,
-          subject: params?.get('id'),
-          sessionId,
-          termId,
-          periodId,
         });
         toast.success(res.data.data.message);
       }
@@ -200,20 +195,42 @@ export default function CreateClassActivityView({
       <div className='flex flex-col gap-4'>
         <div className='text-2xl font-bold my-4'>Add Lesson Task</div>
         <div className='grid grid-cols-2 gap-2'>
-          <ReactFormSelect
-            register={register}
-            name='typeOfActivity'
-            label='Type of Activity'
-            className='rounded-lg h-10 !p-0'
-            options={activityTypes.map((v) => v.value)}
-          />
-          <ReactFormSelect
-            name='format'
-            label='Format'
-            register={register}
-            className='rounded-lg h-10 !p-0'
-            options={activityFormats.map((v) => v.value)}
-          />
+          <div>
+            <div className='font-bold text-xs pb-1'>Type of Activity</div>
+            <Controller
+              name='typeOfActivity'
+              control={control}
+              render={({ field }) => {
+                return (
+                  <ReactSelect
+                    {...field}
+                    options={activityTypes.map((v) => ({
+                      value: v.key,
+                      label: v.value,
+                    }))}
+                  />
+                );
+              }}
+            />
+          </div>
+          <div>
+            <div className='font-bold text-xs pb-1'>Format</div>
+            <Controller
+              name='format'
+              control={control}
+              render={({ field }) => {
+                return (
+                  <ReactSelect
+                    {...field}
+                    options={activityFormats.map((v) => ({
+                      value: v.key,
+                      label: v.value,
+                    }))}
+                  />
+                );
+              }}
+            />
+          </div>
           <InputReactForm
             register={register}
             name='dueDate'
@@ -222,13 +239,26 @@ export default function CreateClassActivityView({
             type='date'
             className='rounded-lg h-10 !p-0'
           />
-          <ReactFormSelect
-            register={register}
-            name='timeLimit'
-            label='Time Limit'
-            className='rounded-lg h-10 !p-0'
-            options={['30 Mins', '1 Hour', '2 Hours']}
-          />
+          <div>
+            <div className='font-bold text-xs pb-1'>Time Limit</div>
+            <Controller
+              name='timeLimit'
+              control={control}
+              render={({ field }) => {
+                return (
+                  <ReactSelect
+                    {...field}
+                    options={['30 Mins', '45 Mins', '1 Hour', '2 Hours'].map(
+                      (v) => ({
+                        value: v,
+                        label: v,
+                      })
+                    )}
+                  />
+                );
+              }}
+            />
+          </div>
 
           <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
             <div className='flex flex-col gap-4 mt-6'>

@@ -277,27 +277,27 @@ export function useGetClassesList() {
   });
   return query;
 }
-export function useGetSchools(type?: string) {
-  const instituteType = type ?? '';
+export function useGetSchools(params: PaginationParams) {
   const query = useQuery({
     queryKey: 'get_school_list',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institutes?limit=100000'
+          '/v1/government/institutes/get-institutes',
+          { params }
         );
-        const result = d.data.data.data.data.filter(
-          (item: any) =>
-            item.instituteType.includes(instituteType) &&
-            item.isOnboardingCompleted
-        );
-        return result as any;
+        return d.data.data.data as PaginatedData<Institution>;
       } catch (error) {
         logger(error);
         throw error;
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params.limit, params.id, params.page, refetch]);
+
   return query;
 }
 

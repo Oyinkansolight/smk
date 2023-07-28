@@ -7,6 +7,7 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
+
 export interface CreateAssignmentParams {
   title?: string;
   body?: string;
@@ -77,9 +78,9 @@ export interface CreateClassActivityParams {
   timeLimit?: string;
   questions?: Question[];
   dueDate?: string;
-  classes?: number;
-  subject?: number;
-  lessonNote?: number;
+  classes?: number | string;
+  subject?: number | string | null;
+  lessonNote?: number | string;
 }
 
 export interface Question {
