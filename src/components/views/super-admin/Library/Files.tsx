@@ -329,6 +329,7 @@ const UploadDocument = ({
           <CreateFolder
             onClickHandler={handleIsCreateFolderModal}
             addNewFolder={() => 'true'}
+            parentFolder={folderTrail[folderTrail.length - 1]}
           />
         )}
         {isAssign && (

@@ -1,19 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
 import logger from '@/lib/logger';
-import { useCreateFolder } from '@/server/library';
+import { useCreateFolder, useCreateFolderInFolder } from '@/server/library';
+import { UserFolder } from '@/types/material';
 import React, { useState } from 'react';
 import Close from '~/svg/close.svg';
 
 interface propType {
   onClickHandler: () => void;
   addNewFolder?: (v: any) => void;
+  parentFolder?: UserFolder;
 }
 
-function CreateFolder({ onClickHandler, addNewFolder }: propType) {
+function CreateFolder({
+  onClickHandler,
+  addNewFolder,
+  parentFolder,
+}: propType) {
   const [name, setname] = useState<any>('');
   const { mutateAsync, isLoading } = useCreateFolder(name);
-
+  const { mutateAsync: createFolderInFolder } = useCreateFolderInFolder(
+    name,
+    parentFolder?.id ?? ''
+  );
   async function addFolder() {
     // const content = {
     //   name: name,
@@ -27,8 +36,13 @@ function CreateFolder({ onClickHandler, addNewFolder }: propType) {
     if (addNewFolder) {
       // addNewFolder(content);
       try {
-        const response = await mutateAsync();
-        logger(response);
+        if (parentFolder) {
+          const response = await createFolderInFolder();
+          logger(response);
+        } else {
+          const response = await mutateAsync();
+          logger(response);
+        }
       } catch (error) {
         logger(error);
       }
@@ -46,7 +60,9 @@ function CreateFolder({ onClickHandler, addNewFolder }: propType) {
         </div>
 
         <div className='mt-4  px-5 pb-10'>
-          <h1 className='text-center text-4xl font-bold mb-2'>Create Folder</h1>
+          <h1 className='text-center text-4xl font-bold mb-2'>
+            Create Folder {parentFolder ? `In ${parentFolder.folderName}` : ''}
+          </h1>
 
           <p className='text-center mb-2 mt-6'>
             Kindly enter the appropriate details below:{' '}

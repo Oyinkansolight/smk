@@ -1,6 +1,7 @@
 import { UserInfo } from '@/types/auth';
 import { Subject } from '@/types/institute';
 
+
 export default interface NewMaterial {
   title: string;
   description: string;
@@ -25,7 +26,7 @@ export interface UserFile {
 }
 
 export interface UserFolder {
-  id?: number;
+  id?: string;
   folderName?: string;
   createdAt?: Date;
   updatedAt?: Date;

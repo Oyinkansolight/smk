@@ -4,6 +4,7 @@ import logger from '@/lib/logger';
 import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useClockIn, useClockOut } from '@/server/teacher';
 import moment, { Duration } from 'moment';
@@ -32,11 +33,15 @@ export default function ClockInTime() {
   const lat = institute?.instituteLat ?? '6.5994752';
   const long = institute?.instituteLong ?? '3.3488896';
 
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+
   const handleClockIn = async () => {
     try {
       const res = await clockIn.mutateAsync({
         sessionId: profile?.currentSession?.id ?? 0,
-        termId: 1,
+        termId: (terms?.data ?? [])[0].id,
       });
       toast.success(res.data.data.message);
     } catch (error) {

@@ -5,6 +5,7 @@ import { UserFile, UserFolder } from '@/types/material';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+
 export interface UploadFileParams {
   filename?: string;
   fileUrl?: string;
@@ -119,7 +120,7 @@ export function useGetFolderFiles(folderId?: number) {
   return query;
 }
 
-export function useGetFolderAndFiles(folderId?: number) {
+export function useGetFolderAndFiles(folderId?: string) {
   const query = useQuery({
     queryKey: `get_folder_files_${folderId ?? 'root'}`,
     queryFn: async () => {
@@ -192,6 +193,23 @@ export function useCreateFolder(name: string) {
     },
     onSettled: () => {
       client.refetchQueries('get_all_files');
+    },
+  });
+  return mutation;
+}
+
+export function useCreateFolderInFolder(name: string, parentFolderId?: string) {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'create_folder_in_folder',
+    mutationFn: async () => {
+      return await request.post('/v1/government/library/add-folder-to-folder', {
+        folderName: name,
+        parentFolderId,
+      });
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_${parentFolderId}`);
     },
   });
   return mutation;
