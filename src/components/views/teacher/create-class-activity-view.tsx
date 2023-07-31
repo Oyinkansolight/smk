@@ -11,12 +11,7 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
-import {
-  CreateClassActivityParams,
-  Question,
-  useCreateClassActivity,
-  useCreateLessonNote,
-} from '@/server/institution/lesson-note';
+import { CreateClassActivityParams, Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
@@ -178,8 +173,8 @@ export default function CreateClassActivityView() {
         const res = await create.mutateAsync({
           ...data,
           ...createActivityParams,
-          timeLimit: data.timeLimit.value,
-          typeOfActivity: data.typeOfActivity.value,
+          timeLimit: data?.timeLimit?.value,
+          typeOfActivity: data?.typeOfActivity?.value,
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questions,
@@ -213,7 +208,7 @@ export default function CreateClassActivityView() {
               }}
             />
           </div>
-          <div>
+          {type !== activityTypes[3].value && <div>
             <div className='font-bold text-xs pb-1'>Format</div>
             <Controller
               name='format'
@@ -230,16 +225,16 @@ export default function CreateClassActivityView() {
                 );
               }}
             />
-          </div>
-          <InputReactForm
+          </div>}
+          {type !== activityTypes[3].value && <InputReactForm
             register={register}
             name='dueDate'
             label='Due Date'
             placeholder='Due date'
             type='date'
             className='rounded-lg h-10 !p-0'
-          />
-          <div>
+          />}
+          {(type === activityTypes[1].value || type === activityTypes[2].value) && <div>
             <div className='font-bold text-xs pb-1'>Time Limit</div>
             <Controller
               name='timeLimit'
@@ -258,9 +253,11 @@ export default function CreateClassActivityView() {
                 );
               }}
             />
-          </div>
+          </div>}
 
-          <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
+
+        </div>
+        <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
             <div className='flex flex-col gap-4 mt-6'>
               <div>Add to grade list</div>
 
@@ -293,13 +290,12 @@ export default function CreateClassActivityView() {
                   />
 
                   <span className='text-[14px] font-normal'>
-                    {addToGradeList ? <div>Yes</div> : <div>No</div>}
+                    {isOnline ? <div>Yes</div> : <div>No</div>}
                   </span>
                 </div>
               </label>
             </div>
           </div>
-        </div>
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
@@ -346,7 +342,7 @@ export default function CreateClassActivityView() {
             <EditorComponent onChange={setBody} />
           </div>
         )}
-        {format === 'Subjective' && type === activityTypes[3].value && (
+        {type === activityTypes[3].value && (
           <div>
             <TextTabBar
               tabs={[

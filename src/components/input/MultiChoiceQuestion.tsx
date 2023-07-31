@@ -4,6 +4,7 @@ import Input from '@/components/input/formInput';
 import { Option, Question } from '@/server/institution/lesson-note';
 import ReactSelect from 'react-select';
 
+
 export default function MultiChoiceQuestion({
   value,
   onChange,
@@ -57,7 +58,32 @@ export default function MultiChoiceQuestion({
           <div className='font-bold text-[#746D69]'>Select An Answer</div>
           <ReactSelect
             className='min-w-[20rem]'
-            options={options.map((v) => ({ label: v }))}
+            value={
+              value.options?.find((opt) => opt.answer)?.answer
+                ? {
+                    value: value.options?.find((opt) => opt.answer)?.answer,
+                    label: value.options?.find((opt) => opt.answer)?.answer,
+                  }
+                : undefined
+            }
+            onChange={(opt) => {
+              const newOpt: Option[] = [
+                ...(value.options ?? [
+                  { a: '' },
+                  { b: '' },
+                  { c: '' },
+                  { d: '' },
+                ]),
+              ];
+              const index = newOpt?.findIndex((v) => v.answer);
+              if (index && (index ?? -1) > 0) {
+                (newOpt ?? [])[index] = { answer: opt?.value };
+              } else if (index && index < 0) {
+                newOpt?.push({ answer: opt?.value });
+              }
+              onChange({ question: value.question, options: newOpt });
+            }}
+            options={options.map((v) => ({ label: v, value: v }))}
           />
         </div>
       </div>

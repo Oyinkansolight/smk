@@ -22,9 +22,9 @@ export default function Page() {
             List of students
           </div>
           <div className='flex flex-col gap-4'>
-            {data &&
-              data.length > 0 &&
-              data.map((student, index) => {
+            {data?.data &&
+              data.data.length > 0 &&
+              data.data.map((student, index) => {
                 if (student.user) {
                   const userName =
                     student.user[0].lastName + ', ' + student.user[0].firstName;
