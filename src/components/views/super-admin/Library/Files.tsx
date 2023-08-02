@@ -24,6 +24,7 @@ import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import User from '~/svg/user1.svg';
 
+
 type TableItemData = (UserFolder | UserFile) & {
   action: number | null;
   setAction: (value: number | null) => void;
@@ -262,8 +263,6 @@ const UploadDocument = ({
     isLoading: isLoadingFolderFiles,
   } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id);
 
-  // console.log(folderData);
-
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
   useEffect(() => {
@@ -306,8 +305,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-            | { label: string; value: number }[]
-            | undefined
+              | { label: string; value: number }[]
+              | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -413,12 +412,15 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${folderTrail.length > 0
-                      ? `?folderId=${folderTrail[folderTrail.length - 1].id
-                      }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                      }`
-                      : ''
-                      }`}
+                    href={`/super-admin/add-material${
+                      folderTrail.length > 0
+                        ? `?folderId=${
+                            folderTrail[folderTrail.length - 1].id
+                          }&folderName=${
+                            folderTrail[folderTrail.length - 1].folderName
+                          }`
+                        : ''
+                    }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -458,21 +460,21 @@ const UploadDocument = ({
               )
               ?.map(
                 (item, idx) =>
-                ({
-                  ...item,
-                  action,
-                  isAssign,
-                  setAction,
-                  setisAssign,
-                  idx,
-                  setFileId,
-                  onFolderClick: (folder) => {
-                    const c = [...folderTrail];
-                    c.push(folder);
-                    setFolderTrail(c);
-                    refetchFolderFiles();
-                  },
-                } as TableItemData)
+                  ({
+                    ...item,
+                    action,
+                    isAssign,
+                    setAction,
+                    setisAssign,
+                    idx,
+                    setFileId,
+                    onFolderClick: (folder) => {
+                      const c = [...folderTrail];
+                      c.push(folder);
+                      setFolderTrail(c);
+                      refetchFolderFiles();
+                    },
+                  } as TableItemData)
               ) ?? []
           }
         />

@@ -130,7 +130,7 @@ export function useGetFolderAndFiles(folderId?: string) {
             params: { id: folderId },
           }
         );
-        return d.data.data.data as (UserFile | UserFolder)[];
+        return (d.data.data.data.children ?? d.data.data.data) as (UserFile | UserFolder)[];
       } catch (error) {
         logger(error);
         throw error;

@@ -3,7 +3,6 @@
 
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
-import { useGetAllFiles } from '@/server/library';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -30,22 +29,11 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TeacherLibrary = () => {
-  const GovtFilesData = useGetAllFiles('');
-  const schoolFilesData: any = [];
-  const teacherFilesData: any = [];
-  const { data } = GovtFilesData;
   const [tabIdx, setTabIdx] = useState(0);
 
-  data &&
-    data.forEach((element: any) => {
-      if (element.userTypes.includes('Institutions')) {
-        schoolFilesData.push(element);
-      }
-      if (element.userTypes.includes('Teachers')) {
-        teacherFilesData.push(element);
-      }
-    });
   return (
     <div className='w-full layout'>
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
