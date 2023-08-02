@@ -274,6 +274,7 @@ export interface LessonNoteObject {
   class?: Class;
   teacher?: Teacher;
   subject?: Subject;
+  classActivities?: ClassActivity1[]
 }
 
 export interface ClassActivity1 {

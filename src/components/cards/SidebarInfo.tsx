@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BasicCard from '@/components/cards/Basic';
-import { LineGraphComponent } from '@/components/charts';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import clsxm from '@/lib/clsxm';
 import { DashboardOverview } from '@/types';
@@ -201,7 +200,7 @@ export const SidebarInfoCardThree = () => {
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total</div>
           <div>
-            <LineGraphComponent width={95.5} height={27} />
+            {/* <LineGraphComponent width={95.5} height={27} /> */}
           </div>
         </div>
 
@@ -228,7 +227,7 @@ export const AdminSidebarInfoCardOne = () => {
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Revenue</div>
           <div>
-            <LineGraphComponent width={95.5} height={27} />
+            {/* <LineGraphComponent width={95.5} height={27} /> */}
           </div>
         </div>
 
@@ -257,7 +256,7 @@ export const AdminSidebarInfoCardTwo = () => {
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Budget</div>
           <div>
-            <LineGraphComponent width={95.5} height={27} />
+            {/* <LineGraphComponent width={95.5} height={27} /> */}
           </div>
         </div>
 
@@ -286,7 +285,7 @@ export const AdminSidebarInfoCardThree = (data: DashboardOverview | any) => {
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Staffs</div>
           <div>
-            <LineGraphComponent width={95.5} height={27} />
+            {/* <LineGraphComponent width={95.5} height={27} /> */}
           </div>
         </div>
 

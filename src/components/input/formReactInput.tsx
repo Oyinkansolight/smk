@@ -86,6 +86,7 @@ type propType = {
   name?: string;
   helper?: HelperProps;
   className?: string;
+  isRequired?: boolean;
 };
 
 const InputReactForm = ({
@@ -98,6 +99,7 @@ const InputReactForm = ({
   name,
   helper,
   className,
+  isRequired = false
 }: propType) => {
   return (
     <div className=''>
@@ -109,6 +111,7 @@ const InputReactForm = ({
         </div>
         <div className={clsxm(className, 'mt-1 w-full border p-2 rounded')}>
           <input
+            required={isRequired}
             disabled={disabled}
             type={type}
             className='w-full border-none outline-none'

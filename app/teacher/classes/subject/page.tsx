@@ -15,7 +15,7 @@ import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
 
@@ -45,18 +45,19 @@ export default function Page() {
     }
   }
 
-  const { data, isLoading } = useGetWeekPeriodsBySubject({
+  const { data } = useGetWeekPeriodsBySubject({
     termId: term,
     sessionId: profile?.currentSession?.id,
     weekId: sortedWeeks[currentWeek]?.id,
     subjectId: params?.get('id') ? params.get('id') : undefined,
-    classArmId: idx === 0 ? undefined : (arms ?? [])[idx - 1]?.id,
+    classArmId: arms ? arms[idx]?.class?.id : "",
   });
+
   const [currentPage, setCurrentPage] = useState(0);
 
   const { data: subject } = useGetSubjectById(params?.get('id') as string);
 
-  if (!data && isLoading) {
+  const Loader = () => {
     return (
       <div className='flex justify-center items-center h-[40vh]'>
         <RotatingLines
@@ -71,67 +72,68 @@ export default function Page() {
   }
 
   return (
-    <div className='px-8 layout'>
-      <div className='text-[#D4D5D7] py-8 text-2xl'>
-        {`Classes > ${(subject ?? [])[0]?.name}`}
-      </div>
-      <TextTabBar
-        tabs={[
-          'All',
-          ...(arms ?? []).map((arm) =>
-            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
-          ),
-        ]}
-        onChange={setIdx}
-        selectedIdx={idx}
-      />
-      <div className='flex justify-end'>
-        <WeekSelector
-          max={weeks?.data.length ? weeks?.data.length - 1 : 0}
-          index={currentWeek}
-          onChange={setCurrentWeek}
-        />
-      </div>
-      <div className=''>
-        <div className='font-bold py-8 text-4xl'>
-          {(subject ?? [])[0]?.name}
+    <Suspense fallback={<Loader />}>
+      <div className='px-8 layout'>
+        <div className='text-[#D4D5D7] py-8 text-2xl'>
+          {`Classes > ${(subject ?? [])[0]?.name}`}
         </div>
-        <div className='flex flex-col gap-4'>
-          {data && data.data ? (
-            data.data.length > 0 ? (
-              data.data.map((period, i) => (
-                <SmallTeacherSubjectListItem
-                  sessionId={profile?.currentSession?.id as unknown as string}
-                  termId={term as unknown as string}
-                  periodId={period.id as unknown as string}
-                  classId={(arms ?? [])[0].id as unknown as string}
-                  onClick={() =>
-                    router.push(`/teacher/classes/subject-task?id=${period.id}`)
-                  }
-                  key={i}
-                  day={period?.day}
-                  cl={period?.class?.name ?? 'NULL'}
-                  time={`${period?.startTime} - ${period?.endTime}`}
+        <TextTabBar
+          tabs={[
+            ...(arms ?? []).map((arm) =>
+              arm.arm ? `${arm.class?.name}` : '[NULL]'
+            ),
+          ]}
+          onChange={setIdx}
+          selectedIdx={idx}
+        />
+        <div className='flex justify-end'>
+          <WeekSelector
+            max={weeks?.data.length ? weeks?.data.length - 1 : 0}
+            index={currentWeek}
+            onChange={setCurrentWeek}
+          />
+        </div>
+        <div className=''>
+          <div className='font-bold py-8 text-4xl'>
+            {(subject ?? [])[0]?.name}
+          </div>
+          <div className='flex flex-col gap-4'>
+            {data && data.data ? (
+              data.data.length > 0 ? (
+                data.data.map((period, i) => (
+                  <SmallTeacherSubjectListItem
+                    sessionId={profile?.currentSession?.id as unknown as string}
+                    termId={term as unknown as string}
+                    periodId={period.id as unknown as string}
+                    classId={(arms ?? [])[0].id as unknown as string}
+                    onClick={() =>
+                      router.push(`/teacher/classes/subject-task?id=${period.id}`)
+                    }
+                    key={i}
+                    day={period?.day}
+                    cl={period?.class?.name ?? 'NULL'}
+                    time={`${period?.startTime} - ${period?.endTime}`}
+                  />
+                ))
+              ) : (
+                <EmptyView
+                  useStandardHeight
+                  label='No periods for this subject'
                 />
-              ))
+              )
             ) : (
-              <EmptyView
-                useStandardHeight
-                label='No periods for this subject'
-              />
-            )
-          ) : (
-            <div />
-          )}
+              <div />
+            )}
+          </div>
         </div>
+        {data && data.data && data.data.length > 0 && (
+          <PaginatedCounter
+            currentPage={currentPage}
+            onChange={setCurrentPage}
+            pageCount={6}
+          />
+        )}
       </div>
-      {data && data.data && data.data.length > 0 && (
-        <PaginatedCounter
-          currentPage={currentPage}
-          onChange={setCurrentPage}
-          pageCount={6}
-        />
-      )}
-    </div>
+    </Suspense>
   );
 }

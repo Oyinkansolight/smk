@@ -39,7 +39,7 @@ const columns: TableColumn<TableItemData>[] = [
     name: 'Name',
     grow: 2,
     cell: (item) => {
-      if ('fileUrl' in item) {
+      if ('filename' in item) {
         return (
           <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
             <div>
@@ -306,8 +306,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+            | { label: string; value: number }[]
+            | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -413,15 +413,12 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${
-                      folderTrail.length > 0
-                        ? `?folderId=${
-                            folderTrail[folderTrail.length - 1].id
-                          }&folderName=${
-                            folderTrail[folderTrail.length - 1].folderName
-                          }`
+                    href={`/super-admin/add-material${folderTrail.length > 0
+                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
+                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                        }`
                         : ''
-                    }`}
+                      }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -461,21 +458,21 @@ const UploadDocument = ({
               )
               ?.map(
                 (item, idx) =>
-                  ({
-                    ...item,
-                    action,
-                    isAssign,
-                    setAction,
-                    setisAssign,
-                    idx,
-                    setFileId,
-                    onFolderClick: (folder) => {
-                      const c = [...folderTrail];
-                      c.push(folder);
-                      setFolderTrail(c);
-                      refetchFolderFiles();
-                    },
-                  } as TableItemData)
+                ({
+                  ...item,
+                  action,
+                  isAssign,
+                  setAction,
+                  setisAssign,
+                  idx,
+                  setFileId,
+                  onFolderClick: (folder) => {
+                    const c = [...folderTrail];
+                    c.push(folder);
+                    setFolderTrail(c);
+                    refetchFolderFiles();
+                  },
+                } as TableItemData)
               ) ?? []
           }
         />

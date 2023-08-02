@@ -11,7 +11,7 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
-import { CreateClassActivityParams, Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
+import { CreateClassActivityParams, CreateLessonNoteTypes, Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
@@ -144,8 +144,13 @@ export default function CreateClassActivityView() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     try {
-      const form = data.format.value;
+      let form;
       let path: string | null = null;
+
+      if (data?.format?.value) {
+        form = data.format.value;
+      }
+
       if (
         data['lesson-note-file-upload'] &&
         data['lesson-note-file-upload'][0]
@@ -158,15 +163,33 @@ export default function CreateClassActivityView() {
       }
 
       if (type === activityTypes[3].value) {
-        const res = await createLessonNote({
+        const payload: CreateLessonNoteTypes = {
           uploadUrl: path ?? '',
-          sessionId: createActivityParams.sessionId,
-          termId: createActivityParams.termId,
-          periodId: createActivityParams.periodId,
-          subjectId: createActivityParams.subject,
+          sessionId: createActivityParams?.sessionId,
+          termId: createActivityParams?.termId,
+          periodId: createActivityParams?.periodId,
+          subjectId: createActivityParams?.subject,
           teacherId: profile?.userInfo?.staff?.id,
           title: 'Title',
-          classArmId: createActivityParams.classes,
+          classArmId: createActivityParams?.classes,
+        };
+
+        if (!path) delete payload.uploadUrl;
+
+        const res = await createLessonNote(payload);
+        toast.success(res.data.data.message);
+      } else if (type === activityTypes[1].value || type === activityTypes[2].value) {
+        //Due date should not be required for class work or pop quiz
+        delete data.dueDate;
+
+        const res = await create.mutateAsync({
+          ...data,
+          ...createActivityParams,
+          timeLimit: data?.timeLimit?.value,
+          typeOfActivity: data?.typeOfActivity?.value,
+          mode: isOnline ? 'ONLINE' : 'OFFLINE',
+          format: form,
+          questions,
         });
         toast.success(res.data.data.message);
       } else {
@@ -217,6 +240,7 @@ export default function CreateClassActivityView() {
                 return (
                   <ReactSelect
                     {...field}
+                    required
                     options={activityFormats.map((v) => ({
                       value: v.key,
                       label: v.value,
@@ -226,7 +250,8 @@ export default function CreateClassActivityView() {
               }}
             />
           </div>}
-          {type !== activityTypes[3].value && <InputReactForm
+          {type === activityTypes[0].value && <InputReactForm
+            isRequired
             register={register}
             name='dueDate'
             label='Due Date'
@@ -243,6 +268,7 @@ export default function CreateClassActivityView() {
                 return (
                   <ReactSelect
                     {...field}
+                    required
                     options={['30 Mins', '45 Mins', '1 Hour', '2 Hours'].map(
                       (v) => ({
                         value: v,
@@ -257,7 +283,8 @@ export default function CreateClassActivityView() {
 
 
         </div>
-        <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
+        {type !== activityTypes[3].value &&
+          <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
             <div className='flex flex-col gap-4 mt-6'>
               <div>Add to grade list</div>
 
@@ -296,6 +323,7 @@ export default function CreateClassActivityView() {
               </label>
             </div>
           </div>
+        }
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (

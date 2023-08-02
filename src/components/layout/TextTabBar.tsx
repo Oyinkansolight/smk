@@ -17,7 +17,7 @@ export default function TextTabBar({
         <div
           onClick={() => onChange(i)}
           className={clsxm(
-            'font-bold flex-1 text-center cursor-pointer text-[#D4D5D7] whitespace-nowrap px-2',
+            'font-bold flex-1 cursor-pointer text-[#D4D5D7] whitespace-nowrap px-2',
             i === selectedIdx && 'text-black',
             i === selectedIdx && activeClassName
           )}
