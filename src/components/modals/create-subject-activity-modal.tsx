@@ -2,7 +2,6 @@ import CreateClassActivityView from '@/components/views/teacher/create-class-act
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
-
 export default function CreateSubjectActivityModal({ children }: { children: JSX.Element }) {
   const [isOpen, setIsOpen] = useState(false);
 

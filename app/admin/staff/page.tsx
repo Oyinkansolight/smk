@@ -5,15 +5,19 @@ import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 // import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import EmptyView from '@/components/misc/EmptyView';
+import AddSubject from '@/components/modal/AddSubject';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
-import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
-import { useGetTeachersList } from '@/server/institution';
+import {
+  useGetSubjectAssignedToTeacher,
+  useGetTeacherById,
+  useUpdateStaffSubject,
+} from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -25,12 +29,67 @@ const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isAddSubject, setisAddSubject] = useState(false);
   const p = useSearchParams();
-  const { data, error } = useGetTeachersList({
+  const { data, error } = useGetTeacherById({
     id: p?.get('id'),
   });
+  const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
+    p?.get('id')
+  );
+  const [assignedClassSubject, setassignedClassSubject] = useState<
+    { classId: string | null; subjectId: string | null }[]
+  >([{ classId: null, subjectId: null }]);
 
-  const staff = data?.data[0];
+  const onClickHandler = () => {
+    setisAddSubject(!isAddSubject);
+  };
+
+  const addSubjectClass = () => {
+    setassignedClassSubject([
+      ...assignedClassSubject,
+      { classId: null, subjectId: null },
+    ]);
+  };
+  const removeRemoveSubjectClass = (id: number) => {
+    const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
+    setassignedClassSubject(updatedItems);
+    toast.success('Record deleted');
+  };
+  const handleSubjectClassChange = (name: string, value: any, id: number) => {
+    const updatedItems = assignedClassSubject.map((item, i) => {
+      if (i === id) {
+        return { ...item, [name]: value }; // Update the name property
+      }
+      return item;
+    });
+    setassignedClassSubject(updatedItems);
+  };
+  const handleUpdateStaff = useUpdateStaffSubject();
+
+  const SubmitHandler = async () => {
+    const payload = {
+      teacherId: p?.get('id'),
+      subjectAndClasses: assignedClassSubject,
+    };
+    try {
+      setLoading(true);
+      const response = await handleUpdateStaff.mutateAsync(payload);
+
+      if (response) {
+        toast.success('Staff Subject Update successfully');
+        onClickHandler();
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error(getErrMsg(error));
+    }
+  };
+  console.log(data);
+
+  const staff = data;
 
   useEffect(() => {
     if (error) {
@@ -46,8 +105,8 @@ const Page = () => {
         name={`${(staff?.user ?? [])[0]?.firstName} ${
           (staff?.user ?? [])[0]?.lastName
         }`}
-        school='Avril Price School'
-        id=''
+        school={staff?.institution?.instituteName ?? ''}
+        id={staff?.staffId}
         student={false}
         showAcademicYear
         currentGridIdx={gridTabIdx}
@@ -82,7 +141,12 @@ const Page = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <StudentDashboardView />}
+          {tabIdx === 0 && (
+            <StudentDashboardView
+              classCount={staff ? staff.classes.length : 0}
+              subjectCount={staff ? staff.subjects.length : 0}
+            />
+          )}
           {tabIdx === 1 && (
             <div>
               <EmptyView label='Timetable Not Available Yet' />
@@ -144,6 +208,18 @@ const Page = () => {
           )}
         </div>
       )}
+
+      {isAddSubject && (
+        <AddSubject
+          onClickHandler={onClickHandler}
+          SubmitHandler={SubmitHandler}
+          removeRemoveSubjectClass={removeRemoveSubjectClass}
+          addSubjectClass={addSubjectClass}
+          assignedClassSubject={assignedClassSubject}
+          handleSubjectClassChange={handleSubjectClassChange}
+          loading={loading}
+        />
+      )}
       {gridTabIdx === 2 && (
         <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
           <div className='flex w-full items-center justify-between'>
@@ -164,7 +240,19 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <>
-              <SubjectList studentSubjectsList={[]} />
+              <div className='flex justify-end'>
+                <Button
+                  onClick={() => {
+                    setisAddSubject(!isAddSubject);
+                  }}
+                  disabled={isEditingBioDetails}
+                  variant='ghost'
+                  className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
+                >
+                  Add Subject
+                </Button>
+              </div>
+              <SubjectList studentSubjectsList={studentSubjectsList} />
             </>
           )}
         </div>

@@ -9,13 +9,49 @@ import TabBar from '@/components/layout/TabBar';
 import AllCurriculumView from '@/components/views/single-subject/AllCurriculumView';
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import Files from '@/components/views/super-admin/Library/Files';
-import logger from '@/lib/logger';
-import { useGetClassesList, useGetSubjectById } from '@/server/institution';
+import request from '@/server';
+import { useGetSubjectById } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/rules-of-hooks */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
@@ -41,19 +77,29 @@ const SingleSubjectDashboard = () => {
   const id = params?.get('id') as string;
   const { data } = useGetSubjectById(id);
   const [sessionterms, setsessionterms] = useState([]);
+  const [allclasses, setallclasses] = useState<any>([]);
   const [schoolType, setschoolType] = useState(0);
-  const [termId, settermId] = useState(0);
-  const [classId, setclassId] = useState(0);
-  const [academicyear, setacademicyear] = useState({ session: '', id: 0 });
-  const { data: allclasses } = useGetClassesList();
+  const [termId, settermId] = useState('');
+  const [classId, setclassId] = useState('');
+  const [academicyear, setacademicyear] = useState({ session: '', id: '' });
 
-  logger(classId);
+  // const { data: allclasses } = useGetClassesList();
+
+  const GetAllClasses = async () => {
+    const d = await request.get(
+      `/v1/government/curriculum/get-subject-curriculum-completion?sessionId=${academicyear.id}&termId=${termId}&subjectId=${id}`
+    );
+    setallclasses(d.data.data.data);
+  };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (termId && academicyear.id && id) {
+      GetAllClasses();
+    }
 
-  logger(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [termId, academicyear]);
+
   return (
     // max-width: 68.75rem;
     // @apply mx-auto w-11/12;
@@ -63,6 +109,8 @@ const SingleSubjectDashboard = () => {
         setschoolType={setschoolType}
         setacademicyear={setacademicyear}
         setsessionterms={setsessionterms}
+        sessionterms={sessionterms}
+        settermId={settermId}
       />
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <>
@@ -91,7 +139,7 @@ const SingleSubjectDashboard = () => {
               curriculumClicked={() => setPage(2)}
               schoolType={schoolType}
               academicyear={academicyear.session}
-              classList={allclasses?.data || []}
+              classList={allclasses || []}
               sessionterms={sessionterms || []}
               settermId={settermId}
               setclassId={setclassId}

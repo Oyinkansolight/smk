@@ -12,26 +12,22 @@ import { useGetAcademicSessionsTermsWeek } from '@/server/institution';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { BsArrowDownCircle } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
 interface propType {
-  termId: number;
+  termId: string;
   sessionId: any;
-  classId: number;
+  classId: string;
 }
 
-export default function AllCurriculumView({
-  termId,
-  sessionId,
-  classId,
-}: propType) {
+export default function AllCurriculumView({ termId, sessionId }: propType) {
   const params = useSearchParams();
   const [periods, setperiods] = useState<any[]>([]);
   const [periodsList, setperiodsList] = useState<any[]>([]);
   const [periodsUpdate, setperiodsUpdate] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [theme, settheme] = useState<string | number>('');
-  const [topic, settopic] = useState<string | number>('');
+
   const [weekid, setWeekId] = useState<string | number>(0);
 
   const id = params?.get('id') as string;
@@ -52,9 +48,9 @@ export default function AllCurriculumView({
 
       periodSettings.push({
         periodId: null,
+        theme: '',
         periodTitle: '',
-        fileId: 2,
-        teacherId: 1,
+        fileId: '',
         subjectId: id,
       });
     }
@@ -63,25 +59,13 @@ export default function AllCurriculumView({
     return occurrences;
   }
 
-  // "weekId": 73,
-  // "theme": "Period theme test",
-  // "topic": "Period topic test",
-  // "periods": [
-  //     {
-  //         "periodId": 235,
-  //         "periodTitle": "Period title here",
-  //         "fileId": 2,
-  //         "teacherId": 1
-  //     }
-  // ]
   const handleCreateCurriculum = useCreateCurriculum();
   const handleSubmit = async () => {
     const data = {
       weekId: weekid,
-      theme,
-      topic,
       periods: periodsUpdate,
     };
+
     try {
       const response = await handleCreateCurriculum.mutateAsync(data);
       if (response) {
@@ -100,7 +84,7 @@ export default function AllCurriculumView({
 
     request
       .get(
-        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&classId=${classId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`,
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`,
         {
           withCredentials: true,
         }
@@ -161,7 +145,7 @@ export default function AllCurriculumView({
             </AddWeekModal>
           </div>
         ) : (
-          (data?.data || []).map((v: any, i: number) => {
+          (data?.data || []).reverse().map((v: any, i: number) => {
             return (
               <div key={i}>
                 <div
@@ -170,17 +154,27 @@ export default function AllCurriculumView({
                     setCurrentIndex(i);
                     fetchPeriods(v.id);
                   }}
-                  className='border-b grid grid-cols-12 gap-4 items-center py-4 cursor-pointer'
+                  className='border-b flex items-center justify-between gap-4 py-4 cursor-pointer'
                 >
-                  <div className='col-span-2'>{v.name} </div>
-                  <div className='col-span-4'>
-                    Theme: <span className='font-bold'>{v.theme}</span>
+                  <div className='flex space-x-2 items-center'>
+                    <BsArrowDownCircle
+                      className={clsxm(
+                        'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
+                        showcontent && currentIndex === i
+                          ? 'rotate-180'
+                          : 'text-[#C3CAD9]'
+                      )}
+                    />
+                    <h2 className='text-xs font-normal'>{v.name}</h2>
                   </div>
-                  <div className='col-span-4'>
-                    Topic/Sub-Theme:
-                    <span className='font-bold'>{v.topic}</span>
-                  </div>
-                  <div className='col-span-2'>
+                  {/* <div className='col-span-4'>
+                  Theme: <span className='font-bold'>{v.theme}</span>
+                </div>
+                <div className='col-span-4'>
+                  Topic/Sub-Theme:
+                  <span className='font-bold'>{v.topic}</span>
+                </div> */}
+                  <div className=''>
                     <button
                       className='border border-primary text-primary p-2 rounded-sm'
                       onClick={() => {
@@ -202,17 +196,25 @@ export default function AllCurriculumView({
                         >
                           <div>Period {j + 1}</div>
                           <div>
-                            <span className='text-[#8898AA] mr-1'>Title:</span>
-                            {v.title}
+                            <span className='text-[#8898AA] mr-1'>
+                              Topic/Sub-Theme:
+                            </span>
+                            {v.theme}
                           </div>
-                          <div className='flex flex-row justify-end text-[#ADB3CC] gap-[10px] md:pr-10'>
-                            <div className='cursor-pointer'>View</div>
+                          <div>
+                            <span className='text-[#8898AA] mr-1'>Title</span>
+                            {v.title}
                           </div>
                         </div>
                       );
                     })}
                     {loading && (
                       <div className='text-center tetx-xs'>Loading..</div>
+                    )}
+                    {periods.length === 0 && !loading && (
+                      <div className='text-center tetx-xs py-4'>
+                        No Period Found
+                      </div>
                     )}
                   </div>
                 )}
@@ -226,8 +228,6 @@ export default function AllCurriculumView({
             periodsList={periodsList}
             periodsUpdate={periodsUpdate}
             setperiodsUpdate={setperiodsUpdate}
-            settheme={settheme}
-            settopic={settopic}
             handleSubmit={handleSubmit}
           />
         )}

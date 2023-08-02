@@ -1,5 +1,4 @@
 'use client';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
@@ -303,8 +302,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+            | { label: string; value: number }[]
+            | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -409,15 +408,12 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${
-                      folderTrail.length > 0
-                        ? `?folderId=${
-                            folderTrail[folderTrail.length - 1].id
-                          }&folderName=${
-                            folderTrail[folderTrail.length - 1].folderName
-                          }`
+                    href={`/super-admin/add-material${folderTrail.length > 0
+                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
+                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                        }`
                         : ''
-                    }`}
+                      }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -457,21 +453,21 @@ const UploadDocument = ({
               )
               ?.map(
                 (item, idx) =>
-                  ({
-                    ...item,
-                    action,
-                    isAssign,
-                    setAction,
-                    setisAssign,
-                    idx,
-                    setFileId,
-                    onFolderClick: (folder) => {
-                      const c = [...folderTrail];
-                      c.push(folder);
-                      setFolderTrail(c);
-                      refetchFolderFiles();
-                    },
-                  } as TableItemData)
+                ({
+                  ...item,
+                  action,
+                  isAssign,
+                  setAction,
+                  setisAssign,
+                  idx,
+                  setFileId,
+                  onFolderClick: (folder) => {
+                    const c = [...folderTrail];
+                    c.push(folder);
+                    setFolderTrail(c);
+                    refetchFolderFiles();
+                  },
+                } as TableItemData)
               ) ?? []
           }
         />

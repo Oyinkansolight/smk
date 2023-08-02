@@ -1,15 +1,17 @@
 'use client';
 
-import PageCounter from '@/components/counter/PageCounter';
-import { useState } from 'react';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function Page() {
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [numberOfPages, setNumberOfPages] = useState(0);
+  // const [currentPage, setCurrentPage] = useState(1);
+
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
   return (
     <div className='w-full layout'>
       <div className='font-bold text-3xl py-8 h3'>Lesson Note</div>
@@ -17,21 +19,19 @@ export default function Page() {
         <div className='h-10 w-10 rounded-full bg-gray-200' />
         <div>Ighosa Ahmed</div>
       </div>
-      <div>
-        <PageCounter
-          page={currentPage}
-          maxPage={numberOfPages}
-          onChange={setCurrentPage}
-        />
-        <Document
-          className='mx-auto'
-          file='/pdfs/Assignment samples.pdf'
-          onLoadSuccess={(v) => {
-            setNumberOfPages(v.numPages);
-          }}
-        >
-          <DocPage pageNumber={currentPage} renderTextLayer={false} />
-        </Document>
+      <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll mt-10'>
+        <div className='flex justify-center'>
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
+            <div style={{ height: '100vh', width: "100vw" }}>
+              <Viewer
+                fileUrl="/pdfs/Assignment samples.pdf"
+                plugins={[
+                  defaultLayoutPluginInstance,
+                ]}
+              />
+            </div>
+          </Worker>
+        </div>
       </div>
     </div>
   );

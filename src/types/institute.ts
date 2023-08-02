@@ -7,7 +7,6 @@ import {
   Week,
 } from '@/types/classes-and-subjects';
 
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Subject {
   id?: number;
@@ -84,7 +83,7 @@ export interface User {
 }
 
 export interface Staff {
-  id?: number;
+  id?: string;
   gender?: string;
   dob?: string;
   height?: string;
@@ -274,7 +273,7 @@ export interface LessonNoteObject {
   class?: Class;
   teacher?: Teacher;
   subject?: Subject;
-  classActivities?: ClassActivity1[]
+  classActivities?: ClassActivity1[];
 }
 
 export interface ClassActivity1 {
@@ -337,7 +336,7 @@ export interface SubmittedActivity {
 }
 
 export interface GradeCategory {
-  id?: number;
+  id?: string;
   institutionType?: string;
   percentageScore?: number;
   categoryName?: string;

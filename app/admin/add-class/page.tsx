@@ -5,9 +5,13 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
+import { getFromLocalStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetCurrentSession, useGetProfile } from '@/server/auth';
-import { useCreateClassArm } from '@/server/institution';
+import {
+  useCreateClassArm,
+  useGetTeachersListByInstitution,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -65,13 +69,29 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const TransferStudent = () => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const AddClass = () => {
   const { data: institutionProfile } = useGetProfile();
   const { data: currentSessionInfo } = useGetCurrentSession();
+  const institutionId = getFromLocalStorage('institutionId');
 
   const {
+    data: staffs,
+    error,
+    isLoading,
+  } = useGetTeachersListByInstitution(institutionId);
+  const {
     register,
-
+    control,
     formState: { errors },
     handleSubmit,
   } = useForm({
@@ -110,7 +130,7 @@ const TransferStudent = () => {
         arm: data.classArm,
         capacity: data.classCapacity,
         classId: data.class,
-        teacherId: data.classTeacher,
+        teacherId: data.classTeacher[0].value,
         sessionId: currentSessionInfo?.id,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
@@ -191,9 +211,16 @@ const TransferStudent = () => {
 
       <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {stage === 1 && <Details register={register} errors={errors} />}
+          {stage === 1 && (
+            <Details
+              register={register}
+              errors={errors}
+              control={control}
+              staffs={staffs}
+            />
+          )}
 
-          {stage === 2 && <Publish publishData={publishData} />}
+          {stage === 2 && <Publish publishData={publishData} staffs={staffs} />}
           <div className='mb-6 mt-10 flex justify-end'>
             <div className='flex space-x-6'>
               <button
@@ -221,4 +248,4 @@ const TransferStudent = () => {
   );
 };
 
-export default TransferStudent;
+export default AddClass;

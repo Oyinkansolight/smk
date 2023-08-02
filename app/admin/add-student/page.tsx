@@ -97,10 +97,11 @@ export default function AddStudent() {
           address: data.parentAddress,
           lga: data.parenttownId,
         },
-        classId: +data.class,
-        classTeacherId: +data.teacher,
+        classArmId: data.class,
+        classTeacherId: data.teacher,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
+      console.log(studentData);
 
       setpublishData(data);
 

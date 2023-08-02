@@ -74,7 +74,8 @@ export default function Page() {
         </div>
         <div className='col-span-3'>
           <div className='h2 mb-6'>
-            Add a file {params?.get('folderName') && `To ${params?.get('folderName')}`}
+            Add a file{' '}
+            {params?.get('folderName') && `To ${params?.get('folderName')}`}
           </div>
 
           <BaseInput label='Title' name='title' register={register} />

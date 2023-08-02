@@ -42,6 +42,9 @@ export default function TakeAttendanceView() {
     sessionId: profile?.currentSession?.id,
   });
 
+  console.log(students);
+
+
   return (
     <div className='flex flex-col gap-10'>
       <div className='font-bold text-3xl'>Take Subject Attendance</div>
@@ -55,7 +58,7 @@ export default function TakeAttendanceView() {
       <div className='flex flex-col gap-4'>
         <div className='font-bold'>List of students</div>
         {studentsLoading ||
-          students?.map((v, i) => (
+          students ? students?.map((v, i) => (
             <TeacherAttendanceListItem
               key={i}
               index={i}
@@ -82,7 +85,9 @@ export default function TakeAttendanceView() {
                 }
               }}
             />
-          ))}
+          )) : (
+          <div className='text-center'>No students have been added to this class arm</div>
+        )}
       </div>
     </div>
   );

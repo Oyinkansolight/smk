@@ -75,6 +75,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TransferStaff = () => {
   const {
     register,

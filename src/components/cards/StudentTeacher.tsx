@@ -74,7 +74,7 @@ export default function StudentTeacherProfileCard({
           },
           {
             icon: <HiUsers className='h-5 w-5' />,
-            label: student ? 'Manage Subject' : 'Contacts',
+            label: 'Manage Subject',
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,

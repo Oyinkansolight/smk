@@ -37,14 +37,20 @@ export default function AdminAuth() {
           response.data.data.data.type === 'DEFAULT'
         ) {
           router.push(ROUTES.SUPER_ADMIN);
-        } else {
-          setLoading(false);
-          toast.info('Redirecting...');
-          setTimeout(() => {
-            router.push(ROUTES.USER_AUTH);
-          }, 2000);
-
-          return;
+        } else if (
+          response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
+        ) {
+          router.push(ROUTES.ADMIN);
+        } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem(
+              'institution',
+              JSON.stringify(response.data.data.data.staff.institution)
+            );
+          }
+          router.push(ROUTES.TEACHER);
+        } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
+          router.push(ROUTES.STUDENT);
         }
 
         toast.success(response.data.data.message);

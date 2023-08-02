@@ -5,7 +5,7 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Biodata from '@/components/views/admin/Addstaff/biodata';
 import Contact from '@/components/views/admin/Addstaff/contact';
-import Education from '@/components/views/admin/Addstaff/education';
+// import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Publish from '@/components/views/admin/Addstaff/publish';
 import Training from '@/components/views/admin/Addstaff/training';
@@ -15,46 +15,10 @@ import { useGetProfile } from '@/server/auth';
 import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -75,7 +39,7 @@ const AddStaff = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-  const [stage, setStage] = useState(5);
+  const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
@@ -85,9 +49,9 @@ const AddStaff = () => {
   const [trainingDetails, setTrainingDetails] = useState<
     { titleOfTraining: string; year: number | null }[]
   >([]);
-  const [assignedClassSubject, setassignedClassSubject] = useState<
-    { classArmId: number | null; subjectId: number | null }[]
-  >([]);
+  // const [assignedClassSubject, setassignedClassSubject] = useState<
+  //   { classArmId: number | null; subjectId: number | null }[]
+  // >([]);
 
   const handleCreateStaff = useCreateStaff();
 
@@ -111,30 +75,30 @@ const AddStaff = () => {
     });
     setTrainingDetails(updatedItems);
   };
-  const addSubjectClass = () => {
-    setassignedClassSubject([
-      ...assignedClassSubject,
-      { classArmId: null, subjectId: null },
-    ]);
-  };
-  const removeRemoveSubjectClass = (id: number) => {
-    const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
-    setassignedClassSubject(updatedItems);
-    toast.success('Record deleted');
-  };
-  const handleSubjectClassChange = (name: string, value: any, id: number) => {
-    const updatedItems = assignedClassSubject.map((item, i) => {
-      if (i === id) {
-        return { ...item, [name]: value }; // Update the name property
-      }
-      return item;
-    });
-    setassignedClassSubject(updatedItems);
-  };
-  useEffect(() => {
-    addTrainingDetail();
-    addSubjectClass();
-  }, []);
+  // const addSubjectClass = () => {
+  //   setassignedClassSubject([
+  //     ...assignedClassSubject,
+  //     { classArmId: null, subjectId: null },
+  //   ]);
+  // };
+  // const removeRemoveSubjectClass = (id: number) => {
+  //   const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
+  //   setassignedClassSubject(updatedItems);
+  //   toast.success('Record deleted');
+  // };
+  // const handleSubjectClassChange = (name: string, value: any, id: number) => {
+  //   const updatedItems = assignedClassSubject.map((item, i) => {
+  //     if (i === id) {
+  //       return { ...item, [name]: value }; // Update the name property
+  //     }
+  //     return item;
+  //   });
+  //   setassignedClassSubject(updatedItems);
+  // };
+  // useEffect(() => {
+  //   addTrainingDetail();
+  //   addSubjectClass();
+  // }, []);
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     // console.log(errors);
@@ -255,12 +219,9 @@ const AddStaff = () => {
       stage: 4,
       stageName: 'Employment Details ',
     },
+
     {
       stage: 5,
-      stageName: 'Subjects and Classes',
-    },
-    {
-      stage: 6,
       stageName: 'Publish',
     },
   ];
@@ -321,17 +282,17 @@ const AddStaff = () => {
             />
           )}
           {stage === 4 && <Employment register={register} errors={errors} />}
-          {stage === 5 && (
+          {/* {stage === 5 && (
             <Education
               removeRemoveSubjectClass={removeRemoveSubjectClass}
               addSubjectClass={addSubjectClass}
               assignedClassSubject={assignedClassSubject}
               handleSubjectClassChange={handleSubjectClassChange}
             />
-          )}
+          )} */}
 
-          {stage === 6 ||
-            (stage === 7 && <Publish publishData={publishData} />)}
+          {stage === 5 ||
+            (stage === 6 && <Publish publishData={publishData} />)}
           <div className='mb-6 flex justify-end'>
             <div className='flex space-x-6'>
               <button
@@ -341,12 +302,12 @@ const AddStaff = () => {
               >
                 Prev
               </button>
-              {stage <= 6 && (
+              {stage <= 5 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
                   {loading ? <ImSpinner2 className='animate-spin' /> : 'Next'}
                 </button>
               )}
-              {stage === 7 && (
+              {stage === 6 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
                   Continue
                 </button>

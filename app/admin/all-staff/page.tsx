@@ -32,6 +32,12 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
@@ -40,8 +46,8 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   },
   {
     name: 'Staff ID',
-    selector: (row) => row.id ?? '',
-    cell: (row) => <div>{row.id}</div>,
+    selector: (row) => row.staffId ?? '',
+    cell: (row) => <div>{row.staffId}</div>,
   },
   {
     name: 'Name',
@@ -49,7 +55,7 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
     cell: (row) => (
       <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        <Link href={`/super-admin/teacher?id=${row.id}`}>
+        <Link href={`/admin/staff?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
             {row['user.0.firstName']} {row['user.0.lastName']}
           </h2>

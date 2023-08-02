@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import FormInput from '@/components/input/formInput';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -17,8 +16,6 @@ interface propType {
   periodsList: any;
   periodsUpdate: any;
   setperiodsUpdate: (v: any) => void;
-  settopic: (v: any) => void;
-  settheme: (v: any) => void;
 }
 
 //Change to trigger build
@@ -29,8 +26,6 @@ function AddActivityName({
   periodsList,
   periodsUpdate,
   setperiodsUpdate,
-  settopic,
-  settheme,
 }: propType) {
   const { data } = useGetSubjectList();
   const { data: files } = useGetAllFiles();
@@ -61,23 +56,6 @@ function AddActivityName({
             Kindly select the appropriate options below:
           </p>
 
-          <div className='w-full grid md:grid-cols-2 gap-4'>
-            <FormInput
-              label='Theme*'
-              name='schoolType'
-              type='text'
-              placeholder='Select an option'
-              setFormValue={settheme}
-            />
-            <FormInput
-              label='Topic/Sub-Theme*'
-              name='schoolType'
-              type='text'
-              setFormValue={settopic}
-              placeholder='Select an option'
-            />
-          </div>
-
           <div>
             {data && (
               <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
@@ -92,7 +70,28 @@ function AddActivityName({
                     <div className='flex flex-col space-y-4'>
                       <div>
                         <label htmlFor='' className='text-xs font-bold'>
-                          Title of period
+                          Topic/Sub-Theme
+                        </label>
+                        <div
+                          className={clsxm('mt-1 w-full border p-2 rounded')}
+                        >
+                          <input
+                            type='text'
+                            className='w-full border-none outline-none'
+                            placeholder='Enter value'
+                            onChange={(e) => {
+                              updateObjectInArray(i, {
+                                ...periodsUpdate[i],
+                                theme: e.target.value,
+                                periodId: v.id,
+                              });
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label htmlFor='' className='text-xs font-bold'>
+                          Title
                         </label>
                         <div
                           className={clsxm('mt-1 w-full border p-2 rounded')}
@@ -135,37 +134,6 @@ function AddActivityName({
                                 {item.filename}
                               </option>
                             ))}
-                          </select>
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor='' className='text-xs font-bold'>
-                          Attach Teacher to Period*
-                        </label>
-                        <div
-                          className={clsxm('mt-1 w-full border p-2 rounded')}
-                        >
-                          <select
-                            id=''
-                            className='w-full border-none outline-none bg-transparent  text-gray-400'
-                            onChange={(e) => {
-                              updateObjectInArray(i, {
-                                ...periodsUpdate[i],
-                                teacherId: e.target.value,
-                              });
-                            }}
-                          >
-                            <option value=''> -- Select an option -- </option>
-
-                            {(staffs?.data ?? []).map(
-                              (item: any, id: number) => (
-                                <option key={id} value={item.id}>
-                                  {`${item.user[0]?.firstName || ''}  ${
-                                    item.user[0]?.lastName || ''
-                                  }`}
-                                </option>
-                              )
-                            )}
                           </select>
                         </div>
                       </div>

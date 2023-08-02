@@ -3,7 +3,6 @@ import { ClassArm } from '@/types/classes-and-subjects';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
-
 export function useGetAllClassArms(params: {
   classId?: string | number;
   institutionId?: string | number;

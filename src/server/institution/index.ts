@@ -10,7 +10,6 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateInstitutionParams {
   instituteName?: string;
   instituteEmail?: string;
@@ -250,10 +249,11 @@ export function useGetTeacherById(params?: PaginationParams) {
     queryKey: `get_teacher_${params?.id}`,
     queryFn: async () => {
       try {
-        const d = await request.get('/v1/government/teachers/get-staffs', {
+        const d = await request.get('/v1/government/teachers/get-staff-by-id', {
           params,
         });
-        return d.data.data.data.data[0] as Staff;
+
+        return d.data.data.data as any;
       } catch (error) {
         logger(error);
         throw error;
@@ -372,6 +372,20 @@ export function useCreateStaff() {
   });
   return mutation;
 }
+export function useUpdateStaffSubject() {
+  const mutation = useMutation({
+    mutationKey: 'update-staff-subject',
+    mutationFn: (params: any) =>
+      request.post(
+        '/v1/government/institutes/classes-subjects/assign-subject-to-teacher',
+        params,
+        {
+          withCredentials: true,
+        }
+      ),
+  });
+  return mutation;
+}
 export function useCreateClassArm() {
   const mutation = useMutation({
     mutationKey: 'create-classs-arm',
@@ -443,6 +457,24 @@ export function useGetIncidentReports(id?: string) {
           `/v1/government/report/get-institution-report?institutionId=${id}`
         );
         return d.data.data.data.data as [];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetSubjectAssignedToTeacher(id?: string | null | undefined) {
+  const query = useQuery({
+    queryKey: ['get_teacher_subject_list', id],
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/classes-subjects/teacher-subjects?id=${id}`
+        );
+
+        return d.data.data.data as [];
       } catch (error) {
         logger(error);
         throw error;

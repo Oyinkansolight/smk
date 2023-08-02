@@ -124,14 +124,14 @@ export default function TaskListView({
                     }}
                     className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
                   >
-                    <div>{`${v.class.name} ${v.arm}`}</div>
+                    <div>{`${v.name}`}</div>
                     <BsArrowRight size={20} />
                   </button>
                 );
               })}
             </div>
           ) : (
-            <div className='py-10 text-center'>No class arm found</div>
+            <div className='py-10 text-center'>No class found</div>
           )}
         </div>
       ) : (

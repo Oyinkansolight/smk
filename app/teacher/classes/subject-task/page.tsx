@@ -16,6 +16,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import BasicModal from '@/components/modal/Basic';
+import { LessonNoteObject } from '@/types/institute';
 
 
 export default function Page() {
@@ -82,14 +83,14 @@ export default function Page() {
             </CreateSubjectActivityModal>
 
             <BasicModal
-              className='ml-20 z-[100000]'
+              className='ml-20 mt-20'
               content={<div className='flex items-stretch gap-10'>
                 {period?.file ? (
                   <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll'>
                     <div className='flex justify-center'>
                       {url.length > 0 &&
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-                          <div style={{ height: '750px', width: "100vw" }}>
+                          <div style={{ height: '100vh', width: "100vw" }}>
                             <Viewer
                               fileUrl={url}
                               plugins={[
@@ -97,7 +98,8 @@ export default function Page() {
                               ]}
                             />
                           </div>
-                        </Worker>}
+                        </Worker>
+                      }
                     </div>
                   </div>
                 ) : (
@@ -120,7 +122,7 @@ export default function Page() {
             {period?.classActivities.map((activity) => {
               const parsedActivityName = activity.typeOfActivity.includes("_") ? activity.typeOfActivity[0] + activity.typeOfActivity.slice(1).split("_").join(" ").toLowerCase() : activity.typeOfActivity[0] + activity.typeOfActivity.slice(1).toLowerCase() ?? "Activity Name";
               return (
-                <SideBarItem key={activity.id} type={activity.typeOfActivity}>{parsedActivityName}</SideBarItem>
+                <SideBarItem key={activity.id} period={period} type={activity.typeOfActivity}>{parsedActivityName}</SideBarItem>
               )
             }
             )}
@@ -130,11 +132,11 @@ export default function Page() {
 
       <div className='flex items-stretch gap-10'>
         {period?.file ? (
-          <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll'>
+          <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
             <div className='flex justify-center'>
               {url.length > 0 &&
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-                  <div style={{ height: '750px', width: "100vw" }}>
+                  <div style={{ height: '100vh', width: "100vw" }}>
                     <Viewer
                       fileUrl={url}
                       plugins={[
@@ -161,28 +163,34 @@ export default function Page() {
 export function SideBarItem({
   type,
   children,
+  period,
 }: {
   type: (typeof ACTIVITY_TYPES)[number] | string;
   children: JSX.Element | JSX.Element[] | string;
+  period: LessonNoteObject;
 }) {
-  return (
-    <Link
-      className='max-h-[38px]'
-      href={
-        type === 'ASSIGNMENT'
-          ? '/teacher/lesson-note/assignment'
-          : type === 'CLASS_WORK'
-            ? '/teacher/lesson-note/class-work'
-            : type === 'LESSON_NOTE'
-              ? '/teacher/lesson-note/lesson-notes'
-              : type === 'QUIZ'
-                ? '/teacher/lesson-note/pop-quiz'
-                : '#'
-      }
-    >
-      <div className='flex text-xs lg:text-base font-bold whitespace-nowrap items-center rounded-md bg-[#D4D5D7] px-10 py-5 w-auto max-h-[38px] h-full'>
-        {children}
-      </div>
-    </Link>
-  );
+  if (period?.subject?.id) {
+    return (
+      <Link
+        className='max-h-[38px]'
+        href={
+          type === 'ASSIGNMENT'
+            ? `/teacher/lesson-note/assignment/submissions?subjectId=${period.subject.id}&type=${type}`
+            : type === 'CLASS_WORK'
+              ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
+              : type === 'LESSON_NOTE'
+                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
+                : type === 'QUIZ'
+                  ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
+                  : '#'
+        }
+      >
+        <div className='flex text-xs lg:text-base font-bold whitespace-nowrap items-center rounded-md bg-[#D4D5D7] px-10 py-5 w-auto max-h-[38px] h-full'>
+          {children}
+        </div>
+      </Link>
+    );
+  }
+
+  return <div></div>
 }

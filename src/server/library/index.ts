@@ -5,7 +5,6 @@ import { UserFile, UserFolder } from '@/types/material';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface UploadFileParams {
   filename?: string;
   fileUrl?: string;

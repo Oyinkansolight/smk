@@ -2,7 +2,6 @@
 'use client';
 
 import logger from '@/lib/logger';
-import { useGetStaffs } from '@/server/government/staff';
 import { useGetClassesList } from '@/server/institution';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -57,16 +56,23 @@ import { useGetClassesList } from '@/server/institution';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const Publish = ({ publishData }: any) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const Publish = ({ publishData, staffs }: any) => {
   logger(publishData);
-  const { data: staffs } = useGetStaffs();
   const { data: classes } = useGetClassesList();
 
-  const getTeacher = (staffs ?? []).find(
-    (v: any) => v.id === Number(publishData.classTeacher)
+  const getTeacher = (staffs?.data ?? []).find(
+    (v: any) => v.id === publishData.classTeacher[0].value
   );
   const getClass = (classes?.data ?? []).find(
-    (v: any) => v.id === Number(publishData.class)
+    (v: any) => v.id === publishData.class
   );
 
   return (

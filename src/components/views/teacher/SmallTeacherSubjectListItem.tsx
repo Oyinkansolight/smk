@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { IoChevronForwardSharp } from 'react-icons/io5';
 import { useSessionStorage } from 'usehooks-ts';
 
-
 export default function SmallTeacherSubjectListItem({
   cl,
   day,
@@ -73,7 +72,7 @@ export default function SmallTeacherSubjectListItem({
           <div>
             {' '}
             <span className='md:hidden block'>+</span>{' '}
-            <span className='hidden md:block'>Add Activity</span>{' '}
+            <span className='hidden md:block'>Add Lesson Tasks</span>{' '}
           </div>{' '}
         </Button>
       </CreateSubjectActivityModal>

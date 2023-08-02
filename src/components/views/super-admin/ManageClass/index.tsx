@@ -15,11 +15,21 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Empty from '~/svg/empty.svg';
 
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable unused-imports/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const UploadDocument = ({
   data,

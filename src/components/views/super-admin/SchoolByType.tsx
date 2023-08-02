@@ -36,7 +36,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
-                item.instituteLogo.includes('picsum')
+                  item.instituteLogo.includes('picsum')
                   ? item.instituteLogo
                   : `/${item.instituteLogo}`
               }

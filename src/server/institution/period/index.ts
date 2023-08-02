@@ -2,8 +2,7 @@ import request from '@/server';
 import { LessonNoteObject } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
-import { useQuery } from 'react-query';
-
+import { useQuery, useQueryClient } from 'react-query';
 
 export interface GetTeacherClassPeriodParams {
   sessionId?: number;
@@ -14,6 +13,8 @@ export interface GetTeacherClassPeriodParams {
 }
 
 export function useGetTeacherClassPeriod(params: GetTeacherClassPeriodParams) {
+  const client = useQueryClient();
+
   const query = useQuery({
     queryKey: 'get_teacher_class_period',
     queryFn: () =>
@@ -22,13 +23,16 @@ export function useGetTeacherClassPeriod(params: GetTeacherClassPeriodParams) {
           params,
         })
         .then((v) => v.data.data.data as PaginatedData<LessonNoteObject>),
+    onSettled: () => {
+      client.refetchQueries('get_week_periods_by_subject');
+    },
   });
   return query;
 }
 
 export interface GetWeekPeriodsBySubjectParams {
-  sessionId?: number;
-  termId?: number;
+  sessionId?: string;
+  termId?: string;
   weekId?: number | string | null;
   classArmId?: number | string | null;
   subjectId?: number | string | null;

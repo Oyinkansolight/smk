@@ -65,12 +65,12 @@ function RenderGradeCategories({
 }) {
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile ? profile?.currentSession?.id : "",
   });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
     sessionId: profile?.currentSession?.id,
-    termId: (terms?.data ?? [])[0].id,
+    termId: terms ? terms?.data[0].id : "",
   });
   return (
     <div>

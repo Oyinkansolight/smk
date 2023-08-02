@@ -11,7 +11,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import ReactSelect from 'react-select';
 
-
 export default function GradeSettingsModal({
   children,
 }: {

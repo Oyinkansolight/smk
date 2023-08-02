@@ -2,7 +2,6 @@
 import { getFromSessionStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
-
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({

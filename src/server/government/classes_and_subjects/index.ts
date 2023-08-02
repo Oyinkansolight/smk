@@ -4,7 +4,6 @@ import { Subject, User } from '@/types/institute';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
-
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
     queryKey: 'get_subject_list_gov',

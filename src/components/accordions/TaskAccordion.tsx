@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
-import moment from 'moment';
 import { useState } from 'react';
-import { AiTwotoneFlag } from 'react-icons/ai';
 import { BsArrowDownCircle } from 'react-icons/bs';
-import { TbClockHour4 } from 'react-icons/tb';
 
 export default function TaskAccordion({
   taskName,
   subName,
-  actions,
+  // actions,
   children,
-  nextClass,
-  endDate,
+  // nextClass,
+  // endDate,
   lesson,
   length = 300,
   // showIcons = true,
   bordered = false,
+  percentage,
+  onClick,
 }: {
   taskName: string;
   subName?: string | JSX.Element | any;
@@ -28,24 +27,47 @@ export default function TaskAccordion({
   length?: number;
   showIcons?: boolean;
   bordered?: boolean;
+  percentage?: number | string | null;
+  onClick?: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div>
       <div
-        onClick={() => setExpanded(!expanded)}
-        className='flex cursor-pointer items-center rounded-md bg-white p-4 shadow-sm mb-4'
+        onClick={() => {
+          onClick && onClick();
+          setExpanded(!expanded);
+        }}
+        className='flex justify-between  cursor-pointer items-center rounded-md bg-white p-4 shadow-sm mb-4'
       >
-        <BsArrowDownCircle
-          className={clsxm(
-            'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
-            expanded ? 'rotate-180' : 'text-[#C3CAD9]'
+        <div className='flex items-center'>
+          <BsArrowDownCircle
+            className={clsxm(
+              'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
+              expanded ? 'rotate-180' : 'text-[#C3CAD9]'
+            )}
+          />
+          <div className='w-4' />
+          <div className='text-[#6B7A99]'>{taskName}</div>
+          <div className='w-8' />
+          <div className='text-[#ADB8CC]'>{subName}</div>
+        </div>
+        <div>
+          {percentage && (
+            <div
+              className={clsxm(
+                percentage === 100
+                  ? 'border-[#2DCE89] text-[#2DCE89]'
+                  : 'border-[#E5A500] bg-[#FFFAF3] text-[#E5A500]',
+
+                ' px-5 border rounded-[50px] py-2 '
+              )}
+            >
+              {percentage !== '0' ? Number(percentage).toFixed(2) : '0'}%
+              Completed
+            </div>
           )}
-        />
-        <div className='w-4' />
-        <div className='text-[#6B7A99]'>{taskName}</div>
-        <div className='w-8' />
-        <div className='text-[#ADB8CC]'>{subName}</div>
+        </div>
         {/*  {showIcons && (
           <>
             <div className='w-3' />
@@ -54,7 +76,7 @@ export default function TaskAccordion({
             <BiPaperclip className='h-5 w-5 text-[#C3CAD9]' />
           </>
         )} */}
-        <div className='flex-1' />
+        {/* <div className='flex-1' />
         {nextClass && (
           <>
             <AiTwotoneFlag className='h-5 w-5 text-[#C3CAD9]' />
@@ -75,7 +97,7 @@ export default function TaskAccordion({
             </div>
           </>
         )}
-        {actions}
+        {actions} */}
       </div>
       <div
         style={{

@@ -8,9 +8,13 @@ import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -73,21 +77,9 @@ const TeacherLibrary = () => {
           </div> */}
         </div>
 
-        {tabIdx === 0 && (
-          <Files  variant='secondary' />
-        )}
-        {tabIdx === 1 && (
-          <Files
-
-            variant='secondary'
-          />
-        )}
-        {tabIdx === 2 && (
-          <Files
-
-            variant='secondary'
-          />
-        )}
+        {tabIdx === 0 && <Files variant='secondary' />}
+        {tabIdx === 1 && <Files variant='secondary' />}
+        {tabIdx === 2 && <Files variant='secondary' />}
       </div>
     </div>
   );

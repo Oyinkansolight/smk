@@ -56,11 +56,7 @@ const Library = () => {
         </div>
 
         {tabIdx === 0 && (
-          <Manageclass
-            data={data}
-            isLoading={isLoading}
-            variant='primary'
-          />
+          <Manageclass data={data} isLoading={isLoading} variant='primary' />
         )}
       </div>
     </div>

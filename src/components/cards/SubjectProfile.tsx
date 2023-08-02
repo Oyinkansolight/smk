@@ -15,8 +15,10 @@ interface StudentTeacherProfileCardProps {
   image?: string;
   name: string;
   setschoolType?: (v: number) => void;
+  settermId: (v: string) => void;
   setsessionterms: (v: []) => void;
-  setacademicyear?: (v: { session: string; id: number }) => void;
+  sessionterms: any[];
+  setacademicyear?: (v: { session: string; id: string }) => void;
 }
 
 export default function SubjectProfileCard({
@@ -25,8 +27,10 @@ export default function SubjectProfileCard({
   setschoolType,
   setsessionterms,
   setacademicyear,
+  sessionterms,
+  settermId,
 }: StudentTeacherProfileCardProps) {
-  const [currentGrid, setCurrentGrid] = useState(2);
+  const [currentGrid, setCurrentGrid] = useState(0);
 
   const handleToggleGrid = (index: number) => {
     setCurrentGrid(index);
@@ -60,11 +64,11 @@ export default function SubjectProfileCard({
       <div className='h-10' />
       <div className='mb-1 text-xl font-bold'>{name}</div>
 
-      <div className=''>
+      <div className='w-[250px]'>
         <select
           name=''
           id=''
-          className='bg-[#EFFFF6] rounded-md'
+          className='bg-[#EFFFF6] text-base rounded-md w-full'
           onChange={(e) => {
             setacademicyear && setacademicyear(JSON.parse(e.target.value));
             Fetchterms(JSON.parse(e.target.value).id);
@@ -75,6 +79,24 @@ export default function SubjectProfileCard({
           {(data?.data ?? []).map((v: any, id: number) => (
             <option key={id} value={JSON.stringify(v)}>
               {v.session}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className='mt-2 w-[250px]'>
+        <select
+          name=''
+          id=''
+          className='bg-[#EFFFF6] text-base rounded-md w-full'
+          onChange={(e) => {
+            settermId && settermId(JSON.parse(e.target.value).id);
+          }}
+        >
+          <option> - Select Term- </option>
+
+          {(sessionterms ?? []).map((v: any, id: number) => (
+            <option key={id} value={JSON.stringify(v)}>
+              {v.name}
             </option>
           ))}
         </select>

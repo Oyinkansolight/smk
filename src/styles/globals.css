@@ -142,6 +142,10 @@
   border-radius: 3px 3px 12px 12px;
 }
 
+.select .css-13cymwt-control {
+  height: 52px !important;
+}
+
 .toggle-switch {
   position: relative;
   display: inline-block;

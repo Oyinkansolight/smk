@@ -6,7 +6,7 @@ export interface UserProfile {
 }
 
 export interface CurrentSession {
-  id?: number;
+  id?: string;
   session?: string;
   institutionType?: string;
   NumberOfWeeks?: number;
@@ -19,7 +19,7 @@ export interface CurrentSession {
 }
 
 export interface UserInfo {
-  id?: number;
+  id?: string;
   firstName?: string;
   lastName?: string;
   deviceToken?: null;
@@ -38,7 +38,7 @@ export interface UserInfo {
   esiAdmin?: {
     createdAt: string;
     email: string;
-    id: number;
+    id: string;
     instituteAddress: string;
     instituteEmail: string;
     instituteLat: string;

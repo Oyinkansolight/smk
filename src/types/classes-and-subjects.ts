@@ -66,7 +66,7 @@ export interface Subject {
 }
 
 export interface Term {
-  id?: number;
+  id?: string;
   name?: string;
   noOfWeeks?: number;
   startDate?: Date;
@@ -75,7 +75,6 @@ export interface Term {
   updatedAt?: Date;
   session?: Session;
 }
-
 
 export interface TeacherNextClass {
   id?: number;

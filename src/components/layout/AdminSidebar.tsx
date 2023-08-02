@@ -69,6 +69,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
           active={routeDetails && routeDetails.includes('dashboard') && true}
         />
         <SideBarButton
+          onClick={handleToggle}
           open={open}
           icon={
             <NoteBook

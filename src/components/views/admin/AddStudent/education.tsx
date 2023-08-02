@@ -3,10 +3,21 @@
 
 import FormSelect from '@/components/input/formSelectClass';
 import FormSelectTeacher from '@/components/input/formSelectteachers';
-import request from '@/server';
+import { getFromLocalStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
+import { useGetTeachersListByInstitution } from '@/server/institution';
 import { useGetInstituteClassArms } from '@/server/institution/class';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -48,21 +59,24 @@ type Iprops = {
 const Education = ({ register, errors }: Iprops) => {
   const { data: institutionProfile } = useGetProfile();
 
-  const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
+  const institutionId = getFromLocalStorage('institutionId');
+
   const currentSessionId = institutionProfile?.currentSession?.id;
   const { data: allclasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
-  const [teachers, setteachers] = useState();
-  const getData = async () => {
-    const d = await request.get('/v1/government/teachers/get-staffs', {
-      withCredentials: true,
-    });
-    setteachers(d.data.data.data.data as any);
-  };
+  const { data: teachers } = useGetTeachersListByInstitution(institutionId);
+
+  // const [teachers, setteachers] = useState();
+  // const getData = async () => {
+  //   const d = await request.get('/v1/government/teachers/get-staffs', {
+  //     withCredentials: true,
+  //   });
+  //   setteachers(d.data.data.data.data as any);
+  // };
   useEffect(() => {
-    getData();
+    // getData();
   }, [teachers]);
   // const { data: staffsList } = useGetTeachersList();
   // logger(staffsList);
@@ -91,21 +105,23 @@ const Education = ({ register, errors }: Iprops) => {
           />
         </div>
         <div>
-          <FormSelectTeacher
-            label='Class Teacher'
-            name='teacher'
-            options={teachers ?? []}
-            register={register}
-            validation={{
-              required: 'Teacher is required',
-            }}
-            helper={
-              errors?.teacher && {
-                message: errors?.teacher?.message,
-                type: 'danger',
+          {teachers && (
+            <FormSelectTeacher
+              label='Class Teacher'
+              name='teacher'
+              options={teachers?.data ?? []}
+              register={register}
+              validation={{
+                required: 'Teacher is required',
+              }}
+              helper={
+                errors?.teacher && {
+                  message: errors?.teacher?.message,
+                  type: 'danger',
+                }
               }
-            }
-          />
+            />
+          )}
         </div>
       </div>
     </section>

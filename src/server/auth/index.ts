@@ -3,7 +3,6 @@ import request from '@/server';
 import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
 
-
 export interface SignUpParams {
   email: string;
   phoneNumber?: string;

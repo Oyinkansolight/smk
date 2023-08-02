@@ -58,6 +58,12 @@ import '/src/styles/globals.css';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
   {

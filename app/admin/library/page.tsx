@@ -53,6 +53,12 @@ import Folder from '~/svg/folder.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
   const GovtFilesData = useGetAllFiles('');
   const schoolFilesData: any = [];
@@ -107,16 +113,8 @@ const Library = () => {
           </div>
         </div>
 
-        {tabIdx === 0 && (
-          <Files   variant='secondary' />
-        )}
-        {tabIdx === 1 && (
-          <Files
-
-
-            variant='secondary'
-          />
-        )}
+        {tabIdx === 0 && <Files variant='secondary' />}
+        {tabIdx === 1 && <Files variant='secondary' />}
       </div>
     </div>
   );

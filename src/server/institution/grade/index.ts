@@ -4,7 +4,6 @@ import { GradeCategory } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export interface CreateRubricParams {
   institutionType: string;
   rubrics: {
@@ -30,8 +29,8 @@ export function useCreateRubric() {
 
 export interface GetCategoryByInstitutionTypeParams {
   institutionType?: string;
-  sessionId?: number | string;
-  termId?: number | string;
+  sessionId?: string;
+  termId?: string;
 }
 
 export function useGetCategoryByInstitutionType(

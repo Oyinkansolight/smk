@@ -4,7 +4,7 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
-export function useGetSessionTerms(params: { sessionId?: number }) {
+export function useGetSessionTerms(params: { sessionId?: string }) {
   const query = useQuery({
     queryKey: `get_session_terms_${params.sessionId ?? ''}`,
     queryFn: async () => {

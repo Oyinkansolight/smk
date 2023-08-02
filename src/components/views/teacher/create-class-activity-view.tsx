@@ -33,7 +33,6 @@ import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
 
-
 const Editor = dynamic(
   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
   {

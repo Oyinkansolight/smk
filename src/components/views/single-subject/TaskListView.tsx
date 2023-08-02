@@ -13,23 +13,45 @@ export default function TaskListView({
   sessionterms,
   settermId,
   setclassId,
+  schoolType,
 }: {
   curriculumClicked: (currId: number) => void;
-  settermId: (id: number) => void;
-  setclassId: (id: number) => void;
+  settermId: (id: string) => void;
+  setclassId: (id: string) => void;
   schoolType?: number;
   academicyear?: string;
   classList: any;
   sessionterms: any;
 }) {
-  // const ECCDE = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('eccde')
-  // );
-  // const Primary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('primary')
-  // );
-  // const Secondary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('ss')
+  const ECCDE = classList.filter((x: any) =>
+    x.className.toLowerCase().includes('eccde')
+  );
+  const Primary = classList.filter((x: any) =>
+    x.className.toLowerCase().includes('primary')
+  );
+  const Secondary = classList.filter((x: any) =>
+    x.className.toLowerCase().includes('ss')
+  );
+  function customSort(a: any, b: any) {
+    const aIsJSS = a.className.startsWith('JSS');
+    const bIsJSS = b.className.startsWith('JSS');
+
+    if (aIsJSS && !bIsJSS) {
+      return -1;
+    } else if (!aIsJSS && bIsJSS) {
+      return 1;
+    } else {
+      // If both elements are JSS or both are SSS, sort them alphabetically.
+      return a.className.localeCompare(b.className);
+    }
+  }
+
+  const sortedSecondary = Secondary ? Secondary.sort(customSort) : [];
+  // const Tertiary = classList.filter(
+  //   (x: any) =>
+  //     !x.className.toLowerCase().includes('ss') ||
+  //     !x.className.toLowerCase().includes('primary') ||
+  //     !x.className.toLowerCase().includes('eccde')
   // );
   const generateVariant = (id: number) => {
     if (id === 0) {
@@ -71,31 +93,22 @@ export default function TaskListView({
           </div> */}
         </div>
       </div>
-      {/* {schoolType === 0 && (
+      {schoolType === 0 && (
         <div>
           {ECCDE.map((v: any, i: number) => {
             return (
               <TaskAccordion
                 length={1}
                 lesson={false}
-                taskName={v.name}
+                percentage={v.percentage ? v.percentage : '0'}
+                taskName={v.className}
                 key={i}
+                onClick={() => {
+                  curriculumClicked(i);
+                  setclassId(v.classId);
+                }}
               >
-                <div className='flex flex-wrap mt-4 gap-[27px]'>
-                  {sessionterms.map((value: any, id: number) => (
-                    <CurriculumCard
-                      key={id}
-                      name={`${value.name} Curriculum`}
-                      count={100}
-                      variant={generateVariant(id)}
-                      onClick={() => {
-                        curriculumClicked(i);
-                        settermId(value.id);
-                        setclassId(v.id);
-                      }}
-                    />
-                  ))}
-                </div>
+                <div className='flex flex-wrap mt-4 gap-[27px]'></div>
               </TaskAccordion>
             );
           })}
@@ -108,8 +121,54 @@ export default function TaskListView({
               <TaskAccordion
                 length={1}
                 lesson={false}
-                taskName={v.name}
+                percentage={v.percentage ? v.percentage : '0'}
+                taskName={v.className}
                 key={i}
+                onClick={() => {
+                  curriculumClicked(i);
+                  setclassId(v.classId);
+                }}
+              >
+                <div className='flex flex-wrap mt-4 gap-[27px]'></div>
+              </TaskAccordion>
+            );
+          })}
+        </div>
+      )}
+      {schoolType === 2 && (
+        <div>
+          {sortedSecondary.map((v: any, i: number) => {
+            return (
+              <TaskAccordion
+                length={1}
+                lesson={false}
+                taskName={v.className}
+                percentage={v.percentage ? v.percentage : '0'}
+                key={i}
+                onClick={() => {
+                  curriculumClicked(i);
+                  setclassId(v.classId);
+                }}
+              >
+                <div className='flex flex-wrap mt-4 gap-[27px]'></div>
+              </TaskAccordion>
+            );
+          })}
+        </div>
+      )}
+      {schoolType === 3 && (
+        <div>
+          {[].map((v: any, i: number) => {
+            return (
+              <TaskAccordion
+                length={1}
+                lesson={false}
+                taskName={v.className}
+                key={i}
+                onClick={() => {
+                  curriculumClicked(i);
+                  setclassId(v.classId);
+                }}
               >
                 <div className='flex flex-wrap mt-4 gap-[27px]'>
                   {sessionterms.map((value: any, id: number) => (
@@ -120,8 +179,8 @@ export default function TaskListView({
                       variant={generateVariant(id)}
                       onClick={() => {
                         curriculumClicked(i);
-                        settermId(value.id);
                         setclassId(v.id);
+                        settermId(value.id);
                       }}
                     />
                   ))}
@@ -130,36 +189,7 @@ export default function TaskListView({
             );
           })}
         </div>
-      )} */}
-
-      <div>
-        {classList.map((v: any, i: number) => {
-          return (
-            <TaskAccordion
-              length={1}
-              lesson={false}
-              taskName={`${v.name} `}
-              key={i}
-            >
-              <div className='flex flex-wrap mt-4 gap-[27px]'>
-                {sessionterms.map((value: any, id: number) => (
-                  <CurriculumCard
-                    key={id}
-                    name={`${value.name} Curriculum`}
-                    count={100}
-                    variant={generateVariant(id)}
-                    onClick={() => {
-                      curriculumClicked(i);
-                      settermId(value.id);
-                      setclassId(v.id);
-                    }}
-                  />
-                ))}
-              </div>
-            </TaskAccordion>
-          );
-        })}
-      </div>
+      )}
     </div>
   );
 }

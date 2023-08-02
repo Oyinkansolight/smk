@@ -4,7 +4,6 @@ import { Student } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 export function useGetStudentList(params: PaginationParams) {
   const query = useQuery({
     queryKey: `get_student_list_${params.id ?? ''}`,

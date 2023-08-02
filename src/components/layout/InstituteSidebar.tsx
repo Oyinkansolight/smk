@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useState } from 'react';
 import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
@@ -14,10 +13,16 @@ import Sidebararrow from '~/svg/sidebararrow.svg';
 import Star from '~/svg/star.svg';
 import Trend from '~/svg/trend_up.svg';
 
-const InstituteSidebar = () => {
+const InstituteSidebar = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+}) => {
   const routeDetails = usePathname();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     // eslint-disable-next-line no-alert
@@ -36,7 +41,7 @@ const InstituteSidebar = () => {
     <aside
       className={clsxm(
         open ? 'w-[280px] ' : 'w-20 ',
-        'absolute order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
+        'absolute z-[999]  order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
       )}
     >
       <nav className='flex flex-1 flex-col space-y-6 pl-4 pr-2'>
@@ -50,6 +55,9 @@ const InstituteSidebar = () => {
         </div>
 
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Globe className='#C3CAD9' />}
           title='Dashboard'
@@ -57,6 +65,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Star className='#C3CAD9' />}
           title='Students'
@@ -64,6 +75,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('all-student') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Trend className='#C3CAD9' />}
           title='Staffs'
@@ -71,6 +85,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('all-staff') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Trend className='#C3CAD9' />}
           title='Subject'
@@ -78,6 +95,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('all-subject') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Trend className='#C3CAD9' />}
           title='Classes'
@@ -85,6 +105,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('all-classes') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Messenger className='#C3CAD9' />}
           title='Communication'
@@ -94,6 +117,9 @@ const InstituteSidebar = () => {
           }
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Company className='#C3CAD9' />}
           title='Accounting and Settings'
@@ -101,6 +127,9 @@ const InstituteSidebar = () => {
           active={routeDetails && routeDetails.includes('Accounting') && true}
         />
         <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
           open={open}
           icon={<Company className='#C3CAD9' />}
           title='Library'
@@ -194,6 +223,7 @@ export const SideBarButton = ({
   href,
   active = false,
   open = false,
+
   onClick,
 }: SideBarButtonProps) => (
   <Link

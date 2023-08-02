@@ -44,13 +44,11 @@ export default function StudentAuth() {
           router.push(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
-        } else {
-          setLoading(false);
-          toast.info('Redirecting...');
-          setTimeout(() => {
-            router.push(ROUTES.ADMIN_AUTH);
-          }, 1000);
-          return;
+        } else if (
+          response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN ||
+          response.data.data.data.type === 'DEFAULT'
+        ) {
+          router.push(ROUTES.SUPER_ADMIN);
         }
 
         toast.success(response.data.data.message);

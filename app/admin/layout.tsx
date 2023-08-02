@@ -2,6 +2,7 @@
 
 import Header from '@/components/layout/Header';
 import InstituteSidebar from '@/components/layout/InstituteSidebar';
+import { useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
@@ -14,6 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   // const routeDetails = usePathname();
+  const [open, setOpen] = useState(false);
   return (
     <html>
       <head />
@@ -25,8 +27,15 @@ export default function RootLayout({
             <div className='ml-20'>{children}</div>
           </main>
 
-          <InstituteSidebar />
-
+          <InstituteSidebar setOpen={setOpen} open={open} />
+          {open && (
+            <div
+              className='z-[4] inset-0 fixed'
+              onClick={() => {
+                setOpen(false);
+              }}
+            ></div>
+          )}
           {/* {routeDetails === '/admin' && <RightSidebar />} */}
         </div>
       </div>

@@ -15,8 +15,7 @@ import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
-import { RotatingLines } from 'react-loader-spinner';
+import { useState } from 'react';
 
 
 
@@ -57,22 +56,9 @@ export default function Page() {
 
   const { data: subject } = useGetSubjectById(params?.get('id') as string);
 
-  const Loader = () => {
-    return (
-      <div className='flex justify-center items-center h-[40vh]'>
-        <RotatingLines
-          width='100'
-          visible={true}
-          strokeWidth='5'
-          strokeColor='#4fa94d'
-          animationDuration='0.75'
-        />
-      </div>
-    );
-  }
 
-  return (
-    <Suspense fallback={<Loader />}>
+  if (arms) {
+    return (
       <div className='px-8 layout'>
         <div className='text-[#D4D5D7] py-8 text-2xl'>
           {`Classes > ${(subject ?? [])[0]?.name}`}
@@ -134,6 +120,8 @@ export default function Page() {
           />
         )}
       </div>
-    </Suspense>
-  );
+    );
+  } else {
+    <EmptyView label='No classes' useStandardHeight />;
+  }
 }

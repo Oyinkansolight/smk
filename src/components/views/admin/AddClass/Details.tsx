@@ -3,40 +3,9 @@
 
 import FormSelectClassDefault from '@/components/input/FormSelectClassDefault';
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
-import FormSelectTeacher from '@/components/input/formSelectteachers';
-import { useGetStaffs } from '@/server/government/staff';
 import { useGetClassesList } from '@/server/institution';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Control, Controller, FieldValues } from 'react-hook-form';
+import ReactSelect from 'react-select';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -45,14 +14,14 @@ import { useGetClassesList } from '@/server/institution';
 type Iprops = {
   register: any;
   errors: any;
+  control: Control<FieldValues, any>;
+  staffs: any;
 };
 
-const numbers = Array.from({ length: 100 }, (_, i) => (i + 1).toString());
 
-const Capacity: string[] = numbers;
+// const Capacity: string[] = numbers;
 
-const Biodata = ({ register, errors }: Iprops) => {
-  const { data: staffs } = useGetStaffs();
+const Biodata = ({ register, errors, control, staffs }: Iprops) => {
   const { data: allclasses } = useGetClassesList();
 
   return (
@@ -79,13 +48,18 @@ const Biodata = ({ register, errors }: Iprops) => {
           />
         </div>
         <div>
-          <FormSelect
-            label='Select Capacity'
+          <FormInput
+            label='Input class capacity'
+            placeholder='25'
             name='classCapacity'
-            options={Capacity}
             register={register}
             validation={{
               required: 'Class Capacity is required',
+              validate: {
+                maxLength: (v) =>
+                  v.length <= 40 ||
+                  'The class capacity should not be more than 40',
+              },
             }}
             helper={
               errors?.classCapacity && {
@@ -112,20 +86,27 @@ const Biodata = ({ register, errors }: Iprops) => {
             }
           }
         />
-        <FormSelectTeacher
-          label='Select Class Teacher'
+
+        <Controller
+          control={control}
           name='classTeacher'
-          options={staffs ?? []}
-          register={register}
-          validation={{
-            required: 'Class Teacher is required',
-          }}
-          helper={
-            errors?.classTeacher && {
-              message: errors?.classTeacher?.message,
-              type: 'danger',
-            }
-          }
+          render={({ field }) => (
+            <div>
+              <div className='font-bold'>Select Class Teacher </div>
+              <ReactSelect
+                isMulti
+                required
+                options={(staffs?.data ?? []).map((v) => ({
+                  label: v?.user
+                    ? `${v?.user[0]?.firstName} ${v?.user[0]?.lastName}`
+                    : ' ',
+                  value: v.id,
+                }))}
+                {...field}
+                className='h-auto mt-2 select'
+              />
+            </div>
+          )}
         />
       </div>
     </section>
