@@ -2,21 +2,34 @@
 
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
+import { useGetAllLessonNotes } from '@/server/institution/lesson-note';
+import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
+
 export default function Page() {
   const [idx, setIdx] = useState(0);
-  const Assignment = [
-    'Thermodynamics',
-    'Friction',
-    'Acceleration',
-    'Kinetic Energy',
-    'Mass',
-  ];
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.id,
+  });
+  const term = terms?.data[0]?.id;
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.id,
+  });
+  const { data: lessonNotes } = useGetAllLessonNotes({
+    sessionId: profile?.currentSession?.id,
+    termId: term,
+  });
 
   return (
     <div className='h-full layout'>
@@ -25,10 +38,9 @@ export default function Page() {
       </div>
       <TextTabBar
         tabs={[
-          'All',
-          ...Array(3)
-            .fill(0)
-            .map((v, i) => `SSS ${i + 1}`),
+          ...(arms ?? []).map((arm) =>
+            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
+          ),
         ]}
         onChange={setIdx}
         selectedIdx={idx}
@@ -51,9 +63,25 @@ export default function Page() {
         <div></div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Assignment.map((title, i) => (
-          <AssignmentListItem title={title} subject='Physics' key={i} />
-        ))}
+        {lessonNotes?.data &&
+          (lessonNotes?.data.length === 0 ? (
+            <EmptyView label='No submissions' useStandardHeight />
+          ) : (
+            lessonNotes.data?.map((lessonNote, i) => (
+              <Link
+                href={`/teacher/lesson-note/lesson-notes/view-lesson-note?lessonNoteId=${lessonNote.id}&uploadUrl=${lessonNote.uploadUrl}`}
+                key={i}
+              >
+                <AssignmentListItem
+                  title={`${lessonNote?.title}`}
+                  key={i}
+                  subject={lessonNote?.subject?.name ?? 'NULL'}
+                  nameOfClass={lessonNote?.class.name}
+                  date={lessonNote?.createdAt}
+                />
+              </Link>
+            ))
+          ))}
       </div>
       <PaginatedCounter pageCount={5} currentPage={2} />
     </div>
@@ -63,35 +91,37 @@ export default function Page() {
 function AssignmentListItem({
   title,
   subject,
+  nameOfClass,
+  date,
 }: {
   title: string;
   subject: string;
+  nameOfClass?: string;
+  date?: Date;
 }) {
   return (
-    <Link href='/teacher/lesson-note/lesson-notes/view-lesson-note'>
-      <div
-        className={clsxm(
-          'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]'
-        )}
-      >
-        <div className='flex items-center col-span-2 gap-4'>
-          <div className='relative rounded-full border md:block hidden h-16 w-16 '>
-            <Image
-              alt='book-stack'
-              className='absolute inset-2'
-              src='/images/book_stack.png'
-              fill
-            />
-          </div>
-          <div>{title}</div>
+    <div
+      className={clsxm(
+        'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]'
+      )}
+    >
+      <div className='flex items-center col-span-2 gap-4'>
+        <div className='relative rounded-full border md:block hidden h-16 w-16 '>
+          <Image
+            alt='book-stack'
+            className='absolute inset-2'
+            src='/images/book_stack.png'
+            fill
+          />
         </div>
-        <div>{subject}</div>
-        <div>SSS 1</div>
-        <div>July 3</div>
-        <div className='flex justify-end w-full items-center'>
-          <BiChevronRight className='h-10 w-10' />
-        </div>
+        <div>{title}</div>
       </div>
-    </Link>
+      <div>{subject}</div>
+      <div>{nameOfClass}</div>
+      <div>{moment(date).format('MMMM DD')}</div>
+      <div className='flex justify-end w-full items-center'>
+        <BiChevronRight className='h-10 w-10' />
+      </div>
+    </div>
   );
 }

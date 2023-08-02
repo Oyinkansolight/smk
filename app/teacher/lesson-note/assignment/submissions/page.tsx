@@ -2,6 +2,7 @@
 
 import Button from '@/components/buttons/Button';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
+import EmptyView from '@/components/misc/EmptyView';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
 import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
@@ -9,7 +10,6 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
-
 
 export default function Page() {
   const params = useSearchParams();
@@ -49,24 +49,29 @@ export default function Page() {
         <div></div>
       </div>
       <div className='flex flex-col gap-2'>
-        {submissions?.map((submission, i) => (
-          <Link
-            href={`/teacher/lesson-note/assignment/submissions/grade?subjectId=${params?.get(
-              'subjectId'
-            )}&classArmId=${params?.get('classArmId')}&type=${params?.get(
-              'type'
-            )}`}
-            key={i}
-          >
-            <AssignmentListItem
-              title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
-              dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
-              dueDate={submission.activity.dueDate}
-              key={i}
-              id={i + 1}
-            />
-          </Link>
-        ))}
+        {submissions &&
+          (submissions.length === 0 ? (
+            <EmptyView label='No submissions' useStandardHeight />
+          ) : (
+            submissions?.map((submission, i) => (
+              <Link
+                href={`/teacher/lesson-note/assignment/submissions/grade?subjectId=${params?.get(
+                  'subjectId'
+                )}&classArmId=${params?.get('classArmId')}&type=${params?.get(
+                  'type'
+                )}`}
+                key={i}
+              >
+                <AssignmentListItem
+                  title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
+                  dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
+                  dueDate={submission.activity.dueDate}
+                  key={i}
+                  id={i + 1}
+                />
+              </Link>
+            ))
+          ))}
       </div>
       <PaginatedCounter pageCount={10} currentPage={3} />
     </div>

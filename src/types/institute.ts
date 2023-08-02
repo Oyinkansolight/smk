@@ -7,6 +7,7 @@ import {
   Week,
 } from '@/types/classes-and-subjects';
 
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Subject {
   id?: number;
@@ -274,6 +275,21 @@ export interface LessonNoteObject {
   teacher?: Teacher;
   subject?: Subject;
   classActivities?: ClassActivity1[];
+}
+
+export interface LessonNote1 {
+  id: string;
+  title: string;
+  uploadUrl: string;
+  instructionalTeachingActivity: null;
+  createdAt: Date;
+  updatedAt: Date;
+  class: Class;
+  subject: Subject;
+  session: Session;
+  term: Term;
+  week: Week;
+  period: Period;
 }
 
 export interface ClassActivity1 {

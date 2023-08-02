@@ -2,7 +2,11 @@
 
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import request from '@/server';
-import { ClassActivity1, SubmittedActivity } from '@/types/institute';
+import {
+  ClassActivity1,
+  LessonNote1,
+  SubmittedActivity,
+} from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
@@ -232,5 +236,31 @@ export function useGetStudentSubmittedActivity(
     params.type,
     refetch,
   ]);
+  return query;
+}
+
+export interface GetAllLessonNotesParams {
+  page?: string | number | null;
+  limit?: string | number | null;
+  sessionId?: string | number | null;
+  termId?: string | number | null;
+}
+
+export function useGetAllLessonNotes(params: GetAllLessonNotesParams) {
+  const query = useQuery({
+    queryKey: 'get_all_lesson_notes',
+    queryFn: async () =>
+      params.sessionId && params.termId
+        ? ((
+            await request.get(`/v1/institutions/lessons/all`, {
+              params,
+            })
+          ).data.data.data as PaginatedData<LessonNote1>)
+        : undefined,
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params.page, params.limit, params.sessionId, params.termId, refetch]);
   return query;
 }
