@@ -100,7 +100,7 @@ const AcademicCalendar = () => {
     //! update to use institute type constant to filter!!!
     const allFilteredSessions = data?.data.filter(
       (item: any) =>
-        item.institutionType.toLowerCase() === e.target.value.toLowerCase()
+        typeof item.institutionType === 'string' && item.institutionType.toLowerCase() === e.target.value.toLowerCase()
     );
     setFilteredSessions(allFilteredSessions);
   };

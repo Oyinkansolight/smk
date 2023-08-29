@@ -41,16 +41,16 @@ export default function SubjectProfileCard({
   }
 
   const eccdeSession = currentUserInfo.find((item) =>
-    item.institutionType.toLowerCase().includes('eccde')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('eccde')
   );
   const secondarySession = currentUserInfo.find((item) =>
-    item.institutionType.toLowerCase().includes('secondary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('secondary')
   );
   const primarySession = currentUserInfo.find((item) =>
-    item.institutionType.toLowerCase().includes('primary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('primary')
   );
   const tertiarySession = currentUserInfo.find((item) =>
-    item.institutionType.toLowerCase().includes('tertiary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('tertiary')
   );
 
   const handleToggleGrid = (index: number) => {
