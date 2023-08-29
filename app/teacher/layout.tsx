@@ -22,6 +22,13 @@ export default function RootLayout({
 
   const handleToggle = () => setOpen(!open);
 
+  if (open) {
+    //auto close sidebar after 5 seconds
+    setTimeout(() => {
+      setOpen(false);
+    }, 5000);
+  }
+
   useEffect(() => {
     //* Used to Close Sidebar when navigating to another route.
     setOpen(false);
@@ -31,19 +38,21 @@ export default function RootLayout({
     <html>
       <head />
       <body className='flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
-        <Sidebar open={open} handleToggle={handleToggle} />
-
         <div className='flex flex-1 flex-col overflow-y-hidden'>
-          <Header />
+          <Header handleToggle={handleToggle} />
 
-          <main className='hideScroll flex-1 overflow-y-auto text-xs'>
-            <BasicCard className='flex w-full flex-col gap-8 !rounded-[4.5px] bg-white !px-[27px] !pb-[27px] !pt-[18px]'>
-              <div className='flex w-full justify-end'>
-                <ClockInTime />
-              </div>
-            </BasicCard>
-            <div>{children}</div>
-          </main>
+          <div className='flex flex-row overflow-y-auto overflow-hidden'>
+            <Sidebar open={open} handleToggle={handleToggle} />
+            <main className='hideScroll flex-1 overflow-y-auto text-xs'>
+              <BasicCard className='flex w-full flex-col gap-8 !rounded-[4.5px] bg-white !px-[27px] !pb-[27px] !pt-[18px]'>
+                <div className='flex w-full justify-end'>
+                  <ClockInTime />
+                </div>
+              </BasicCard>
+
+              {children}
+            </main>
+          </div>
         </div>
       </body>
     </html>

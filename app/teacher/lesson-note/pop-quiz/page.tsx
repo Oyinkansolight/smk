@@ -71,7 +71,7 @@ export default function Page() {
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={10} currentPage={3} />
+      <PaginatedCounter pageCount={10} currentPage={0} />
     </div>
   );
 }

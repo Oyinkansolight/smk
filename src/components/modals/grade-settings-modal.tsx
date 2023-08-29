@@ -19,8 +19,16 @@ export default function GradeSettingsModal({
   const [isOpen, setIsOpen] = useState(false);
   const { data: profile } = useGetProfile();
   const { data: terms, refetch: refetchTerms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
+
+  const term = terms?.data[0]?.id;
+  const institutionId = profile?.userInfo?.staff?.institution?.id;
+
+  // const { data: arms } = useGetTeacherClassArms({
+  //   teacherId: profile?.userInfo?.staff?.id,
+  //   sessionId: profile?.currentSession?.[0]?.id,
+  // });
 
   function closeModal() {
     setIsOpen(false);
@@ -70,10 +78,10 @@ export default function GradeSettingsModal({
                     institutionType={
                       profile?.userInfo?.staff?.institution?.instituteType ?? ''
                     }
-                    sessionId={profile?.currentSession?.id ?? 1}
-                    subjectId={2}
-                    termId={terms?.data[0].id ?? 1}
-                    institutionId={382}
+                    sessionId={profile?.currentSession?.[0]?.id ?? ''}
+                    subjectId='2'
+                    termId={term ?? ''}
+                    institutionId={institutionId ?? ''}
                   />
                 </Dialog.Panel>
               </Transition.Child>
@@ -92,16 +100,17 @@ function GradeSettingsView({
   subjectId,
   institutionId,
 }: {
-  institutionId: number;
+  institutionId: string;
   institutionType: string;
-  sessionId: number;
-  termId: number;
-  subjectId: number;
+  sessionId: string;
+  termId: string;
+  subjectId: string;
 }) {
   const { data: items, refetch } = useGetCategoryByInstitutionType({
-    institutionType: 'PRIMARY',
-    sessionId: 1,
-    termId: 1,
+    institutionId,
+    institutionType,
+    sessionId,
+    termId,
   });
   useEffect(() => {
     refetch();
@@ -122,7 +131,7 @@ function GradeSettingsView({
     for (let i = 0; i < count.length; i++) {
       const e = count[i];
       await createSettings({
-        classId: 1,
+        classId: '1',
         institutionId,
         subjectId,
         termId,
@@ -203,7 +212,6 @@ function GradeSettingsView({
                     });
                     setCount(n);
                   }}
-                  variant='outline'
                   className='border-blue-500 text-blue-500 hover:bg-blue-200 active:bg-blue-800'
                 >
                   Add Assessment

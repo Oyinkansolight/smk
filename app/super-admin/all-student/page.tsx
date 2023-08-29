@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 // import clsxm from '@/lib/clsxm';
 import AvrilImage from '~/svg/avril.svg';
 
-
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   {
     name: 'No',

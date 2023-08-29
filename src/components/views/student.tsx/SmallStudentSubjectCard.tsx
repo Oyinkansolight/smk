@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 
@@ -6,7 +7,7 @@ export default function SmallStudentSubjectCard({
   className,
   onClick,
 }: {
-  subject: string;
+  subject: any;
   className?: string;
   onClick?: () => void;
 }) {
@@ -25,7 +26,7 @@ export default function SmallStudentSubjectCard({
           fill
         />
       </div>
-      <div className='font-bold text-xl'>{subject}</div>
+      <div className='font-bold text-xl'>{subject?.name}</div>
       <div
         onClick={onClick}
         className='text-[#3361FF] text-xs font-semibold cursor-pointer'

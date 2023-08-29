@@ -13,14 +13,14 @@ export default function TimetableListItem({
   return (
     <div
       className={clsxm(
-        'border rounded-md h-36 w-36  text-xs py-4 px-2 font-bold',
+        'border rounded-md w-28 h-28 lg:h-36 lg:w-36 text-xs py-4 px-2 font-bold',
         subject?.textColor
       )}
     >
       {subject && (
         <div
           className={clsxm(
-            'h-full w-full rounded-md flex gap-6 flex-col justify-center items-center',
+            'h-full w-full rounded-md flex gap-6 flex-col justify-center items-center p-2',
             subject.subjectColor
           )}
         >

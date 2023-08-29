@@ -18,11 +18,11 @@ export interface CreateInstitutionParams {
   instituteLat?: string;
   instituteLong?: string;
   instituteType?: string;
-  town?: number;
+  town?: string;
   email?: string;
   password?: string;
   role?: number;
-  id?: number;
+  id?: string;
 }
 
 export interface CreateSubjectParams {
@@ -226,21 +226,44 @@ export function useGetTeachersList(params?: PaginationParams) {
 
   return query;
 }
-export function useGetTeachersListByInstitution(instituteId: any) {
+
+interface Props {
+  instituteId?: string;
+  limit?: number;
+  page?: number;
+  enabled?: boolean;
+}
+
+export function useGetTeachersListByInstitution(props: Props) {
+  const { instituteId, limit, page } = props;
+  let { enabled } = props;
+
+  if (enabled !== false) enabled = true;
+
   const query = useQuery({
+    enabled,
     queryKey: 'get_teachers_list_in_institution',
     queryFn: async () => {
-      try {
-        const d = await request.get(
-          `/v1/government/teachers/institution-staffs?institutionId=${instituteId}`
-        );
-        return d.data.data.data as PaginatedData<Staff>;
-      } catch (error) {
-        logger(error);
-        throw error;
+      if (instituteId) {
+        try {
+          const d = await request.get(
+            `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
+              limit ? `&&limit=${limit}` : ''
+            }${page ? `&&page=${page}` : ''}`
+          );
+          return d.data.data.data as PaginatedData<Staff>;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
       }
     },
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [instituteId, refetch]);
   return query;
 }
 
@@ -377,7 +400,7 @@ export function useUpdateStaffSubject() {
     mutationKey: 'update-staff-subject',
     mutationFn: (params: any) =>
       request.post(
-        '/v1/government/institutes/classes-subjects/assign-subject-to-teacher',
+        '/v1/government/classes-subjects/assign-subject-to-teacher',
         params,
         {
           withCredentials: true,
@@ -436,7 +459,7 @@ export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
             await request.get(`/v1/institutions/institutes/get-term-weeks`, {
               params: { termId },
             })
-          ).data.data.data as PaginatedData<Week>)
+          ).data.data as PaginatedData<Week>)
         : undefined,
   });
   const { refetch } = query;
@@ -465,13 +488,16 @@ export function useGetIncidentReports(id?: string) {
   });
   return query;
 }
-export function useGetSubjectAssignedToTeacher(id?: string | null | undefined) {
+export function useGetSubjectAssignedToTeacher(
+  id?: string | null | undefined,
+  sessionId?: string | null | undefined
+) {
   const query = useQuery({
     queryKey: ['get_teacher_subject_list', id],
     queryFn: async () => {
       try {
         const d = await request.get(
-          `/v1/government/classes-subjects/teacher-subjects?id=${id}`
+          `/v1/government/classes-subjects/teacher-subjects?teacherId=${id}&&sessionId=${sessionId}`
         );
 
         return d.data.data.data as [];

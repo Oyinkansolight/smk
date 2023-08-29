@@ -25,6 +25,7 @@ type propType = {
   validation?: RegisterOptions<any>;
   name?: string;
   helper?: HelperProps;
+  required?: boolean;
 };
 
 const Select = ({
@@ -36,6 +37,7 @@ const Select = ({
   validation,
   name,
   helper,
+  required,
 }: propType) => {
   return (
     <div className=''>
@@ -48,6 +50,7 @@ const Select = ({
         <div className='mt-1 w-full border p-2 rounded'>
           <select
             id=''
+            required={required}
             className='w-full border-none outline-none bg-transparent  text-gray-400'
             {...(register ? register(name as string, validation) : {})}
             onChange={(e) => {

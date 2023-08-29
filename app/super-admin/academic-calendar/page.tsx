@@ -3,6 +3,7 @@
 
 import AddSession from '@/components/modal/AddSession';
 import { BasicSearch } from '@/components/search';
+import logger from '@/lib/logger';
 // import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
@@ -12,98 +13,60 @@ import {
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Toggle from 'react-toggle';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const AcadamicCalendar = () => {
-  const handdleCreateAcademicCalendar = useCreateAcademicCalendar();
+const AcademicCalendar = () => {
+  const handleCreateAcademicCalendar = useCreateAcademicCalendar();
   const { data, isLoading } = useGetAcademicSessions();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [session, setsession] = useState<string | number>('');
   const [institutionType, setinstitutionType] = useState<string | number>('');
-  const [NumberOfWeeks, setNumberOfWeeks] = useState<string | number>('');
-  const [startDate, setstartDate] = useState<string | number>('');
-  const [endDate, setendDate] = useState<string | number>('');
   const [firstendDate, setfirstendDate] = useState<string | number>('');
   const [secondendDate, setsecondendDate] = useState<string | number>('');
   const [thirdendDate, setthirdendDate] = useState<string | number>('');
   const [firststartDate, setfirststartDate] = useState<string | number>('');
   const [secondstartDate, setsecondstartDate] = useState<string | number>('');
   const [thirdstartDate, setthirdstartDate] = useState<string | number>('');
-  const [firstnoofweeks, setfirstnoofweeks] = useState<string | number>('');
-  const [secondnoofweeks, setsecondnoofweeks] = useState<string | number>('');
-  const [thirdnoofweeks, setthirdnofweeks] = useState<string | number>('');
+  const [filterCurrent, setFilterCurrent] = useState(false);
+  const [filteredInstitutions, setFilteredInstitutions] = useState(false);
+  const [filteredSessions, setFilteredSessions] = useState([]);
 
   const [loading, setloading] = useState(false);
   function handleModal() {
     setIsOpen(!isOpen);
   }
-  // function getWeeksBetweenDates(startDate: string, endDate: string) {
-  //   const start = new Date(startDate).getTime();
-  //   const end = new Date(endDate).getTime();
-
-  //   // Calculate the difference in milliseconds
-  //   const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-  //   const diffInMilliseconds = Math.abs(end - start);
-
-  //   // Calculate the number of weeks
-  //   const weeks = Math.floor(diffInMilliseconds / millisecondsPerWeek);
-
-  //   return weeks;
-  // }
 
   const SubmitHandler = async () => {
     const data = {
-      session,
       institutionType,
-      NumberOfWeeks:
-        Number(firstnoofweeks) +
-        Number(secondnoofweeks) +
-        Number(thirdnoofweeks),
       terms: [
         {
-          name: 'First term',
-          noOfWeeks: firstnoofweeks,
+          name: '1',
           startDate: firststartDate,
           endDate: firstendDate,
         },
         {
-          name: 'Second term',
-          noOfWeeks: secondnoofweeks,
+          name: '2',
           startDate: secondstartDate,
           endDate: secondendDate,
         },
         {
-          name: 'Third term',
-          noOfWeeks: thirdnoofweeks,
+          name: '3',
           startDate: thirdstartDate,
           endDate: thirdendDate,
         },
       ],
-      startDate,
-      endDate,
     };
 
     try {
       setloading(true);
-      const response = await handdleCreateAcademicCalendar.mutateAsync(data);
+      const response = await handleCreateAcademicCalendar.mutateAsync(data);
 
       if (response) {
         toast.success('Academic calendar created successfully');
@@ -118,26 +81,52 @@ const AcadamicCalendar = () => {
     }
   };
 
+  const handleFilterCurrentSession = () => {
+    setFilterCurrent(!filterCurrent);
+  };
+
+  const handleChangeInstitutionType = (bool: boolean) => {
+    setFilteredInstitutions(bool);
+  };
+  const handleFilterByInstitution = (e: any) => {
+    if (e.target.value === '') {
+      setFilteredSessions(data?.data);
+      handleChangeInstitutionType(false);
+      return;
+    }
+
+    handleChangeInstitutionType(true);
+
+    //! update to use institute type constant to filter!!!
+    const allFilteredSessions = data?.data.filter(
+      (item: any) =>
+        item.institutionType.toLowerCase() === e.target.value.toLowerCase()
+    );
+    setFilteredSessions(allFilteredSessions);
+  };
+
+  useEffect(() => {
+    if (filterCurrent) {
+      const allCurrentSessions = data?.data.filter(
+        (item: any) => item.isCurrent
+      );
+      setFilteredSessions(allCurrentSessions);
+    }
+  }, [data?.data, filterCurrent]);
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <AddSession
           onClickHandler={handleModal}
-          setsession={setsession}
           setinstitutionType={setinstitutionType}
-          setNumberOfWeeks={setNumberOfWeeks}
-          setstartDate={setstartDate}
-          setendDate={setendDate}
           SubmitHandler={SubmitHandler}
-          setfirstendDate={setfirstendDate}
-          setsecondendDate={setsecondendDate}
-          setthirdendDate={setthirdendDate}
           setfirststartDate={setfirststartDate}
+          setfirstendDate={setfirstendDate}
           setsecondstartDate={setsecondstartDate}
+          setsecondendDate={setsecondendDate}
           setthirdstartDate={setthirdstartDate}
-          setfirstnoofweeks={setfirstnoofweeks}
-          setsecondnoofweeks={setsecondnoofweeks}
-          setthirdnofweeks={setthirdnofweeks}
+          setthirdendDate={setthirdendDate}
           loading={loading}
         />
       )}
@@ -168,19 +157,39 @@ const AcadamicCalendar = () => {
         </div>
         <button
           onClick={handleModal}
-          className='w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '
+          className='w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary bg-white font-semibold'
         >
           Add Session
         </button>
       </div>
       <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
-            <option value=''>Filter</option>
+        <div className='flex space-x-[10px]'>
+          <div className='flex flex-row gap-[10px] items-center bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg p-2 whitespace-nowrap font-medium'>
+            <div>Show Current Session Only</div>
+            <Toggle
+              defaultChecked={false}
+              icons={false}
+              style={{ width: '23px !important' }}
+              onChange={handleFilterCurrentSession}
+            />
+          </div>
+
+          <select
+            onChange={handleFilterByInstitution}
+            name=''
+            className='border-none bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg'
+          >
+            <option value=''>Filter by Institution type</option>
+            <option value='Eccde'>ECCDE</option>
+            <option value='Primary School'>Primary</option>
+            <option value='Secondary School'>Secondary</option>
+            <option value='Tertiary'>Tertiary</option>
           </select>
+
           <BasicSearch
+            placeholder='Search session'
             handleSearch={() => {
-              console.log('Test');
+              logger('Test');
             }}
           />
         </div>
@@ -197,12 +206,42 @@ const AcadamicCalendar = () => {
 
         {isLoading ? (
           <div className='text-center'>Loading...</div>
+        ) : filterCurrent || filteredInstitutions ? (
+          filteredSessions.length > 0 ? (
+            filteredSessions.map((item: any) => (
+              <Link
+                href={`/super-admin/school-calendar?session=${item.id}&name=${item.session}&schooltype=${item.institutionType}`}
+                className=' min-w-[800px] grid grid-cols-5 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
+                key={item.id}
+              >
+                <div className='text-center text-black'>{item.session}</div>
+                <div className='text-center  items-center'>
+                  {item.institutionType}
+                </div>
+                <div className='text-center'>
+                  {moment(item.startDate).format('ll')}
+                </div>
+                <div className='text-center'>
+                  {moment(item.endDate).format('ll')}
+                </div>
+                <div className=' text-center  items-center'>
+                  {item.NumberOfWeeks}
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className='text-red-500 py-10 text-center'>
+              {filterCurrent
+                ? 'No current session found'
+                : 'Institution type not found'}
+            </div>
+          )
         ) : (
-          (data?.data || []).map((item: any, idx: number) => (
+          (data?.data || []).map((item: any) => (
             <Link
               href={`/super-admin/school-calendar?session=${item.id}&name=${item.session}&schooltype=${item.institutionType}`}
               className=' min-w-[800px] grid grid-cols-5 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              key={idx}
+              key={item.id}
             >
               <div className='text-center text-black'>{item.session}</div>
               <div className='text-center  items-center'>
@@ -220,8 +259,9 @@ const AcadamicCalendar = () => {
             </Link>
           ))
         )}
+
         {data?.data.length === 0 && (
-          <div className='text-red-500 py-10 text-center'>No record Found</div>
+          <div className='text-red-500 py-10 text-center'>No record found</div>
         )}
 
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
@@ -272,4 +312,4 @@ const AcadamicCalendar = () => {
   );
 };
 
-export default AcadamicCalendar;
+export default AcademicCalendar;

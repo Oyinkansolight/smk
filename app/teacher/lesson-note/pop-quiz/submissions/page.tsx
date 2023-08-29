@@ -2,6 +2,7 @@
 
 import Button from '@/components/buttons/Button';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
+import EmptyView from '@/components/misc/EmptyView';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
 import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
@@ -20,43 +21,54 @@ export default function Page() {
   });
   return (
     <div className='h-full layout'>
-      <div className='text-3xl text-[#D4D5D7]'>{'Pop Quiz > Submissions'}</div>
+      <div className='text-3xl pt-8 text-[#D4D5D7]'>
+        {'Pop Quiz > Submissions'}
+      </div>
       <div className='font-bold text-3xl py-8 h3'>
         <div>Submissions</div>
       </div>
-      <div className='flex gap-8 items-center text-[#746D69] bg-white p-4 rounded-md'>
-        <input className='rounded-full border p-3' placeholder='search' />
-        <div className='flex-1' />
-        <div className='flex items-center'>
-          Filter By
-          <BiChevronDown className='w-6 h-6' />
-        </div>
-        <BiSortUp className='h-6 w-6' />
-        <Link href='/teacher/lesson-note/pop-quiz/late-submissions'>
-          <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
-            View Late Submissions
-          </Button>
-        </Link>
-      </div>
-      <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
-        <div className='col-span-2'>Name</div>
-        <div>Date Submitted</div>
-        <div>Due Date</div>
-        <div></div>
-      </div>
-      <div className='flex flex-col gap-2'>
-        {submissions?.map((submission, i) => (
-          <AssignmentListItem
-            title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
-            dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
-            dueDate={submission.activity.dueDate}
-            key={i}
-            id={i + 1}
-          />
-        ))}
-      </div>
-      <PaginatedCounter pageCount={10} currentPage={3} />
+      {submissions && submissions?.length > 0 ? (
+        <>
+          <div className='flex gap-8 items-center text-[#746D69] bg-white p-4 rounded-md'>
+            <input className='rounded-full border p-3' placeholder='search' />
+            <div className='flex-1' />
+            <div className='flex items-center'>
+              Filter By
+              <BiChevronDown className='w-6 h-6' />
+            </div>
+            <BiSortUp className='h-6 w-6' />
+            <Link href='/teacher/lesson-note/pop-quiz/late-submissions'>
+              <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
+                View Late Submissions
+              </Button>
+            </Link>
+          </div>
+          <div className='h-4' />
+          <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
+            <div className='col-span-2'>Name</div>
+            <div>Date Submitted</div>
+            <div>Due Date</div>
+            <div></div>
+          </div>
+          <div className='flex flex-col gap-2'>
+            {submissions?.map((submission, i) => (
+              <AssignmentListItem
+                title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
+                dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
+                dueDate={submission.activity.dueDate}
+                key={i}
+                id={i + 1}
+              />
+            ))}
+          </div>
+          <PaginatedCounter pageCount={10} currentPage={0} />
+        </>
+      ) : (
+        <EmptyView
+          label='No submissions for this lesson task'
+          useStandardHeight
+        />
+      )}
     </div>
   );
 }

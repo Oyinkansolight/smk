@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { BsArrowRight } from 'react-icons/bs';
 
 interface timetableArg {
-  classId: number;
+  classId: string;
   termId: number;
 }
 interface propType {
@@ -47,7 +47,7 @@ export default function TaskListView({
   // const router = useRouter();
 
   const [showTimeTable, setShowTimeTable] = useState(false);
-  const [classId, setclassId] = useState<number>(0);
+  const [classId, setclassId] = useState<string>('');
   const [termId, settermId] = useState<any>(null);
 
   function HandleTimeTable({ classId, termId }: timetableArg) {
@@ -57,6 +57,26 @@ export default function TaskListView({
     settermId(termId);
   }
 
+  const getClassesByInstitution = classList.filter((item: any) =>
+    item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
+  );
+  function customSort(a: any, b: any) {
+    const aIsJSS = a.name.startsWith('JSS');
+    const bIsJSS = b.name.startsWith('JSS');
+
+    if (aIsJSS && !bIsJSS) {
+      return -1;
+    } else if (!aIsJSS && bIsJSS) {
+      return 1;
+    } else {
+      // If both elements are JSS or both are SSS, sort them alphabetically.
+      return a.name.localeCompare(b.name);
+    }
+  }
+
+  const sortedSecondary = getClassesByInstitution
+    ? getClassesByInstitution.sort(customSort)
+    : [];
   return (
     <div className='flex flex-col space -y-6'>
       {!showTimeTable ? (
@@ -112,7 +132,7 @@ export default function TaskListView({
 
           {classList.length > 0 ? (
             <div className='mt-6'>
-              {classList.map((v: any, i: number) => {
+              {sortedSecondary.map((v: any, i: number) => {
                 return (
                   <button
                     key={i}

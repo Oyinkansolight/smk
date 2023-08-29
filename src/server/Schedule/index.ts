@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface timetableArg {
   sessionId: any;
-  classId: number;
+  classId: string;
   termId: number;
 }
 export function useGetAcademicEvent() {
@@ -42,7 +42,7 @@ export function useGetAcademicTimetable({
     queryFn: () =>
       request
         .get(
-          `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${termId}&type=DEFAULT`
+          `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${termId}&type=DEFAULT&limit=10000`
         )
         .then((res) => res.data.data.data),
   });

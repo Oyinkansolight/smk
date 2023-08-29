@@ -24,9 +24,9 @@ export function useGetClassTestExam(params: GetClassTestExamParams) {
 }
 
 export interface GetSubjectTestExamParams {
-  sessionId?: number;
-  termId?: number;
-  classId?: number;
+  sessionId?: string;
+  termId?: string;
+  classId?: string;
   type?: string;
   subjectId?: string | null;
 }

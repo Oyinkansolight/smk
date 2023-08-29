@@ -51,6 +51,16 @@ import { useEffect } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -59,14 +69,16 @@ type Iprops = {
 const Education = ({ register, errors }: Iprops) => {
   const { data: institutionProfile } = useGetProfile();
 
-  const institutionId = getFromLocalStorage('institutionId');
+  const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
-  const currentSessionId = institutionProfile?.currentSession?.id;
+  const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
   const { data: allclasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
-  const { data: teachers } = useGetTeachersListByInstitution(institutionId);
+  const { data: teachers } = useGetTeachersListByInstitution({
+    instituteId: institutionId,
+  });
 
   // const [teachers, setteachers] = useState();
   // const getData = async () => {

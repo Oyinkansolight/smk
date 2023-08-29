@@ -3,9 +3,21 @@
 
 import FormSelectClassDefault from '@/components/input/FormSelectClassDefault';
 import FormInput from '@/components/input/formInput';
-import { useGetClassesList } from '@/server/institution';
+import { useGetClassesList, useGetSubjectList } from '@/server/institution';
+import { UserProfile } from '@/types/auth';
+import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -16,13 +28,24 @@ type Iprops = {
   errors: any;
   control: Control<FieldValues, any>;
   staffs: any;
+  profile?: UserProfile;
 };
-
 
 // const Capacity: string[] = numbers;
 
-const Biodata = ({ register, errors, control, staffs }: Iprops) => {
-  const { data: allclasses } = useGetClassesList();
+const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
+  const { data: allClasses } = useGetClassesList();
+  const { data: allSubjects } = useGetSubjectList();
+
+  const filteredClass = useMemo(() => {
+    const response =
+      allClasses?.data.filter(
+        (v) =>
+          typeof v.institutionType === 'string' && v.institutionType.toLowerCase() ===
+          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+      ) ?? [];
+    return response;
+  }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
 
   return (
     <section className=''>
@@ -34,7 +57,7 @@ const Biodata = ({ register, errors, control, staffs }: Iprops) => {
           <FormSelectClassDefault
             label='Select Class'
             name='class'
-            options={allclasses?.data ?? []}
+            options={filteredClass ?? []}
             register={register}
             validation={{
               required: 'Class is required',
@@ -56,14 +79,15 @@ const Biodata = ({ register, errors, control, staffs }: Iprops) => {
             validation={{
               required: 'Class Capacity is required',
               validate: {
-                maxLength: (v) =>
-                  v.length <= 40 ||
-                  'The class capacity should not be more than 40',
+                //* count should be less than or equal to 50
+                lessThan: (v) => {
+                  return parseInt(v) <= 50;
+                },
               },
             }}
             helper={
               errors?.classCapacity && {
-                message: errors?.classCapacity?.message,
+                message: 'Class capacity should be 50 or less',
                 type: 'danger',
               }
             }
@@ -92,14 +116,33 @@ const Biodata = ({ register, errors, control, staffs }: Iprops) => {
           name='classTeacher'
           render={({ field }) => (
             <div>
-              <div className='font-bold'>Select Class Teacher </div>
+              <div className='font-bold'>Select Class Teacher</div>
               <ReactSelect
-                isMulti
                 required
                 options={(staffs?.data ?? []).map((v) => ({
                   label: v?.user
                     ? `${v?.user[0]?.firstName} ${v?.user[0]?.lastName}`
                     : ' ',
+                  value: v.id,
+                }))}
+                {...field}
+                className='h-auto mt-2 select'
+              />
+            </div>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name='subjects'
+          render={({ field }) => (
+            <div>
+              <div className='font-bold'>Select Class Subjects</div>
+              <ReactSelect
+                isMulti
+                required
+                options={(allSubjects ?? []).map((v) => ({
+                  label: v?.name,
                   value: v.id,
                 }))}
                 {...field}

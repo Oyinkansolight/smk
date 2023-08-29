@@ -11,7 +11,6 @@ import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
-
 export interface CreateAssignmentParams {
   title?: string;
   body?: string;
@@ -89,16 +88,8 @@ export interface CreateClassActivityParams {
 
 export interface Question {
   question?: string;
-  options?: Option[];
-}
-
-export interface Option {
-  a?: string;
-  b?: string;
-  c?: string;
-  d?: string;
-  e?: string;
-  answer?: string;
+  options?: string[];
+  correctOption?: number;
 }
 
 export interface SubmittedQuestion {
@@ -150,8 +141,8 @@ export type CreateLessonNoteTypes = {
   weekId?: number | string | null;
   periodId?: number | string | null;
   teacherId?: number | string | null;
-  classArmId?: number | string | null;
-}
+  classes?: number | string | null;
+};
 
 export function useCreateLessonNote() {
   const mutation = useMutation({

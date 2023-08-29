@@ -45,7 +45,7 @@ export default function TimetableView() {
             {days.map((d, i) => (
               <div
                 key={i}
-                className='flex items-center justify-center w-36 h-full font-bold text-lg'
+                className='flex items-center justify-center w-full max-w-[144px] h-full font-bold text-lg'
               >
                 <div>{d}</div>
               </div>

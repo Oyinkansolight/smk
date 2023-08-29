@@ -14,64 +14,65 @@ import {
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
+import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-
-
 
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const [idx, setIdx] = useState(0);
   const term = terms?.data[0]?.id;
   const { data: weeks } = useGetAcademicSessionsTermsWeek(term);
   const [currentWeek, setCurrentWeek] = useState(0);
+  const isGenericApp = Cookies.get('isGenericApp') === 'Y';
 
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   const sortedWeeks: Week[] = [];
 
   if (weeks) {
-    for (let index = weeks?.data.length - 1; index > 0; index--) {
+    for (let index = 0; index < weeks?.data.length; index++) {
       sortedWeeks.push(weeks.data[index]);
     }
   }
 
   const { data } = useGetWeekPeriodsBySubject({
     termId: term,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
     weekId: sortedWeeks[currentWeek]?.id,
     subjectId: params?.get('id') ? params.get('id') : undefined,
-    classArmId: arms ? arms[idx]?.class?.id : "",
+    // classArmId: arms ? arms[idx]?.class?.id : '',
   });
 
   const [currentPage, setCurrentPage] = useState(0);
 
   const { data: subject } = useGetSubjectById(params?.get('id') as string);
 
-
-  if (arms) {
+  if (data?.data && data.data.length > 0) {
     return (
       <div className='px-8 layout'>
         <div className='text-[#D4D5D7] py-8 text-2xl'>
           {`Classes > ${(subject ?? [])[0]?.name}`}
         </div>
-        <TextTabBar
-          tabs={[
-            ...(arms ?? []).map((arm) =>
-              arm.arm ? `${arm.class?.name}` : '[NULL]'
-            ),
-          ]}
-          onChange={setIdx}
-          selectedIdx={idx}
-        />
+        {arms && arms.length > 0 && (
+          <TextTabBar
+            tabs={[
+              ...(arms ?? []).map((arm) =>
+                arm.arm ? `${arm.class?.name}` : '[NULL]'
+              ),
+            ]}
+            onChange={setIdx}
+            selectedIdx={idx}
+          />
+        )}
         <div className='flex justify-end'>
           <WeekSelector
             max={weeks?.data.length ? weeks?.data.length - 1 : 0}
@@ -88,14 +89,25 @@ export default function Page() {
               data.data.length > 0 ? (
                 data.data.map((period, i) => (
                   <SmallTeacherSubjectListItem
-                    sessionId={profile?.currentSession?.id as unknown as string}
+                    sessionId={
+                      profile?.currentSession?.[0]?.id as unknown as string
+                    }
                     termId={term as unknown as string}
                     periodId={period.id as unknown as string}
-                    classId={(arms ?? [])[0].id as unknown as string}
-                    onClick={() =>
-                      router.push(`/teacher/classes/subject-task?id=${period.id}`)
+                    classId={
+                      arms && arms.length > 0
+                        ? arms[0].id
+                        : ('' as unknown as string)
                     }
-                    key={i}
+                    onClick={() =>
+                      router.push(
+                        isGenericApp ? (
+                          i % 2 === 0 ? '/teacher/classes/subject-task-doc' : '/teacher/classes/subject-task-video'
+                        ) :
+                          `/teacher/classes/subject-task?id=${period.id}`
+                      )
+                    }
+                    key={period?.id ?? i}
                     day={period?.day}
                     cl={period?.class?.name ?? 'NULL'}
                     time={`${period?.startTime} - ${period?.endTime}`}
@@ -122,6 +134,10 @@ export default function Page() {
       </div>
     );
   } else {
-    <EmptyView label='No classes' useStandardHeight />;
+    return (
+      <div className='py-8 layout'>
+        <EmptyView label='No classes' useStandardHeight />
+      </div>
+    );
   }
 }

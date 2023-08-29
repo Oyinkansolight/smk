@@ -36,7 +36,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
-                  item.instituteLogo.includes('picsum')
+                item.instituteLogo.includes('picsum')
                   ? item.instituteLogo
                   : `/${item.instituteLogo}`
               }
@@ -119,7 +119,7 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
       </div>
       <Table
         data={((data?.data ?? []) as any[]).map((item, i) => ({
-          idx: (pagingData.page * pagingData.limit - pagingData.limit) + i,
+          idx: pagingData.page * pagingData.limit - pagingData.limit + i,
           ...item,
         }))}
         columns={columns}

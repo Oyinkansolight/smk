@@ -4,24 +4,7 @@
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
 import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -45,15 +28,7 @@ const TeacherLibrary = () => {
             items={[
               {
                 icon: <GiHamburgerMenu className='h-5 w-5' />,
-                label: 'Government Library',
-              },
-              {
-                icon: <BiListCheck className='h-5 w-5' />,
-                label: 'School Library',
-              },
-              {
-                icon: <BiListCheck className='h-5 w-5' />,
-                label: 'Personal Library',
+                label: 'Library',
               },
             ]}
           />

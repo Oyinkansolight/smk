@@ -3,12 +3,21 @@
 import NextImage from '@/components/NextImage';
 import EditRequest from '@/components/modal/EditRequest';
 import EditStudentProfile from '@/components/modal/EditStudentProfile';
+import { getFromSessionStorage } from '@/lib/helper';
 // import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import ProfileAvatar from '~/svg/profile_avatar.svg';
 
 const Page = () => {
+  const userData = getFromSessionStorage('user');
+  let user;
+  let info;
+
+  if (userData) {
+    user = JSON.parse(userData).currentStudentInfo;
+    info = JSON.parse(userData);
+  }
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, seteditContent] = useState(false);
   const [editAction, seteditAction] = useState(false);
@@ -77,24 +86,26 @@ const Page = () => {
           <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gapx-4 gap-y-10'>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Full Name</h1>
-              <p className='text-base font-medium'>JOHNY MAKELELE</p>
+              <p className='text-base font-medium'>
+                {user?.firstName} {user?.lastName}{' '}
+              </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Gender</h1>
-              <p className='text-base font-medium'>MALE</p>
+              <p className='text-base font-medium uppercase'>{user?.gender} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Year/Level</h1>
-              <p className='text-base font-medium'>PRIMARY 1 A</p>
+              <p className='text-base font-medium'>{user?.classArmId}</p>
             </div>
 
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Student ID Number</h1>
-              <p className='text-base font-medium'>PRI-1224</p>
+              <p className='text-base font-medium'>{user?.studentId} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Date of Birth</h1>
-              <p className='text-base font-medium'>10-OCT-2008</p>
+              <p className='text-base font-medium'>{user?.dob} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Nationality</h1>
@@ -122,17 +133,11 @@ const Page = () => {
           <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gapx-4 gap-y-10'>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
-              <p className='text-base font-medium'>johnymakelele@gmail.com</p>
+              <p className='text-base font-medium'>{info?.email} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Address</h1>
-              <p className='text-base font-medium'>
-                90, Wuraola House, Allen, Lagos State
-              </p>
-            </div>
-            <div>
-              <h1 className='text-gray-400 text-xs mb-3'>Phone Number</h1>
-              <p className='text-base font-medium'>09020022002</p>
+              <p className='text-base font-medium'>{user?.address ?? 'null'}</p>
             </div>
           </div>
           <div className='py-2 border-b flex justify-between mt-5'>
@@ -148,29 +153,35 @@ const Page = () => {
           <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gapx-4 gap-y-10'>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Full Name</h1>
-              <p className='text-base font-medium'>Mr. OYEKUNLE MAKELELE</p>
-            </div>
-            <div>
-              <h1 className='text-gray-400 text-xs mb-3'>Relationship</h1>
-              <p className='text-base font-medium'>FATHER</p>
-            </div>
-            <div>
-              <h1 className='text-gray-400 text-xs mb-3'>Occupation</h1>
-              <p className='text-base font-medium'>Teacher</p>
-            </div>
-            <div>
-              <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
-              <p className='text-base font-medium'>johnymakelele@gmail.com</p>
-            </div>
-            <div>
-              <h1 className='text-gray-400 text-xs mb-3'>Address</h1>
               <p className='text-base font-medium'>
-                90, Wuraola House, Allen, Lagos State
+                {' '}
+                {user?.parentDetails.name}{' '}
               </p>
             </div>
             <div>
+              <h1 className='text-gray-400 text-xs mb-3'>Relationship</h1>
+              <p className='text-base font-medium'> {user?.parentStatus} </p>
+            </div>
+            <div>
+              <h1 className='text-gray-400 text-xs mb-3'>Occupation</h1>
+              <p className='text-base font-medium'>{user?.parentOccupation}</p>
+            </div>
+            <div>
+              <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
+              <p className='text-base font-medium'>
+                {' '}
+                {user?.parentDetails.email}{' '}
+              </p>
+            </div>
+            <div>
+              <h1 className='text-gray-400 text-xs mb-3'>Address</h1>
+              <p className='text-base font-medium'></p>
+            </div>
+            <div>
               <h1 className='text-gray-400 text-xs mb-3'>Phone Number</h1>
-              <p className='text-base font-medium'>09020022002</p>
+              <p className='text-base font-medium'>
+                {user?.parentDetails.phoneNumber}
+              </p>
             </div>
           </div>
 

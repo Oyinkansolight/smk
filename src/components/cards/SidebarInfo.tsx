@@ -199,9 +199,7 @@ export const SidebarInfoCardThree = () => {
       <div className='mx-auto flex flex-col justify-center gap-y-7'>
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total</div>
-          <div>
-            {/* <LineGraphComponent width={95.5} height={27} /> */}
-          </div>
+          <div>{/* <LineGraphComponent width={95.5} height={27} /> */}</div>
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>0</div>
@@ -226,9 +224,7 @@ export const AdminSidebarInfoCardOne = () => {
       <div className='mx-auto flex flex-col justify-center gap-y-7'>
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Revenue</div>
-          <div>
-            {/* <LineGraphComponent width={95.5} height={27} /> */}
-          </div>
+          <div>{/* <LineGraphComponent width={95.5} height={27} /> */}</div>
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
@@ -255,9 +251,7 @@ export const AdminSidebarInfoCardTwo = () => {
       <div className='mx-auto flex flex-col justify-center gap-y-7'>
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Budget</div>
-          <div>
-            {/* <LineGraphComponent width={95.5} height={27} /> */}
-          </div>
+          <div>{/* <LineGraphComponent width={95.5} height={27} /> */}</div>
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>
@@ -284,9 +278,7 @@ export const AdminSidebarInfoCardThree = (data: DashboardOverview | any) => {
       <div className='mx-auto flex flex-col justify-center gap-y-7'>
         <div className='flex flex-row justify-between px-[18px]'>
           <div className='text-xs font-bold text-[#6B7A99]'>Total Staffs</div>
-          <div>
-            {/* <LineGraphComponent width={95.5} height={27} /> */}
-          </div>
+          <div>{/* <LineGraphComponent width={95.5} height={27} /> */}</div>
         </div>
 
         <div className='px-[18px] text-[21px] font-bold text-[#4D5E80]'>

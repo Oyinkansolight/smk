@@ -10,7 +10,7 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: sessionCalendarData } = useGetSessionCalendar(1);
   return (
-    <div className='flex justify-center'>
+    <div className='layout flex justify-center'>
       <div className='w-full max-w-5xl'>
         <div className='font-bold text-3xl my-14'>Timetable</div>
         <TextTabBar

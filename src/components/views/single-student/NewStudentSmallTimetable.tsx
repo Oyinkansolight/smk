@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
+import { RotatingLines } from 'react-loader-spinner';
 
-export default function NewStudentSmallTimetable() {
+export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -12,21 +14,36 @@ export default function NewStudentSmallTimetable() {
   return (
     <div className='w-full max-w-[296px]'>
       <div className='flex justify-end'>
-        <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-[93px] h-[30px] whitespace-nowrap'>
+        <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-max px-2 h-[30px] whitespace-nowrap'>
           {formattedDate}
         </div>
       </div>
       <div className='h-4' />
       <div className='flex gap-4 flex-col'>
-        {['English', 'Mathematics'].map((v, i) => (
-          <TimetableItem
-            key={i}
-            isCurrent={i === 0}
-            img='/images/sidebar-icons/Subjects.png'
-            subtitle='08:00 AM - 08:30 am'
-            title={v}
-          />
-        ))}
+        {!loading ? (
+          <div>
+            {' '}
+            {todaysPeriod.map((v: any, i: number) => (
+              <TimetableItem
+                key={i}
+                isCurrent={i === 0}
+                img='/images/sidebar-icons/Subjects.png'
+                subtitle={`${v.startTime} - ${v.endTime}`}
+                title={v.title}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className='flex justify-center'>
+            <RotatingLines
+              width='100'
+              visible={true}
+              strokeWidth='5'
+              strokeColor='#3361FF'
+              animationDuration='0.75'
+            />
+          </div>
+        )}
       </div>
     </div>
   );

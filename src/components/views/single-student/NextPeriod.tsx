@@ -4,16 +4,25 @@ import { useGetStudentNextPeriod } from '@/server/government/student';
 import Link from 'next/link';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function NextPeriod() {
-  const { isLoading } = useGetStudentNextPeriod();
+export default function NextPeriod({
+  studentId,
+  weekId,
+}: {
+  studentId: string;
+  weekId: string;
+}) {
+  const { isLoading, data } = useGetStudentNextPeriod({
+    studentId,
+    weekId,
+  });
 
-  const data = {
-    startTime: '8:00',
-    endTime: '9:00',
-    subject: {
-      name: 'Diction',
-    },
-  };
+  // const data = {
+  //   startTime: '8:00',
+  //   endTime: '9:00',
+  //   subject: {
+  //     name: 'Diction',
+  //   },
+  // };
 
   return (
     <div>
@@ -47,7 +56,7 @@ export default function NextPeriod() {
             </div>
           ) : (
             <div>
-              <h3>No Next Peeriod</h3>
+              <h3>No Next Period</h3>
             </div>
           )}
         </div>

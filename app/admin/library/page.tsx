@@ -4,7 +4,7 @@
 import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
-import { useGetAllFiles } from '@/server/library';
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -13,64 +13,8 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiWhatsappFill } from 'react-icons/ri';
 import Folder from '~/svg/folder.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Library = () => {
-  const GovtFilesData = useGetAllFiles('');
-  const schoolFilesData: any = [];
-  const { data } = GovtFilesData;
-
-  data &&
-    data.forEach((element: any) => {
-      if (element.userTypes.includes('Institutions')) {
-        schoolFilesData.push(element);
-      }
-    });
-
+  const isGenericApp = Cookies.get('isGenericApp') === 'Y';
   const [tabIdx, setTabIdx] = useState(0);
   return (
     <div className='flex'>
@@ -97,7 +41,7 @@ const Library = () => {
             items={[
               {
                 icon: <GiHamburgerMenu className='h-5 w-5' />,
-                label: 'Government Library',
+                label: isGenericApp ? 'Library' : 'Government Library',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,

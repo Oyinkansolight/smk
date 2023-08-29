@@ -5,10 +5,12 @@ import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
+import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,6 +19,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function StudentAuth() {
+  const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
@@ -55,13 +58,25 @@ export default function StudentAuth() {
         toast.info('Redirecting to dashboard...');
         setLoading(false);
 
+        let currentStudentInfo;
         const name =
           response.data.data.data.firstName +
           ' ' +
           response.data.data.data.lastName;
+        const id = response.data.data.data.id;
         const role = response.data.data.data.type;
         const email = response.data.data.data.email;
-        const userDetails = { name, role, email };
+        if (role === 'STUDENT') {
+          currentStudentInfo = response.data.data.data.student;
+        }
+
+        const userDetails = {
+          name,
+          role,
+          email,
+          id,
+          currentStudentInfo,
+        };
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('user', JSON.stringify(userDetails));
         }
@@ -75,13 +90,14 @@ export default function StudentAuth() {
     <Layout>
       <main>
         <section className='authBackground relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
-          <Image
-            width={154}
-            height={53}
-            className='absolute left-[60px] top-[60px] z-20'
-            src='/images/edo_logo.png'
-            alt=''
-          />
+          {isGenericApp === 'N' &&
+            <Image
+              width={154}
+              height={53}
+              alt={APP_LOGOS.APP_LOGO.alt}
+              src={APP_LOGOS.APP_LOGO.asset}
+              className='absolute left-[60px] top-[60px] z-20'
+            />}
 
           <div className='container flex flex-col items-center gap-8 px-4 md:px-0'>
             <div className='h1'>Welcome</div>

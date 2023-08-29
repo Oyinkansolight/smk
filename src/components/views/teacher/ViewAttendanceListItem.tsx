@@ -2,10 +2,10 @@ import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import { useTakeAttendance } from '@/server/government/student';
 import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { Institution } from '@/types/institute';
 import { toast } from 'react-toastify';
 import { useSessionStorage } from 'usehooks-ts';
-
 
 export default function ViewAttendanceListItem({
   index,
@@ -20,8 +20,14 @@ export default function ViewAttendanceListItem({
   const [institution] = useSessionStorage('institution', {} as Institution);
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
+  });
+
+  const arm = (arms ?? [])[0];
   // const { data: student } = useGetStudentById({ id: studentId });
   const handlePresent = async (status: 'PRESENT' | 'ABSENT' | 'LATE') => {
     toast.info(`Marking "${name}" as ${status.toLowerCase()}...`);
@@ -29,10 +35,10 @@ export default function ViewAttendanceListItem({
       await mutateAsync({
         studentId,
         status: status,
-        periodId: 1,
+        periodId: '',
         institutionId: institution.id,
-        classId: 1,
-        sessionId: profile?.currentSession?.id,
+        classArmId: arm?.id,
+        sessionId: profile?.currentSession?.[0]?.id,
         termId: (terms?.data ?? [])[0].id,
       });
 
@@ -45,7 +51,7 @@ export default function ViewAttendanceListItem({
   return (
     <div
       className={clsxm(
-        'flex flex-col lg:flex-row py-2 px-6 rounded-md border bg-white items-center gap-8'
+        'grid grid-cols-1 sm:grid-cols-7 justify-items-center py-2 px-2 sm:px-6 rounded-md border bg-white items-center gap-8'
       )}
     >
       <div className='font-bold text-lg'>{index}</div>

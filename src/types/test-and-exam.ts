@@ -1,5 +1,5 @@
 export interface ClassTestExam {
-  id?: number;
+  id?: string;
   title?: string;
   type?: string;
   file?: string;
@@ -12,7 +12,7 @@ export interface ClassTestExam {
 }
 
 export interface Class {
-  id?: number;
+  id?: string;
   name?: string;
   startTime?: null;
   endTime?: null;
@@ -23,7 +23,7 @@ export interface Class {
 }
 
 export interface Session {
-  id?: number;
+  id?: string;
   session?: string;
   institutionType?: string;
   NumberOfWeeks?: number;
@@ -36,7 +36,7 @@ export interface Session {
 }
 
 export interface Subject {
-  id?: number;
+  id?: string;
   name?: string;
   description?: string;
   createdBy?: null;
@@ -45,7 +45,7 @@ export interface Subject {
 }
 
 export interface Term {
-  id?: number;
+  id?: string;
   name?: string;
   noOfWeeks?: number;
   startDate?: Date;

@@ -1,6 +1,6 @@
 import clsxm from '@/lib/clsxm';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { cloneElement, Fragment, useState } from 'react';
 
 export default function GeneralModal({
   body,
@@ -55,10 +55,10 @@ export default function GeneralModal({
                 <Dialog.Panel
                   className={clsxm(
                     panelClassName,
-                    'w-full max-h-[618px] max-w-2xl transform overflow-x-hidden overflow-y-scroll rounded-2xl bg-white p-6 align-middle shadow-xl transition-all'
+                    'w-full max-h-[618px] max-w-2xl transform overflow-x-hidden overflow-y-scroll rounded-2xl bg-white p-6 align-middle shadow-xl transition-all hideScroll'
                   )}
                 >
-                  {body}
+                  {cloneElement(body, { closeModal })}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

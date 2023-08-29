@@ -1,5 +1,3 @@
-'use client';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
@@ -71,15 +69,29 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
     classes2.forEach((v) => ids.push(d2[v as number].id));
     classes3.forEach((v) => ids.push(d3[v as number].id));
     classes4.forEach((v) => ids.push(d4[v as number].id));
-    const response = await mutateAsync({
-      classId: ids,
-      name: data.subject,
-      description: data.description,
-    });
+
+    let payload;
+
+    if (data.description || data.description.length > 0) {
+      payload = {
+        classId: ids,
+        name: data.subject,
+        description: data.description,
+      }
+    } else {
+      payload = {
+        classId: ids,
+        name: data.subject,
+      }
+    }
+
+    const response = await mutateAsync(payload);
 
     if (response) {
       toast.success('Subject added successfully');
       closeModal();
+    } else {
+      toast.error('An error occurred');
     }
   };
 
@@ -113,7 +125,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
               register={register}
               label={
                 <span>
-                  Enter Description<span className='text-[#E5A500]'>*</span>
+                  Enter Description
                 </span>
               }
               name='description'

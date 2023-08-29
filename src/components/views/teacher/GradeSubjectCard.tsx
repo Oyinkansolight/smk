@@ -14,7 +14,7 @@ export default function GradeSubjectCard({
     <div
       onClick={onClick}
       className={clsxm(
-        'flex flex-col items-center justify-center w-[210px] h-[195px] gap-[17px] cursor-pointer self-center rounded-lg',
+        'flex flex-col items-center justify-center w-full min-w-[210px] max-w-[400px] h-[195px] gap-[17px] cursor-pointer self-center rounded-lg',
         className
       )}
     >

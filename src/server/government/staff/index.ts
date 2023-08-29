@@ -34,7 +34,7 @@ export function useGetStaffs() {
 }
 
 export interface UpdateStaffParams {
-  id?: number;
+  id?: string;
   firstName?: string;
   lastName?: string;
   email?: string;

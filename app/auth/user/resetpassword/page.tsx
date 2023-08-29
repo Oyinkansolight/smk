@@ -5,6 +5,7 @@ import { BasicCard } from '@/components/cards';
 // import { BaseInput } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
+import { APP_LOGOS } from '@/constant/assets';
 import { getErrMsg } from '@/server';
 import { useResetPassword } from '@/server/auth';
 import Image from 'next/image';
@@ -54,9 +55,9 @@ export default function ForgotPassword() {
           <Image
             width={154}
             height={53}
+            alt={APP_LOGOS.APP_LOGO.alt}
+            src={APP_LOGOS.APP_LOGO.asset}
             className='absolute left-[60px] top-[60px] z-20'
-            src='/images/edo_logo.png'
-            alt=''
           />
 
           <div className='container flex flex-col items-center gap-8 px-4 md:px-0'>

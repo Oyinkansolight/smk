@@ -31,38 +31,9 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+import Cookies from 'js-cookie';
+import { APP_LOGOS } from '@/constant/assets';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
@@ -70,12 +41,6 @@ const LocationInput = dynamic(
     loading: () => <p>Loading...</p>,
   }
 );
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const stepData = [
   {
@@ -102,6 +67,7 @@ const stepData = [
 ];
 
 export default function Page() {
+  const isGenericApp = Cookies.get('isGenericApp');
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
@@ -255,7 +221,7 @@ export default function Page() {
                     typeof getValues('instituteAddress') === 'string'
                       ? getValues('instituteAddress')
                       : (getValues('instituteAddress') as GeoCodeResponse)
-                          .formatted_address,
+                        .formatted_address,
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
@@ -288,7 +254,8 @@ export default function Page() {
       <div className='h2 max-w-[590px]'>
         Welcome,
         <br />
-        The Edo State Government has invited you to register your account
+        {isGenericApp === 'Y' && "You have been invited you to register your account"}
+        {isGenericApp === 'N' && "The Edo State Government has invited you to register your account"}
       </div>
 
       <div className='text-[#171818]'>
@@ -679,13 +646,19 @@ export default function Page() {
         <div className='flex flex-col gap-3'>
           <div className='text-center'>Verifying Token</div>
 
-          <Image
-            width={154}
-            height={53}
-            className='animate-bounce'
-            src='/images/edo_logo.png'
-            alt=''
-          />
+          {isGenericApp === 'Y' && (
+            <div>Loading....</div>
+          )}
+
+          {isGenericApp === 'N' && (
+            <Image
+              width={154}
+              height={53}
+              className='animate-bounce'
+              alt={APP_LOGOS.APP_LOGO.alt}
+              src={APP_LOGOS.APP_LOGO.asset}
+            />
+          )}
         </div>
       </div>
     );

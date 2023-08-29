@@ -73,7 +73,7 @@ export function useGetWeekPeriodsBySubject(
 
 export function useGetPeriodById(id?: string) {
   const query = useQuery({
-    queryKey: 'get_week_periods_by_subject',
+    queryKey: 'get_week_periods_by_id',
     queryFn: async () => {
       return id
         ? ((

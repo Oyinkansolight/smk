@@ -145,9 +145,9 @@ export default function AllCurriculumView({ termId, sessionId }: propType) {
             </AddWeekModal>
           </div>
         ) : (
-          (data?.data || []).reverse().map((v: any, i: number) => {
+          (data?.data || []).map((v: any, i: number) => {
             return (
-              <div key={i}>
+              <div key={v.id}>
                 <div
                   onClick={() => {
                     setShowContent(!showcontent);
@@ -165,7 +165,7 @@ export default function AllCurriculumView({ termId, sessionId }: propType) {
                           : 'text-[#C3CAD9]'
                       )}
                     />
-                    <h2 className='text-xs font-normal'>{v.name}</h2>
+                    <h2 className='text-xs font-normal'>Week {v.name}</h2>
                   </div>
                   {/* <div className='col-span-4'>
                   Theme: <span className='font-bold'>{v.theme}</span>
@@ -191,7 +191,7 @@ export default function AllCurriculumView({ termId, sessionId }: propType) {
                     {periods.map((v: any, j: number) => {
                       return (
                         <div
-                          key={j}
+                          key={v.id ?? j}
                           className={clsxm('grid grid-cols-3 py-[22px] px-5')}
                         >
                           <div>Period {j + 1}</div>

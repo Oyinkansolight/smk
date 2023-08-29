@@ -60,7 +60,7 @@ const DragDropDocument = ({
             type='file'
             id='upload'
             hidden
-            accept='application/pdf'
+            accept='application/pdf, video/*, vid'
             onChange={(e) => {
               if (e.target.files) {
                 handleImage(e.target.files[0]);

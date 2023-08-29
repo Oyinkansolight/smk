@@ -37,7 +37,7 @@ export function useGetStaffDashboardOverview() {
         .get('/v1/government/dashboards/get-staff-dashboard', {
           withCredentials: true,
         })
-        .then((v) => v.data.data as DashboardOverview),
+        .then((v) => v.data.data.data as DashboardOverview),
   });
   return query;
 }

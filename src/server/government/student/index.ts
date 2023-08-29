@@ -20,7 +20,7 @@ export function useGetStudentList(params: PaginationParams) {
 }
 
 interface UpdateStudentParams {
-  id: number;
+  id: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -45,13 +45,13 @@ export function useUpdateStudent() {
   return mutation;
 }
 
-export function useGetStudentNextPeriod() {
+export function useGetStudentNextPeriod({ studentId, weekId }) {
   const query = useQuery({
     queryKey: 'get_student_next_period',
     queryFn: () =>
       request
         .get(
-          '/v1/institutions/institutes/get-student-next-period?sessionId=1&termId=1&studentId=1&weekId=1',
+          `/v1/institutions/institutes/get-student-next-period?studentId=${studentId}&weekId=${weekId}`,
           {
             withCredentials: true,
           }
@@ -61,13 +61,13 @@ export function useGetStudentNextPeriod() {
   return query;
 }
 
-export function useGetStudentOngoingPeriod() {
+export function useGetStudentOngoingPeriod({ studentId, weekId }) {
   const query = useQuery({
     queryKey: 'get_student_ongoing_period',
     queryFn: () =>
       request
         .get(
-          '/v1/institutions/institutes/get-student-ongoing-period?sessionId=1&termId=1&studentId=1&weekId=1',
+          `/v1/institutions/institutes/get-student-ongoing-period?studentId=${studentId}&weekId=${weekId}`,
           {
             withCredentials: true,
           }

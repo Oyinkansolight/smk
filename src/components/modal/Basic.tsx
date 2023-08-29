@@ -2,6 +2,7 @@
 import clsxm from '@/lib/clsxm';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import { IoCloseCircle } from 'react-icons/io5';
 
 interface BasicModalProps {
   children: any;
@@ -61,7 +62,14 @@ export default function BasicModal({
                     'w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'
                   )}
                 >
-                  {content}
+                  <div className='flex relative'>
+                    <IoCloseCircle
+                      onClick={closeModal}
+                      className='w-6 h-6 lg:w-10 lg:h-10 absolute right-0'
+                    />
+
+                    <span className='mt-16 w-full'>{content}</span>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

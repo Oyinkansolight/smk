@@ -28,7 +28,7 @@ export default function TakeAttendanceView() {
   const { data: arms } = useGetAllClassArms({
     classId: period?.class?.id,
     institutionId: institution?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const arm = (arms ?? [])[0];
   const { data: students, isLoading: studentsLoading } =
@@ -39,11 +39,8 @@ export default function TakeAttendanceView() {
   const { data: attendance } = useGetLessonAttendance({ periodId: id });
 
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
-
-  console.log(students);
-
 
   return (
     <div className='flex flex-col gap-10'>
@@ -57,8 +54,8 @@ export default function TakeAttendanceView() {
       </div>
       <div className='flex flex-col gap-4'>
         <div className='font-bold'>List of students</div>
-        {studentsLoading ||
-          students ? students?.map((v, i) => (
+        {studentsLoading || students ? (
+          students?.map((v, i) => (
             <TeacherAttendanceListItem
               key={i}
               index={i}
@@ -74,7 +71,7 @@ export default function TakeAttendanceView() {
                     classArmId: arm?.id,
                     institutionId: institution?.id,
                     periodId: id,
-                    sessionId: profile?.currentSession?.id,
+                    sessionId: profile?.currentSession?.[0]?.id,
                     status,
                     studentId: v.id,
                     termId: (terms?.data ?? [])[0].id,
@@ -85,8 +82,11 @@ export default function TakeAttendanceView() {
                 }
               }}
             />
-          )) : (
-          <div className='text-center'>No students have been added to this class arm</div>
+          ))
+        ) : (
+          <div className='text-center'>
+            No students have been added to this class arm
+          </div>
         )}
       </div>
     </div>

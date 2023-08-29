@@ -3,7 +3,6 @@ import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
-
 interface ClockInParams {
   sessionId?: number | string | null;
   termId?: number | string | null;
@@ -15,9 +14,9 @@ interface ClockOutParams {
 
 interface AttendanceParams {
   institutionId: number;
-  classId: number;
+  classId: string;
   studentId: number;
-  sessionId: number;
+  sessionId: string;
   termId: number;
   status: string;
   periodId: number;

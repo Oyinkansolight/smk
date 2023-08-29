@@ -5,7 +5,6 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
-import { getFromLocalStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetCurrentSession, useGetProfile } from '@/server/auth';
 import {
@@ -19,76 +18,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AddClass = () => {
   const { data: institutionProfile } = useGetProfile();
   const { data: currentSessionInfo } = useGetCurrentSession();
-  const institutionId = getFromLocalStorage('institutionId');
+  const { data: staffs } = useGetTeachersListByInstitution({
+    instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
+    limit: 1000,
+  });
 
-  const {
-    data: staffs,
-    error,
-    isLoading,
-  } = useGetTeachersListByInstitution(institutionId);
   const {
     register,
     control,
@@ -99,7 +36,7 @@ const AddClass = () => {
     mode: 'onChange',
   });
   const [stage, setStage] = useState(1);
-  const [isOpen, setisOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [publishData, setPublishedData] = useState(null);
 
@@ -110,7 +47,8 @@ const AddClass = () => {
       !data.class ||
       !data.classArm ||
       !data.classTeacher ||
-      !data.classCapacity
+      !data.classCapacity ||
+      !data.subjects
     ) {
       toast.error('All fields must be completed');
     }
@@ -119,18 +57,22 @@ const AddClass = () => {
       data.class &&
       data.classArm &&
       data.classTeacher &&
-      data.classCapacity
+      data.classCapacity &&
+      data.subjects
     ) {
       setPublishedData(data);
       setStage(stage + 1);
     }
 
     if (stage === 2) {
+      const assignedSubjects = data.subjects.map((subject) => subject.value);
+
       const classArmData = {
-        arm: data.classArm,
-        capacity: data.classCapacity,
+        arm: data.classArm.toUpperCase(),
+        capacity: Number(data.classCapacity),
         classId: data.class,
-        teacherId: data.classTeacher[0].value,
+        subjects: assignedSubjects,
+        teacherId: data.classTeacher.value,
         sessionId: currentSessionInfo?.id,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
@@ -142,7 +84,7 @@ const AddClass = () => {
           toast.success('Class Arm created successfully');
           setLoading(false);
           //2 Second - Open Success Modal
-          setisOpen(true);
+          setIsOpen(true);
         }
       } catch (error) {
         setLoading(false);
@@ -150,15 +92,7 @@ const AddClass = () => {
       }
     }
   };
-  // const nextHandler = (): void => {
-  //   // handleSubmit(onSubmit);
-  //   // console.log(getValues())
-  //   // console.log(formState)
 
-  //   // if (stage >= 1 && stage <= 4) {
-  //   //   setStage(stage + 1);
-  //   // }
-  // };
   const prevHandler = (): void => {
     if (stage >= 2) {
       setStage(stage - 1);
@@ -217,6 +151,7 @@ const AddClass = () => {
               errors={errors}
               control={control}
               staffs={staffs}
+              profile={institutionProfile}
             />
           )}
 

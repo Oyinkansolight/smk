@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TaskAccordion from '@/components/accordions/TaskAccordion';
+import Button from '@/components/buttons/Button';
 // import Button from '@/components/buttons/Button';
 import { CurriculumCard } from '@/components/cards';
+import BasicModal from '@/components/modal/Basic';
+import { RotatingLines } from 'react-loader-spinner';
 
 // import AddSubjectModal from '@/components/modals/add-subject-modal';
 // import { MdKeyboardArrowDown } from 'react-icons/md';
@@ -14,11 +17,13 @@ export default function TaskListView({
   settermId,
   setclassId,
   schoolType,
+  isLoading,
 }: {
   curriculumClicked: (currId: number) => void;
   settermId: (id: string) => void;
   setclassId: (id: string) => void;
   schoolType?: number;
+  isLoading?: boolean;
   academicyear?: string;
   classList: any;
   sessionterms: any;
@@ -65,35 +70,70 @@ export default function TaskListView({
     }
   };
 
+  const DeleteModalContent = () => (
+    <div className='flex flex-col space-y-4 items-center justify-center'>
+      <div className='font-bold text-4xl'>
+        Delete Subject
+      </div>
+      <div className='text-base text-[#6B7A99]'>
+        Are you sure you want to delete this subject?
+      </div>
+      <div className='flex flex-row items-center justify-end space-x-4'>
+        <Button
+          className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'
+        >
+          Keep
+        </Button>
+
+        <Button
+          variant='danger'
+          className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'
+        >
+          <span>Delete</span>
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div className='flex flex-col space-y-6'>
-      <div className='flex justify-between items-center'>
-        <div className='text-[#6B7A99] font-bold text-xl'> {academicyear}</div>
-        <div className='flex justify-end'>
-          {/* <div className='flex items-center font-bold'>
-            <div>Filter</div> <MdKeyboardArrowDown className='h-5 w-5' />
-          </div>
-          <div className='w-8' />
-          <div className='flex gap-5'>
-            <Button
-              variant='outline'
-              className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-            >
-              Download Report
-            </Button>
+      <div className='flex flex-row items-center justify-between'>
+        <div className='text-[#6B7A99] font-bold text-xl'>{academicyear}</div>
 
-            <AddSubjectModal>
-              <Button
-                variant='outline'
-                className='!text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-              >
-                Manage
-              </Button>
-            </AddSubjectModal>
-          </div> */}
+        <div className='flex flex-col lg:flex-row items-center justify-center space-x-2 space-y-4'>
+          <Button
+            variant='outline'
+            className='flex flex-row items-center space-x-2 bg-white w-[168px] whitespace-nowrap'
+          >
+            Download Report
+          </Button>
+
+          <BasicModal
+            content={<DeleteModalContent />}
+            className="max-w-[777px] w-full h-[267px]"
+          >
+            <Button
+              variant='danger'
+              className='flex flex-row items-center justify-center space-x-2 w-[168px] whitespace-nowrap -mt-4'
+            >
+              <span>Delete Subject</span>
+            </Button>
+          </BasicModal>
         </div>
+
       </div>
-      {schoolType === 0 && (
+      <div className='flex justify-center'>
+        {isLoading && (
+          <RotatingLines
+            width='100'
+            visible={true}
+            strokeWidth='5'
+            strokeColor='#008146'
+            animationDuration='0.75'
+          />
+        )}
+      </div>
+      {!isLoading && schoolType === 0 && (
         <div>
           {ECCDE.map((v: any, i: number) => {
             return (
@@ -114,7 +154,7 @@ export default function TaskListView({
           })}
         </div>
       )}
-      {schoolType === 1 && (
+      {!isLoading && schoolType === 1 && (
         <div>
           {Primary.map((v: any, i: number) => {
             return (
@@ -135,7 +175,7 @@ export default function TaskListView({
           })}
         </div>
       )}
-      {schoolType === 2 && (
+      {!isLoading && schoolType === 2 && (
         <div>
           {sortedSecondary.map((v: any, i: number) => {
             return (
@@ -156,7 +196,7 @@ export default function TaskListView({
           })}
         </div>
       )}
-      {schoolType === 3 && (
+      {!isLoading && schoolType === 3 && (
         <div>
           {[].map((v: any, i: number) => {
             return (

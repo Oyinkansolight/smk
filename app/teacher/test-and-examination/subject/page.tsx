@@ -5,13 +5,13 @@ import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetSubjectTestExam } from '@/server/test-and-exam';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
-import ReactSelect from 'react-select';
+import { BiChevronRight } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 
 export default function Page() {
@@ -19,12 +19,17 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data, error } = useGetSubjectTestExam({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
     termId: (terms?.data ?? [])[0].id,
     subjectId: params?.get('id'),
+  });
+
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   useEffect(() => {
@@ -41,14 +46,18 @@ export default function Page() {
       <div className='font-bold py-8 h2'>
         <div>Mathematics</div>
       </div>
-      <TextTabBar
-        tabs={Array(6)
-          .fill(0)
-          .map((v, i) => `Primary ${i + 1}`)}
-        onChange={setIdx}
-        selectedIdx={idx}
-      />
-      <div className='flex justify-between'>
+      {arms && arms.length > 0 && (
+        <TextTabBar
+          tabs={[
+            ...(arms ?? []).map((arm) =>
+              arm.arm ? `${arm.class?.name}` : '[NULL]'
+            ),
+          ]}
+          onChange={setIdx}
+          selectedIdx={idx}
+        />
+      )}
+      {/* <div className='flex justify-between'>
         <ReactSelect
           classNames={{
             control: () =>
@@ -62,11 +71,11 @@ export default function Page() {
           <div>First Term</div>
           <BiChevronRight className='h-6 w-6 text-blue-500' />
         </div>
-      </div>
+      </div> */}
       <div className='h-4' />
       <div className='flex flex-col gap-2'>
         {data?.data && data.data.length === 0 ? (
-          <EmptyView label='Tests and Exams haven’t been added for this term' />
+          <EmptyView label='Tests and Exams haven’t been added for this term' useStandardHeight />
         ) : (
           data?.data.map((v, i) => (
             <Link

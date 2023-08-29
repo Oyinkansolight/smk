@@ -67,7 +67,7 @@ export default function Page() {
                 <EditScore key={i} id={i + 1} />
               ))}
           </div>
-          <PaginatedCounter pageCount={5} currentPage={3} />
+          <PaginatedCounter pageCount={5} currentPage={0} />
         </>
       )}
       {idx === 1 && (

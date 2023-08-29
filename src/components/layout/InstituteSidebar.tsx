@@ -170,7 +170,7 @@ const InstituteSidebar = ({
             />
           </div>
         </button>
-        <button
+        {/* <button
           onClick={handleLogout}
           className={clsxm(
             open
@@ -202,7 +202,7 @@ const InstituteSidebar = ({
               )}
             />
           </div>
-        </button>
+        </button> */}
       </nav>
     </aside>
   );

@@ -2,6 +2,7 @@ import request from '@/server';
 import { PaginationParams } from '@/types';
 import { Class } from '@/types/classes-and-subjects';
 import { InstituteClass } from '@/types/institute';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 export function useGetInstituteClass(
@@ -20,21 +21,30 @@ export function useGetInstituteClass(
   return query;
 }
 export function useGetInstituteClassArms(
-  instituteId: unknown,
-  currentSessionId: unknown
+  instituteId?: string,
+  currentSessionId?: string,
+  enabled?: boolean
 ) {
-  // subjectId: string,
+  if (enabled !== false) enabled = true;
 
   const query = useQuery({
+    enabled,
     queryKey: 'get_institute_class_arm',
     queryFn: async () => {
-      const d = await request.get(
-        `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}`
-      );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return d.data.data.data as any;
+      if (instituteId || currentSessionId) {
+        const d = await request.get(
+          `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}`
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return d.data.data.data as any;
+      }
     },
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [instituteId, currentSessionId, refetch]);
   return query;
 }
 export function useGetInstituteSessionClassArms(

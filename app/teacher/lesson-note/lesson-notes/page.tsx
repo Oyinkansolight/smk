@@ -14,20 +14,19 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
-
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data: lessonNotes } = useGetAllLessonNotes({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
     termId: term,
   });
 
@@ -39,7 +38,7 @@ export default function Page() {
       <TextTabBar
         tabs={[
           ...(arms ?? []).map((arm) =>
-            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
+            arm.arm ? `${arm.class?.name}` : '[NULL]'
           ),
         ]}
         onChange={setIdx}
@@ -76,14 +75,14 @@ export default function Page() {
                   title={`${lessonNote?.title}`}
                   key={i}
                   subject={lessonNote?.subject?.name ?? 'NULL'}
-                  nameOfClass={lessonNote?.class.name}
+                  nameOfClass={arms?.[i].class?.name}
                   date={lessonNote?.createdAt}
                 />
               </Link>
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={5} currentPage={2} />
+      <PaginatedCounter pageCount={5} currentPage={0} />
     </div>
   );
 }

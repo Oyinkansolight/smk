@@ -2,7 +2,7 @@ import { Staff } from '@/types/institute';
 
 export interface UserProfile {
   userInfo?: UserInfo;
-  currentSession?: CurrentSession;
+  currentSession?: CurrentSession[];
 }
 
 export interface CurrentSession {

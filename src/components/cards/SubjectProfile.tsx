@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
+import { getFromLocalStorage } from '@/lib/helper';
 import request from '@/server';
-import { useGetAcademicSessions } from '@/server/dashboard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { HiUsers } from 'react-icons/hi';
@@ -18,7 +20,7 @@ interface StudentTeacherProfileCardProps {
   settermId: (v: string) => void;
   setsessionterms: (v: []) => void;
   sessionterms: any[];
-  setacademicyear?: (v: { session: string; id: string }) => void;
+  setacademicyear?: (v: any) => void;
 }
 
 export default function SubjectProfileCard({
@@ -30,15 +32,43 @@ export default function SubjectProfileCard({
   sessionterms,
   settermId,
 }: StudentTeacherProfileCardProps) {
-  const [currentGrid, setCurrentGrid] = useState(0);
+  const [currentGrid, setCurrentGrid] = useState(2);
+  const currentSession = getFromLocalStorage('currentSession');
+  let currentUserInfo;
+
+  if (currentSession) {
+    currentUserInfo = JSON.parse(currentSession);
+  }
+
+  const eccdeSession = currentUserInfo.find((item) =>
+    item.institutionType.toLowerCase().includes('eccde')
+  );
+  const secondarySession = currentUserInfo.find((item) =>
+    item.institutionType.toLowerCase().includes('secondary')
+  );
+  const primarySession = currentUserInfo.find((item) =>
+    item.institutionType.toLowerCase().includes('primary')
+  );
+  const tertiarySession = currentUserInfo.find((item) =>
+    item.institutionType.toLowerCase().includes('tertiary')
+  );
 
   const handleToggleGrid = (index: number) => {
     setCurrentGrid(index);
     setschoolType && setschoolType(index);
   };
-  const { data } = useGetAcademicSessions();
-
-  function Fetchterms(id: number) {
+  const termNumberToName = (num: string) => {
+    if (num) {
+      if (num === '1') {
+        return 'First Term';
+      } else if (num === '2') {
+        return 'Second Term';
+      } else if (num === '3') {
+        return 'Third Term';
+      }
+    } else return 'Term';
+  };
+  function Fetchterms(id: string) {
     request
       .get(`/v1/government/terms/session-terms?sessionId=${id}`, {
         withCredentials: true,
@@ -46,8 +76,16 @@ export default function SubjectProfileCard({
       .then((v) => {
         const data = v.data.data.data;
         setsessionterms(data.data || []);
+        if (settermId) settermId(data.data[0].id);
       });
   }
+
+  useEffect(() => {
+    if (secondarySession) {
+      if (setacademicyear) setacademicyear(secondarySession);
+      Fetchterms(secondarySession.id);
+    }
+  }, []);
   return (
     <div className='hidden md:flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
@@ -64,7 +102,7 @@ export default function SubjectProfileCard({
       <div className='h-10' />
       <div className='mb-1 text-xl font-bold'>{name}</div>
 
-      <div className='w-[250px]'>
+      {/* <div className='w-[250px]'>
         <select
           name=''
           id=''
@@ -82,25 +120,7 @@ export default function SubjectProfileCard({
             </option>
           ))}
         </select>
-      </div>
-      <div className='mt-2 w-[250px]'>
-        <select
-          name=''
-          id=''
-          className='bg-[#EFFFF6] text-base rounded-md w-full'
-          onChange={(e) => {
-            settermId && settermId(JSON.parse(e.target.value).id);
-          }}
-        >
-          <option> - Select Term- </option>
-
-          {(sessionterms ?? []).map((v: any, id: number) => (
-            <option key={id} value={JSON.stringify(v)}>
-              {v.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      </div> */}
 
       <div className='text-[#C3CAD9] text-center font-bold mt-4 mb-8'>
         Select School
@@ -110,25 +130,51 @@ export default function SubjectProfileCard({
         variant='secondary'
         selected={currentGrid}
         onSelect={handleToggleGrid}
+        Fetchterms={Fetchterms}
+        setacademicyear={setacademicyear}
         items={[
           {
             icon: <BiListCheck className='h-7 w-7' />,
             label: 'ECCDE',
+            sessionInfo: eccdeSession,
           },
           {
             icon: <RiUserFill className='h-5 w-5' />,
+
             label: 'Primary',
+            sessionInfo: primarySession,
           },
           {
             icon: <HiUsers className='h-5 w-5' />,
+
             label: 'Secondary',
+            sessionInfo: secondarySession,
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,
+
             label: 'Tertiary',
+            sessionInfo: tertiarySession,
           },
         ]}
       />
+
+      <div className='mt-2 w-[210px]'>
+        <select
+          name=''
+          id=''
+          className='bg-[#EFFFF6] text-base rounded-md w-full'
+          onChange={(e) => {
+            settermId && settermId(JSON.parse(e.target.value).id);
+          }}
+        >
+          {(sessionterms ?? []).map((v: any, id: number) => (
+            <option key={id} value={JSON.stringify(v)}>
+              {termNumberToName(v.name)}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

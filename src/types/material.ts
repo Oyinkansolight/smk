@@ -1,7 +1,6 @@
 import { UserInfo } from '@/types/auth';
 import { Subject } from '@/types/institute';
 
-
 export default interface NewMaterial {
   title: string;
   description: string;

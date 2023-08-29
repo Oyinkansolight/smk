@@ -3,10 +3,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
+import UpdateFolder from '@/components/modal/updateFolder';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
 import {
   useAssignSubjectsToFile,
+  useDeleteFolder,
   useGetFileById,
   useGetFolderAndFiles,
 } from '@/server/library';
@@ -24,7 +26,6 @@ import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import User from '~/svg/user1.svg';
 
-
 type TableItemData = (UserFolder | UserFile) & {
   action: number | null;
   setAction: (value: number | null) => void;
@@ -33,6 +34,11 @@ type TableItemData = (UserFolder | UserFile) & {
   isAssign: boolean;
   setFileId: (value: string) => void;
   onFolderClick: (folderId: UserFolder) => void;
+  setDeleteFolderId: (folderId: string) => void;
+  setFolderId: (value: string) => void;
+  setFolderName: (value: string) => void;
+  isUpdateFolder: boolean;
+  setIsUpdateFolder: (value: boolean) => void;
 };
 
 const columns: TableColumn<TableItemData>[] = [
@@ -40,7 +46,7 @@ const columns: TableColumn<TableItemData>[] = [
     name: 'Name',
     grow: 2,
     cell: (item) => {
-      if ('filename' in item) {
+      if ('fileUrl' in item) {
         return (
           <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
             <div>
@@ -200,10 +206,22 @@ const columns: TableColumn<TableItemData>[] = [
                   >
                     Assign to a Subject
                   </button> */}
-                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                  <button
+                    onClick={() => {
+                      item.setIsUpdateFolder(!item.isUpdateFolder);
+                      item.setFolderName(item?.folderName ?? '');
+                      item.setFolderId(item?.id ?? '');
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
                     Rename
                   </button>
-                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                  <button
+                    onClick={() => {
+                      item.setDeleteFolderId(item?.id ?? '');
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
                     Delete
                   </button>
                 </div>
@@ -245,15 +263,14 @@ const UploadDocument = ({
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isCreateFolder, setisCreateFolder] = useState(false);
+  const [isCreateFolder, setIsCreateFolder] = useState(false);
+  const [isUpdateFolder, setIsUpdateFolder] = useState(false);
   const [isAssign, setisAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
   const [fileId, setFileId] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  // const [path, setPath] = useState<string>();
-  // const [url, setUrl] = useState<string | any>();
-  // const { data: folderData } = useGetAllFolders();
-  // const { data, isLoading: isLoadingFiles } = useGetAllFiles();
+  const [folderName, setFolderName] = useState('');
+  const [folderId, setFolderId] = useState('');
 
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
 
@@ -287,12 +304,18 @@ const UploadDocument = ({
   }, [fileObject, setValue]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
+  const handleFolderDelete = useDeleteFolder();
 
   function handleIsCreateFolderModal() {
-    setisCreateFolder(!isCreateFolder);
+    setIsCreateFolder(!isCreateFolder);
   }
+
   function handleIsAssignModal() {
     setisAssign(!isAssign);
+  }
+
+  function handleIsUpdateFolderModal() {
+    setIsUpdateFolder(!isUpdateFolder);
   }
 
   // const [content, setContent] = useState<UserFile[] | undefined>([]);
@@ -321,6 +344,21 @@ const UploadDocument = ({
     }
   };
 
+  const handleFolderDeletion = async (folderId: string) => {
+    setLoading(true);
+    try {
+      const response = await handleFolderDelete.mutateAsync(folderId);
+
+      if (response) {
+        toast.success('Folder deleted successful');
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error('An error occurred');
+      setLoading(false);
+    }
+  };
+
   if (!isLoadingFolderFiles) {
     return (
       <section className='transition-all ease-in-out delay-1000 w-full max-w-[40rem] lg:max-w-full'>
@@ -338,6 +376,13 @@ const UploadDocument = ({
             loading={loading}
             onClickHandler={handleIsAssignModal}
             handleSubmit={handleAssignSubject}
+          />
+        )}
+        {isUpdateFolder && (
+          <UpdateFolder
+            folderId={folderId}
+            folderName={folderName}
+            onClickHandler={handleIsUpdateFolderModal}
           />
         )}
 
@@ -365,7 +410,7 @@ const UploadDocument = ({
                 className={clsxm(
                   variant === 'secondary' && '!border-blue-500 text-blue-500',
                   variant === 'primary' && 'border-[#016938] text-[#016938]',
-                  'w-max flex items-center rounded border  px-6 py-3 text-center text-xs font-medium'
+                  'w-max flex items-center rounded border px-6 py-3 text-center text-xs font-semibold bg-white'
                 )}
               >
                 Add Document
@@ -396,7 +441,7 @@ const UploadDocument = ({
                 <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-12 right-0 z-10'>
                   <button
                     onClick={() => {
-                      setisCreateFolder(!isCreateFolder);
+                      setIsCreateFolder(!isCreateFolder);
                     }}
                     className='p-3 hover:bg-slate-100  text-left font-medium w-full'
                   >
@@ -466,7 +511,7 @@ const UploadDocument = ({
                     isAssign,
                     setAction,
                     setisAssign,
-                    idx,
+                    idx: item.id ? item.id : idx,
                     setFileId,
                     onFolderClick: (folder) => {
                       const c = [...folderTrail];
@@ -474,6 +519,13 @@ const UploadDocument = ({
                       setFolderTrail(c);
                       refetchFolderFiles();
                     },
+                    setDeleteFolderId: async (folderId) => {
+                      handleFolderDeletion(folderId);
+                    },
+                    setFolderId,
+                    setFolderName,
+                    isUpdateFolder,
+                    setIsUpdateFolder,
                   } as TableItemData)
               ) ?? []
           }

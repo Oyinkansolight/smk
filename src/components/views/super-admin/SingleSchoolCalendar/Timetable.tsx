@@ -24,55 +24,11 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface dataType {
-  sessionId: number;
+  sessionId: string;
   institutionType: string | null;
   timeTableType: string;
-  classId: number;
+  classId: string;
   term: number;
   type: string | number;
   periods?: any[];
@@ -90,7 +46,7 @@ const TimeTable = ({
   timeTableType = 'DEFAULT',
 }: {
   sessionId: any;
-  classId: number;
+  classId: string;
   termId: number;
   examSchedule?: any;
   isClassTimeTable?: boolean;
@@ -102,6 +58,7 @@ const TimeTable = ({
     classId,
     termId,
   });
+
 
   const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
 
@@ -180,7 +137,30 @@ const TimeTable = ({
     }
 
     try {
+      if (!data.startTime || data.startTime === '') {
+        toast.error('Start Time is invalid or missing');
+        return;
+      }
+      if (!data.endTime || data.endTime === '') {
+        toast.error('End time is invalid or missing');
+        return;
+      }
+      if (data.periods && type === 'period') {
+        for (const period of data.periods) {
+          // Check if subject is a positive integer
+          if (!period.subject) {
+            toast.error('one or more subject in periods is invalid or missing');
+            return;
+          }
+        }
+      }
+      // If isEvent is true, check for eventName
+      if (type === 'event' && !data.eventName) {
+        toast.error('Event Name is invalid or missing');
+        return;
+      }
       setloading(true);
+
       const response = await handleCreateAcademicTimeTable.mutateAsync(data);
 
       if (response) {
@@ -188,8 +168,6 @@ const TimeTable = ({
         // location.reload()
         setloading(false);
         modalActivityHandler();
-
-        //2 Second - Open Success Modal
       }
     } catch (error) {
       setloading(false);
@@ -273,7 +251,7 @@ const TimeTable = ({
         {!isLoading ? (
           <div>
             <div>
-              {((isClassTimeTable ? data : examSchedule)?.data ?? []).map(
+              {((isClassTimeTable ? data : examSchedule) ?? []).map(
                 (item: any, id: number) => (
                   <div key={id}>
                     {item.type === 'event' ? (
@@ -281,12 +259,9 @@ const TimeTable = ({
                         <div className='w-[150px] bg-white font-medium text-[10px] px-3 py-5  border'>
                           {item.startTime} - {item.endTime}
                         </div>
-                        <button
-                          onClick={modalActivityHandler}
-                          className='w-full border p-5 text-center'
-                        >
+                        <div className='w-full border p-5 text-center'>
                           <p> {item.eventName} </p>
-                        </button>
+                        </div>
                         <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
                           <div className='text-green-600'>Edit</div>
                           <div className='text-red-600'>Delete</div>

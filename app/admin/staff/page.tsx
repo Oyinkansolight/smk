@@ -12,6 +12,7 @@ import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetai
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import {
   useGetSubjectAssignedToTeacher,
@@ -26,6 +27,8 @@ import { toast } from 'react-toastify';
 
 const Page = () => {
   const router = useRouter();
+  const currentSessionId: string =
+    getFromLocalStorage('currentSessionId') ?? '';
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
@@ -36,7 +39,8 @@ const Page = () => {
     id: p?.get('id'),
   });
   const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
-    p?.get('id')
+    p?.get('id'),
+    currentSessionId
   );
   const [assignedClassSubject, setassignedClassSubject] = useState<
     { classId: string | null; subjectId: string | null }[]
@@ -71,14 +75,31 @@ const Page = () => {
   const SubmitHandler = async () => {
     const payload = {
       teacherId: p?.get('id'),
+      sessionId: currentSessionId,
       subjectAndClasses: assignedClassSubject,
     };
+
+    if (payload.subjectAndClasses.length === 0) {
+      toast.error('Please add at least one subject');
+      return;
+    }
+
+    for (let i = 0; i < payload.subjectAndClasses.length; i++) {
+      if (
+        !payload.subjectAndClasses[i].classId ||
+        !payload.subjectAndClasses[i].subjectId
+      ) {
+        toast.error('Please complete all fields');
+        return;
+      }
+    }
+
     try {
       setLoading(true);
       const response = await handleUpdateStaff.mutateAsync(payload);
 
       if (response) {
-        toast.success('Staff Subject Update successfully');
+        toast.success('Teacher subject updated successfully');
         onClickHandler();
         setLoading(false);
       }
@@ -87,7 +108,6 @@ const Page = () => {
       toast.error(getErrMsg(error));
     }
   };
-  console.log(data);
 
   const staff = data;
 
@@ -97,14 +117,18 @@ const Page = () => {
     }
   }, [error]);
 
+  const teacherName = `${(staff?.user ?? [])[0]?.firstName} ${
+    (staff?.user ?? [])[0]?.lastName
+  }`;
+
+  console.log(studentSubjectsList);
+
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
         // image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? [])[0]?.firstName} ${
-          (staff?.user ?? [])[0]?.lastName
-        }`}
+        name={teacherName}
         school={staff?.institution?.instituteName ?? ''}
         id={staff?.staffId}
         student={false}
@@ -145,6 +169,7 @@ const Page = () => {
             <StudentDashboardView
               classCount={staff ? staff.classes.length : 0}
               subjectCount={staff ? staff.subjects.length : 0}
+              managedClass={staff ? staff.managedClassArm : {}}
             />
           )}
           {tabIdx === 1 && (
@@ -252,7 +277,11 @@ const Page = () => {
                   Add Subject
                 </Button>
               </div>
-              <SubjectList studentSubjectsList={studentSubjectsList} />
+              <SubjectList
+                studentSubjectsList={studentSubjectsList}
+                managedClassArm={data.managedClassArm}
+                teacher={teacherName}
+              />
             </>
           )}
         </div>

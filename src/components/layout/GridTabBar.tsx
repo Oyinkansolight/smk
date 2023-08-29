@@ -1,17 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
 
 interface GridTabBarProps {
-  items: { label: string; icon: JSX.Element }[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  items: { label: string; icon: JSX.Element; sessionInfo?: any }[];
   selected?: number;
   onSelect?: (idx: number) => void;
   buttonActiveClassName?: string;
   variant?: 'primary' | 'secondary';
+  setacademicyear?: (session: any) => void;
+  Fetchterms?: (id: string) => void;
 }
 
 export default function GridTabBar({
   items,
   selected,
   onSelect,
+  setacademicyear,
+  Fetchterms,
   variant = 'primary',
 }: GridTabBarProps) {
   return (
@@ -20,6 +26,8 @@ export default function GridTabBar({
         <button
           key={i}
           onClick={() => {
+            if (setacademicyear) setacademicyear(item.sessionInfo);
+            if (Fetchterms) Fetchterms(item.sessionInfo.id);
             if (onSelect) onSelect(i);
           }}
           className={clsxm(

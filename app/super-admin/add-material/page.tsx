@@ -39,13 +39,30 @@ export default function Page() {
       );
 
       const folderId = params?.get('folderId');
-      const fileUploadDetails: UploadFileParams = {
-        filename: d.title,
-        fileUrl: path,
-        createdBy: profile?.userInfo?.email,
-        userTypes: [],
-        folderId,
-      };
+      let fileUploadDetails: UploadFileParams;
+
+      const videoFileType = data.type.split('/')[0];
+      const pdfFileType = data.type.split('/')[1];
+
+      if (folderId) {
+        fileUploadDetails = {
+          folderId,
+          userTypes: [],
+          fileUrl: path,
+          filename: d.title,
+          createdBy: profile?.userInfo?.email,
+          fileType: videoFileType === 'video' ? videoFileType : pdfFileType,
+        };
+      } else {
+        fileUploadDetails = {
+          userTypes: [],
+          fileUrl: path,
+          filename: d.title,
+          createdBy: profile?.userInfo?.email,
+          fileType: videoFileType === 'video' ? videoFileType : pdfFileType,
+        };
+      }
+
       const response = folderId
         ? await uploadFolderFile(fileUploadDetails)
         : await uploadFile(fileUploadDetails);

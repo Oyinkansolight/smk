@@ -1,10 +1,16 @@
 'use client';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
-import { useAssignSubjectsToFile, useGetFileById, useGetFolderAndFiles } from '@/server/library';
+import {
+  useAssignSubjectsToFile,
+  useDeleteFolder,
+  useGetFileById,
+  useGetFolderAndFiles,
+} from '@/server/library';
 import { UserFile, UserFolder } from '@/types/material';
 import moment from 'moment';
 import Link from 'next/link';
@@ -19,7 +25,6 @@ import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import User from '~/svg/user1.svg';
 
-
 type TableItemData = (UserFolder | UserFile) & {
   action: number | null;
   setAction: (value: number | null) => void;
@@ -28,6 +33,7 @@ type TableItemData = (UserFolder | UserFile) & {
   isAssign: boolean;
   setFileId: (value: string) => void;
   onFolderClick: (folderId: UserFolder) => void;
+  setDeleteFolderId: (folderId: string) => void;
 };
 
 const columns: TableColumn<TableItemData>[] = [
@@ -198,7 +204,12 @@ const columns: TableColumn<TableItemData>[] = [
                   <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
                     Rename
                   </button>
-                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                  <button
+                    onClick={() => {
+                      item.setDeleteFolderId(item?.id ?? '');
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
                     Delete
                   </button>
                 </div>
@@ -284,6 +295,7 @@ const UploadDocument = ({
   }, [fileObject, setValue]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
+  const handleFolderDelete = useDeleteFolder();
 
   function handleIsCreateFolderModal() {
     setisCreateFolder(!isCreateFolder);
@@ -302,8 +314,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-            | { label: string; value: number }[]
-            | undefined
+              | { label: string; value: number }[]
+              | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -314,6 +326,21 @@ const UploadDocument = ({
       }
     } catch (error) {
       toast.error('An error occured');
+      setLoading(false);
+    }
+  };
+
+  const handleFolderDeletion = async (folderId: string) => {
+    setLoading(true);
+    try {
+      const response = await handleFolderDelete.mutateAsync(folderId);
+
+      if (response) {
+        toast.success('Folder deleted successful');
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error('An error occurred');
       setLoading(false);
     }
   };
@@ -408,12 +435,15 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${folderTrail.length > 0
-                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
-                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                        }`
+                    href={`/super-admin/add-material${
+                      folderTrail.length > 0
+                        ? `?folderId=${
+                            folderTrail[folderTrail.length - 1].id
+                          }&folderName=${
+                            folderTrail[folderTrail.length - 1].folderName
+                          }`
                         : ''
-                      }`}
+                    }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -453,21 +483,24 @@ const UploadDocument = ({
               )
               ?.map(
                 (item, idx) =>
-                ({
-                  ...item,
-                  action,
-                  isAssign,
-                  setAction,
-                  setisAssign,
-                  idx,
-                  setFileId,
-                  onFolderClick: (folder) => {
-                    const c = [...folderTrail];
-                    c.push(folder);
-                    setFolderTrail(c);
-                    refetchFolderFiles();
-                  },
-                } as TableItemData)
+                  ({
+                    ...item,
+                    action,
+                    isAssign,
+                    setAction,
+                    setisAssign,
+                    idx,
+                    setFileId,
+                    onFolderClick: (folder) => {
+                      const c = [...folderTrail];
+                      c.push(folder);
+                      setFolderTrail(c);
+                      refetchFolderFiles();
+                    },
+                    setDeleteFolderId: async (folderId) => {
+                      handleFolderDeletion(folderId);
+                    },
+                  } as TableItemData)
               ) ?? []
           }
         />

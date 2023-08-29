@@ -7,7 +7,6 @@ import Biodata from '@/components/views/admin/Addstaff/biodata';
 import Contact from '@/components/views/admin/Addstaff/contact';
 // import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
-import Publish from '@/components/views/admin/Addstaff/publish';
 import Training from '@/components/views/admin/Addstaff/training';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
@@ -113,18 +112,25 @@ const AddStaff = () => {
     ) {
       setStage(stage + 1);
     }
-    if (
-      stage === 2 &&
-      data.phoneNumber &&
-      data.address &&
-      data.email &&
-      data.townId
-    ) {
+    if (stage === 2 && data.phoneNumber && data.address && data.email) {
       setStage(stage + 1);
     }
     if (stage === 3) {
       setStage(stage + 1);
     }
+
+    // if (
+    //   stage === 4 &&
+    //   data.schoolname &&
+    //   data.dateposted &&
+    //   data.qualification &&
+    //   data.dateappointed &&
+    //   data.jobTitle &&
+    //   data.retirementDate &&
+    //   data.salarygrade
+    // ) {
+    //   setStage(stage + 1);
+    // }
 
     if (
       stage === 4 &&
@@ -136,9 +142,6 @@ const AddStaff = () => {
       data.retirementDate &&
       data.salarygrade
     ) {
-      setStage(stage + 1);
-    }
-    if (stage === 5) {
       const array = await imageData?.arrayBuffer();
       let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
       if (array) {
@@ -220,10 +223,10 @@ const AddStaff = () => {
       stageName: 'Employment Details ',
     },
 
-    {
-      stage: 5,
-      stageName: 'Publish',
-    },
+    // {
+    //   stage: 5,
+    //   stageName: 'Publish',
+    // },
   ];
 
   return (
@@ -291,25 +294,28 @@ const AddStaff = () => {
             />
           )} */}
 
-          {stage === 5 ||
-            (stage === 6 && <Publish publishData={publishData} />)}
+          {/* {(stage === 5 || stage === 6) && <Publish publishData={publishData} />} */}
           <div className='mb-6 flex justify-end'>
             <div className='flex space-x-6'>
-              <button
-                type='button'
-                onClick={prevHandler}
-                className='cursor-pointer w-full rounded px-2 py-3 text-xs text-[#3361FF] md:px-6'
-              >
-                Prev
-              </button>
-              {stage <= 5 && (
+              {stage > 1 && (
+                <button
+                  type='button'
+                  onClick={prevHandler}
+                  className='cursor-pointer w-full rounded px-2 py-3 text-xs text-[#3361FF] md:px-6'
+                >
+                  Prev
+                </button>
+              )}
+
+              {stage < 4 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
                   {loading ? <ImSpinner2 className='animate-spin' /> : 'Next'}
                 </button>
               )}
-              {stage === 6 && (
+
+              {stage === 4 && (
                 <button className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '>
-                  Continue
+                  Submit
                 </button>
               )}
             </div>

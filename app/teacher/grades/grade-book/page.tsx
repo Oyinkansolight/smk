@@ -55,7 +55,9 @@ function StudentGradeListItem({ id, name }: { id: number; name: string }) {
         <div>24/24</div>
         <div className='text-black'>16/19</div>
         <div className='text-black flex items-center'>
-          <div>{id}th</div>
+          <div>
+            {id} {id === 1 ? 'st' : id === 2 ? 'nd' : id === 3 ? 'rd' : 'th'}
+          </div>
           <BsArrowUp className='h-5 w-5 text-green-500' />
         </div>
       </div>

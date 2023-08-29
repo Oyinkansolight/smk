@@ -7,7 +7,6 @@ import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoDocumentOutline } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-import { Tooltip } from 'react-tooltip';
 import Calendar_icon from '~/svg/calendar_icon.svg';
 import Chat from '~/svg/chats_teardrop.svg';
 import Folder from '~/svg/folder_notch.svg';
@@ -229,7 +228,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
             />
           }
           title='Logout'
-          href='/auth/admin'
+          href='#'
           onClick={handleLogout}
           active={routeDetails && routeDetails.includes('message') && true}
         />
@@ -257,8 +256,8 @@ export const SideBarButton = ({
 }: SideBarButtonProps) => (
   <>
     <ButtonLink
-      data-tooltip-id={`super-admin-tooltip-${title}`}
       href={href}
+      title={title}
       onClick={onClick}
       className={clsxm(
         open && 'w-[190px]',
@@ -280,10 +279,6 @@ export const SideBarButton = ({
         </div>
       </div>
     </ButtonLink>
-
-    <Tooltip id={`super-admin-tooltip-${title}`} place='top'>
-      {title}
-    </Tooltip>
   </>
 );
 

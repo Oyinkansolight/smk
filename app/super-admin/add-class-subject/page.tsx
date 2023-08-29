@@ -5,12 +5,20 @@ import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/super-admin/AddClassSubject/Details';
 import Publish from '@/components/views/super-admin/AddClassSubject/publish';
-import { getErrMsg } from '@/server';
+// import { getErrMsg } from '@/server';
 // import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -92,7 +100,7 @@ const TransferStudent = () => {
   });
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
-  const [publishData, setpublishData] = useState(null);
+  const [publishData] = useState(null);
 
   const [submissionList, setSubmissionList] = useState([
     { name: '', subjects: [] },
@@ -108,8 +116,6 @@ const TransferStudent = () => {
   };
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(errors);
-    console.log(data);
     if (
       stage === 1 &&
       data.className &&

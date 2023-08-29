@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AccordionAlt from '@/components/accordions/AccordionAlt';
+import EmptyView from '@/components/misc/EmptyView';
 import PeriodStatusModal from '@/components/modals/period-status-modal';
 import { useState } from 'react';
 import { AiFillFlag } from 'react-icons/ai';
@@ -7,9 +8,13 @@ import { BiChevronLeft } from 'react-icons/bi';
 
 export default function SubjectList({
   studentSubjectsList,
+  managedClassArm,
+  teacher,
 }: {
   // subjectCount?: number
   studentSubjectsList?: any[];
+  managedClassArm?: any;
+  teacher?: string;
 }) {
   // const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
   const [currentView, setCurrentView] = useState(0);
@@ -21,46 +26,57 @@ export default function SubjectList({
           <div className='mx-8 font-bold text-2xl text-[#6B7A99] my-4 border-b'>
             Subjects
           </div>
-          <div className='p-8'>
-            <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
-              <div className='flex items-center gap-8'>
-                <div>Class:</div>
-                <div className='text-bold text-sm text-[#5A5A5A]'>
-                  Primary 1
-                </div>
-              </div>
-              <div>
-                <div className='text-end'>Class Teacher:</div>
-                <div className='flex gap-4 items-center'>
-                  <div className='bg-gray-500 rounded-full h-10 w-10' />
-                  <div className='text-[#8898AA] font-bold text-sm'>
-                    James Grace
+          {managedClassArm && (
+            <div className='p-8'>
+              <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
+                <div className='flex items-center gap-8'>
+                  <div>Class:</div>
+                  <div className='text-bold text-sm text-[#5A5A5A]'>
+                    Class Name - {managedClassArm.arm}
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className='h-12' />
-            <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-              {studentSubjectsList &&
-                studentSubjectsList.map((v, i) => (
-                  <div
-                    key={i}
-                    onClick={() => {
-                      setCurrentView(1);
-                      setSubjectName(v.name);
-                    }}
-                    className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square'
-                  >
-                    <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
-                      <div>{v.name.substring(0, 1)}</div>
-                    </div>
-                    <div className='font-bold text-center text-lg'>
-                      {v.name}
+                <div>
+                  <div className='text-end'>Class Teacher:</div>
+                  <div className='flex gap-4 items-center'>
+                    <div className='bg-gray-500 rounded-full h-10 w-10' />
+                    <div className='text-[#8898AA] font-bold text-sm'>
+                      {teacher}
                     </div>
                   </div>
+                </div>
+              </div>
+              <div className='h-12' />
+              <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+                {studentSubjectsList &&
+                  studentSubjectsList.length > 0 &&
+                  studentSubjectsList.map((v, i) => (
+                    <div
+                      key={v?.subject?.id ?? i}
+                      onClick={() => {
+                        setCurrentView(1);
+                        setSubjectName(v?.subject?.name);
+                      }}
+                      className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square'
+                    >
+                      <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
+                        <div>{v?.subject?.name?.substring(0, 1)}</div>
+                      </div>
+                      <div className='font-bold text-center text-lg'>
+                        {v?.subject?.name ?? 'Subject Name'}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              {!studentSubjectsList ||
+                (studentSubjectsList.length === 0 && (
+                  <EmptyView
+                    label='No subject has been assigned to this teacher'
+                    useStandardHeight
+                  />
                 ))}
             </div>
-          </div>
+          )}
         </div>
       )}
       {currentView === 1 && (

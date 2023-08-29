@@ -1,30 +1,41 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import ROUTES from '@/constant/routes';
 import { getFromLocalStorage } from '@/lib/helper';
-import { useGetStaffs } from '@/server/government/staff';
+import { useGetTeachersListByInstitution } from '@/server/institution';
 import { useGetInstituteClassArms } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// import Back from '@/'
-// import clsxm from '@/lib/clsxm';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllClasses = () => {
-  const institutionId = getFromLocalStorage('institutionId');
-  const currentSessionId = getFromLocalStorage('currentSessionId');
+  const currentSessionId: string =
+    getFromLocalStorage('currentSessionId') ?? '';
+  const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
-  const { data: allclasses, isLoading } = useGetInstituteClassArms(
-    institutionId,
-    currentSessionId
-  );
+  const {
+    data: allClasses,
+    isLoading,
+    isError,
+  } = useGetInstituteClassArms(institutionId, currentSessionId);
 
-  const { data: staffs } = useGetStaffs();
-  // console.log(institutionId, currentSessionId);
+  const { data: staffs } = useGetTeachersListByInstitution({
+    instituteId: institutionId,
+  });
 
   const getTeacher = (teacherId: number) => {
-    const teacherInfo = (staffs ?? []).find((v: any) => v.id === teacherId);
-    return `${teacherInfo?.user[0].firstName} ${teacherInfo?.user[0].lastName}`;
+    const teacherInfo = (staffs?.data ?? []).find(
+      (v: any) => v.id === teacherId
+    );
+    return teacherInfo?.user
+      ? `${teacherInfo?.user[0].firstName} ${teacherInfo?.user[0].lastName}`
+      : '';
   };
 
   return (
@@ -67,26 +78,30 @@ const AllClasses = () => {
           <div className='col-span-3'>Capacity</div>
           <div className='col-span-6'>Class Teacher</div>
         </div>
-        {isLoading ? (
+        {isLoading && !isError ? (
           <div className='py-10 text-center'>Loading...</div>
         ) : (
           <div>
-            {(allclasses ?? []).map((item: any, idx: number) => (
-              <div
-                className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b bg-white py-4 px-1 text-[#8898AA] font-semibold'
-                key={idx}
-              >
-                <div className='col-span-3'>
-                  <Link href={`/admin/class?id=${item.id}`}>
-                    {`${item.class.name} ${item.arm}`}
-                  </Link>
+            {allClasses && allClasses.length > 0 ? (
+              allClasses.map((item: any, idx: number) => (
+                <div
+                  className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b bg-white py-4 px-1 text-[#8898AA] font-semibold'
+                  key={idx}
+                >
+                  <div className='col-span-3'>
+                    <Link href={`/admin/class?id=${item.id}`}>
+                      {`${item.class.name} ${item.arm}`}
+                    </Link>
+                  </div>
+                  <div className='col-span-3'> {item.capacity} </div>
+                  <div className='col-span-6'>
+                    {getTeacher(item?.teacher?.id)}
+                  </div>
                 </div>
-                <div className='col-span-3'> {item.capacity} </div>
-                <div className='col-span-6'>
-                  {getTeacher(item?.teacher?.id)}
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className='py-10 text-center'>No Class Arm Found</div>
+            )}
           </div>
         )}
       </div>

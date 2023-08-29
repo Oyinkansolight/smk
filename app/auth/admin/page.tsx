@@ -3,6 +3,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
 import { getErrMsg } from '@/server';
@@ -17,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function AdminAuth() {
+  const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
@@ -61,10 +63,17 @@ export default function AdminAuth() {
           response.data.data.data.firstName +
           ' ' +
           response.data.data.data.lastName;
+        const id = response.data.data.data.id;
         const role = response.data.data.data.type;
         const email = response.data.data.data.email;
         const adminType = response.data.data.data.esgAdmin.type;
-        const userDetails = { name, role, email };
+
+        const userDetails = {
+          name,
+          role,
+          email,
+          id,
+        };
         Cookies.set('adminType', adminType);
         if (typeof window !== 'undefined') {
           sessionStorage.setItem('user', JSON.stringify(userDetails));
@@ -82,13 +91,14 @@ export default function AdminAuth() {
           <section className='relative overflow-hidden bg-white'>
             <div className='relative z-10 -m-8 flex flex-wrap'>
               <div className='hidden p-8 lg:block lg:w-1/2'>
-                <Image
-                  width={154}
-                  height={53}
-                  className='absolute left-[60px] top-[60px] z-20'
-                  src='/images/edo_logo.png'
-                  alt=''
-                />
+                {isGenericApp === 'N' &&
+                  <Image
+                    width={154}
+                    height={53}
+                    alt={APP_LOGOS.APP_LOGO.alt}
+                    src={APP_LOGOS.APP_LOGO.asset}
+                    className='absolute left-[60px] top-[60px] z-20'
+                  />}
                 <div className='container mx-auto'>
                   <Image
                     width={726}
@@ -104,7 +114,8 @@ export default function AdminAuth() {
                 <div className='flex flex-col justify-center h-full py-6  lg:py-10 px-6'>
                   <div className='flex flex-col justify-center items-center text-center'>
                     <div className='h1 mb-4'>
-                      Edo State Education Management Portal
+                      {isGenericApp === "Y" && "Education Management Portal"}
+                      {isGenericApp === "N" && "Edo State Education Management Portal"}
                     </div>
 
                     <div className='h4 mb-4'>
@@ -113,12 +124,13 @@ export default function AdminAuth() {
                     </div>
                   </div>
                   <div className='bg-blueGray-100 flex h-full flex-col items-center justify-center p-4'>
-                    <Image
-                      width={146}
-                      height={146}
-                      src='/images/Seal_of_Edo_State.png'
-                      alt=''
-                    />
+                    {isGenericApp === 'N' &&
+                      <Image
+                        width={146}
+                        height={146}
+                        src='/images/Seal_of_Edo_State.png'
+                        alt=''
+                      />}
 
                     <form
                       onSubmit={handleSubmit(onSubmit)}

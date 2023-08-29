@@ -18,18 +18,18 @@ export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data: activities } = useGetClassActivity({
     typeOfActivity: 'CLASS_WORK',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   return (
@@ -104,7 +104,7 @@ export default function Page() {
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={5} currentPage={2} />
+      <PaginatedCounter pageCount={5} currentPage={0} />
     </div>
   );
 }

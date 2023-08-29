@@ -15,10 +15,10 @@ const colors = ['bg-[#EFF7F6]', 'bg-[#F3EFF7]', 'bg-[#F7EFEF]', 'bg-[#F7F7EF]'];
 export default function Page() {
   return (
     <div className='w-full layout mt-10'>
-      <div className='font-extrabold text-3xl mb-2'>Lesson Task</div>
+      <div className='font-extrabold text-3xl mb-2 p-6'>Lesson Task</div>
       <div className='bg-white rounded-lg p-8'>
         <div className='font-extrabold text-lg my-4'>Choose a lesson task</div>
-        <div className='grid grid-cols-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4'>
           {items?.map((v, i) => (
             <Link href={links[i]} key={v}>
               <GradeSubjectCard

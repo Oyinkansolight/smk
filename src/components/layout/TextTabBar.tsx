@@ -12,12 +12,12 @@ export default function TextTabBar({
   activeClassName?: string;
 }) {
   return (
-    <div className='flex p-5 rounded-xl bg-white my-4 overflow-hidden overflow-x-scroll hideScroll'>
+    <div className='flex gap-1 justify-start p-5 rounded-xl bg-white my-4 overflow-hidden overflow-x-scroll hideScroll'>
       {tabs.map((v, i) => (
         <div
           onClick={() => onChange(i)}
           className={clsxm(
-            'font-bold flex-1 cursor-pointer text-[#D4D5D7] whitespace-nowrap px-2',
+            'font-bold cursor-pointer text-[#D4D5D7] whitespace-nowrap px-2',
             i === selectedIdx && 'text-black',
             i === selectedIdx && activeClassName
           )}

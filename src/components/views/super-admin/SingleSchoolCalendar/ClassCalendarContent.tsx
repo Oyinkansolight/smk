@@ -151,7 +151,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
         </div>
 
         {isLoading ? (
-          <div className='text-center'>Loading...</div>
+          <div className='text-center my-4'>Loading...</div>
         ) : (
           filteredEvents.map((item: any, idx: number) => (
             <div

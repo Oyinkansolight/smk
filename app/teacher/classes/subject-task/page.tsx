@@ -3,21 +3,26 @@
 
 import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
+import BasicModal from '@/components/modal/Basic';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import { getURL } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
+import { LessonNoteObject } from '@/types/institute';
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-import BasicModal from '@/components/modal/Basic';
-import { LessonNoteObject } from '@/types/institute';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const [url, setUrl] = useState('');
@@ -39,7 +44,7 @@ export default function Page() {
     }
   }, [period, url]);
 
-  if (isLoading || typeof window === "undefined") {
+  if (isLoading || typeof window === 'undefined') {
     return (
       <div className='flex justify-center items-center h-[40vh]'>
         <RotatingLines
@@ -53,13 +58,10 @@ export default function Page() {
     );
   }
 
-
   return (
-    <div className='layout pl-20 xl:pl-0'>
+    <div className='layout'>
       <div className='text-[#D4D5D7] py-8 text-lg lg:text-2xl'>
-        <Link href="/teacher/classes">
-          Classes
-        </Link>
+        <Link href='/teacher/classes'>Classes</Link>
         {` > ${period?.subject?.name}`}
       </div>
 
@@ -83,34 +85,34 @@ export default function Page() {
             </CreateSubjectActivityModal>
 
             <BasicModal
-              className='ml-20 mt-20'
-              content={<div className='flex items-stretch gap-10'>
-                {period?.file ? (
-                  <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll'>
-                    <div className='flex justify-center'>
-                      {url.length > 0 &&
-                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-                          <div style={{ height: '100vh', width: "100vw" }}>
-                            <Viewer
-                              fileUrl={url}
-                              plugins={[
-                                defaultLayoutPluginInstance,
-                              ]}
-                            />
-                          </div>
-                        </Worker>
-                      }
+              className='mt-20'
+              content={
+                <div className='flex items-stretch gap-10'>
+                  {period?.file ? (
+                    <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+                      <div className='flex justify-center'>
+                        {url.length > 0 && (
+                          <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
+                            <div style={{ height: '100vh', width: '90vw' }}>
+                              <Viewer
+                                fileUrl={url}
+                                plugins={[defaultLayoutPluginInstance]}
+                              />
+                            </div>
+                          </Worker>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className='w-full'>
-                    <EmptyView
-                      label='No scripted lesson note for this period'
-                      useStandardHeight
-                    />
-                  </div>
-                )}
-              </div>}
+                  ) : (
+                    <div className='w-full'>
+                      <EmptyView
+                        label='No scripted lesson note for this period'
+                        useStandardHeight
+                      />
+                    </div>
+                  )}
+                </div>
+              }
             >
               <Button variant='secondary'>View Scripted Lesson</Button>
             </BasicModal>
@@ -120,12 +122,26 @@ export default function Page() {
         {period?.classActivities && period?.classActivities.length > 0 && (
           <div className='flex flex-wrap gap-[17px] justify-end h-fit self-end mb-4'>
             {period?.classActivities.map((activity) => {
-              const parsedActivityName = activity.typeOfActivity.includes("_") ? activity.typeOfActivity[0] + activity.typeOfActivity.slice(1).split("_").join(" ").toLowerCase() : activity.typeOfActivity[0] + activity.typeOfActivity.slice(1).toLowerCase() ?? "Activity Name";
+              const parsedActivityName = activity.typeOfActivity.includes('_')
+                ? activity.typeOfActivity[0] +
+                activity.typeOfActivity
+                  .slice(1)
+                  .split('_')
+                  .join(' ')
+                  .toLowerCase()
+                : activity.typeOfActivity[0] +
+                activity.typeOfActivity.slice(1).toLowerCase() ??
+                'Activity Name';
               return (
-                <SideBarItem key={activity.id} period={period} type={activity.typeOfActivity}>{parsedActivityName}</SideBarItem>
-              )
-            }
-            )}
+                <SideBarItem
+                  key={activity.id}
+                  period={period}
+                  type={activity.typeOfActivity}
+                >
+                  {parsedActivityName}
+                </SideBarItem>
+              );
+            })}
           </div>
         )}
       </div>
@@ -134,17 +150,16 @@ export default function Page() {
         {period?.file ? (
           <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
             <div className='flex justify-center'>
-              {url.length > 0 &&
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js">
-                  <div style={{ height: '100vh', width: "100vw" }}>
+              {url.length > 0 && (
+                <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
+                  <div style={{ height: '100vh', width: '100vw' }}>
                     <Viewer
                       fileUrl={url}
-                      plugins={[
-                        defaultLayoutPluginInstance,
-                      ]}
+                      plugins={[defaultLayoutPluginInstance]}
                     />
                   </div>
-                </Worker>}
+                </Worker>
+              )}
             </div>
           </div>
         ) : (
@@ -160,7 +175,7 @@ export default function Page() {
   );
 }
 
-export function SideBarItem({
+function SideBarItem({
   type,
   children,
   period,
@@ -192,5 +207,5 @@ export function SideBarItem({
     );
   }
 
-  return <div></div>
+  return <div></div>;
 }

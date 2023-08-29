@@ -10,6 +10,9 @@ export interface DashboardOverview {
   Total_Tertiary?: number;
   Total_Teachers?: number;
   Total_Subjects?: number;
+  Total_Absent_Today: number;
+  Total_Late_Today: number;
+  Total_Present_Today: number;
 }
 
 export interface Label {
@@ -18,7 +21,7 @@ export interface Label {
 }
 
 export interface LocalGovernmentArea {
-  id?: number;
+  id?: string;
   name?: string;
   towns?: Town[];
   value?: number;
@@ -26,7 +29,7 @@ export interface LocalGovernmentArea {
 }
 
 export interface Town {
-  id?: number;
+  id?: string;
   name?: string;
   value?: number;
   label?: string;

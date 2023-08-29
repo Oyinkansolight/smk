@@ -14,7 +14,7 @@ export default function SubmittedQuestionView({
         <div>{question.question}</div>
       </div>
       <div className='grid grid-cols-2'>
-        {(question?.options ?? question.optons ?? [])
+        {(question?.options ?? question.options ?? [])
           ?.filter((q) => !q.answer)
           .map((v, i) => (
             <div key={i} className='flex gap-4'>
@@ -27,7 +27,7 @@ export default function SubmittedQuestionView({
         <div className='font-bold'>Answer</div>
         <div>
           {
-            (question?.options ?? question.optons ?? [])?.filter(
+            (question?.options ?? question.options ?? [])?.filter(
               (q) => q.answer
             )[0].answer
           }

@@ -1,5 +1,7 @@
+import { UserInfo } from '@/types/auth';
+
 export interface GradeListItem {
-  id?: number;
+  id?: string;
   gradeType?: string;
   gradeList?: GradeList[];
   createdAt?: Date;
@@ -11,8 +13,8 @@ export interface GradeListItem {
   institution?: Institution;
 }
 
-export interface Class {
-  id?: number;
+export interface ClassInterface {
+  id?: string;
   name?: string;
   startTime?: null;
   endTime?: null;
@@ -28,7 +30,7 @@ export interface GradeList {
 }
 
 export interface Institution {
-  id?: number;
+  id?: string;
   instituteName?: string;
   loginCount?: null;
   instituteEmail?: string;
@@ -44,7 +46,7 @@ export interface Institution {
 }
 
 export interface Session {
-  id?: number;
+  id?: string;
   session?: string;
   institutionType?: string;
   NumberOfWeeks?: number;
@@ -57,7 +59,7 @@ export interface Session {
 }
 
 export interface Subject {
-  id?: number;
+  id?: string;
   name?: string;
   description?: string;
   createdBy?: null;
@@ -77,7 +79,7 @@ export interface Term {
 }
 
 export interface TeacherNextClass {
-  id?: number;
+  id?: string;
   title?: string;
   theme?: null;
   subTheme?: null;
@@ -108,7 +110,7 @@ export interface TeacherNextClass {
 }
 
 export interface Class {
-  id?: number;
+  id?: string;
   arm?: string;
   name?: string;
   startTime?: null;
@@ -120,7 +122,7 @@ export interface Class {
 }
 
 export interface Teacher {
-  id?: number;
+  id?: string;
   gender?: string;
   dob?: string;
   lga?: string;
@@ -135,6 +137,7 @@ export interface Teacher {
   staffType?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  user: UserInfo;
 }
 
 export interface EmploymentDetails {
@@ -154,7 +157,7 @@ export interface TrainingDetail {
 }
 
 export interface Week {
-  id?: number;
+  id?: string;
   name?: string;
   theme?: string;
   topic?: string;

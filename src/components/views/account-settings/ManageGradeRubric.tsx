@@ -7,42 +7,61 @@ import { useGetSessionTerms } from '@/server/government/terms';
 import {
   CreateRubricParams,
   useCreateRubric,
+  useGetGradeRubricByInstitutionType,
 } from '@/server/institution/grade';
+import { GradeRubricInterface } from '@/types/institute';
 import { useCallback, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 
+export default function ManageGradeRubric({ closeModal }: { closeModal?: () => void }) {
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.[1]?.id,
+  });
+
+  const params = {
+    institutionType: "SECONDARY",
+    sessionId: profile?.currentSession?.[1]?.id as unknown as string,
+    termId: terms?.data[0]?.id as unknown as string,
+  }
+  const { data } = useGetGradeRubricByInstitutionType(params);
+
+  const reversedData: GradeRubricInterface[] = [];
+
+  if (data && data?.length > 0) {
+    for (let index = data?.length - 1; index >= 0; index--) {
+      reversedData.push(data[index]);
+    }
+  };
 
 
-export default function ManageGradeRubric() {
-  const [rubrics, setRubrics] = useState<
-    (CreateRubricParams['rubrics'][number] & { baseLabel: string })[]
-  >([
-    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', baseLabel: '', maxRange: 0, minRange: 0, remark: '' },
+  const [rubrics, setRubrics] = useState<GradeRubricInterface[] |
+    (CreateRubricParams['rubrics'][number] & { label: string })[]
+  >(reversedData.length > 0 ? reversedData : [
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
+    { label: '', maxRange: 0, minRange: 0, remark: '' },
   ]);
   const [currentStage, setCurrentStage] = useState(0);
   const { mutateAsync: createRubric, isLoading } = useCreateRubric();
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
-  });
+
   const handleCreateRubric = useCallback(async () => {
     try {
       const response = await createRubric({
-        institutionType: 'PRIMARY',
+        institutionType: 'SECONDARY',
         rubrics: rubrics,
-        sessionId: profile?.currentSession?.id as unknown as string,
+        sessionId: profile?.currentSession?.[1]?.id as unknown as string,
         termId: (terms?.data ?? [])[0]?.id as unknown as string,
       });
       toast.success(response.data.data.message ?? 'Success');
+      closeModal && closeModal();
     } catch (error) {
       toast.error(getErrMsg(error));
     }
-  }, [createRubric, rubrics, profile?.currentSession?.id, terms?.data]);
+  }, [closeModal, createRubric, profile?.currentSession, rubrics, terms?.data]);
   return (
     <div>
       <div className='text-center'>
@@ -68,24 +87,30 @@ export default function ManageGradeRubric() {
       </div>
       {currentStage === 0 && (
         <div>
+          <div className='flex flex-row'>
+            <div>Institution type:</div>
+
+
+          </div>
+
           {rubrics.map((v: unknown, i: number) => (
             <div key={i}>
               <div className='flex items-end gap-3'>
                 <Input
-                  label='Category Name'
+                  label='Rubric Label'
                   placeholder='eg. A'
                   containerClassName='w-full'
                   inputClassName='max-h-[10px]'
-                  formValue={rubrics[i].baseLabel}
+                  formValue={rubrics[i].label}
                   setFormValue={(v) => {
                     const n = [...rubrics];
-                    n[i].baseLabel = v as string;
+                    n[i].label = v as string;
                     setRubrics(n);
                   }}
                 />
                 <Input
                   label='Remark'
-                  placeholder='Enter Details. eg. Excellent'
+                  placeholder='Enter Details'
                   containerClassName='w-full'
                   inputClassName='max-h-[10px]'
                   formValue={rubrics[i].remark}
@@ -115,7 +140,6 @@ export default function ManageGradeRubric() {
                     maxRange: 0,
                     minRange: 0,
                     remark: '',
-                    baseLabel: '',
                   },
                 ])
               }
@@ -138,8 +162,8 @@ export default function ManageGradeRubric() {
                     value={{ value: rubrics[i].label, label: rubrics[i].label }}
                     options={rubrics
                       .map((v) => ({
-                        value: v.baseLabel,
-                        label: v.baseLabel,
+                        value: v.label,
+                        label: v.label,
                       }))
                       .filter((v) => v.label !== '')}
                     onChange={(value) => {

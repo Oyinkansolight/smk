@@ -2,7 +2,7 @@ import request from '@/server';
 import { useQuery } from 'react-query';
 
 export interface ClockInfo {
-  id?: number;
+  id?: string;
   clockInTime?: Date;
   clockOutTime?: null;
   status?: boolean;

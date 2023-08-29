@@ -11,7 +11,7 @@ export default function EmptyView({
   return (
     <div
       className={clsxm(
-        'bg-white flex flex-col gap-4 items-center justify-center',
+        'bg-white flex flex-col gap-4 items-center justify-center w-full',
         useStandardHeight && 'h-96'
       )}
     >

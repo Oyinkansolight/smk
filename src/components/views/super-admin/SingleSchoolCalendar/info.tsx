@@ -13,6 +13,17 @@ export default function StudentTeacherProfileCard({
   sessionterms?: any;
   setCurrentTermId?: (v: number) => void;
 }) {
+  const termNumberToName = (num: string) => {
+    if (num) {
+      if (num === '1') {
+        return 'First Term';
+      } else if (num === '2') {
+        return 'Second Term';
+      } else if (num === '3') {
+        return 'Third Term';
+      }
+    } else return 'Term';
+  };
   return (
     <div className='flex flex-col items-center px-10 pt-5'>
       <NextImage
@@ -35,7 +46,7 @@ export default function StudentTeacherProfileCard({
         >
           {sessionterms.map((v: any, i: number) => (
             <option key={i} value={v.id}>
-              {v.name}
+              {termNumberToName(v.name)}
             </option>
           ))}
         </select>

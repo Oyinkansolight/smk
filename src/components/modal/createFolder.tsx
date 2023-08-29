@@ -4,6 +4,7 @@ import logger from '@/lib/logger';
 import { useCreateFolder, useCreateFolderInFolder } from '@/server/library';
 import { UserFolder } from '@/types/material';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import Close from '~/svg/close.svg';
 
 interface propType {
@@ -38,13 +39,23 @@ function CreateFolder({
       try {
         if (parentFolder) {
           const response = await createFolderInFolder();
-          logger(response);
+          if (response) {
+            toast.success('Folder created successfully');
+            onClickHandler();
+          }
         } else {
           const response = await mutateAsync();
           logger(response);
+          if (response) {
+            toast.success('Folder created successfully');
+            onClickHandler();
+          }
         }
       } catch (error) {
         logger(error);
+        if (error) {
+          toast.error('Folder creation failed');
+        }
       }
 
       onClickHandler();
@@ -71,7 +82,7 @@ function CreateFolder({
           <div className='w-full'>
             <FormInput
               type='text'
-              label='Name of File*'
+              label='Folder Name*'
               setFormValue={setname}
               formValue={name}
               placeholder='e.g Primary School Folder'

@@ -3,41 +3,47 @@ import { BasicCard } from '@/components/cards';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
 import clsxm from '@/lib/clsxm';
+import { useGetProfile } from '@/server/auth';
+import { useGetStaffDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
 
 export default function TeacherDashboardView() {
+  const { data: profileData } = useGetProfile();
+  const { data: overviewData } = useGetStaffDashboardOverview();
   // const { data: sessionCalendarData } = useGetSessionCalendar(1);
 
   return (
     <div className='flex flex-col layout'>
-      <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 py-4 px-6  bg-white rounded-lg my-4 w-full'>
-        <SmallTeacherCard
-          icon={<BiUser className='h-16 w-16 text-[#008146]' />}
-          subtitle='Total Students'
-          title='50'
-          className='bg-[#E3FFF5]'
-        />
-        <SmallTeacherCard
-          icon={<BiUser className='h-16 w-16 text-[#7D8FB3]' />}
-          subtitle='Present today'
-          title='47'
-          className='bg-[#F4F9FF]'
-        />
-        <SmallTeacherCard
-          icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
-          subtitle='Absent today'
-          title='3'
-          className='bg-[#F9F3FF]'
-        />
-        <SmallTeacherCard
-          icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
-          subtitle='Late Students'
-          title='3'
-          className='bg-[#FFF3F3]'
-        />
-      </div>
-      <div className='grid lg:grid-cols-2 gap-10 w-full'>
+      {profileData?.userInfo?.staff?.managedClassArm && (
+        <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 py-4 px-6 bg-white rounded-lg mt-4 w-full'>
+          <SmallTeacherCard
+            icon={<BiUser className='h-16 w-16 text-[#008146]' />}
+            subtitle='Total Students'
+            title={`${overviewData?.Total_Students ?? 0}`}
+            className='bg-[#E3FFF5]'
+          />
+          <SmallTeacherCard
+            icon={<BiUser className='h-16 w-16 text-[#7D8FB3]' />}
+            subtitle='Present today'
+            title={`${overviewData?.Total_Present_Today ?? 0}`}
+            className='bg-[#F4F9FF]'
+          />
+          <SmallTeacherCard
+            icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
+            subtitle='Absent today'
+            title={`${overviewData?.Total_Absent_Today ?? 0}`}
+            className='bg-[#F9F3FF]'
+          />
+          <SmallTeacherCard
+            icon={<BiUser className='h-16 w-16 text-[#D794C8]' />}
+            subtitle='Late Students'
+            title={`${overviewData?.Total_Late_Today ?? 0}`}
+            className='bg-[#FFF3F3]'
+          />
+        </div>
+      )}
+      <div className='grid lg:grid-cols-2 gap-10 w-full mt-4'>
         <div className='grid grid-rows-2 gap-6 w-full'>
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>

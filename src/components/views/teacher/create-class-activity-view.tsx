@@ -11,7 +11,13 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
-import { CreateClassActivityParams, CreateLessonNoteTypes, Question, useCreateClassActivity, useCreateLessonNote } from '@/server/institution/lesson-note';
+import {
+  CreateClassActivityParams,
+  CreateLessonNoteTypes,
+  Question,
+  useCreateClassActivity,
+  useCreateLessonNote,
+} from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
 import { convertToHTML } from 'draft-convert';
 import { EditorState } from 'draft-js';
@@ -26,8 +32,6 @@ import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 import { useSessionStorage } from 'usehooks-ts';
-
-
 
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
@@ -129,7 +133,7 @@ export default function CreateClassActivityView() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     classId: createActivityParams.classes,
     institutionId: institution?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   const handleAddToGradeList = () => {
@@ -142,6 +146,41 @@ export default function CreateClassActivityView() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    questions.forEach((v) => {
+      if (!v.question) {
+        toast.error('Please fill all questions');
+        return;
+      }
+
+      if (!v.options) {
+        toast.error('Please fill all options');
+        return;
+      }
+
+      if (!v.correctOption) {
+        toast.error('Please select a correct option');
+        return;
+      }
+
+      if (v.options.length < 4) {
+        toast.error('Please add at least 4 options');
+        return;
+      } else if (v.options.length === 4) {
+        v.options.map((option) => {
+          if (!option || option === '') {
+            toast.error('Please fill all options');
+            return;
+          }
+        });
+      }
+    });
+
+    const questionsV2 = questions.map((v) => ({
+      question: v.question,
+      options: v.options,
+      correctOption: v.correctOption,
+    }));
+
     try {
       let form;
       let path: string | null = null;
@@ -170,15 +209,18 @@ export default function CreateClassActivityView() {
           subjectId: createActivityParams?.subject,
           teacherId: profile?.userInfo?.staff?.id,
           title: 'Title',
-          classArmId: createActivityParams?.classes,
+          classes: createActivityParams?.classes,
         };
 
         if (!path) delete payload.uploadUrl;
 
         const res = await createLessonNote(payload);
         toast.success(res.data.data.message);
-      } else if (type === activityTypes[1].value || type === activityTypes[2].value) {
-        //Due date should not be required for class work or pop quiz
+      } else if (
+        type === activityTypes[1].value ||
+        type === activityTypes[2].value
+      ) {
+        //* Due date should not be required for class work or pop quiz
         delete data.dueDate;
 
         const res = await create.mutateAsync({
@@ -188,7 +230,7 @@ export default function CreateClassActivityView() {
           typeOfActivity: data?.typeOfActivity?.value,
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
-          questions,
+          questionsV2,
         });
         toast.success(res.data.data.message);
       } else {
@@ -199,7 +241,7 @@ export default function CreateClassActivityView() {
           typeOfActivity: data?.typeOfActivity?.value,
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
-          questions,
+          questionsV2,
         });
         toast.success(res.data.data.message);
       }
@@ -207,6 +249,7 @@ export default function CreateClassActivityView() {
       toast.error(getErrMsg(error));
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col gap-4'>
@@ -230,59 +273,64 @@ export default function CreateClassActivityView() {
               }}
             />
           </div>
-          {type !== activityTypes[3].value && <div>
-            <div className='font-bold text-xs pb-1'>Format</div>
-            <Controller
-              name='format'
-              control={control}
-              render={({ field }) => {
-                return (
-                  <ReactSelect
-                    {...field}
-                    required
-                    options={activityFormats.map((v) => ({
-                      value: v.key,
-                      label: v.value,
-                    }))}
-                  />
-                );
-              }}
+          {type !== activityTypes[3].value && (
+            <div>
+              <div className='font-bold text-xs pb-1'>Format</div>
+              <Controller
+                name='format'
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <ReactSelect
+                      {...field}
+                      required
+                      options={activityFormats.map((v) => ({
+                        value: v.key,
+                        label: v.value,
+                      }))}
+                    />
+                  );
+                }}
+              />
+            </div>
+          )}
+          {type === activityTypes[0].value && (
+            <InputReactForm
+              isRequired
+              register={register}
+              name='dueDate'
+              label='Due Date'
+              placeholder='Due date'
+              type='date'
+              className='rounded-lg h-10 !p-0'
             />
-          </div>}
-          {type === activityTypes[0].value && <InputReactForm
-            isRequired
-            register={register}
-            name='dueDate'
-            label='Due Date'
-            placeholder='Due date'
-            type='date'
-            className='rounded-lg h-10 !p-0'
-          />}
-          {(type === activityTypes[1].value || type === activityTypes[2].value) && <div>
-            <div className='font-bold text-xs pb-1'>Time Limit</div>
-            <Controller
-              name='timeLimit'
-              control={control}
-              render={({ field }) => {
-                return (
-                  <ReactSelect
-                    {...field}
-                    required
-                    options={['30 Mins', '45 Mins', '1 Hour', '2 Hours'].map(
-                      (v) => ({
-                        value: v,
-                        label: v,
-                      })
-                    )}
-                  />
-                );
-              }}
-            />
-          </div>}
-
-
+          )}
+          {(type === activityTypes[1].value ||
+            type === activityTypes[2].value) && (
+            <div>
+              <div className='font-bold text-xs pb-1'>Time Limit</div>
+              <Controller
+                name='timeLimit'
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <ReactSelect
+                      {...field}
+                      required
+                      options={['15 Mins', '30 Mins', '45 Mins', '1 Hour'].map(
+                        (v) => ({
+                          value: v,
+                          label: v,
+                        })
+                      )}
+                    />
+                  );
+                }}
+              />
+            </div>
+          )}
         </div>
-        {type !== activityTypes[3].value &&
+        {type !== activityTypes[3].value && (
           <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
             <div className='flex flex-col gap-4 mt-6'>
               <div>Add to grade list</div>
@@ -322,7 +370,7 @@ export default function CreateClassActivityView() {
               </label>
             </div>
           </div>
-        }
+        )}
         {format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
@@ -344,7 +392,11 @@ export default function CreateClassActivityView() {
                     newQ.splice(i, 1);
                     setQuestions(newQ);
                   }}
-                  className='cursor-pointer flex items-center w-14 h-14 rounded justify-center bg-red-100'
+                  className={clsxm(
+                    questions.length === 1 ? 'hidden' : '',
+                    i === 0 ? 'invisible' : 'flex',
+                    'cursor-pointer items-center w-14 h-14 rounded justify-center bg-red-100'
+                  )}
                 >
                   <MdDelete className='text-red-500 h-5 w-5' />
                 </div>

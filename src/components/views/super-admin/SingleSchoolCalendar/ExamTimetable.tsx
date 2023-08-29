@@ -9,7 +9,7 @@ import request from '@/server';
 import { getErrMsg } from '@/server';
 import { useCreateTestTimeTable } from '@/server/Schedule';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Time from '~/svg/time.svg';
 
@@ -23,56 +23,10 @@ import Time from '~/svg/time.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 interface dataType {
-  sessionId: number;
+  sessionId: string | null;
   institutionType: string;
-  classId: number;
+  classId: string;
   term: any;
   type: string | number;
   timeTableType: string | number;
@@ -86,7 +40,7 @@ interface dataType {
   eventName?: string | number;
 }
 interface timetableArg {
-  classId: number;
+  classId: string;
   termId: any;
   type: string;
 }
@@ -103,24 +57,35 @@ const AcademicCalendar = ({
   classList,
   sessionId,
   currentTermId,
+  academicyear,
 }: propType) => {
   const [showTimeTable, setShowTimeTable] = useState(false);
-  const [classId, setclassId] = useState<number>(0);
+  const [classId, setclassId] = useState<string>('');
   const [termId, settermId] = useState<any>(null);
   const [ExamOrTest, setExamOrTest] = useState('');
   const [testTable, setTestTable] = useState('');
-  // const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
-  // const { data, error, isLoading } = useGetAcademicTimetable(1, 1, 1);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const ECCDE = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('eccde')
-  // );
-  // const Primary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('primary')
-  // );
-  // const Secondary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('ss')
-  // );
+  const getClassesByInstitution = classList.filter((item: any) =>
+    item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
+  );
+  function customSort(a: any, b: any) {
+    const aIsJSS = a.name.startsWith('JSS');
+    const bIsJSS = b.name.startsWith('JSS');
+
+    if (aIsJSS && !bIsJSS) {
+      return -1;
+    } else if (!aIsJSS && bIsJSS) {
+      return 1;
+    } else {
+      // If both elements are JSS or both are SSS, sort them alphabetically.
+      return a.name.localeCompare(b.name);
+    }
+  }
+
+  const sortedSchools = getClassesByInstitution
+    ? getClassesByInstitution.sort(customSort)
+    : [];
   const generateVariant = (id: number) => {
     if (id === 0) {
       return 'primary';
@@ -134,36 +99,43 @@ const AcademicCalendar = ({
   };
   // const router = useRouter();
 
-  const fetchTestTimeTable = () => {
-    request
+  const fetchTestTimeTable = async (classId: string, type: string | number) => {
+    setIsLoading(true);
+    await request
       .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=EXAM`,
+        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=${type}&limit=10000`,
         {
           withCredentials: true,
         }
       )
       .then((res) => {
-        setschedule(res.data.data.data);
+        setIsLoading(false);
+
+        type == 'TEST'
+          ? setTestTable(res.data.data.data)
+          : setschedule(res.data.data.data);
+      })
+      .catch((err) => {
+        getErrMsg(err);
       });
-    request
-      .get(
-        `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        setTestTable(res.data.data.data);
-      });
+    // await request
+    //   .get(
+    //     `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${currentTermId}&type=TEST&limit=10000`,
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   )
+    //   .then((res) => {
+    //     setTestTable(res.data.data.data);
+    //   });
   };
 
-  function HandleTimeTable({ classId, termId, type }: timetableArg) {
-    setShowTimeTable(true);
-
+  async function HandleTimeTable({ classId, termId, type }: timetableArg) {
     setclassId(classId);
     settermId(termId);
     setExamOrTest(type);
-    fetchTestTimeTable();
+    await fetchTestTimeTable(classId, type);
+    setShowTimeTable(true);
   }
   const [schedule, setschedule] = useState<dataType[]>([]);
   const [isOpenActivity, setisOpenActivity] = useState(false);
@@ -201,9 +173,9 @@ const AcademicCalendar = ({
 
   const SubmitHandler = async () => {
     const data: dataType = {
-      sessionId: 8,
+      sessionId,
       institutionType: 'ECCDE',
-      classId: 2,
+      classId,
       term: currentTermId,
       type,
       periods: [
@@ -246,13 +218,36 @@ const AcademicCalendar = ({
     }
 
     try {
+      if (!data.startTime || data.startTime === '') {
+        toast.error('Start Time is invalid or missing');
+        return;
+      }
+      if (!data.endTime || data.endTime === '') {
+        toast.error('End time is invalid or missing');
+        return;
+      }
+      if (data.periods && type === 'period') {
+        for (const period of data.periods) {
+          // Check if subject is a positive integer
+          if (!period.subject) {
+            toast.error('one or more subject in periods is invalid or missing');
+            return;
+          }
+        }
+      }
+      // If isEvent is true, check for eventName
+      if (type === 'event' && !data.eventName) {
+        toast.error('Event Name is invalid or missing');
+        return;
+      }
+
       setloading(true);
       const response = await handleCreateTestTimetable.mutateAsync(data);
       if (response) {
         toast.success('Timetable updated successfully');
         setloading(false);
         // settypeDropdown(false);
-        fetchTestTimeTable();
+        fetchTestTimeTable(classId, type);
         modalActivityHandler();
 
         // location.reload();
@@ -262,10 +257,12 @@ const AcademicCalendar = ({
     }
   };
 
-  useEffect(() => {
-    fetchTestTimeTable();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   if (classId) {
+  //     fetchTestTimeTable();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [classId]);
 
   return (
     <section className='bg-white p-4'>
@@ -306,32 +303,7 @@ const AcademicCalendar = ({
           activityname5={activityname5}
         />
       )}
-      {/* <div className='flex justify-end relative'>
-        <button
-          onClick={() => {
-            settypeDropdown(!typeDropdown);
-          }}
-          className='p-2 border-2 border-primary text-center  text-primary rounded-md'
-        >
-          <p>Add Test/Exam Schedule</p>
-        </button>
-        {typeDropdown && (
-          <div className='absolute top-10 shadow-lg bg-white rounded-md w-[160px]'>
-            <button
-              className='p-4'
-              onClick={() => modalActivityHandler('EXAM')}
-            >
-              Exam Timetable
-            </button>
-            <button
-              className='p-4'
-              onClick={() => modalActivityHandler('TEST')}
-            >
-              Test Timetable
-            </button>
-          </div>
-        )}
-      </div> */}
+
       <div className='bg-[#F4F9FF] py-6 mt-5 flex items-center justify-between font-medium rounded-md px-4'>
         <h1 className='text-sm text-[#5A5A5A]'>
           {schoolType} - Exam/Test Timetable
@@ -341,151 +313,12 @@ const AcademicCalendar = ({
         </div>
       </div>
 
-      {/* <div className='mt-8  p-2 rounded-md'>
-        <div className='flex w-full mr-10 mb-4'>
-          <div className='w-[150px] font-medium rounded-l p-3 text-base  border bg-white text-gray-500'>
-            Date
-          </div>
-          <div className='w-full grid grid-cols-5 text-base  border font-medium text-center bg-white'>
-            <div className='p-3 border-r'>Monday</div>
-            <div className='p-3 border-r'>Tuesday</div>
-            <div className='p-3 border-r'>Wednesday</div>
-            <div className='p-3 border-r'>Thursday</div>
-            <div className='p-3 border-r'>Friday</div>
-          </div>
-          <div className='w-[40px] pl-4 flex flex-col space-y-2 text-[8px] '></div>
-        </div>
-
-        <div>
-          {schedule.reverse().map((item: any, id: number) => (
-            <div key={id}>
-              {item.type === 'event' ? (
-                <div className='flex w-full mt-2 items-center'>
-                  <div className='w-[150px] text-base bg-white font-medium px-3 py-5  border'>
-                    {item.startTime} - {item.endTime}
-                  </div>
-                  <div className='w-full border p-5 text-center'>
-                    <p className='font-medium text-base'> {item.eventName} </p>
-                  </div>
-                  <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                    <div className='text-green-600'>Edit</div>
-                    <div className='text-red-600'>Delete</div>
-                  </div>
-                </div>
-              ) : (
-                <div className='flex w-full mt-2 items-center'>
-                  <div className='w-[150px] bg-white font-medium px-3 py-5  border'>
-                    {item.startTime} - {item.endTime}
-                  </div>
-
-                  <div className='w-full grid grid-cols-5 text-gray-200  text-base border font-medium text-center'>
-                    <div className='px-3 py-5 bg-[#FFF2F0] text-[#FB6340]'>
-                      {item?.periods ? item?.periods[0].subject : 'Null'}
-                    </div>
-                    <div className='px-3 py-5 bg-[#FDE8FF] text-[#ED1CFF]'>
-                      {item?.periods ? item?.periods[1].subject : 'Null'}
-                    </div>
-                    <div className='px-3 py-5 bg-[#FFF3E2] text-[#FF9F1C]'>
-                      {item?.periods ? item?.periods[2].subject : 'Null'}
-                    </div>
-                    <div className='px-3 py-5 bg-[#F4FFE6] text-[#60AC00]'>
-                      {item?.periods ? item?.periods[3].subject : 'Null'}
-                    </div>
-                    <div className='px-3 py-5 bg-[#FFFFEB] text-[#CDCD04]'>
-                      {item?.periods ? item?.periods[4].subject : 'Null'}
-                    </div>
-                  </div>
-                  <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                    <div className='text-green-600'>Edit</div>
-                    <div className='text-red-600'>Delete</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       <div className='flex flex-col space -y-6'>
         {!showTimeTable ? (
           <div>
-            {/* {schoolType?.toLowerCase()?.includes('eccde') && (
+            {sortedSchools.length > 0 ? (
               <div className='mt-6'>
-                {ECCDE.map((v: any, i: number) => {
-                  return (
-                    <TaskAccordion
-                      length={1}
-                      lesson={false}
-                      taskName={v.name}
-                      key={i}
-                    >
-                      <div className='flex flex-wrap mt-4 gap-[27px]'>
-                        <CurriculumCard
-                          name='Exam Timetable'
-                          count={100}
-                          variant={generateVariant(0)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: currentTermId,
-                              type: 'EXAM',
-                            });
-                          }}
-                        />
-                        <CurriculumCard
-                          name='Test Timetable'
-                          count={100}
-                          variant={generateVariant(1)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: currentTermId,
-                              type: 'TEST',
-                            });
-                          }}
-                        />
-                      </div>
-                    </TaskAccordion>
-                  );
-                })}
-              </div>
-            )}
-            {schoolType?.toLowerCase()?.includes('primary') && (
-              <div className='mt-6'>
-                {Primary.map((v: any, i: number) => {
-                  return (
-                    <TaskAccordion
-                      length={1}
-                      lesson={false}
-                      taskName={v.name}
-                      key={i}
-                    >
-                      <div className='flex flex-wrap mt-4 gap-[27px]'>
-                        {sessionterms.map((value: any, id: number) => (
-                          <CurriculumCard
-                            key={id}
-                            name={`${value.name} Timetable`}
-                            count={100}
-                            variant={generateVariant(id)}
-                            onClick={() => {
-                              HandleTimeTable({
-                                classId: v.id,
-                                termId: id + 1,
-                                type: 'TEST',
-                              });
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </TaskAccordion>
-                  );
-                })}
-              </div>
-            )} */}
-
-            {classList.length > 0 ? (
-              <div className='mt-6'>
-                {classList.map((v: any, i: number) => {
+                {sortedSchools.map((v: any, i: number) => {
                   return (
                     <TaskAccordion
                       length={1}
@@ -493,31 +326,39 @@ const AcademicCalendar = ({
                       taskName={`${v.name}`}
                       key={i}
                     >
-                      <div className='flex flex-wrap mt-4 gap-[27px]'>
-                        <CurriculumCard
-                          name='Exam Timetable'
-                          count={100}
-                          variant={generateVariant(0)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: currentTermId,
-                              type: 'EXAM',
-                            });
-                          }}
-                        />
-                        <CurriculumCard
-                          name='Test Timetable'
-                          count={100}
-                          variant={generateVariant(1)}
-                          onClick={() => {
-                            HandleTimeTable({
-                              classId: v.id,
-                              termId: currentTermId,
-                              type: 'TEST',
-                            });
-                          }}
-                        />
+                      <div>
+                        <div className='flex flex-wrap mt-4 gap-[27px]'>
+                          <CurriculumCard
+                            name='Exam Timetable'
+                            count={100}
+                            variant={generateVariant(0)}
+                            onClick={() => {
+                              HandleTimeTable({
+                                classId: v.id,
+                                termId: currentTermId,
+                                type: 'EXAM',
+                              });
+                            }}
+                          />
+                          <CurriculumCard
+                            name='Test Timetable'
+                            count={100}
+                            variant={generateVariant(1)}
+                            onClick={() => {
+                              HandleTimeTable({
+                                classId: v.id,
+                                termId: currentTermId,
+                                type: 'TEST',
+                              });
+                            }}
+                          />
+                        </div>
+                        {isLoading && (
+                          <div className='text-center pt-2 pb-4 '>
+                            {' '}
+                            Opening....{' '}
+                          </div>
+                        )}
                       </div>
                     </TaskAccordion>
                   );

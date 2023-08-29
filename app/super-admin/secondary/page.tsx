@@ -5,7 +5,6 @@ const SchoolList = () => {
     <SchoolByType
       name='All Secondary Schools'
       title='Total Secondary Schools'
-      type='SECONDARY'
     />
   );
 };

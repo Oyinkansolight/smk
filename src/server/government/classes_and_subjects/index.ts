@@ -1,6 +1,6 @@
 import request from '@/server';
 import { GradeListItem } from '@/types/classes-and-subjects';
-import { Subject, User } from '@/types/institute';
+import { AssignedSubject, Subject, User } from '@/types/institute';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -37,11 +37,11 @@ export function useGetGovernmentSubjectById(id?: string) {
 }
 
 export interface GetSubjectGradeBookParams {
-  sessionId?: string | number;
-  termId?: string | number;
-  institutionId?: string | number;
-  classId?: string | number;
-  subjectId?: string | number;
+  sessionId?: string;
+  termId?: string;
+  institutionId?: string;
+  classArmId?: string;
+  subjectId?: string;
 }
 
 export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
@@ -58,16 +58,19 @@ export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
   return query;
 }
 
-export function useGetSubjectsAssignedToTeacher(id?: number) {
+export function useGetSubjectsAssignedToTeacher(
+  teacherId?: string,
+  sessionId?: string
+) {
   const query = useQuery({
     queryKey: 'get_subjects_assigned_to_teacher',
     queryFn: async () => {
-      if (id) {
+      if (teacherId && sessionId) {
         const d = await request.get(
           '/v1/government/classes-subjects/teacher-subjects',
-          { params: { id }, withCredentials: true }
+          { params: { teacherId, sessionId }, withCredentials: true }
         );
-        return d.data.data.data as Subject[];
+        return d.data.data.data as AssignedSubject[];
       }
     },
   });
@@ -77,11 +80,11 @@ export function useGetSubjectsAssignedToTeacher(id?: number) {
 export interface CreateGradeSettingsParams {
   gradeType?: string;
   gradeList?: GradeList[];
-  classId?: number;
-  subjectId?: number;
-  sessionId?: number;
-  termId?: number;
-  institutionId?: number;
+  classId?: string;
+  subjectId?: string;
+  sessionId?: string;
+  termId?: string;
+  institutionId?: string;
 }
 
 export interface GradeList {

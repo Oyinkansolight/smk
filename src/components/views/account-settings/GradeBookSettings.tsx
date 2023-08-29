@@ -44,7 +44,10 @@ export default function GradeBookSettings() {
   return (
     <div className='flex flex-col gap-[22px] my-[22px]'>
       <div className='flex justify-end'>
-        <GeneralModal body={<ManageGradeRubric />}>
+        <GeneralModal
+          body={<ManageGradeRubric />}
+          panelClassName='!max-h-[1000px] hideScroll'
+        >
           <Button variant='outline'>Grade Rubric Settings</Button>
         </GeneralModal>
       </div>
@@ -65,12 +68,12 @@ function RenderGradeCategories({
 }) {
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile ? profile?.currentSession?.id : "",
+    sessionId: profile ? profile?.currentSession?.[0]?.id : '',
   });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: profile?.currentSession?.id,
-    termId: terms ? terms?.data[0].id : "",
+    sessionId: profile?.currentSession?.[0]?.id,
+    termId: terms ? terms?.data[0].id : '',
   });
   return (
     <div>
@@ -88,11 +91,11 @@ function RenderGradeCategoryActions({
 }) {
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
     termId: (terms?.data ?? [])[0]?.id,
   });
   return (

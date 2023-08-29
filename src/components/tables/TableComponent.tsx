@@ -3,7 +3,6 @@ import { BasicSearch } from '@/components/search';
 import { useMemo, useState } from 'react';
 import DataTable, { TableProps } from 'react-data-table-component';
 
-
 export default function Table<T>(
   props: TableProps<T> & {
     filterFields?: (keyof T)[];
@@ -67,7 +66,9 @@ export default function Table<T>(
       </div>
       <DataTable
         customStyles={{
-          table: { style: { backgroundColor: 'transparent', padding: '0 0 200px 0' } },
+          table: {
+            style: { backgroundColor: 'transparent', padding: '0 0 200px 0' },
+          },
           rows: { style: { backgroundColor: '#00000000', color: '#8898AA' } },
           headRow: {
             style: {

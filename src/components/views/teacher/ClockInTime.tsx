@@ -34,13 +34,13 @@ export default function ClockInTime() {
   const long = institute?.instituteLong ?? '3.3488896';
 
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   const handleClockIn = async () => {
     try {
       const res = await clockIn.mutateAsync({
-        sessionId: profile?.currentSession?.id ?? 0,
+        sessionId: profile?.currentSession?.[0]?.id ?? 0,
         termId: (terms?.data ?? [])[0].id,
       });
       toast.success(res.data.data.message);

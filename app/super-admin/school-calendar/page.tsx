@@ -47,6 +47,14 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Index = () => {
   const queryString = useSearchParams();
   const [tabIdx, setTabIdx] = useState(0);
@@ -64,7 +72,6 @@ const Index = () => {
       .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
       .then((v) => {
         const data = v.data.data.data;
-        console.log(data);
         setsessionterms(data.data || []);
         handleCurrentTerm(data.data[0].id);
       });

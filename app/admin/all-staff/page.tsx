@@ -24,20 +24,6 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
@@ -81,13 +67,13 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
 ];
 
 const AllStaff = () => {
-  const institutionId = getFromLocalStorage('institutionId');
+  const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
   const {
     data: staff,
     error,
     isLoading,
-  } = useGetTeachersListByInstitution(institutionId);
+  } = useGetTeachersListByInstitution({ instituteId: institutionId });
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);

@@ -1,16 +1,19 @@
 import { Question, SubmittedQuestion } from '@/server/institution/lesson-note';
-import {
-  Class,
-  Session,
-  Teacher,
-  Term,
-  Week,
-} from '@/types/classes-and-subjects';
-
+import { Session, Teacher, Term, Week } from '@/types/classes-and-subjects';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export interface AssignedSubject {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  student: any;
+  class: ClassInterface;
+  session: Session;
+  subject: Subject;
+}
+
 export interface Subject {
-  id?: number;
+  id?: string;
   name?: string;
   description?: string;
   classes?: any[];
@@ -19,7 +22,7 @@ export interface Subject {
 }
 
 export interface Student {
-  id?: number;
+  id?: string;
   gender?: string;
   dob?: Date;
   height?: string;
@@ -32,7 +35,7 @@ export interface Student {
 }
 
 export interface FlattenedStudent {
-  id?: number;
+  id?: string;
   gender?: string;
   dob?: Date;
   height?: string;
@@ -97,6 +100,40 @@ export interface Staff {
   class?: any[];
   subject?: any[];
   user?: User[];
+  managedClassArm?: ManagedClassArm | null;
+}
+
+export interface ManagedClassArm {
+  id: string;
+  arm: string;
+  capacity: number;
+  curriculum: string;
+  institutionType?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  class: ClassInterface;
+}
+
+export interface ClassInterface {
+  id: string;
+  name: string;
+  startTime: any;
+  endTime: any;
+  curriculum: string;
+  institutionType: string;
+  createdAt: string;
+  updatedAt: string;
+  arms: Arm[];
+}
+
+export interface Arm {
+  id: string;
+  arm: string;
+  capacity: number;
+  curriculum: string;
+  institutionType: any;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface FlattenedStaff {
@@ -196,7 +233,7 @@ export interface InstituteClass {
 }
 
 export interface Institution {
-  id?: number;
+  id?: string;
   instituteName?: string;
   instituteEmail?: string;
   instituteLogo?: string;
@@ -246,7 +283,7 @@ export interface AcademicCalendarType {
 }
 
 export interface LessonNoteObject {
-  id?: number;
+  id?: string;
   title?: string;
   theme?: string;
   subTheme?: string;
@@ -271,7 +308,7 @@ export interface LessonNoteObject {
   session?: Session;
   file?: FileInterface | null;
   term?: Term;
-  class?: Class;
+  class?: ClassInterface;
   teacher?: Teacher;
   subject?: Subject;
   classActivities?: ClassActivity1[];
@@ -284,7 +321,7 @@ export interface LessonNote1 {
   instructionalTeachingActivity: null;
   createdAt: Date;
   updatedAt: Date;
-  class: Class;
+  class: ClassInterface;
   subject: Subject;
   session: Session;
   term: Term;
@@ -300,7 +337,7 @@ export interface ClassActivity1 {
   dueDate: Date;
   teacher: Teacher;
   lessonNote: null;
-  classes: Class;
+  classes: ClassInterface;
   subject: Subject;
   period: Period;
   session: Session;
@@ -345,7 +382,7 @@ export interface SubmittedActivity {
   questions: SubmittedQuestion[];
   createdAt: Date;
   updatedAt: Date;
-  class: Class;
+  class: ClassInterface;
   student: User;
   activity: ClassActivity1;
   period: Period;
@@ -370,4 +407,53 @@ export interface FileInterface {
   id: string;
   updatedAt: string;
   userTypes: [];
+}
+
+//* Class Arm Attendance Interface starts here
+export interface StudentAttendanceInterface {
+  id: string;
+  profileImg: string;
+  firstName: string;
+  lastName: string;
+  parentDetails: ParentDetails;
+  lga: string;
+  address: any;
+  parentStatus: string;
+  gender: string;
+  dob: string;
+  studentId: string;
+  parentOccupation: string;
+  createdAt: string;
+  updatedAt: string;
+  attendanceToday?: AttendanceToday;
+}
+
+export interface ParentDetails {
+  lga: string;
+  name: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+}
+
+export interface AttendanceToday {
+  createdAt: string;
+  day: string;
+  id: string;
+  status: 'ABSENT' | 'PRESENT' | 'LATE' | undefined;
+  updatedAt: string;
+}
+//* Class Arm Attendance Interface ends here
+
+export interface GradeRubricInterface {
+  id: string;
+  institutionType: string;
+  label: string;
+  remark: string;
+  minRange: number;
+  maxRange: number;
+  createdAt: string;
+  updatedAt: string;
+  term: Term;
+  session: Session;
 }

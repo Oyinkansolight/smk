@@ -112,7 +112,7 @@ const StudentSidebar = ({ isSidebarOpen }: StudentSidebarProps) => {
             open={false}
             icon={<BiExit className={clsxm('fill-red-500 w-6 h-6')} />}
             title='Logout'
-            href='/auth/admin'
+            href='#'
             onClick={handleLogout}
             active={undefined}
           />

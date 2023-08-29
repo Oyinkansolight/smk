@@ -15,17 +15,15 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
+
   const router = useRouter();
-  // const { data } = useGetGovernmentSubjectList();
 
-  //* Actual Api to be called, response currently empty
-  const { data: profile, isSuccess } = useGetProfile();
+  const { data: profile } = useGetProfile();
 
-  const { data, refetch, isError } = useGetSubjectsAssignedToTeacher(
-    profile?.userInfo?.staff?.id
+  const { data, refetch } = useGetSubjectsAssignedToTeacher(
+    profile?.userInfo?.staff?.id,
+    profile?.currentSession?.[0]?.id
   );
-  // console.log(profile?.userInfo?.staff?.id);
 
   useEffect(() => {
     if (profile?.userInfo?.staff?.id) {
@@ -46,7 +44,7 @@ export default function Page() {
         />
       </div>
     );
-  }
+  };
 
   return (
     <Suspense fallback={<Loader />}>
@@ -57,18 +55,7 @@ export default function Page() {
             <div>My Subjects</div>
           </div>
           <div className='flex flex-wrap gap-4 justify-items-center'>
-            {/* {(!profile || !data) && (
-              <div className='flex flex-col h-full w-full items-center justify-center p-10'>
-                <RotatingLines
-                  width='100'
-                  visible={true}
-                  strokeWidth='5'
-                  strokeColor='#4fa94d'
-                  animationDuration='0.75'
-                />
-              </div>
-            )} */}
-            {data?.length === 0 ? (
+            {data && data?.length === 0 ? (
               <div className='w-full h-full flex items-center justify-center'>
                 <EmptyView label='No subjects assigned to you' />
               </div>
@@ -76,11 +63,11 @@ export default function Page() {
               data?.map((v, i) => (
                 <SmallTeacherSubjectCard
                   onClick={() => {
-                    router.push(`/teacher/classes/subject?id=${v.id}`);
+                    router.push(`/teacher/classes/subject?id=${v.subject.id}`);
                   }}
-                  key={i}
+                  key={v.subject.id}
                   isNext={i == 0}
-                  subject={v.name ?? '[NULL]'}
+                  subject={v.subject.name ?? '[NULL]'}
                   assignmentDue={2}
                   tasks={4}
                   className={colors[i % colors.length]}

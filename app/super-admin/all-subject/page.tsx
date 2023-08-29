@@ -7,7 +7,8 @@ import { useGetSubjectList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { CiMenuKebab } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 
 const AllSubjects = () => {
@@ -60,6 +61,22 @@ const AllSubjects = () => {
       toast.error(getErrMsg(error));
     }
   }, [error]);
+  //   handlePopOver
+  // popOverRef
+  // handleDelete
+
+  const popOverRef = useRef<HTMLDivElement>(null);
+
+  const handleTogglePopOver = () => {
+    if (popOverRef.current) {
+      popOverRef.current.classList.toggle('hidden');
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    console.log(id);
+  };
+
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -84,7 +101,7 @@ const AllSubjects = () => {
           <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
         </div>
         <AddSubjectModal>
-          <div className='cursor-pointer w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '>
+          <div className='cursor-pointer w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary font-semibold bg-white'>
             Add Subject
           </div>
         </AddSubjectModal>
@@ -101,23 +118,59 @@ const AllSubjects = () => {
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full bg-white'>
         <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Subject Name</div>
-          <div className='col-span-5'>Description</div>
-          <div className='col-span-4'>Classes</div>
+          <div className='col-span-4'>Description</div>
+          <div className='col-span-3'>Classes Applicable</div>
+          <div className='col-span-2'>{" "}</div>
         </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
           (data ?? []).map((item, idx) => (
             <div
-              onClick={() => {
-                router.push(`/super-admin/subject?id=${item.id ?? ''}`);
-              }}
-              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
-              key={idx}
+              key={item.id ?? idx}
+              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-1'
             >
-              <div className='col-span-3'>{item.name} </div>
-              <div className='col-span-5'>{item.description} </div>
-              <div className='col-span-4'> {2} </div>
+              <div
+                className='col-span-3 text-[#525F7F] font-bold text-sm'
+                onClick={() => {
+                  router.push(`/super-admin/subject?id=${item.id ?? ''}`);
+                }}
+              >
+                {item.name}
+              </div>
+              <div className='col-span-4 text-[#8898AA] text-sm leading-5'>{item.description ?? "-"} </div>
+              <div className='col-span-3 text-center'>
+                {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
+              </div>
+              <div className='col-span-2 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
+                <div className='hidden lg:block cursor-pointer text-primary text-sm leading-5'>Click to manage</div>
+                <div className='relative'>
+                  <CiMenuKebab
+                    onClick={handleTogglePopOver}
+                    className='w-6 h-6 cursor-pointer'
+                  />
+
+                  <div
+                    ref={popOverRef}
+                    className='absolute z-10 hidden w-48 py-1 mt-2 bg-white rounded-md shadow-lg'
+                  >
+                    <Link href={`/super-admin/subject?id=${item.id ?? ''}`}>
+                      <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                        Edit
+                      </div>
+                    </Link>
+                    <div
+                      onClick={() => {
+                        handleDelete(item.id ?? '');
+                      }}
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                    >
+                      Delete
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
           ))
         )}

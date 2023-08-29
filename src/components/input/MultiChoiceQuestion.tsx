@@ -1,9 +1,9 @@
 import BaseAccordion from '@/components/accordions/BaseAccordion';
 import TextAreaWithOnChange from '@/components/input/TextAreaWithOnChange';
 import Input from '@/components/input/formInput';
-import { Option, Question } from '@/server/institution/lesson-note';
+import { Question } from '@/server/institution/lesson-note';
+import _ from 'lodash';
 import ReactSelect from 'react-select';
-
 
 export default function MultiChoiceQuestion({
   value,
@@ -12,7 +12,8 @@ export default function MultiChoiceQuestion({
   value: Question;
   onChange: (value: Question) => void;
 }) {
-  const options: (keyof Option)[] = ['a', 'b', 'c', 'd'];
+  const isEmpty = _.isEmpty(value.options?.filter((item) => item.length > 0));
+
   return (
     <BaseAccordion
       title='Question'
@@ -38,54 +39,42 @@ export default function MultiChoiceQuestion({
                 key={i}
                 placeholder={`Option ${i + 1}`}
                 label=''
-                formValue={((value.options ?? [])[i] ?? [])[options[i]]}
+                formValue={
+                  ((value.options ?? [])[i] ?? [])[(value?.options ?? [])[i]]
+                }
                 setFormValue={(v) => {
-                  const newOpt: Option[] = [
-                    ...(value.options ?? [
-                      { a: '' },
-                      { b: '' },
-                      { c: '' },
-                      { d: '' },
-                    ]),
+                  const newOpt: string[] = [
+                    ...(value.options ?? ['', '', '', '']),
                   ];
-                  newOpt[i][options[i]] = v as string;
-                  onChange({ question: value.question, options: newOpt });
+                  newOpt[i] = v as string;
+                  onChange({ ...value, options: newOpt });
                 }}
               />
             ))}
         </div>
-        <div className='flex items-center justify-between pt-4'>
-          <div className='font-bold text-[#746D69]'>Select An Answer</div>
-          <ReactSelect
-            className='min-w-[20rem]'
-            value={
-              value.options?.find((opt) => opt.answer)?.answer
-                ? {
-                    value: value.options?.find((opt) => opt.answer)?.answer,
-                    label: value.options?.find((opt) => opt.answer)?.answer,
-                  }
-                : undefined
-            }
-            onChange={(opt) => {
-              const newOpt: Option[] = [
-                ...(value.options ?? [
-                  { a: '' },
-                  { b: '' },
-                  { c: '' },
-                  { d: '' },
-                ]),
-              ];
-              const index = newOpt?.findIndex((v) => v.answer);
-              if (index && (index ?? -1) > 0) {
-                (newOpt ?? [])[index] = { answer: opt?.value };
-              } else if (index && index < 0) {
-                newOpt?.push({ answer: opt?.value });
-              }
-              onChange({ question: value.question, options: newOpt });
-            }}
-            options={options.map((v) => ({ label: v, value: v }))}
-          />
-        </div>
+        {value.options && !isEmpty && (
+          <div className='flex items-center justify-between pt-4'>
+            <div className='font-bold text-[#746D69]'>Select An Answer</div>
+            <ReactSelect
+              className='min-w-[20rem]'
+              value={{
+                value: value.correctOption ?? 0,
+                label: (value.options ?? [])[value.correctOption ?? 0],
+              }}
+              onChange={(opt) => {
+                const index = value.options?.findIndex((v) => v === opt?.label);
+
+                if (index === null || index === undefined || index === -1)
+                  return;
+
+                onChange({ ...value, correctOption: index });
+              }}
+              options={value.options
+                .filter((item) => item.length > 0)
+                .map((v, idx) => ({ label: v, value: idx }))}
+            />
+          </div>
+        )}
       </div>
     </BaseAccordion>
   );

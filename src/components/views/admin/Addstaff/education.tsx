@@ -13,6 +13,14 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   addSubjectClass: () => void;
   removeRemoveSubjectClass: (id: number) => void;
@@ -33,7 +41,7 @@ const Education = ({
   const { data: institutionProfile } = useGetProfile();
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
-  const currentSessionId = institutionProfile?.currentSession?.id;
+  const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
   const { data: allclasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId

@@ -3,7 +3,10 @@ import Input from '@/components/input/formInput';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
-import { useCreateCategory, useGetCategoryByInstitutionType } from '@/server/institution/grade';
+import {
+  useCreateCategory,
+  useGetCategoryByInstitutionType,
+} from '@/server/institution/grade';
 import { GradeCategory } from '@/types/institute';
 import React from 'react';
 import { useEffect, useState } from 'react';
@@ -22,12 +25,12 @@ export default function EditGradeCategory({
 
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   const { data: categories } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
     termId: (terms?.data ?? [])[0].id,
   });
 
@@ -57,7 +60,7 @@ export default function EditGradeCategory({
           percentageScore: Number.parseInt(data.percentage[i]),
         })),
         institutionType,
-        sessionId: profile?.currentSession?.id,
+        sessionId: profile?.currentSession?.[0]?.id,
         termId: (terms?.data ?? [])[0].id,
       });
       toast.success('Grade categories created successfully');
@@ -68,6 +71,12 @@ export default function EditGradeCategory({
 
   const handleAddNewCategory = () => {
     setItems([...items, { categoryName: '', percentageScore: 0 }]);
+  };
+
+  const handleRemoveCategoryByIndex = (index: number) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
   };
 
   useEffect(() => {
@@ -82,7 +91,7 @@ export default function EditGradeCategory({
     <div>
       <div className='bg-[#F4F9FF] font-bold p-4'>
         <div className='text-xl my-4'>Institution Type</div>
-        <div className='text-center border-y py-5'>Primary</div>
+        <div className='text-center border-y py-5'>{institutionType}</div>
       </div>
       <div className='h-4' />
       <div className='flex flex-col gap-4 '>
@@ -154,7 +163,7 @@ export default function EditGradeCategory({
                 }}
               />
               <div className='bg-[#FFF8F8] text-red-500 p-4 rounded-full'>
-                <BsTrashFill />
+                <BsTrashFill onClick={() => handleRemoveCategoryByIndex(i)} />
               </div>
             </div>
 

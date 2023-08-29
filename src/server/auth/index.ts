@@ -67,7 +67,7 @@ export function useResetPassword() {
 
 export function useGetProfile() {
   const query = useQuery({
-    staleTime: Number.POSITIVE_INFINITY,
+    // staleTime: Number.POSITIVE_INFINITY,
     queryKey: 'get_profile',
     queryFn: async () => {
       const response = (
@@ -79,9 +79,14 @@ export function useGetProfile() {
         'institutionId',
         `${response.userInfo?.esiAdmin?.id}`
       );
+
       localStorage.setItem(
         'currentSessionId',
-        `${response.currentSession?.id}`
+        `${response.currentSession?.[0]?.id}`
+      );
+      localStorage.setItem(
+        'currentSession',
+        `${JSON.stringify(response.currentSession)}`
       );
       return response;
     },
@@ -97,7 +102,7 @@ export function useGetCurrentSession() {
         await request.get('/v1/authentication/profile', {
           withCredentials: true,
         })
-      ).data.data.data.currentSession as any;
+      ).data.data.data.currentSession[0] as any;
       return response;
     },
   });

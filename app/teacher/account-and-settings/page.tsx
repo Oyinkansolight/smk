@@ -1,24 +1,11 @@
 'use client';
 
 import { BigAvatar } from '@/components/profile/BigAvatar';
-
-const profileDetails = [
-  { title: 'Full Name', value: 'SANTOS IGBOSA' },
-  { title: 'Gender', value: 'Male' },
-  { title: 'Staff Id Number', value: 'PRI-1224' },
-  { title: 'Marital Status', value: 'Single' },
-  { title: 'Date of Birth', value: '10-OCT-2008' },
-  { title: 'Nationality', value: 'Nigerian' },
-  { title: 'Religion', value: 'CHRISTIANITY' },
-];
-
-const contactDetails = [
-  { title: 'Email', value: 'santosigbhosa5$@gmail.com' },
-  { title: 'Address', value: '90, Wuraola House, Allen, Lagos State' },
-  { title: 'Phone Number', value: '09020022002' },
-];
+import { useGetProfile } from '@/server/auth';
 
 export default function Page() {
+  const { data } = useGetProfile();
+
   return (
     <div className='layout flex flex-col gap-8 my-5'>
       <div className='text-2xl font-bold'>Account And Settings</div>
@@ -30,12 +17,42 @@ export default function Page() {
         </div>
         <div className='h-px bg-gray-300' />
         <div className='p-8 bg-white rounded-lg grid gap-5 sm:grid-cols-2 md:grid-cols-3'>
-          {profileDetails.map((v, i) => (
-            <div key={i}>
-              <div className='text-[#B1B1B1]'>{v.title}</div>
-              <div className='text-lg'>{v.value}</div>
+          <div>
+            <div className='text-[#B1B1B1]'>Full Name</div>
+            <div className='text-lg'>
+              {data?.userInfo?.firstName} {data?.userInfo?.lastName}
             </div>
-          ))}
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Gender</div>
+            <div className='text-lg'>{data?.userInfo?.staff?.gender}</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Staff Id Number</div>
+            <div className='text-lg'>{data?.userInfo?.staff?.id}</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Marital Status</div>
+            <div className='text-lg'>Single</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Date of Birth</div>
+            <div className='text-lg'>{data?.userInfo?.staff?.dob}</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Nationality</div>
+            <div className='text-lg'>Nationality</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Religion</div>
+            <div className='text-lg'>Christianlity</div>
+          </div>
         </div>
       </div>
       <div className='flex flex-col gap-4'>
@@ -45,12 +62,20 @@ export default function Page() {
         </div>
         <div className='h-px bg-gray-300' />
         <div className='p-8 bg-white rounded-lg grid gap-5 sm:grid-cols-2 md:grid-cols-3'>
-          {contactDetails.map((v, i) => (
-            <div key={i}>
-              <div className='text-[#B1B1B1]'>{v.title}</div>
-              <div className='text-lg'>{v.value}</div>
-            </div>
-          ))}
+          <div>
+            <div className='text-[#B1B1B1]'>Email</div>
+            <div className='text-lg'>{data?.userInfo?.email}</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Address</div>
+            <div className='text-lg'>{data?.userInfo?.address}</div>
+          </div>
+
+          <div>
+            <div className='text-[#B1B1B1]'>Phone Number</div>
+            <div className='text-lg'>{data?.userInfo?.phoneNumber}</div>
+          </div>
         </div>
       </div>
     </div>

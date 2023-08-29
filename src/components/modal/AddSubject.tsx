@@ -35,8 +35,8 @@ function AddActivityName({
   const { data: institutionProfile } = useGetProfile();
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
-  const currentSessionId = institutionProfile?.currentSession?.id;
-  const { data: allclasses } = useGetInstituteClassArms(
+  const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
+  const { data: allClasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
@@ -59,38 +59,12 @@ function AddActivityName({
             <div>
               {assignedClassSubject.map((v: any, i: number) => (
                 <div
-                  key={i}
+                  key={v?.id ?? i}
                   className='my-10 grid grid-cols-12 gap-6 items-center'
                 >
                   <div className='col-span-5'>
                     <label htmlFor='' className='text-xs font-bold'>
                       Assign Subject
-                    </label>
-                    <div className='mt-1 w-full border p-2 rounded'>
-                      <select
-                        id=''
-                        className='w-full border-none outline-none bg-transparent  text-gray-400'
-                        onChange={(e) => {
-                          handleSubjectClassChange(
-                            'classId',
-                            e.target.value,
-                            i
-                          );
-                        }}
-                      >
-                        <option value=''> -- Select an option -- </option>
-
-                        {(allSubjects ?? []).map((item, id) => (
-                          <option key={id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  <div className='col-span-5'>
-                    <label htmlFor='' className='text-xs font-bold'>
-                      Assign Class
                     </label>
                     <div className='mt-1 w-full border p-2 rounded'>
                       <select
@@ -106,8 +80,34 @@ function AddActivityName({
                       >
                         <option value=''> -- Select an option -- </option>
 
-                        {(allclasses ?? []).map((item: any, id: number) => (
-                          <option key={id} value={item.id}>
+                        {(allSubjects ?? []).map((item, id) => (
+                          <option key={item?.id ?? id} value={item?.id}>
+                            {item?.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className='col-span-5'>
+                    <label htmlFor='' className='text-xs font-bold'>
+                      Assign Class
+                    </label>
+                    <div className='mt-1 w-full border p-2 rounded'>
+                      <select
+                        id=''
+                        className='w-full border-none outline-none bg-transparent  text-gray-400'
+                        onChange={(e) => {
+                          handleSubjectClassChange(
+                            'classId',
+                            e.target.value,
+                            i
+                          );
+                        }}
+                      >
+                        <option value=''> -- Select an option -- </option>
+
+                        {(allClasses ?? []).map((item: any) => (
+                          <option key={item?.id} value={item?.id}>
                             {`${item.class.name} ${item.arm}`}
                           </option>
                         ))}

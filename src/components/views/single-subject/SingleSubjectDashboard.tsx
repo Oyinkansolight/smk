@@ -9,7 +9,7 @@ import TabBar from '@/components/layout/TabBar';
 import AllCurriculumView from '@/components/views/single-subject/AllCurriculumView';
 import TaskListView from '@/components/views/single-subject/TaskListView';
 import Files from '@/components/views/super-admin/Library/Files';
-import request from '@/server';
+import request, { getErrMsg } from '@/server';
 import { useGetSubjectById } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -33,44 +33,6 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/rules-of-hooks */
-
 const SingleSubjectDashboard = () => {
   const params = useSearchParams();
   const [page, setPage] = useState(0);
@@ -78,18 +40,28 @@ const SingleSubjectDashboard = () => {
   const { data } = useGetSubjectById(id);
   const [sessionterms, setsessionterms] = useState([]);
   const [allclasses, setallclasses] = useState<any>([]);
-  const [schoolType, setschoolType] = useState(0);
+  const [schoolType, setschoolType] = useState(2);
   const [termId, settermId] = useState('');
   const [classId, setclassId] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const [academicyear, setacademicyear] = useState({ session: '', id: '' });
 
   // const { data: allclasses } = useGetClassesList();
 
   const GetAllClasses = async () => {
-    const d = await request.get(
-      `/v1/government/curriculum/get-subject-curriculum-completion?sessionId=${academicyear.id}&termId=${termId}&subjectId=${id}`
-    );
-    setallclasses(d.data.data.data);
+    setisLoading(true);
+    await request
+      .get(
+        `/v1/government/curriculum/get-subject-curriculum-completion?sessionId=${academicyear.id}&termId=${termId}&subjectId=${id}`
+      )
+      .then((res) => {
+        setisLoading(false);
+        setallclasses(res.data.data.data);
+      })
+      .catch((err) => {
+        setisLoading(false);
+        getErrMsg(err);
+      });
   };
 
   useEffect(() => {
@@ -143,6 +115,7 @@ const SingleSubjectDashboard = () => {
               sessionterms={sessionterms || []}
               settermId={settermId}
               setclassId={setclassId}
+              isLoading={isLoading}
             />
           )}
           {page === 1 && <Files variant='primary' />}

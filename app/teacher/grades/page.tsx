@@ -2,11 +2,13 @@
 
 import Button from '@/components/buttons/Button';
 import TextIconTabBar from '@/components/layout/TextIconTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import GradeSubjectCard from '@/components/views/teacher/GradeSubjectCard';
-import { useGetGovernmentSubjectList } from '@/server/government/classes_and_subjects';
+import { useGetProfile } from '@/server/auth';
+import { useGetSubjectsAssignedToTeacher } from '@/server/government/classes_and_subjects';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiBookContent } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
@@ -18,14 +20,23 @@ export default function Page() {
     'bg-[#F7EFEF]',
     'bg-[#F7F7EF]',
   ];
-  // const subjects = ['Mathematics', 'Science', 'English', 'History'];
+
   const router = useRouter();
-  const { data } = useGetGovernmentSubjectList();
 
   const [idx, setIdx] = useState(0);
 
-  //* Actual Api to be called, response currently empty
-  // const { data: data2 } = useGetTeachersSubjectList();
+  const { data: profile } = useGetProfile();
+
+  const { data, refetch } = useGetSubjectsAssignedToTeacher(
+    profile?.userInfo?.staff?.id
+  );
+
+  useEffect(() => {
+    if (profile?.userInfo?.staff?.id) {
+      // Make the second query only when the first query data is available
+      refetch();
+    }
+  }, [refetch, profile]);
 
   const Names = [
     'Ighosa Ahmed',
@@ -68,21 +79,23 @@ export default function Page() {
             <div>Choose a Subject</div>
           </div>
           <div className='flex flex-wrap gap-4 justify-items-center'>
-            {data ? (
+            {data && data.length > 0 ? (
               data.map((v, i) => (
                 <GradeSubjectCard
                   onClick={() => {
                     router.push(
-                      `/teacher/grades/subject?id=${v.id}&subjectName=${v.name}`
+                      `/teacher/grades/subject?id=${v.subject.id}&subjectName=${v.subject.name}`
                     );
                   }}
                   key={i}
-                  subject={v.name ?? '[NULL]'}
+                  subject={v.subject.name ?? '[NULL]'}
                   className={colors[0]}
                 />
               ))
             ) : (
-              <div></div>
+              <div className='w-full h-full flex items-center justify-center'>
+                <EmptyView label='No subjects assigned to you' />
+              </div>
             )}
           </div>
         </div>

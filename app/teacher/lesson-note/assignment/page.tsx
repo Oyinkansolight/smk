@@ -14,23 +14,22 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
-
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data: activities } = useGetClassActivity({
     typeOfActivity: 'ASSIGNMENT',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
-    sessionId: profile?.currentSession?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
   });
 
   return (
@@ -57,10 +56,10 @@ export default function Page() {
         <BiSortUp className='h-6 w-6' />
       </div>
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-6'>
+      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-5 md:grid-cols-6'>
         <div className='col-span-2'>Title</div>
         <div>Subject</div>
-        <div>Class</div>
+        <div className='hidden md:block'>Class</div>
         <div>Date Assigned</div>
         <div>Date Due</div>
       </div>
@@ -115,7 +114,7 @@ export default function Page() {
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={5} currentPage={2} />
+      <PaginatedCounter pageCount={5} currentPage={0} />
     </div>
   );
 }
@@ -140,7 +139,7 @@ function LessonTaskListItem({
   return (
     <div
       className={clsxm(
-        'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',
+        'border rounded bg-white p-4 grid grid-cols-5 md:grid-cols-6 items-center font-bold text-[#746D69]',
         isDue && 'border-red-500'
       )}
     >
@@ -161,7 +160,7 @@ function LessonTaskListItem({
         )}
       </div>
       <div>{subject}</div>
-      <div>{classString}</div>
+      <div className='hidden md:block'>{classString}</div>
       <div>{moment(dateCreated).format('MMMM DD')}</div>
       <div className='flex justify-between items-center'>
         <div className={clsxm(isDue && 'text-red-500')}>

@@ -1,19 +1,36 @@
 import Pill from '@/components/buttons/Pill';
 import { BasicSearch } from '@/components/search';
+import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import * as React from 'react';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { GoBell } from 'react-icons/go';
 import Avatar from '~/svg/avatar.svg';
 
 import AdminNotification from './AdminNotification';
 
-export default function Header() {
+interface HeaderProps {
+  handleToggle?: () => void;
+}
+
+export default function Header({ handleToggle }: HeaderProps) {
   const [isOpen, setisOpen] = React.useState(false);
   const { data } = useGetProfile();
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
       <div className='mx-auto flex h-20 items-center justify-between px-4'>
+        {handleToggle && (
+          <div
+            onClick={handleToggle}
+            className={clsxm(
+              'flex w-12 justify-center cursor-pointer bg-secondary-50 bg-opacity-30 p-4 rounded-full my-12'
+            )}
+          >
+            <GiHamburgerMenu />
+          </div>
+        )}
+
         <div className='flex w-full flex-row gap-28 ml-20'>
           <BasicSearch />
         </div>
