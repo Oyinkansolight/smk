@@ -75,7 +75,7 @@ export default function Page() {
                   title={`${lessonNote?.title}`}
                   key={i}
                   subject={lessonNote?.subject?.name ?? 'NULL'}
-                  nameOfClass={arms?.[i].class?.name}
+                  nameOfClass={arms?.[i]?.class?.name}
                   date={lessonNote?.createdAt}
                 />
               </Link>

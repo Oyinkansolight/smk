@@ -84,6 +84,7 @@ export interface CreateClassActivityParams {
   classes?: number | string;
   subject?: number | string | null;
   lessonNote?: number | string;
+  addToGradeList?: boolean;
 }
 
 export interface Question {
@@ -141,7 +142,7 @@ export type CreateLessonNoteTypes = {
   weekId?: number | string | null;
   periodId?: number | string | null;
   teacherId?: number | string | null;
-  classes?: number | string | null;
+  classArmId?: number | string | null;
 };
 
 export function useCreateLessonNote() {
@@ -206,7 +207,7 @@ export function useGetStudentSubmittedActivity(
   const query = useQuery({
     queryKey: 'get_student_submitted_activity',
     queryFn: async () =>
-      params.classArmId && params.subjectId && params.studentId && params.type
+      params.classArmId && params.subjectId && params.type
         ? ((
             await request.get(
               `/v1/institutions/lessons/get-submittted-class-activties-by-subject`,
@@ -220,13 +221,7 @@ export function useGetStudentSubmittedActivity(
   const { refetch } = query;
   useEffect(() => {
     refetch();
-  }, [
-    params.classArmId,
-    params.subjectId,
-    params.studentId,
-    params.type,
-    refetch,
-  ]);
+  }, [params.classArmId, params.subjectId, params.type, refetch]);
   return query;
 }
 

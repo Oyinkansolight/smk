@@ -73,19 +73,15 @@ export default function Page() {
           ) : (
             activities?.data?.map((activity, i) => (
               <Link
-                key={i}
+                key={activity.id ?? i}
                 href={
                   activity.format === 'MULTIPLE_CHOICE'
-                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
-                        activity.subject.id
-                      }&classArmId=${(arms ?? [])[idx].id}&type=${
-                        activity.typeOfActivity
-                      }`
-                    : `/teacher/lesson-note/assignment/submissions?subjectId=${
-                        activity.subject.id
-                      }&classArmId=${(arms ?? [])[idx].id}&type=${
-                        activity.typeOfActivity
-                      }`
+                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }`
+                    : `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }`
                 }
               >
                 <LessonTaskListItem
@@ -94,16 +90,15 @@ export default function Page() {
                   title={
                     activity.typeOfActivity
                       ? `${activity.typeOfActivity} -  ${activity.format}`
-                          .replace('_', ' ')
-                          .toLowerCase()
+                        .replace('_', ' ')
+                        .toLowerCase()
                       : '[NULL]'
                   }
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
-                      ? `${(arms ?? [])[idx].class?.name} ${
-                          (arms ?? [])[idx].arm
-                        }`
+                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
+                      }`
                       : '[NULL]'
                   }
                   dueDate={activity.dueDate}
@@ -140,7 +135,7 @@ function LessonTaskListItem({
     <div
       className={clsxm(
         'border rounded bg-white p-4 grid grid-cols-5 md:grid-cols-6 items-center font-bold text-[#746D69]',
-        isDue && 'border-red-500'
+        moment() >= moment(dueDate) && 'border-red-500'
       )}
     >
       <div className='flex items-center col-span-2 gap-4'>
@@ -163,7 +158,7 @@ function LessonTaskListItem({
       <div className='hidden md:block'>{classString}</div>
       <div>{moment(dateCreated).format('MMMM DD')}</div>
       <div className='flex justify-between items-center'>
-        <div className={clsxm(isDue && 'text-red-500')}>
+        <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
           {moment(dueDate).format('MMMM DD')}
         </div>
         <BiChevronRight className='h-10 w-10' />

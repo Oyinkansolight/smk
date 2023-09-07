@@ -2,9 +2,10 @@ import Button from '@/components/buttons/Button';
 import GeneralModal from '@/components/modals/general-modal';
 import EditGradeCategory from '@/components/views/account-settings/EditGradeCategory';
 import ManageGradeRubric from '@/components/views/account-settings/ManageGradeRubric';
-import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
+import { INSTITUTION_TYPES } from '@/constant/institution';
+import { useGetCurrentSessionTerm } from '@/server/government/terms';
 import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
+import { UserProfile } from '@/types/auth';
 import { useState } from 'react';
 import ReactTable, { TableColumn } from 'react-data-table-component';
 
@@ -13,42 +14,53 @@ const columns: TableColumn<any>[] = [
   { name: 'Institution Type', cell: (row) => row.type },
   {
     name: 'Grade Category',
-    cell: (row) => <RenderGradeCategories institutionType={row.type} />,
+    cell: (row) => <RenderGradeCategories institutionType={row.type} profile={row.profile} />,
   },
   {
     name: '',
-    cell: (row) => <RenderGradeCategoryActions institutionType={row.type} />,
+    cell: (row) => <RenderGradeCategoryActions institutionType={row.type} profile={row.profile} />,
   },
 ];
 
-export default function GradeBookSettings() {
+interface GradeBookSettingsProps {
+  profile?: UserProfile;
+};
+
+export default function GradeBookSettings({ profile }: GradeBookSettingsProps) {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [data, setData] = useState([
     {
-      type: 'ECCDE',
+      type: INSTITUTION_TYPES.ECCDE,
       categories: [],
+      profile
     },
     {
-      type: 'PRIMARY',
-      categories: ['CA 1', 'CA 2', 'Examination'],
-    },
-    {
-      type: 'SECONDARY',
+      type: INSTITUTION_TYPES.PRIMARY,
       categories: [],
+      profile
     },
     {
-      type: 'TERTIARY',
-      categories: ['Test', 'Attendance', 'Examination'],
+      type: INSTITUTION_TYPES.SECONDARY,
+      categories: [],
+      profile
+    },
+    {
+      type: INSTITUTION_TYPES.TERTIARY,
+      categories: [],
+      profile
     },
   ]);
+
+  const allSessions = profile?.currentSession;
+
   return (
     <div className='flex flex-col gap-[22px] my-[22px]'>
       <div className='flex justify-end'>
         <GeneralModal
-          body={<ManageGradeRubric />}
+          body={<ManageGradeRubric allSessions={allSessions} />}
           panelClassName='!max-h-[1000px] hideScroll'
         >
-          <Button variant='outline'>Grade Rubric Settings</Button>
+          <Button variant='outline' className='bg-white'>Grade Rubric Settings</Button>
         </GeneralModal>
       </div>
       <div className='bg-white'>
@@ -62,18 +74,22 @@ export default function GradeBookSettings() {
 }
 
 function RenderGradeCategories({
+  profile,
   institutionType,
 }: {
+  profile: UserProfile;
   institutionType: string;
 }) {
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile ? profile?.currentSession?.[0]?.id : '',
+  const currentInstitutionSession = profile?.currentSession?.find((v) => v.institutionType === institutionType);
+
+  const { data: term } = useGetCurrentSessionTerm({
+    sessionId: currentInstitutionSession?.id ?? '',
   });
+
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: profile?.currentSession?.[0]?.id,
-    termId: terms ? terms?.data[0].id : '',
+    sessionId: currentInstitutionSession?.id ?? '',
+    termId: term ? term?.id : '',
   });
   return (
     <div>
@@ -85,18 +101,21 @@ function RenderGradeCategories({
 }
 
 function RenderGradeCategoryActions({
+  profile,
   institutionType,
 }: {
+  profile: UserProfile;
   institutionType: string;
 }) {
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
+  const currentInstitutionSession = profile?.currentSession?.find((v) => v.institutionType === institutionType);
+
+  const { data: term } = useGetCurrentSessionTerm({
+    sessionId: currentInstitutionSession?.id ?? '',
   });
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
-    sessionId: profile?.currentSession?.[0]?.id,
-    termId: (terms?.data ?? [])[0]?.id,
+    sessionId: currentInstitutionSession?.id ?? '',
+    termId: term ? term?.id : '',
   });
   return (
     <div className='flex w-full justify-end font-bold gap-3'>
@@ -104,7 +123,12 @@ function RenderGradeCategoryActions({
         <GeneralModal
           panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
           body={
-            <EditGradeCategory state='add' institutionType={institutionType} />
+            <EditGradeCategory
+              state='add'
+              termId={term ? term.id : ''}
+              institutionType={institutionType}
+              sessionId={currentInstitutionSession?.id ?? ''}
+            />
           }
         >
           <div className='text-[#008146] cursor-pointer'>Add Category</div>
@@ -113,7 +137,14 @@ function RenderGradeCategoryActions({
         <>
           <GeneralModal
             panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
-            body={<EditGradeCategory institutionType={institutionType} />}
+            body={
+              <EditGradeCategory
+                categories={data.data}
+                termId={term ? term.id : ''}
+                institutionType={institutionType}
+                sessionId={currentInstitutionSession?.id ?? ''}
+              />
+            }
           >
             <div className='text-[#008146] cursor-pointer'>View Category</div>
           </GeneralModal>
@@ -121,8 +152,11 @@ function RenderGradeCategoryActions({
             panelClassName='!max-w-[809px] !max-h-[716px] !py-[58px] !px-[54px]'
             body={
               <EditGradeCategory
-                institutionType={institutionType}
                 state='edit'
+                categories={data.data}
+                termId={term ? term.id : ''}
+                institutionType={institutionType}
+                sessionId={currentInstitutionSession?.id ?? ''}
               />
             }
           >

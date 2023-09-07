@@ -1,6 +1,6 @@
 import request from '@/server';
 import { ClassArm } from '@/types/classes-and-subjects';
-import { StudentAttendanceInterface } from '@/types/institute';
+import { ClassArmStudents, StudentAttendanceInterface } from '@/types/institute';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -114,4 +114,28 @@ export function useUpdateClassArmAttendance() {
       ).data.data.data,
   });
   return mutation;
+}
+
+export function useGetClassArmStudents(params: { classArmId?: string }) {
+  const query = useQuery({
+    queryKey: `get_students_in_class`,
+    queryFn: async () => {
+      //* Will remove check when BE implementation changes
+      if (params.classArmId) {
+        const d = await request.get(
+          '/v1/institutions/institutes/all-students-in-class?limit=1000',
+          {
+            params,
+            withCredentials: true,
+          }
+        );
+        return d.data.data.data.data as ClassArmStudents[];
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params.classArmId, refetch]);
+  return query;
 }

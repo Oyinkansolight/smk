@@ -1,11 +1,8 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import { getErrMsg } from '@/server';
-import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
 import {
   useCreateCategory,
-  useGetCategoryByInstitutionType,
 } from '@/server/institution/grade';
 import { GradeCategory } from '@/types/institute';
 import React from 'react';
@@ -15,32 +12,21 @@ import { BsTrashFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 
 export default function EditGradeCategory({
+  termId,
   state,
+  sessionId,
+  categories,
   institutionType,
 }: {
-  state?: 'add' | 'edit' | 'view';
+  termId?: string;
+  sessionId: string;
   institutionType?: string;
+  categories?: GradeCategory[];
+  state?: 'add' | 'edit' | 'view';
 }) {
-  const [items, setItems] = useState<GradeCategory[]>([]);
-
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
-
-  const { data: categories } = useGetCategoryByInstitutionType({
-    institutionType,
-    sessionId: profile?.currentSession?.[0]?.id,
-    termId: (terms?.data ?? [])[0].id,
-  });
+  const [items, setItems] = useState<GradeCategory[]>(categories ?? []);
 
   const { mutateAsync: createCategory } = useCreateCategory();
-
-  useEffect(() => {
-    if (categories) {
-      setItems(categories.data);
-    }
-  }, [categories]);
 
   const [isEditing, setIsEditing] = useState(
     state === 'edit' || state === 'add'
@@ -57,11 +43,12 @@ export default function EditGradeCategory({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         gradeCategory: (data.category as any[]).map((v, i) => ({
           categoryName: v,
+          type: v,
           percentageScore: Number.parseInt(data.percentage[i]),
         })),
         institutionType,
-        sessionId: profile?.currentSession?.[0]?.id,
-        termId: (terms?.data ?? [])[0].id,
+        sessionId: sessionId,
+        termId: termId,
       });
       toast.success('Grade categories created successfully');
     } catch (error) {

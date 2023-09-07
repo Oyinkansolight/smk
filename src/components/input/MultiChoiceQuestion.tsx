@@ -36,7 +36,7 @@ export default function MultiChoiceQuestion({
             .fill(0)
             .map((v, i) => (
               <Input
-                key={i}
+                key={i + Math.random() * 100}
                 placeholder={`Option ${i + 1}`}
                 label=''
                 formValue={

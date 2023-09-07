@@ -7,7 +7,6 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { getFromSessionStorage } from '@/lib/helper';
-import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
@@ -19,10 +18,6 @@ import {
   useCreateLessonNote,
 } from '@/server/institution/lesson-note';
 import { Institution } from '@/types/classes-and-subjects';
-import { convertToHTML } from 'draft-convert';
-import { EditorState } from 'draft-js';
-import { stateFromHTML } from 'draft-js-import-html';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -36,13 +31,8 @@ import { useSessionStorage } from 'usehooks-ts';
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
-
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
-  {
-    loading: () => <p>Loading...</p>,
-  }
-);
+import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
+import useCustomEditor from '@/hooks/useEditor';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
@@ -63,49 +53,8 @@ const activityFormats = [
   { key: 'SUBJECTIVE', value: 'Subjective' },
 ];
 
-const EditorComponent = ({
-  onChange,
-}: {
-  onChange?: (value: string) => void;
-}) => {
-  const [body] = useState('');
-
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(stateFromHTML(body))
-  );
-
-  const [convertedContent, setConvertedContent] = useState<string>('');
-  logger(convertedContent);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEditorChange = (state: any) => {
-    setEditorState(state);
-    const h = convertToHTML((state as EditorState).getCurrentContent());
-    setConvertedContent(h);
-    if (onChange) onChange(h);
-  };
-
-  // function handleSubmit(): void {
-  //   logger(convertedContent);
-  // }
-
-  return (
-    <div className='pb-20'>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={handleEditorChange}
-        wrapperClassName='wrapper-class'
-        editorClassName='editor-class'
-        toolbarClassName='toolbar-class'
-        editorStyle={{ border: '1px solid', width: 'full', height: '20rem' }}
-        toolbar={{
-          fontFamily: { options: [''] },
-        }}
-      />
-    </div>
-  );
-};
-
 export default function CreateClassActivityView() {
+  const editor = useCustomEditor();
   const { register, watch, handleSubmit, getValues, control } = useForm({
     mode: 'all',
     reValidateMode: 'onChange',
@@ -113,7 +62,6 @@ export default function CreateClassActivityView() {
   const format = watch('format')?.label;
   const type = watch('typeOfActivity')?.label;
   const [subjectiveType, setSubjectiveType] = useState(0);
-  const [, setBody] = useState('[NO_BODY]');
   const create = useCreateClassActivity();
   const { mutateAsync: createLessonNote } = useCreateLessonNote();
   const [questions, setQuestions] = useState<Question[]>([{}]);
@@ -146,40 +94,59 @@ export default function CreateClassActivityView() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    questions.forEach((v) => {
-      if (!v.question) {
+    if (data.format.value === activityFormats[0].key) {
+      questions.forEach((v) => {
+        if (!v.question) {
+          toast.error('Please fill all questions');
+          return;
+        }
+
+        if (!v.options) {
+          toast.error('Please fill all options');
+          return;
+        }
+
+        if (!v.correctOption) {
+          toast.error('Please select a correct option');
+          return;
+        }
+
+        if (v.options.length < 4) {
+          toast.error('Please add at least 4 options');
+          return;
+        } else if (v.options.length === 4) {
+          v.options.map((option) => {
+            if (!option || option === '') {
+              toast.error('Please fill all options');
+              return;
+            }
+          });
+        }
+      });
+    };
+
+    if (data.format.value === activityFormats[1].key) {
+      if (editor?.getHTML() === '' || editor?.getHTML() === '<p></p>') {
         toast.error('Please fill all questions');
         return;
       }
+    };
 
-      if (!v.options) {
-        toast.error('Please fill all options');
-        return;
-      }
+    let questionsV2;
 
-      if (!v.correctOption) {
-        toast.error('Please select a correct option');
-        return;
-      }
+    if (data.format.value === activityFormats[0].key) {
+      questionsV2 = questions.map((v) => ({
+        question: v.question,
+        options: v.options,
+        correctOption: v.correctOption,
+      }));
+    };
 
-      if (v.options.length < 4) {
-        toast.error('Please add at least 4 options');
-        return;
-      } else if (v.options.length === 4) {
-        v.options.map((option) => {
-          if (!option || option === '') {
-            toast.error('Please fill all options');
-            return;
-          }
-        });
-      }
-    });
-
-    const questionsV2 = questions.map((v) => ({
-      question: v.question,
-      options: v.options,
-      correctOption: v.correctOption,
-    }));
+    if (data.format.value === activityFormats[1].key) {
+      questionsV2 = [{
+        question: editor?.getHTML() ?? '',
+      }];
+    };
 
     try {
       let form;
@@ -209,7 +176,8 @@ export default function CreateClassActivityView() {
           subjectId: createActivityParams?.subject,
           teacherId: profile?.userInfo?.staff?.id,
           title: 'Title',
-          classes: createActivityParams?.classes,
+          classArmId: createActivityParams?.classes,
+          instructionalTeachingActivity: editor?.getHTML() ?? '',
         };
 
         if (!path) delete payload.uploadUrl;
@@ -231,6 +199,7 @@ export default function CreateClassActivityView() {
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questionsV2,
+          addToGradeList,
         });
         toast.success(res.data.data.message);
       } else {
@@ -242,6 +211,7 @@ export default function CreateClassActivityView() {
           mode: isOnline ? 'ONLINE' : 'OFFLINE',
           format: form,
           questionsV2,
+          addToGradeList,
         });
         toast.success(res.data.data.message);
       }
@@ -307,28 +277,28 @@ export default function CreateClassActivityView() {
           )}
           {(type === activityTypes[1].value ||
             type === activityTypes[2].value) && (
-            <div>
-              <div className='font-bold text-xs pb-1'>Time Limit</div>
-              <Controller
-                name='timeLimit'
-                control={control}
-                render={({ field }) => {
-                  return (
-                    <ReactSelect
-                      {...field}
-                      required
-                      options={['15 Mins', '30 Mins', '45 Mins', '1 Hour'].map(
-                        (v) => ({
-                          value: v,
-                          label: v,
-                        })
-                      )}
-                    />
-                  );
-                }}
-              />
-            </div>
-          )}
+              <div>
+                <div className='font-bold text-xs pb-1'>Time Limit</div>
+                <Controller
+                  name='timeLimit'
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <ReactSelect
+                        {...field}
+                        required
+                        options={['15 Mins', '30 Mins', '45 Mins', '1 Hour'].map(
+                          (v) => ({
+                            value: v,
+                            label: v,
+                          })
+                        )}
+                      />
+                    );
+                  }}
+                />
+              </div>
+            )}
         </div>
         {type !== activityTypes[3].value && (
           <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
@@ -418,7 +388,8 @@ export default function CreateClassActivityView() {
         )}
         {format === 'Subjective' && type !== activityTypes[3].value && (
           <div>
-            <EditorComponent onChange={setBody} />
+            <CustomRichTextEditor editor={editor} />
+            {/* <EditorComponent onChange={setBody} /> */}
           </div>
         )}
         {type === activityTypes[3].value && (
@@ -457,7 +428,7 @@ export default function CreateClassActivityView() {
               selectedIdx={subjectiveType}
               activeClassName='text-[#1A8FE3]'
             />
-            {subjectiveType === 0 && <EditorComponent onChange={setBody} />}
+            {subjectiveType === 0 && <CustomRichTextEditor editor={editor} />}
             {subjectiveType === 1 && (
               <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
                 {(getValues('lesson-note-file-upload') ?? [])[0]?.name ? (

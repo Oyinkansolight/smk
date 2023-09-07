@@ -3,7 +3,7 @@
 import GradeSubjectCard from '@/components/views/teacher/GradeSubjectCard';
 import Link from 'next/link';
 
-const items = ['Home Work', 'Class Work', 'Lesson Note', 'Pop Quizzes'];
+const items = ['Assignment', 'Class Work', 'Lesson Note', 'Pop Quizzes'];
 const links = [
   '/teacher/lesson-note/assignment',
   '/teacher/lesson-note/class-work',

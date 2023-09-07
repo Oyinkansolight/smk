@@ -208,6 +208,11 @@ export interface User {
   suspended: boolean;
   createdAt: Date;
   updatedAt: Date;
+  deviceToken: any;
+  batteryLevel: any;
+  resetPasswordToken: any;
+  resetPasswordTokenExpires: any;
+  loginCount: number;
 }
 
 export interface IncidentReportType {
@@ -456,4 +461,25 @@ export interface GradeRubricInterface {
   updatedAt: string;
   term: Term;
   session: Session;
+}
+
+export interface ClassArmStudents {
+  id: string;
+  profileImg: string;
+  firstName: string;
+  lastName: string;
+  parentDetails: ParentDetails;
+  lga: string;
+  address: any;
+  parentStatus: string;
+  gender: string;
+  dob: string;
+  studentId: string;
+  parentOccupation: string;
+  createdAt: string;
+  updatedAt: string;
+  class: ClassInterface;
+  institution: Institution;
+  user: User[];
+  classArmId: string;
 }

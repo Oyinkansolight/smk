@@ -77,11 +77,9 @@ export default function Page() {
                 href={
                   !activity.id
                     ? '/teacher/lesson-note/class-work/offline-submissions'
-                    : `/teacher/lesson-note/class-work/submissions?subjectId=${
-                        activity.subject.id
-                      }&classArmId=${(arms ?? [])[idx].id}&type=${
-                        activity.typeOfActivity
-                      }`
+                    : `/teacher/lesson-note/class-work/submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }`
                 }
               >
                 <LessonTaskListItem
@@ -91,9 +89,8 @@ export default function Page() {
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
-                      ? `${(arms ?? [])[idx].class?.name} ${
-                          (arms ?? [])[idx].arm
-                        }`
+                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
+                      }`
                       : '[NULL]'
                   }
                   dueDate={activity.dueDate}
@@ -130,7 +127,7 @@ function LessonTaskListItem({
     <div
       className={clsxm(
         'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]',
-        isDue && 'border-red-500'
+        moment() >= moment(dueDate) && 'border-red-500'
       )}
     >
       <div className='flex items-center col-span-2 gap-4'>
@@ -153,7 +150,7 @@ function LessonTaskListItem({
       <div>{classString}</div>
       <div>{moment(dateCreated).format('MMMM DD')}</div>
       <div className='flex justify-between items-center'>
-        <div className={clsxm(isDue && 'text-red-500')}>
+        <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
           {moment(dueDate).format('MMMM DD')}
         </div>
         <BiChevronRight className='h-10 w-10' />

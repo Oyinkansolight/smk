@@ -30,8 +30,8 @@ export default function ClockInTime() {
     institute = JSON.parse(institutionData);
   }
 
-  const lat = institute?.instituteLat ?? '6.5994752';
-  const long = institute?.instituteLong ?? '3.3488896';
+  const lat = institute?.instituteLat ?? 6.5994752;
+  const long = institute?.instituteLong ?? 3.3488896;
 
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,

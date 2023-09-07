@@ -25,3 +25,28 @@ export function useGetSessionTerms(params: { sessionId?: string }) {
 
   return query;
 }
+
+export function useGetCurrentSessionTerm(params: { sessionId?: string }) {
+  const query = useQuery({
+    queryKey: `get_current_session_term_${params.sessionId ?? ''}`,
+    queryFn: async () => {
+      if (params.sessionId) {
+        const d = await request.get(
+          '/v1/government/terms/current-session-term',
+          {
+            params,
+          }
+        );
+        return d.data.data.data as Term;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    if (params.sessionId) {
+      refetch();
+    }
+  }, [params.sessionId, refetch]);
+
+  return query;
+}

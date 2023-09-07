@@ -1,31 +1,52 @@
 'use client';
 
-import Button from '@/components/buttons/Button';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
+import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
-import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
-import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
+import { useGetProfile } from '@/server/auth';
+import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetTeacherClassArms } from '@/server/institution/class-arm';
+import { useGetClassActivity } from '@/server/institution/lesson-note';
 import moment from 'moment';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { BiChevronDown, BiSortUp } from 'react-icons/bi';
+import { useState } from 'react';
+import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
 
 export default function Page() {
-  const params = useSearchParams();
-  const { data: submissions } = useGetStudentSubmittedActivity({
-    classArmId: params?.get('classArmId'),
-    subjectId: params?.get('subjectId'),
-    type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
-    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
+  const [idx, setIdx] = useState(0);
+  const { data: profile } = useGetProfile();
+  const { data: terms } = useGetSessionTerms({
+    sessionId: profile?.currentSession?.[0]?.id,
   });
+  const term = terms?.data[0]?.id;
+  const { data: arms } = useGetTeacherClassArms({
+    teacherId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
+  });
+  const { data: activities } = useGetClassActivity({
+    typeOfActivity: 'QUIZ',
+    classArmId: (arms ?? [])[idx]?.id as unknown as string,
+    termId: term as unknown as string,
+    sessionId: profile?.currentSession?.[0]?.id,
+  });
+
   return (
     <div className='h-full layout'>
-      <div className='text-3xl text-[#D4D5D7]'>{'Pop Quiz > Submissions'}</div>
       <div className='font-bold text-3xl py-8 h3'>
-        <div>Submissions</div>
+        <div>Pop Quizzes</div>
       </div>
-      <div className='flex gap-8 items-center text-[#746D69] bg-white p-4 rounded-md'>
+      <TextTabBar
+        tabs={[
+          ...(arms ?? []).map((arm) =>
+            arm.arm ? `${arm.class?.name} ${arm.arm}` : '[NULL]'
+          ),
+        ]}
+        onChange={setIdx}
+        selectedIdx={idx}
+      />
+      <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
         <input className='rounded-full border p-3' placeholder='search' />
         <div className='flex-1' />
         <div className='flex items-center'>
@@ -33,80 +54,114 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
-        <Link href='/teacher/lesson-note/pop-quiz/late-submissions'>
-          <Button className='bg-[#E5002B] px-10 hover:bg-[#9e001d] text-xs py-3 active:bg-[#c9072a] justify-center'>
-            View Late Submissions
-          </Button>
-        </Link>
       </div>
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
-        <div className='col-span-2'>Name</div>
-        <div>Date Submitted</div>
-        <div>Due Date</div>
-        <div></div>
+      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-5 md:grid-cols-6'>
+        <div className='col-span-2'>Title</div>
+        <div>Subject</div>
+        <div className='hidden md:block'>Class</div>
+        <div>Date Assigned</div>
+        <div>Date Due</div>
       </div>
       <div className='flex flex-col gap-2'>
-        {submissions &&
-          (submissions.length === 0 ? (
-            <EmptyView label='No submissions' useStandardHeight />
+        {activities?.data &&
+          (activities?.data.length === 0 ? (
+            <EmptyView
+              useStandardHeight
+              label='No assignments created for this class.'
+            />
           ) : (
-            submissions?.map((submission, i) => (
+            activities?.data?.map((activity, i) => (
               <Link
-                href={`/teacher/lesson-note/pop-quiz/submissions/grade?subjectId=${params?.get(
-                  'subjectId'
-                )}&classArmId=${params?.get('classArmId')}&type=${params?.get(
-                  'type'
-                )}`}
                 key={i}
+                href={
+                  activity.format === 'MULTIPLE_CHOICE'
+                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }`
+                    : `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }`
+                }
               >
-                <AssignmentListItem
-                  title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
-                  dateSubmitted={moment(submission.createdAt).format('MMMM DD')}
-                  dueDate={submission.activity.dueDate}
+                <LessonTaskListItem
+                  isDue={false}
+                  isOfflineSubmission={false}
+                  title={
+                    activity.typeOfActivity
+                      ? `${activity.typeOfActivity} -  ${activity.format}`
+                        .replace('_', ' ')
+                        .toLowerCase()
+                      : '[NULL]'
+                  }
+                  subject={activity.subject.name ?? '[NULL]'}
+                  classString={
+                    (arms ?? [])[idx].arm
+                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
+                      }`
+                      : '[NULL]'
+                  }
+                  dueDate={activity.dueDate}
+                  dateCreated={activity.createdAt}
                   key={i}
-                  id={i + 1}
                 />
               </Link>
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={10} currentPage={0} />
+      <PaginatedCounter pageCount={5} currentPage={0} />
     </div>
   );
 }
 
-function AssignmentListItem({
-  id,
+function LessonTaskListItem({
+  isDue,
   title,
-  dateSubmitted,
+  subject,
+  isOfflineSubmission,
+  classString,
   dueDate,
+  dateCreated,
 }: {
-  id: number;
+  isDue: boolean;
+  isOfflineSubmission?: boolean;
   title: string;
-  dateSubmitted?: string;
-  dueDate?: Date;
+  subject: string;
+  classString: string;
+  dueDate: Date;
+  dateCreated: Date;
 }) {
   return (
     <div
       className={clsxm(
-        'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
+        'border rounded bg-white p-4 grid grid-cols-5 md:grid-cols-6 items-center font-bold text-[#746D69]',
+        moment() >= moment(dueDate) && 'border-red-500'
       )}
     >
-      <div className='flex items-center col-span-2 gap-8'>
-        <div>{id}.</div>
-        <div className='relative rounded-full border h-16 w-16 bg-gray-300 md:block hidden '></div>
-        <div>{title}</div>
+      <div className='flex items-center col-span-2 gap-4'>
+        <div className='relative rounded-full border md:block hidden h-16 w-16 '>
+          <Image
+            alt='book-stack'
+            className='absolute inset-2'
+            src='/images/book_stack.png'
+            fill
+          />
+        </div>
+        <div className='capitalize'>{title}</div>
+        {isOfflineSubmission && (
+          <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
+            Offline
+          </div>
+        )}
       </div>
-      <div>{dateSubmitted ? dateSubmitted : '-'}</div>
-      <div>{moment(dueDate).format('MMMM DD')}</div>
-      <div className='flex justify-end '>
-        <Button
-          disabled={!dateSubmitted}
-          className='bg-[#1A8FE3] px-10 hover:bg-[#0c5d96] disabled:bg-[#BDBEBE] text-xs py-3 active:bg-[#126eb0] justify-center'
-        >
-          Grade
-        </Button>
+      <div>{subject}</div>
+      <div className='hidden md:block'>{classString}</div>
+      <div>{moment(dateCreated).format('MMMM DD')}</div>
+      <div className='flex justify-between items-center'>
+        <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
+          {moment(dueDate).format('MMMM DD')}
+        </div>
+        <BiChevronRight className='h-10 w-10' />
       </div>
     </div>
   );

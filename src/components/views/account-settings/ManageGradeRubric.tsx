@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import Index from '@/components/stepper';
+import { INSTITUTION_TYPES } from '@/constant/institution';
 import { getErrMsg } from '@/server';
-import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
+import { useGetCurrentSessionTerm } from '@/server/government/terms';
 import {
   CreateRubricParams,
   useCreateRubric,
@@ -14,54 +15,100 @@ import { useCallback, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
+import { Session } from '@/types/classes-and-subjects';
+import GenericLoader from '@/components/layout/Loader';
 
-export default function ManageGradeRubric({ closeModal }: { closeModal?: () => void }) {
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[1]?.id,
+interface ManageGradeRubricProps {
+  closeModal?: () => void;
+  allSessions?: Session[];
+};
+
+const initialRubric = [
+  { label: '', maxRange: 0, minRange: 0, remark: '' },
+  { label: '', maxRange: 0, minRange: 0, remark: '' },
+  { label: '', maxRange: 0, minRange: 0, remark: '' },
+  { label: '', maxRange: 0, minRange: 0, remark: '' },
+];
+
+export default function ManageGradeRubric({ closeModal, allSessions }: ManageGradeRubricProps) {
+  const [loading, setLoading] = useState(false);
+  const [currentInstitution, setCurrentInstitution] = useState(INSTITUTION_TYPES.SECONDARY);
+  const currentSessionId = allSessions?.find((v) => v.isCurrent && v.institutionType === currentInstitution)?.id;
+  const { data: term } = useGetCurrentSessionTerm({
+    sessionId: currentSessionId,
   });
 
+  const toggleLoading = () => {
+    setLoading(!loading);
+  };
+
   const params = {
-    institutionType: "SECONDARY",
-    sessionId: profile?.currentSession?.[1]?.id as unknown as string,
-    termId: terms?.data[0]?.id as unknown as string,
+    institutionType: currentInstitution,
+    sessionId: currentSessionId,
+    termId: term?.id,
   }
-  const { data } = useGetGradeRubricByInstitutionType(params);
+  const { data, refetch, isError, isLoading: isLoadingRubric } = useGetGradeRubricByInstitutionType(params);
 
   const reversedData: GradeRubricInterface[] = [];
-
-  if (data && data?.length > 0) {
-    for (let index = data?.length - 1; index >= 0; index--) {
-      reversedData.push(data[index]);
-    }
-  };
 
 
   const [rubrics, setRubrics] = useState<GradeRubricInterface[] |
     (CreateRubricParams['rubrics'][number] & { label: string })[]
-  >(reversedData.length > 0 ? reversedData : [
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-    { label: '', maxRange: 0, minRange: 0, remark: '' },
-  ]);
+  >(data && data.length > 0 ? data : initialRubric);
   const [currentStage, setCurrentStage] = useState(0);
   const { mutateAsync: createRubric, isLoading } = useCreateRubric();
 
   const handleCreateRubric = useCallback(async () => {
     try {
       const response = await createRubric({
-        institutionType: 'SECONDARY',
+        institutionType: currentInstitution,
         rubrics: rubrics,
-        sessionId: profile?.currentSession?.[1]?.id as unknown as string,
-        termId: (terms?.data ?? [])[0]?.id as unknown as string,
+        sessionId: currentSessionId,
+        termId: term?.id,
       });
       toast.success(response.data.data.message ?? 'Success');
       closeModal && closeModal();
     } catch (error) {
       toast.error(getErrMsg(error));
     }
-  }, [closeModal, createRubric, profile?.currentSession, rubrics, terms?.data]);
+  }, [createRubric, currentInstitution, rubrics, currentSessionId, term?.id, closeModal]);
+
+  const allInstitutions = [
+    { value: INSTITUTION_TYPES.ECCDE, label: INSTITUTION_TYPES.ECCDE },
+    { value: INSTITUTION_TYPES.PRIMARY, label: INSTITUTION_TYPES.PRIMARY },
+    { value: INSTITUTION_TYPES.SECONDARY, label: INSTITUTION_TYPES.SECONDARY },
+    { value: INSTITUTION_TYPES.TERTIARY, label: INSTITUTION_TYPES.TERTIARY },
+  ];
+
+  const handleInstitutionChange = async (value: { value: string; label: string }) => {
+    toggleLoading();
+    setCurrentInstitution(value.value);
+    setRubrics(initialRubric);
+    // reversedData = [];
+    refetch();
+
+    setTimeout(() => {
+      console.log(isLoadingRubric);
+      console.log(isError);
+
+
+
+      if (!isLoadingRubric || !isError) {
+        console.log(data);
+        console.log(isError);
+
+
+        if (data && data?.length > 0) {
+          setRubrics(data);
+        }
+
+        toggleLoading();
+      }
+    }, 2000);
+
+  };
+
   return (
     <div>
       <div className='text-center'>
@@ -85,14 +132,23 @@ export default function ManageGradeRubric({ closeModal }: { closeModal?: () => v
           </div>
         </div>
       </div>
-      {currentStage === 0 && (
+
+      {currentStage === 0 &&
+        <div className='flex flex-row items-center gap-2 mb-6'>
+          <div>Institution type:</div>
+          <Select
+            name="institution"
+            className='text-primary'
+            options={allInstitutions}
+            onChange={(value) => handleInstitutionChange(value as { value: string; label: string })}
+            //Defaults to secondary institution
+            defaultValue={allInstitutions[2]}
+          />
+        </div>
+      }
+
+      {currentStage === 0 && !loading ? (
         <div>
-          <div className='flex flex-row'>
-            <div>Institution type:</div>
-
-
-          </div>
-
           {rubrics.map((v: unknown, i: number) => (
             <div key={i}>
               <div className='flex items-end gap-3'>
@@ -148,7 +204,10 @@ export default function ManageGradeRubric({ closeModal }: { closeModal?: () => v
             </Button>
           </div>
         </div>
+      ) : loading && (
+        <GenericLoader />
       )}
+
       {currentStage === 1 && (
         <div>
           {rubrics.map((v: unknown, i: number) => (
@@ -220,7 +279,9 @@ export default function ManageGradeRubric({ closeModal }: { closeModal?: () => v
           ))}
         </div>
       )}
+
       <div className='h-24' />
+
       <div className='flex justify-end gap-4'>
         <Button
           variant='outline'

@@ -2,6 +2,7 @@ import logger from '@/lib/logger';
 import request from '@/server';
 import { GradeCategory, GradeRubricInterface } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface CreateRubricParams {
@@ -47,7 +48,15 @@ export function useGetGradeRubricByInstitutionType(
               params,
             }
           );
-          return d.data.data.data.data as GradeRubricInterface[];
+
+          const data = d.data.data.data.data as GradeRubricInterface[];
+          const reversedData: GradeRubricInterface[] = [];
+
+          for (let index = data?.length - 1; index >= 0; index--) {
+            reversedData.push(data[index]);
+          }
+
+          return reversedData as GradeRubricInterface[];
         } catch (error) {
           logger(error);
           throw error;
@@ -71,7 +80,7 @@ export function useGetCategoryByInstitutionType(
   const query = useQuery({
     queryKey: `get_category_by_institution_type_${params?.institutionType}`,
     queryFn: async () => {
-      if (params?.institutionType) {
+      if (params?.institutionType && params?.termId) {
         try {
           const d = await request.get(
             '/v1/institutions/grade/get-category-by-institution-type',
@@ -87,6 +96,14 @@ export function useGetCategoryByInstitutionType(
       }
     },
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    if (params?.termId) {
+      refetch();
+    }
+  }, [params?.termId, refetch]);
+
   return query;
 }
 

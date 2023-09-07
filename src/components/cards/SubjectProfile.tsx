@@ -4,6 +4,7 @@
 import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
+import { INSTITUTION_TYPES } from '@/constant/institution';
 import { getFromLocalStorage } from '@/lib/helper';
 import request from '@/server';
 import { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ interface StudentTeacherProfileCardProps {
   setsessionterms: (v: []) => void;
   sessionterms: any[];
   setacademicyear?: (v: any) => void;
+  handleSetCurrentTermName: (v: string) => void;
 }
 
 export default function SubjectProfileCard({
@@ -31,6 +33,7 @@ export default function SubjectProfileCard({
   setacademicyear,
   sessionterms,
   settermId,
+  handleSetCurrentTermName
 }: StudentTeacherProfileCardProps) {
   const [currentGrid, setCurrentGrid] = useState(2);
   const currentSession = getFromLocalStorage('currentSession');
@@ -41,16 +44,16 @@ export default function SubjectProfileCard({
   }
 
   const eccdeSession = currentUserInfo.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('eccde')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.ECCDE.toLowerCase())
   );
   const secondarySession = currentUserInfo.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('secondary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.SECONDARY.toLowerCase())
   );
   const primarySession = currentUserInfo.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('primary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.PRIMARY.toLowerCase())
   );
   const tertiarySession = currentUserInfo.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes('tertiary')
+    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.TERTIARY.toLowerCase())
   );
 
   const handleToggleGrid = (index: number) => {
@@ -166,10 +169,11 @@ export default function SubjectProfileCard({
           className='bg-[#EFFFF6] text-base rounded-md w-full'
           onChange={(e) => {
             settermId && settermId(JSON.parse(e.target.value).id);
+            handleSetCurrentTermName(termNumberToName(JSON.parse(e.target.value).name) ?? 'Term');
           }}
         >
           {(sessionterms ?? []).map((v: any, id: number) => (
-            <option key={id} value={JSON.stringify(v)}>
+            <option key={v.id ?? id} value={JSON.stringify(v)}>
               {termNumberToName(v.name)}
             </option>
           ))}

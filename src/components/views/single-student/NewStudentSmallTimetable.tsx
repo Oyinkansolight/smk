@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import clsxm from '@/lib/clsxm';
-import Image from 'next/image';
+import logger from '@/lib/logger';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
@@ -10,6 +9,9 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
     month: 'long',
     day: 'numeric',
   });
+
+  logger(todaysPeriod);
+
 
   return (
     <div className='w-full max-w-[296px]'>
@@ -23,7 +25,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
         {!loading ? (
           <div>
             {' '}
-            {todaysPeriod.map((v: any, i: number) => (
+            {/* {todaysPeriod.map((v: any, i: number) => (
               <TimetableItem
                 key={i}
                 isCurrent={i === 0}
@@ -31,7 +33,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
                 subtitle={`${v.startTime} - ${v.endTime}`}
                 title={v.title}
               />
-            ))}
+            ))} */}
           </div>
         ) : (
           <div className='flex justify-center'>
@@ -49,43 +51,43 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   );
 }
 
-function TimetableItem({
-  isCurrent,
-  img,
-  title,
-  subtitle,
-}: {
-  isCurrent: boolean;
-  title: string;
-  subtitle: string;
-  img: string;
-}) {
-  return (
-    <div
-      className={clsxm(
-        'rounded-t-lg p-5 relative bg-[#FFFCF8] border-b-2 flex w-full',
-        isCurrent && 'border border-blue-500 bg-[#EFF2F7] shadow-xl'
-      )}
-    >
-      {isCurrent && (
-        <div className='flex items-center justify-center py-1 px-3 rounded text-[7px] font-semibold whitespace-nowrap text-white bg-[#3361FF] absolute -top-2 -left-[1px] max-w-[59px] h-5'>
-          Current Period
-        </div>
-      )}
-      <div className='flex-1'>
-        <div
-          className={clsxm(
-            isCurrent && 'text-lg',
-            'text-[#160537] font-semibold text-sm'
-          )}
-        >
-          {title}
-        </div>
-        <div className='text-[#808080]'>{subtitle}</div>
-      </div>
-      <div>
-        <Image src={img} alt={img} height={40} width={40} />
-      </div>
-    </div>
-  );
-}
+// function TimetableItem({
+//   isCurrent,
+//   img,
+//   title,
+//   subtitle,
+// }: {
+//   isCurrent: boolean;
+//   title: string;
+//   subtitle: string;
+//   img: string;
+// }) {
+//   return (
+//     <div
+//       className={clsxm(
+//         'rounded-t-lg p-5 relative bg-[#FFFCF8] border-b-2 flex w-full',
+//         isCurrent && 'border border-blue-500 bg-[#EFF2F7] shadow-xl'
+//       )}
+//     >
+//       {isCurrent && (
+//         <div className='flex items-center justify-center py-1 px-3 rounded text-[7px] font-semibold whitespace-nowrap text-white bg-[#3361FF] absolute -top-2 -left-[1px] max-w-[59px] h-5'>
+//           Current Period
+//         </div>
+//       )}
+//       <div className='flex-1'>
+//         <div
+//           className={clsxm(
+//             isCurrent && 'text-lg',
+//             'text-[#160537] font-semibold text-sm'
+//           )}
+//         >
+//           {title}
+//         </div>
+//         <div className='text-[#808080]'>{subtitle}</div>
+//       </div>
+//       <div>
+//         <Image src={img} alt={img} height={40} width={40} />
+//       </div>
+//     </div>
+//   );
+// }

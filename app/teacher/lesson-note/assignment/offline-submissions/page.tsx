@@ -13,7 +13,7 @@ export default function Page() {
     classArmId: params?.get('classArmId'),
     subjectId: params?.get('subjectId'),
     type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
-    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
+    // studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
   });
   return (
     <div className='layout w-full flex flex-col gap-4'>
@@ -26,7 +26,7 @@ export default function Page() {
       />
       <div className='bg-white rounded-md py-[8px] px-[40px] font-bold text-xl text-[#746D69]'>
         <div>
-          <span className='text-[#D4D5D7]'>Subject: </span> {}
+          <span className='text-[#D4D5D7]'>Subject: </span> { }
         </div>
         <div>
           <span className='text-[#D4D5D7]'>Date Assigned: </span> October 16

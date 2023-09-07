@@ -1,18 +1,38 @@
 'use client';
 
 import AddAdmin from '@/components/modal/addAdmin';
+import clsxm from '@/lib/clsxm';
 import { useGetAdminList } from '@/server/Permission';
 import Link from 'next/link';
 import { useState } from 'react';
+import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const Role = () => {
   const [action, setAction] = useState<number | null>(null);
-  const [isOpen, setisOpen] = useState(false);
-  const { data, isLoading } = useGetAdminList();
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading } = useGetAdminList(currentPage);
   function handleModal() {
-    setisOpen(!isOpen);
-  }
+    setIsOpen(!isOpen);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleJumpToStart = () => {
+    setCurrentPage(1);
+  };
+
+  const handleJumpToEnd = () => {
+    if (data) setCurrentPage(data.paging.totalPage);
+  };
 
   return (
     <div>
@@ -24,7 +44,7 @@ const Role = () => {
           Manage Roles
         </Link>
         <button
-          onClick={() => setisOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
           className='w-max  rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
         >
           Add Admin
@@ -38,24 +58,24 @@ const Role = () => {
         </div>
 
         <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
-          <div className='col-span-5'>Name</div>
-          <div className='col-span-2'>Username/Email</div>
+          <div className='col-span-4'>Name</div>
+          <div className='col-span-5 lg:col-span-4'>Username/Email</div>
           <div className='col-span-2'>Role</div>
-          <div className='col-span-2'>Status</div>
+          <div className='hidden lg:block col-span-1'>Status</div>
         </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (data ?? []).map((item: any, idx: number) => (
+          (data?.data ?? []).map((item: any, idx: number) => (
             <div className='grid grid-cols-12 p-4 border-b' key={idx}>
-              <div className='col-span-5'>
+              <div className='col-span-4'>
                 {item?.user?.firstName || 'N/A'} {item?.user?.lastName || 'N/A'}
               </div>
-              <div className='col-span-2'>{item?.user?.email || 'N/A'}</div>
+              <div className='col-span-5 lg:col-span-4'>{item?.user?.email || 'N/A'}</div>
               <div className='col-span-2'> {item?.type || 'N/A'} ADMIN </div>
-              <div className='col-span-2'> {item?.status || 'N/A'} </div>
-              <div className='col-span-1 justify-center flex'>
+              <div className='hidden lg:block col-span-1'> {item?.status || 'N/A'} </div>
+              <div className='col-span-1 justify-end flex'>
                 <button
                   onClick={() => {
                     setAction(idx + 1);
@@ -86,53 +106,100 @@ const Role = () => {
             </div>
           ))
         )}
-        {!isLoading && data?.length === 0 && (
+        {!isLoading && data?.data?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
 
-        <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
+        {data && data.data.length > 0 &&
+          <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
+            <button
+              onClick={handleJumpToStart}
+              disabled={currentPage === 1}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              <BiChevronsLeft />
+            </button>
+
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              <svg
+                width='6'
+                height='8'
+                viewBox='0 0 6 8'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  fill-rule='evenodd'
+                  clip-rule='evenodd'
+                  d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
+                  fill='#8898AA'
+                />
+              </svg>
+            </button>
+
+
+            {Array(data.paging.totalPage).fill(0).slice(0, 2).map((item, idx: number) => (
+              <div key={(Math.random() * 100)} className={clsxm(
+                currentPage === idx + 1 ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
+                'grid h-7 w-7 place-content-center rounded-full border p-2'
+              )}>
+                {idx + 1}
+              </div>
+            ))}
+
+            <div key={(Math.random() * 100)} className={clsxm(
+              (currentPage === 3 || (currentPage > 3 && currentPage < data.paging.totalPage)) ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
+              'grid h-7 w-7 place-content-center rounded-full border p-2'
+            )}>
+              {currentPage > 3 && currentPage < data.paging.totalPage ? currentPage : 3}
+            </div>
+
+            {data.paging.totalPage > 4 &&
+              <div key={(Math.random() * 100)} className={clsxm(
+                'bg-white text-gray-500',
+                'grid h-7 w-7 place-content-center rounded-full border p-2'
+              )}>
+                ...
+              </div>
+            }
+
+            <div className={clsxm(
+              currentPage === data.paging.totalPage ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
+              'grid h-7 w-7 place-content-center rounded-full border p-2'
+            )}>
+              {data.paging.totalPage}
+            </div>
+
+            <button
+              onClick={handleNextPage}
+              disabled={data && data?.data?.length < 10}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              <svg
+                width='6'
+                height='8'
+                viewBox='0 0 6 8'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  fill-rule='evenodd'
+                  clip-rule='evenodd'
+                  d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
+                  fill='#8898AA'
+                />
+              </svg>
+            </button>
+
+            <button
+              onClick={handleJumpToEnd}
+              disabled={data && data?.data?.length < 10}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              <BiChevronsRight />
+            </button>
           </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border bg-[#008146] p-2 text-white'>
-            1
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            2
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            3
-          </div>
-          <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
-            <svg
-              width='6'
-              height='8'
-              viewBox='0 0 6 8'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
-                fill='#8898AA'
-              />
-            </svg>
-          </div>
-        </div>
+        }
       </div>
     </div>
   );
