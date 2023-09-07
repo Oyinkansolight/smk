@@ -16,6 +16,7 @@ import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
 import { useGetSchoolById } from '@/server/institution';
+import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
@@ -24,7 +25,8 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
-import Cookies from 'js-cookie';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div># {row.id}</div> },

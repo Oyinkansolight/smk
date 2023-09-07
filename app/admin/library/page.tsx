@@ -13,6 +13,8 @@ import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
 import { RiWhatsappFill } from 'react-icons/ri';
 import Folder from '~/svg/folder.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
   const isGenericApp = Cookies.get('isGenericApp') === 'Y';
   const [tabIdx, setTabIdx] = useState(0);

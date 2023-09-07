@@ -77,9 +77,11 @@ export default function Page() {
                 href={
                   !activity.id
                     ? '/teacher/lesson-note/class-work/offline-submissions'
-                    : `/teacher/lesson-note/class-work/submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
+                    : `/teacher/lesson-note/class-work/submissions?subjectId=${
+                        activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${
+                        activity.typeOfActivity
+                      }`
                 }
               >
                 <LessonTaskListItem
@@ -89,8 +91,9 @@ export default function Page() {
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
-                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
-                      }`
+                      ? `${(arms ?? [])[idx].class?.name} ${
+                          (arms ?? [])[idx].arm
+                        }`
                       : '[NULL]'
                   }
                   dueDate={activity.dueDate}

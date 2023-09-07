@@ -18,6 +18,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AddClass = () => {
   const { data: institutionProfile } = useGetProfile();
   const { data: currentSessionInfo } = useGetCurrentSession();

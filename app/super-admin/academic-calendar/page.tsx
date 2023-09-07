@@ -21,6 +21,8 @@ import Toggle from 'react-toggle';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcademicCalendar = () => {
   const handleCreateAcademicCalendar = useCreateAcademicCalendar();
   const { data, isLoading } = useGetAcademicSessions();
@@ -100,7 +102,8 @@ const AcademicCalendar = () => {
     //! update to use institute type constant to filter!!!
     const allFilteredSessions = data?.data.filter(
       (item: any) =>
-        typeof item.institutionType === 'string' && item.institutionType.toLowerCase() === e.target.value.toLowerCase()
+        typeof item.institutionType === 'string' &&
+        item.institutionType.toLowerCase() === e.target.value.toLowerCase()
     );
     setFilteredSessions(allFilteredSessions);
   };

@@ -7,8 +7,11 @@ export function useGetLocalGovernments() {
   const query = useQuery({
     queryKey: 'get_local_governments',
     queryFn: async () =>
-      (await request.get(`/v1/government/admin/get-local-government-area`)).data
-        .data.data.localGovernmentArea as LocalGovernmentArea[],
+      (
+        await request.get(
+          `/v1/government/admin/get-local-government-area?limit=20`
+        )
+      ).data.data.data.localGovernmentArea as LocalGovernmentArea[],
   });
 
   query.data?.forEach((item: any) => {
@@ -28,8 +31,11 @@ export function useGetTowns(id: number) {
   const query = useQuery({
     queryKey: 'get_local_towns',
     queryFn: async () =>
-      (await request.get(`/v1/government/admin/get-local-government-area`)).data
-        .data.localGovernmentArea[id] as any,
+      (
+        await request.get(
+          `/v1/government/admin/get-local-government-area?limit=20`
+        )
+      ).data.data.localGovernmentArea[id] as any,
   });
 
   query?.data.forEach((town: any) => {
@@ -56,7 +62,7 @@ export function useGetAdminRoles() {
   const query = useQuery({
     queryKey: 'get_all_admin_roles',
     queryFn: async () =>
-      (await request.get(`/v1/government/roles/get-roles`)).data.data.data
+      (await request.get(`/v1/government/roles/find-role`)).data.data.data
         .roles,
   });
 

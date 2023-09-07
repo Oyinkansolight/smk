@@ -75,6 +75,8 @@ import Folder from '~/svg/folder.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Library = () => {
   const [tabIdx, setTabIdx] = useState(0);
 

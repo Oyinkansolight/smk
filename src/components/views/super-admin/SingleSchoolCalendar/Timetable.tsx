@@ -24,6 +24,8 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: string;
   institutionType: string | null;
@@ -58,7 +60,6 @@ const TimeTable = ({
     classId,
     termId,
   });
-
 
   const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
 

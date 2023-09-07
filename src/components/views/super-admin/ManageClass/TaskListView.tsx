@@ -57,8 +57,10 @@ export default function TaskListView({
     settermId(termId);
   }
 
-  const getClassesByInstitution = classList.filter((item: any) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
+  const getClassesByInstitution = classList.filter(
+    (item: any) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
   );
   function customSort(a: any, b: any) {
     const aIsJSS = a.name.startsWith('JSS');

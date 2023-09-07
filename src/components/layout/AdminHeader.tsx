@@ -24,14 +24,15 @@ export default function AdminHeader() {
               <div className='hidden lg:block w-[54px] h-4' />
             )}
 
-            {isGenericApp === 'N' &&
+            {isGenericApp === 'N' && (
               <Image
                 width={154}
                 height={53}
                 className='block'
                 alt={APP_LOGOS.APP_LOGO.alt}
                 src={APP_LOGOS.APP_LOGO.asset}
-              />}
+              />
+            )}
 
             <div className='flex flex-row items-center justify-center gap-[15px]'>
               <Image
@@ -40,7 +41,7 @@ export default function AdminHeader() {
                 alt='Profile Picture'
                 src={
                   (data?.userInfo?.firstName ?? '') ===
-                    ('Godwin Nogheghase Obaseki' as string)
+                  ('Godwin Nogheghase Obaseki' as string)
                     ? '/images/governor.png'
                     : '/images/avatar.png'
                 }

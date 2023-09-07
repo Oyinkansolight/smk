@@ -90,14 +90,15 @@ export default function StudentAuth() {
     <Layout>
       <main>
         <section className='authBackground relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
-          {isGenericApp === 'N' &&
+          {isGenericApp === 'N' && (
             <Image
               width={154}
               height={53}
               alt={APP_LOGOS.APP_LOGO.alt}
               src={APP_LOGOS.APP_LOGO.asset}
               className='absolute left-[60px] top-[60px] z-20'
-            />}
+            />
+          )}
 
           <div className='container flex flex-col items-center gap-8 px-4 md:px-0'>
             <div className='h1'>Welcome</div>

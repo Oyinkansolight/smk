@@ -75,7 +75,10 @@ export default function Page() {
       <div className='h-4' />
       <div className='flex flex-col gap-2'>
         {data?.data && data.data.length === 0 ? (
-          <EmptyView label='Tests and Exams haven’t been added for this term' useStandardHeight />
+          <EmptyView
+            label='Tests and Exams haven’t been added for this term'
+            useStandardHeight
+          />
         ) : (
           data?.data.map((v, i) => (
             <Link

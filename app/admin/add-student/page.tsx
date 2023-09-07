@@ -101,7 +101,7 @@ export default function AddStudent() {
         classTeacherId: data.teacher,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
-      console.log(studentData);
+      // console.log(studentData);
 
       setpublishData(data);
 

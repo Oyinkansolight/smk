@@ -23,6 +23,8 @@ import Time from '~/svg/time.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface dataType {
   sessionId: string | null;
   institutionType: string;
@@ -66,8 +68,10 @@ const AcademicCalendar = ({
   const [testTable, setTestTable] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const getClassesByInstitution = classList.filter((item: any) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
+  const getClassesByInstitution = classList.filter(
+    (item: any) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType.toLowerCase().includes(academicyear?.toLowerCase())
   );
   function customSort(a: any, b: any) {
     const aIsJSS = a.name.startsWith('JSS');

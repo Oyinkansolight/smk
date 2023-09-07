@@ -54,6 +54,8 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   { name: 'Student ID', selector: (row) => row.id ?? '' },
   {

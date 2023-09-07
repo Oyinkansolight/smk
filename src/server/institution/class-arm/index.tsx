@@ -1,6 +1,9 @@
 import request from '@/server';
 import { ClassArm } from '@/types/classes-and-subjects';
-import { ClassArmStudents, StudentAttendanceInterface } from '@/types/institute';
+import {
+  ClassArmStudents,
+  StudentAttendanceInterface,
+} from '@/types/institute';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -90,7 +93,9 @@ export function useTakeClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.post(
-          `/v1/institutions/institutes/take-class-arm-attendance?${params.studentId ? `studentId=${params.studentId}` : ''}&${params.status ? `status=${params.status}` : ''}`,
+          `/v1/institutions/institutes/take-class-arm-attendance?${
+            params.studentId ? `studentId=${params.studentId}` : ''
+          }&${params.status ? `status=${params.status}` : ''}`,
           {
             withCredentials: true,
           }
@@ -106,7 +111,11 @@ export function useUpdateClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.patch(
-          `/v1/institutions/institutes/update-class-arm-attendance?${params.classArmAttendanceId ? `classArmAttendanceId=${params.classArmAttendanceId}` : ''}&${params.status ? `status=${params.status}` : ''}`,
+          `/v1/institutions/institutes/update-class-arm-attendance?${
+            params.classArmAttendanceId
+              ? `classArmAttendanceId=${params.classArmAttendanceId}`
+              : ''
+          }&${params.status ? `status=${params.status}` : ''}`,
           {
             withCredentials: true,
           }

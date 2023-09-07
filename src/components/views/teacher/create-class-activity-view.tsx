@@ -2,9 +2,11 @@
 
 import Button from '@/components/buttons/Button';
 import MultiChoiceQuestion from '@/components/input/MultiChoiceQuestion';
+import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
 import InputReactForm from '@/components/input/formReactInput';
 import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
+import useCustomEditor from '@/hooks/useEditor';
 import clsxm from '@/lib/clsxm';
 import { getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
@@ -31,8 +33,6 @@ import { useSessionStorage } from 'usehooks-ts';
 import BookSVG from '../../../../public/svg/book.svg';
 import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
 import TakePictureSVG from '../../../../public/svg/take_picture.svg';
-import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
-import useCustomEditor from '@/hooks/useEditor';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
@@ -123,14 +123,14 @@ export default function CreateClassActivityView() {
           });
         }
       });
-    };
+    }
 
     if (data.format.value === activityFormats[1].key) {
       if (editor?.getHTML() === '' || editor?.getHTML() === '<p></p>') {
         toast.error('Please fill all questions');
         return;
       }
-    };
+    }
 
     let questionsV2;
 
@@ -140,13 +140,15 @@ export default function CreateClassActivityView() {
         options: v.options,
         correctOption: v.correctOption,
       }));
-    };
+    }
 
     if (data.format.value === activityFormats[1].key) {
-      questionsV2 = [{
-        question: editor?.getHTML() ?? '',
-      }];
-    };
+      questionsV2 = [
+        {
+          question: editor?.getHTML() ?? '',
+        },
+      ];
+    }
 
     try {
       let form;

@@ -86,6 +86,8 @@ import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -96,9 +98,14 @@ const Contact = ({ register, errors }: Iprops) => {
 
   useEffect(() => {
     if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      locals.data.forEach((local: any) => {
-        setTowns([...towns, local.towns]);
-      });
+      setTowns([...towns, locals.data])
+
+      // console.log(locals.data);
+
+
+      // locals.data.forEach((local: any) => {
+      //   setTowns([...towns, local.towns]);
+      // });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

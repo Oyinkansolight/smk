@@ -35,10 +35,6 @@ export default function Page() {
 
   // const { data: profile } = useGetProfile();
 
-
-
-
-
   return (
     <div className='h-full layout'>
       <div className='text-[#D4D5D7] text-xl my-4'>Test & Exams</div>
@@ -59,25 +55,26 @@ export default function Page() {
             </div>
           )}
 
-          {data && data?.length > 0 ? (
-            data.map((v, i) => (
-              <GradeSubjectCard
-                onClick={() => {
-                  router.push(
-                    `/teacher/test-and-examination/subject?id=${v.id}`
-                  );
-                }}
-                key={v.id ?? i}
-                subject={v.subject.name ?? '[NULL]'}
-                className={colors[i % colors.length]}
-              />
-            ))
-          ) : data && data?.length === 0 && (
-            <EmptyView
-              label='No test or exam has been created'
-              useStandardHeight
-            />
-          )}
+          {data && data?.length > 0
+            ? data.map((v, i) => (
+                <GradeSubjectCard
+                  onClick={() => {
+                    router.push(
+                      `/teacher/test-and-examination/subject?id=${v.id}`
+                    );
+                  }}
+                  key={v.id ?? i}
+                  subject={v.subject.name ?? '[NULL]'}
+                  className={colors[i % colors.length]}
+                />
+              ))
+            : data &&
+              data?.length === 0 && (
+                <EmptyView
+                  label='No test or exam has been created'
+                  useStandardHeight
+                />
+              )}
         </div>
       </div>
     </div>

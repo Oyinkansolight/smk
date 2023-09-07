@@ -77,7 +77,6 @@ const AllSubjects = () => {
     console.log(id);
   };
 
-
   return (
     <section className='md:px-[60px] px-5 py-6'>
       <Link href='/super-admin'>
@@ -120,7 +119,7 @@ const AllSubjects = () => {
           <div className='col-span-3'>Subject Name</div>
           <div className='col-span-4'>Description</div>
           <div className='col-span-3'>Classes Applicable</div>
-          <div className='col-span-2'>{" "}</div>
+          <div className='col-span-2'> </div>
         </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
@@ -138,12 +137,16 @@ const AllSubjects = () => {
               >
                 {item.name}
               </div>
-              <div className='col-span-4 text-[#8898AA] text-sm leading-5'>{item.description ?? "-"} </div>
+              <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
+                {item.description ?? '-'}{' '}
+              </div>
               <div className='col-span-3 text-center'>
                 {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
               </div>
               <div className='col-span-2 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
-                <div className='hidden lg:block cursor-pointer text-primary text-sm leading-5'>Click to manage</div>
+                <div className='hidden lg:block cursor-pointer text-primary text-sm leading-5'>
+                  Click to manage
+                </div>
                 <div className='relative'>
                   <CiMenuKebab
                     onClick={handleTogglePopOver}
@@ -168,7 +171,6 @@ const AllSubjects = () => {
                       Delete
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

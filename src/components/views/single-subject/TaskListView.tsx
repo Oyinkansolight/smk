@@ -72,16 +72,12 @@ export default function TaskListView({
 
   const DeleteModalContent = () => (
     <div className='flex flex-col space-y-4 items-center justify-center'>
-      <div className='font-bold text-4xl'>
-        Delete Subject
-      </div>
+      <div className='font-bold text-4xl'>Delete Subject</div>
       <div className='text-base text-[#6B7A99]'>
         Are you sure you want to delete this subject?
       </div>
       <div className='flex flex-row items-center justify-end space-x-4'>
-        <Button
-          className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'
-        >
+        <Button className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'>
           Keep
         </Button>
 
@@ -110,7 +106,7 @@ export default function TaskListView({
 
           <BasicModal
             content={<DeleteModalContent />}
-            className="max-w-[777px] w-full h-[267px]"
+            className='max-w-[777px] w-full h-[267px]'
           >
             <Button
               variant='danger'
@@ -120,7 +116,6 @@ export default function TaskListView({
             </Button>
           </BasicModal>
         </div>
-
       </div>
       <div className='flex justify-center'>
         {isLoading && (

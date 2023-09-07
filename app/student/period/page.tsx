@@ -20,6 +20,8 @@ import Teacher from '~/svg/teacher.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   // const [isEdit, setIsEdit] = useState(false);
   // const [editContent, seteditContent] = useState(false);

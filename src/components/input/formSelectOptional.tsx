@@ -46,7 +46,7 @@ const Input = ({
         <div className='mt-1 w-full border p-2 rounded'>
           <select
             id=''
-            className='w-full border-none outline-none bg-transparent  text-gray-400'
+            className='w-full border-none outline-none bg-transparent  text-gray-400 capitalize'
             {...(register ? register(name as string, validation) : {})}
             onChange={(e) => {
               setFormValue && setFormValue(e.target.value);

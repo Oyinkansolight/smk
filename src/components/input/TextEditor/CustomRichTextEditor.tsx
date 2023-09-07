@@ -5,9 +5,11 @@ interface CustomRichTextEditorProps {
   editor: Editor | null;
 }
 
-export default function CustomRichTextEditor({ editor }: CustomRichTextEditorProps) {
+export default function CustomRichTextEditor({
+  editor,
+}: CustomRichTextEditorProps) {
   return (
-    <RichTextEditor editor={editor} className="min-h-[30vh]">
+    <RichTextEditor editor={editor} className='min-h-[30vh]'>
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -51,4 +53,4 @@ export default function CustomRichTextEditor({ editor }: CustomRichTextEditorPro
       <RichTextEditor.Content />
     </RichTextEditor>
   );
-};
+}

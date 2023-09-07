@@ -69,6 +69,8 @@ import { useGetSubjectList } from '@/server/institution';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;

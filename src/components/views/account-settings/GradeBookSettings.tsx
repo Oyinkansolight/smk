@@ -14,17 +14,24 @@ const columns: TableColumn<any>[] = [
   { name: 'Institution Type', cell: (row) => row.type },
   {
     name: 'Grade Category',
-    cell: (row) => <RenderGradeCategories institutionType={row.type} profile={row.profile} />,
+    cell: (row) => (
+      <RenderGradeCategories institutionType={row.type} profile={row.profile} />
+    ),
   },
   {
     name: '',
-    cell: (row) => <RenderGradeCategoryActions institutionType={row.type} profile={row.profile} />,
+    cell: (row) => (
+      <RenderGradeCategoryActions
+        institutionType={row.type}
+        profile={row.profile}
+      />
+    ),
   },
 ];
 
 interface GradeBookSettingsProps {
   profile?: UserProfile;
-};
+}
 
 export default function GradeBookSettings({ profile }: GradeBookSettingsProps) {
   // eslint-disable-next-line unused-imports/no-unused-vars
@@ -32,22 +39,22 @@ export default function GradeBookSettings({ profile }: GradeBookSettingsProps) {
     {
       type: INSTITUTION_TYPES.ECCDE,
       categories: [],
-      profile
+      profile,
     },
     {
       type: INSTITUTION_TYPES.PRIMARY,
       categories: [],
-      profile
+      profile,
     },
     {
       type: INSTITUTION_TYPES.SECONDARY,
       categories: [],
-      profile
+      profile,
     },
     {
       type: INSTITUTION_TYPES.TERTIARY,
       categories: [],
-      profile
+      profile,
     },
   ]);
 
@@ -60,7 +67,9 @@ export default function GradeBookSettings({ profile }: GradeBookSettingsProps) {
           body={<ManageGradeRubric allSessions={allSessions} />}
           panelClassName='!max-h-[1000px] hideScroll'
         >
-          <Button variant='outline' className='bg-white'>Grade Rubric Settings</Button>
+          <Button variant='outline' className='bg-white'>
+            Grade Rubric Settings
+          </Button>
         </GeneralModal>
       </div>
       <div className='bg-white'>
@@ -80,7 +89,9 @@ function RenderGradeCategories({
   profile: UserProfile;
   institutionType: string;
 }) {
-  const currentInstitutionSession = profile?.currentSession?.find((v) => v.institutionType === institutionType);
+  const currentInstitutionSession = profile?.currentSession?.find(
+    (v) => v.institutionType === institutionType
+  );
 
   const { data: term } = useGetCurrentSessionTerm({
     sessionId: currentInstitutionSession?.id ?? '',
@@ -107,7 +118,9 @@ function RenderGradeCategoryActions({
   profile: UserProfile;
   institutionType: string;
 }) {
-  const currentInstitutionSession = profile?.currentSession?.find((v) => v.institutionType === institutionType);
+  const currentInstitutionSession = profile?.currentSession?.find(
+    (v) => v.institutionType === institutionType
+  );
 
   const { data: term } = useGetCurrentSessionTerm({
     sessionId: currentInstitutionSession?.id ?? '',

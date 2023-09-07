@@ -22,8 +22,8 @@ export default function TeacherAttendanceListItem({
         status === 'ABSENT'
           ? 'absent'
           : status === 'PRESENT'
-            ? 'present'
-            : 'late'
+          ? 'present'
+          : 'late'
       );
     }
   }, [status]);

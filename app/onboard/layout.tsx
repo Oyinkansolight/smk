@@ -10,14 +10,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <head />
       <body className='flex h-screen max-h-screen flex-col overflow-hidden'>
         <header className='flex h-[158px] flex-row items-center gap-x-[109px] bg-[#E8FFF7] px-16 text-3xl font-bold md:text-5xl'>
-          {isGenericApp === 'N' &&
+          {isGenericApp === 'N' && (
             <Image
               width={154}
               height={53}
               className=''
               alt={APP_LOGOS.APP_LOGO.alt}
               src={APP_LOGOS.APP_LOGO.asset}
-            />}
+            />
+          )}
           Set up Account
         </header>
 

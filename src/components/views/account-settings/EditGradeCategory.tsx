@@ -1,9 +1,7 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
 import { getErrMsg } from '@/server';
-import {
-  useCreateCategory,
-} from '@/server/institution/grade';
+import { useCreateCategory } from '@/server/institution/grade';
 import { GradeCategory } from '@/types/institute';
 import React from 'react';
 import { useEffect, useState } from 'react';

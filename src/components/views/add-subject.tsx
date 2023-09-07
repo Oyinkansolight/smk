@@ -77,12 +77,12 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
         classId: ids,
         name: data.subject,
         description: data.description,
-      }
+      };
     } else {
       payload = {
         classId: ids,
         name: data.subject,
-      }
+      };
     }
 
     const response = await mutateAsync(payload);
@@ -123,11 +123,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
           <div className='w-full'>
             <BaseInput
               register={register}
-              label={
-                <span>
-                  Enter Description
-                </span>
-              }
+              label={<span>Enter Description</span>}
               name='description'
             />
           </div>

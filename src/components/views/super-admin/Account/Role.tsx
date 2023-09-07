@@ -15,7 +15,7 @@ const Role = () => {
   const { data, isLoading } = useGetAdminList(currentPage);
   function handleModal() {
     setIsOpen(!isOpen);
-  };
+  }
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -72,9 +72,14 @@ const Role = () => {
               <div className='col-span-4'>
                 {item?.user?.firstName || 'N/A'} {item?.user?.lastName || 'N/A'}
               </div>
-              <div className='col-span-5 lg:col-span-4'>{item?.user?.email || 'N/A'}</div>
+              <div className='col-span-5 lg:col-span-4'>
+                {item?.user?.email || 'N/A'}
+              </div>
               <div className='col-span-2'> {item?.type || 'N/A'} ADMIN </div>
-              <div className='hidden lg:block col-span-1'> {item?.status || 'N/A'} </div>
+              <div className='hidden lg:block col-span-1'>
+                {' '}
+                {item?.status || 'N/A'}{' '}
+              </div>
               <div className='col-span-1 justify-end flex'>
                 <button
                   onClick={() => {
@@ -110,19 +115,21 @@ const Role = () => {
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
 
-        {data && data.data.length > 0 &&
+        {data && data.data.length > 0 && (
           <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
             <button
               onClick={handleJumpToStart}
               disabled={currentPage === 1}
-              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
               <BiChevronsLeft />
             </button>
 
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
               <svg
                 width='6'
                 height='8'
@@ -139,43 +146,66 @@ const Role = () => {
               </svg>
             </button>
 
+            {Array(data.paging.totalPage)
+              .fill(0)
+              .slice(0, 2)
+              .map((item, idx: number) => (
+                <div
+                  key={Math.random() * 100}
+                  className={clsxm(
+                    currentPage === idx + 1
+                      ? 'bg-[#008146] text-white'
+                      : 'bg-white text-gray-500',
+                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                  )}
+                >
+                  {idx + 1}
+                </div>
+              ))}
 
-            {Array(data.paging.totalPage).fill(0).slice(0, 2).map((item, idx: number) => (
-              <div key={(Math.random() * 100)} className={clsxm(
-                currentPage === idx + 1 ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
+            <div
+              key={Math.random() * 100}
+              className={clsxm(
+                currentPage === 3 ||
+                  (currentPage > 3 && currentPage < data.paging.totalPage)
+                  ? 'bg-[#008146] text-white'
+                  : 'bg-white text-gray-500',
                 'grid h-7 w-7 place-content-center rounded-full border p-2'
-              )}>
-                {idx + 1}
-              </div>
-            ))}
-
-            <div key={(Math.random() * 100)} className={clsxm(
-              (currentPage === 3 || (currentPage > 3 && currentPage < data.paging.totalPage)) ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
-              'grid h-7 w-7 place-content-center rounded-full border p-2'
-            )}>
-              {currentPage > 3 && currentPage < data.paging.totalPage ? currentPage : 3}
+              )}
+            >
+              {currentPage > 3 && currentPage < data.paging.totalPage
+                ? currentPage
+                : 3}
             </div>
 
-            {data.paging.totalPage > 4 &&
-              <div key={(Math.random() * 100)} className={clsxm(
-                'bg-white text-gray-500',
-                'grid h-7 w-7 place-content-center rounded-full border p-2'
-              )}>
+            {data.paging.totalPage > 4 && (
+              <div
+                key={Math.random() * 100}
+                className={clsxm(
+                  'bg-white text-gray-500',
+                  'grid h-7 w-7 place-content-center rounded-full border p-2'
+                )}
+              >
                 ...
               </div>
-            }
+            )}
 
-            <div className={clsxm(
-              currentPage === data.paging.totalPage ? 'bg-[#008146] text-white' : 'bg-white text-gray-500',
-              'grid h-7 w-7 place-content-center rounded-full border p-2'
-            )}>
+            <div
+              className={clsxm(
+                currentPage === data.paging.totalPage
+                  ? 'bg-[#008146] text-white'
+                  : 'bg-white text-gray-500',
+                'grid h-7 w-7 place-content-center rounded-full border p-2'
+              )}
+            >
               {data.paging.totalPage}
             </div>
 
             <button
               onClick={handleNextPage}
               disabled={data && data?.data?.length < 10}
-              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
               <svg
                 width='6'
                 height='8'
@@ -195,11 +225,12 @@ const Role = () => {
             <button
               onClick={handleJumpToEnd}
               disabled={data && data?.data?.length < 10}
-              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
               <BiChevronsRight />
             </button>
           </div>
-        }
+        )}
       </div>
     </div>
   );

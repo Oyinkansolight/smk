@@ -37,7 +37,10 @@ function AddActivityName({
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, subjectIdOrUndefined);
+  } = useGetFolderAndFiles(
+    folderTrail[folderTrail.length - 1]?.id,
+    subjectIdOrUndefined
+  );
   const [openDocumentViewer, setOpenDocumentViewer] = useState(false);
 
   const updateObjectInArray = (index: number, newValue: any) => {

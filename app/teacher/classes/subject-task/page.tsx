@@ -24,6 +24,8 @@ import { RotatingLines } from 'react-loader-spinner';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const [url, setUrl] = useState('');
   const params = useSearchParams();
@@ -124,14 +126,14 @@ export default function Page() {
             {period?.classActivities.map((activity) => {
               const parsedActivityName = activity.typeOfActivity.includes('_')
                 ? activity.typeOfActivity[0] +
-                activity.typeOfActivity
-                  .slice(1)
-                  .split('_')
-                  .join(' ')
-                  .toLowerCase()
+                  activity.typeOfActivity
+                    .slice(1)
+                    .split('_')
+                    .join(' ')
+                    .toLowerCase()
                 : activity.typeOfActivity[0] +
-                activity.typeOfActivity.slice(1).toLowerCase() ??
-                'Activity Name';
+                    activity.typeOfActivity.slice(1).toLowerCase() ??
+                  'Activity Name';
               return (
                 <SideBarItem
                   key={activity.id}
@@ -192,12 +194,12 @@ function SideBarItem({
           type === 'ASSIGNMENT'
             ? `/teacher/lesson-note/assignment/submissions?subjectId=${period.subject.id}&type=${type}`
             : type === 'CLASS_WORK'
-              ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
-              : type === 'LESSON_NOTE'
-                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
-                : type === 'QUIZ'
-                  ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
-                  : '#'
+            ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
+            : type === 'LESSON_NOTE'
+            ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
+            : type === 'QUIZ'
+            ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
+            : '#'
         }
       >
         <div className='flex text-xs lg:text-base font-bold whitespace-nowrap items-center rounded-md bg-[#D4D5D7] px-10 py-5 w-auto max-h-[38px] h-full'>

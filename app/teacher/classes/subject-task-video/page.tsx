@@ -8,6 +8,8 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Link from 'next/link';
 import { RotatingLines } from 'react-loader-spinner';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
@@ -35,14 +37,10 @@ export default function Page() {
       <div className='grid grid-cols-2'>
         <div>
           {' '}
-          <div className='font-bold py-8 text-xl lg:text-4xl'>
-            Biology
-          </div>
+          <div className='font-bold py-8 text-xl lg:text-4xl'>Biology</div>
           <div className=' text-xl md:text-2xl'>
             <span className='font-bold'>Period: </span>
-            <span className='text-[#746D69]'>
-              Wednesday 10:00am - 11:00am
-            </span>
+            <span className='text-[#746D69]'>Wednesday 10:00am - 11:00am</span>
           </div>
           <div className='flex flex-wrap justify-start my-6 gap-3 whitespace-nowrap'>
             <TakeAttendanceModal>

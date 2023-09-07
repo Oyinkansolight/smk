@@ -26,7 +26,7 @@ export default function Page() {
       />
       <div className='bg-white rounded-md py-[8px] px-[40px] font-bold text-xl text-[#746D69]'>
         <div>
-          <span className='text-[#D4D5D7]'>Subject: </span> { }
+          <span className='text-[#D4D5D7]'>Subject: </span> {}
         </div>
         <div>
           <span className='text-[#D4D5D7]'>Date Assigned: </span> October 16

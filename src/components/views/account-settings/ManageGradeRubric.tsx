@@ -10,13 +10,13 @@ import {
   useCreateRubric,
   useGetGradeRubricByInstitutionType,
 } from '@/server/institution/grade';
+import { Session } from '@/types/classes-and-subjects';
 import { GradeRubricInterface } from '@/types/institute';
 import { useCallback, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
-import { toast } from 'react-toastify';
 import Select from 'react-select';
-import { Session } from '@/types/classes-and-subjects';
+import { toast } from 'react-toastify';
 import GenericLoader from '@/components/layout/Loader';
 
 interface ManageGradeRubricProps {
@@ -50,7 +50,7 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
   }
   const { data, refetch, isError, isLoading: isLoadingRubric } = useGetGradeRubricByInstitutionType(params);
 
-  const reversedData: GradeRubricInterface[] = [];
+  // const reversedData: GradeRubricInterface[] = [];
 
 
   const [rubrics, setRubrics] = useState<GradeRubricInterface[] |
@@ -72,7 +72,14 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
     } catch (error) {
       toast.error(getErrMsg(error));
     }
-  }, [createRubric, currentInstitution, rubrics, currentSessionId, term?.id, closeModal]);
+  }, [
+    createRubric,
+    currentInstitution,
+    rubrics,
+    currentSessionId,
+    term?.id,
+    closeModal,
+  ]);
 
   const allInstitutions = [
     { value: INSTITUTION_TYPES.ECCDE, label: INSTITUTION_TYPES.ECCDE },

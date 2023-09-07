@@ -64,7 +64,8 @@ export default function ClockInTime() {
     setIsLoading(loading);
     logger({ latitude, longitude, loading, error });
     if (latitude && longitude) {
-      const d = calculateEarthDistance(latitude, longitude, lat, long);
+      //conver lat and long to number before usage
+      const d = calculateEarthDistance(latitude, longitude, +lat, +long);
       setDistance(d.toFixed(2));
       if (d < 10000) {
         setInArea(true);

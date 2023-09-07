@@ -76,12 +76,16 @@ export default function Page() {
                 key={activity.id ?? i}
                 href={
                   activity.format === 'MULTIPLE_CHOICE'
-                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
-                    : `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
+                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
+                        activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${
+                        activity.typeOfActivity
+                      }`
+                    : `/teacher/lesson-note/assignment/submissions?subjectId=${
+                        activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${
+                        activity.typeOfActivity
+                      }`
                 }
               >
                 <LessonTaskListItem
@@ -90,15 +94,16 @@ export default function Page() {
                   title={
                     activity.typeOfActivity
                       ? `${activity.typeOfActivity} -  ${activity.format}`
-                        .replace('_', ' ')
-                        .toLowerCase()
+                          .replace('_', ' ')
+                          .toLowerCase()
                       : '[NULL]'
                   }
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
-                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
-                      }`
+                      ? `${(arms ?? [])[idx].class?.name} ${
+                          (arms ?? [])[idx].arm
+                        }`
                       : '[NULL]'
                   }
                   dueDate={activity.dueDate}

@@ -101,10 +101,11 @@ export default function Page() {
                     }
                     onClick={() =>
                       router.push(
-                        isGenericApp ? (
-                          i % 2 === 0 ? '/teacher/classes/subject-task-doc' : '/teacher/classes/subject-task-video'
-                        ) :
-                          `/teacher/classes/subject-task?id=${period.id}`
+                        isGenericApp
+                          ? i % 2 === 0
+                            ? '/teacher/classes/subject-task-doc'
+                            : '/teacher/classes/subject-task-video'
+                          : `/teacher/classes/subject-task?id=${period.id}`
                       )
                     }
                     key={period?.id ?? i}

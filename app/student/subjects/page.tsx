@@ -26,6 +26,8 @@ import { useRouter } from 'next/navigation';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const colors = [
     'bg-[#EFF7F6]',

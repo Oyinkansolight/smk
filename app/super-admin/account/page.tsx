@@ -55,7 +55,6 @@ const Account = () => {
         ]}
       />
 
-
       {tabIdx === 0 && <GradeBookSettings profile={profile} />}
       {tabIdx === 1 && <Schooltype />}
       {tabIdx === 2 && <Role />}

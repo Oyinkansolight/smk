@@ -1,6 +1,6 @@
 import clsxm from '@/lib/clsxm';
 import { Dialog, Transition } from '@headlessui/react';
-import { cloneElement, Fragment, useState } from 'react';
+import { Fragment, cloneElement, useState } from 'react';
 
 export default function GeneralModal({
   body,

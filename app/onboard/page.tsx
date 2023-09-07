@@ -7,6 +7,7 @@ import DragDropGeneric from '@/components/input/DragDropGeneric';
 import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
+import { APP_LOGOS } from '@/constant/assets';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -19,6 +20,7 @@ import {
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
+import Cookies from 'js-cookie';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -31,9 +33,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
-import Cookies from 'js-cookie';
-import { APP_LOGOS } from '@/constant/assets';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
@@ -221,7 +222,7 @@ export default function Page() {
                     typeof getValues('instituteAddress') === 'string'
                       ? getValues('instituteAddress')
                       : (getValues('instituteAddress') as GeoCodeResponse)
-                        .formatted_address,
+                          .formatted_address,
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
@@ -254,8 +255,10 @@ export default function Page() {
       <div className='h2 max-w-[590px]'>
         Welcome,
         <br />
-        {isGenericApp === 'Y' && "You have been invited you to register your account"}
-        {isGenericApp === 'N' && "The Edo State Government has invited you to register your account"}
+        {isGenericApp === 'Y' &&
+          'You have been invited you to register your account'}
+        {isGenericApp === 'N' &&
+          'The Edo State Government has invited you to register your account'}
       </div>
 
       <div className='text-[#171818]'>
@@ -646,9 +649,7 @@ export default function Page() {
         <div className='flex flex-col gap-3'>
           <div className='text-center'>Verifying Token</div>
 
-          {isGenericApp === 'Y' && (
-            <div>Loading....</div>
-          )}
+          {isGenericApp === 'Y' && <div>Loading....</div>}
 
           {isGenericApp === 'N' && (
             <Image
