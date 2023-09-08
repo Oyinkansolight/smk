@@ -97,5 +97,3 @@ module.exports = {
   },
   plugins: [require('@tailwindcss/forms')],
 };
-
-//Trigger a rebuild
