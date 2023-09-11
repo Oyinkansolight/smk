@@ -32,11 +32,12 @@ export default function StudentDashboardView({
             }
             variant='basic'
           />
-          <CountCard
-            count={managedClass.arm}
-            title='Class Teacher'
-            variant='basic'
-          />
+          {managedClass?.arm &&
+            <CountCard
+              count={managedClass?.arm ?? 'No class'}
+              title='Class Teacher'
+              variant='basic'
+            />}
         </div>
       </BasicCard>
     </>
