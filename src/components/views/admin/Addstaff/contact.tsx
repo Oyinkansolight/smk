@@ -88,9 +88,7 @@ const Contact = ({ register, errors }: Iprops) => {
 
   useEffect(() => {
     if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      locals.data.forEach((local: any) => {
-        setTowns([...towns, local.towns]);
-      });
+      setTowns([...towns, locals.data])
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
