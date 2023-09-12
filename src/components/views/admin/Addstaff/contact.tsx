@@ -88,11 +88,9 @@ const Contact = ({ register, errors }: Iprops) => {
 
   useEffect(() => {
     if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      setTowns([...towns, locals.data])
+      setTowns([locals.data])
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locals.data]);
+  }, [locals.data, locals.isLoading]);
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Contact Details</h2>

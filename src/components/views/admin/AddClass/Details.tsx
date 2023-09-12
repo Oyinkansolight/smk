@@ -45,7 +45,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -76,21 +76,21 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
         <div>
           <FormInput
             label='Input class capacity'
-            placeholder='25'
+            placeholder='Number of students in class'
             name='classCapacity'
             register={register}
             validation={{
               required: 'Class Capacity is required',
-              validate: {
-                //* count should be less than or equal to 50
-                lessThan: (v) => {
-                  return parseInt(v) <= 50;
-                },
-              },
+              // validate: {
+              //   //* count should be less than or equal to 50
+              //   lessThan: (v) => {
+              //     return parseInt(v) <= 50;
+              //   },
+              // },
             }}
             helper={
               errors?.classCapacity && {
-                message: 'Class capacity should be 50 or less',
+                message: 'Class capacity is required',
                 type: 'danger',
               }
             }

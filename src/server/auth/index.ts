@@ -108,3 +108,18 @@ export function useGetCurrentSession() {
   });
   return query;
 }
+
+export function useGetValidIMEI() {
+  const query = useQuery({
+    queryKey: 'get_current_device_imei',
+    queryFn: async () => {
+      const response = (
+        await request.get('/v1/government/admin/is-valid-institution-imei', {
+          withCredentials: true,
+        })
+      ).data as any;
+      return response;
+    },
+  });
+  return query;
+}

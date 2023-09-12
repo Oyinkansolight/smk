@@ -30,6 +30,12 @@ export default function RootLayout({
     charging,
   } = useBattery();
 
+  // const { data: isValidDevice } = useGetValidIMEI();
+  // console.log(isValidDevice);
+
+  const isValidDevice = true;
+
+
   useEffect(() => {
     if (!loadingBatteryCheck) {
       const currentBattery = batteryLevel * 100;
@@ -46,15 +52,25 @@ export default function RootLayout({
   // Set App to be generic and not tied to any company/institution
   Cookies.set('isGenericApp', 'N');
 
-  return (
-    <html>
-      <head />
-      <body>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-        <ToastContainer />
-      </body>
-    </html>
-  );
+  if (isValidDevice) {
+    return (
+      <html>
+        <head />
+        <body>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+          <ToastContainer />
+        </body>
+      </html>
+    );
+  } else {
+    return (
+      <div className='flex flex-col justify-center items-center h-screen'>
+        <div className='text-2xl font-bold text-[#6B7A99]'>
+          This device is not authorized to use this app.
+        </div>
+      </div>
+    );
+  }
 }

@@ -5,8 +5,7 @@ import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
-  baseURL:
-    process.env.NEXT_BE_URL ?? 'https://es-ems-be-90cc307ddc62.herokuapp.com/',
+  baseURL: 'https://es-ems-be-production-b62b1d40e244.herokuapp.com/',
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Origin': '*', // For CORS support to work
