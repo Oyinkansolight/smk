@@ -79,7 +79,7 @@ const Education = ({ register, errors }: Iprops) => {
       <h2 className='text-3xl font-bold'>Employment History</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6 pb-3 border-b'>
+      <div className='my-10 grid md:grid-cols-2 gap-6 pb-3 border-b'>
         <div>
           <FormInput
             label='Name of School'
@@ -116,7 +116,7 @@ const Education = ({ register, errors }: Iprops) => {
         </div>
       </div>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Date Posted to Current School'
@@ -153,7 +153,7 @@ const Education = ({ register, errors }: Iprops) => {
           />
         </div>
       </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Date of First Appointment'
@@ -191,7 +191,7 @@ const Education = ({ register, errors }: Iprops) => {
           />
         </div>
       </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Salary Grade Level'

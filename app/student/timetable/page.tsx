@@ -36,22 +36,10 @@ const Page = () => {
           ]}
         />
       </div>
-      <div className='flex justify-end py-4 border-b border-black mb-5  text-gray-500'>
-        <select
-          name=''
-          id=''
-          className='p-2 bg-[#FFF6E7] border !text-xs rounded'
-        >
-          <option value=''> Session & Term</option>
-          <option value=''>2023/2024 First</option>
-          <option value=''>2023/2024 Secomd</option>
-          <option value=''>2023/2024 Third</option>
-        </select>
-      </div>
 
-      {page === 0 && <Timetable />}
+      {page === 0 && <Timetable isClassTimeTable={true} />}
       {page === 1 && <AcademicCalendar sessionCalendarData={[]} />}
-      {page === 2 && <ExamCalendar />}
+      {page === 2 && <ExamCalendar isClassTimeTable={false} />}
     </div>
   );
 };

@@ -64,6 +64,21 @@ export function useCreateAcademicTimeTable() {
   });
   return mutation;
 }
+export function useDeleteAcademicTimeTable() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete-academic-timetable',
+    mutationFn: (params: any) =>
+      request.delete(
+        `/v1/government/time-table/delete-time-table?id=${params.id}`
+      ),
+    onSettled: () => {
+      client.refetchQueries('academic_timetable');
+    },
+  });
+  return mutation;
+}
 export function useCreateTestTimeTable() {
   const mutation = useMutation({
     mutationKey: 'create-test-timetable',

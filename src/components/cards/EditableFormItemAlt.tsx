@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ /* eslint-disable @typescript-eslint/no-explicit-any */
 import Input from '@/components/input/formInput';
 import { HTMLInputTypeAttribute } from 'react';
 

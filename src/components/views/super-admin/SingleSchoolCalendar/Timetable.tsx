@@ -2,29 +2,17 @@
 'use client';
 
 import AddActivityName from '@/components/modal/TestSchedule';
-import { getErrMsg } from '@/server';
+import  { getErrMsg } from '@/server';
 import {
   useCreateAcademicTimeTable,
+  useDeleteAcademicTimeTable,
   useGetAcademicTimetable,
 } from '@/server/Schedule';
+import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface dataType {
   sessionId: string;
@@ -62,6 +50,7 @@ const TimeTable = ({
   });
 
   const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
+  const handleDeleteAcademicTimeTable = useDeleteAcademicTimeTable();
 
   const [isOpenActivity, setisOpenActivity] = useState(false);
   const [startTime, setstartDate] = useState<string | number>('');
@@ -195,6 +184,19 @@ const TimeTable = ({
     return { subjectName, isEvent };
   }
 
+  async function deleteTimetable(id: string) {
+    const data = { id };
+
+    try {
+      const response = await handleDeleteAcademicTimeTable.mutateAsync(data);
+      if (response) {
+        toast.success('Timetable deleted successfully');
+      }
+    } catch (error) {
+      toast.error(getErrMsg(error));
+    }
+  }
+
   return (
     <section>
       {isOpenActivity && (
@@ -257,21 +259,30 @@ const TimeTable = ({
                   <div key={id}>
                     {item.type === 'event' ? (
                       <div className='flex w-full mt-2 items-center'>
-                        <div className='w-[150px] bg-white font-medium text-[10px] px-3 py-5  border'>
-                          {item.startTime} - {item.endTime}
+                        <div className='w-[150px] bg-white font-medium text-[10px] pl-3 py-5  border'>
+                        {moment(item.startTime).format('LT')} -
+                          {moment(item.endTime).format('LT')}
                         </div>
                         <div className='w-full border p-5 text-center'>
                           <p> {item.eventName} </p>
                         </div>
                         <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                          <div className='text-green-600'>Edit</div>
-                          <div className='text-red-600'>Delete</div>
+                          <button className='text-green-600'>Edit</button>
+                          <button
+                            onClick={() => {
+                              deleteTimetable(item.id);
+                            }}
+                            className='text-red-600'
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
                     ) : (
                       <div className='flex w-full mt-2 items-center'>
-                        <div className='w-[150px] bg-white font-medium px-3 py-5  border'>
-                          {item.startTime} - {item.endTime}
+                        <div className='w-[150px] bg-white  font-medium pl-3 py-5  border'>
+                          {moment(item.startTime).format('LT')} -
+                          {moment(item.endTime).format('LT')}
                         </div>
 
                         <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
@@ -280,7 +291,7 @@ const TimeTable = ({
                               getEachDaySubject(item, 'monday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF2F0] text-[#FB6340]'
-                            }  px-3 py-5 `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'monday').subjectName}
                           </div>
@@ -289,7 +300,7 @@ const TimeTable = ({
                               getEachDaySubject(item, 'tuesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FDE8FF] text-[#ED1CFF]'
-                            }  px-3 py-5 `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'tuesday').subjectName}
                           </div>
@@ -298,7 +309,7 @@ const TimeTable = ({
                               getEachDaySubject(item, 'wednesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF3E2] text-[#FF9F1C]'
-                            }  px-3 py-5 `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'wednesday').subjectName}
                           </div>
@@ -307,7 +318,7 @@ const TimeTable = ({
                               getEachDaySubject(item, 'thursday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#F4FFE6] text-[#60AC00]'
-                            }  px-3 py-5 `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'thursday').subjectName}
                           </div>
@@ -316,14 +327,21 @@ const TimeTable = ({
                               getEachDaySubject(item, 'friday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFFFEB] text-[#CDCD04]'
-                            }  px-3 py-5 `}
+                            }  px-3 py-5 truncate`}
                           >
                             {getEachDaySubject(item, 'friday').subjectName}
                           </div>
                         </div>
                         <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                          <div className='text-green-600'>Edit</div>
-                          <div className='text-red-600'>Delete</div>
+                          <button className='text-green-600'>Edit</button>
+                          <button
+                            onClick={() => {
+                              deleteTimetable(item.id);
+                            }}
+                            className='text-red-600'
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
                     )}

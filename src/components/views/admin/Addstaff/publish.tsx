@@ -9,80 +9,6 @@ import logger from '@/lib/logger';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Publish = ({ publishData }: any) => {
   logger(publishData);
 
@@ -127,7 +53,7 @@ const Publish = ({ publishData }: any) => {
       <div className='bg-[#F4F9FF] p-8 rounded-md mt-4'>
         <h2 className='text-xl font-bold mb-10'>Summary</h2>
 
-        <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+        <div className='grid md:grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Week</h2>
             <p>Week 1</p>
@@ -139,13 +65,13 @@ const Publish = ({ publishData }: any) => {
           </div>
         </div>
 
-        <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+        <div className='grid md:grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Subject</h2>
             <p>Mathematics</p>
           </div>
         </div>
-        <div className='grid grid-cols-12 gap-4  items-center mb-10 py-5 border-b'>
+        <div className='grid md:grid-cols-12 gap-4  items-center mb-10 py-5 border-b'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Title</h2>
             <p>Primary 1</p>
@@ -169,7 +95,7 @@ const Publish = ({ publishData }: any) => {
             <p>Mathematics, English, Yoruba</p>
           </div>
         </div>
-        <div className='grid grid-cols-12 gap-4  items-center mb-10'>
+        <div className='grid md:grid-cols-12 gap-4  items-center mb-10'>
           <div className='col-span-8'>
             <h2 className='text-xs mb-2 font-medium'>Step 1</h2>
             <p>Primary 1</p>

@@ -4,7 +4,7 @@ import StudentActionCard from '@/components/cards/StudentActionCard';
 import NewStudentClock from '@/components/views/single-student/NewStudentClock';
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetStudentOngoingPeriod } from '@/server/government/student';
@@ -12,30 +12,51 @@ import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useGetTodaysPeriod } from '@/server/student';
 import { useClockIn, useClockOut } from '@/server/teacher';
+import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
 export default function NewStudentDashboard() {
-  const userData = getFromSessionStorage('user');
-  let user;
+  const { data: profile } = useGetProfile();
 
-  if (userData) {
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  const currentDate = new Date();
+  const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
+  const currentDay = daysOfWeek[currentDayIndex];
+  const userData = getFromSessionStorage('user');
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentWeek = getFromSessionStorage('currentWeek') ?? '';
+  let user;
+  let currentTermInfo;
+  let currentWeekinfo;
+
+  if (userData && currentTerm && currentWeek) {
     user = JSON.parse(userData);
+    currentTermInfo = JSON.parse(currentTerm);
+    // currentWeekinfo = JSON.parse(currentWeek) ?? {};
   }
   const { data, isLoading } = useGetStudentOngoingPeriod({
-    studentId: user?.currentStudentInfo.id,
-    weekId: '5d207bc4-753e-4832-904e-7fe105751508',
+    studentId: user?.currentStudentInfo.id ?? '',
+    weekId: currentWeekinfo?.id ?? '',
   });
   const { isLoading: loading, data: todaysPeriod } = useGetTodaysPeriod({
-    classId: '85dcf853-87fa-4454-bb93-b3d5279cda18',
-    day: 'Monday',
-    weekid: '5d207bc4-753e-4832-904e-7fe105751508',
+    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
+    day: 'Friday',
+    weekid: currentWeekinfo?.id ?? '',
   });
 
   const clockIn = useClockIn();
   const clockOut = useClockOut();
   const { data: clockInfo } = useGetClockInfo();
-  const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0].id,
   });
@@ -61,6 +82,43 @@ export default function NewStudentDashboard() {
       toast.error(getErrMsg(error));
     }
   };
+
+  // ===========================================================
+
+  const [time, setTime] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
+  const [pageLoadTime, setPageLoadTime] = useState(Date.now());
+  const [isActive, setIsActive] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isActive) {
+        setTime(Date.now() - pageLoadTime);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isActive, pageLoadTime]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsActive(!document.hidden);
+      if (!document.hidden) {
+        const pageLoadTime = Date.now() - time;
+        setPageLoadTime(pageLoadTime);
+        localStorage.setItem('pageLoadTime', `${(time/60000).toFixed(2)}`);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [time]);
+
   return (
     <div className='flex md:flex-row flex-col md:justify-between gap-8'>
       <div className='w-full flex flex-col gap-8 mt-8 px-7'>
@@ -78,7 +136,7 @@ export default function NewStudentDashboard() {
           </div>
           <NextPeriod
             studentId={user?.currentStudentInfo.id}
-            weekId='5d207bc4-753e-4832-904e-7fe105751508'
+            weekId={currentWeekinfo?.id ?? ''}
           />
         </div>
 

@@ -17,7 +17,7 @@ interface propType {
   removeRemoveSubjectClass: (id: number) => void;
   handleSubjectClassChange: (name: string, value: any, id: number) => void;
   assignedClassSubject: {
-    classId: string | null;
+    classArmId: string | null;
     subjectId: string | null;
   }[];
 }
@@ -98,7 +98,7 @@ function AddActivityName({
                         className='w-full border-none outline-none bg-transparent  text-gray-400'
                         onChange={(e) => {
                           handleSubjectClassChange(
-                            'classId',
+                            'classArmId',
                             e.target.value,
                             i
                           );

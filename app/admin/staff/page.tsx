@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -43,8 +44,8 @@ const Page = () => {
     currentSessionId
   );
   const [assignedClassSubject, setassignedClassSubject] = useState<
-    { classId: string | null; subjectId: string | null }[]
-  >([{ classId: null, subjectId: null }]);
+    { classArmId: string | null; subjectId: string | null }[]
+  >([{ classArmId: null, subjectId: null }]);
 
   const onClickHandler = () => {
     setisAddSubject(!isAddSubject);
@@ -53,7 +54,7 @@ const Page = () => {
   const addSubjectClass = () => {
     setassignedClassSubject([
       ...assignedClassSubject,
-      { classId: null, subjectId: null },
+      { classArmId: null, subjectId: null },
     ]);
   };
   const removeRemoveSubjectClass = (id: number) => {
@@ -86,7 +87,7 @@ const Page = () => {
 
     for (let i = 0; i < payload.subjectAndClasses.length; i++) {
       if (
-        !payload.subjectAndClasses[i].classId ||
+        !payload.subjectAndClasses[i].classArmId ||
         !payload.subjectAndClasses[i].subjectId
       ) {
         toast.error('Please complete all fields');
@@ -117,11 +118,8 @@ const Page = () => {
     }
   }, [error]);
 
-  const teacherName = `${(staff?.user ?? [])[0]?.firstName} ${
-    (staff?.user ?? [])[0]?.lastName
-  }`;
-
-  console.log(studentSubjectsList);
+  const teacherName = `${(staff?.user ?? [])[0]?.firstName} ${(staff?.user ?? [])[0]?.lastName
+    }`;
 
   return (
     <div className='flex'>

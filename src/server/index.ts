@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isLocal } from '@/constant/env';
 import { getFromSessionStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
-  baseURL: 'https://es-ems-be-production-b62b1d40e244.herokuapp.com/',
+  baseURL: isLocal
+    ? process.env.NEXT_PUBLIC_BE_STAGING_URL
+    : process.env.NEXT_PUBLIC_BE_PROD_URL,
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Origin': '*', // For CORS support to work

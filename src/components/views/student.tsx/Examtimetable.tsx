@@ -1,6 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import EmptyView from '@/components/misc/EmptyView';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { useGetAcademicTimetable } from '@/server/Schedule';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -9,83 +19,149 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const AcadamicCalendar = () => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const AcadamicCalendar = ({
+  isClassTimeTable = true,
+}: {
+  isClassTimeTable?: boolean;
+}) => {
+  const currentSessionId = getFromLocalStorage('currentSessionId');
+  const currentTerm = getFromSessionStorage('currentTerm');
+  let currentTermInfo;
+  if (currentTerm) {
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const { data, isLoading } = useGetAcademicTimetable({
+    sessionId: currentSessionId,
+    classId: 'c0c590b0-5dc0-446c-a93c-42fe95602faa',
+    termId: currentTermInfo?.id ?? "",
+  });
+  function getEachDaySubject(data: any, day: string) {
+    let subjectName;
+    let isEvent;
+
+    data.periods.forEach((element: any) => {
+      if (element.day.toLowerCase() === day) {
+        if (element.subject) {
+          subjectName = element.subject.name;
+          isEvent = false;
+        } else {
+          subjectName = element.eventName;
+          isEvent = true;
+        }
+      }
+    });
+
+    return { subjectName, isEvent };
+  }
+
+  const timetableData = isClassTimeTable ? data : [];
   return (
     <section>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-base text-[#6B7A99]'> TimeTable</h1>
-        <select name='' id='' className='border p-2 w-[150px] rounded text-xs'>
-          <option value=''>Class Timetable</option>
-          <option value=''>Exam Timetable</option>
-          <option value=''>Test Timetable</option>
-        </select>
-      </div>
       <div className='mt-8 p-2 rounded-md'>
-        <div className='flex w-full mr-10'>
-          <div className='w-[150px] font-medium  p-3  border-l border-y bg-white text-gray-500'>
-            Time
-          </div>
-          <div className='w-full grid grid-cols-5 text-base border font-medium text-center'>
-            <div className='p-3 font-bold text-gray-800 border-r '>Monday</div>
-            <div className='p-3 font-bold text-gray-800 border-r '>Tuesday</div>
-            <div className='p-3 font-bold text-gray-800 border-r '>
-              Wednesday
-            </div>
-            <div className='p-3 font-bold text-gray-800 border-r '>
-              Thursday
-            </div>
-            <div className='p-3 font-bold text-gray-800 border-r '>Friday</div>
-          </div>
+        <div className='flex justify-between items-center'>
+          <h1 className='text-base text-[#6B7A99]'> TimeTable</h1>
+          <select
+            name=''
+            id=''
+            className='border p-2 w-[150px] rounded text-xs'
+          >
+            <option value=''>Test Timetable</option>
+            <option value=''>Exam Timetable</option>
+          </select>
         </div>
-        <div className='flex w-full mr-10 items-stretch'>
-          <div className='w-[150px] bg-white   grid place-content-center   border'>
-            9:00 - 9:40
-          </div>
-          <div className='w-full grid place-content-center text-xl  font-light py-5 border-y border-r  text-center'>
-            Mental Mathematics
-          </div>
-        </div>
-        <div className='flex w-full mr-10 items-stretch'>
-          <div className='w-[150px] bg-white    grid place-content-center   border'>
-            9:00 - 9:40
-          </div>
-          <div className='w-full grid place-content-center text-xl font-light py-5 border-y border-r text-center'>
-            Assembly{' '}
-          </div>
-        </div>
-        <div>
-          {[1, 2, 3, 4].map((item: any, id: number) => (
-            <div key={id}>
-              <div className='flex w-full items-stretch'>
-                <div className='w-[150px] bg-white font-medium grid place-content-center  border'>
-                  9:00 - 9:40
-                </div>
 
-                <div className='w-full grid grid-cols-5 text-gray-200  border font-semibold text-center'>
-                  <div></div>
-                  <div className='px-3 py-5 bg-[#FDE8FF] text-[#ED1CFF]'>
-                    <p className=''>English</p>
-                  </div>
-                  <div className='px-3 py-5 bg-[#FFF3E2] text-[#FF9F1C]'>
-                    <p className=''> Basic Science</p>
-                  </div>
-                  <div className='px-3 py-5 bg-[#F4FFE6] text-[#60AC00]'>
-                    <p className=''>Biology</p>
-                  </div>
-                  <div></div>
+        {!isLoading ? (
+          <div>
+            <div>
+              {(timetableData ?? []).map((item: any, id: number) => (
+                <div key={item?.id ?? id}>
+                  {item.type === 'event' ? (
+                    <div className='flex w-full mt-2 items-center'>
+                      <div className='w-[150px] bg-white font-medium text-[10px] px-3 py-5  border'>
+                        {item.startTime} - {item.endTime}
+                      </div>
+                      <div className='w-full border p-5 text-center'>
+                        <p> {item.eventName} </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='flex w-full mt-2 items-center'>
+                      <div className='w-[150px] bg-white font-medium px-3 py-5  border'>
+                        {item.startTime} - {item.endTime}
+                      </div>
+
+                      <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
+                        <div
+                          className={`${getEachDaySubject(item, 'monday').isEvent
+                            ? 'bg-white text-black'
+                            : 'bg-[#FFF2F0] text-[#FB6340]'
+                            }  px-3 py-5 `}
+                        >
+                          {getEachDaySubject(item, 'monday').subjectName}
+                        </div>
+                        <div
+                          className={`${getEachDaySubject(item, 'tuesday').isEvent
+                            ? 'bg-white text-black'
+                            : 'bg-[#FDE8FF] text-[#ED1CFF]'
+                            }  px-3 py-5 `}
+                        >
+                          {getEachDaySubject(item, 'tuesday').subjectName}
+                        </div>
+                        <div
+                          className={`${getEachDaySubject(item, 'wednesday').isEvent
+                            ? 'bg-white text-black'
+                            : 'bg-[#FFF3E2] text-[#FF9F1C]'
+                            }  px-3 py-5 `}
+                        >
+                          {getEachDaySubject(item, 'wednesday').subjectName}
+                        </div>
+                        <div
+                          className={`${getEachDaySubject(item, 'thursday').isEvent
+                            ? 'bg-white text-black'
+                            : 'bg-[#F4FFE6] text-[#60AC00]'
+                            }  px-3 py-5 `}
+                        >
+                          {getEachDaySubject(item, 'thursday').subjectName}
+                        </div>
+                        <div
+                          className={`${getEachDaySubject(item, 'friday').isEvent
+                            ? 'bg-white text-black'
+                            : 'bg-[#FFFFEB] text-[#CDCD04]'
+                            }  px-3 py-5 `}
+                        >
+                          {getEachDaySubject(item, 'friday').subjectName}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {timetableData.length === 0 && (
+                    // <EmptyView label='No Timetable for this class yet' />
+                    <div className='text-center text-xs mt-5'>
+                      No Timetable for this class yet
+                    </div>
+                  )}
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className='flex w-full mr-10 items-stretch'>
-          <div className='w-[150px] bg-white    grid place-content-center   border'>
-            9:00 - 9:40
           </div>
-          <div className='w-full grid place-content-center text-xl font-light py-5 border-y border-r text-center'>
-            Long Break
-          </div>
-        </div>
+        ) : (
+          <div className='text-center text-xs mt-5'>Loading...</div>
+        )}
+        {!isLoading && timetableData.length === 0 && (
+          <EmptyView label='No Timetable for this class yet' />
+          // <div className='text-center text-xs mt-5'>
+          //   No Timetable for this class yet
+          // </div>
+        )}
       </div>
     </section>
   );

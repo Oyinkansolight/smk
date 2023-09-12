@@ -6,14 +6,12 @@ import { RotatingLines } from 'react-loader-spinner';
 
 export default function NextPeriod({
   studentId,
-  weekId,
 }: {
   studentId: string;
   weekId: string;
 }) {
   const { isLoading, data } = useGetStudentNextPeriod({
-    studentId,
-    weekId,
+    studentId
   });
 
   // const data = {

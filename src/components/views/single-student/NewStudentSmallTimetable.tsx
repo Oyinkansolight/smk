@@ -3,6 +3,7 @@ import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import Image from 'next/image';
 import { RotatingLines } from 'react-loader-spinner';
+import moment from 'moment';
 
 export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   const currentDate = new Date();
@@ -12,30 +13,31 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
     day: 'numeric',
   });
 
-  logger(todaysPeriod);
 
 
   return (
-    <div className='w-full max-w-[296px]'>
+    <div className='w-full max-w-[296px] max-h-[500px] overflow-y-auto'>
       <div className='flex justify-end'>
         <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-max px-2 h-[30px] whitespace-nowrap'>
           {formattedDate}
         </div>
       </div>
       <div className='h-4' />
-      <div className='flex gap-4 flex-col'>
+      <div className='flex gap-4 flex-col '>
         {!loading ? (
           <div>
             {' '}
-            {todaysPeriod.map((v: any, i: number) => (
-              <TimetableItem
-                key={i}
-                isCurrent={i === 0}
-                img='/images/sidebar-icons/Subjects.png'
-                subtitle={`${v.startTime} - ${v.endTime}`}
-                title={v.title}
-              />
-            ))}
+            {(todaysPeriod ?? []).map(
+              (v: any, i: number) => (
+                <TimetableItem
+                  key={i}
+                  isCurrent={i === 0}
+                  img='/images/sidebar-icons/Subjects.png'
+                  subtitle={`${moment(v.startTime).format('LT')} - ${moment(v.endTime).format('LT')}`}
+                  title={v.subject.name ?? 'Subject_Name'}
+                />
+              )
+            )}
           </div>
         ) : (
           <div className='flex justify-center'>

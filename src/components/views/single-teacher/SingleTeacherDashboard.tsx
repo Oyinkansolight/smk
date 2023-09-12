@@ -40,7 +40,7 @@ const SingleTeacherDashboard = () => {
           (staff?.user ?? [])[0]?.lastName
         }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
-        id='#14241-EDO-12'
+        id={staff?.staffId}
         student={false}
         currentGridIdx={gridIdx}
         setGridIdx={(value) => {

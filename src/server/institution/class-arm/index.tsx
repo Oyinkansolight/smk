@@ -84,6 +84,7 @@ export function useGetClassArmAttendance(params: { classArmId?: string }) {
 interface TakeClassArmAttendanceParams {
   studentId?: string | number | null;
   classArmAttendanceId?: string | number | null;
+  classArmId?: string | null;
   status?: 'PRESENT' | 'ABSENT' | 'LATE';
 }
 
@@ -93,9 +94,8 @@ export function useTakeClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.post(
-          `/v1/institutions/institutes/take-class-arm-attendance?${
-            params.studentId ? `studentId=${params.studentId}` : ''
-          }&${params.status ? `status=${params.status}` : ''}`,
+          `/v1/institutions/institutes/take-class-arm-attendance?${params.studentId ? `studentId=${params.studentId}` : ''
+          }&${params.status ? `status=${params.status}` : ''}&${params.classArmId ? `classArmId=${params.classArmId}` : ''}`,
           {
             withCredentials: true,
           }
@@ -111,10 +111,9 @@ export function useUpdateClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.patch(
-          `/v1/institutions/institutes/update-class-arm-attendance?${
-            params.classArmAttendanceId
-              ? `classArmAttendanceId=${params.classArmAttendanceId}`
-              : ''
+          `/v1/institutions/institutes/update-class-arm-attendance?${params.classArmAttendanceId
+            ? `classArmAttendanceId=${params.classArmAttendanceId}`
+            : ''
           }&${params.status ? `status=${params.status}` : ''}`,
           {
             withCredentials: true,

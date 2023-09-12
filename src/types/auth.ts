@@ -1,6 +1,28 @@
 import { Staff } from '@/types/institute';
 
 export interface UserProfile {
+  currentTerm?: {
+    startDate?: Date;
+    endDate?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+    description?: string;
+    id?: string;
+    name?: string;
+    noOfWeeks?: string;
+  };
+  currentWeek?: {
+    startDate?: Date;
+    endDate?: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+    description?: string;
+    id?: string;
+    name?: number;
+    noOfPeriod?: string;
+    topic?: string;
+    theme?: string;
+  };
   userInfo?: UserInfo;
   currentSession?: CurrentSession[];
 }

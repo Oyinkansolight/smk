@@ -59,7 +59,7 @@ export function useGetAcademicSessions() {
     queryKey: 'academic_sessions',
     queryFn: () =>
       request
-        .get('/v1/government/session/all', {
+        .get('/v1/government/session/all?limit=20', {
           withCredentials: true,
         })
         .then((v) => v.data.data.data as any),

@@ -56,7 +56,7 @@ const Education = ({
       {!isLoading ? (
         <div>
           {assignedClassSubject.map((v: any, i: number) => (
-            <div key={i} className='my-10 grid grid-cols-12 gap-6 items-center'>
+            <div key={i} className='my-10 grid md:grid-cols-12 gap-6 items-center'>
               <div className='col-span-5'>
                 <label htmlFor='' className='text-xs font-bold'>
                   Assign Subject

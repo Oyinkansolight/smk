@@ -7,6 +7,7 @@ import AttendanceRate from '@/components/charts/AttendanceRate';
 import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
 import GenderDistribution from '@/components/charts/GenderDistribution';
 import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution';
+import EmptyView from '@/components/misc/EmptyView';
 import AddSingleSchool from '@/components/modal/addSchool';
 import EventCalendarTable from '@/components/tables/EventCalendarTable';
 import LoginLogsTable from '@/components/tables/LoginLogsTable';
@@ -45,9 +46,8 @@ const Page = () => {
 
       <div className='flex gap-5 w-full'>
         <div
-          className={` ${
-            adminType === 'NORMAL' ? 'w-4/5' : 'w-full'
-          }  'flex flex-col gap-[10px]  md:w-full bg-white rounded-[10px] p-5`}
+          className={` ${adminType === 'NORMAL' ? 'w-4/5' : 'w-full'
+            }  'flex flex-col gap-[10px]  md:w-full bg-white rounded-[10px] p-5`}
         >
           <h1 className='font-bold text-[28px] leading-[27px]'>
             Dashboard Statistic
@@ -154,7 +154,7 @@ const Page = () => {
             <GenericChart
               titleClassName='bg-[#DADEE6]'
               title='Attendance Tracker'
-              content={<BarChart />}
+              content={<EmptyView label='No Data' /> ?? <BarChart />}
             />
             {/* <GenericChart
               title='Attendance Tracker'
@@ -163,24 +163,24 @@ const Page = () => {
 
             <GenericChart
               title='Attendance Rate'
-              content={<AttendanceRate />}
+              content={<EmptyView label='No Data' /> ?? <AttendanceRate />}
               className='border-[#EDF5F2]'
               titleClassName='bg-[#EDF5F2]'
             />
             <GenericChart
               title='Gender Distribution'
-              content={<GenderDistribution />}
+              content={<EmptyView label='No Data' /> ?? <GenderDistribution />}
               className='border-[#E8ECF2]'
               titleClassName='bg-[#E8ECF2]'
               contentClassName='bg-[#EBF5F6]'
             />
             <GenericChart
               title='Enrolment Analysis'
-              content={<EnrolmentAnalysis />}
+              content={<EmptyView label='No Data' /> ?? <EnrolmentAnalysis />}
             />
             <GenericChart
               title='Low Batteries Notifications'
-              content={
+              content={<EmptyView label='No Data' /> ?? (
                 <div className='flex flex-col gap-y-5 px-5'>
                   <div className='flex flex-row items-center gap-x-[22.5px]'>
                     <StudentBadge className='h-[60px] w-[60px]' />
@@ -239,40 +239,40 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
-              }
+              )}
             />
           </div>
 
           <div className='flex flex-col gap-y-7'>
             <GenericChart
               title='Gender Distribution'
-              content={<SuperGenderDistribution />}
+              content={<EmptyView label='No Data' /> ?? <SuperGenderDistribution />}
               className='border-[#E6FFF7]'
               titleClassName='bg-[#E6FFF7]'
             />
 
             <GenericChart
               title='Recently Added Institutions'
-              content={<RecentlyAddedInstitutions />}
+              content={<EmptyView label='No Data' /> ?? <RecentlyAddedInstitutions />}
               className='border-[#FFF6EC]'
               titleClassName='bg-[#FFF6EC]'
             />
 
             <GenericChart
               title='Event/Calendar'
-              content={<EventCalendarTable />}
+              content={<EmptyView label='No Data' /> ?? <EventCalendarTable />}
               titleClassName='bg-[#E6FFF7]'
               className='border-[#E6FFF7]'
             />
             <GenericChart
               title='Transfer Requests'
-              content={<SuperTransferRequestsTable />}
+              content={<EmptyView label='No Data' /> ?? <SuperTransferRequestsTable />}
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
             />
             <GenericChart
               title='Admin Login Log'
-              content={<LoginLogsTable />}
+              content={<EmptyView label='No Data' /> ?? <LoginLogsTable />}
               titleClassName='bg-[#EDF5F2]'
               className='border-[#EDF5F2]'
             />

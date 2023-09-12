@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
@@ -23,17 +24,32 @@ import Teacher from '~/svg/teacher.svg';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
-  // const [isEdit, setIsEdit] = useState(false);
-  // const [editContent, seteditContent] = useState(false);
-  // const [editAction, seteditAction] = useState(false);
-  // function handleModal() {
-  //   setIsEdit(!isEdit);
-  //   seteditAction(true);
-  // }
-  // function handleEditModal() {
-  //   seteditContent(!editContent);
-  // }
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
 
+  const currentDate = new Date();
+  const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
+  const currentDay = daysOfWeek[currentDayIndex];
+  const userData = getFromSessionStorage('user');
+  const currentSessionId = getFromLocalStorage('currentSessionId');
+  const currentTerm = getFromSessionStorage('currentTerm');
+  const currentWeek = getFromSessionStorage('currentWeek');
+  let user;
+  let currentTermInfo;
+  let currentWeekinfo;
+
+  if (userData && currentTerm && currentWeek) {
+    user = JSON.parse(userData);
+    currentTermInfo = JSON.parse(currentTerm);
+    currentWeekinfo = JSON.parse(currentWeek);
+  }
   useEffect(() => {
     // const sessionInfo = JSON.parse(
     //   sessionStorage.getItem('currentSession') || '{}'
@@ -41,9 +57,9 @@ const Page = () => {
   }, []);
 
   const { isLoading, data } = useGetTodaysPeriod({
-    classId: '85dcf853-87fa-4454-bb93-b3d5279cda18',
-    day: 'Monday',
-    weekid: '5d207bc4-753e-4832-904e-7fe105751508',
+    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
+    day: currentDay,
+    weekid: currentWeekinfo?.id,
   });
 
   return (
@@ -74,7 +90,7 @@ const Page = () => {
                 >
                   <div className='flex justify-between items-center'>
                     <div>
-                      <h1 className='font-bold text-base'> Subject Name </h1>
+                      <h1 className='font-bold text-base'> {item.subject.name} </h1>
                       <p className='text-[#808080] text-[10px] '>
                         {item.startTime} - {item.endTime}
                       </p>

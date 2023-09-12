@@ -45,13 +45,13 @@ export function useUpdateStudent() {
   return mutation;
 }
 
-export function useGetStudentNextPeriod({ studentId, weekId }) {
+export function useGetStudentNextPeriod({ studentId }) {
   const query = useQuery({
     queryKey: 'get_student_next_period',
     queryFn: () =>
       request
         .get(
-          `/v1/institutions/institutes/get-student-next-period?studentId=${studentId}&weekId=${weekId}`,
+          `/v1/institutions/institutes/get-student-next-period?studentId=${studentId}`,
           {
             withCredentials: true,
           }

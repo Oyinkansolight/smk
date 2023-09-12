@@ -36,28 +36,29 @@ const Page = () => {
     day: 'numeric',
   });
 
+  let path
   if (data && !isLoading) {
-    const path = data?.file?.fileUrl ?? '';
+     path = data?.file?.fileUrl ?? '';
 
     getURL(path).then((v) => setUrl(v));
     logger(data);
   }
 
-  // useEffect(() => {
-  //   // Create a URLSearchParams object with the query string
-  //   const searchParams = new URLSearchParams(queryString ?? '');
+  useEffect(() => {
+    // Create a URLSearchParams object with the query string
+    const searchParams = new URLSearchParams(queryString ?? '');
 
-  //   // Extract the values of subject name parameters
-  //   const subjectName = searchParams.get('name');
-  //   settitle(subjectName);
-  //   const getFileURL = async () => {
-  //     // const url = await getURL(path);
-  //     // setUrl(url);
-  //     logger(url);
-  //   };
-  //   getFileURL();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [url]);
+    // Extract the values of subject name parameters
+    const subjectName = searchParams.get('name');
+    // settitle(subjectName);
+    const getFileURL = async () => {
+      const url = await getURL(path);
+      setUrl(url);
+      logger(url);
+    };
+    getFileURL();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url]);
   return (
     <div className='layout flex flex-col gap-5'>
       {!isLoading ? (

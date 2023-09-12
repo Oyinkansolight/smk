@@ -56,6 +56,7 @@ export default function Page() {
                           await takeAttendance({
                             status,
                             studentId: studentId as unknown as string,
+                            classArmId: profileData?.userInfo?.staff?.managedClassArm?.id,
                           });
                         } else {
                           await updateAttendance({

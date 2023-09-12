@@ -7,6 +7,7 @@ import { useGetProfile } from '@/server/auth';
 import { useGetStaffDashboardOverview } from '@/server/dashboard';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
+import EmptyView from '@/components/misc/EmptyView';
 
 export default function TeacherDashboardView() {
   const { data: profileData } = useGetProfile();
@@ -47,9 +48,10 @@ export default function TeacherDashboardView() {
         <div className='grid grid-rows-2 gap-6 w-full'>
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>
-            <NextClassCard isActive />
+            <EmptyView label='No Data' />
+            {/* <NextClassCard isActive />
             <NextClassCard />
-            <div className='font-bold text-right'>See all</div>
+            <div className='font-bold text-right'>See all</div> */}
           </BasicCard>
 
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
@@ -57,20 +59,22 @@ export default function TeacherDashboardView() {
               <div className='h4'>Unread Messages</div>
               <div className='absolute w-[6px] h-[6px] bg-[#E5002B] rounded-full top-0 ml-40' />
             </div>
+            <EmptyView label='No Data' />
+            {/* <MessageCard />
             <MessageCard />
-            <MessageCard />
-            <div className='font-bold text-right'>See all</div>
+            <div className='font-bold text-right'>See all</div> */}
           </BasicCard>
         </div>
 
         <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
           <div className='h4'>Assignments</div>
-          <AssignmentsCard />
+          <EmptyView label='No Data' useStandardHeight />
+          {/* <AssignmentsCard />
           <AssignmentsCard today isActive />
           <AssignmentsCard />
           <AssignmentsCard />
           <AssignmentsCard />
-          <div className='font-bold text-right'>View all</div>
+          <div className='font-bold text-right'>View all</div> */}
         </BasicCard>
       </div>
 

@@ -88,6 +88,14 @@ export function useGetProfile() {
         'currentSession',
         `${JSON.stringify(response.currentSession)}`
       );
+      sessionStorage.setItem(
+        'currentTerm',
+        `${JSON.stringify(response.currentTerm)}`
+      );
+      sessionStorage.setItem(
+        'currentWeek',
+        `${JSON.stringify(response.currentWeek)}`
+      );
       return response;
     },
     refetchOnMount: false,
