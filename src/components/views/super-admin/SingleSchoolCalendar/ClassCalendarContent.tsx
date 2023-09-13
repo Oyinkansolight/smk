@@ -129,7 +129,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
         <div className='bg-[#ECF4FF] rounded-lg pr-10 pl-5 py-8'>
           <div className='flex justify-between items-center text-[10px]'>
             <div className='font-semibold text-[#5A5A5A] text-xs'>
-              {schoolType} - Academic Roadmap
+              {schoolType} - Academic Calendar
             </div>
 
             {/* <p className='font-bold'>

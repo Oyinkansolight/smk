@@ -135,12 +135,12 @@ const Biodata = ({
       <h2 className='text-3xl font-bold'>Bio Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-2 grid grid-cols-2 gap-6'>
+      <div className='my-2 grid md:grid-cols-2 gap-6'>
         <div></div>
         <div className='font-medium text-center'> Preview </div>
       </div>
 
-      <div className='my-2 grid grid-cols-2 gap-6'>
+      <div className='my-2 grid md:grid-cols-2 gap-6'>
         <div>
           {!isCapture ? (
             <div>
@@ -172,7 +172,7 @@ const Biodata = ({
         </div>
       </div>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='First name'
@@ -208,7 +208,7 @@ const Biodata = ({
           />
         </div>
       </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormSelect
             label='Gender'

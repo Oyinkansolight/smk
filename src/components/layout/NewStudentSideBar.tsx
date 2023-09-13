@@ -61,7 +61,8 @@ export default function NewStudentSidebar() {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('user');
+        localStorage.clear()
+        sessionStorage.clear();
       }
       router.push('/auth/user');
     }

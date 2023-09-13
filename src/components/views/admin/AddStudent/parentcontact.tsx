@@ -102,7 +102,7 @@ const Contact = ({ register, errors }: Iprops) => {
       <h2 className='text-3xl font-bold'>Parent Contact Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Phone Number'
@@ -143,7 +143,7 @@ const Contact = ({ register, errors }: Iprops) => {
           />
         </div>
       </div>
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Address'
@@ -180,7 +180,7 @@ const Contact = ({ register, errors }: Iprops) => {
         </div>
       </div>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
             label='Parent Name'
@@ -219,7 +219,7 @@ const Contact = ({ register, errors }: Iprops) => {
         </div>
       </div>
 
-      <div className='my-10 grid grid-cols-2 gap-6'>
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormSelect
             label='Parental/Guardian Status'

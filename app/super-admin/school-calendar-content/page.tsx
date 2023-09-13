@@ -79,7 +79,7 @@ const SingleStudentDashboard = () => {
             items={[
               {
                 icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Academic Roadmap',
+                label: 'Academic Calendar',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,

@@ -13,17 +13,6 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Time from '~/svg/time.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface dataType {
   sessionId: string | null;
@@ -67,6 +56,7 @@ const AcademicCalendar = ({
   const [ExamOrTest, setExamOrTest] = useState('');
   const [testTable, setTestTable] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentClassName, setClassName] = useState<string>('');
 
   const getClassesByInstitution = classList.filter(
     (item: any) =>
@@ -337,6 +327,7 @@ const AcademicCalendar = ({
                             count={100}
                             variant={generateVariant(0)}
                             onClick={() => {
+                              setClassName(v.name);
                               HandleTimeTable({
                                 classId: v.id,
                                 termId: currentTermId,
@@ -349,6 +340,7 @@ const AcademicCalendar = ({
                             count={100}
                             variant={generateVariant(1)}
                             onClick={() => {
+                              setClassName(v.name);
                               HandleTimeTable({
                                 classId: v.id,
                                 termId: currentTermId,
@@ -374,21 +366,25 @@ const AcademicCalendar = ({
           </div>
         ) : (
           <div className='mt-2'>
-            <button
-              onClick={() => {
-                setShowTimeTable(false);
-              }}
-              className='flex items-center space-x-4 bg-[#EDEFF2] rounded-md px-3 py-1'
-            >
-              <Image
-                src='/svg/back_yellow.svg'
-                width={10}
-                height={10}
-                alt='back'
-                className='h-3 w-3'
-              />
-              <h3 className='text-[14px] font-bold'>Back</h3>
-            </button>
+            <div className='flex justify-between items-center'>
+              <button
+                onClick={() => {
+                  setShowTimeTable(false);
+                }}
+                className='flex items-center space-x-4 bg-[#EDEFF2] rounded-md px-3 py-1'
+              >
+                <Image
+                  src='/svg/back_yellow.svg'
+                  width={10}
+                  height={10}
+                  alt='back'
+                  className='h-3 w-3'
+                />
+                <h3 className='text-[14px] font-bold'>Back</h3>
+              </button>
+              <h3 className='font-medium text-base'>{currentClassName} </h3>
+            </div>
+
             <TimeTable
               sessionId={sessionId}
               schoolType={schoolType}

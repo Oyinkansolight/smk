@@ -57,6 +57,8 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Index = () => {
   const queryString = useSearchParams();
   const [tabIdx, setTabIdx] = useState(0);
@@ -121,7 +123,7 @@ const Index = () => {
             items={[
               {
                 icon: <RiDashboardFill className='h-5 w-5' />,
-                label: 'Academic Roadmap',
+                label: 'Academic Calendar',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,

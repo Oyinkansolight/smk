@@ -26,26 +26,27 @@ const Checkbox = ({
   };
 
   return (
-    <div onClick={handleCheck}>
+    <div>
       <input
         name={Math.random().toString()}
         type='checkbox'
         checked={checked}
+        onChange={handleCheck}
         className='peer/checkbox hidden'
       />
 
       <div
         className={clsxm([
           type === 'primary' &&
-            'hidden h-4 w-4 text-primary peer-checked/checkbox:block',
+          'hidden h-4 w-4 text-primary peer-checked/checkbox:block',
           type === 'success' &&
-            'text-success hidden h-4 w-4 peer-checked/checkbox:block',
+          'text-success hidden h-4 w-4 peer-checked/checkbox:block',
           type === 'warning' &&
-            'hidden h-4 w-4 text-warning peer-checked/checkbox:block',
+          'hidden h-4 w-4 text-warning peer-checked/checkbox:block',
           type === 'danger' &&
-            'text-danger hidden h-4 w-4 peer-checked/checkbox:block',
+          'text-danger hidden h-4 w-4 peer-checked/checkbox:block',
           type === 'info' &&
-            'text-info hidden h-4 w-4 peer-checked/checkbox:block',
+          'text-info hidden h-4 w-4 peer-checked/checkbox:block',
         ])}
       >
         <GrCheckboxSelected
@@ -63,13 +64,13 @@ const Checkbox = ({
       <GrCheckbox
         className={clsxm([
           type === 'primary' &&
-            'h-4 w-4 text-primary peer-checked/checkbox:hidden',
+          'h-4 w-4 text-primary peer-checked/checkbox:hidden',
           type === 'success' &&
-            'text-success h-4 w-4 peer-checked/checkbox:hidden',
+          'text-success h-4 w-4 peer-checked/checkbox:hidden',
           type === 'warning' &&
-            'h-4 w-4 text-warning peer-checked/checkbox:hidden',
+          'h-4 w-4 text-warning peer-checked/checkbox:hidden',
           type === 'danger' &&
-            'text-danger h-4 w-4 peer-checked/checkbox:hidden',
+          'text-danger h-4 w-4 peer-checked/checkbox:hidden',
           type === 'info' && 'text-info h-4 w-4 peer-checked/checkbox:hidden',
           'fill-current',
         ])}
