@@ -253,6 +253,28 @@ export function useDeleteFolder() {
   return mutation;
 }
 
+export function useDeleteFile() {
+  const client = useQueryClient();
+
+  let refetchFileId: string | undefined;
+
+  const mutation = useMutation({
+    mutationKey: `delete_file`,
+    mutationFn: async (fileId: string) => {
+      refetchFileId = fileId;
+      return await request.delete('/v1/government/library/delete-file', {
+        params: {
+          fileId,
+        },
+      });
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_${refetchFileId ?? 'root'}`);
+    },
+  });
+  return mutation;
+}
+
 export function useAssignFolderToSubject() {
   const client = useQueryClient();
   let refetchFolderId: string | undefined;
