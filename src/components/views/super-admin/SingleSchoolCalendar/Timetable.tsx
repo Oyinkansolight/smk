@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import EditTimeTable from '@/components/modal/EditSchedule';
 import AddActivityName from '@/components/modal/TestSchedule';
-import  { getErrMsg } from '@/server';
+import { getErrMsg } from '@/server';
 import {
   useCreateAcademicTimeTable,
   useDeleteAcademicTimeTable,
@@ -11,7 +12,6 @@ import {
 import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 
 
 interface dataType {
@@ -53,6 +53,8 @@ const TimeTable = ({
   const handleDeleteAcademicTimeTable = useDeleteAcademicTimeTable();
 
   const [isOpenActivity, setisOpenActivity] = useState(false);
+  const [itemToEdit, setitemToEdit] = useState(null);
+  const [isEditOpen, setisEditOpen] = useState(false);
   const [startTime, setstartDate] = useState<string | number>('');
   const [endTime, setendDate] = useState<string | number>('');
   const [subjectId1, setSubjectId1] = useState<string | number>('');
@@ -138,8 +140,14 @@ const TimeTable = ({
       if (data.periods && type === 'period') {
         for (const period of data.periods) {
           // Check if subject is a positive integer
-          if (!period.subject) {
+          if (period.subject === '' && !period.isEvent) {
             toast.error('one or more subject in periods is invalid or missing');
+            return;
+          }
+          if (period.eventName === '' && period.isEvent) {
+            toast.error(
+              'one or more activity in periods is invalid or missing'
+            );
             return;
           }
         }
@@ -157,6 +165,16 @@ const TimeTable = ({
         toast.success('Timetable created successfully');
         // location.reload()
         setloading(false);
+        setSubjectId1('');
+        setSubjectId2('');
+        setSubjectId3('');
+        setSubjectId4('');
+        setSubjectId5('');
+        setactivityname1('');
+        setactivityname2('');
+        setactivityname3('');
+        setactivityname4('');
+        setactivityname5('');
         modalActivityHandler();
       }
     } catch (error) {
@@ -236,6 +254,45 @@ const TimeTable = ({
           activityname5={activityname5}
         />
       )}
+      {isEditOpen && (
+        <EditTimeTable
+          onClickHandler={() => {
+            setisEditOpen(false);
+          }}
+          setStartDate={setstartDate}
+          setEndDate={setendDate}
+          setSubjectId1={setSubjectId1}
+          setSubjectId2={setSubjectId2}
+          setSubjectId3={setSubjectId3}
+          setSubjectId4={setSubjectId4}
+          setSubjectId5={setSubjectId5}
+          seteventname={seteventname}
+          setType={setType}
+          type={type}
+          loading={loading}
+          SubmitHandler={SubmitHandler}
+          setactivity1={setactivity1}
+          activity1={activity1}
+          setactivity2={setactivity2}
+          activity2={activity2}
+          setactivity3={setactivity3}
+          activity3={activity3}
+          setactivity4={setactivity4}
+          activity4={activity4}
+          setactivity5={setactivity5}
+          activity5={activity5}
+          setactivityname1={setactivityname1}
+          activityname1={activityname1}
+          setactivityname2={setactivityname2}
+          activityname2={activityname2}
+          setactivityname3={setactivityname3}
+          activityname3={activityname3}
+          setactivityname4={setactivityname4}
+          activityname4={activityname4}
+          setactivityname5={setactivityname5}
+          activityname5={activityname5}
+        />
+      )}
 
       <div className='mt-8 bg-[#F5F5F6] p-2 rounded-md'>
         <div className='flex w-full mr-10 mb-4'>
@@ -260,7 +317,7 @@ const TimeTable = ({
                     {item.type === 'event' ? (
                       <div className='flex w-full mt-2 items-center'>
                         <div className='w-[150px] bg-white font-medium text-[10px] pl-3 py-5  border'>
-                        {moment(item.startTime).format('LT')} -
+                          {moment(item.startTime).format('LT')} -
                           {moment(item.endTime).format('LT')}
                         </div>
                         <div className='w-full border p-5 text-center'>
@@ -287,53 +344,56 @@ const TimeTable = ({
 
                         <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
                           <div
-                            className={`${
-                              getEachDaySubject(item, 'monday').isEvent
+                            className={`${getEachDaySubject(item, 'monday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF2F0] text-[#FB6340]'
-                            }  px-3 py-5 truncate `}
+                              }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'monday').subjectName}
                           </div>
                           <div
-                            className={`${
-                              getEachDaySubject(item, 'tuesday').isEvent
+                            className={`${getEachDaySubject(item, 'tuesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FDE8FF] text-[#ED1CFF]'
-                            }  px-3 py-5 truncate `}
+                              }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'tuesday').subjectName}
                           </div>
                           <div
-                            className={`${
-                              getEachDaySubject(item, 'wednesday').isEvent
+                            className={`${getEachDaySubject(item, 'wednesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF3E2] text-[#FF9F1C]'
-                            }  px-3 py-5 truncate `}
+                              }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'wednesday').subjectName}
                           </div>
                           <div
-                            className={`${
-                              getEachDaySubject(item, 'thursday').isEvent
+                            className={`${getEachDaySubject(item, 'thursday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#F4FFE6] text-[#60AC00]'
-                            }  px-3 py-5 truncate `}
+                              }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'thursday').subjectName}
                           </div>
                           <div
-                            className={`${
-                              getEachDaySubject(item, 'friday').isEvent
+                            className={`${getEachDaySubject(item, 'friday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFFFEB] text-[#CDCD04]'
-                            }  px-3 py-5 truncate`}
+                              }  px-3 py-5 truncate`}
                           >
                             {getEachDaySubject(item, 'friday').subjectName}
                           </div>
                         </div>
                         <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                          <button className='text-green-600'>Edit</button>
+                          <button
+                            onClick={() => {
+                              setisEditOpen(true);
+                              setitemToEdit(item);
+                            }}
+                            className='text-green-600'
+                          >
+                            Edit
+                          </button>
                           <button
                             onClick={() => {
                               deleteTimetable(item.id);

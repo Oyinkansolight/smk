@@ -30,6 +30,8 @@ export default function StudentAuth() {
   const { mutateAsync } = useSignIn();
   const onSubmit = async (data: SignInParams) => {
     setLoading(true);
+    localStorage.clear()
+    sessionStorage.clear();
 
     try {
       const response = await mutateAsync(data);

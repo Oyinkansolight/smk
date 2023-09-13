@@ -93,7 +93,7 @@ const SingleTeacherDashboard = () => {
               ]}
             />
           )}
-          {tabIdx === 2 && <ExamTimetable />}
+          {tabIdx === 2 && <ExamTimetable isClassTimeTable={true} />}
           {tabIdx === 3 && <SchoolCalendarView />}
           {tabIdx === 4 && <TaskListView />}
         </div>

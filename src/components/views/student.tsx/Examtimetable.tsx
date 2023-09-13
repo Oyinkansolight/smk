@@ -30,7 +30,7 @@ import { useGetAcademicTimetable } from '@/server/Schedule';
 const AcadamicCalendar = ({
   isClassTimeTable = true,
 }: {
-  isClassTimeTable?: boolean;
+  isClassTimeTable: boolean;
 }) => {
   const currentSessionId = getFromLocalStorage('currentSessionId');
   const currentTerm = getFromSessionStorage('currentTerm');

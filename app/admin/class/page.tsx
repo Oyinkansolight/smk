@@ -69,7 +69,7 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <div className='bg-[#fff] p-2 rounded'>
-              <ExamTimetable />
+              <ExamTimetable isClassTimeTable={true}/>
             </div>
           )}
           {tabIdx === 1 && <StudentList />}

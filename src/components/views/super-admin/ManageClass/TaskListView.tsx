@@ -24,30 +24,9 @@ export default function TaskListView({
   sessionId,
   currentTermId,
 }: propType) {
-  // const ECCDE = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('eccde')
-  // );
-  // const Primary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('primary')
-  // );
-  // const Secondary = classList.filter((x: any) =>
-  //   x.name.toLowerCase().includes('sss')
-  // );
-  // const generateVariant = (id: number) => {
-  //   if (id === 0) {
-  //     return 'primary';
-  //   }
-  //   if (id === 1) {
-  //     return 'secondary';
-  //   }
-  //   if (id === 2) {
-  //     return 'tertiary';
-  //   }
-  // };
-  // const router = useRouter();
-
   const [showTimeTable, setShowTimeTable] = useState(false);
   const [classId, setclassId] = useState<string>('');
+  const [currentClassName, setClassName] = useState<string>('');
   const [termId, settermId] = useState<any>(null);
 
   function HandleTimeTable({ classId, termId }: timetableArg) {
@@ -56,6 +35,7 @@ export default function TaskListView({
     setclassId(classId);
     settermId(termId);
   }
+
 
   const getClassesByInstitution = classList.filter(
     (item: any) =>
@@ -85,52 +65,9 @@ export default function TaskListView({
         <div>
           <div className='flex justify-between items-center'>
             <div className='text-[#6B7A99] font-bold text-xl'>
-              {' '}
               {academicyear}
             </div>
           </div>
-          {/* {schoolType?.toLowerCase()?.includes('eccde') && (
-            <div className='mt-6'>
-              {ECCDE.map((v: any, i: number) => {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      HandleTimeTable({
-                        classId: v.id,
-                        termId: currentTermId,
-                      });
-                    }}
-                    className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
-                  >
-                    <div>{v.name}</div>
-                    <BsArrowRight size={20} />
-                  </button>
-                );
-              })}
-            </div>
-          )}
-          {schoolType?.toLowerCase()?.includes('primary') && (
-            <div className='mt-6'>
-              {Primary.map((v: any, i: number) => {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      HandleTimeTable({
-                        classId: v.id,
-                        termId: currentTermId,
-                      });
-                    }}
-                    className='flex text-gray-500 font-medium justify-between items-center duration-200 transition-all hover:bg-slate-200 w-full border-2  border-gray-200 rounded p-4 mb-2'
-                  >
-                    <div>{v.name}</div>
-                    <BsArrowRight size={20} />
-                  </button>
-                );
-              })}
-            </div>
-          )} */}
 
           {classList.length > 0 ? (
             <div className='mt-6'>
@@ -139,6 +76,7 @@ export default function TaskListView({
                   <button
                     key={i}
                     onClick={() => {
+                      setClassName(v.name);
                       HandleTimeTable({
                         classId: v.id,
                         termId: currentTermId,
@@ -158,21 +96,24 @@ export default function TaskListView({
         </div>
       ) : (
         <div className='mt-2'>
-          <button
-            onClick={() => {
-              setShowTimeTable(false);
-            }}
-            className='flex items-center space-x-4 bg-[#EDEFF2] rounded-md px-3 py-1'
-          >
-            <Image
-              src='/svg/back_yellow.svg'
-              width={10}
-              height={10}
-              alt='back'
-              className='h-3 w-3'
-            />
-            <h3 className='text-[14px] font-bold'>Back</h3>
-          </button>
+          <div className='flex justify-between items-center pr-4'>
+            <button
+              onClick={() => {
+                setShowTimeTable(false);
+              }}
+              className='flex items-center space-x-4 bg-[#EDEFF2] rounded-md px-3 py-1'
+            >
+              <Image
+                src='/svg/back_yellow.svg'
+                width={10}
+                height={10}
+                alt='back'
+                className='h-3 w-3'
+              />
+              <h3 className='text-[14px] font-bold'>Back</h3>
+            </button>
+            <h3 className='font-medium text-base'>{currentClassName} </h3>
+          </div>
           <TimeTable
             sessionId={sessionId}
             schoolType={schoolType}
