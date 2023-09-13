@@ -74,7 +74,7 @@ export default function TaskListView({
               {sortedSecondary.map((v: any, i: number) => {
                 return (
                   <button
-                    key={i}
+                    key={v?.id ?? i}
                     onClick={() => {
                       setClassName(v.name);
                       HandleTimeTable({
