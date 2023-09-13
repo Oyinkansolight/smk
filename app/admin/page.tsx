@@ -167,7 +167,7 @@ const Page = () => {
                 title='Event/Calendar'
                 content={<EmptyView label='No Data' /> ?? <EventCalendarTable />}
               />
-              <GenericChart title='Time Table' content={<TimeTable />} />
+              <GenericChart title='Time Table' content={<EmptyView label='No Data' /> ?? <TimeTable />} />
               <GenericChart
                 title='Transfer Requests'
                 content={<EmptyView label='No Data' /> ?? <TransferRequestsTable />}

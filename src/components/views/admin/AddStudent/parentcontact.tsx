@@ -91,7 +91,9 @@ const Contact = ({ register, errors }: Iprops) => {
 
   useEffect(() => {
     if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      setTowns([locals.data])
+      locals.data.forEach((local: any) => {
+        setTowns((prev: any) => [...prev, local.towns]);
+      });
     }
   }, [locals.data, locals.isLoading]);
 
