@@ -214,8 +214,9 @@ function AddActivityName({
                             >
                               <input
                                 type='text'
-                                className='w-full border-none outline-none'
                                 placeholder='Enter value'
+                                value={periodsUpdate[idx]?.theme ?? ''}
+                                className='w-full border-none outline-none'
                                 onChange={(e) => {
                                   updateObjectInArray(idx, {
                                     ...periodsUpdate[idx],
@@ -237,8 +238,9 @@ function AddActivityName({
                             >
                               <input
                                 type='text'
-                                className='w-full border-none outline-none'
                                 placeholder='Enter value'
+                                className='w-full border-none outline-none'
+                                value={periodsUpdate[idx]?.periodTitle ?? ''}
                                 onChange={(e) => {
                                   updateObjectInArray(idx, {
                                     ...periodsUpdate[idx],
