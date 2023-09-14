@@ -6,7 +6,7 @@ import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
-  baseURL: !isLocal
+  baseURL: isLocal
     ? process.env.NEXT_PUBLIC_BE_STAGING_URL
     : process.env.NEXT_PUBLIC_BE_PROD_URL,
   withCredentials: true,
