@@ -162,3 +162,19 @@ export function useGetLessonAttendance(params: {
   }, [params.periodId, refetch]);
   return query;
 }
+
+export function useDeleteSubject() {
+  const mutation = useMutation({
+    mutationKey: 'delete_subject',
+    mutationFn: async (id?: string) =>
+      (
+        await request.delete('/v1/government/classes-subjects/delete-subject', {
+          params: {
+            withCredentials: true,
+          },
+          data: { id },
+        })
+      ).data,
+  });
+  return mutation;
+}
