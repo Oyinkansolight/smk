@@ -105,6 +105,7 @@ const SingleSubjectDashboard = () => {
 
           {page === 0 && (
             <TaskListView
+              params={params}
               curriculumClicked={() => setPage(3)}
               schoolType={schoolType}
               academicyear={academicyear.session}

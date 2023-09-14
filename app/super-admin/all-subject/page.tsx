@@ -13,48 +13,16 @@ import { toast } from 'react-toastify';
 
 const AllSubjects = () => {
   const router = useRouter();
-  const mockData = [
-    {
-      name: 'Mathematics',
-      description: 'It is the study of maths',
-      class: 5,
-    },
-    {
-      name: 'English',
-      description: 'It is the study of english',
-      class: 10,
-    },
-    {
-      name: 'Sciences',
-      description: 'It is the study of science',
-      class: 12,
-    },
-    {
-      name: 'Igbo',
-      description: 'It is the study of Igbo',
-      class: 18,
-    },
-    {
-      name: 'History',
-      description: 'It is the study of history',
-      class: 16,
-    },
-    {
-      name: 'Yoruba',
-      description: 'It is the study of Yoruba',
-      class: 5,
-    },
-  ];
-  const [, setsubjects] = useState(mockData);
+  const { data, error, isLoading } = useGetSubjectList();
+  const [subjects, setSubjects] = useState(data);
 
   const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.name.toLowerCase().includes(value.toLowerCase())
+    const result = subjects && subjects?.filter((data) =>
+      data?.name?.toLowerCase().includes(value.toLowerCase())
     );
-    setsubjects(result);
+    setSubjects(result);
   };
 
-  const { data, error, isLoading } = useGetSubjectList();
 
   useEffect(() => {
     if (error) {
@@ -115,9 +83,8 @@ const AllSubjects = () => {
       </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full bg-white'>
-        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'>
+        <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-4 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Subject Name</div>
-          <div className='col-span-4'>Description</div>
           <div className='col-span-3'>Classes Applicable</div>
           <div className='col-span-2'> </div>
         </div>
@@ -127,7 +94,7 @@ const AllSubjects = () => {
           (data ?? []).map((item, idx) => (
             <div
               key={item.id ?? idx}
-              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-1'
+              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-4'
             >
               <div
                 className='col-span-3 text-[#525F7F] font-bold text-sm'
@@ -187,7 +154,7 @@ const AllSubjects = () => {
               xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 clip-rule='evenodd'
                 d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
                 fill='#8898AA'
@@ -212,7 +179,7 @@ const AllSubjects = () => {
               xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 clip-rule='evenodd'
                 d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
                 fill='#8898AA'

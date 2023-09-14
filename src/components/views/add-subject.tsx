@@ -70,20 +70,10 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
     classes3.forEach((v) => ids.push(d3[v as number].id));
     classes4.forEach((v) => ids.push(d4[v as number].id));
 
-    let payload;
-
-    if (data.description || data.description.length > 0) {
-      payload = {
-        classId: ids,
-        name: data.subject,
-        description: data.description,
-      };
-    } else {
-      payload = {
-        classId: ids,
-        name: data.subject,
-      };
-    }
+    const payload = {
+      classId: ids,
+      name: data.subject,
+    };
 
     const response = await mutateAsync(payload);
 
@@ -120,13 +110,13 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
             </div>
           </div>
 
-          <div className='w-full'>
+          {/* <div className='w-full'>
             <BaseInput
               register={register}
               label={<span>Enter Description</span>}
               name='description'
             />
-          </div>
+          </div> */}
         </div>
 
         <div className='h-2' />
