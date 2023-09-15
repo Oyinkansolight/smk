@@ -4,6 +4,7 @@ import Button from '@/components/buttons/Button';
 // import Button from '@/components/buttons/Button';
 import { CurriculumCard } from '@/components/cards';
 import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import logger from '@/lib/logger';
 import { useDeleteSubject } from '@/server/government/classes_and_subjects';
 import { useRouter } from 'next/navigation';
@@ -98,34 +99,21 @@ export default function TaskListView({
     }
   };
 
-  const DeleteModalContent = () => (
-    <div className='flex flex-col space-y-4 items-center justify-center'>
-      <div className='font-bold text-4xl'>Delete Subject</div>
-      <div className='text-base text-[#6B7A99]'>
-        Are you sure you want to delete this subject?
-      </div>
-      <div className='flex flex-row items-center justify-end space-x-4'>
-        <Button onClick={toggleModal} className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'>
-          Keep
-        </Button>
 
-        <Button
-          onClick={handleDelete}
-          variant='danger'
-          className='flex flex-row items-center justify-center w-[168px] whitespace-nowrap'
-        >
-          <span>Delete</span>
-        </Button>
-      </div>
-    </div>
-  );
 
   return (
     <>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
-        content={<DeleteModalContent />}
+        content={
+          <DeleteModalContent
+            title='Delete Subject'
+            body='Are you sure you want to delete this subject?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
         className='max-w-[777px] w-full h-[267px]'
       />
 

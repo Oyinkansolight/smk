@@ -39,3 +39,21 @@ export function getFromSessionStorage(key: string): string | null {
   }
   return null;
 }
+
+export function convertTimestampToTime(timestamp) {
+  try {
+    // Create a Date object from the timestamp
+    const date = new Date(timestamp);
+
+    // Extract the hours and minutes
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+
+    // Format the time as HH:MM
+    const timeStr = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+    return timeStr;
+  } catch (error) {
+    return 'Invalid timestamp format';
+  }
+}

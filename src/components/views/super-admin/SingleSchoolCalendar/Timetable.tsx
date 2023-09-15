@@ -1,20 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import EditTimeTable from '@/components/modal/EditSchedule';
 import AddActivityName from '@/components/modal/TestSchedule';
 import { getErrMsg } from '@/server';
 import {
   useCreateAcademicTimeTable,
   useDeleteAcademicTimeTable,
+  useEditAcademicTimeTable,
   useGetAcademicTimetable,
 } from '@/server/Schedule';
 import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
 interface dataType {
+  id?: string;
   sessionId: string;
   institutionType: string | null;
   timeTableType: string;
@@ -51,12 +54,14 @@ const TimeTable = ({
 
   const handleCreateAcademicTimeTable = useCreateAcademicTimeTable();
   const handleDeleteAcademicTimeTable = useDeleteAcademicTimeTable();
+  const handleEditAcademicTimeTable = useEditAcademicTimeTable();
 
   const [isOpenActivity, setisOpenActivity] = useState(false);
-  const [itemToEdit, setitemToEdit] = useState(null);
+  const [itemToEdit, setitemToEdit] = useState<dataType | null>();
+  const [itemToDelete, setitemToDelete] = useState<string>('');
   const [isEditOpen, setisEditOpen] = useState(false);
-  const [startTime, setstartDate] = useState<string | number>('');
-  const [endTime, setendDate] = useState<string | number>('');
+  const [startTime, setStartTime] = useState<string | number>('');
+  const [endTime, setEndTime] = useState<string | number>('');
   const [subjectId1, setSubjectId1] = useState<string | number>('');
   const [subjectId2, setSubjectId2] = useState<string | number>('');
   const [subjectId3, setSubjectId3] = useState<string | number>('');
@@ -75,12 +80,37 @@ const TimeTable = ({
   const [activity3, setactivity3] = useState(false);
   const [activity4, setactivity4] = useState(false);
   const [activity5, setactivity5] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const modalActivityHandler = () => {
     setisOpenActivity(!isOpenActivity);
   };
 
   const generateKey = (decider: boolean) => {
     return decider ? 'eventName' : 'subject';
+  };
+  const resetState = () => {
+    setSubjectId1('');
+    setSubjectId2('');
+    setSubjectId3('');
+    setSubjectId4('');
+    setSubjectId5('');
+    setactivityname1('');
+    setactivityname2('');
+    setactivityname3('');
+    setactivityname4('');
+    setactivityname5('');
+    seteventname('');
+    setStartTime('');
+    setEndTime('');
+    setactivity1(false);
+    setactivity2(false);
+    setactivity3(false);
+    setactivity4(false);
+    setactivity5(false);
   };
   const SubmitHandler = async () => {
     const data: dataType = {
@@ -158,23 +188,23 @@ const TimeTable = ({
         return;
       }
       setloading(true);
-
-      const response = await handleCreateAcademicTimeTable.mutateAsync(data);
+      let response;
+      if (itemToEdit) {
+        data.id = itemToEdit?.id;
+        response = await handleEditAcademicTimeTable.mutateAsync(data);
+      } else {
+        response = await handleCreateAcademicTimeTable.mutateAsync(data);
+      }
 
       if (response) {
-        toast.success('Timetable created successfully');
+        if (itemToEdit) {
+          toast.success('Timetable updated successfully');
+        } else {
+          toast.success('Timetable created successfully');
+        }
         // location.reload()
         setloading(false);
-        setSubjectId1('');
-        setSubjectId2('');
-        setSubjectId3('');
-        setSubjectId4('');
-        setSubjectId5('');
-        setactivityname1('');
-        setactivityname2('');
-        setactivityname3('');
-        setactivityname4('');
-        setactivityname5('');
+        resetState();
         modalActivityHandler();
       }
     } catch (error) {
@@ -202,13 +232,14 @@ const TimeTable = ({
     return { subjectName, isEvent };
   }
 
-  async function deleteTimetable(id: string) {
-    const data = { id };
+  async function deleteTimetable() {
+    const data = { id: itemToDelete };
 
     try {
       const response = await handleDeleteAcademicTimeTable.mutateAsync(data);
       if (response) {
         toast.success('Timetable deleted successfully');
+        toggleModal();
       }
     } catch (error) {
       toast.error(getErrMsg(error));
@@ -219,9 +250,12 @@ const TimeTable = ({
     <section>
       {isOpenActivity && (
         <AddActivityName
-          onClickHandler={modalActivityHandler}
-          setStartDate={setstartDate}
-          setEndDate={setendDate}
+          onClickHandler={() => {
+            modalActivityHandler();
+            resetState();
+          }}
+          setEndTime={setEndTime}
+          setStartTime={setStartTime}
           setSubjectId1={setSubjectId1}
           setSubjectId2={setSubjectId2}
           setSubjectId3={setSubjectId3}
@@ -258,15 +292,24 @@ const TimeTable = ({
         <EditTimeTable
           onClickHandler={() => {
             setisEditOpen(false);
+            resetState();
           }}
-          setStartDate={setstartDate}
-          setEndDate={setendDate}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
+          startTime={startTime}
+          endTime={endTime}
+          subjectId1={subjectId1}
+          subjectId2={subjectId2}
+          subjectId3={subjectId3}
+          subjectId4={subjectId4}
+          subjectId5={subjectId5}
           setSubjectId1={setSubjectId1}
           setSubjectId2={setSubjectId2}
           setSubjectId3={setSubjectId3}
           setSubjectId4={setSubjectId4}
           setSubjectId5={setSubjectId5}
           seteventname={seteventname}
+          eventname={eventName}
           setType={setType}
           type={type}
           loading={loading}
@@ -291,8 +334,22 @@ const TimeTable = ({
           activityname4={activityname4}
           setactivityname5={setactivityname5}
           activityname5={activityname5}
+          itemToEdit={itemToEdit}
         />
       )}
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Row'
+            body='Are you sure you want to delete this row on the list?'
+            toggleModal={toggleModal}
+            handleDelete={deleteTimetable}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
 
       <div className='mt-8 bg-[#F5F5F6] p-2 rounded-md'>
         <div className='flex w-full mr-10 mb-4'>
@@ -324,10 +381,19 @@ const TimeTable = ({
                           <p> {item.eventName} </p>
                         </div>
                         <div className='w-[40px] pl-4 flex flex-col justify-center space-y-2 text-[8px] '>
-                          <button className='text-green-600'>Edit</button>
                           <button
                             onClick={() => {
-                              deleteTimetable(item.id);
+                              setisEditOpen(true);
+                              setitemToEdit(item);
+                            }}
+                            className='text-green-600'
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              setitemToDelete(item.id);
+                              toggleModal();
                             }}
                             className='text-red-600'
                           >
@@ -396,7 +462,8 @@ const TimeTable = ({
                           </button>
                           <button
                             onClick={() => {
-                              deleteTimetable(item.id);
+                              setitemToDelete(item.id);
+                              toggleModal();
                             }}
                             className='text-red-600'
                           >
@@ -413,7 +480,10 @@ const TimeTable = ({
             <div className='flex w-full mt-2 items-center'>
               <div className='w-full py-5 flex justify-end px-4  border text-center'>
                 <button
-                  onClick={modalActivityHandler}
+                  onClick={() => {
+                    modalActivityHandler();
+                    setitemToEdit(null);
+                  }}
                   className='w-full text-center'
                 >
                   <p>Click to add event or period </p>

@@ -1,8 +1,11 @@
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import AddSubjectModal from '@/components/modals/add-subject-modal';
 import { BasicSearch } from '@/components/search';
 import { getErrMsg } from '@/server';
+import { useDeleteSubject } from '@/server/government/classes_and_subjects';
 import { useGetSubjectList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,14 +18,21 @@ const AllSubjects = () => {
   const router = useRouter();
   const { data, error, isLoading } = useGetSubjectList();
   const [subjects, setSubjects] = useState(data);
+  const [action, setAction] = useState<number | null>(null);
+  const [itemToDelete, setitemToDelete] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const handleSearch = (value: string) => {
-    const result = subjects && subjects?.filter((data) =>
-      data?.name?.toLowerCase().includes(value.toLowerCase())
-    );
+    const result =
+      subjects &&
+      subjects?.filter((data) =>
+        data?.name?.toLowerCase().includes(value.toLowerCase())
+      );
     setSubjects(result);
   };
-
 
   useEffect(() => {
     if (error) {
@@ -33,17 +43,21 @@ const AllSubjects = () => {
   // popOverRef
   // handleDelete
 
-  const popOverRef = useRef<HTMLDivElement>(null);
+  const { mutateAsync } = useDeleteSubject();
 
-  const handleTogglePopOver = () => {
-    if (popOverRef.current) {
-      popOverRef.current.classList.toggle('hidden');
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        const res = await mutateAsync(itemToDelete);
+        toggleModal();
+        toast.success('Subject deleted successfully');
+        res && router.replace('/super-admin/all-subject');
+      } catch (error) {
+        toast.error(getErrMsg(error));
+      }
     }
   };
 
-  const handleDelete = (id: string) => {
-    console.log(id);
-  };
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -82,6 +96,20 @@ const AllSubjects = () => {
         </div>
       </div>
 
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Subject'
+            body='Are you sure you want to delete this subject?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
+
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full bg-white'>
         <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-4 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Subject Name</div>
@@ -111,33 +139,48 @@ const AllSubjects = () => {
                 {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
               </div>
               <div className='col-span-2 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
-                <div className='hidden lg:block cursor-pointer text-primary text-sm leading-5'>
+                <button
+                  onClick={() => {
+                    router.push(`/super-admin/subject?id=${item.id ?? ''}`);
+                  }}
+                  className='hidden lg:block cursor-pointer text-primary text-sm leading-5'
+                >
                   Click to manage
-                </div>
+                </button>
                 <div className='relative'>
                   <CiMenuKebab
-                    onClick={handleTogglePopOver}
+                    onClick={() => {
+                      setAction(idx + 1);
+                    }}
                     className='w-6 h-6 cursor-pointer'
                   />
 
-                  <div
-                    ref={popOverRef}
-                    className='absolute z-10 hidden w-48 py-1 mt-2 bg-white rounded-md shadow-lg'
-                  >
-                    <Link href={`/super-admin/subject?id=${item.id ?? ''}`}>
-                      <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
-                        Edit
+                  {action == idx + 1 && (
+                    <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                      <AddSubjectModal>
+                        <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          Edit
+                        </div>
+                      </AddSubjectModal>
+                      <div
+                        onClick={() => {
+                          setitemToDelete(item.id ?? '');
+                          toggleModal();
+                        }}
+                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      >
+                        Delete
                       </div>
-                    </Link>
-                    <div
-                      onClick={() => {
-                        handleDelete(item.id ?? '');
-                      }}
-                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                    >
-                      Delete
                     </div>
-                  </div>
+                  )}
+                  {action && (
+                    <div
+                      className='fixed inset-0 z-[1]'
+                      onClick={() => {
+                        setAction(null);
+                      }}
+                    ></div>
+                  )}
                 </div>
               </div>
             </div>

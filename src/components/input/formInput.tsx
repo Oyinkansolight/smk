@@ -65,7 +65,7 @@ const Input = ({
             className={clsxm(inputClassName, 'w-full border-none outline-none')}
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}
-            value={formValue && formValue}
+            defaultValue={formValue && formValue}
             onChange={(e) => {
               setFormValue && setFormValue(e.target.value);
             }}

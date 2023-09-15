@@ -25,21 +25,7 @@ function AssignSubject({
   const getSubjects = useGetSubjectList();
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
 
-  const options = ['ECCDE', 'PRIMARY', 'SECONDARY', 'TERTIARY'];
-  const classesOptions = [
-    'Primary 1',
-    'Primary 2',
-    'Primary 3',
-    'Primary 4',
-    'Primary 5',
-    'Primary 6',
-    'JSS 1',
-    'JSS 2',
-    'JSS 3',
-    'SSS 1',
-    'SSS 2',
-    'SSS 3',
-  ];
+
 
   useEffect(() => {
     if (!getSubjects.isLoading) {
@@ -70,45 +56,6 @@ function AssignSubject({
             <p className='text-center mb-2 mt-6'>
               Kindly enter the appropriate details below:{' '}
             </p>
-
-            <div className='w-full mb-4'>
-              <Controller
-                control={control}
-                name='schoolType'
-                render={({ field }) => (
-                  <div>
-                    <div>School Type </div>
-                    <ReactSelect
-                      isMulti
-                      required
-                      options={options.map((v) => ({ label: v, value: v }))}
-                      {...field}
-                    />
-                  </div>
-                )}
-              />
-            </div>
-
-            <div className='w-full mb-4'>
-              <Controller
-                control={control}
-                name='class'
-                render={({ field }) => (
-                  <div>
-                    <div>Class </div>
-                    <ReactSelect
-                      isMulti
-                      required
-                      options={classesOptions.map((v) => ({
-                        label: v,
-                        value: v,
-                      }))}
-                      {...field}
-                    />
-                  </div>
-                )}
-              />
-            </div>
 
             <div className='w-full mb-4'>
               <Controller

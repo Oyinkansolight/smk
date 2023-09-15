@@ -30,12 +30,14 @@ type propType = {
 const Input = ({
   label,
   setFormValue,
+  formValue,
   options,
   register,
   validation,
   name,
   helper,
 }: propType) => {
+
   return (
     <div className=''>
       <div>
@@ -50,6 +52,7 @@ const Input = ({
             onChange={(e) => {
               setFormValue && setFormValue(e.target.value);
             }}
+            defaultValue={formValue && formValue}
           >
             <option value=''> -- Select an option -- </option>
 

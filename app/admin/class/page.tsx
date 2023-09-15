@@ -7,16 +7,11 @@ import Subject from '@/components/views/admin/Class/subject';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
-// import { getErrMsg } from '@/server';
-// import { useGetStudentList } from '@/server/government/student';
-// import { useGetStudentSubjectList } from '@/server/institution';
-// import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
-// import { toast } from 'react-toastify';
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
