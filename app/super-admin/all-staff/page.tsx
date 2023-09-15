@@ -31,7 +31,7 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         <Link href={`/super-admin/teacher?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
-            {row['user.0.firstName']} {row['user.0.lastName']}
+            {row['user.firstName']} {row['user.lastName']}
           </h2>
         </Link>
       </div>
