@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import { CircularCounter } from '@/components/counter';
-import Editweek from '@/components/modal/Editweek';
+import EditWeek from '@/components/modal/EditWeek';
 import AddWeekModal from '@/components/modals/add-week-modal';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -223,7 +223,7 @@ export default function AllCurriculumView({ termId, sessionId }: propType) {
           })
         )}
         {modal && (
-          <Editweek
+          <EditWeek
             onClickHandler={onClickHandler}
             periodsList={periodsList}
             periodsUpdate={periodsUpdate}
