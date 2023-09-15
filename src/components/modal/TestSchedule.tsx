@@ -10,8 +10,8 @@ import Close from '~/svg/close.svg';
 interface propType {
   onClickHandler?: () => void;
   SubmitHandler: () => void;
-  setStartDate: (v: string | number) => void;
-  setEndDate: (v: string | number) => void;
+  setStartTime: (v: string | number) => void;
+  setEndTime: (v: string | number) => void;
   setSubjectId1: (v: string | number) => void;
   setSubjectId2: (v: string | number) => void;
   setSubjectId3: (v: string | number) => void;
@@ -47,8 +47,8 @@ interface propType {
 
 function AddActivityName({
   onClickHandler,
-  setStartDate,
-  setEndDate,
+  setStartTime,
+  setEndTime,
   setSubjectId1,
   setSubjectId2,
   setSubjectId3,
@@ -111,14 +111,14 @@ function AddActivityName({
               name='schoolType'
               type='time'
               placeholder='Select an option'
-              setFormValue={setStartDate}
+              setFormValue={setStartTime}
             />
             <FormInput
               label='Select end time'
               name='schoolType'
               type='time'
               placeholder='Select an option'
-              setFormValue={setEndDate}
+              setFormValue={setEndTime}
             />
           </div>
           {type === 'period' ? (

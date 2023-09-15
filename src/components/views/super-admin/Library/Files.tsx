@@ -1,8 +1,9 @@
 'use client';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AssignSubject from '@/components/modal/assignSubject';
 import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
+import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import UpdateFolder from '@/components/modal/updateFolder';
 import Table from '@/components/tables/TableComponent';
@@ -11,12 +12,15 @@ import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import {
   useAssignSubjectsToFile,
+  useAssignSubjectsToFolder,
   useDeleteFile,
   useDeleteFolder,
   useGetFileById,
   useGetFolderAndFiles,
 } from '@/server/library';
 import { UserFile, UserFolder } from '@/types/material';
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -29,8 +33,6 @@ import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import User from '~/svg/user1.svg';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -45,8 +47,10 @@ type TableItemData = (UserFolder | UserFile) & {
   setAction: (value: number | null) => void;
   setIsUpdateFolder: (value: boolean) => void;
   onFolderClick: (folderId: UserFolder) => void;
-  setDeleteFolderId: (folderId: string) => void;
-  setDeleteFileId: (fileId: string) => void;
+  // setDeleteFolderId: (folderId: string) => void;
+  // setDeleteFileId: (fileId: string) => void;
+  setConentType: (fileId: string) => void;
+  toggleDeleteModal: () => void;
 };
 
 const columns: TableColumn<TableItemData>[] = [
@@ -60,9 +64,14 @@ const columns: TableColumn<TableItemData>[] = [
             <div>
               <FileContent className='h-6 w-6' />
             </div>
-            <h2 onClick={() => {
-              item?.fileUrl && item.openModal(item.fileUrl)
-            }} className='text-sm font-medium cursor-pointer'>{item?.filename}</h2>
+            <h2
+              onClick={() => {
+                item?.fileUrl && item.openModal(item.fileUrl);
+              }}
+              className='text-sm font-medium cursor-pointer'
+            >
+              {item?.filename}
+            </h2>
           </div>
         );
       } else if ('folderName' in item) {
@@ -165,11 +174,12 @@ const columns: TableColumn<TableItemData>[] = [
               <BsThreeDotsVertical className='text-lg' />
 
               {item.action == item.idx + 1 && (
-                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
+                <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
                   <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
                       item.setFileId(item?.id ?? '');
+                      item.setConentType('file');
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
@@ -180,9 +190,13 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                   <button
                     onClick={() => {
-                      item.setDeleteFileId(item?.id ?? '');
+                      // item.setDeleteFileId(item?.id ?? '');
+                      item.setFileId(item?.id ?? '');
+                      item.setConentType('file');
+                      item.toggleDeleteModal();
                     }}
-                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
                     Delete
                   </button>
                 </div>
@@ -210,16 +224,17 @@ const columns: TableColumn<TableItemData>[] = [
               <BsThreeDotsVertical className='text-lg' />
 
               {item.action == item.idx + 1 && (
-                <div className='shadow-lg rounded-xl bg-white w-[150px] h-max absolute top-0 -left-[150px] z-10'>
-                  {/* <button
+                <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                  <button
                     onClick={() => {
                       item.setisAssign(!item.isAssign);
-                      item.setFileId(item?.id ?? "");
+                      item.setFolderId(item?.id ?? '');
+                      item.setConentType('folder');
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
                     Assign to a Subject
-                  </button> */}
+                  </button>
                   <button
                     onClick={() => {
                       item.setIsUpdateFolder(!item.isUpdateFolder);
@@ -232,7 +247,9 @@ const columns: TableColumn<TableItemData>[] = [
                   </button>
                   <button
                     onClick={() => {
-                      item.setDeleteFolderId(item?.id ?? '');
+                      item.setFolderId(item?.id ?? '');
+                      item.setConentType('folder');
+                      item.toggleDeleteModal();
                     }}
                     className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                   >
@@ -288,7 +305,12 @@ const UploadDocument = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFile, setCurrentFile] = useState('');
   const [url, setUrl] = useState('');
+  const [contentType, setConentType] = useState('');
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
+  const toggleDeleteModal = () => {
+    setIsModalDeleteOpen(!isModalDeleteOpen);
+  };
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
@@ -298,7 +320,7 @@ const UploadDocument = ({
   };
 
   const openModal = (fileUrl: string) => {
-    logger(fileUrl)
+    logger(fileUrl);
     setCurrentFile(fileUrl);
     toggleModal();
   };
@@ -333,20 +355,20 @@ const UploadDocument = ({
   }, [fileObject, setValue]);
 
   useEffect(() => {
-    logger(currentFile)
+    logger(currentFile);
     if (isModalOpen) {
       const getFileURL = async () => {
         await getURL(currentFile).then((v) => setUrl(v));
-        logger(url)
+        logger(url);
       };
       getFileURL();
     } else {
       setCurrentFile('');
     }
-  }, [currentFile, isModalOpen, url])
-
+  }, [currentFile, isModalOpen, url]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
+  const handleUseAssignSubjectsToFolder = useAssignSubjectsToFolder();
   const handleFolderDelete = useDeleteFolder();
   const handleFileDelete = useDeleteFile();
 
@@ -366,19 +388,32 @@ const UploadDocument = ({
 
   const handleAssignSubject = async () => {
     setLoading(true);
+    let response;
     try {
-      const response = await handleUseAssignSubjectsToFile.mutateAsync({
-        fileId,
-        subjectId:
-          (
-            getValues('subject') as
-            | { label: string; value: number }[]
-            | undefined
-          )?.map((s) => s.value ?? 0) ?? [],
-      });
+      if (contentType === 'file') {
+        response = await handleUseAssignSubjectsToFile.mutateAsync({
+          fileId,
+          subjectId:
+            (
+              getValues('subject') as
+              | { label: string; value: number }[]
+              | undefined
+            )?.map((s) => s.value ?? '0') ?? [],
+        });
+      } else {
+        response = await handleUseAssignSubjectsToFolder.mutateAsync({
+          folderId,
+          subjectId:
+            (
+              getValues('subject') as
+              | { label: string; value: number }[]
+              | undefined
+            )?.map((s) => s.value ?? '0') ?? [],
+        });
+      }
 
       if (response) {
-        toast.success('File assigned successful');
+        toast.success('Content assigned successful');
         setLoading(false);
         setisAssign(!isAssign);
       }
@@ -388,13 +423,14 @@ const UploadDocument = ({
     }
   };
 
-  const handleFolderDeletion = async (folderId: string) => {
+  const handleFolderDeletion = async () => {
     setLoading(true);
     try {
       const response = await handleFolderDelete.mutateAsync(folderId);
 
       if (response) {
         toast.success('Folder deleted successfully');
+        toggleDeleteModal();
         setLoading(false);
         refetchFolderFiles();
       }
@@ -404,13 +440,14 @@ const UploadDocument = ({
     }
   };
 
-  const handleFileDeletion = async (fileId: string) => {
+  const handleFileDeletion = async () => {
     setLoading(true);
     try {
       const response = await handleFileDelete.mutateAsync(fileId);
 
       if (response) {
         toast.success('File deleted successfully');
+        toggleDeleteModal();
         setLoading(false);
         refetchFolderFiles();
       }
@@ -423,6 +460,24 @@ const UploadDocument = ({
   if (!isLoadingFolderFiles) {
     return (
       <>
+        <ControlledModal
+          isOpen={isModalDeleteOpen}
+          toggleModal={toggleDeleteModal}
+          content={
+            <DeleteModalContent
+              title={`Delete ${contentType === 'file' ? 'File' : 'Folder'}`}
+              body={`Are you sure you want to delete this  ${contentType === 'file' ? 'file' : 'folder'
+                }?`}
+              toggleModal={toggleDeleteModal}
+              handleDelete={
+                contentType === 'file'
+                  ? handleFileDeletion
+                  : handleFolderDeletion
+              }
+            />
+          }
+          className='max-w-[777px] w-full h-[267px]'
+        />
         <ControlledModal
           className='mt-40 lg:mt-20'
           isOpen={isModalOpen}
@@ -543,10 +598,10 @@ const UploadDocument = ({
               /> */}
                     <Link
                       href={`/super-admin/add-material${folderTrail.length > 0
-                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
-                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                        }`
-                        : ''
+                          ? `?folderId=${folderTrail[folderTrail.length - 1].id
+                          }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                          }`
+                          : ''
                         }`}
                     >
                       <label
@@ -555,7 +610,8 @@ const UploadDocument = ({
                       >
                         Upload File{' '}
                         {folderTrail.length > 0 &&
-                          `To ${folderTrail[folderTrail.length - 1].folderName}`}
+                          `To ${folderTrail[folderTrail.length - 1].folderName
+                          }`}
                       </label>
                     </Link>
 
@@ -602,16 +658,18 @@ const UploadDocument = ({
                       setFolderTrail(c);
                       refetchFolderFiles();
                     },
-                    setDeleteFolderId: async (folderId) => {
-                      handleFolderDeletion(folderId);
-                    },
-                    setDeleteFileId: async (fileId) => {
-                      handleFileDeletion(fileId);
-                    },
+                    // setDeleteFolderId: async (folderId) => {
+                    //   handleFolderDeletion();
+                    // },
+                    // setDeleteFileId: async (fileId) => {
+                    //   handleFileDeletion();
+                    // },
                     setFolderId,
                     setFolderName,
                     isUpdateFolder,
                     setIsUpdateFolder,
+                    setConentType,
+                    toggleDeleteModal,
                   } as TableItemData)
                 ) ?? []
             }

@@ -133,8 +133,8 @@ const AcademicCalendar = ({
   }
   const [schedule, setschedule] = useState<dataType[]>([]);
   const [isOpenActivity, setisOpenActivity] = useState(false);
-  const [startTime, setstartDate] = useState<string | number>('');
-  const [endTime, setendDate] = useState<string | number>('');
+  const [startTime, setStartTime] = useState<string | number>('');
+  const [endTime, setEndTime] = useState<string | number>('');
   const [subjectId1, setSubjectId1] = useState<string | number>('');
   const [subjectId2, setSubjectId2] = useState<string | number>('');
   const [subjectId3, setSubjectId3] = useState<string | number>('');
@@ -263,8 +263,8 @@ const AcademicCalendar = ({
       {isOpenActivity && (
         <AddActivityName
           onClickHandler={modalActivityHandler}
-          setStartDate={setstartDate}
-          setEndDate={setendDate}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
           setSubjectId1={setSubjectId1}
           setSubjectId2={setSubjectId2}
           setSubjectId3={setSubjectId3}

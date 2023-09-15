@@ -17,6 +17,7 @@ export interface UploadFileParams {
 
 export interface UpdateFileSubjectParams {
   fileId?: string;
+  folderId?: string;
   classes?: string;
   subjectId: number[];
   schoolType?: string;
@@ -187,6 +188,23 @@ export function useAssignSubjectsToFile() {
     mutationFn: async (params: UpdateFileSubjectParams) => {
       return await request.post(
         '/v1/government/library/assign-to-subject',
+        params
+      );
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_root}`);
+    },
+  });
+  return mutation;
+}
+export function useAssignSubjectsToFolder() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'update-subjects-with-folder',
+    mutationFn: async (params: UpdateFileSubjectParams) => {
+      return await request.post(
+        '/v1/government/library/assign-folder-to-subject',
         params
       );
     },
