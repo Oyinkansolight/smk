@@ -19,7 +19,7 @@ interface propType {
   setperiodsUpdate: (v: any) => void;
 }
 
-function AddActivityName({
+function EditWeek({
   onClickHandler,
   handleSubmit,
   periodsList,
@@ -292,4 +292,4 @@ function AddActivityName({
   );
 }
 
-export default AddActivityName;
+export default EditWeek;

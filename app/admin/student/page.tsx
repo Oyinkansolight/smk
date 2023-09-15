@@ -26,14 +26,12 @@ const Page = () => {
   const router = useRouter();
   const p = useSearchParams();
   const studentId = p?.get('id');
-  const { data, error, isLoading } = useGetStudentList({
+  const { data, error } = useGetStudentList({
     id: p?.get('id'),
   });
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
-  console.log(studentSubjectsList);
 
   const student = data?.data[0];
-  console.log(student);
 
   useEffect(() => {
     if (error) {
@@ -44,9 +42,8 @@ const Page = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/test_student.png'
-        name={`${(student?.user ?? [])[0]?.firstName} ${
-          (student?.user ?? [])[0]?.lastName
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
+          }`}
         school='Avril Price School'
         id={student?.id || ''}
         student
