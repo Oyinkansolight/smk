@@ -5,6 +5,7 @@ import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import EditTimeTable from '@/components/modal/EditSchedule';
 import AddActivityName from '@/components/modal/TestSchedule';
+import { timeConverter } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import {
   useCreateAcademicTimeTable,
@@ -12,17 +13,18 @@ import {
   useEditAcademicTimeTable,
   useGetAcademicTimetable,
 } from '@/server/Schedule';
-import moment from 'moment';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+
+
 interface dataType {
   id?: string;
-  sessionId: string;
+  sessionId?: string;
   institutionType: string | null;
   timeTableType: string;
-  classId: string;
-  term: number;
+  classId?: string;
+  term?: number;
   type: string | number;
   periods?: any[];
   startTime: string | number;
@@ -191,6 +193,9 @@ const TimeTable = ({
       let response;
       if (itemToEdit) {
         data.id = itemToEdit?.id;
+        delete data.sessionId;
+        delete data.classId;
+        delete data.term;
         response = await handleEditAcademicTimeTable.mutateAsync(data);
       } else {
         response = await handleCreateAcademicTimeTable.mutateAsync(data);
@@ -199,13 +204,14 @@ const TimeTable = ({
       if (response) {
         if (itemToEdit) {
           toast.success('Timetable updated successfully');
+          toggleModal();
         } else {
           toast.success('Timetable created successfully');
+          modalActivityHandler;
         }
         // location.reload()
         setloading(false);
         resetState();
-        modalActivityHandler();
       }
     } catch (error) {
       setloading(false);
@@ -252,7 +258,7 @@ const TimeTable = ({
         <AddActivityName
           onClickHandler={() => {
             modalActivityHandler();
-            resetState();
+            // resetState();
           }}
           setEndTime={setEndTime}
           setStartTime={setStartTime}
@@ -374,8 +380,8 @@ const TimeTable = ({
                     {item.type === 'event' ? (
                       <div className='flex w-full mt-2 items-center'>
                         <div className='w-[150px] bg-white font-medium text-[10px] pl-3 py-5  border'>
-                          {moment(item.startTime).format('LT')} -
-                          {moment(item.endTime).format('LT')}
+                          {timeConverter(item.startTime)} -
+                          {timeConverter(item.endTime)}
                         </div>
                         <div className='w-full border p-5 text-center'>
                           <p> {item.eventName} </p>
@@ -404,8 +410,8 @@ const TimeTable = ({
                     ) : (
                       <div className='flex w-full mt-2 items-center'>
                         <div className='w-[150px] bg-white  font-medium pl-3 py-5  border'>
-                          {moment(item.startTime).format('LT')} -
-                          {moment(item.endTime).format('LT')}
+                          {timeConverter(item.startTime)} -
+                          {timeConverter(item.endTime)}
                         </div>
 
                         <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>

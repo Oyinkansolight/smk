@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
+import { time24Converter } from '@/lib/helper';
 import Image from 'next/image';
 import { RotatingLines } from 'react-loader-spinner';
-import moment from 'moment';
 
 export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   const currentDate = new Date();
@@ -24,17 +24,16 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
         {!loading ? (
           <div>
             {' '}
-            {(todaysPeriod ?? []).map(
-              (v: any, i: number) => (
-                <TimetableItem
-                  key={i}
-                  isCurrent={i === 0}
-                  img='/images/sidebar-icons/Subjects.png'
-                  subtitle={`${moment(v.startTime).format('LT')} - ${moment(v.endTime).format('LT')}`}
-                  title={v.subject.name ?? 'Subject_Name'}
-                />
-              )
-            )}
+            {(todaysPeriod ?? []).map((v: any, i: number) => (
+              <TimetableItem
+                key={i}
+                isCurrent={i === 0}
+                img='/images/sidebar-icons/Subjects.png'
+                subtitle={`${time24Converter(v.startTime)} -
+                  ${time24Converter(v.endTime)}`}
+                title={v.subject.name ?? 'Subject_Name'}
+              />
+            ))}
           </div>
         ) : (
           <div className='flex justify-center'>

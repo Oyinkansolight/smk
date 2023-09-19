@@ -32,30 +32,6 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   { name: 'Student ID', selector: (row) => row.id ?? '' },
   {
@@ -66,7 +42,7 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         <Link href={`/admin/student?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
-            {row['user.firstName']} {row['user.lastName']}
+            {row['user.0.firstName']} {row['user.0.lastName']}
           </h2>
         </Link>
       </div>
@@ -162,7 +138,7 @@ const AllStudent = () => {
             }}
             setFile={setFile}
             file={files}
-            link='/pdfs/StudentOnboarding.xlsx'
+            link='/pdfs/upload_student_template.csv'
             bulkStudentUpload={bulkStudentUpload}
           />
         )}
@@ -236,9 +212,9 @@ const AllStudent = () => {
             data={
               students?.map(
                 (v, i) =>
-                ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
-                  idx: number;
-                })
+                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
+                    idx: number;
+                  })
               ) ?? []
             }
             columns={studentListColumns}

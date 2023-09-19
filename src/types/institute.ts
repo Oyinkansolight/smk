@@ -275,7 +275,7 @@ export interface Institution {
   instituteLong?: string;
   isOnboardingCompleted?: boolean;
   students?: Student[];
-  staff?: Staff[];
+  staff?: Staff;
   studentCount?: number;
   staffCount?: number;
 }
@@ -507,6 +507,6 @@ export interface ClassArmStudents {
   updatedAt: string;
   class: ClassInterface;
   institution: Institution;
-  user: User[];
+  user: User;
   classArmId: string;
 }

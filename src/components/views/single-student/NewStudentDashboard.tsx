@@ -19,19 +19,19 @@ import { toast } from 'react-toastify';
 export default function NewStudentDashboard() {
   const { data: profile } = useGetProfile();
 
-  // const daysOfWeek = [
-  //   'Sunday',
-  //   'Monday',
-  //   'Tuesday',
-  //   'Wednesday',
-  //   'Thursday',
-  //   'Friday',
-  //   'Saturday',
-  // ];
+  const daysOfWeek = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
 
-  // const currentDate = new Date();
-  // const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
-  // const currentDay = daysOfWeek[currentDayIndex];
+  const currentDate = new Date();
+  const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
+  const currentDay = daysOfWeek[currentDayIndex];
   const userData = getFromSessionStorage('user');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentWeek = getFromSessionStorage('currentWeek') ?? '';
@@ -49,8 +49,8 @@ export default function NewStudentDashboard() {
     weekId: currentWeekInfo?.id ?? '',
   });
   const { isLoading: loading, data: todaysPeriod } = useGetTodaysPeriod({
-    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
-    day: 'Friday',
+    classId: user?.currentStudentInfo.class.class.id,
+    day: currentDay,
     weekid: currentWeekInfo?.id ?? '',
   });
 

@@ -1,13 +1,15 @@
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromSessionStorage, time24Converter } from '@/lib/helper';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
 import Books from '~/svg/books.svg';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
   const daysOfWeek = [
@@ -27,13 +29,13 @@ const Page = () => {
   // const currentSessionId = getFromLocalStorage('currentSessionId');
   const currentTerm = getFromSessionStorage('currentTerm');
   const currentWeek = getFromSessionStorage('currentWeek');
-  // let user;
-  // let currentTermInfo;
+  let user;
+  let currentTermInfo;
   let currentWeekInfo;
 
   if (userData && currentTerm && currentWeek) {
-    // user = JSON.parse(userData);
-    // currentTermInfo = JSON.parse(currentTerm);
+    user = JSON.parse(userData);
+    currentTermInfo = JSON.parse(currentTerm);
     currentWeekInfo = JSON.parse(currentWeek);
   }
   // useEffect(() => {
@@ -43,7 +45,7 @@ const Page = () => {
   // }, []);
 
   const { isLoading, data } = useGetTodaysPeriod({
-    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
+    classId: user?.currentStudentInfo.class.class.id,
     day: currentDay,
     weekid: currentWeekInfo?.id,
   });
@@ -76,9 +78,13 @@ const Page = () => {
                 >
                   <div className='flex justify-between items-center'>
                     <div>
-                      <h1 className='font-bold text-base'> {item.subject.name} </h1>
+                      <h1 className='font-bold text-base'>
+                        {' '}
+                        {item.subject.name}{' '}
+                      </h1>
                       <p className='text-[#808080] text-[10px] '>
-                        {item.startTime} - {item.endTime}
+                        {time24Converter(item.startTime)} -{' '}
+                        {time24Converter(item.endTime)}
                       </p>
                     </div>
                     <div>

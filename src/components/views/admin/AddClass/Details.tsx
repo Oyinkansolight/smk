@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
 
+
 type Iprops = {
   register: any;
   errors: any;
@@ -29,7 +30,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -108,7 +109,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
                 required
                 options={(staffs?.data?.staffs ?? []).map((v) => ({
                   label: v?.user
-                    ? `${v?.user[0]?.firstName} ${v?.user[0]?.lastName}`
+                    ? `${v?.user?.firstName} ${v?.user?.lastName}`
                     : ' ',
                   value: v.id,
                 }))}

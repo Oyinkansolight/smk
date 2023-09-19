@@ -137,7 +137,7 @@ const AllStaff = () => {
             setFile={setFile}
             file={files}
             bulkStudentUpload={bulkStudentUpload}
-            link='/pdfs/StaffOnboarding.xlsx'
+            link='/pdfs/upload_teacher_template.csv'
           />
         )}
         <div className='mb-6 flex justify-end items-end relative'>

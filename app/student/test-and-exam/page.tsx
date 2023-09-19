@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 
+
 const Page = () => {
   const [page, setPage] = useState(0);
   const { data: allSession } = useGetAcademicSessions();

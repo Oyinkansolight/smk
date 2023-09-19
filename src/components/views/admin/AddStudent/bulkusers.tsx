@@ -65,7 +65,7 @@ function AddActivityName({
               </p>
             )}
             <a
-              href='/pdfs/StudentOnboarding.xlsx'
+              href='/pdfs/upload_student_template.xlsx'
               download
               className='text-[#011739] my-4 font-bold'
             >

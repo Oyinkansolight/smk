@@ -46,6 +46,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
       title,
       startDate,
       endDate,
+      type: 'CALENDAR',
     };
 
     try {
@@ -82,8 +83,9 @@ export default function StudentDashboardView({ currentTermId }: any) {
   }, []);
   const filteredEvents = (data?.data ?? []).filter(
     (item: any) =>
-      item?.session?.id === Number(session) &&
-      item.institutionType.includes(schoolType)
+      item?.session?.id === session &&
+      item.institutionType.includes(schoolType) &&
+      item.type === 'CALENDAR'
   );
   // setEvents(filteredEvents);
 

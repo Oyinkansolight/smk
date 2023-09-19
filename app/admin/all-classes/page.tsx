@@ -28,7 +28,7 @@ const AllClasses = () => {
       (v: any) => v.id === teacherId
     );
     return teacherInfo?.user
-      ? `${teacherInfo?.user[0].firstName} ${teacherInfo?.user[0].lastName}`
+      ? `${teacherInfo?.user.firstName} ${teacherInfo?.user.lastName}`
       : '';
   };
 

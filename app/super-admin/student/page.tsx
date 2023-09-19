@@ -1,3 +1,5 @@
+'use client';
+
 import SingleStudentDashboard from '@/components/views/single-student/SingleStudentDashboard';
 
 const Page = () => {

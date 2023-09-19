@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type OpenGraphType = {
   siteName: string;
   description: string;
@@ -44,16 +45,49 @@ export function convertTimestampToTime(timestamp) {
   try {
     // Create a Date object from the timestamp
     const date = new Date(timestamp);
-
+    
     // Extract the hours and minutes
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
-
-    // Format the time as HH:MM
-    const timeStr = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-
+    
+    // Format the time as HH:MM with leading zeros
+    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+    const timeStr = `${formattedHours}:${formattedMinutes}`;
+    
     return timeStr;
   } catch (error) {
-    return 'Invalid timestamp format';
+    return "Invalid timestamp format";
   }
 }
+export const timeConverter = (timestamp) => {
+  const date = new Date(timestamp);
+
+  const hours: number | any = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+  // eslint-disable-next-line prefer-const
+  const hourformat = hours % 12 || 12;
+  const period = hours >= 12 ? 'PM' : 'AM';
+
+  return `${hourformat}:${minutes} ${period}`;
+};
+export const time24Converter = (timestamp) => {
+ // Split the input time string into hours and minutes
+ const [hours, minutes] = timestamp.split(':');
+
+ // Convert the hours to a number
+ const hoursNum = parseInt(hours, 10);
+
+ // Determine whether it's AM or PM
+ const period = hoursNum >= 12 ? 'PM' : 'AM';
+
+ // Convert to 12-hour format
+ let hours12 = hoursNum % 12;
+ hours12 = hours12 === 0 ? 12 : hours12; // Handle midnight (0:00) as 12:00 AM
+
+ // Create the 12-hour formatted time string
+ const time12 = `${hours12}:${minutes} ${period}`;
+
+ return time12;
+};

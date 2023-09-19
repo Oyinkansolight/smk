@@ -279,7 +279,7 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher?.user[0].firstName
+                        ? data?.teacher?.user.firstName
                         : 'No_name'}{' '}
                     </div>
                   </div>

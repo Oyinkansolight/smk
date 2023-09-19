@@ -2,6 +2,7 @@
 'use client';
 
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
@@ -10,6 +11,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const queryString = useSearchParams();
@@ -17,7 +24,15 @@ const Page = () => {
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
   const [url, setUrl] = useState<string | any>('');
+  const [videoUrl, setVideoUrl] = useState('');
 
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_VIDEOS.SCRIPTED_LESSONS.BIOLOGY;
+      await getURL(path).then((v) => setVideoUrl(v));
+    };
+    getFileURL();
+  }, [videoUrl]);
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -25,7 +40,7 @@ const Page = () => {
     day: 'numeric',
   });
 
-  let path
+  let path;
   if (data && !isLoading) {
     path = data?.file?.fileUrl ?? '';
 
@@ -102,7 +117,7 @@ const Page = () => {
                 </div>
               </div>
               <div className='flex  md:flex-col flex-row gap-6 '>
-                <div className='flex flex-col items-center justify-between min-w-[220px] w-full bg-[#F9F9F9] rounded border py-3'>
+                <div className='flex flex-col items-center justify-between md:min-w-[260px] w-full bg-[#F9F9F9] rounded border py-3'>
                   <div className='text-[#818181] text-[14px] font-semibold leading-5'>
                     Teacher
                   </div>
@@ -111,13 +126,13 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher?.user[0].firstName
+                        ? data?.teacher?.user.firstName
                         : 'No_name'}{' '}
                     </div>
                   </div>
                 </div>
 
-                <div className='flex flex-col items-center justify-between min-w-[220px] w-full bg-[#F9F9F9] rounded border py-3'>
+                <div className='flex flex-col items-center justify-between md:min-w-[260px] w-full bg-[#F9F9F9] rounded border py-3'>
                   <div className='text-[#818181] text-[14px] font-semibold leading-5'>
                     Attendance Status
                   </div>
@@ -128,8 +143,15 @@ const Page = () => {
 
             <div className='flex-1 mb-8 rounded-lg bg-white w-full'>
               <div className='w-full'>
-                {url.length > 0 && (
+                {url.length > 0 ? (
                   <CustomPDFReader url={url} />
+                ) : (
+                  <video
+                    controls
+                    title='Scripted lesson video player'
+                    className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                    src={videoUrl}
+                  ></video>
                 )}
               </div>
             </div>
