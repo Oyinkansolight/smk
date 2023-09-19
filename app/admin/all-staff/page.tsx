@@ -18,14 +18,6 @@ import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
@@ -69,17 +61,18 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
 ];
 
 const AllStaff = () => {
+  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
   const {
     data: staff,
     error,
     isLoading,
-  } = useGetTeachersListByInstitution({ instituteId: institutionId });
+  } = useGetTeachersListByInstitution({ ...pagingData, instituteId: institutionId });
   const [isOpen, setIsOpen] = useState(false);
-  const [isBulk, setisBulk] = useState(false);
+  const [isBulk, setIsBulk] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [files, setfile] = useState<File | undefined>(undefined);
+  const [files, setFile] = useState<File | undefined>(undefined);
 
   const handleCreateBulkStudent = useCreateBulkStaff();
   const bulkStudentUpload = async () => {
@@ -94,7 +87,7 @@ const AllStaff = () => {
       if (response) {
         toast.success('Staff(s) Added successfully');
         setLoading(false);
-        setisBulk(!isBulk);
+        setIsBulk(!isBulk);
 
         //2 Second - Open Success Modal
         // setisOpen(true);
@@ -131,15 +124,17 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{staff?.data.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {staff?.paging.itemCount ?? 0}
+          </h1>
         </div>
         {isBulk && (
           <BulkUser
             loading={loading}
             onClickHandler={() => {
-              setisBulk(!isBulk);
+              setIsBulk(!isBulk);
             }}
-            setfile={setfile}
+            setFile={setFile}
             file={files}
             bulkStudentUpload={bulkStudentUpload}
             link='/pdfs/StaffOnboarding.xlsx'
@@ -190,7 +185,7 @@ const AllStaff = () => {
                 onClick={() => {
                   setIsOpen(!isOpen);
 
-                  setisBulk(!isBulk);
+                  setIsBulk(!isBulk);
                 }}
                 className='w-full p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
               >
@@ -212,15 +207,25 @@ const AllStaff = () => {
         ) : (
           <Table
             data={
-              staff?.data.map((v, i) => ({
+              staff?.data?.map((v, i) => ({
                 idx: i + 1,
                 ...flattenObject(v),
               })) ?? []
             }
             columns={staffColumn}
+            paginationServer
+            paginationTotalRows={
+              pagingData.limit * (staff?.paging.totalPage ?? 0)
+            }
+            onChangePage={(page) => {
+              setPagingData({ page, limit: pagingData.limit });
+            }}
+            onChangeRowsPerPage={(limit, page) => {
+              setPagingData({ page, limit });
+            }}
           />
         )}
-        {!isLoading && staff?.data?.length === 0 && (
+        {!isLoading && staff?.data && staff?.data?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
       </div>

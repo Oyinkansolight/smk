@@ -100,7 +100,7 @@ const AllStudent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [files, setfile] = useState<any>(null);
+  const [files, setFile] = useState<any>(null);
 
   const handleCreateBulkStudent = useCreateBulkStudent();
   const bulkStudentUpload = async () => {
@@ -160,7 +160,7 @@ const AllStudent = () => {
             onClickHandler={() => {
               setisBulk(!isBulk);
             }}
-            setfile={setfile}
+            setFile={setFile}
             file={files}
             link='/pdfs/StudentOnboarding.xlsx'
             bulkStudentUpload={bulkStudentUpload}

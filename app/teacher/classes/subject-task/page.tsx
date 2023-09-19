@@ -6,33 +6,22 @@ import EmptyView from '@/components/misc/EmptyView';
 import BasicModal from '@/components/modal/Basic';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import { getURL } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
 import { LessonNoteObject } from '@/types/institute';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const [url, setUrl] = useState('');
   const params = useSearchParams();
   const id = params?.get('id');
   const { data: period, isLoading } = useGetPeriodById(id ? id : undefined);
-
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   useEffect(() => {
     if (period && period?.file?.fileUrl) {
@@ -94,14 +83,7 @@ export default function Page() {
                     <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                       <div className='flex justify-center'>
                         {url.length > 0 && (
-                          <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-                            <div style={{ height: '100vh', width: '90vw' }}>
-                              <Viewer
-                                fileUrl={url}
-                                plugins={[defaultLayoutPluginInstance]}
-                              />
-                            </div>
-                          </Worker>
+                          <CustomPDFReader url={url} />
                         )}
                       </div>
                     </div>
@@ -126,14 +108,14 @@ export default function Page() {
             {period?.classActivities.map((activity) => {
               const parsedActivityName = activity.typeOfActivity.includes('_')
                 ? activity.typeOfActivity[0] +
-                  activity.typeOfActivity
-                    .slice(1)
-                    .split('_')
-                    .join(' ')
-                    .toLowerCase()
+                activity.typeOfActivity
+                  .slice(1)
+                  .split('_')
+                  .join(' ')
+                  .toLowerCase()
                 : activity.typeOfActivity[0] +
-                    activity.typeOfActivity.slice(1).toLowerCase() ??
-                  'Activity Name';
+                activity.typeOfActivity.slice(1).toLowerCase() ??
+                'Activity Name';
               return (
                 <SideBarItem
                   key={activity.id}
@@ -153,14 +135,7 @@ export default function Page() {
           <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
             <div className='flex justify-center'>
               {url.length > 0 && (
-                <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-                  <div style={{ height: '100vh', width: '100vw' }}>
-                    <Viewer
-                      fileUrl={url}
-                      plugins={[defaultLayoutPluginInstance]}
-                    />
-                  </div>
-                </Worker>
+                <CustomPDFReader url={url} />
               )}
             </div>
           </div>
@@ -194,12 +169,12 @@ function SideBarItem({
           type === 'ASSIGNMENT'
             ? `/teacher/lesson-note/assignment/submissions?subjectId=${period.subject.id}&type=${type}`
             : type === 'CLASS_WORK'
-            ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
-            : type === 'LESSON_NOTE'
-            ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
-            : type === 'QUIZ'
-            ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
-            : '#'
+              ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
+              : type === 'LESSON_NOTE'
+                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
+                : type === 'QUIZ'
+                  ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
+                  : '#'
         }
       >
         <div className='flex text-xs lg:text-base font-bold whitespace-nowrap items-center rounded-md bg-[#D4D5D7] px-10 py-5 w-auto max-h-[38px] h-full'>

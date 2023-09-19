@@ -1,22 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import NextImage from '@/components/NextImage';
-import PageCounter from '@/components/counter/PageCounter';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 import { getURL } from '@/firebase/init';
-import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { BiChevronRight } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 const Page = () => {
   const router = useRouter();
@@ -24,10 +16,7 @@ const Page = () => {
   const periodId = queryString?.get('name');
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [url, setUrl] = useState<string | any>('');
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -38,7 +27,7 @@ const Page = () => {
 
   let path
   if (data && !isLoading) {
-     path = data?.file?.fileUrl ?? '';
+    path = data?.file?.fileUrl ?? '';
 
     getURL(path).then((v) => setUrl(v));
     logger(data);
@@ -50,15 +39,15 @@ const Page = () => {
 
     // Extract the values of subject name parameters
     const subjectName = searchParams.get('name');
+    logger(subjectName);
     // settitle(subjectName);
     const getFileURL = async () => {
       const url = await getURL(path);
       setUrl(url);
-      logger(url);
     };
     getFileURL();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [path, queryString, url]);
+
   return (
     <div className='layout flex flex-col gap-5'>
       {!isLoading ? (
@@ -140,14 +129,7 @@ const Page = () => {
             <div className='flex-1 mb-8 rounded-lg bg-white w-full'>
               <div className='w-full'>
                 {url.length > 0 && (
-                  <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-                    <div style={{ height: '100vh', width: '100%' }}>
-                      <Viewer
-                        fileUrl={url}
-                        plugins={[defaultLayoutPluginInstance]}
-                      />
-                    </div>
-                  </Worker>
+                  <CustomPDFReader url={url} />
                 )}
               </div>
             </div>

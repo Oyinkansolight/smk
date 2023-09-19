@@ -31,4 +31,5 @@ export interface UserFolder {
   updatedAt?: Date;
   createdBy?: UserInfo;
   size?: string;
+  subject?: Subject[];
 }

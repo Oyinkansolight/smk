@@ -9,22 +9,6 @@ import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 type Iprops = {
   register: any;
   errors: any;
@@ -122,7 +106,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
               <div className='font-bold'>Select Class Teacher</div>
               <ReactSelect
                 required
-                options={(staffs?.data ?? []).map((v) => ({
+                options={(staffs?.data?.staffs ?? []).map((v) => ({
                   label: v?.user
                     ? `${v?.user[0]?.firstName} ${v?.user[0]?.lastName}`
                     : ' ',

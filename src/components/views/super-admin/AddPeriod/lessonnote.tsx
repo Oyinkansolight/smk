@@ -2,134 +2,15 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-import logger from '@/lib/logger';
-import { convertToHTML } from 'draft-convert';
-import { EditorState } from 'draft-js';
-import { stateFromHTML } from 'draft-js-import-html';
-import 'draft-js/dist/Draft.css';
-import dynamic from 'next/dynamic';
+import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
+import useCustomEditor from '@/hooks/useEditor';
 import React, { useState } from 'react';
-// import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const Editor = dynamic(
-  () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
-  {
-    loading: () => <p>Loading...</p>,
-  }
-);
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const Editorcomponent = () => {
-  const [body] = useState('');
-
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(stateFromHTML(body))
-  );
-
-  const [convertedContent, setConvertedContent] = useState<string>('');
-  logger(convertedContent);
-  const handleEditorChange = (state: any) => {
-    setEditorState(state);
-    convertContentToHTML();
-  };
-  const convertContentToHTML = () => {
-    const currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
-  };
-
-  // function handleSubmit(): void {
-  //   logger(convertedContent)
-  // }
-
+const EditorComponent = () => {
+  const editor = useCustomEditor();
   return (
     <div className='pb-20'>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={handleEditorChange}
-        wrapperClassName='wrapper-class'
-        editorClassName='editor-class'
-        toolbarClassName='toolbar-class'
-        editorStyle={{ border: '1px solid', width: 'full', height: '20rem' }}
-        toolbar={{
-          fontFamily: { options: [''] },
-        }}
-      />
+      <CustomRichTextEditor editor={editor} />
     </div>
   );
 };
@@ -150,7 +31,7 @@ const LessonNote = () => {
         />
       </div>
 
-      <Editorcomponent />
+      <EditorComponent />
     </section>
   );
 };

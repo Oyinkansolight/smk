@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Toggle from '@/components/input/Toggle';
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
@@ -160,7 +161,8 @@ function AddActivityName({
         setactivityname5(fridaySchedule.eventName);
       }
     }
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className='fixed inset-0 z-[999] hideScroll grid place-content-center rounded-sm bg-black/30'>

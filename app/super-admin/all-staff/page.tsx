@@ -89,7 +89,7 @@ const AllStaff = () => {
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
           <h1 className='font-semibold text-2xl'>
-            {pagingData.limit * (staff?.paging.totalPage ?? 0)}
+            {staff?.data?.count ?? 0}
           </h1>
         </div>
       </div>
@@ -100,7 +100,7 @@ const AllStaff = () => {
         ) : (
           <Table
             data={
-              staff?.data.map((v, i) => ({
+              staff?.data?.staffs?.map((v, i) => ({
                 idx: pagingData.page * pagingData.limit - pagingData.limit + i,
                 ...flattenObject(v),
               })) ?? []
@@ -118,7 +118,7 @@ const AllStaff = () => {
             }}
           />
         )}
-        {!isLoading && staff?.data.length === 0 && (
+        {!isLoading && staff?.data?.staffs && staff?.data?.staffs?.length === 0 && (
           <div className='text-red-500 py-4 text-center'>No record found</div>
         )}
       </div>

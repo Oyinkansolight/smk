@@ -19,8 +19,6 @@ import {
   useGetFolderAndFiles,
 } from '@/server/library';
 import { UserFile, UserFolder } from '@/types/material';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -32,7 +30,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
-import User from '~/svg/user1.svg';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -101,7 +99,13 @@ const columns: TableColumn<TableItemData>[] = [
           </div>
         );
       } else if ('folderName' in item) {
-        return <div className='col-span-2'>-</div>;
+        return (
+          <div className='col-span-2'>
+            {(item?.subject?.length ?? 0) > 0
+              ? (item?.subject ?? []).map((v) => v.name).join(', ')
+              : '-'}{' '}
+          </div>
+        );
       }
     },
   },
@@ -128,21 +132,15 @@ const columns: TableColumn<TableItemData>[] = [
     cell: (item) => {
       if ('fileUrl' in item) {
         return (
-          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-            <User alt='avril' className='h-8 w-8 rounded-full' />
-            <h2 className='text-sm font-normal'>
-              {moment(item?.createdAt).format('ll')}
-            </h2>
-          </div>
+          <h2 className='text-sm font-normal'>
+            {moment(item?.createdAt).format('ll')}
+          </h2>
         );
       } else if ('folderName' in item) {
         return (
-          <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-            <User alt='avril' className='h-8 w-8 rounded-full' />
-            <h2 className='text-sm font-normal'>
-              {moment(item?.createdAt).format('ll')}
-            </h2>
-          </div>
+          <h2 className='text-sm font-normal'>
+            {moment(item?.createdAt).format('ll')}
+          </h2>
         );
       }
     },
@@ -311,7 +309,6 @@ const UploadDocument = ({
   const toggleDeleteModal = () => {
     setIsModalDeleteOpen(!isModalDeleteOpen);
   };
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
 
@@ -487,14 +484,7 @@ const UploadDocument = ({
               <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                 <div className='flex justify-center'>
                   {url.length > 0 && (
-                    <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-                      <div style={{ height: '100vh', width: '90vw' }}>
-                        <Viewer
-                          fileUrl={url}
-                          plugins={[defaultLayoutPluginInstance]}
-                        />
-                      </div>
-                    </Worker>
+                    <CustomPDFReader url={url} />
                   )}
                 </div>
               </div>
@@ -598,10 +588,10 @@ const UploadDocument = ({
               /> */}
                     <Link
                       href={`/super-admin/add-material${folderTrail.length > 0
-                          ? `?folderId=${folderTrail[folderTrail.length - 1].id
-                          }&folderName=${folderTrail[folderTrail.length - 1].folderName
-                          }`
-                          : ''
+                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
+                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                        }`
+                        : ''
                         }`}
                     >
                       <label

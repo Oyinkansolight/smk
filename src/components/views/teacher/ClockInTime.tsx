@@ -67,7 +67,7 @@ export default function ClockInTime() {
       //conver lat and long to number before usage
       const d = calculateEarthDistance(latitude, longitude, +lat, +long);
       setDistance(d.toFixed(2));
-      if (d < 1000) {
+      if (d < 0.5) {
         setInArea(true);
         setIsLoading(false);
       }

@@ -1,17 +1,11 @@
 'use client';
 
-import NextImage from '@/components/NextImage';
-import clsxm from '@/lib/clsxm';
 import { useGetPeriodById } from '@/server/institution/period';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
-import { BiChevronRight } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
-import { pdfjs } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 const Page = () => {
   const router = useRouter();
@@ -85,7 +79,6 @@ const Page = () => {
                     Teacher
                   </div>
                   <div className='flex'>
-                    {/* <BigAvatar src='/images/teacher_1.png' /> */}
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
@@ -158,46 +151,5 @@ const Page = () => {
     </div>
   );
 };
-
-interface AssignmentCardProps {
-  title: string;
-  status?: 'completed' | 'pending' | 'overdue';
-}
-
-function AssignmentCard({ title, status = 'pending' }: AssignmentCardProps) {
-  return (
-    <div className='w-full bg-white rounded-[10px] h-[93px] max-w-[775px] px-[22px] py-5 cursor-pointer'>
-      <div className='flex flex-row items-center justify-between w-full'>
-        <div className='flex flex-row gap-6'>
-          <NextImage
-            width={57}
-            height={54}
-            alt='Assignment Icon'
-            src='/images/sidebar-icons/Assignment.png'
-          />
-
-          <div className='flex flex-col gap-1'>
-            <div className='text-[#615E83] font-bold text-2xl leading-7'>
-              {title}
-            </div>
-            <div
-              className={clsxm(
-                status === 'completed' && 'bg-[#08643A]',
-                status === 'pending' && 'bg-[#E0A03B]',
-                'flex items-center justify-center w-[109px] h-[24px] rounded text-white text-[10px] font-semibold capitalize'
-              )}
-            >
-              {status}
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <BiChevronRight className='w-[50px] h-[50px]' />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default Page;

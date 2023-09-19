@@ -1,24 +1,22 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
-import PageCounter from '@/components/counter/PageCounter';
 import SubmittedQuestionView from '@/components/views/teacher/SubmittedQuestionView';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
 import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
+import { useEffect, useState } from 'react';
 import ReactSelect from 'react-select';
 import Toggle from 'react-toggle';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+import { SAMPLE_ASSETS } from '@/constant/assets';
+import { getURL } from '@/firebase/init';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 
 export default function Page() {
+  const [url, setUrl] = useState('');
   const [addToGradeList, setAddToGradeList] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(0);
+
   const params = useSearchParams();
   const { data: submissions } = useGetStudentSubmittedActivity({
     classArmId: params?.get('classArmId'),
@@ -26,6 +24,16 @@ export default function Page() {
     type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
     studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
   });
+
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_PDFS.ASSIGNMENT;
+
+      await getURL(path).then((v) => setUrl(v));
+    };
+    getFileURL();
+  }, [url]);
+
   return (
     <div className='h-full layout'>
       <div className='text-3xl text-[#D4D5D7]'>
@@ -36,9 +44,8 @@ export default function Page() {
       </div>
       <div className='font-bold pb-4 flex items-center gap-4'>
         <div className='h-10 w-10 rounded-full bg-gray-200' />
-        <div>{`${(submissions ?? [])[0]?.student.lastName} ${
-          (submissions ?? [])[0]?.student.firstName
-        }`}</div>
+        <div>{`${(submissions ?? [])[0]?.student.lastName} ${(submissions ?? [])[0]?.student.firstName
+          }`}</div>
       </div>
       <div className='flex lg:flex-row flex-col gap-4'>
         {(submissions ?? [])[0]?.questions ? (
@@ -48,22 +55,12 @@ export default function Page() {
             ))}
           </div>
         ) : (
-          <div className='flex-1 grid grid-cols-1 rounded-lg p-2 w-full bg-white'>
-            <div className='flex justify-center p-8'>
-              <PageCounter
-                page={currentPage}
-                maxPage={numberOfPages}
-                onChange={setCurrentPage}
-              />
+          <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+            <div className='flex justify-center'>
+              {url.length > 0 && (
+                <CustomPDFReader url={url} />
+              )}
             </div>
-            <Document
-              file='/pdfs/Assignment samples.pdf'
-              onLoadSuccess={(v) => {
-                setNumberOfPages(v.numPages);
-              }}
-            >
-              <DocPage pageNumber={currentPage} renderTextLayer={false} />
-            </Document>
           </div>
         )}
         <div className=' rounded-lg bg-white p-2'>

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
-import logger from '@/lib/logger';
 import Image from 'next/image';
 import { RotatingLines } from 'react-loader-spinner';
 import moment from 'moment';
@@ -12,8 +11,6 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
     month: 'long',
     day: 'numeric',
   });
-
-
 
   return (
     <div className='w-full max-w-[296px] max-h-[500px] overflow-y-auto'>

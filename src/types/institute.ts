@@ -88,19 +88,36 @@ export interface User {
 
 export interface Staff {
   id?: string;
-  gender?: string;
+  class?: any[];
+  user?: User;
+  lga?: string;
   dob?: string;
+  email?: string;
+  subject?: any[];
+  gender?: string;
   height?: string;
   weight?: string;
+  address?: string;
+  lastName?: string;
+  firstName?: string;
+  nextOfKin?: string;
   staffType?: string;
+  document?: Document;
+  phoneNumber?: string;
   institution?: Institution;
+  phoneOfNextOfKin?: string;
+  addressOfNextOfKin?: string;
+  relationshipToNextOfKin?: string;
+  trainingDetails: TrainingDetails[];
+  employmentDetails: EmploymentDetails;
   teacherEducation?: TeacherEducation[];
   employmentHistory?: EmploymentHistory[];
-  document?: Document;
-  class?: any[];
-  subject?: any[];
-  user?: User[];
   managedClassArm?: ManagedClassArm | null;
+}
+
+export interface TrainingDetails {
+  titleOfTraining: string;
+  year: string;
 }
 
 export interface ManagedClassArm {
@@ -184,6 +201,16 @@ export interface EmploymentHistory {
   employmentYear: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface EmploymentDetails {
+  jobTitle?: string;
+  datePosted?: string;
+  schoolName?: string;
+  retirementDate?: string;
+  salaryGradeLevel?: string;
+  highestQualification?: string;
+  DateOfFirstAppointment?: string;
 }
 
 export interface TeacherEducation {

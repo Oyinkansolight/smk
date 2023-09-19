@@ -1,12 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
 
 export default function Page() {
-  const [idx, setIdx] = useState(0);
   const Names = [
     'Ighosa Ahmed',
     'David Keyan',

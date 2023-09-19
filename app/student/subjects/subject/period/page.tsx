@@ -2,25 +2,32 @@
 
 import NextImage from '@/components/NextImage';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
-import PageCounter from '@/components/counter/PageCounter';
 import TabBar from '@/components/layout/TabBar';
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiDashboardFill } from 'react-icons/ri';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+import { SAMPLE_ASSETS } from '@/constant/assets';
+import { getURL } from '@/firebase/init';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 
 const Page = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_PDFS.LESSON_NOTE;
+
+      await getURL(path).then((v) => setUrl(v));
+    };
+    getFileURL();
+  }, [url]);
+
   return (
     <div className='layout flex flex-col gap-5'>
       <div className='flex flex-row gap-8 justify-between'>
@@ -133,23 +140,11 @@ const Page = () => {
           />
 
           {page === 0 && (
-            <div className='flex-1 mb-8 rounded-lg bg-white'>
-              <div className='flex justify-center '>
-                <PageCounter
-                  page={currentPage}
-                  maxPage={numberOfPages}
-                  onChange={setCurrentPage}
-                />
-              </div>
-              <div className='flex justify-center mt-4 '>
-                <Document
-                  file='/pdfs/lesson note.pdf'
-                  onLoadSuccess={(v) => {
-                    setNumberOfPages(v.numPages);
-                  }}
-                >
-                  <DocPage pageNumber={currentPage} renderTextLayer={false} />
-                </Document>
+            <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+              <div className='flex justify-center'>
+                {url.length > 0 && (
+                  <CustomPDFReader url={url} />
+                )}
               </div>
             </div>
           )}

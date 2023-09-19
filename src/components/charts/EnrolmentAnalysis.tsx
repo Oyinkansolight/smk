@@ -59,6 +59,7 @@ const d = [
 const EnrolmentAnalysis = ({ data }: { data?: typeof d }) => (
   // <ChartWrapper className='bg-[#FFF6EC]' title='Enrolment Analysis'>
   <div className='h-96'>
+
     <ResponsiveLine
       data={data ?? d}
       margin={{ top: 50, right: 40, bottom: 70, left: 50 }}

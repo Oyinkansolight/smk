@@ -8,14 +8,6 @@ import { useGetInstituteClassArms } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AllClasses = () => {
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';

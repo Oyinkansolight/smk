@@ -1,15 +1,10 @@
 'use client';
 
+import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
+import useCustomEditor from '@/hooks/useEditor';
 import clsxm from '@/lib/clsxm';
-import { convertToHTML } from 'draft-convert';
-import { EditorState } from 'draft-js';
-import { stateFromHTML } from 'draft-js-import-html';
-import 'draft-js/dist/Draft.css';
-import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
-// import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 // import { BasicSearch } from '@/components/search';
 import { BsTrash3Fill } from 'react-icons/bs';
 import { GoSearch } from 'react-icons/go';
@@ -18,8 +13,9 @@ import { MdOutlineAddTask } from 'react-icons/md';
 import { RxEnvelopeOpen } from 'react-icons/rx';
 
 const AllNotification = () => {
+  const editor = useCustomEditor();
   const [active, setActive] = useState(false);
-  const [composeMessage, setcomposeMessage] = useState(false);
+  const [composeMessage, setComposeMessage] = useState(false);
   const mockData = [
     {
       id: 1,
@@ -90,52 +86,19 @@ const AllNotification = () => {
       date_recieved: 'Tue,  10:51 am',
     },
   ];
-  const [allnotification, setallnotification] = useState(mockData);
+  const [allNotification] = useState(mockData);
 
-  const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.title.toLowerCase().includes(value.toLowerCase())
-    );
-    setallnotification(result);
-  };
+  // const handleSearch = (value: string) => {
+  //   const result = mockData.filter((data) =>
+  //     data.title.toLowerCase().includes(value.toLowerCase())
+  //   );
+  //   setAllNotification(result);
+  // };
 
-  const Editor = dynamic(
-    () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
-    {
-      loading: () => <p>Loading...</p>,
-    }
-  );
 
   const EditorPage = () => {
-    const [body] = useState('');
-
-    const [editorState, setEditorState] = useState(() =>
-      EditorState.createWithContent(stateFromHTML(body))
-    );
-
-    const [convertedContent, setConvertedContent] = useState<string>('');
-    const handleEditorChange = (state: any) => {
-      setEditorState(state);
-      convertContentToHTML();
-    };
-    const convertContentToHTML = () => {
-      const currentContentAsHTML = convertToHTML(
-        editorState.getCurrentContent()
-      );
-      setConvertedContent(currentContentAsHTML);
-    };
     return (
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={handleEditorChange}
-        wrapperClassName='wrapper-class'
-        editorClassName='editor-class'
-        toolbarClassName='toolbar-class'
-        editorStyle={{ border: '1px solid', width: 'full', height: '20rem' }}
-        toolbar={{
-          fontFamily: { options: [''] },
-        }}
-      />
+      <CustomRichTextEditor editor={editor} />
     );
   };
 
@@ -148,7 +111,7 @@ const AllNotification = () => {
             <div className='flex w-full justify-end'>
               <button
                 onClick={() => {
-                  setcomposeMessage(false);
+                  setComposeMessage(false);
                 }}
                 className='mt-4 bg-secondary-400 py-3 text-white rounded-md md:px-5'
               >
@@ -188,7 +151,7 @@ const AllNotification = () => {
       <div className='py-4 bg-white rounded-2xl mt-6   flex justify-between grid-cols-2 items-center px-4'>
         <button
           onClick={() => {
-            setcomposeMessage(true);
+            setComposeMessage(true);
           }}
           className='bg-secondary-400 py-4 text-white rounded-md md:px-10'
         >
@@ -210,15 +173,14 @@ const AllNotification = () => {
             <div className='col-span-2'>Due</div>
             <div className='col-span-2'>Date Received</div>
           </div>
-          {allnotification.map((item, i) => (
+          {allNotification.map((item, i) => (
             <div
               key={i}
               onClick={() => {
                 setActive(!active);
               }}
-              className={`${
-                item.status === 'unread' && 'bg-[#EDF3FE]'
-              } mb-3 grid grid-cols-12 rounded-md p-2 font-light items-center`}
+              className={`${item.status === 'unread' && 'bg-[#EDF3FE]'
+                } mb-3 grid grid-cols-12 rounded-md p-2 font-light items-center`}
             >
               <div className='col-span-1 flex justify-center'>
                 <input

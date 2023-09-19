@@ -3,63 +3,62 @@
 import Button from '@/components/buttons/Button';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import {
-  useGetSubjectAssignedToTeacher,
+  // useGetSubjectAssignedToTeacher,
   useGetTeacherById,
-  useUpdateStaffSubject,
+  // useUpdateStaffSubject,
 } from '@/server/institution';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Avatar from '~/svg/governor.svg';
 
 const Page = () => {
   const router = useRouter();
-  const currentSessionId: string =
-    getFromLocalStorage('currentSessionId') ?? '';
+  // const currentSessionId: string =
+  //   getFromLocalStorage('currentSessionId') ?? '';
 
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isAddSubject, setisAddSubject] = useState(false);
-  const p = useSearchParams();
+  // const [loading, setLoading] = useState(false);
+  // const [isAddSubject, setisAddSubject] = useState(false);
+  // const p = useSearchParams();
   const { data, error } = useGetTeacherById({
     id: 'c23066f0-544f-4d4b-bb0a-02064f57f708',
   });
 
-  const onClickHandler = () => {
-    setisAddSubject(!isAddSubject);
-  };
+  // const onClickHandler = () => {
+  //   setisAddSubject(!isAddSubject);
+  // };
 
-  const handleUpdateStaff = useUpdateStaffSubject();
+  // const handleUpdateStaff = useUpdateStaffSubject();
 
-  const SubmitHandler = async () => {
-    const payload = {
-      teacherId: p?.get('id'),
-      sessionId: currentSessionId,
-      subjectAndClasses: [],
-    };
+  // const SubmitHandler = async () => {
+  //   const payload = {
+  //     teacherId: p?.get('id'),
+  //     sessionId: currentSessionId,
+  //     subjectAndClasses: [],
+  //   };
 
-    if (payload.subjectAndClasses.length === 0) {
-      toast.error('Please add at least one subject');
-      return;
-    }
+  //   if (payload.subjectAndClasses.length === 0) {
+  //     toast.error('Please add at least one subject');
+  //     return;
+  //   }
 
-    try {
-      setLoading(true);
-      const response = await handleUpdateStaff.mutateAsync(payload);
+  //   try {
+  //     setLoading(true);
+  //     const response = await handleUpdateStaff.mutateAsync(payload);
 
-      if (response) {
-        toast.success('Teacher subject updated successfully');
-        onClickHandler();
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.error(getErrMsg(error));
-    }
-  };
+  //     if (response) {
+  //       toast.success('Teacher subject updated successfully');
+  //       onClickHandler();
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error(getErrMsg(error));
+  //   }
+  // };
 
   const staff = data;
 

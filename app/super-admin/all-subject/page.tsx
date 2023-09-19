@@ -10,7 +10,7 @@ import { useGetSubjectList } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CiMenuKebab } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 
@@ -19,7 +19,7 @@ const AllSubjects = () => {
   const { data, error, isLoading } = useGetSubjectList();
   const [subjects, setSubjects] = useState(data);
   const [action, setAction] = useState<number | null>(null);
-  const [itemToDelete, setitemToDelete] = useState('');
+  const [itemToDelete, setItemToDelete] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModal = () => {
@@ -57,7 +57,6 @@ const AllSubjects = () => {
       }
     }
   };
-
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -133,7 +132,7 @@ const AllSubjects = () => {
                 {item.name}
               </div>
               <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
-                {item.description ?? '-'}{' '}
+                {item?.classes?.length ?? '0'}{' '}
               </div>
               <div className='col-span-3 text-center'>
                 {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
@@ -164,7 +163,7 @@ const AllSubjects = () => {
                       </AddSubjectModal>
                       <div
                         onClick={() => {
-                          setitemToDelete(item.id ?? '');
+                          setItemToDelete(item.id ?? '');
                           toggleModal();
                         }}
                         className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
@@ -198,7 +197,7 @@ const AllSubjects = () => {
             >
               <path
                 fillRule='evenodd'
-                clip-rule='evenodd'
+                clipRule='evenodd'
                 d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
                 fill='#8898AA'
               />
@@ -223,7 +222,7 @@ const AllSubjects = () => {
             >
               <path
                 fillRule='evenodd'
-                clip-rule='evenodd'
+                clipRule='evenodd'
                 d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
                 fill='#8898AA'
               />
