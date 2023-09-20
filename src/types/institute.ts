@@ -131,6 +131,8 @@ export interface ManagedClassArm {
   class: ClassInterface;
 }
 
+
+
 export interface ClassInterface {
   id: string;
   name: string;
@@ -278,6 +280,13 @@ export interface Institution {
   staff?: Staff;
   studentCount?: number;
   staffCount?: number;
+  createdAt?: string;
+  email?: string;
+  lga?: null;
+  phone?: string;
+  updatedAt?: string;
+  user?: User;
+  zone?: string;
 }
 
 export interface AcademicCalendarType {

@@ -31,6 +31,21 @@ export function useCreateAcademicEvent() {
   });
   return mutation;
 }
+export function useEditAcademicEvent() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'edit-academic-event',
+    mutationFn: (params: any) =>
+      request.put('/v1/government/events/update', params, {
+        withCredentials: true,
+      }),
+    onSettled: () => {
+      client.refetchQueries('academic_events');
+    },
+  });
+  return mutation;
+}
 
 export function useGetAcademicTimetable({
   sessionId,
@@ -85,11 +100,24 @@ export function useDeleteAcademicTimeTable() {
   const mutation = useMutation({
     mutationKey: 'delete-academic-timetable',
     mutationFn: (params: any) =>
-      request.delete(
-        `/v1/government/time-table/delete-time-table?id=${params.id}`
-      ),
+      request.delete(`/v1/government/events/delete-event?eventId=${params.id}`),
     onSettled: () => {
       client.refetchQueries('academic_timetable');
+    },
+  });
+  return mutation;
+}
+export function useDeleteAcademicEvent() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete-academic-event',
+    mutationFn: (params: any) =>
+      request.delete(
+        `/v1/government/events/delete-event?eventId=${params.eventId}`
+      ),
+    onSettled: () => {
+      client.refetchQueries('academic_events');
     },
   });
   return mutation;

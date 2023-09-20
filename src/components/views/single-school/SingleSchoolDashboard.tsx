@@ -99,7 +99,7 @@ const SingleSchoolDashboard = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <SchoolDashboardView />}
+          {tabIdx === 0 && <SchoolDashboardView school={school} />}
           {tabIdx === 1 && <SchoolCalendarView />}
           {tabIdx === 2 && <TaskListView />}
           {tabIdx === 3 && (

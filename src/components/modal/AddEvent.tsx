@@ -21,14 +21,12 @@ function AddActivityName({
   setstartDate,
   loading,
 }: propType) {
-  // function handleSubmit() {
-  //   onClickHandler && onClickHandler();
-  // }
+ 
 
   const [isOpen, setIsOpen] = useState(true);
   function handleVisibility() {
     setIsOpen(!isOpen);
-  }
+}
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
@@ -49,7 +47,7 @@ function AddActivityName({
               label='Title*'
               name='Title'
               type='text'
-              placeholder='Select an option'
+              placeholder='Enter a title'
               setFormValue={settitle}
             />
             <div></div>

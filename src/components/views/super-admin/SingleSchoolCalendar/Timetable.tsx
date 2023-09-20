@@ -204,7 +204,8 @@ const TimeTable = ({
       if (response) {
         if (itemToEdit) {
           toast.success('Timetable updated successfully');
-          toggleModal();
+          setisEditOpen(false);
+
         } else {
           toast.success('Timetable created successfully');
           modalActivityHandler;
