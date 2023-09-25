@@ -1,7 +1,7 @@
 import request from '@/server';
 import { PaginationParams } from '@/types';
-import { Staff } from '@/types/institute';
-import { PaginatedData } from '@/types/pagination';
+import { Staff, TrainingDetails } from '@/types/institute';
+import { StaffPaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetStaffList(params: PaginationParams) {
@@ -13,7 +13,7 @@ export function useGetStaffList(params: PaginationParams) {
         withCredentials: true,
       });
       // console.log(d.data.data.data);
-      return d.data.data.data as PaginatedData<Staff>;
+      return d.data.data.data as StaffPaginatedData<Staff>;
     },
   });
   return query;
@@ -35,15 +35,33 @@ export function useGetStaffs() {
 
 export interface UpdateStaffParams {
   id?: string;
-  firstName?: string;
-  lastName?: string;
+  dob?: string;
+  lga?: string;
   email?: string;
-  phoneNumber?: string;
-  address?: string;
-  employerName?: string;
-  employerPhoneNumber?: string;
-  employerAddress?: string;
   weight?: string;
+  gender?: string;
+  address?: string;
+  lastName?: string;
+  nextOfKin?: string;
+  firstName?: string;
+  profileImg?: string;
+  phoneNumber?: string;
+  employerName?: string;
+  employerAddress?: string;
+  phoneOfNextOfKin?: string;
+  addressOfNextOfKin?: string;
+  employerPhoneNumber?: string;
+  relationshipToNextOfKin?: string;
+  employmentDetails?: {
+    jobTitle?: string;
+    datePosted?: string;
+    schoolName?: string;
+    retirementDate?: string;
+    salaryGradeLevel?: string;
+    highestQualification?: string;
+    DateOfFirstAppointment?: string;
+  };
+  trainingDetails?: TrainingDetails[];
 }
 
 export function useUpdateStaff() {

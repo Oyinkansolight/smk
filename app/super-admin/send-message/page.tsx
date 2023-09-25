@@ -3,25 +3,19 @@
 import FormInput from '@/components/input/formInput';
 import Library from '@/components/modal/Library';
 import Stepper from '@/components/stepper';
-// import { convertToHTML } from 'draft-convert';
-// import { EditorState } from 'draft-js';
-// import { stateFromHTML } from 'draft-js-import-html';
-import 'draft-js/dist/Draft.css';
-// import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 
 const Page = () => {
   const [stage, setStage] = useState(1);
-  const [isOpen, setisOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState<number | string>('');
   const [dropDown, setDropDown] = useState(false);
 
   const onClickHandler = () => {
-    setisOpen(!isOpen);
+    setIsOpen(!isOpen);
   };
   const nextHandler = (): void => {
     if (stage >= 1 && stage <= 3) {
@@ -43,46 +37,6 @@ const Page = () => {
       stageName: 'Publish',
     },
   ];
-
-  // const Editor = dynamic(
-  //   () => import('react-draft-wysiwyg').then((draft) => draft.Editor),
-  //   {
-  //     loading: () => <p>Loading...</p>,
-  //   }
-  // );
-
-  // const Editorcomponent = () => {
-  //   const [body] = useState('');
-
-  //   const [editorState, setEditorState] = useState(() =>
-  //     EditorState.createWithContent(stateFromHTML(body))
-  //   );
-
-  //   const [convertedContent, setConvertedContent] = useState<string>('');
-  //   const handleEditorChange = (state: any) => {
-  //     setEditorState(state);
-  //     convertContentToHTML();
-  //   };
-  //   const convertContentToHTML = () => {
-  //     const currentContentAsHTML = convertToHTML(
-  //       editorState.getCurrentContent()
-  //     );
-  //     setConvertedContent(currentContentAsHTML);
-  //   };
-  //   return (
-  //     <Editor
-  //       editorState={editorState}
-  //       onEditorStateChange={handleEditorChange}
-  //       wrapperClassName='wrapper-class'
-  //       editorClassName='editor-class'
-  //       toolbarClassName='toolbar-class'
-  //       editorStyle={{ border: '1px solid', width: 'full', height: '20rem' }}
-  //       toolbar={{
-  //         fontFamily: { options: [''] },
-  //       }}
-  //     />
-  //   );
-  // };
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -172,7 +126,7 @@ const Page = () => {
 
                       <button
                         onClick={() => {
-                          setisOpen(!isOpen);
+                          setIsOpen(!isOpen);
                         }}
                         className='p-3 hover:bg-slate-100  text-left font-medium w-full'
                       >

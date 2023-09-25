@@ -32,10 +32,10 @@ export default function StudentProfile({
       <OnlineStatus status='online' />
       <div className='grid w-full max-w-[216px] grid-cols-2 gap-4 overflow-hidden whitespace-nowrap py-4'>
         {[
-          { title: 'Primary', subtitle: 'Grade' },
-          { title: '1A', subtitle: 'Class' },
-          { title: '72%', subtitle: 'Student Average' },
-          { title: '12', subtitle: 'Subjects' },
+          { title: 'Secondary', subtitle: 'Grade' },
+          { title: 'SS Science 1A', subtitle: 'Class' },
+          { title: '0%', subtitle: 'Student Average' },
+          { title: '0', subtitle: 'Subjects' },
         ].map((v, i) => (
           <InfoTab key={i} title={v.title} subtitle={v.subtitle} />
         ))}

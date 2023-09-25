@@ -8,14 +8,6 @@ import { useGetInstituteClassArms } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AllClasses = () => {
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';
@@ -36,7 +28,7 @@ const AllClasses = () => {
       (v: any) => v.id === teacherId
     );
     return teacherInfo?.user
-      ? `${teacherInfo?.user[0].firstName} ${teacherInfo?.user[0].lastName}`
+      ? `${teacherInfo?.user.firstName} ${teacherInfo?.user.lastName}`
       : '';
   };
 

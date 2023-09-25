@@ -1,22 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import NextImage from '@/components/NextImage';
-import PageCounter from '@/components/counter/PageCounter';
+import CustomPDFReader from '@/components/pdfReader/Reader';
+import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
-import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { useGetPeriodById } from '@/server/institution/period';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { BiChevronRight } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
   const router = useRouter();
@@ -24,11 +23,16 @@ const Page = () => {
   const periodId = queryString?.get('name');
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [url, setUrl] = useState<string | any>('');
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [videoUrl, setVideoUrl] = useState('');
 
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_VIDEOS.SCRIPTED_LESSONS.BIOLOGY;
+      await getURL(path).then((v) => setVideoUrl(v));
+    };
+    getFileURL();
+  }, [videoUrl]);
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -36,9 +40,9 @@ const Page = () => {
     day: 'numeric',
   });
 
-  let path
+  let path;
   if (data && !isLoading) {
-     path = data?.file?.fileUrl ?? '';
+    path = data?.file?.fileUrl ?? '';
 
     getURL(path).then((v) => setUrl(v));
     logger(data);
@@ -50,15 +54,15 @@ const Page = () => {
 
     // Extract the values of subject name parameters
     const subjectName = searchParams.get('name');
+    logger(subjectName);
     // settitle(subjectName);
     const getFileURL = async () => {
       const url = await getURL(path);
       setUrl(url);
-      logger(url);
     };
     getFileURL();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [path, queryString, url]);
+
   return (
     <div className='layout flex flex-col gap-5'>
       {!isLoading ? (
@@ -113,7 +117,7 @@ const Page = () => {
                 </div>
               </div>
               <div className='flex  md:flex-col flex-row gap-6 '>
-                <div className='flex flex-col items-center justify-between min-w-[220px] w-full bg-[#F9F9F9] rounded border py-3'>
+                <div className='flex flex-col items-center justify-between md:min-w-[260px] w-full bg-[#F9F9F9] rounded border py-3'>
                   <div className='text-[#818181] text-[14px] font-semibold leading-5'>
                     Teacher
                   </div>
@@ -122,13 +126,13 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher?.user[0].firstName
+                        ? data?.teacher?.user.firstName
                         : 'No_name'}{' '}
                     </div>
                   </div>
                 </div>
 
-                <div className='flex flex-col items-center justify-between min-w-[220px] w-full bg-[#F9F9F9] rounded border py-3'>
+                <div className='flex flex-col items-center justify-between md:min-w-[260px] w-full bg-[#F9F9F9] rounded border py-3'>
                   <div className='text-[#818181] text-[14px] font-semibold leading-5'>
                     Attendance Status
                   </div>
@@ -139,15 +143,15 @@ const Page = () => {
 
             <div className='flex-1 mb-8 rounded-lg bg-white w-full'>
               <div className='w-full'>
-                {url.length > 0 && (
-                  <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-                    <div style={{ height: '100vh', width: '100%' }}>
-                      <Viewer
-                        fileUrl={url}
-                        plugins={[defaultLayoutPluginInstance]}
-                      />
-                    </div>
-                  </Worker>
+                {url.length > 0 ? (
+                  <CustomPDFReader url={url} />
+                ) : (
+                  <video
+                    controls
+                    title='Scripted lesson video player'
+                    className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                    src={videoUrl}
+                  ></video>
                 )}
               </div>
             </div>

@@ -34,8 +34,6 @@ import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
   {
@@ -222,7 +220,7 @@ export default function Page() {
                     typeof getValues('instituteAddress') === 'string'
                       ? getValues('instituteAddress')
                       : (getValues('instituteAddress') as GeoCodeResponse)
-                          .formatted_address,
+                        .formatted_address,
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
@@ -355,6 +353,7 @@ export default function Page() {
             /> */}
 
             <div className=' w-full gap-6'>
+
               <LocationInput
                 value={
                   (getValues('instituteAddress') as GeoCodeResponse)

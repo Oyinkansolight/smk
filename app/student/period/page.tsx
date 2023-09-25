@@ -1,25 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { getFromSessionStorage, time24Converter } from '@/lib/helper';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
-// import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { BiUser } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
 import Books from '~/svg/books.svg';
-import Teacher from '~/svg/teacher.svg';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -38,32 +26,32 @@ const Page = () => {
   const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
   const currentDay = daysOfWeek[currentDayIndex];
   const userData = getFromSessionStorage('user');
-  const currentSessionId = getFromLocalStorage('currentSessionId');
+  // const currentSessionId = getFromLocalStorage('currentSessionId');
   const currentTerm = getFromSessionStorage('currentTerm');
   const currentWeek = getFromSessionStorage('currentWeek');
   let user;
   let currentTermInfo;
-  let currentWeekinfo;
+  let currentWeekInfo;
 
   if (userData && currentTerm && currentWeek) {
     user = JSON.parse(userData);
     currentTermInfo = JSON.parse(currentTerm);
-    currentWeekinfo = JSON.parse(currentWeek);
+    currentWeekInfo = JSON.parse(currentWeek);
   }
-  useEffect(() => {
-    // const sessionInfo = JSON.parse(
-    //   sessionStorage.getItem('currentSession') || '{}'
-    // );
-  }, []);
+  // useEffect(() => {
+  //   const sessionInfo = JSON.parse(
+  //     sessionStorage.getItem('currentSession') || '{}'
+  //   );
+  // }, []);
 
   const { isLoading, data } = useGetTodaysPeriod({
-    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
+    classId: user?.currentStudentInfo.class.class.id,
     day: currentDay,
-    weekid: currentWeekinfo?.id,
+    weekid: currentWeekInfo?.id,
   });
 
   return (
-    <div className='flex gapx-4 gap-y-10'>
+    <div className='flex gap x-4 gap-y-10'>
       <div className='w-full px-4'>
         <div className='mb-4 flex justify-between items-center border-b border-black'>
           <h1 className='text-xl font-medium mb-3 mt-6'>Periods</h1>
@@ -85,14 +73,18 @@ const Page = () => {
             <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-6'>
               {data?.data.map((item: any, i: number) => (
                 <div
-                  key={i}
+                  key={item.id ?? i}
                   className='h-[250px] relative w-full border-[#3361FF] border rounded-lg bg-[#F2F5FF] p-[10px]'
                 >
                   <div className='flex justify-between items-center'>
                     <div>
-                      <h1 className='font-bold text-base'> {item.subject.name} </h1>
+                      <h1 className='font-bold text-base'>
+                        {' '}
+                        {item.subject.name}{' '}
+                      </h1>
                       <p className='text-[#808080] text-[10px] '>
-                        {item.startTime} - {item.endTime}
+                        {time24Converter(item.startTime)} -{' '}
+                        {time24Converter(item.endTime)}
                       </p>
                     </div>
                     <div>
@@ -103,7 +95,7 @@ const Page = () => {
                   <p className='text-[#808080] text-[10px] '>{item.theme}</p>
                   <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
                   <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
-                    <Teacher className='h-8 w-8 ' /> <p> Babafemi Akanni</p>
+                    <BiUser className='h-8 w-8' /> <p> Babafemi Akanni</p>
                   </div>
 
                   <div className='flex justify-center absolute bottom-4 w-full'>

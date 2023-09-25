@@ -15,12 +15,15 @@ export default function NewStudentAvatar() {
       <Avatar className='h-10 w-10' />
       <div className='font-bold flex flex-col'>
         <div className='text-[#615E83]'>{user?.name ?? ''} </div>
-        <div className='text-[#E87F1E]'>SSS 1 A</div>
+        <div className='text-[#E87F1E]'>
+          {user?.currentStudentInfo.class.class.name}
+        </div>
       </div>
       <div>
         <OnlineStatus status='online' />
         <div className='font-extrabold'>
-          <span className='font-normal text-[#3361FF]'>ID no:</span> PR1-1234
+          <span className='font-normal text-[#3361FF]'>ID no:</span>{' '}
+          {user?.currentStudentInfo.studentId}
         </div>
       </div>
     </div>

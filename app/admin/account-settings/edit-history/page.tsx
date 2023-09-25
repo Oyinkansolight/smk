@@ -1,54 +1,7 @@
-'use client';
-
-import { useState } from 'react';
+import { BiUser } from 'react-icons/bi';
 import { MdArrowBackIos } from 'react-icons/md';
-import User1 from '~/svg/user1.svg';
 
 const Page = () => {
-  const mockData = [
-    {
-      logo: 1,
-      name: 'Avril Price School',
-      numberOfStudent: '12,500',
-      type: 'Primary',
-      staff: '',
-      location: 'Benin',
-    },
-    {
-      logo: 2,
-      name: 'Scaling Heights School',
-      numberOfStudent: '12,500',
-      type: 'Primary',
-      staff: '',
-      location: 'Benin',
-    },
-    {
-      logo: 3,
-      name: 'Black Dash School',
-      numberOfStudent: '12,500',
-      type: 'Primary',
-      staff: '',
-      location: 'Benin',
-    },
-    {
-      logo: 4,
-      name: 'Reaction Primary ',
-      numberOfStudent: '12,500',
-      type: 'Primary',
-      staff: '',
-      location: 'Benin',
-    },
-    {
-      logo: 5,
-      name: 'Victory International  School',
-      numberOfStudent: '12,500',
-      type: 'Primary',
-      staff: '',
-      location: 'Benin',
-    },
-  ];
-
-  const [eccede] = useState(mockData);
   return (
     <div className='h-full px-12'>
       <div className='cursor-pointer flex items-center'>
@@ -64,13 +17,13 @@ const Page = () => {
           <div className='col-span-6'>Administrator</div>
           <div className='col-span-6'>Timestamp</div>
         </div>
-        {eccede.map((item, idx) => (
+        {Array(5).fill(0).map((item, idx) => (
           <div
             className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-gray-100 py-4 px-1 text-[#8898AA] font-semibold'
             key={idx}
           >
             <div className='col-span-6 flex items-center gap-4'>
-              <User1 className='h-12 w-12' /> <div>James Omokwe</div>{' '}
+              <BiUser className='h-12 w-12' /> <div>James Omokwe</div>{' '}
             </div>
             <div className='col-span-6 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
               03/03/12 22:43

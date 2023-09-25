@@ -6,6 +6,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useBattery } from '@uidotdev/usehooks';
 import Cookies from 'js-cookie';
+import { isNumber } from 'lodash';
 import { useEffect } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -37,7 +38,7 @@ export default function RootLayout({
 
 
   useEffect(() => {
-    if (!loadingBatteryCheck) {
+    if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
       if (currentBattery <= 10 && !charging) {
         logger(`Battery is low and currently ${currentBattery}%`);

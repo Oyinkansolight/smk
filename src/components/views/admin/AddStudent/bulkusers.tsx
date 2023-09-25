@@ -8,7 +8,7 @@ import Close from '~/svg/close.svg';
 
 interface propType {
   onClickHandler?: () => void;
-  setfile: (file?: File) => void;
+  setFile: (file?: File) => void;
   bulkStudentUpload: () => void;
   loading: boolean;
   file: File | undefined;
@@ -17,7 +17,7 @@ interface propType {
 
 function AddActivityName({
   onClickHandler,
-  setfile,
+  setFile,
   file,
   bulkStudentUpload,
   loading = false,
@@ -52,7 +52,7 @@ function AddActivityName({
               id='upload'
               hidden
               onChange={(e) => {
-                setfile(e.target.files?.[0] || null);
+                setFile(e.target.files?.[0] || null);
               }}
             />
             {!file && (
@@ -65,7 +65,7 @@ function AddActivityName({
               </p>
             )}
             <a
-              href='/pdfs/StudentOnboarding.xlsx'
+              href='/pdfs/upload_student_template.xlsx'
               download
               className='text-[#011739] my-4 font-bold'
             >
@@ -73,7 +73,7 @@ function AddActivityName({
             </a>
           </div>
         </div> */}
-        <DragDropGeneric value={file} onChange={setfile} link={link} />
+        <DragDropGeneric value={file} onChange={setFile} link={link} />
 
         <div className='flex justify-center mt-2'>
           <button

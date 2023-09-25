@@ -1,22 +1,18 @@
 'use client';
 
 import NextImage from '@/components/NextImage';
-import { BigAvatar } from '@/components/profile/BigAvatar';
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
-import { pdfjs } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 const Page = () => {
   const router = useRouter();
   // Get the URL query string
   const queryString = useSearchParams();
-  const [title, settitle] = useState<string | null>('');
+  const [title, setTitle] = useState<string | null>('');
 
   useEffect(() => {
     // Create a URLSearchParams object with the query string
@@ -24,7 +20,7 @@ const Page = () => {
 
     // Extract the values of subject name parameters
     const subjectName = searchParams.get('name');
-    settitle(subjectName);
+    setTitle(subjectName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

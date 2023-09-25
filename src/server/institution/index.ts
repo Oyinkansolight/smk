@@ -6,7 +6,7 @@ import { PaginationParams } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import { Institution, Student, Subject } from '@/types/institute';
 import { Staff } from '@/types/institute';
-import { PaginatedData } from '@/types/pagination';
+import { PaginatedData, StaffPaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -212,7 +212,7 @@ export function useGetTeachersList(params?: PaginationParams) {
         const d = await request.get('/v1/government/teachers/get-staffs', {
           params,
         });
-        return d.data.data.data as PaginatedData<Staff>;
+        return d.data.data.data as StaffPaginatedData<Staff>;
       } catch (error) {
         logger(error);
         throw error;
@@ -248,8 +248,8 @@ export function useGetTeachersListByInstitution(props: Props) {
         try {
           const d = await request.get(
             `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
-              limit ? `&&limit=${limit}` : ''
-            }${page ? `&&page=${page}` : ''}`
+              limit ? `&limit=${limit}` : ''
+            }${page ? `&page=${page}` : ''}`
           );
           return d.data.data.data as PaginatedData<Staff>;
         } catch (error) {
@@ -263,7 +263,7 @@ export function useGetTeachersListByInstitution(props: Props) {
   const { refetch } = query;
   useEffect(() => {
     refetch();
-  }, [instituteId, refetch]);
+  }, [limit, page, instituteId, refetch]);
   return query;
 }
 

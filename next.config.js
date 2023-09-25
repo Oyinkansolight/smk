@@ -1,4 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true', // Set ANALYZE=true in your environment to enable bundle analysis
+});
+
 const nextConfig = {
   eslint: {
     dirs: ['src'],
@@ -38,8 +43,7 @@ const nextConfig = {
     ],
   },
 
-  // SVGR
-  webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -61,4 +65,5 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+//* To run bundle analyzer run "ANALYZE=true yarn build" in terminal
+module.exports = withBundleAnalyzer(nextConfig);

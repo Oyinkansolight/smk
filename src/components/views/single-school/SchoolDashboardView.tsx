@@ -1,7 +1,13 @@
 import Button from '@/components/buttons/Button';
 import { BasicCard, CountCard } from '@/components/cards';
+import { Institution } from '@/types/institute';
 
-export default function SchoolDashboardView() {
+interface proptype {
+  school? : Institution
+}
+
+export default function SchoolDashboardView({school} : proptype) {
+  
   return (
     <>
       <div className='-mt-[10px] flex flex-row items-center justify-end'>
@@ -24,10 +30,10 @@ export default function SchoolDashboardView() {
         <hr className='h-[1.8px] bg-[#F5F6F7] mt-[18px]' />
 
         <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px] mt-6'>
-          <CountCard text='Primary' title='Grade' variant='basic' />
-          <CountCard text='1 A' title='Class' variant='basic' />
-          <CountCard text='72 %' title='Student Average' variant='basic' />
-          <CountCard count={12} title='Total Subjects' variant='basic' />
+          <CountCard text={school?.students?.length} title='Total Student' variant='basic' />
+          <CountCard text={0} title='Total Staff' variant='basic' />
+          <CountCard text='0' title='Total Classes' variant='basic' />
+          <CountCard count={0} title='Total Subjects' variant='basic' />
           {/* <div>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores
             ipsum, fugiat deleniti ratione laudantium eveniet ex consequuntur

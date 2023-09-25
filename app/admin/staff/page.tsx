@@ -118,7 +118,7 @@ const Page = () => {
     }
   }, [error]);
 
-  const teacherName = `${(staff?.user ?? [])[0]?.firstName} ${(staff?.user ?? [])[0]?.lastName
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
     }`;
 
   return (
@@ -220,7 +220,7 @@ const Page = () => {
                   Edit Account Details
                 </Button>
               </div>
-              <div className='bg-white px-8'>
+              <div className='bg-white px-8 pb-10'>
                 <TeacherBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}

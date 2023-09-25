@@ -1,27 +1,28 @@
 'use client';
 
-import PageCounter from '@/components/counter/PageCounter';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import clsxm from '@/lib/clsxm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { RiBookReadLine } from 'react-icons/ri';
-import { Page as DocPage, Document, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/esm/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
-// const names = [
-//   'Continuous Assessment test 1',
-//   'Continuous Assessment test 2',
-//   'End of term Examination',
-// ];
+import { SAMPLE_ASSETS } from '@/constant/assets';
+import { getURL } from '@/firebase/init';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_PDFS.ASSIGNMENT;
+
+      await getURL(path).then((v) => setUrl(v));
+    };
+    getFileURL();
+  }, [url]);
+
   return (
     <div className='h-full layout'>
       <div className='text-[#D4D5D7] text-xl mt-6'>
@@ -71,22 +72,12 @@ export default function Page() {
         </>
       )}
       {idx === 1 && (
-        <div className='flex-1 mb-8 rounded-lg bg-white'>
-          <div className='flex justify-center p-8'>
-            <PageCounter
-              page={currentPage}
-              maxPage={numberOfPages}
-              onChange={setCurrentPage}
-            />
+        <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+          <div className='flex justify-center'>
+            {url.length > 0 && (
+              <CustomPDFReader url={url} />
+            )}
           </div>
-          <Document
-            file='/pdfs/Assignment samples.pdf'
-            onLoadSuccess={(v) => {
-              setNumberOfPages(v.numPages);
-            }}
-          >
-            <DocPage pageNumber={currentPage} renderTextLayer={false} />
-          </Document>
         </div>
       )}
     </div>

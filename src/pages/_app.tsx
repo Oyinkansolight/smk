@@ -15,6 +15,7 @@ import 'slick-carousel/slick/slick.css';
  */
 
 function MyApp({ Component, pageProps }: AppProps) {
+  {/*  Server Component */ }
   return <Component {...pageProps} />;
 }
 

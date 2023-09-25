@@ -4,14 +4,25 @@
 import Button from '@/components/buttons/Button';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import { SAMPLE_ASSETS } from '@/constant/assets';
+import { getURL } from '@/firebase/init';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_VIDEOS.SCRIPTED_LESSONS.BIOLOGY;
+
+      await getURL(path).then((v) => setUrl(v));
+    };
+    getFileURL();
+  }, [url]);
 
   if (typeof window === 'undefined') {
     return (
@@ -57,20 +68,14 @@ export default function Page() {
       <div className='flex items-stretch gap-10'>
         <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
           <div className='flex justify-center'>
-            {/* static video player with youtube */}
-            {/* <iframe
-              className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
-              src='/videos/Ssce Biology Cell As Living Things.m4v'
-              title='Scripted lesson video player'
-              // allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-            ></iframe> */}
-
-            <video
-              controls
-              title='Scripted lesson video player'
-              className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
-              src='/videos/Ssce Biology Cell As Living Things.m4v'
-            ></video>
+            {url.length > 0 && (
+              <video
+                src={url}
+                controls
+                title='Scripted lesson video player'
+                className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
+              ></video>
+            )}
           </div>
         </div>
       </div>

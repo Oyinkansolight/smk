@@ -4,29 +4,8 @@
 import SearchInput from '@/components/input/SearchInput';
 import SmallStudentSubjectCard from '@/components/views/student.tsx/SmallStudentSubjectCard';
 import { getFromSessionStorage } from '@/lib/helper';
-import { useGetProfile } from '@/server/auth';
 import { useGetStudentSubjectList } from '@/server/institution';
 import { useRouter } from 'next/navigation';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const colors = [

@@ -22,9 +22,11 @@ import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
 import { IoReorderThree } from 'react-icons/io5';
-import { MdOutlineSort } from 'react-icons/md';
+import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -62,6 +64,13 @@ const SingleSchoolDashboard = () => {
       />
       {gridIdx === 0 && (
         <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+          <div
+            onClick={() => router.back()}
+            className='flex items-center gap-3 cursor-pointer'
+          >
+            <MdArrowBackIos className='text-blue-500' />
+            <div>Back</div>
+          </div>
           <div className='flex w-full items-center justify-between'>
             <TabBar
               variant='primary'
@@ -90,7 +99,7 @@ const SingleSchoolDashboard = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <SchoolDashboardView />}
+          {tabIdx === 0 && <SchoolDashboardView school={school} />}
           {tabIdx === 1 && <SchoolCalendarView />}
           {tabIdx === 2 && <TaskListView />}
           {tabIdx === 3 && (

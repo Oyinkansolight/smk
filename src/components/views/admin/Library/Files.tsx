@@ -17,13 +17,13 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { useForm } from 'react-hook-form';
+import { BiUser } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
-import User from '~/svg/user1.svg';
 
 type TableItemData = (UserFolder | UserFile) & {
   action: number | null;
@@ -105,7 +105,7 @@ const columns: TableColumn<TableItemData>[] = [
       if ('fileUrl' in item) {
         return (
           <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <BiUser className='h-8 w-8 rounded-full' />
             <h2 className='text-sm font-normal'>
               {moment(item?.createdAt).format('ll')}
             </h2>
@@ -114,7 +114,7 @@ const columns: TableColumn<TableItemData>[] = [
       } else if ('folderName' in item) {
         return (
           <div className='col-span-2 w-max text-center  flex space-x-2 items-center'>
-            <User alt='avril' className='h-8 w-8 rounded-full' />
+            <BiUser className='h-8 w-8 rounded-full' />
             <h2 className='text-sm font-normal'>
               {moment(item?.createdAt).format('ll')}
             </h2>
@@ -314,8 +314,8 @@ const UploadDocument = ({
         subjectId:
           (
             getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+            | { label: string; value: number }[]
+            | undefined
           )?.map((s) => s.value ?? 0) ?? [],
       });
 
@@ -435,15 +435,12 @@ const UploadDocument = ({
                 hidden
               /> */}
                   <Link
-                    href={`/super-admin/add-material${
-                      folderTrail.length > 0
-                        ? `?folderId=${
-                            folderTrail[folderTrail.length - 1].id
-                          }&folderName=${
-                            folderTrail[folderTrail.length - 1].folderName
-                          }`
+                    href={`/super-admin/add-material${folderTrail.length > 0
+                        ? `?folderId=${folderTrail[folderTrail.length - 1].id
+                        }&folderName=${folderTrail[folderTrail.length - 1].folderName
+                        }`
                         : ''
-                    }`}
+                      }`}
                   >
                     <label
                       htmlFor='upload_file'
@@ -483,24 +480,24 @@ const UploadDocument = ({
               )
               ?.map(
                 (item, idx) =>
-                  ({
-                    ...item,
-                    action,
-                    isAssign,
-                    setAction,
-                    setisAssign,
-                    idx,
-                    setFileId,
-                    onFolderClick: (folder) => {
-                      const c = [...folderTrail];
-                      c.push(folder);
-                      setFolderTrail(c);
-                      refetchFolderFiles();
-                    },
-                    setDeleteFolderId: async (folderId) => {
-                      handleFolderDeletion(folderId);
-                    },
-                  } as TableItemData)
+                ({
+                  ...item,
+                  action,
+                  isAssign,
+                  setAction,
+                  setisAssign,
+                  idx,
+                  setFileId,
+                  onFolderClick: (folder) => {
+                    const c = [...folderTrail];
+                    c.push(folder);
+                    setFolderTrail(c);
+                    refetchFolderFiles();
+                  },
+                  setDeleteFolderId: async (folderId) => {
+                    handleFolderDeletion(folderId);
+                  },
+                } as TableItemData)
               ) ?? []
           }
         />

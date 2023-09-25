@@ -38,7 +38,7 @@ export default function SchoolProfileCard({
       )}
       <div className='h-10' />
       <div className='mb-1 text-xl font-bold'>{school?.instituteName}</div>
-      <Pill text='Primary School' variant='primary' />
+      <Pill text={school?.instituteType ?? "Secondary School"} variant='primary' />
       <div className='h-8' />
       <GridTabBar
         variant='secondary'

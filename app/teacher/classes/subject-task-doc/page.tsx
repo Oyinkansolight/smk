@@ -4,15 +4,24 @@
 import Button from '@/components/buttons/Button';
 import CreateSubjectActivityModal from '@/components/modals/create-subject-activity-modal';
 import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
-import { Viewer, Worker } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import CustomPDFReader from '@/components/pdfReader/Reader';
+import { SAMPLE_ASSETS } from '@/constant/assets';
+import { getURL } from '@/firebase/init';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export default function Page() {
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    const getFileURL = async () => {
+      const path = SAMPLE_ASSETS.SAMPLE_PDFS.SCRIPTED_LESSONS.BIOLOGY;
+
+      await getURL(path).then((v) => setUrl(v));
+    };
+    getFileURL();
+  }, [url]);
 
   if (typeof window === 'undefined') {
     return (
@@ -58,15 +67,9 @@ export default function Page() {
       <div className='flex items-stretch gap-10'>
         <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
           <div className='flex justify-center'>
-            <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.js'>
-              <div style={{ height: '100vh', width: '100vw' }}>
-                <Viewer
-                  initialPage={1}
-                  fileUrl='/pdfs/BIOLOGY SS2 3RD TERM WEEK 3.pdf'
-                  plugins={[defaultLayoutPluginInstance]}
-                />
-              </div>
-            </Worker>
+            {url.length > 0 && (
+              <CustomPDFReader url={url} />
+            )}
           </div>
         </div>
       </div>

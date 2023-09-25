@@ -22,7 +22,6 @@ import {
 import { Institution } from '@/types/classes-and-subjects';
 import Image from 'next/image';
 import { useState } from 'react';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Controller, useForm } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
 import ReactSelect from 'react-select';
@@ -30,9 +29,9 @@ import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 import { useSessionStorage } from 'usehooks-ts';
 
-import BookSVG from '../../../../public/svg/book.svg';
-import ComputerUploadSVG from '../../../../public/svg/computer_upload.svg';
-import TakePictureSVG from '../../../../public/svg/take_picture.svg';
+import BookSVG from '~/svg/book.svg';
+import ComputerUploadSVG from '~/svg/computer_upload.svg';
+import TakePictureSVG from '~/svg/take_picture.svg';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',

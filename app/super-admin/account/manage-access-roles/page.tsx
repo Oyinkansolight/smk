@@ -134,7 +134,6 @@ export default function Page() {
 
   useEffect(() => {
     const AT = Cookies.get('adminType');
-    console.log(AT);
 
     if (AT === 'NORMAL') {
       setSelectedRole({ item: 4, child: 0 });
@@ -198,9 +197,8 @@ export default function Page() {
           <div className='text-xl uppercase'>Permissions</div>
           <div className='h-8' />
           <PermissionsEditor
-            key={`${
-              roles[selectedRole.item].children[selectedRole.child].role
-            }`}
+            key={`${roles[selectedRole.item].children[selectedRole.child].role
+              }`}
             isEditing={isEditing}
           />
         </div>

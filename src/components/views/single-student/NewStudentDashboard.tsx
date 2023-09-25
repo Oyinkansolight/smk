@@ -4,7 +4,7 @@ import StudentActionCard from '@/components/cards/StudentActionCard';
 import NewStudentClock from '@/components/views/single-student/NewStudentClock';
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetStudentOngoingPeriod } from '@/server/government/student';
@@ -36,22 +36,22 @@ export default function NewStudentDashboard() {
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentWeek = getFromSessionStorage('currentWeek') ?? '';
   let user;
-  let currentTermInfo;
-  let currentWeekinfo;
+  // let currentTermInfo;
+  let currentWeekInfo;
 
   if (userData && currentTerm && currentWeek) {
     user = JSON.parse(userData);
-    currentTermInfo = JSON.parse(currentTerm);
-    // currentWeekinfo = JSON.parse(currentWeek) ?? {};
+    // currentTermInfo = JSON.parse(currentTerm);
+    currentWeekInfo = JSON.parse(currentWeek) ?? {};
   }
   const { data, isLoading } = useGetStudentOngoingPeriod({
     studentId: user?.currentStudentInfo.id ?? '',
-    weekId: currentWeekinfo?.id ?? '',
+    weekId: currentWeekInfo?.id ?? '',
   });
   const { isLoading: loading, data: todaysPeriod } = useGetTodaysPeriod({
-    classId: '6a37fa80-a12c-42dc-8333-c05a322bf332',
-    day: 'Friday',
-    weekid: currentWeekinfo?.id ?? '',
+    classId: user?.currentStudentInfo.class.class.id,
+    day: currentDay,
+    weekid: currentWeekInfo?.id ?? '',
   });
 
   const clockIn = useClockIn();
@@ -86,7 +86,7 @@ export default function NewStudentDashboard() {
   // ===========================================================
 
   const [time, setTime] = useState(0);
-  const [intervalId, setIntervalId] = useState(null);
+  // const [intervalId, setIntervalId] = useState(null);
   const [pageLoadTime, setPageLoadTime] = useState(Date.now());
   const [isActive, setIsActive] = useState(true);
 
@@ -108,7 +108,7 @@ export default function NewStudentDashboard() {
       if (!document.hidden) {
         const pageLoadTime = Date.now() - time;
         setPageLoadTime(pageLoadTime);
-        localStorage.setItem('pageLoadTime', `${(time/60000).toFixed(2)}`);
+        localStorage.setItem('pageLoadTime', `${(time / 60000).toFixed(2)}`);
       }
     };
 
@@ -136,7 +136,7 @@ export default function NewStudentDashboard() {
           </div>
           <NextPeriod
             studentId={user?.currentStudentInfo.id}
-            weekId={currentWeekinfo?.id ?? ''}
+            weekId={currentWeekInfo?.id ?? ''}
           />
         </div>
 

@@ -6,16 +6,10 @@ import Stepper from '@/components/stepper';
 import Details from '@/components/views/super-admin/TransferStaff/Details';
 import Publish from '@/components/views/super-admin/TransferStaff/publish';
 import logger from '@/lib/logger';
-import { getErrMsg } from '@/server';
-// import { useCreateStaff } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TransferStaff = () => {
   const {

@@ -1,19 +1,46 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
-import React, { useState } from 'react';
+import { convertTimestampToDate } from '@/lib/helper';
+import React, { useEffect, useState } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
 
 interface propType {
   onClickHandler?: () => void;
+  SubmitHandler?: () => void;
+  settitle: (v: any) => void;
+  setstartDate: (v: any) => void;
+  setendDate: (v: any) => void;
+  title: string;
+  startDate: string;
+  endDate: string;
+  loading: boolean;
+  itemToEdit: any;
 }
 
-function AddActivityName({ onClickHandler }: propType) {
-  function handleSubmit() {
-    onClickHandler && onClickHandler();
-  }
+function AddActivityName({
+  onClickHandler,
+  itemToEdit,
+  SubmitHandler,
+  settitle,
+  setendDate,
+  setstartDate,
+  title,
+  endDate,
+  startDate,
+  loading,
+}: propType) {
   const [isOpen, setIsOpen] = useState(true);
   function handleVisibility() {
     setIsOpen(!isOpen);
   }
+
+  useEffect(() => {
+    setstartDate(convertTimestampToDate(itemToEdit.startDate));
+    setendDate(convertTimestampToDate(itemToEdit.endDate));
+    settitle(itemToEdit.title);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
@@ -34,7 +61,9 @@ function AddActivityName({ onClickHandler }: propType) {
               label='Title*'
               name='Title'
               type='text'
-              placeholder='Select an option'
+              placeholder='Enter a title'
+              formValue={title}
+              setFormValue={settitle}
             />
             <div></div>
 
@@ -43,6 +72,8 @@ function AddActivityName({ onClickHandler }: propType) {
               name='schoolType'
               type='date'
               placeholder='Select an option'
+              formValue={startDate}
+              setFormValue={setstartDate}
             />
             {isOpen && (
               <FormInput
@@ -50,11 +81,12 @@ function AddActivityName({ onClickHandler }: propType) {
                 name='schoolType'
                 type='date'
                 placeholder='Select an option'
+                formValue={endDate}
+                setFormValue={setendDate}
               />
             )}
           </div>
           <div className='flex space-x-2 items-center'>
-            {' '}
             <input
               type='checkbox'
               className='scale-125 transform'
@@ -67,10 +99,10 @@ function AddActivityName({ onClickHandler }: propType) {
 
         <div className='flex justify-center'>
           <button
-            onClick={handleSubmit}
+            onClick={SubmitHandler}
             className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
           >
-            Proceed
+            {loading ? <ImSpinner2 className='animate-spin' /> : 'Proceed'}
           </button>
         </div>
       </div>

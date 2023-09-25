@@ -2,7 +2,6 @@
 
 import Button from '@/components/buttons/Button';
 import { BasicCard } from '@/components/cards';
-// import { BaseInput } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
@@ -36,18 +35,22 @@ export default function ForgotPassword() {
     try {
       const response = await mutateAsync(data);
 
-      toast.success('Password reset successful, Login');
-      router.push('/auth/user');
+      if (response) {
+        toast.success('Password reset successful, Login');
+        router.push('/auth/user');
+      }
     } catch (error) {
       toast.error(getErrMsg(error as Error));
-      setLoading(false);
     }
+
+    setLoading(false);
   };
   React.useEffect(() => {
     const gettoken = queryString && queryString.get('token');
     settoken(gettoken);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Layout>
       <main>

@@ -169,7 +169,7 @@ const AddSchool = () => {
               label='Upload Staff List CSV'
               value={staffDetailsFile}
               onChange={setStaffDetailsFile}
-              link='/pdfs/StaffOnboarding.csv'
+              link='/pdfs/upload_teacher_template.csv'
             />
           </div>
         )}
@@ -181,7 +181,7 @@ const AddSchool = () => {
               label='Upload Student List CSV'
               value={studentDetailsFile}
               onChange={setStudentDetailsFile}
-              link='/pdfs/StudentOnboarding.xlsx'
+              link='/pdfs/upload_student_template.csv'
             />
           </div>
         )}

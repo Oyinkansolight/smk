@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { BiUser } from 'react-icons/bi';
 import { MdArrowBackIos } from 'react-icons/md';
-import User1 from '~/svg/user1.svg';
 
 export default function Page() {
   const mockData = [
@@ -71,7 +71,7 @@ export default function Page() {
             key={idx}
           >
             <div className='col-span-6 flex items-center gap-4'>
-              <User1 className='h-12 w-12' /> <div>James Omokwe</div>{' '}
+              <BiUser className='h-12 w-12' /> <div>James Omokwe</div>{' '}
             </div>
             <div className='col-span-6 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
               03/03/12 22:43
