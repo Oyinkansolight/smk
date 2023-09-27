@@ -4,6 +4,7 @@ import Button from '@/components/buttons/Button';
 import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import GenericLoader from '@/components/layout/Loader';
 import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
@@ -88,6 +89,16 @@ export default function StudentAuth() {
       setLoading(false);
     }
   };
+  if (typeof window === 'undefined') {
+    // if (sessionStorage.getItem('user')) {
+    //   router.push(ROUTES.STUDENT);
+    // }
+
+    return (
+      <GenericLoader />
+    )
+  }
+
   return (
     <Layout>
       <main>

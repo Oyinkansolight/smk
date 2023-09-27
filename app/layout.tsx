@@ -1,6 +1,7 @@
 'use client';
 
 import logger from '@/lib/logger';
+import request from '@/server';
 // Import the styles provided by the react-pdf-viewer packages
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
@@ -40,11 +41,18 @@ export default function RootLayout({
   useEffect(() => {
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
-      if (currentBattery <= 10 && !charging) {
-        logger(`Battery is low and currently ${currentBattery}%`);
+      if (currentBattery <= 30 && !charging) {
+        request.put(
+          '/v1/utilities/update-batery-level',
+          { battryLevel: currentBattery },
+          {
+            withCredentials: true,
+          }
+        ),
+          logger(`Battery is low and currently ${currentBattery}%`);
       }
 
-      if (currentBattery > 10) {
+      if (currentBattery > 30) {
         logger(`Battery is currently ${currentBattery}%`);
       }
     }

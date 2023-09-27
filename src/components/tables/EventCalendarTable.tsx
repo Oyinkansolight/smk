@@ -1,33 +1,27 @@
+import EmptyView from '@/components/misc/EmptyView';
+import moment from 'moment';
 import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
 import { BiChevronRight } from 'react-icons/bi';
+interface Event {
+  id: string;
+  title: string;
+  type: string;
+  institutionType: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
-const data = [
-  {
-    eventName: 'Examination Registration',
-    startDate: '21-02-23',
-    endDate: '21-02-23',
-  },
-  {
-    eventName: 'Examination Registration',
-    startDate: '21-02-23',
-    endDate: '21-02-23',
-  },
-  {
-    eventName: 'Examination Registration',
-    startDate: '21-02-23',
-    endDate: '21-02-23',
-  },
-];
-
-const columns: TableColumn<(typeof data)[number]>[] = [
+const columns: TableColumn<Event>[] = [
   {
     name: 'Event Name',
-    selector: (event) => event.eventName,
+    selector: (event) => event.title,
     grow: 3,
     cell: (event) => (
       <div className='text-sm font-medium whitespace-nowrap overflow-hidden'>
-        <div className='text-[#525F7F]'>{event.eventName}</div>
+        <div className='text-[#525F7F]'>{event.title}</div>
       </div>
     ),
   },
@@ -35,24 +29,33 @@ const columns: TableColumn<(typeof data)[number]>[] = [
     name: 'Start Date',
     selector: (event) => event.startDate,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{event.startDate}</div>
+      <div className='font-bold text-[#ADB8CC]'>{moment(event.startDate).format('hh:mm a')}</div>
     ),
   },
   {
     name: 'End Date',
     selector: (event) => event.endDate,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{event.endDate}</div>
+      <div className='font-bold text-[#ADB8CC]'>{event.endDate ? moment(event.endDate).format('hh:mm a') : '-'}</div>
     ),
   },
 ];
 
-export default function EventCalendarTable() {
+export default function EventCalendarTable({ data }) {
+  if (!data || !data.length) {
+    return (
+      <EmptyView label='No Event Calendar Data' useStandardHeight />
+    );
+  }
+
   return (
     <div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data.slice(0, 5)} />
       <div className='flex justify-end'>
-        <Link className='flex items-center text my-2 text-[#007AFF]' href='#'>
+        <Link
+          href='/super-admin/academic-calendar'
+          className='flex items-center text my-2 text-[#007AFF]'
+        >
           <div>View All</div>
           <BiChevronRight className='h-5 w-5' />
         </Link>

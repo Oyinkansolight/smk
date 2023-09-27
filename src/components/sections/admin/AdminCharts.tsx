@@ -13,6 +13,13 @@ import LoginLogsTable from '@/components/tables/LoginLogsTable';
 import TimeTable from '@/components/tables/TimeTable';
 
 const AdminCharts = () => {
+  // const { data: chartData, isLoading } = useGetAdminCharts({
+
+  // });
+
+  // if (!chartData || isLoading) {
+  //   return <SearchLoader />;
+  // }
   return (
     <div className='grid md:grid-cols-2 gap-[20px]'>
       <div>
@@ -118,7 +125,7 @@ const AdminCharts = () => {
 
           <GenericChart
             title='Event/Calendar'
-            content={<EmptyView label='No Data' /> ?? <EventCalendarTable />}
+            content={<EventCalendarTable data={[]} />}
           />
 
           <GenericChart title='Time Table' content={<EmptyView label='No Data' /> ?? <TimeTable />} />
@@ -128,7 +135,7 @@ const AdminCharts = () => {
             content={<EmptyView label='No Data' /> ?? <TransferRequestsTable />}
           />
 
-          <GenericChart title='Login Logs' content={<EmptyView label='No Data' /> ?? <LoginLogsTable />} />
+          <GenericChart title='Login Logs' content={<EmptyView label='No Data' /> ?? <LoginLogsTable data={[]} />} />
 
           <GenericChart
             title='Click In/Clock Out Logs'

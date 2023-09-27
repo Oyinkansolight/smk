@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import AddSingleSchool from '@/components/modal/addSchool';
-import DataGenerator from '@/components/views/admin/DataGenerator';
 import DashboardCounts from '@/components/sections/superAdmin/DashboardCounts';
 const SuperAdminCharts = dynamic(() => import('@/components/sections/superAdmin/SuperAdminCharts'));
 
@@ -26,9 +25,6 @@ const Page = () => {
       )}
 
       <DashboardCounts handleSetOpen={handleSetOpen} />
-
-      <DataGenerator />
-
 
       <SuperAdminCharts />
     </div>
