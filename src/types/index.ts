@@ -45,3 +45,22 @@ export interface PaginationParams {
   limit?: number;
   page?: number;
 }
+
+export interface ChartParams {
+  institutionType?: number;
+  lgaId?: string;
+  institutionId?: string;
+  userType?: string;
+  sessionId?: string;
+  classId?: string;
+  subjectId?: string;
+  studentId?: string;
+  staffId?: string;
+  startPeriod?: string;
+  endPeriod?: string;
+}
+
+export interface BatteryLevel {
+  battryLevel?: number;
+  deviceId?: string;
+}

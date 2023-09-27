@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
 import clsxm from '@/lib/clsxm';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -15,6 +15,7 @@ import IDBadge from '~/svg/identification_badge.svg';
 import NoteBook from '~/svg/notebook.svg';
 import OpenBook from '~/svg/open_book.svg';
 import UsersThree from '~/svg/users_three.svg';
+import ROUTES from '@/constant/routes';
 
 interface AdminSidebarProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
+  const router = useRouter();
   const routeDetails = usePathname();
 
   const handleLogout = () => {
@@ -34,6 +36,12 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
         localStorage.clear()
         sessionStorage.clear();
       }
+
+      toast.info('Redirecting to login page...');
+
+      setTimeout(() => {
+        router.push(ROUTES.ADMIN_AUTH);
+      }, 1500);
     }
   };
 

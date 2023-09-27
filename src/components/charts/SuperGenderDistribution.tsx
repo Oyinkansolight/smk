@@ -1,29 +1,33 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bar
+import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
 
-const data = [
-  {
-    gender: 'Male',
-    staff: 59,
+const SuperGenderDistribution = ({ data }) => {
+  const dataKeys = Object.keys(data ?? {});
+  const parsedData = dataKeys.map((item) => ({
     staffColor: '#7F0CA7',
-    student: 10,
     studentColor: '#00CABE',
-  },
-  {
-    gender: 'Female',
-    staff: 61,
-    staffColor: '#7F0CA7',
-    student: 37,
-    studentColor: '#00CABE',
-  },
-];
+    staff: data[item].staff,
+    student: data[item].student,
+    gender: item[0].toUpperCase(),
+  }));
 
-const SuperGenderDistribution = () => {
+  const totalSum = dataKeys.reduce((acc, curr) => {
+    return acc + data[curr].student + data[curr].staff;
+  }
+    , 0);
+
+  const isEmpty = !data || !dataKeys?.length || !parsedData?.length || totalSum === 0;
+
+  if (isEmpty) {
+    return <EmptyView label='No Data' />;
+  }
+
   return (
     <div className='h-80'>
       <ResponsiveBar
-        data={data}
+        data={parsedData}
         keys={['student', 'staff']}
         indexBy='gender'
         margin={{ top: 0, right: 30, bottom: 60, left: 60 }}

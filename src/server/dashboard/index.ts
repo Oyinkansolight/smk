@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
-import { DashboardOverview } from '@/types';
+import { BatteryLevel, ChartParams, DashboardOverview } from '@/types';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetDashboardOverview() {
@@ -54,6 +54,7 @@ export function useGetStudentDashboardOverview() {
   });
   return query;
 }
+
 export function useGetAcademicSessions() {
   const query = useQuery({
     queryKey: 'academic_sessions',
@@ -79,6 +80,35 @@ export function useCreateAcademicCalendar() {
     onSettled: () => {
       client.refetchQueries('academic_sessions');
     },
+  });
+  return mutation;
+}
+
+export function useGetAdminCharts(params: Partial<ChartParams>) {
+  const query = useQuery({
+    queryKey: 'admin_charts',
+    queryFn: () =>
+      request
+        .get('/v1/government/dashboards/get-admin-stat-dashboard', {
+          params,
+          withCredentials: true,
+        })
+        .then((v) => v.data.data as any),
+  });
+  return query;
+}
+
+export function useCreateLowBatteryEntry() {
+  const mutation = useMutation({
+    mutationKey: 'update-battery-level',
+    mutationFn: (params: Partial<BatteryLevel>) =>
+      request.put(
+        '/v1/utilities/update-batery-level',
+        { params },
+        {
+          withCredentials: true,
+        }
+      ),
   });
   return mutation;
 }

@@ -1,50 +1,33 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bar
+import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
 
-const data = [
-  {
-    day: 'M',
-    staff: 59,
+const BarChart = ({ data }) => {
+  const dataKeys = Object.keys(data ?? {});
+  const parsedData = dataKeys.map((item) => ({
+    day: item[0],
     staffColor: '#7F0CA7',
-    student: 10,
     studentColor: '#00CABE',
-  },
-  {
-    day: 'T',
-    staff: 61,
-    staffColor: '#7F0CA7',
-    student: 37,
-    studentColor: '#00CABE',
-  },
-  {
-    day: 'W',
-    staff: 55,
-    staffColor: '#7F0CA7',
-    student: 30,
-    studentColor: '#00CABE',
-  },
-  {
-    day: 'TH',
-    staff: 78,
-    staffColor: '#7F0CA7',
-    student: 20,
-    studentColor: '#00CABE',
-  },
-  {
-    day: 'F',
-    staff: 71,
-    staffColor: '#7F0CA7',
-    student: 30,
-    studentColor: '#00CABE',
-  },
-];
+    staff: data[item].staff,
+    student: data[item].student
+  }));
 
-const BarChart = () => {
+  const totalSum = dataKeys.reduce((acc, curr) => {
+    return acc + data[curr].student + data[curr].staff;
+  }
+    , 0);
+
+  const isEmpty = !data || !dataKeys?.length || !parsedData?.length || totalSum === 0;
+
+  if (isEmpty) {
+    return <EmptyView label='No Data' />;
+  }
+
   return (
     <div className='h-80'>
       <ResponsiveBar
-        data={data}
+        data={parsedData}
         keys={['student', 'staff']}
         indexBy='day'
         margin={{ top: 0, right: 30, bottom: 60, left: 30 }}
