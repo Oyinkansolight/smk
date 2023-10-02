@@ -32,6 +32,7 @@ import { useSessionStorage } from 'usehooks-ts';
 import BookSVG from '~/svg/book.svg';
 import ComputerUploadSVG from '~/svg/computer_upload.svg';
 import TakePictureSVG from '~/svg/take_picture.svg';
+import { isLocal } from '@/constant/env';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
@@ -161,10 +162,12 @@ export default function CreateClassActivityView() {
         data['lesson-note-file-upload'] &&
         data['lesson-note-file-upload'][0]
       ) {
+        const environment = isLocal ? 'staging' : 'production';
         const f = data['lesson-note-file-upload'][0] as File;
         path = await uploadDocument(
           `/teacher-lesson-note/${f.name}`,
-          await f.arrayBuffer()
+          await f.arrayBuffer(),
+          environment
         );
       }
 

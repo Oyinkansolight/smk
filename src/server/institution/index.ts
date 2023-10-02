@@ -144,7 +144,7 @@ export function useGetStudentSubjectList(id: any) {
   return query;
 }
 
-export function useGetStudentsList(params?: PaginationParams) {
+export function useGetStudentsList(params?: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_student_list',
     queryFn: async () => {
@@ -305,7 +305,7 @@ export function useGetClassesList() {
   });
   return query;
 }
-export function useGetSchools(params: PaginationParams) {
+export function useGetSchools(params: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_school_list',
     queryFn: async () => {

@@ -29,14 +29,18 @@ const columns: TableColumn<Event>[] = [
     name: 'Start Date',
     selector: (event) => event.startDate,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{moment(event.startDate).format('hh:mm a')}</div>
+      <div className='font-bold text-[#ADB8CC] whitespace-nowrap'>{moment(event.startDate).format('DD MMM yyyy')}</div>
     ),
   },
   {
     name: 'End Date',
     selector: (event) => event.endDate,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{event.endDate ? moment(event.endDate).format('hh:mm a') : '-'}</div>
+      <div className='font-bold text-[#ADB8CC] whitespace-nowrap'>{
+        event.startDate === event.endDate ?
+          moment(event.startDate).format('DD MMM yyyy') :
+          event.endDate ? moment(event.endDate).format('DD MMM yyyy') : '-'
+      }</div>
     ),
   },
 ];

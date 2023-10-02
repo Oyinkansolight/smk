@@ -3,6 +3,7 @@ import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import DragDropDocument from '@/components/input/DragDropDocument';
 import TextArea from '@/components/input/TextArea';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { useCreateReport } from '@/server/teacher';
 import React, { useState } from 'react';
@@ -43,9 +44,11 @@ const IncidentReport = () => {
     const institutionId = JSON.parse(institution).id;
 
     if (fileName && fileData?.arrayBuffer && institutionId) {
+      const environment = isLocal ? 'staging' : 'production';
       const path = await uploadDocument(
         fileName ?? '',
-        await fileData?.arrayBuffer()
+        await fileData?.arrayBuffer(),
+        environment
       );
 
       const parsedData = {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Table from '@/components/tables/TableComponent';
@@ -29,26 +30,37 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         <Link href={`/super-admin/student?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
-            {row['user.firstName']} {row['user.lastName']}
+            {row['user.0.lastName'] ?? row['user.lastName']} {row['user.0.firstName'] ?? row['user.firstName']}
           </h2>
         </Link>
       </div>
     ),
   },
-  { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
+  { name: 'Type', selector: (row) => row['user.0.type'] ?? '-' },
   {
     name: 'Institution',
-    selector: (row) => row['institution.instituteName'] ?? '',
+    selector: (row) => row['institution.instituteName'] ?? '-',
   },
   {
     name: 'Institution Type',
-    selector: (row) => row['institution.instituteType'] ?? '',
+    selector: (row) => row['institution.instituteType'] ?? '-',
   },
 ];
 
 const AllStudent = () => {
-  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
-  const { data: students, error, isLoading } = useGetStudentsList();
+  const [lastName, setLastName] = useState('');
+  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, lastName });
+  const { data: students, error, isLoading, refetch } = useGetStudentsList({ ...pagingData });
+
+  const handleSearch = (value: string) => {
+    setLastName(value);
+    setPagingData({ ...pagingData, lastName: value });
+  }
+
+  useEffect(() => {
+    refetch();
+  }
+    , [pagingData, refetch]);
 
   useEffect(() => {
     if (error) {
@@ -87,6 +99,7 @@ const AllStudent = () => {
           <div className='text-center'>Loading...</div>
         ) : (
           <Table
+            handleSearchParam={handleSearch}
             data={
               students?.data?.map(
                 (v, i) =>
@@ -105,10 +118,10 @@ const AllStudent = () => {
               pagingData.limit * (students?.paging.totalPage ?? 0)
             }
             onChangePage={(page) => {
-              setPagingData({ page, limit: pagingData.limit });
+              setPagingData({ page, limit: pagingData.limit, lastName });
             }}
             onChangeRowsPerPage={(limit, page) => {
-              setPagingData({ page, limit });
+              setPagingData({ page, limit, lastName });
             }}
           />
         )}

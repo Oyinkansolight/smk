@@ -41,7 +41,7 @@ export default function RootLayout({
   useEffect(() => {
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
-      if (currentBattery <= 30 && !charging) {
+      if (currentBattery <= 20 && !charging) {
         request.put(
           '/v1/utilities/update-batery-level',
           { battryLevel: currentBattery },
@@ -52,7 +52,7 @@ export default function RootLayout({
           logger(`Battery is low and currently ${currentBattery}%`);
       }
 
-      if (currentBattery > 30) {
+      if (currentBattery > 20) {
         logger(`Battery is currently ${currentBattery}%`);
       }
     }

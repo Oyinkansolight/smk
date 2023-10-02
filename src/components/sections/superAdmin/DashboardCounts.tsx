@@ -71,8 +71,8 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
               link='/super-admin/all-student'
             />
             <IndividualTotal
-              count={data?.Total_Teachers ?? 0}
-              name='Total Teachers'
+              count={data?.Total_Staff ?? 0}
+              name='Total Staff'
               variant='primary'
               link='/super-admin/all-staff'
             />
