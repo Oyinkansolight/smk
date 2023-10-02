@@ -7,6 +7,7 @@ import Account from '@/components/views/super-admin/AddSchool/account';
 import General from '@/components/views/super-admin/AddSchool/general';
 import Location from '@/components/views/super-admin/AddSchool/location';
 import Publish from '@/components/views/super-admin/AddSchool/publish';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
@@ -235,7 +236,8 @@ const AddSchool = () => {
                     const array = await imageData?.arrayBuffer();
                     let p = `profile_pictures/${imageName}`;
                     if (array) {
-                      p = await uploadDocument(p, array);
+                      const environment = isLocal ? 'staging' : 'production';
+                      p = await uploadDocument(p, array, environment);
                     }
                     const response = createInstitution.mutateAsync({
                       instituteLat:

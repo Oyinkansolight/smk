@@ -7,7 +7,7 @@ import { useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import AvrilImage from '~/svg/avril.svg';
 
@@ -36,7 +36,7 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
             <Image
               src={
                 item.instituteLogo.includes('placeimg') ||
-                item.instituteLogo.includes('picsum')
+                  item.instituteLogo.includes('picsum')
                   ? item.instituteLogo
                   : `/${item.instituteLogo}`
               }
@@ -65,13 +65,13 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
     name: 'Number of Students',
     selector: (item) => item.studentCount ?? '',
     sortable: true,
-    cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
+    cell: (item) => <div className='col-span-2'>{item.studentCount ?? item.students?.length}</div>,
   },
   {
     name: 'Number of Staff',
     selector: (item) => item.studentCount ?? '',
     sortable: true,
-    cell: (item) => <div className='col-span-2'>{item.studentCount}</div>,
+    cell: (item) => <div className='col-span-2'>{item.staffCount ?? item.staff?.length}</div>,
   },
   {
     name: 'Location',
@@ -82,8 +82,19 @@ const columns: TableColumn<Institution & { idx: string }>[] = [
 ];
 
 const SchoolList = ({ name, title }: { name: string; title: string }) => {
-  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
-  const { data, isLoading } = useGetSchools({ ...pagingData });
+  const [instituteName, setInstituteName] = useState('');
+  const [pagingData, setPagingData] = useState({ page: 1, limit: 10, instituteName });
+  const { data, isLoading, refetch } = useGetSchools({ ...pagingData });
+
+  const handleSetInstitutionName = (name: string) => {
+    setInstituteName(name);
+    setPagingData({ ...pagingData, instituteName: name });
+  }
+
+  useEffect(() => {
+    refetch();
+  }, [pagingData, refetch]);
+
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -118,6 +129,7 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
         </Link>
       </div>
       <Table
+        handleSearchParam={handleSetInstitutionName}
         data={((data?.data ?? []) as any[]).map((item, i) => ({
           idx: pagingData.page * pagingData.limit - pagingData.limit + i,
           ...item,
@@ -128,10 +140,10 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
         paginationServer
         paginationTotalRows={pagingData.limit * (data?.paging.totalPage ?? 0)}
         onChangePage={(page) => {
-          setPagingData({ page, limit: pagingData.limit });
+          setPagingData({ page, limit: pagingData.limit, instituteName });
         }}
         onChangeRowsPerPage={(limit, page) => {
-          setPagingData({ page, limit });
+          setPagingData({ page, limit, instituteName });
         }}
       />
     </section>

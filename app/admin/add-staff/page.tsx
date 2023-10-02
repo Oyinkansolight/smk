@@ -8,6 +8,7 @@ import Contact from '@/components/views/admin/Addstaff/contact';
 // import Education from '@/components/views/admin/Addstaff/education';
 import Employment from '@/components/views/admin/Addstaff/employment';
 import Training from '@/components/views/admin/Addstaff/training';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
@@ -136,10 +137,11 @@ const AddStaff = () => {
       data.retirementDate &&
       data.salarygrade
     ) {
+      const environment = isLocal ? 'staging' : 'production';
       const array = await imageData?.arrayBuffer();
       let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
       if (array) {
-        uploadedImage = await uploadDocument(uploadedImage, array);
+        uploadedImage = await uploadDocument(uploadedImage, array, environment);
       }
       const staffData = {
         profileImg: uploadedImage,

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BasicSearch } from '@/components/search';
-import { useMemo, useState } from 'react';
 import DataTable, { TableProps } from 'react-data-table-component';
 
 export default function Table<T>(
@@ -9,39 +8,40 @@ export default function Table<T>(
     showFilter?: boolean;
     showSearch?: boolean;
     bottomPadding?: number;
+    handleSearchParam?: (value: string) => void;
   }
 ) {
-  const [filterText, setFilterText] = useState('');
+  // const [filterText, setFilterText] = useState('');
 
-  const filteredData = useMemo(() => {
-    if (filterText.length > 2) {
-      const nData: T[] = [];
-      for (let j = 0; j < props.data.length; j++) {
-        const dataItem = props.data[j];
-        let keys: (keyof T)[] = [];
-        if (props.filterFields || dataItem) {
-          keys =
-            props.filterFields ??
-            (Object.keys(dataItem as any) as unknown as (keyof T)[]);
-        }
-        for (let i = 0; i < keys.length; i++) {
-          const key = keys[i];
+  // const filteredData = useMemo(() => {
+  //   if (filterText.length > 2) {
+  //     const nData: T[] = [];
+  //     for (let j = 0; j < props.data.length; j++) {
+  //       const dataItem = props.data[j];
+  //       let keys: (keyof T)[] = [];
+  //       if (props.filterFields || dataItem) {
+  //         keys =
+  //           props.filterFields ??
+  //           (Object.keys(dataItem as any) as unknown as (keyof T)[]);
+  //       }
+  //       for (let i = 0; i < keys.length; i++) {
+  //         const key = keys[i];
 
-          if (
-            typeof dataItem[key] === 'string' &&
-            (dataItem[key] as string)
-              .toLowerCase()
-              .includes(filterText.toLocaleLowerCase())
-          ) {
-            nData.push(dataItem);
-            break;
-          }
-        }
-      }
-      return nData;
-    }
-    return props.data;
-  }, [filterText, props.data, props.filterFields]);
+  //         if (
+  //           typeof dataItem[key] === 'string' &&
+  //           (dataItem[key] as string)
+  //             .toLowerCase()
+  //             .includes(filterText.toLocaleLowerCase())
+  //         ) {
+  //           nData.push(dataItem);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //     return nData;
+  //   }
+  //   return props.data;
+  // }, [filterText, props.data, props.filterFields]);
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex justify-end'>
@@ -59,7 +59,7 @@ export default function Table<T>(
             (props.showSearch === undefined && (
               <BasicSearch
                 placeholder='Search User Name/ID'
-                handleSearch={setFilterText}
+                handleSearch={props.handleSearchParam}
               />
             ))}
         </div>
@@ -84,7 +84,7 @@ export default function Table<T>(
           },
         }}
         {...props}
-        data={filteredData}
+        data={props.data}
         pagination
         paginationPerPage={10}
       />

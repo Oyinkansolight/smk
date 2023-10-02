@@ -33,6 +33,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+import { isLocal } from '@/constant/env';
 
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
@@ -202,7 +203,8 @@ export default function Page() {
                 const buffer = await imageData?.arrayBuffer();
                 let p = `profile_picture/${imageName}`;
                 if (buffer) {
-                  p = await uploadDocument(p, buffer);
+                  const environment = isLocal ? 'staging' : 'production';
+                  p = await uploadDocument(p, buffer, environment);
                 }
                 setLoading(true);
                 await create.mutateAsync({

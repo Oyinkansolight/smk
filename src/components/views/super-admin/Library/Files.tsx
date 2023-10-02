@@ -20,7 +20,6 @@ import {
 } from '@/server/library';
 import { UserFile, UserFolder } from '@/types/material';
 import moment from 'moment';
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { useForm } from 'react-hook-form';
@@ -29,11 +28,14 @@ import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
+import VideoContent from '~/svg/media.svg';
 import Folder from '~/svg/folder.svg';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import UploadMaterial from '@/components/modal/UploadMaterial';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
+  fileType: string;
   isAssign: boolean;
   action: number | null;
   isUpdateFolder: boolean;
@@ -60,7 +62,11 @@ const columns: TableColumn<TableItemData>[] = [
         return (
           <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
             <div>
-              <FileContent className='h-6 w-6' />
+              {item.fileType === 'video' ? (
+                <VideoContent className='h-6 w-6' />
+              ) : (
+                <FileContent className='h-6 w-6' />
+              )}
             </div>
             <h2
               onClick={() => {
@@ -305,6 +311,7 @@ const UploadDocument = ({
   const [url, setUrl] = useState('');
   const [contentType, setConentType] = useState('');
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [openUploadModal, setOpenUploadModal] = useState(false);
 
   const toggleDeleteModal = () => {
     setIsModalDeleteOpen(!isModalDeleteOpen);
@@ -321,6 +328,10 @@ const UploadDocument = ({
     setCurrentFile(fileUrl);
     toggleModal();
   };
+
+  const toggleUploadModal = () => {
+    setOpenUploadModal(!openUploadModal);
+  }
 
   const {
     data: folderContent,
@@ -491,6 +502,20 @@ const UploadDocument = ({
             </div>
           }
         />
+
+        <ControlledModal
+          className='mt-10'
+          isOpen={openUploadModal}
+          toggleModal={toggleUploadModal}
+          content={
+            <UploadMaterial
+              toggleUploadModal={toggleUploadModal}
+              folderId={folderTrail[folderTrail?.length - 1]?.id}
+              folderName={folderTrail[folderTrail?.length - 1]?.folderName}
+            />
+          }
+        />
+
         <section className='transition-all ease-in-out delay-1000 w-full max-w-[40rem] lg:max-w-full'>
           {isCreateFolder && (
             <CreateFolder
@@ -586,26 +611,27 @@ const UploadDocument = ({
                 id='upload_file'
                 hidden
               /> */}
-                    <Link
+                    {/* <Link
                       href={`/super-admin/add-material${folderTrail.length > 0
                         ? `?folderId=${folderTrail[folderTrail.length - 1].id
                         }&folderName=${folderTrail[folderTrail.length - 1].folderName
                         }`
                         : ''
                         }`}
+                    > */}
+                    <label
+                      onClick={toggleUploadModal}
+                      htmlFor='upload_file'
+                      className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
                     >
-                      <label
-                        htmlFor='upload_file'
-                        className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-                      >
-                        Upload File{' '}
-                        {folderTrail.length > 0 &&
-                          `To ${folderTrail[folderTrail.length - 1].folderName
-                          }`}
-                      </label>
-                    </Link>
+                      Upload File{' '}
+                      {folderTrail.length > 0 &&
+                        `To ${folderTrail[folderTrail.length - 1].folderName
+                        }`}
+                    </label>
+                    {/* </Link> */}
 
-                    <input
+                    {/* <input
                       type='file'
                       name='upload_folder'
                       id='upload_folder'
@@ -617,7 +643,7 @@ const UploadDocument = ({
                       className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
                     >
                       Upload Folder
-                    </label>
+                    </label> */}
                   </div>
                 )}
               </div>

@@ -20,7 +20,7 @@ export default function RootLayout({
         <NewHeader />
         <div className='flex flex-1 flex-row overflow-y-hidden'>
           <NewStudentSidebar />
-          <main className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
+          <main className='hideScroll flex-1 overflow-y-auto p-2 text-xs h-[100vh]'>
             <div className='ml-20'>{children}</div>
           </main>
         </div>

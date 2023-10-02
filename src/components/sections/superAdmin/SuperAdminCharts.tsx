@@ -100,13 +100,6 @@ const SuperAdminCharts = ({
               title='Low Batteries Notifications'
               content={<LowBatteriesTable data={chartData?.lowBatteryUsers} />}
             />
-
-            <GenericChart
-              title='Admin Login Log'
-              content={<LoginLogsTable data={chartData?.loginLogs} />}
-              titleClassName='bg-[#EDF5F2]'
-              className='border-[#EDF5F2]'
-            />
           </div>
 
           <div className='flex flex-col gap-y-7'>
@@ -136,6 +129,13 @@ const SuperAdminCharts = ({
               content={<EmptyView label='No Data' /> ?? <SuperTransferRequestsTable />}
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
+            />
+
+            <GenericChart
+              title='Admin Login Log'
+              content={<LoginLogsTable data={chartData?.loginLogs} />}
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
             />
           </div>
         </div>

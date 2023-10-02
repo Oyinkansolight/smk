@@ -32,7 +32,10 @@ const BasicSearch = ({ handleSearch, placeholder }: propTypes) => {
           className='block h-[40px] w-full max-w-[581px] rounded-full border-0 bg-white p-2.5 pl-[54px] text-xs text-black shadow-sm placeholder:text-[#ADB8CC] focus:border-blue-500 focus:ring-blue-500'
           placeholder={placeholder ? placeholder : 'Search...'}
           required
-          onChange={(e) => handleSearch?.(e.target.value)}
+          onChange={(e) => {
+            e.preventDefault();
+            handleSearch?.(e.target.value)
+          }}
         />
       </div>
     </form>

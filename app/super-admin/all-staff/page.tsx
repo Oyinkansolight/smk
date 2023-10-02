@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Table from '@/components/tables/TableComponent';
@@ -21,7 +22,7 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'Staff ID',
     selector: (row) => row.staffId ?? '',
-    cell: (row) => <div>{row.staffId}</div>,
+    cell: (row) => <div>{row?.oracleNumber ?? row.staffId}</div>,
   },
   {
     name: 'Name',
@@ -31,7 +32,7 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
         <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         <Link href={`/super-admin/teacher?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
-            {row['user.firstName']} {row['user.lastName']}
+            {row['user.lastName']} {row['user.firstName']}
           </h2>
         </Link>
       </div>
@@ -55,12 +56,23 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
 ];
 
 const AllStaff = () => {
-  const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
+  const [lastName, setLastName] = useState('');
+  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, lastName });
   const {
     data: staff,
     error,
     isLoading,
+    refetch
   } = useGetTeachersList({ ...pagingData });
+
+  const handleSearch = (value: string) => {
+    setLastName(value);
+    setPagingData({ ...pagingData, lastName: value });
+  };
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, pagingData]);
 
   useEffect(() => {
     if (error) {
@@ -99,6 +111,7 @@ const AllStaff = () => {
           <div className='text-center'>Loading...</div>
         ) : (
           <Table
+            handleSearchParam={handleSearch}
             data={
               staff?.data?.staffs?.map((v, i) => ({
                 idx: pagingData.page * pagingData.limit - pagingData.limit + i,
@@ -111,10 +124,10 @@ const AllStaff = () => {
               pagingData.limit * (staff?.paging.totalPage ?? 0)
             }
             onChangePage={(page) => {
-              setPagingData({ page, limit: pagingData.limit });
+              setPagingData({ page, limit: pagingData.limit, lastName });
             }}
             onChangeRowsPerPage={(limit, page) => {
-              setPagingData({ page, limit });
+              setPagingData({ page, limit, lastName });
             }}
           />
         )}

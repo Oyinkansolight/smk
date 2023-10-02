@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
         <AdminHeader />
 
-        <div className='flex flex-1 flex-row overflow-y-hidden'>
+        <div className='flex flex-1 flex-row overflow-y-hidden h-[100vh]'>
           <div className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
             <div className='ml-20'>{children}</div>
           </div>

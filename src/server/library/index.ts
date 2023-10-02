@@ -33,23 +33,35 @@ export interface UpdateFolderSubjectParams {
 }
 
 export function useUploadFile() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'upload-file',
     mutationFn: async (params: UploadFileParams) => {
       return await request.post('/v1/government/library/upload-file', params);
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_root`);
     },
   });
   return mutation;
 }
 
 export function useUploadFolderFile() {
+  const client = useQueryClient();
+  let folderId: string | undefined;
+
   const mutation = useMutation({
     mutationKey: 'upload_folder_file',
     mutationFn: async (params: UploadFileParams) => {
+      folderId = params.folderId?.toString();
       return await request.post(
         '/v1/government/library/upload-folder-file',
         params
       );
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_${folderId}`);
     },
   });
   return mutation;
@@ -192,7 +204,7 @@ export function useAssignSubjectsToFile() {
       );
     },
     onSettled: () => {
-      client.refetchQueries(`get_folder_files_root}`);
+      client.refetchQueries(`get_folder_files_root`);
     },
   });
   return mutation;
@@ -209,7 +221,7 @@ export function useAssignSubjectsToFolder() {
       );
     },
     onSettled: () => {
-      client.refetchQueries(`get_folder_files_root}`);
+      client.refetchQueries(`get_folder_files_root`);
     },
   });
   return mutation;
@@ -226,7 +238,7 @@ export function useCreateFolder(name: string) {
       });
     },
     onSettled: () => {
-      client.refetchQueries(`get_folder_files_root'}`);
+      client.refetchQueries(`get_folder_files_root`);
     },
   });
   return mutation;
@@ -327,7 +339,7 @@ export function useUpdateFolder() {
       return await request.put('/v1/government/library/update-folder', params);
     },
     onSettled: () => {
-      client.refetchQueries(`get_folder_files_root'}`);
+      client.refetchQueries(`get_folder_files_root`);
     },
   });
   return mutation;

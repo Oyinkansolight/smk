@@ -20,9 +20,13 @@ if (typeof window !== 'undefined') {
   analytics = getAnalytics(app);
 }
 
-export async function uploadDocument(fileName: string, bytes: ArrayBuffer) {
+export async function uploadDocument(
+  fileName: string,
+  bytes: ArrayBuffer,
+  env: string
+) {
   const upload = await uploadBytes(
-    ref(getStorage(), `institute_materials/${fileName}`),
+    ref(getStorage(), `${env}/institute_materials/${fileName}`),
     bytes
   );
   return upload.ref.fullPath;

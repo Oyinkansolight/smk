@@ -107,6 +107,7 @@ export interface Staff {
   institution?: Institution;
   phoneOfNextOfKin?: string;
   addressOfNextOfKin?: string;
+  oracleNumber?: string | number;
   relationshipToNextOfKin?: string;
   trainingDetails: TrainingDetails[];
   employmentDetails: EmploymentDetails;
@@ -130,8 +131,6 @@ export interface ManagedClassArm {
   updatedAt: string;
   class: ClassInterface;
 }
-
-
 
 export interface ClassInterface {
   id: string;
@@ -162,6 +161,7 @@ export interface FlattenedStaff {
   lga: string;
   designation: string;
   staffId: string;
+  oracleNumber: string | number;
   'employmentDetails.jobTitle': string;
   'employmentDetails.schoolName': string;
   'employmentDetails.retirementDate': string;
@@ -277,7 +277,7 @@ export interface Institution {
   instituteLong?: string;
   isOnboardingCompleted?: boolean;
   students?: Student[];
-  staff?: Staff;
+  staff?: Staff[];
   studentCount?: number;
   staffCount?: number;
   createdAt?: string;

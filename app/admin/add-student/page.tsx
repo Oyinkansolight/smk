@@ -7,6 +7,7 @@ import Contact from '@/components/views/admin/AddStudent/contact';
 import Education from '@/components/views/admin/AddStudent/education';
 import ParentContact from '@/components/views/admin/AddStudent/parentcontact';
 import Publish from '@/components/views/admin/AddStudent/publish';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
@@ -70,10 +71,11 @@ export default function AddStudent() {
     }
     if (stage === 4 && data.teacher && data.class) {
       // setStage(stage + 1);
+      const environment = isLocal ? 'staging' : 'production';
       const array = await imageData?.arrayBuffer();
       let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
       if (array) {
-        uploadedImage = await uploadDocument(uploadedImage, array);
+        uploadedImage = await uploadDocument(uploadedImage, array, environment);
       }
 
       const studentData = {
