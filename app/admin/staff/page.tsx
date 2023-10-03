@@ -128,7 +128,7 @@ const Page = () => {
         image='/images/teacher_1.png'
         name={teacherName}
         school={staff?.institution?.instituteName ?? ''}
-        id={staff?.staffId}
+        id={staff?.oracleNumber ?? staff?.staffId}
         student={false}
         showAcademicYear
         currentGridIdx={gridTabIdx}

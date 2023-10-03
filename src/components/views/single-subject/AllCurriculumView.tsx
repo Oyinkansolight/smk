@@ -21,7 +21,7 @@ interface propType {
   classId: string;
 }
 
-export default function AllCurriculumView({ termId, sessionId }: propType) {
+export default function AllCurriculumView({ termId, sessionId, classId }: propType) {
   const params = useSearchParams();
   const [periods, setperiods] = useState<any[]>([]);
   const [periodsList, setperiodsList] = useState<any[]>([]);
@@ -62,6 +62,7 @@ export default function AllCurriculumView({ termId, sessionId }: propType) {
   const handleCreateCurriculum = useCreateCurriculum();
   const handleSubmit = async () => {
     const data = {
+      classId,
       weekId: weekid,
       periods: periodsUpdate,
     };
