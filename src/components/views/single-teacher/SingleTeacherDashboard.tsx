@@ -5,7 +5,7 @@ import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
 import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
-import StudentDashboardView from '@/components/views/single-school/SchoolDashboardView';
+import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
@@ -36,11 +36,10 @@ const SingleTeacherDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? [])[0]?.firstName} ${
-          (staff?.user ?? [])[0]?.lastName
-        }`}
+        name={`${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
+          }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
-        id={staff?.staffId}
+        id={staff?.oracleNumber ?? staff?.staffId}
         student={false}
         currentGridIdx={gridIdx}
         setGridIdx={(value) => {
@@ -82,7 +81,13 @@ const SingleTeacherDashboard = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <StudentDashboardView />}
+          {tabIdx === 0 && (
+            <StudentDashboardView
+              classCount={staff ? staff.classes.length : 0}
+              subjectCount={staff ? staff.subjects.length : 0}
+              managedClass={staff ? staff.managedClassArm : {}}
+            />
+          )}
           {tabIdx === 1 && (
             <ExamReportView
               report={[
