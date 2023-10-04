@@ -21,6 +21,7 @@ const AllClasses = () => {
 
   const { data: staffs } = useGetTeachersListByInstitution({
     instituteId: institutionId,
+    limit: 50,
   });
 
   const getTeacher = (teacherId: number) => {

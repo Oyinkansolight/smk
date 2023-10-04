@@ -30,7 +30,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -107,7 +107,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
               <div className='font-bold'>Select Class Teacher</div>
               <ReactSelect
                 required
-                options={(staffs?.data?.staffs ?? []).map((v) => ({
+                options={(staffs?.data ?? []).map((v) => ({
                   label: v?.user
                     ? `${v?.user?.firstName} ${v?.user?.lastName}`
                     : ' ',
