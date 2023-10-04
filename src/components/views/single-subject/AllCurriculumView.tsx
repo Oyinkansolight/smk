@@ -85,7 +85,7 @@ export default function AllCurriculumView({ termId, sessionId, classId }: propTy
 
     request
       .get(
-        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&termId=${termId}&weekId=${weekId}&subjectId=${id}`,
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${sessionId}&termId=${termId}&weekId=${weekId}&subjectId=${id}&classId=${classId}`,
         {
           withCredentials: true,
         }
