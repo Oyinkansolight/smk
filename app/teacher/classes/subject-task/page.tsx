@@ -135,7 +135,16 @@ export default function Page() {
           <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
             <div className='flex justify-center'>
               {url.length > 0 && (
-                <CustomPDFReader url={url} />
+                period?.file?.fileType === 'video' ? (
+                  <video
+                    src={url}
+                    controls
+                    title='Scripted lesson video player'
+                    className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                  ></video>
+                ) : (
+                  <CustomPDFReader url={url} />
+                )
               )}
             </div>
           </div>

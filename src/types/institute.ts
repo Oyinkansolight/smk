@@ -452,6 +452,7 @@ export interface FileInterface {
   id: string;
   updatedAt: string;
   userTypes: [];
+  fileType?: string;
 }
 
 //* Class Arm Attendance Interface starts here
