@@ -19,6 +19,7 @@ export default function SubjectList({
   // const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
   const [currentView, setCurrentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
+
   return (
     <div>
       {currentView === 0 && (
@@ -26,7 +27,7 @@ export default function SubjectList({
           <div className='mx-8 font-bold text-2xl text-[#6B7A99] my-4 border-b'>
             Subjects
           </div>
-          {managedClassArm && (
+          {managedClassArm ? (
             <div className='p-8'>
               <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
                 <div className='flex items-center gap-8'>
@@ -46,7 +47,7 @@ export default function SubjectList({
                 </div>
               </div>
               <div className='h-12' />
-              <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+              <div className='flex flex-wrap gap-4 px-4 pb-4'>
                 {studentSubjectsList &&
                   studentSubjectsList.length > 0 &&
                   studentSubjectsList.map((v, i) => (
@@ -56,7 +57,7 @@ export default function SubjectList({
                         setCurrentView(1);
                         setSubjectName(v?.subject?.name);
                       }}
-                      className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square'
+                      className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square min-w-[200px] lg:max-w-[200px] max-h-[200px]'
                     >
                       <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
                         <div>{v?.subject?.name?.substring(0, 1)}</div>
@@ -76,6 +77,38 @@ export default function SubjectList({
                   />
                 ))}
             </div>
+          ) : (
+            <>
+              <div className='flex flex-wrap gap-4 px-4 pb-4'>
+                {studentSubjectsList &&
+                  studentSubjectsList.length > 0 &&
+                  studentSubjectsList.map((v, i) => (
+                    <div
+                      key={v?.subject?.id ?? i}
+                      onClick={() => {
+                        setCurrentView(1);
+                        setSubjectName(v?.subject?.name);
+                      }}
+                      className='border cursor-pointer flex flex-col items-center justify-center gap-5 rounded-md w-full aspect-square min-w-[200px] lg:max-w-[200px] max-h-[200px]'
+                    >
+                      <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
+                        <div>{v?.subject?.name?.substring(0, 1)}</div>
+                      </div>
+                      <div className='font-bold text-center text-lg'>
+                        {v?.subject?.name ?? 'Subject Name'}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              {!studentSubjectsList ||
+                (studentSubjectsList.length === 0 && (
+                  <EmptyView
+                    label='No subject has been assigned to this teacher'
+                    useStandardHeight
+                  />
+                ))}
+            </>
           )}
         </div>
       )}
