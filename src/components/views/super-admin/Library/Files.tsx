@@ -41,7 +41,7 @@ type TableItemData = (UserFolder | UserFile) & {
   isUpdateFolder: boolean;
   setFileId: (value: string) => void;
   setFolderId: (value: string) => void;
-  openModal: (fileUrl: string) => void;
+  openModal: (fileUrl: string, fileType?: string) => void;
   setisAssign: (value: boolean) => void;
   setFolderName: (value: string) => void;
   setAction: (value: number | null) => void;
@@ -70,7 +70,7 @@ const columns: TableColumn<TableItemData>[] = [
             </div>
             <h2
               onClick={() => {
-                item?.fileUrl && item.openModal(item.fileUrl);
+                item?.fileUrl && item.openModal(item.fileUrl, item.fileType);
               }}
               className='text-sm font-medium cursor-pointer'
             >
@@ -308,6 +308,7 @@ const UploadDocument = ({
   const [folderId, setFolderId] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFile, setCurrentFile] = useState('');
+  const [mediaType, setMediaType] = useState('')
   const [url, setUrl] = useState('');
   const [contentType, setConentType] = useState('');
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -323,9 +324,10 @@ const UploadDocument = ({
     setIsModalOpen(!isModalOpen);
   };
 
-  const openModal = (fileUrl: string) => {
+  const openModal = (fileUrl: string, fileType?: string) => {
     logger(fileUrl);
     setCurrentFile(fileUrl);
+    setMediaType(fileType ?? '')
     toggleModal();
   };
 
@@ -495,7 +497,14 @@ const UploadDocument = ({
               <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                 <div className='flex justify-center'>
                   {url.length > 0 && (
-                    <CustomPDFReader url={url} />
+                    mediaType === 'video' ? (
+                      <video
+                        src={url}
+                        controls
+                        title='Scripted lesson video player'
+                        className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                      ></video>
+                    ) : <CustomPDFReader url={url} />
                   )}
                 </div>
               </div>
