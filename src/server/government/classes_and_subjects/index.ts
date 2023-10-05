@@ -178,3 +178,21 @@ export function useDeleteSubject() {
   });
   return mutation;
 }
+export function useDeleteStaff() {
+  const mutation = useMutation({
+    mutationKey: 'delete_staff',
+    mutationFn: async (id?: string) =>
+      (await request.delete(`/v1/government/teachers/delete-by-id?id=${id}`))
+        .data,
+  });
+  return mutation;
+}
+export function useDeleteStudent() {
+  const mutation = useMutation({
+    mutationKey: 'delete_student',
+    mutationFn: async (id?: string) =>
+      (await request.delete(`/v1/government/students/delete-by-id?id=${id}`))
+        .data,
+  });
+  return mutation;
+}

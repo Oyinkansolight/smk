@@ -169,7 +169,7 @@ export function useGetStudentsListByInstitution(instituteId: any) {
         const d = await request.get(
           `/v1/government/students/get-students-by-institution?institutionId=${instituteId}`
         );
-        return d.data.data.data.data as Student[];
+        return d.data.data.data.data as Student[] | any[];
       } catch (error) {
         logger(error);
         throw error;
@@ -228,7 +228,7 @@ export function useGetTeachersList(params?: PaginationParams) {
 }
 
 interface Props {
-  instituteId?: string;
+  instituteId?: string | null;
   limit?: number;
   page?: number;
   enabled?: boolean;

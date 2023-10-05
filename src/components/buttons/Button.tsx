@@ -10,7 +10,7 @@ export const ButtonVariant = [
   'ghost',
   'light',
   'dark',
-  'danger',
+  'danger'
 ] as const;
 const ButtonSize = ['sm', 'base'] as const;
 

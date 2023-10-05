@@ -7,6 +7,8 @@ import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import AddSubject from '@/components/modal/AddSubject';
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
@@ -14,7 +16,9 @@ import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useDeleteStaff } from '@/server/government/classes_and_subjects';
 import {
   useGetSubjectAssignedToTeacher,
   useGetTeacherById,
@@ -26,6 +30,16 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -35,6 +49,8 @@ const Page = () => {
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAddSubject, setisAddSubject] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const p = useSearchParams();
   const { data, error } = useGetTeacherById({
     id: p?.get('id'),
@@ -56,6 +72,10 @@ const Page = () => {
       ...assignedClassSubject,
       { classArmId: null, subjectId: null },
     ]);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
   const removeRemoveSubjectClass = (id: number) => {
     const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
@@ -118,11 +138,40 @@ const Page = () => {
     }
   }, [error]);
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
-    }`;
+  const { mutateAsync } = useDeleteStaff();
+
+  const handleDelete = async () => {
+    const staffId = p?.get('id');
+
+    if (staffId) {
+      try {
+        const res = await mutateAsync(staffId);
+        res && router.replace('/admin/all-staff');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
+
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${
+    (staff?.user ?? {})?.lastName
+  }`;
 
   return (
     <div className='flex'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Staff'
+            body='Are you sure you want to delete this staff?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <StudentTeacherProfileCard
         // image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
         image='/images/teacher_1.png'
@@ -164,11 +213,24 @@ const Page = () => {
           </div>
 
           {tabIdx === 0 && (
-            <StudentDashboardView
-              classCount={staff ? staff.classes.length : 0}
-              subjectCount={staff ? staff.subjects.length : 0}
-              managedClass={staff ? staff.managedClassArm : {}}
-            />
+            <div>
+              <div className='flex justify-end py-2'>
+                <Button
+                  variant='danger'
+                  onClick={() => {
+                    toggleModal();
+                  }}
+                  className='flex flex-row items-center justify-center space-x-2 w-[168px] whitespace-nowrap'
+                >
+                  <span>Delete Staff</span>
+                </Button>
+              </div>
+              <StudentDashboardView
+                classCount={staff ? staff.classes.length : 0}
+                subjectCount={staff ? staff.subjects.length : 0}
+                managedClass={staff ? staff.managedClassArm : {}}
+              />
+            </div>
           )}
           {tabIdx === 1 && (
             <div>

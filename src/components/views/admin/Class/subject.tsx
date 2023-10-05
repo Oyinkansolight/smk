@@ -43,7 +43,7 @@ export default function ExamReportView() {
           showFilter={false}
           showSearch={false}
           columns={columns}
-          data={report}
+          data={[]}
         />
       </div>
     </div>

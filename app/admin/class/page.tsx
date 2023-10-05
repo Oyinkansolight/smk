@@ -7,24 +7,36 @@ import Subject from '@/components/views/admin/Class/subject';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
+import { useGetClassArmInfo } from '@/server/institution/class';
+import { useGetClassArmStudents } from '@/server/institution/class-arm';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
-
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
+  const p = useSearchParams();
+  const classArmId = p?.get('id');
+
+  const { data: classArmInfo } = useGetClassArmInfo(classArmId);
+
 
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
-        image='/images/test_student.png'
-        name='Primary 1A'
+        image={classArmInfo?.arm ?? ''}
+        name={`${classArmInfo?.class?.name ?? 'Loading...'} ${
+          classArmInfo?.arm ?? ''
+        }`}
+        classTeacher={`${classArmInfo?.teacher?.user?.firstName ?? ''} ${
+          classArmInfo?.teacher?.user?.lastName ?? ''
+        }`}
         school='Avril Price School'
         id=''
-        student
+        student={false}
         showAcademicYear
         currentGridIdx={gridTabIdx}
         setGridIdx={(v) => {
@@ -64,10 +76,15 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <div className='bg-[#fff] p-2 rounded'>
-              <ExamTimetable isClassTimeTable={true}/>
+              {classArmInfo && (
+                <ExamTimetable
+                  isClassTimeTable={true}
+                  classId={classArmInfo?.class?.id}
+                />
+              )}
             </div>
           )}
-          {tabIdx === 1 && <StudentList />}
+          {tabIdx === 1 && <StudentList classArmId={classArmId} />}
           {tabIdx === 2 && <Subject />}
           {tabIdx === 3 && <SingleStudentAttendanceTracker />}
         </div>

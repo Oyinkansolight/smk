@@ -3,6 +3,8 @@
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
@@ -10,7 +12,9 @@ import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import { useGetStudentList } from '@/server/government/student';
 import { useGetStudentSubjectList } from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -23,6 +27,8 @@ const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const router = useRouter();
   const p = useSearchParams();
   const studentId = p?.get('id');
@@ -32,7 +38,23 @@ const Page = () => {
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
   const student = data?.data[0];
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { mutateAsync } = useDeleteStudent();
 
+  const handleDelete = async () => {
+    const studentId = p?.get('id');
+
+    if (studentId) {
+      try {
+        const res = await mutateAsync(studentId);
+        res && router.replace('/admin/all-staff');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -40,11 +62,25 @@ const Page = () => {
   }, [error]);
   return (
     <div className='flex'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Staff'
+            body='Are you sure you want to delete this staff?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <StudentTeacherProfileCard
         image='/images/test_student.png'
-        name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
-          }`}
-        school='Avril Price School'
+        name={`${(student?.user ?? [])[0]?.firstName} ${
+          (student?.user ?? [])[0]?.lastName
+        }`}
+        school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
         showAcademicYear
@@ -134,6 +170,15 @@ const Page = () => {
                   variant='secondary'
                 >
                   Edit Account Details
+                </Button>
+                <Button
+                  variant='danger'
+                  onClick={() => {
+                    toggleModal();
+                  }}
+                  className='flex flex-row items-center justify-center space-x-2 w-[168px] whitespace-nowrap'
+                >
+                  <span>Delete Staff</span>
                 </Button>
               </div>
               <div className='bg-white px-8'>
