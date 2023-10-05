@@ -88,7 +88,7 @@ export default function AddStudent() {
         parentName: data.parentName,
         parentOccupation: data.parentOccupation,
         email: data.parentEmail,
-        password: '123456789',
+        password: '12345678',
         phoneNumber: data.phoneNumber,
         address: data.address,
         lga: data.townId,

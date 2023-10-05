@@ -100,10 +100,13 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>
-            {staff?.data?.count ?? 0}
-          </h1>
+          <h1 className='font-semibold text-2xl'>{staff?.data?.count ?? 0}</h1>
         </div>
+      </div>
+
+      <div className='flex space-x-2 py-2 border-b'>
+        <button>All Staff</button>
+        <button>Transfer Requests</button>
       </div>
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
@@ -131,9 +134,11 @@ const AllStaff = () => {
             }}
           />
         )}
-        {!isLoading && staff?.data?.staffs && staff?.data?.staffs?.length === 0 && (
-          <div className='text-red-500 py-4 text-center'>No record found</div>
-        )}
+        {!isLoading &&
+          staff?.data?.staffs &&
+          staff?.data?.staffs?.length === 0 && (
+            <div className='text-red-500 py-4 text-center'>No record found</div>
+          )}
       </div>
     </section>
   );

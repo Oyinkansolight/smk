@@ -5,10 +5,13 @@ import EmptyView from '@/components/misc/EmptyView';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetAcademicTimetable } from '@/server/Schedule';
 
-const AcadamicCalendar = ({
+
+const GenericTimetable = ({
   isClassTimeTable = true,
+  classId,
 }: {
-  isClassTimeTable: boolean;
+  isClassTimeTable?: boolean;
+  classId: string;
 }) => {
   const currentSessionId = getFromLocalStorage('currentSessionId');
   const currentTerm = getFromSessionStorage('currentTerm');
@@ -18,8 +21,8 @@ const AcadamicCalendar = ({
   }
   const { data, isLoading } = useGetAcademicTimetable({
     sessionId: currentSessionId,
-    classId: 'c0c590b0-5dc0-446c-a93c-42fe95602faa',
-    termId: currentTermInfo?.id ?? "",
+    classId,
+    termId: currentTermInfo?.id ?? '',
   });
   function getEachDaySubject(data: any, day: string) {
     let subjectName;
@@ -39,7 +42,6 @@ const AcadamicCalendar = ({
 
     return { subjectName, isEvent };
   }
-
 
   const timetableData = isClassTimeTable ? data : [];
   return (
@@ -67,42 +69,47 @@ const AcadamicCalendar = ({
 
                       <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
                         <div
-                          className={`${getEachDaySubject(item, 'monday').isEvent
-                            ? 'bg-white text-black'
-                            : 'bg-[#FFF2F0] text-[#FB6340]'
-                            }  px-3 py-5 `}
+                          className={`${
+                            getEachDaySubject(item, 'monday').isEvent
+                              ? 'bg-white text-black'
+                              : 'bg-[#FFF2F0] text-[#FB6340]'
+                          }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'monday').subjectName}
                         </div>
                         <div
-                          className={`${getEachDaySubject(item, 'tuesday').isEvent
-                            ? 'bg-white text-black'
-                            : 'bg-[#FDE8FF] text-[#ED1CFF]'
-                            }  px-3 py-5 `}
+                          className={`${
+                            getEachDaySubject(item, 'tuesday').isEvent
+                              ? 'bg-white text-black'
+                              : 'bg-[#FDE8FF] text-[#ED1CFF]'
+                          }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'tuesday').subjectName}
                         </div>
                         <div
-                          className={`${getEachDaySubject(item, 'wednesday').isEvent
-                            ? 'bg-white text-black'
-                            : 'bg-[#FFF3E2] text-[#FF9F1C]'
-                            }  px-3 py-5 `}
+                          className={`${
+                            getEachDaySubject(item, 'wednesday').isEvent
+                              ? 'bg-white text-black'
+                              : 'bg-[#FFF3E2] text-[#FF9F1C]'
+                          }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'wednesday').subjectName}
                         </div>
                         <div
-                          className={`${getEachDaySubject(item, 'thursday').isEvent
-                            ? 'bg-white text-black'
-                            : 'bg-[#F4FFE6] text-[#60AC00]'
-                            }  px-3 py-5 `}
+                          className={`${
+                            getEachDaySubject(item, 'thursday').isEvent
+                              ? 'bg-white text-black'
+                              : 'bg-[#F4FFE6] text-[#60AC00]'
+                          }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'thursday').subjectName}
                         </div>
                         <div
-                          className={`${getEachDaySubject(item, 'friday').isEvent
-                            ? 'bg-white text-black'
-                            : 'bg-[#FFFFEB] text-[#CDCD04]'
-                            }  px-3 py-5 `}
+                          className={`${
+                            getEachDaySubject(item, 'friday').isEvent
+                              ? 'bg-white text-black'
+                              : 'bg-[#FFFFEB] text-[#CDCD04]'
+                          }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'friday').subjectName}
                         </div>
@@ -134,4 +141,4 @@ const AcadamicCalendar = ({
   );
 };
 
-export default AcadamicCalendar;
+export default GenericTimetable;

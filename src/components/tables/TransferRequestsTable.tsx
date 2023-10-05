@@ -64,7 +64,7 @@ const columns: TableColumn<(typeof data)[number]>[] = [
 export default function TransferRequestsTable() {
   return (
     <div>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} />r
       <div className='flex justify-end'>
         <Link
           className='flex items-center text my-2 px-4 text-[#007AFF]'

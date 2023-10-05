@@ -2,16 +2,18 @@ import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
+import { BiUser } from 'react-icons/bi';
 import { RiUserFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 import ReactSelect from 'react-select';
 
 interface StudentTeacherProfileCardProps {
-  image: string;
-  name: string;
-  school: string;
+  image?: string;
+  name?: string;
+  school?: string;
+  classTeacher?: string;
   id: string;
-  student: boolean;
+  student?: boolean;
   showAcademicYear?: boolean;
   currentGridIdx?: number;
   setGridIdx?: (value: number) => void;
@@ -19,9 +21,11 @@ interface StudentTeacherProfileCardProps {
 
 export default function StudentTeacherProfileCard({
   name,
-
+  classTeacher,
   showAcademicYear,
   currentGridIdx,
+  image,
+  student,
   setGridIdx,
 }: StudentTeacherProfileCardProps) {
   return (
@@ -32,7 +36,7 @@ export default function StudentTeacherProfileCard({
       </div>
       <div className=' h-[117px] w-[117px] rounded-full border-2 p-2 border-[#DADEE6]'>
         <div className='w-full bg-[#00000033] h-full rounded-full grid place-content-center text-white text-2xl font-bold'>
-          1A
+          {student ? <BiUser className='h-8 w-8' /> : image}
         </div>
       </div>
       <div className='h-10' />
@@ -41,7 +45,7 @@ export default function StudentTeacherProfileCard({
       <div className='h-3' />
 
       <div className='flex border rounded-[100px] border-blue-500 px-4 items-center'>
-        Class Teacher: <h2 className='text-base ml-2'>James Akanni</h2>
+        Class Teacher: <h2 className='text-base ml-2'>{classTeacher} </h2>
       </div>
 
       {showAcademicYear && (

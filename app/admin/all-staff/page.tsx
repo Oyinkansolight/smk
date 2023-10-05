@@ -18,6 +18,8 @@ import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 import AvrilImage from '~/svg/avril.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
     name: 'No',
@@ -68,7 +70,10 @@ const AllStaff = () => {
     data: staff,
     error,
     isLoading,
-  } = useGetTeachersListByInstitution({ ...pagingData, instituteId: institutionId });
+  } = useGetTeachersListByInstitution({
+    ...pagingData,
+    instituteId: institutionId,
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setIsBulk] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -201,6 +206,8 @@ const AllStaff = () => {
           )}
         </div>
       </div>
+
+     
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
         {isLoading ? (
           <div className='text-center'>Loading...</div>

@@ -280,6 +280,10 @@ export interface Institution {
   staff?: Staff[];
   studentCount?: number;
   staffCount?: number;
+  totalClassArm?: number | string;
+  totalStaff?: number | string;
+  totalStudent?: number | string;
+  totalSubjects?: number | string;
   createdAt?: string;
   email?: string;
   lga?: null;

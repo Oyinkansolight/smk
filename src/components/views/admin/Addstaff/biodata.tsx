@@ -241,15 +241,8 @@ const Biodata = ({
           label='Staff type'
           name='staffType'
           options={[
-            'BUS_DRIVER',
-            'COACH',
             'TEACHER',
-            'TEACHING',
-            'PRINCIPAL',
-            'HOD',
-            'HEADMASTER',
-            'HEADMISTRESS',
-            'DEFAULT',
+            'TEACHING', 
           ]}
           register={register}
           validation={{
