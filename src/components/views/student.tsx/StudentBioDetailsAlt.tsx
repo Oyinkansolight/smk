@@ -52,8 +52,7 @@ export default function StudentBioDetailsAlt({
       setValue('parentOccupation', initStudent?.parentOccupation);
       setValue(
         'fullName',
-        `${(initStudent?.user ?? [])[0]?.firstName} ${
-          (initStudent?.user ?? [])[0]?.lastName
+        `${(initStudent?.user ?? [])[0]?.firstName} ${(initStudent?.user ?? [])[0]?.lastName
         }`
       );
       setValue('dateOfBirth', initStudent.dob);
@@ -92,7 +91,7 @@ export default function StudentBioDetailsAlt({
             <input id='image-upload' type='file' className='hidden' />
           </div>
         )}
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='fullName'
@@ -183,7 +182,7 @@ export default function StudentBioDetailsAlt({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Contact Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='studentEmail'
@@ -236,7 +235,7 @@ export default function StudentBioDetailsAlt({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Educational Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='school'

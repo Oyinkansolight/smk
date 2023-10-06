@@ -30,16 +30,6 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -153,12 +143,11 @@ const Page = () => {
     }
   };
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${
-    (staff?.user ?? {})?.lastName
-  }`;
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
+    }`;
 
   return (
-    <div className='flex'>
+    <div className='flex flex-col lg:flex-row'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
@@ -234,7 +223,7 @@ const Page = () => {
           )}
           {tabIdx === 1 && (
             <div>
-              <EmptyView label='Timetable Not Available Yet' />
+              <EmptyView label='Timetable Not Available Yet' useStandardHeight />
             </div>
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}

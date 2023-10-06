@@ -4,6 +4,7 @@ import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateStaff } from '@/server/government/staff';
+import { useGetLocalGovernments } from '@/server/onboard';
 import { Staff, TrainingDetails } from '@/types/institute';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -21,7 +22,34 @@ export default function TeacherBioDetails({
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [, setIsLoading] = useState(false);
+  const [userLga, setUserLga] = useState('');
   const update = useUpdateStaff();
+  const { data: localGovernments } = useGetLocalGovernments();
+
+  useEffect(() => {
+    async function getLga() {
+      const foundLga: any = await localGovernments?.filter((local) => local.id === initStaff?.lga)[0].name;
+
+      if (foundLga) {
+        setUserLga(foundLga)
+        return;
+      }
+
+      if (initStaff?.lga && initStaff?.lga?.length < 20) {
+        setUserLga(initStaff?.lga)
+        return;
+      }
+
+      if (!initStaff?.lga || (initStaff?.lga && initStaff?.lga?.length > 20)) {
+        setUserLga('None')
+        return;
+      }
+    };
+
+    getLga();
+  }, [localGovernments, initStaff?.lga, userLga])
+
+
 
   const onSubmit = async (data: any) => {
     if (initStaff?.id) {
@@ -93,7 +121,7 @@ export default function TeacherBioDetails({
       setValue('dateOfBirth', initStaff.dob);
       setValue('address', (initStaff?.user ?? {})?.address);
       setValue('school', initStaff?.institution?.instituteName);
-      setValue('lga', initStaff?.lga);
+      setValue('lga', userLga);
       setValue('nextOfKin', initStaff?.nextOfKin);
       setValue('relationshipNextOfKin', initStaff?.relationshipToNextOfKin);
       setValue('addressNextOfKin', initStaff?.addressOfNextOfKin);
@@ -115,7 +143,7 @@ export default function TeacherBioDetails({
         });
       }
     }
-  }, [initStaff, setValue]);
+  }, [initStaff, setValue, userLga]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
@@ -141,7 +169,7 @@ export default function TeacherBioDetails({
             <input id='image-upload' type='file' className='hidden' />
           </div>
         )}
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='fullName'
@@ -195,7 +223,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Contact Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='phone'
@@ -298,7 +326,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Training History
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           {initStaff?.trainingDetails && initStaff.trainingDetails.length > 0 ? (
             initStaff.trainingDetails?.map((training, index) => (
               <>
@@ -357,7 +385,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Employment Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='datePosted'

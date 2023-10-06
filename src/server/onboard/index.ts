@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetLocalGovernments() {
   const query = useQuery({
+    cacheTime: Infinity,
     queryKey: 'get_local_governments',
     queryFn: async () =>
       (

@@ -65,12 +65,14 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
 
           <div className='grid w-full grid-cols-1 gap-x-6 gap-y-[10px] bg-[#FFF6EC] p-5 rounded-[10px] min-w-[276px]'>
             <IndividualTotal
+              chart
               count={data?.Total_Students ?? 0}
               name='Total Students'
               variant='primary'
               link='/super-admin/all-student'
             />
             <IndividualTotal
+              chart
               count={data?.Total_Staff ?? 0}
               name='Total Staff'
               variant='primary'
