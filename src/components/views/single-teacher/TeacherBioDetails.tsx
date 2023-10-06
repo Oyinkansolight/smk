@@ -22,38 +22,32 @@ export default function TeacherBioDetails({
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [, setIsLoading] = useState(false);
-  // const [userLga, setUserLga] = useState('');
-  // const [townByLgaId, setTownByLgaId] = useState('');
+  const [userLga, setUserLga] = useState('');
   const update = useUpdateStaff();
-  const { data: localGoverments } = useGetLocalGovernments();
+  const { data: localGovernments } = useGetLocalGovernments();
 
-  // useEffect(() => {
-  //   async function flattenTowns() {
-  //     const allLgas: any = await localGoverments?.map((local) => {
-  //       console.log(local.id == initStaff?.lga);
-  //       return local.towns;
-  //     });
+  useEffect(() => {
+    async function getLga() {
+      const foundLga: any = await localGovernments?.filter((local) => local.id === initStaff?.lga)[0].name;
 
-  //     const flattened: any = [].concat(...allLgas);
+      if (foundLga) {
+        setUserLga(foundLga)
+        return;
+      }
 
+      if (initStaff?.lga && initStaff?.lga?.length < 20) {
+        setUserLga(initStaff?.lga)
+        return;
+      }
 
+      if (!initStaff?.lga || (initStaff?.lga && initStaff?.lga?.length > 20)) {
+        setUserLga('None')
+        return;
+      }
+    };
 
-  //     console.log(flattened.filter(i => {
-  //       console.log(i.id == initStaff?.lga);
-
-  //       return i.id === initStaff?.lga
-  //     }));
-
-  //     const filteredLga = flattened?.filter((town) => town.name.toLowerCase() === initStaff?.lga?.toLowerCase())[0];
-  //     const filteredIds = flattened?.filter((town) => town.id === initStaff?.lga)[0];
-  //     setUserLga(filteredLga);
-  //     setTownByLgaId(filteredIds);
-  //   };
-
-  //   flattenTowns();
-
-  //   console.log(userLga, townByLgaId);
-  // }, [localGoverments, initStaff?.lga, userLga, townByLgaId])
+    getLga();
+  }, [localGovernments, initStaff?.lga, userLga])
 
 
 
@@ -116,8 +110,6 @@ export default function TeacherBioDetails({
 
   useEffect(() => {
     if (initStaff) {
-      const userLga = initStaff?.lga && initStaff?.lga.length < 20 ? initStaff?.lga : 'None';
-
       setValue('email', (initStaff?.user ?? {})?.email);
       setValue('phone', (initStaff?.user ?? {})?.phoneNumber);
       setValue('gender', initStaff?.gender);
@@ -151,7 +143,7 @@ export default function TeacherBioDetails({
         });
       }
     }
-  }, [initStaff, setValue]);
+  }, [initStaff, setValue, userLga]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
