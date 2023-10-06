@@ -1,7 +1,7 @@
 import clsxm from '@/lib/clsxm';
 import { getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
-import calculateEarthDistance from '@/misc/functions/calculateEarthDistance';
+import { calculateEarthDistanceTwo } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
@@ -65,7 +65,7 @@ export default function ClockInTime() {
     logger({ latitude, longitude, loading, error });
     if (latitude && longitude) {
       //conver lat and long to number before usage
-      const d = calculateEarthDistance(latitude, longitude, +lat, +long);
+      const d = calculateEarthDistanceTwo(latitude, +lat, longitude, +long);
       setDistance(d.toFixed(2));
       if (d < 500) {
         setInArea(true);
