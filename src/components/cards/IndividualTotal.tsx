@@ -7,13 +7,15 @@ import { BiTrendingUp } from 'react-icons/bi';
 import { GoChevronRight } from 'react-icons/go';
 
 interface IndividualTotalProps {
-  count: number;
   name: string;
-  variant: 'primary' | 'secondary' | 'tertiary';
   link: string;
+  count: number;
+  chart?: boolean;
+  variant: 'primary' | 'secondary' | 'tertiary';
 }
 
 const IndividualTotal = ({
+  chart = false,
   count,
   name,
   variant,
@@ -33,10 +35,12 @@ const IndividualTotal = ({
         <div className='flex items-center gap-[10px] text-2xl font-semibold text-[#1C1C1C]'>
           <div>{commaNumber(count)}</div>
 
-          <span className='text-[#2DCE89] flex items-center text-xs'>
-            <div>+1.20%</div>
-            <BiTrendingUp className='fill-current w-4 h-4' />
-          </span>
+          {chart && (
+            <span className='text-[#2DCE89] flex items-center text-xs'>
+              <div>+1.20%</div>
+              <BiTrendingUp className='fill-current w-4 h-4' />
+            </span>
+          )}
         </div>
 
         <div

@@ -32,7 +32,9 @@ const columns: TableColumn<(Institution)>[] = [
     name: 'Time',
     selector: (event) => moment(event.createdAt).format('hh:mm a'),
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{moment(event.createdAt).format('hh:mm a')}</div>
+      <div className='text-sm font-bold text-[#ADB8CC]'>
+        {moment(event.createdAt).fromNow()}
+      </div>
     ),
   },
 ];

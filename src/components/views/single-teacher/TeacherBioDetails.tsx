@@ -4,6 +4,7 @@ import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateStaff } from '@/server/government/staff';
+import { useGetLocalGovernments } from '@/server/onboard';
 import { Staff, TrainingDetails } from '@/types/institute';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -21,7 +22,40 @@ export default function TeacherBioDetails({
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [, setIsLoading] = useState(false);
+  // const [userLga, setUserLga] = useState('');
+  // const [townByLgaId, setTownByLgaId] = useState('');
   const update = useUpdateStaff();
+  const { data: localGoverments } = useGetLocalGovernments();
+
+  // useEffect(() => {
+  //   async function flattenTowns() {
+  //     const allLgas: any = await localGoverments?.map((local) => {
+  //       console.log(local.id == initStaff?.lga);
+  //       return local.towns;
+  //     });
+
+  //     const flattened: any = [].concat(...allLgas);
+
+
+
+  //     console.log(flattened.filter(i => {
+  //       console.log(i.id == initStaff?.lga);
+
+  //       return i.id === initStaff?.lga
+  //     }));
+
+  //     const filteredLga = flattened?.filter((town) => town.name.toLowerCase() === initStaff?.lga?.toLowerCase())[0];
+  //     const filteredIds = flattened?.filter((town) => town.id === initStaff?.lga)[0];
+  //     setUserLga(filteredLga);
+  //     setTownByLgaId(filteredIds);
+  //   };
+
+  //   flattenTowns();
+
+  //   console.log(userLga, townByLgaId);
+  // }, [localGoverments, initStaff?.lga, userLga, townByLgaId])
+
+
 
   const onSubmit = async (data: any) => {
     if (initStaff?.id) {
@@ -82,6 +116,8 @@ export default function TeacherBioDetails({
 
   useEffect(() => {
     if (initStaff) {
+      const userLga = initStaff?.lga && initStaff?.lga.length < 20 ? initStaff?.lga : 'None';
+
       setValue('email', (initStaff?.user ?? {})?.email);
       setValue('phone', (initStaff?.user ?? {})?.phoneNumber);
       setValue('gender', initStaff?.gender);
@@ -93,7 +129,7 @@ export default function TeacherBioDetails({
       setValue('dateOfBirth', initStaff.dob);
       setValue('address', (initStaff?.user ?? {})?.address);
       setValue('school', initStaff?.institution?.instituteName);
-      setValue('lga', initStaff?.lga);
+      setValue('lga', userLga);
       setValue('nextOfKin', initStaff?.nextOfKin);
       setValue('relationshipNextOfKin', initStaff?.relationshipToNextOfKin);
       setValue('addressNextOfKin', initStaff?.addressOfNextOfKin);
@@ -141,7 +177,7 @@ export default function TeacherBioDetails({
             <input id='image-upload' type='file' className='hidden' />
           </div>
         )}
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='fullName'
@@ -195,7 +231,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Contact Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='phone'
@@ -298,7 +334,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Training History
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           {initStaff?.trainingDetails && initStaff.trainingDetails.length > 0 ? (
             initStaff.trainingDetails?.map((training, index) => (
               <>
@@ -357,7 +393,7 @@ export default function TeacherBioDetails({
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Employment Details
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           <Controller
             control={control}
             name='datePosted'

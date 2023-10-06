@@ -61,7 +61,7 @@ const Page = () => {
     }
   }, [error]);
   return (
-    <div className='flex'>
+    <div className='flex flex-col lg:flex-row'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
@@ -77,9 +77,8 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image='/images/test_student.png'
-        name={`${(student?.user ?? [])[0]?.firstName} ${
-          (student?.user ?? [])[0]?.lastName
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
+          }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student

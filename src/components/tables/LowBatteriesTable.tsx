@@ -32,7 +32,7 @@ const LowBatteriesTable = ({ data }) => {
 
   return (
     <div className='flex flex-col gap-y-5 px-5'>
-      {data.map((item: LowBatteriesTableProps) => (
+      {data.filter(i => i.firstName && i.lastName).slice(0, 5).map((item: LowBatteriesTableProps) => (
         <div key={item.id} className='flex flex-row items-center gap-x-[22.5px]'>
           <StudentBadge className='h-[60px] w-[60px]' />
 
