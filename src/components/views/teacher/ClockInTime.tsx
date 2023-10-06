@@ -22,6 +22,7 @@ export default function ClockInTime() {
   const [inArea, setInArea] = useState(false);
   const [distance, setDistance] = useState('Calculating...');
   const [isLoading, setIsLoading] = useState(false);
+  const [isClockingIn, setIsClockingIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState<Duration | undefined>();
   const { latitude, longitude, loading, error } = useGeoLocation();
   let institute;
@@ -38,14 +39,17 @@ export default function ClockInTime() {
   });
 
   const handleClockIn = async () => {
+    setIsClockingIn(true);
     try {
       const res = await clockIn.mutateAsync({
         sessionId: profile?.currentSession?.[0]?.id ?? 0,
         termId: (terms?.data ?? [])[0].id,
       });
       toast.success(res.data.data.message);
+      setIsClockingIn(false);
     } catch (error) {
       toast.error(getErrMsg(error));
+      setIsClockingIn(false);
     }
   };
 
@@ -135,10 +139,11 @@ export default function ClockInTime() {
       </div>
       <div className='w-4' />
       <button
+        disabled={isClockingIn}
         onClick={handleClockIn}
         className='rounded-sm bg-[#007AFF] py-2 px-5 text-white'
       >
-        Clock In
+        {isClockingIn ? "Loading..." : "Clock In"}
       </button>
     </div>
   );
