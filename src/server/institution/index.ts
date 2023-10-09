@@ -20,7 +20,7 @@ export interface CreateInstitutionParams {
   town?: string;
   email?: string;
   password?: string;
-  role?: number;
+  role: string;
   id?: string;
 }
 
