@@ -34,7 +34,7 @@ export interface CreateSubjectParams {
 export function useCreateInstitution() {
   const { data } = useGetAdminRoles();
   const admin =
-    data.data?.find((item) => item.name === 'institution-admin') ?? '';
+    data?.data?.find((item) => item.name === 'institution-admin') ?? '';
 
   const mutation = useMutation({
     mutationKey: 'create_institution',
