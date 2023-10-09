@@ -49,7 +49,7 @@ export function useCreateInstitution() {
 export function useInviteInstitution() {
   const mutation = useMutation({
     mutationKey: 'invite_institution',
-    mutationFn: (params: CreateInstitutionParams) =>
+    mutationFn: (params: Partial<CreateInstitutionParams>) =>
       request.post('/v1/government/institutes/invite-institute', params, {
         withCredentials: true,
       }),
