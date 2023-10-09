@@ -17,7 +17,7 @@ import {
   useCompleteInstitutionOnboarding,
   useOnboardVerification,
 } from '@/server/institution';
-import { useGetLocalGovernments } from '@/server/onboard';
+import { useGetAdminRoles, useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
 import Cookies from 'js-cookie';
@@ -117,6 +117,9 @@ export default function Page() {
   const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
   const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
 
+  const { data: allRoles } = useGetAdminRoles();
+  const instituteRoleId = allRoles?.data.find((role) => role.name === 'institution-admin')?.id;
+
   useEffect(() => {
     setIsLoading(true);
     const verifyUser = async () => {
@@ -210,7 +213,7 @@ export default function Page() {
                 await create.mutateAsync({
                   // ...getValues(),
                   town: (getValues('townId') as Town | undefined)?.id,
-                  role: 1,
+                  role: instituteRoleId,
                   instituteType: type?.label,
                   password: getValues('password'),
                   instituteLat: d[0].geometry?.location?.lat?.toString() ?? '0',
