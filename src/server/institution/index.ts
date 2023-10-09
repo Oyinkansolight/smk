@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { useGetAdminRoles } from '@/server/onboard';
 import { PaginationParams } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import { Institution, Student, Subject } from '@/types/institute';
@@ -32,16 +31,12 @@ export interface CreateSubjectParams {
 }
 
 export function useCreateInstitution() {
-  const { data } = useGetAdminRoles();
-  const admin =
-    data?.data?.find((item) => item.name === 'institution-admin') ?? '';
-
   const mutation = useMutation({
     mutationKey: 'create_institution',
     mutationFn: (params: CreateInstitutionParams) =>
       request.post(
         '/v1/government/institutes/add-institute',
-        { ...params, role: admin.id },
+        { ...params },
         {
           withCredentials: true,
         }

@@ -12,6 +12,7 @@ import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { useGeocoding } from '@/server/geocoding';
 import { useCreateInstitution } from '@/server/institution';
+import { useGetAdminRoles } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
 import { GeoCodeResponse } from '@/types/geocode';
 import Image from 'next/image';
@@ -38,6 +39,9 @@ const AddSchool = () => {
     GeoCodeResponse[]
   >([]);
   const [instituteType, setInstituteType] = useState('');
+
+  const { data: allRoles } = useGetAdminRoles();
+  const instituteRoleId = allRoles?.data.find((role) => role.name === 'institution-admin')?.id;
 
   const geocode = useGeocoding();
 
@@ -252,7 +256,7 @@ const AddSchool = () => {
                       town: town?.id,
                       email: schoolEmail as string,
                       password: password,
-                      role: 1,
+                      role: instituteRoleId,
                     });
 
                     if ((await response).data) setisOpen(true);
