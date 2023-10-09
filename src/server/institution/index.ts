@@ -33,7 +33,8 @@ export interface CreateSubjectParams {
 
 export function useCreateInstitution() {
   const { data } = useGetAdminRoles();
-  const admin = data?.find((item) => item.name === 'Admin') ?? '';
+  const admin =
+    data.data?.find((item) => item.name === 'institution-admin') ?? '';
 
   const mutation = useMutation({
     mutationKey: 'create_institution',
@@ -395,6 +396,7 @@ export function useCreateStaff() {
   });
   return mutation;
 }
+
 export function useUpdateStaffSubject() {
   const mutation = useMutation({
     mutationKey: 'update-staff-subject',
@@ -409,6 +411,27 @@ export function useUpdateStaffSubject() {
   });
   return mutation;
 }
+
+export function useRemoveStaffSubject() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete-staff-subject',
+    mutationFn: (params: any) =>
+      request.delete(
+        '/v1/government/classes-subjects/un-assign-subject-to-teacher',
+        {
+          params,
+          withCredentials: true,
+        }
+      ),
+    onSettled() {
+      client.refetchQueries('get_teacher_subject_list');
+    },
+  });
+  return mutation;
+}
+
 export function useCreateClassArm() {
   const mutation = useMutation({
     mutationKey: 'create-classs-arm',
