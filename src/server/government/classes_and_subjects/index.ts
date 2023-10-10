@@ -196,3 +196,12 @@ export function useDeleteStudent() {
   });
   return mutation;
 }
+export function useDeleteClass() {
+  const mutation = useMutation({
+    mutationKey: 'delete_Class',
+    mutationFn: async (id?: string) =>
+      (await request.delete(`/v1/institutions/class-arm/delete?classArmId=${id}`))
+        .data,
+  });
+  return mutation;
+}

@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import Table from '@/components/tables/TableComponent';
 import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
 import { getFromLocalStorage } from '@/lib/helper';
+import logger from '@/lib/logger';
 import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
+import { useDeleteStaff } from '@/server/government/classes_and_subjects';
 import {
   useCreateBulkStaff,
   useGetTeachersListByInstitution,
@@ -13,56 +17,19 @@ import {
 import { FlattenedStaff } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
-  {
-    name: 'No',
-    selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx}</div>,
-  },
-  {
-    name: 'Staff ID',
-    selector: (row) => row.staffId ?? '',
-    cell: (row) => <div>{row.staffId}</div>,
-  },
-  {
-    name: 'Name',
-    grow: 2,
-    cell: (row) => (
-      <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        <Link href={`/admin/staff?id=${row.id}`}>
-          <h2 className='text-sm font-medium capitalize'>
-            {row['user.firstName']} {row['user.lastName']}
-          </h2>
-        </Link>
-      </div>
-    ),
-  },
-  {
-    name: 'Type',
-    selector: (row) => row.staffType ?? '',
-    cell: (row) => <div>{row.staffType}</div>,
-  },
-  {
-    name: 'Institution',
-    selector: (row) => row['institution.instituteName'] ?? '',
-    cell: (row) => <div>{row['institution.instituteName']}</div>,
-  },
-  {
-    name: 'Institution Type',
-    selector: (row) => row['institution.instituteType'] ?? '',
-    cell: (row) => <div>{row['institution.instituteType']}</div>,
-  },
-];
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStaff = () => {
+  const router = useRouter();
+
   const [pagingData, setPagingData] = useState({ page: 1, limit: 10 });
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
@@ -78,6 +45,26 @@ const AllStaff = () => {
   const [isBulk, setIsBulk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [files, setFile] = useState<File | undefined>(undefined);
+
+  const [action, setAction] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string>();
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { mutateAsync } = useDeleteStaff();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        const res = await mutateAsync(itemToDelete);
+        toast.success('Staff removed successfully');
+        res && router.replace('/admin/all-staff');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
 
   const handleCreateBulkStudent = useCreateBulkStaff();
   const bulkStudentUpload = async () => {
@@ -103,6 +90,92 @@ const AllStaff = () => {
     }
   };
 
+  const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
+    {
+      name: 'No',
+      selector: (row) => row.idx,
+      cell: (row) => <div>#{row.idx}</div>,
+    },
+    {
+      name: 'Staff ID',
+      selector: (row) => row.staffId ?? '',
+      cell: (row) => <div>{row.staffId}</div>,
+    },
+    {
+      name: 'Name',
+      grow: 2,
+      cell: (row) => (
+        <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+          <Link href={`/admin/staff?id=${row.id}`}>
+            <h2 className='text-sm font-medium capitalize'>
+              {row['user.firstName']} {row['user.lastName']}
+            </h2>
+          </Link>
+        </div>
+      ),
+    },
+    {
+      name: 'Type',
+      selector: (row) => row.staffType ?? '',
+      cell: (row) => <div>{row.staffType}</div>,
+    },
+    {
+      name: 'Institution',
+      selector: (row) => row['institution.instituteName'] ?? '',
+      cell: (row) => <div>{row['institution.instituteName']}</div>,
+    },
+    {
+      name: 'Institution Type',
+      selector: (row) => row['institution.instituteType'] ?? '',
+      cell: (row) => <div>{row['institution.instituteType']}</div>,
+    },
+    {
+      name: '',
+      grow: 0,
+      width: '20px',
+      cell: (row, idx) => {
+        return (
+          <div>
+            <div
+              onClick={() => {
+                setAction(idx + 1);
+              }}
+              className='relative'
+            >
+              <BsThreeDotsVertical className='text-lg' />
+
+              {action == idx + 1 && (
+                <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                  <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      // item.setDeleteFileId(item?.id ?? '');
+                      setItemToDelete(row.id);
+                      toggleModal();
+                    }}
+                    className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {action && (
+              <div
+                className='fixed inset-0 z-[1]'
+                onClick={() => {
+                  setAction(null);
+                }}
+              ></div>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -111,6 +184,19 @@ const AllStaff = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Staff'
+            body='Are you sure you want to delete this staff?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -207,7 +293,6 @@ const AllStaff = () => {
         </div>
       </div>
 
-     
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
         {isLoading ? (
           <div className='text-center'>Loading...</div>

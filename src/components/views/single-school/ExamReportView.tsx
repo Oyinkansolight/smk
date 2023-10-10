@@ -48,10 +48,10 @@ export default function ExamReportView({
         </div>
         <div className='rounded bg-[#F8FDFF] p-5 flex items-center justify-between'>
           <div className='text-[#5A5A5A]'>
-            Class: <span className='font-bold text-black'>Primary 1</span>
+            Class: <span className='font-bold text-black'>S S S Science 1</span>
           </div>
           <div className='flex flex-col'>
-            <div className='text-xl font-bold'>72%</div>
+            <div className='text-xl font-bold'>0%</div>
             <div>Student Average</div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import OnlineStatus from '@/components/profile/OnlineStatus';
-import PaymentStatus from '@/components/profile/PaymentStatus';
+// import PaymentStatus from '@/components/profile/PaymentStatus';
 import Table from '@/components/tables/TableComponent';
 import logger from '@/lib/logger';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
@@ -107,8 +107,8 @@ export default function StudentList({ classArmId }: Iprop) {
           showFilter={false}
           showSearch={false}
           columns={studentListColumns}
-          // data={getInstitutionStudents}
-          data={[]}
+          data={getInstitutionStudents ?? []}
+          // data={[]}
         />
       </div>
     </div>

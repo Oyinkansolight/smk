@@ -11,6 +11,7 @@ import StudentDashboardView from '@/components/views/single-student/StudentDashb
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+// import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
@@ -38,6 +39,7 @@ const Page = () => {
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
   const student = data?.data[0];
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -49,12 +51,23 @@ const Page = () => {
     if (studentId) {
       try {
         const res = await mutateAsync(studentId);
-        res && router.replace('/admin/all-staff');
+        res && router.replace('/admin/all-student');
       } catch (error) {
         logger(error);
       }
     }
   };
+  const [url, setUrl] = useState<string | any>("/images/test_student.png");
+  const [content, setContent] = useState([]);
+  const getFileURL = async () => {
+    // const url = await getURL(path);
+    // setUrl(url);
+    // await getURL(student ?? student?.profileImg).then((v) => setUrl(v));
+    logger(url);
+  };
+  useEffect(() => {
+    getFileURL();
+  }, [url]);
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -67,8 +80,8 @@ const Page = () => {
         toggleModal={toggleModal}
         content={
           <DeleteModalContent
-            title='Delete Staff'
-            body='Are you sure you want to delete this staff?'
+            title='Delete Student'
+            body='Are you sure you want to delete this student?'
             toggleModal={toggleModal}
             handleDelete={handleDelete}
           />
@@ -76,7 +89,7 @@ const Page = () => {
         className='max-w-[777px] w-full h-[267px]'
       />
       <StudentTeacherProfileCard
-        image='/images/test_student.png'
+        image={url}
         name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
           }`}
         school={student?.institution?.instituteName ?? ''}
@@ -118,12 +131,11 @@ const Page = () => {
           {tabIdx === 0 && <StudentDashboardView />}
           {tabIdx === 1 && (
             <ExamReportView
-              report={[
-                { name: 'Mathematics', score: 58, date: new Date() },
-                { name: 'Mathematics', score: 88, date: new Date() },
-                { name: 'Mathematics', score: 45, date: new Date() },
-                { name: 'Mathematics', score: 34, date: new Date() },
-              ]}
+              report={
+                [
+                  // { name: 'Mathematics', score: 58, date: new Date() },
+                ]
+              }
             />
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}
@@ -177,7 +189,7 @@ const Page = () => {
                   }}
                   className='flex flex-row items-center justify-center space-x-2 w-[168px] whitespace-nowrap'
                 >
-                  <span>Delete Staff</span>
+                  <span>Delete Student</span>
                 </Button>
               </div>
               <div className='bg-white px-8'>

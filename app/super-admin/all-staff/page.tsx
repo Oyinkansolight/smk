@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
-import AvrilImage from '~/svg/avril.svg';
 
 const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
   {
@@ -29,7 +28,6 @@ const staffColumn: TableColumn<FlattenedStaff & { idx: number }>[] = [
     grow: 2,
     cell: (row) => (
       <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
         <Link href={`/super-admin/teacher?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
             {row['user.lastName']} {row['user.firstName']}
@@ -104,10 +102,10 @@ const AllStaff = () => {
         </div>
       </div>
 
-      <div className='flex space-x-2 py-2 border-b'>
+      {/* <div className='flex space-x-2 py-2 border-b'>
         <button>All Staff</button>
         <button>Transfer Requests</button>
-      </div>
+      </div> */}
 
       <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
         {isLoading ? (

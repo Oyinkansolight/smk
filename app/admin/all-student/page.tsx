@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+// import AvrilImage from '~/svg/avril.svg';
+import NextImage from '@/components/NextImage';
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import Table from '@/components/tables/TableComponent';
 import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
+import { getURL } from '@/firebase/init';
 import { getFromLocalStorage } from '@/lib/helper';
+import logger from '@/lib/logger';
 import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
+import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import {
   useCreateBulkStudent,
   useGetStudentsListByInstitution,
@@ -13,10 +20,11 @@ import {
 import { FlattenedStudent } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
+import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -32,34 +40,51 @@ import AvrilImage from '~/svg/avril.svg';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
-  { name: 'Student ID', selector: (row) => row.id ?? '' },
-  {
-    name: 'Name',
-    selector: (row) => row['user.0.firstName'] ?? '',
-    cell: (row) => (
-      <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-        <Link href={`/admin/student?id=${row.id}`}>
-          <h2 className='text-sm font-medium capitalize'>
-            {row['user.0.firstName']} {row['user.0.lastName']}
-          </h2>
-        </Link>
-      </div>
-    ),
-  },
-  { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
-  {
-    name: 'Institution',
-    selector: (row) => row['institution.instituteName'] ?? '',
-  },
-  {
-    name: 'Institution Type',
-    selector: (row) => row['institution.instituteType'] ?? '',
-  },
-];
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStudent = () => {
+  // const getFileURL = async (path) => {
+  //   let result = '';
+  //   await getURL(path).then((v) => {
+  //     result = v;
+  //   });
+  //   return result;
+  // };
+
+  async function fetchProfileImageSrc(item) {
+    try {
+      const profileImgUrl = await getURL(item.profileImg);
+      return profileImgUrl;
+    } catch (error) {
+      console.error('Error fetching profile image URL:', error);
+      return ''; // Provide a fallback URL or handle the error appropriately
+    }
+  }
+
   const institutionId = getFromLocalStorage('institutionId');
 
   // const fetchStudent = ()=>{
@@ -77,6 +102,11 @@ const AllStudent = () => {
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [files, setFile] = useState<any>(null);
+  const [profileImgSrcs, setProfileImgSrcs] = useState<string[]>([]);
+  const [imageError, setImageError] = useState(false);
+  const [action, setAction] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string>();
 
   const handleCreateBulkStudent = useCreateBulkStudent();
   const bulkStudentUpload = async () => {
@@ -100,6 +130,121 @@ const AllStudent = () => {
       toast.error(getErrMsg(error));
     }
   };
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { mutateAsync } = useDeleteStudent();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        const res = await mutateAsync(itemToDelete);
+        toast.success('Student removed successfully');
+        res && Router.replace('/admin/all-student');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
+  useEffect(() => {
+    // Map over the array and fetch profile image URLs for each item
+    Promise.all((students ?? []).map((item) => fetchProfileImageSrc(item)))
+      .then((urls) => {
+        setProfileImgSrcs(urls);
+      })
+      .catch((error) => {
+        console.error('Error fetching profile image URLs:', error);
+        setProfileImgSrcs([]); // Provide a fallback or handle the error appropriately
+      });
+  }, [students]); // Make sure to include any dependencies that trigger the update
+
+  const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] =
+    [
+      { name: 'Student ID', selector: (row) => row.id ?? '' },
+      {
+        name: 'Name',
+        selector: (row) => row['user.0.firstName'] ?? '',
+        cell: (row, id) => (
+          <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
+            <div className='relative h-8 w-8 rounded-full'>
+              <NextImage
+                src={
+                  imageError
+                    ? 'https://www.bu.edu/wll/files/2017/10/avatar.png'
+                    : profileImgSrcs[id]
+                }
+                className='rounded-full object-contain'
+                style={{ objectFit: 'contain' }}
+                layout='fill'
+                alt='student-profile-picture'
+                onError={() => setImageError(true)}
+              />
+            </div>
+
+            <Link href={`/admin/student?id=${row.id}`}>
+              <h2 className='text-sm font-medium capitalize'>
+                {row['user.0.firstName']} {row['user.0.lastName']}
+              </h2>
+            </Link>
+          </div>
+        ),
+      },
+      { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
+      {
+        name: 'Institution',
+        selector: (row) => row['institution.instituteName'] ?? '',
+      },
+      {
+        name: 'Institution Type',
+        selector: (row) => row['institution.instituteType'] ?? '',
+      },
+      {
+        name: '',
+        grow: 0,
+        width: '20px',
+        cell: (row, idx) => {
+          return (
+            <div>
+              <div
+                onClick={() => {
+                  setAction(idx + 1);
+                }}
+                className='relative'
+              >
+                <BsThreeDotsVertical className='text-lg' />
+
+                {action == idx + 1 && (
+                  <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => {
+                        // item.setDeleteFileId(item?.id ?? '');
+                        setItemToDelete(row.id);
+                        toggleModal();
+                      }}
+                      className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {action && (
+                <div
+                  className='fixed inset-0 z-[1]'
+                  onClick={() => {
+                    setAction(null);
+                  }}
+                ></div>
+              )}
+            </div>
+          );
+        },
+      },
+    ];
 
   useEffect(() => {
     if (error) {
@@ -109,6 +254,19 @@ const AllStudent = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Student'
+            body='Are you sure you want to delete this student?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image

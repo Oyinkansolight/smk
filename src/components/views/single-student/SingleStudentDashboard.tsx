@@ -5,7 +5,7 @@ import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
 import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
-import StudentDashboardView from '@/components/views/single-school/SchoolDashboardView';
+import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
@@ -83,10 +83,10 @@ const SingleStudentDashboard = () => {
           {tabIdx === 1 && (
             <ExamReportView
               report={[
-                { name: 'Mathematics', score: 58, date: new Date() },
-                { name: 'Mathematics', score: 88, date: new Date() },
-                { name: 'Mathematics', score: 45, date: new Date() },
-                { name: 'Mathematics', score: 34, date: new Date() },
+                // { name: 'Mathematics', score: 58, date: new Date() },
+                // { name: 'Mathematics', score: 88, date: new Date() },
+                // { name: 'Mathematics', score: 45, date: new Date() },
+                // { name: 'Mathematics', score: 34, date: new Date() },
               ]}
             />
           )}

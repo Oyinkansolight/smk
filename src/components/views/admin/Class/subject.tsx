@@ -3,28 +3,28 @@ import Table from '@/components/tables/TableComponent';
 import { TableColumn } from 'react-data-table-component';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const report = [
-  {
-    subject: 'Mathematics',
-    attendancePerformance: '95%',
-    name: 'Ibrahim Wilson',
-  },
-  {
-    subject: 'Englsh',
-    attendancePerformance: '75%',
-    name: 'Akani Egbherve',
-  },
-  {
-    subject: 'Social Studies',
-    attendancePerformance: '51%',
-    name: 'Norman Russell',
-  },
-  {
-    subject: 'Diction',
-    attendancePerformance: '55%',
-    name: 'Regina Askiya',
-  },
-];
+// const report = [
+//   {
+//     subject: 'Mathematics',
+//     attendancePerformance: '95%',
+//     name: 'Ibrahim Wilson',
+//   },
+//   {
+//     subject: 'Englsh',
+//     attendancePerformance: '75%',
+//     name: 'Akani Egbherve',
+//   },
+//   {
+//     subject: 'Social Studies',
+//     attendancePerformance: '51%',
+//     name: 'Norman Russell',
+//   },
+//   {
+//     subject: 'Diction',
+//     attendancePerformance: '55%',
+//     name: 'Regina Askiya',
+//   },
+// ];
 
 const columns: TableColumn<any>[] = [
   { name: 'Subject', cell: (row) => row.subject },
