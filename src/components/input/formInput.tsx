@@ -25,6 +25,8 @@ type HelperProps = {
 type propType = {
   label: string;
   placeholder: string;
+  min?: number | string;
+  max?: number | string;
   formValue?: string | number;
   setFormValue?: (value: string | number) => void;
   type?: HTMLInputTypeAttribute;
@@ -39,6 +41,8 @@ type propType = {
 };
 
 const Input = ({
+  min,
+  max,
   label,
   formValue,
   type = 'text',
@@ -62,6 +66,8 @@ const Input = ({
           <input
             disabled={disabled}
             type={type}
+            min={min ?? undefined}
+            max={max ?? undefined}
             className={clsxm(inputClassName, 'w-full border-none outline-none')}
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}

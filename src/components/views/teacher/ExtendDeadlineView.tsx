@@ -1,5 +1,6 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/input/formInput';
+import { getCurrentDate } from '@/lib/helper';
 
 export default function ExtendDeadlineView() {
   return (
@@ -11,7 +12,7 @@ export default function ExtendDeadlineView() {
           <Input label='Due Date' placeholder='Due date ' type='date' />
         </div>
         <div className='flex-1'>
-          <Input label='New Due Date' placeholder='New Due date ' type='date' />
+          <Input label='New Due Date' placeholder='New Due date' min={getCurrentDate()} />
         </div>
       </div>
       <div>

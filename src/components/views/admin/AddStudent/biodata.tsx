@@ -7,32 +7,7 @@ import FormSelect from '@/components/input/formSelect';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { subtractYearsFromCurrentDate } from '@/lib/helper';
 
 type Iprops = {
   register: any;
@@ -204,6 +179,7 @@ const Biodata = ({
           <FormInput
             label='Date of birth'
             type='date'
+            max={subtractYearsFromCurrentDate(5)}
             placeholder='Details here'
             name='dob'
             register={register}

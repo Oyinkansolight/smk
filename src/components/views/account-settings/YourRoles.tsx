@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Avatar from '~/svg/governor.svg';
 
-export default function Page() {
-  const [isSuperAdmin, setisSuperAdmin] = useState(true);
+export default function YourRoles() {
+  const [isSuperAdmin, setIsSuperAdmin] = useState(true);
   return (
     <div className='h-full px-12 py-10'>
       <div className='rounded-md bg-white'>
@@ -32,22 +32,22 @@ export default function Page() {
                     <p>Super Admin</p>
                     <button
                       onClick={() => {
-                        setisSuperAdmin(true);
+                        setIsSuperAdmin(true);
                       }}
                       className='text-[10px] text-[#016938]'
                     >
-                      View Pernission
+                      View Permission
                     </button>
                   </div>
                   <div className='bg-gray-200 rounded p-2 flex items-center justify-between'>
                     <p>Institutional Level -1</p>
                     <button
                       onClick={() => {
-                        setisSuperAdmin(false);
+                        setIsSuperAdmin(false);
                       }}
                       className='text-[10px] text-[#016938]'
                     >
-                      View Pernission
+                      View Permission
                     </button>
                   </div>
                 </div>

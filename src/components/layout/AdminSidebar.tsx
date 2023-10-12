@@ -26,15 +26,15 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
   const router = useRouter();
   const routeDetails = usePathname();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm('Are you sure you want to logout?');
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        localStorage.clear()
-        sessionStorage.clear();
+        await sessionStorage.clear();
+        await localStorage.clear();
       }
 
       toast.info('Redirecting to login page...');

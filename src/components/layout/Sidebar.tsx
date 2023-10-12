@@ -34,6 +34,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
     toast.success('You have been logged out successfully');
     if (typeof window !== 'undefined') {
       await sessionStorage.clear();
+      await localStorage.clear();
     }
     router.push(ROUTES.USER_AUTH);
   };
