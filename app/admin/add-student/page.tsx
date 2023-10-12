@@ -24,6 +24,7 @@ export default function AddStudent() {
 
   const {
     register,
+    getValues,
     formState: { errors },
     handleSubmit,
   } = useForm({
@@ -38,6 +39,7 @@ export default function AddStudent() {
 
   const [publishData, setpublishData] = useState(null);
 
+  
   const handleCreateStudent = useCreateStudent();
   /**
    *
@@ -202,8 +204,8 @@ export default function AddStudent() {
               setImageData={(v) => setImageData(v)}
             />
           )}
-          {stage === 2 && <Contact register={register} errors={errors} />}
-          {stage === 3 && <ParentContact register={register} errors={errors} />}
+          {stage === 2 && <Contact register={register} errors={errors} getValues={getValues}/>}
+          {stage === 3 && <ParentContact register={register} errors={errors} getValues={getValues} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
 

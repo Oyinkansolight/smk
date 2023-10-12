@@ -22,8 +22,9 @@ import { useEffect, useState } from 'react';
 type Iprops = {
   register: any;
   errors: any;
+  getValues?: any
 };
-const Contact = ({ register, errors }: Iprops) => {
+const Contact = ({ register, errors, getValues }: Iprops) => {
   const locals = useGetLocalGovernments();
   const [towns, setTowns] = useState<any>([]);
 
@@ -116,6 +117,8 @@ const Contact = ({ register, errors }: Iprops) => {
             validation={{
               required: 'Town is required',
             }}
+            formValue={ getValues ? `${getValues('parenttownId')}` : ""}
+
             helper={
               errors?.parenttownId && {
                 message: errors?.parenttownId?.message,

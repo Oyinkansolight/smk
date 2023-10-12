@@ -66,6 +66,8 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStudent = () => {
   // const getFileURL = async (path) => {
   //   let result = '';
@@ -138,9 +140,10 @@ const AllStudent = () => {
   const handleDelete = async () => {
     if (itemToDelete) {
       try {
+        toggleModal();
+        setAction(null)
         const res = await mutateAsync(itemToDelete);
         toast.success('Student removed successfully');
-        res && Router.replace('/admin/all-student');
       } catch (error) {
         logger(error);
       }
@@ -296,7 +299,7 @@ const AllStudent = () => {
             }}
             setFile={setFile}
             file={files}
-            link='/pdfs/upload_student_template.csv'
+            link='/pdfs/upload_student_template.xlsx'
             bulkStudentUpload={bulkStudentUpload}
           />
         )}

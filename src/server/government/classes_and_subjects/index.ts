@@ -2,7 +2,7 @@ import request from '@/server';
 import { GradeListItem } from '@/types/classes-and-subjects';
 import { AssignedSubject, Subject, User } from '@/types/institute';
 import { useEffect } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
@@ -179,29 +179,47 @@ export function useDeleteSubject() {
   return mutation;
 }
 export function useDeleteStaff() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'delete_staff',
     mutationFn: async (id?: string) =>
       (await request.delete(`/v1/government/teachers/delete-by-id?id=${id}`))
         .data,
+    onSettled: () => {
+      client.refetchQueries(`get_teachers_list_in_institution`);
+    },
   });
   return mutation;
 }
 export function useDeleteStudent() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'delete_student',
     mutationFn: async (id?: string) =>
       (await request.delete(`/v1/government/students/delete-by-id?id=${id}`))
         .data,
+    onSettled: () => {
+      client.refetchQueries(`get_student_list_By_institution`);
+    },
   });
   return mutation;
 }
 export function useDeleteClass() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'delete_Class',
     mutationFn: async (id?: string) =>
-      (await request.delete(`/v1/institutions/class-arm/delete?classArmId=${id}`))
-        .data,
+      (
+        await request.delete(
+          `/v1/institutions/class-arm/delete?classArmId=${id}`
+        )
+      ).data,
+    onSettled: () => {
+      client.refetchQueries(`get_institute_class_arm`);
+    },
   });
   return mutation;
 }

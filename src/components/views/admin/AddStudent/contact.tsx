@@ -17,8 +17,9 @@ import { useEffect, useState } from 'react';
 type Iprops = {
   register: any;
   errors: any;
+  getValues?: any
 };
-const Contact = ({ register, errors }: Iprops) => {
+const Contact = ({ register, errors, getValues }: Iprops) => {
   const locals = useGetLocalGovernments();
   const [towns, setTowns] = useState<any>([]);
 
@@ -26,6 +27,7 @@ const Contact = ({ register, errors }: Iprops) => {
     if (!locals.isLoading && locals.data && locals.data.length > 0) {
       setTowns([locals.data]);
     }
+    
   }, [locals.data, locals.isLoading]);
 
   return (
@@ -60,6 +62,7 @@ const Contact = ({ register, errors }: Iprops) => {
             validation={{
               required: 'Town is required',
             }}
+            formValue={ getValues ? `${getValues('townId')}` : ""}
             helper={
               errors?.townId && {
                 message: errors?.townId?.message,
@@ -73,7 +76,7 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormInput
             label='Phone Number'
-            type='tel'
+            type='number'
             placeholder='Details here'
             name='phoneNumber'
             register={register}

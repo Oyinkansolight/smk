@@ -429,9 +429,19 @@ export function useRemoveStaffSubject() {
 
 export function useCreateClassArm() {
   const mutation = useMutation({
-    mutationKey: 'create-classs-arm',
+    mutationKey: 'create-class-arm',
     mutationFn: (params: any) =>
       request.post('/v1/institutions/class-arm/create/', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useUpdateClassArm() {
+  const mutation = useMutation({
+    mutationKey: 'update-class-arm',
+    mutationFn: (params: any) =>
+      request.put('/v1/institutions/class-arm/update', params, {
         withCredentials: true,
       }),
   });

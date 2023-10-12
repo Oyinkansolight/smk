@@ -30,6 +30,7 @@ type propType = {
 const Input = ({
   label,
   setFormValue,
+  formValue,
   options,
   register,
   validation,
@@ -54,7 +55,7 @@ const Input = ({
             <option value=''> -- Select an option -- </option>
 
             {(options ?? []).map((item: any, id: number) => (
-              <option key={id} value={item.id}>
+              <option key={id} value={item.id} selected={formValue === item.id}>
                 {item.name}
               </option>
             ))}

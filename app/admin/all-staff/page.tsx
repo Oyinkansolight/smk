@@ -27,6 +27,10 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const router = useRouter();
 
@@ -58,8 +62,9 @@ const AllStaff = () => {
     if (itemToDelete) {
       try {
         const res = await mutateAsync(itemToDelete);
+        toggleModal();
+        setAction(null)
         toast.success('Staff removed successfully');
-        res && router.replace('/admin/all-staff');
       } catch (error) {
         logger(error);
       }

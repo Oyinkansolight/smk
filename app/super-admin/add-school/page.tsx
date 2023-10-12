@@ -186,7 +186,7 @@ const AddSchool = () => {
               label='Upload Student List CSV'
               value={studentDetailsFile}
               onChange={setStudentDetailsFile}
-              link='/pdfs/upload_student_template.csv'
+              link='/pdfs/upload_student_template.xlsx'
             />
           </div>
         )}

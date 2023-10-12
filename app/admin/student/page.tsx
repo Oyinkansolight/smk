@@ -51,13 +51,14 @@ const Page = () => {
     if (studentId) {
       try {
         const res = await mutateAsync(studentId);
-        res && router.replace('/admin/all-student');
+        toggleModal();
+        res && router.push('/admin/all-student');
       } catch (error) {
-        logger(error);
+        logger(error); 
       }
     }
   };
-  const [url, setUrl] = useState<string | any>("/images/test_student.png");
+  const [url, setUrl] = useState<string | any>('/images/test_student.png');
   const [content, setContent] = useState([]);
   const getFileURL = async () => {
     // const url = await getURL(path);

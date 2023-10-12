@@ -55,7 +55,8 @@ const AllClasses = () => {
       try {
         const res = await mutateAsync(itemToDelete);
         toast.success('class removed successfully');
-        res && router.replace('/admin/all-classes');
+        toggleModal();
+        setAction(null);
       } catch (error) {
         logger(error);
       }
@@ -145,7 +146,12 @@ const AllClasses = () => {
 
                       {action == idx + 1 && (
                         <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                          <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                          <button
+                            onClick={() => {
+                              router.push(`/admin/edit-class?id=${item.id}`);
+                            }}
+                            className='p-4 text-black hover:bg-gray-200 w-full  text-left font-medium'
+                          >
                             Edit
                           </button>
                           <button

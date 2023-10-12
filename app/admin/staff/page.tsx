@@ -136,7 +136,7 @@ const Page = () => {
     if (staffId) {
       try {
         const res = await mutateAsync(staffId);
-        res && router.replace('/admin/all-staff');
+        res && router.push('/admin/all-staff');
       } catch (error) {
         logger(error);
       }
