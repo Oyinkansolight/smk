@@ -39,7 +39,7 @@ export default function AddStudent() {
 
   const [publishData, setpublishData] = useState(null);
 
-  
+
   const handleCreateStudent = useCreateStudent();
   /**
    *
@@ -71,7 +71,7 @@ export default function AddStudent() {
     ) {
       setStage(stage + 1);
     }
-    if (stage === 4 && data.teacher && data.class) {
+    if (stage === 4 && data.class) {
       // setStage(stage + 1);
       const environment = isLocal ? 'staging' : 'production';
       const array = await imageData?.arrayBuffer();
@@ -102,7 +102,6 @@ export default function AddStudent() {
           lga: data.parenttownId,
         },
         classArmId: data.class,
-        classTeacherId: data.teacher,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
       // console.log(studentData);
@@ -204,7 +203,7 @@ export default function AddStudent() {
               setImageData={(v) => setImageData(v)}
             />
           )}
-          {stage === 2 && <Contact register={register} errors={errors} getValues={getValues}/>}
+          {stage === 2 && <Contact register={register} errors={errors} getValues={getValues} />}
           {stage === 3 && <ParentContact register={register} errors={errors} getValues={getValues} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
