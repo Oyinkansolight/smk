@@ -393,6 +393,8 @@ export function useCreateStaff() {
 }
 
 export function useUpdateStaffSubject() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'update-staff-subject',
     mutationFn: (params: any) =>
@@ -403,6 +405,9 @@ export function useUpdateStaffSubject() {
           withCredentials: true,
         }
       ),
+    onSettled: () => {
+      client.refetchQueries('get_teacher_subject_list');
+    },
   });
   return mutation;
 }
