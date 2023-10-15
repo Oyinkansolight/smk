@@ -4,8 +4,6 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useGetProfile } from '@/server/auth';
 import Button from '@/components/buttons/Button';
-import ReactSelect from 'react-select';
-import DataGenerator from '@/components/views/admin/DataGenerator';
 import DashboardCounts from '@/components/sections/admin/DashboardCounts';
 const AdminCharts = dynamic(() => import('@/components/sections/admin/AdminCharts'));
 
@@ -29,14 +27,9 @@ const Page = () => {
         </div>
         <DashboardCounts />
       </div>
-      <DataGenerator variant='secondary' />
-      <div className='p-[20px] bg-white'>
-        <div className='flex justify-end'>
-          <ReactSelect placeholder='Manage Widgets' />
-        </div>
-        <div className='h-[20px]' />
 
-        <AdminCharts />
+      <div className='p-[20px] bg-white'>
+        <AdminCharts institutionId={institutionProfile?.userInfo?.esiAdmin?.id} />
       </div>
     </div>
   );
