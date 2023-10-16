@@ -3,30 +3,15 @@
 
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
-import FormSelectOption from '@/components/input/formSelectOptional';
-import { useGetLocalGovernments } from '@/server/onboard';
-import { useEffect, useState } from 'react';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
   errors: any;
   getValues?: any
 };
-const Contact = ({ register, errors, getValues }: Iprops) => {
-  const locals = useGetLocalGovernments();
-  const [towns, setTowns] = useState<any>([]);
+const Contact = ({ register, errors }: Iprops) => {
+  // const locals = useGetLocalGovernments();
+  // const [towns, setTowns] = useState<any>([]);
 
   const StatusOptions: string[] = [
     'Single Parents',
@@ -36,13 +21,13 @@ const Contact = ({ register, errors, getValues }: Iprops) => {
     'Not Applicable ',
   ];
 
-  useEffect(() => {
-    if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      locals.data.forEach((local: any) => {
-        setTowns((prev: any) => [...prev, local.towns]);
-      });
-    }
-  }, [locals.data, locals.isLoading]);
+  // useEffect(() => {
+  //   if (!locals.isLoading && locals.data && locals.data.length > 0) {
+  //     locals.data.forEach((local: any) => {
+  //       setTowns((prev: any) => [...prev, local.towns]);
+  //     });
+  //   }
+  // }, [locals.data, locals.isLoading]);
 
   return (
     <section className=''>
@@ -108,7 +93,7 @@ const Contact = ({ register, errors, getValues }: Iprops) => {
             }
           />
         </div>
-        <div>
+        {/* <div>
           <FormSelectOption
             label='Town'
             name='parenttownId'
@@ -126,7 +111,7 @@ const Contact = ({ register, errors, getValues }: Iprops) => {
               }
             }
           />
-        </div>
+        </div> */}
       </div>
 
       <div className='my-10 grid md:grid-cols-2 gap-6'>

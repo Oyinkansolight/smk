@@ -3,25 +3,7 @@
 
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
-import FormSelectOptional from '@/components/input/formSelectOptional';
-import { useGetLocalGovernments } from '@/server/onboard';
-import { useEffect, useState } from 'react';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
@@ -29,14 +11,15 @@ type Iprops = {
 };
 
 const Contact = ({ register, errors }: Iprops) => {
-  const locals = useGetLocalGovernments();
-  const [towns, setTowns] = useState<any>([]);
+  // const locals = useGetLocalGovernments();
+  // const [towns, setTowns] = useState<any>([]);
 
-  useEffect(() => {
-    if (!locals.isLoading && locals.data && locals.data.length > 0) {
-      setTowns([locals.data]);
-    }
-  }, [locals.data, locals.isLoading]);
+  // useEffect(() => {
+  //   if (!locals.isLoading && locals.data && locals.data.length > 0) {
+  //     setTowns([locals.data]);
+  //   }
+  // }, [locals.data, locals.isLoading]);
+
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Contact Details</h2>
@@ -97,7 +80,7 @@ const Contact = ({ register, errors }: Iprops) => {
             }
           />
         </div>
-        <div>
+        {/* <div>
           <FormSelectOptional
             label='Local Government Area'
             name='townId'
@@ -113,7 +96,7 @@ const Contact = ({ register, errors }: Iprops) => {
               }
             }
           />
-        </div>
+        </div> */}
       </div>
       <div className='border-t w-full my-4'></div>
 
@@ -189,7 +172,7 @@ const Contact = ({ register, errors }: Iprops) => {
             name='phoneOfNextOfKin'
             register={register}
             validation={{
-              required: 'Phonenumber  of next of kin is required',
+              required: 'Phone number  of next of kin is required',
             }}
             helper={
               errors?.phoneOfNextOfKin && {

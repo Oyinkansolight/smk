@@ -56,7 +56,7 @@ export default function AddStudent() {
     ) {
       setStage(stage + 1);
     }
-    if (stage === 2 && data.phoneNumber && data.address && data.townId) {
+    if (stage === 2 && data.phoneNumber && data.address) {
       setStage(stage + 1);
     }
     if (
@@ -64,7 +64,6 @@ export default function AddStudent() {
       data.parentphoneNumber &&
       data.parentEmail &&
       data.parentAddress &&
-      data.parenttownId &&
       data.parentName &&
       data.parentOccupation &&
       data.parentStatus
@@ -93,13 +92,13 @@ export default function AddStudent() {
         password: '12345678',
         phoneNumber: data.phoneNumber,
         address: data.address,
-        lga: data.townId,
+        lga: "",
         parentDetails: {
           name: data.parentName,
           phoneNumber: data.parentphoneNumber,
           email: data.parentEmail,
           address: data.parentAddress,
-          lga: data.parenttownId,
+          lga: "",
         },
         classArmId: data.class,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
