@@ -14,6 +14,7 @@ import StudentDashboardView from '@/components/views/single-teacher/StudentDashb
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -40,6 +41,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [isAddSubject, setisAddSubject] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [url, setUrl] = useState('/images/teacher_1.png');
 
   const p = useSearchParams();
   const { data, error } = useGetTeacherById({
@@ -123,6 +125,17 @@ const Page = () => {
   const staff = data;
 
   useEffect(() => {
+    const getFileURL = async () => {
+      if (data?.profileImg) {
+        await getURL(data?.profileImg).then((imageUrl) => {
+          setUrl(imageUrl);
+        });
+      }
+    };
+    getFileURL();
+  }, [data]);
+
+  useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
     }
@@ -162,8 +175,7 @@ const Page = () => {
         className='max-w-[777px] w-full h-[267px]'
       />
       <StudentTeacherProfileCard
-        // image={staff?.document?.idCardImage ?? '/images/teacher_1.png'}
-        image='/images/teacher_1.png'
+        image={url}
         name={teacherName}
         school={staff?.institution?.instituteName ?? ''}
         id={staff?.oracleNumber ?? staff?.staffId}

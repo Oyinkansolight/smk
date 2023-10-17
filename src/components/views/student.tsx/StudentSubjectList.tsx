@@ -122,7 +122,7 @@ export default function SubjectList({
                 {!studentSubjectsList ||
                   (studentSubjectsList.length === 0 && (
                     <EmptyView
-                      label='No subject has been assigned to this teacher'
+                      label='No subject has been assigned to this user'
                       useStandardHeight
                     />
                   ))}
@@ -164,7 +164,7 @@ export default function SubjectList({
                 {!studentSubjectsList ||
                   (studentSubjectsList.length === 0 && (
                     <EmptyView
-                      label='No subject has been assigned to this teacher'
+                      label='No subject has been assigned to this user'
                       useStandardHeight
                     />
                   ))}

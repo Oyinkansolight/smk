@@ -323,7 +323,7 @@ const UploadDocument = ({
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
 
   const pathname = usePathname();
- 
+
 
   const toggleDeleteModal = () => {
     setIsModalDeleteOpen(!isModalDeleteOpen);
@@ -418,8 +418,8 @@ const UploadDocument = ({
           subjectId:
             (
               getValues('subject') as
-                | { label: string; value: number }[]
-                | undefined
+              | { label: string; value: number }[]
+              | undefined
             )?.map((s) => s.value ?? '0') ?? [],
         });
       } else {
@@ -428,14 +428,15 @@ const UploadDocument = ({
           subjectId:
             (
               getValues('subject') as
-                | { label: string; value: number }[]
-                | undefined
+              | { label: string; value: number }[]
+              | undefined
             )?.map((s) => s.value ?? '0') ?? [],
         });
       }
 
       if (response) {
-        toast.success('Content assigned successful');
+        const message = contentType === 'file' ? 'File' : contentType === 'video' ? 'Video' : 'Folder';
+        toast.success(message + ' assigned successfully');
         setLoading(false);
         setIsAssign(!isAssign);
       }
@@ -488,9 +489,8 @@ const UploadDocument = ({
           content={
             <DeleteModalContent
               title={`Delete ${contentType === 'file' ? 'File' : 'Folder'}`}
-              body={`Are you sure you want to delete this  ${
-                contentType === 'file' ? 'file' : 'folder'
-              }?`}
+              body={`Are you sure you want to delete this  ${contentType === 'file' ? 'file' : 'folder'
+                }?`}
               toggleModal={toggleDeleteModal}
               handleDelete={
                 contentType === 'file'
@@ -681,35 +681,35 @@ const UploadDocument = ({
                 )
                 ?.map(
                   (item, idx) =>
-                    ({
-                      ...item,
-                      action,
-                      isAssign,
-                      openModal,
-                      setAction,
-                      setIsAssign,
-                      idx: item.id ? item.id : idx,
-                      setFileId,
-                      onFolderClick: (folder) => {
-                        const c = [...folderTrail];
-                        c.push(folder);
-                        setFolderTrail(c);
-                        refetchFolderFiles();
-                      },
-                      // setDeleteFolderId: async (folderId) => {
-                      //   handleFolderDeletion();
-                      // },
-                      // setDeleteFileId: async (fileId) => {
-                      //   handleFileDeletion();
-                      // },
-                      isSuperAdmin,
-                      setFolderId,
-                      setFolderName,
-                      isUpdateFolder,
-                      setIsUpdateFolder,
-                      setConentType,
-                      toggleDeleteModal,
-                    } as TableItemData)
+                  ({
+                    ...item,
+                    action,
+                    isAssign,
+                    openModal,
+                    setAction,
+                    setIsAssign,
+                    idx: item.id ? item.id : idx,
+                    setFileId,
+                    onFolderClick: (folder) => {
+                      const c = [...folderTrail];
+                      c.push(folder);
+                      setFolderTrail(c);
+                      refetchFolderFiles();
+                    },
+                    // setDeleteFolderId: async (folderId) => {
+                    //   handleFolderDeletion();
+                    // },
+                    // setDeleteFileId: async (fileId) => {
+                    //   handleFileDeletion();
+                    // },
+                    isSuperAdmin,
+                    setFolderId,
+                    setFolderName,
+                    isUpdateFolder,
+                    setIsUpdateFolder,
+                    setConentType,
+                    toggleDeleteModal,
+                  } as TableItemData)
                 ) ?? []
             }
           />

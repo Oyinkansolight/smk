@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -11,7 +12,7 @@ import StudentDashboardView from '@/components/views/single-student/StudentDashb
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
-// import { getURL } from '@/firebase/init';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
@@ -34,7 +35,7 @@ const Page = () => {
   const p = useSearchParams();
   const studentId = p?.get('id');
   const { data, error } = useGetStudentList({
-    id: p?.get('id'),
+    query: p?.get('id'),
   });
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
@@ -54,21 +55,24 @@ const Page = () => {
         toggleModal();
         res && router.push('/admin/all-student');
       } catch (error) {
-        logger(error); 
+        logger(error);
       }
     }
   };
-  const [url, setUrl] = useState<string | any>('/images/test_student.png');
-  const [content, setContent] = useState([]);
-  const getFileURL = async () => {
-    // const url = await getURL(path);
-    // setUrl(url);
-    // await getURL(student ?? student?.profileImg).then((v) => setUrl(v));
-    logger(url);
-  };
+  const [url, setUrl] = useState<string | any>('/svg/avatar.svg');
+
+
   useEffect(() => {
+    const getFileURL = async () => {
+      if (student?.profileImg) {
+        await getURL(student?.profileImg).then((imageUrl) => {
+          setUrl(imageUrl);
+        });
+      }
+    };
     getFileURL();
-  }, [url]);
+  }, [student]);
+
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));

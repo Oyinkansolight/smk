@@ -1,4 +1,6 @@
-import { ResponsiveBar } from '@nivo/bar';
+// import { ResponsiveBar } from '@nivo/bar';
+import dynamic from 'next/dynamic';
+const ResponsiveBar = dynamic(() => import('@nivo/bar').then((module) => module.ResponsiveBar));
 
 const d = [
   {
@@ -13,7 +15,7 @@ const d = [
   },
 ];
 
-const AttendanceTracker = ({ data }: { data?: typeof d }) => (
+const GenderDistribution = ({ data }: { data?: typeof d }) => (
   <div className='h-[35rem]'>
     <ResponsiveBar
       data={data ?? d}
@@ -82,4 +84,4 @@ const AttendanceTracker = ({ data }: { data?: typeof d }) => (
   </div>
 );
 
-export default AttendanceTracker;
+export default GenderDistribution;
