@@ -181,10 +181,10 @@ export function useGetStudentById(params?: PaginationParams) {
     queryFn: async () => {
       if (params?.id) {
         try {
-          const d = await request.get('/v1/government/students/get-students', {
+          const d = await request.get('/v1/government/students/get-student-by-id', {
             params,
           });
-          return d.data.data.data.data[0] as Student;
+          return d.data.data.data as Student;
         } catch (error) {
           logger(error);
           throw error;
@@ -531,6 +531,24 @@ export function useGetSubjectAssignedToTeacher(
       try {
         const d = await request.get(
           `/v1/government/classes-subjects/teacher-subjects?teacherId=${id}&&sessionId=${sessionId}`
+        );
+
+        return d.data.data.data as [];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetTeacherAttendanceLog() {
+  const query = useQuery({
+    queryKey: 'get_teacher_subject_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/institutions/clock/list-clock-in`
         );
 
         return d.data.data.data as [];

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import BackButton from '@/components/buttons/BackButton';
+import EmptyView from '@/components/misc/EmptyView';
 import ScoreStatus from '@/components/profile/ScoreStatus';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
@@ -70,14 +71,16 @@ export default function ExamReportView({
       </div>
       <div className='h-px bg-gray-200 my-4' />
       <div className='flex flex-col gap-2'>
-        {Array(6)
+        {/* {Array(6)
           .fill(0)
           .map((v, i) => (
             <ListItem key={i} title={`Primary ${i + 1}`} />
           ))}
         <ListItem title='SSS 1 - Science Class' />
         <ListItem title='SSS 1 - Social Science Class' />
-        <ListItem title='SSS 2 - Science Class' />
+        <ListItem title='SSS 2 - Science Class' /> */}
+
+        <EmptyView label='No data' />
       </div>
     </div>
   );

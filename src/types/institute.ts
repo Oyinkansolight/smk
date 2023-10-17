@@ -33,6 +33,8 @@ export interface Student {
   user?: User[];
   institution?: Institution;
   class?: any;
+  studentId?: string;
+  teacher?: string;
 }
 
 export interface FlattenedStudent {

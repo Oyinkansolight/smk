@@ -344,3 +344,13 @@ export function useUpdateFolder() {
   });
   return mutation;
 }
+export function useGetNotification() {
+  const mutation = useQuery({
+    queryKey: 'get_notification',
+    queryFn: async () => {
+      const d = await request.get('/v1/authentication/notification');
+      return d.data.data;
+    },
+  });
+  return mutation;
+}

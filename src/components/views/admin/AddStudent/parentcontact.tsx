@@ -38,7 +38,7 @@ const Contact = ({ register, errors }: Iprops) => {
         <div>
           <FormInput
             label='Phone Number'
-            type='tel'
+            type='number'
             placeholder='Details here'
             name='parentphoneNumber'
             register={register}

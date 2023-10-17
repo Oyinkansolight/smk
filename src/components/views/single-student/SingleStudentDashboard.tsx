@@ -9,6 +9,7 @@ import StudentDashboardView from '@/components/views/single-student/StudentDashb
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import {
   useGetStudentById,
@@ -16,13 +17,16 @@ import {
 } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import router from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 const SingleStudentDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
+  const [url, setUrl] = useState(
+    'https://www.bu.edu/wll/files/2017/10/avatar.png'
+  );
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();
   const studentId = p?.get('id');
@@ -34,18 +38,32 @@ const SingleStudentDashboard = () => {
   } = useGetStudentById({
     id: p?.get('id'),
   });
+  console.log(student);
+
+  const getFileURL = async (path) => {
+    let result = '';
+    await getURL(path).then((v) => {
+      result = v;
+      setUrl(v);
+    });
+    return result;
+  };
+
+  useEffect(() => {
+    getFileURL(student?.profileImg);
+  }, [student]);
 
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
-        image='/images/test_student.png'
+        image={url}
         name={`${(student?.user ?? [])[0]?.firstName} ${
           (student?.user ?? [])[0]?.lastName
         }`}
         school={student?.institution?.instituteName ?? '[NULL]'}
-        id=''
+        id={student?.studentId ?? ''}
         student
         currentGridIdx={gridTabIdx}
         setGridIdx={(value) => {
@@ -79,15 +97,26 @@ const SingleStudentDashboard = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <StudentDashboardView />}
+          {tabIdx === 0 && (
+            <StudentDashboardView
+              schoolType={'Secondary'}
+              classArm={
+                ` ${student?.class?.class.name}  ${student?.class?.arm} ` ?? ''
+              }
+              studentAve={0}
+              totalSubject={0}
+            />
+          )}
           {tabIdx === 1 && (
             <ExamReportView
-              report={[
-                // { name: 'Mathematics', score: 58, date: new Date() },
-                // { name: 'Mathematics', score: 88, date: new Date() },
-                // { name: 'Mathematics', score: 45, date: new Date() },
-                // { name: 'Mathematics', score: 34, date: new Date() },
-              ]}
+              report={
+                [
+                  // { name: 'Mathematics', score: 58, date: new Date() },
+                  // { name: 'Mathematics', score: 88, date: new Date() },
+                  // { name: 'Mathematics', score: 45, date: new Date() },
+                  // { name: 'Mathematics', score: 34, date: new Date() },
+                ]
+              }
             />
           )}
           {tabIdx === 2 && <SchoolCalendarView />}
@@ -119,14 +148,14 @@ const SingleStudentDashboard = () => {
                   isEditingBioDetails && 'opacity-50'
                 )}
               >
-                <Button
-                  onClick={() => router.push('/admin/student/edit-history')}
-                  disabled={isEditingBioDetails}
-                  variant='ghost'
-                  className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
-                >
-                  View Edit History
-                </Button>
+                {/* <Button
+                onClick={() => router.push('/admin/student/edit-history')}
+                disabled={isEditingBioDetails}
+                variant='ghost'
+                className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
+              >
+                View Edit History
+              </Button> */}
                 <Button
                   disabled={isEditingBioDetails}
                   onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}
@@ -166,7 +195,13 @@ const SingleStudentDashboard = () => {
 
           {tabIdx === 0 && (
             <>
-              <SubjectList studentSubjectsList={studentSubjectsList} />
+              <SubjectList
+                studentSubjectsList={studentSubjectsList}
+                teacher={student?.teacher ?? 'No Name'}
+                managedClassArm={{
+                  arm: ` ${student?.class?.class.name}  ${student?.class?.arm} `,
+                }}
+              />
             </>
           )}
         </div>

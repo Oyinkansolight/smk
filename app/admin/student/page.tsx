@@ -25,6 +25,8 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -39,7 +41,8 @@ const Page = () => {
   });
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
-  const student = data?.data[0];
+  const student = data;
+  console.log(student);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -53,15 +56,20 @@ const Page = () => {
       try {
         const res = await mutateAsync(studentId);
         toggleModal();
-        res && router.push('/admin/all-student');
       } catch (error) {
         logger(error);
       }
     }
   };
-  const [url, setUrl] = useState<string | any>('/svg/avatar.svg');
-
-
+  const [url, setUrl] = useState<string | any>(
+    'https://www.bu.edu/wll/files/2017/10/avatar.png'
+  );
+  const [content, setContent] = useState([]);
+  const getFileURL = async () => {
+    setUrl(url);
+    await getURL(data?.profileImg ?? ' ').then((v) => setUrl(v));
+    logger(url);
+  };
   useEffect(() => {
     const getFileURL = async () => {
       if (student?.profileImg) {
@@ -71,8 +79,7 @@ const Page = () => {
       }
     };
     getFileURL();
-  }, [student]);
-
+  }, [data]);
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -95,8 +102,9 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
-          }`}
+        name={`${(student?.user ?? [])[0]?.firstName} ${
+          (student?.user ?? [])[0]?.lastName
+        }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -133,7 +141,16 @@ const Page = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <StudentDashboardView />}
+          {tabIdx === 0 && (
+            <StudentDashboardView
+              schoolType={'Secondary'}
+              classArm={
+                `${student?.class?.class.name}  ${student?.class?.arm}` ?? ''
+              }
+              studentAve={0}
+              totalSubject={0}
+            />
+          )}
           {tabIdx === 1 && (
             <ExamReportView
               report={

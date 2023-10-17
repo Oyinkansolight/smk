@@ -30,7 +30,7 @@ export default function SubjectList({
 
   const handleDeleteSubject = async () => {
     const response = await removeSubject.mutateAsync({
-      id: itemId
+      id: itemId,
     });
 
     if (response) {
@@ -39,11 +39,11 @@ export default function SubjectList({
     } else {
       toast.error('An error occured');
     }
-  }
+  };
 
   const toggleDeleteModal = () => {
     setShowDeleteModal(!showDeleteModal);
-  }
+  };
 
   return (
     <>
@@ -73,7 +73,7 @@ export default function SubjectList({
                   <div className='flex items-center gap-8'>
                     <div>Class:</div>
                     <div className='text-bold text-sm text-[#5A5A5A]'>
-                      Class Name - {managedClassArm.arm}
+                      {managedClassArm.arm}
                     </div>
                   </div>
                   <div>
@@ -101,7 +101,7 @@ export default function SubjectList({
                             toggleDeleteModal();
                             setSubjectName(v?.subject?.name);
                           }}
-                          className="absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block"
+                          className='absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block'
                         />
                         <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
                           <div>{v?.subject?.name?.substring(0, 1)}</div>
@@ -143,7 +143,7 @@ export default function SubjectList({
                             toggleDeleteModal();
                             setSubjectName(v?.subject?.name);
                           }}
-                          className="absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block"
+                          className='absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block'
                         />
                         <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
                           <div>{v?.subject?.name?.substring(0, 1)}</div>
@@ -241,7 +241,9 @@ export default function SubjectList({
                                 <div>Period 1</div>
                                 <div className='text-[#6B7A99]'>
                                   Title:{' '}
-                                  <span className='font-bold'>Even Numbers</span>
+                                  <span className='font-bold'>
+                                    Even Numbers
+                                  </span>
                                 </div>
                                 <div className='flex text-[#6B7A99] col-span-2 justify-end'>
                                   <div className='cursor-pointer'>View</div>

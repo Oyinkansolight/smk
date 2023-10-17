@@ -6,15 +6,14 @@ import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import {
   // useGetSubjectAssignedToTeacher,
-  useGetTeacherById,
-  // useUpdateStaffSubject,
+  useGetTeacherById, // useUpdateStaffSubject,
 } from '@/server/institution';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Avatar from '~/svg/governor.svg';
 
-const Page = () => {
+const Page = ({ profile } : { profile?: any }) => {
   const router = useRouter();
   // const currentSessionId: string =
   //   getFromLocalStorage('currentSessionId') ?? '';
@@ -122,7 +121,7 @@ const Page = () => {
                 <TeacherBioDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
-                  initStaff={staff}
+                  initStaff={profile}
                 />
               </div>
             </div>

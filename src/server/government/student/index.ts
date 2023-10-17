@@ -8,12 +8,12 @@ export function useGetStudentList(params: any) {
   const query = useQuery({
     queryKey: `get_student_list_${params.query ?? ''}`,
     queryFn: async () => {
-      const d = await request.get('/v1/government/students/get-students', {
+      const d = await request.get(`/v1/government/students/get-student-by-id`, {
         params,
         withCredentials: true,
       });
 
-      return d.data.data.data as PaginatedData<Student>;
+      return d.data.data.data as Student;
     },
   });
   return query;
