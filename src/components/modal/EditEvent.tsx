@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
-import { convertTimestampToDate } from '@/lib/helper';
+import { convertTimestampToDate, subtractMonthsFromCurrentDate } from '@/lib/helper';
 import React, { useEffect, useState } from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
@@ -74,6 +74,7 @@ function AddActivityName({
               placeholder='Select an option'
               formValue={startDate}
               setFormValue={setstartDate}
+              min={subtractMonthsFromCurrentDate()}
             />
             {isOpen && (
               <FormInput
@@ -83,6 +84,7 @@ function AddActivityName({
                 placeholder='Select an option'
                 formValue={endDate}
                 setFormValue={setendDate}
+                min={subtractMonthsFromCurrentDate()}
               />
             )}
           </div>

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type OpenGraphType = {
   siteName: string;
@@ -91,6 +93,7 @@ export const timeConverter = (timestamp) => {
 
   return `${hourformat}:${minutes} ${period}`;
 };
+
 export const time24Converter = (timestamp) => {
   // Split the input time string into hours and minutes
   const [hours, minutes] = timestamp.split(':');
@@ -109,4 +112,94 @@ export const time24Converter = (timestamp) => {
   const time12 = `${hours12}:${minutes} ${period}`;
 
   return time12;
+};
+
+//* Get the current date in "YYYY-MM-DD" format defaults to 6 months ago
+export const subtractMonthsFromCurrentDate = (months = 6) => {
+  // Get the current date
+  const currentDate = moment();
+
+  // Subtract 6 months from the current date
+  const monthsAgo = currentDate.subtract(months, 'months');
+
+  // Format the result in "YYYY-MM-DD" format
+  const formattedDate = monthsAgo.format('YYYY-MM-DD');
+
+  return formattedDate;
+};
+
+//* Get the current date in "YYYY-MM-DD" format defaults to 6 years ago
+export const subtractYearsFromCurrentDate = (years = 6) => {
+  // Get the current date
+  const currentDate = moment();
+
+  // Subtract 6 months from the current date
+  const yearsAgo = currentDate.subtract(years, 'years');
+
+  // Format the result in "YYYY-MM-DD" format
+  const formattedDate = yearsAgo.format('YYYY-MM-DD');
+
+  return formattedDate;
+};
+
+export const getCurrentDate = () => {
+  const currentDate = moment();
+
+  // Format the result in "YYYY-MM-DD" format
+  const formattedDate = currentDate.format('YYYY-MM-DD');
+
+  return formattedDate;
+};
+
+//* ttl in milliseconds
+export const setStorageValueWithExpiry = (
+  itemType: 'session' | 'local',
+  key: string,
+  value: any,
+  ttl: number
+) => {
+  const now = new Date();
+
+  // `item` is an object which contains the original value
+  // as well as the time when it's supposed to expire
+  const item = {
+    value: value,
+    expiry: now.getTime() + ttl,
+  };
+
+  if (itemType === 'session') {
+    sessionStorage.setItem(key, JSON.stringify(item));
+  } else {
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+};
+
+export const getStorageValueWithExpiry = (
+  itemType: 'session' | 'local',
+  key: string,
+  callBack?: (data: any) => void
+) => {
+  const itemStr =
+    itemType === 'session'
+      ? getFromSessionStorage(key)
+      : getFromLocalStorage(key);
+  // if the item doesn't exist, return null
+  if (!itemStr) {
+    return null;
+  }
+  const item = JSON.parse(itemStr);
+  const now = new Date();
+  // compare the expiry time of the item with the current time
+  if (now.getTime() > item.expiry) {
+    // If the item is expired, delete the item from storage
+    // and return null
+
+    //* callBack provided with the item in storage in the scenario where the item cleanup is required
+    callBack && callBack(item);
+    itemType === 'session'
+      ? sessionStorage.removeItem(key)
+      : localStorage.removeItem(key);
+    return null;
+  }
+  return item.value;
 };

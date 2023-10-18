@@ -9,6 +9,7 @@ import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
+import { getStorageValueWithExpiry, setStorageValueWithExpiry } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Cookies from 'js-cookie';
@@ -22,11 +23,38 @@ import { toast } from 'react-toastify';
 export default function StudentAuth() {
   const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = React.useState(false);
+  const [isChecked, setIsChecked] = React.useState(false);
+  const [checkUserLogin, setCheckUserLogin] = React.useState(false);
+
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
     mode: 'all',
   });
+
+  React.useEffect(() => {
+    setCheckUserLogin(true);
+    const validSession = getStorageValueWithExpiry('local', 'TOKEN_KEY');
+    const userPath = getStorageValueWithExpiry('local', 'dashboard');
+    if (validSession && userPath) {
+      router.push(userPath);
+    } else {
+      setCheckUserLogin(false);
+    }
+  }, [router]);
+
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  }
+
+  const setUserDashboard = (path: string) => {
+    setStorageValueWithExpiry(
+      'local',
+      'dashboard',
+      path,
+      1000 * 60 * 60 * 24 * 7
+    );
+  }
 
   const { mutateAsync } = useSignIn();
   const onSubmit = async (data: SignInParams) => {
@@ -34,12 +62,17 @@ export default function StudentAuth() {
     localStorage.clear();
     sessionStorage.clear();
 
+    if (isChecked) {
+      data.rememberMe = true;
+    }
+
     try {
       const response = await mutateAsync(data);
 
       if (response) {
         if (response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN) {
           router.push(ROUTES.ADMIN);
+          if (isChecked) setUserDashboard(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
           if (typeof window !== 'undefined') {
             sessionStorage.setItem(
@@ -48,13 +81,16 @@ export default function StudentAuth() {
             );
           }
           router.push(ROUTES.TEACHER);
+          if (isChecked) setUserDashboard(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
+          if (isChecked) setUserDashboard(ROUTES.STUDENT);
         } else if (
           response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN ||
           response.data.data.data.type === 'DEFAULT'
         ) {
           router.push(ROUTES.SUPER_ADMIN);
+          if (isChecked) setUserDashboard(ROUTES.SUPER_ADMIN);
         }
 
         toast.success(response.data.data.message);
@@ -89,11 +125,8 @@ export default function StudentAuth() {
       setLoading(false);
     }
   };
-  if (typeof window === 'undefined') {
-    // if (sessionStorage.getItem('user')) {
-    //   router.push(ROUTES.STUDENT);
-    // }
 
+  if (typeof window === 'undefined' || checkUserLogin) {
     return (
       <GenericLoader />
     )
@@ -151,7 +184,7 @@ export default function StudentAuth() {
                   <div className='-m-2 mb-4 flex flex-wrap justify-between'>
                     <div className='w-auto p-2'>
                       <div className='flex items-center'>
-                        <Checkbox type='warning' />
+                        <Checkbox type='warning' isChecked={isChecked} onClick={toggleCheckbox} />
                         <label
                           className='ml-2 text-sm font-medium text-gray-900'
                           htmlFor='default-checkbox'

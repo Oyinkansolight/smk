@@ -5,7 +5,7 @@ import clsxm from '@/lib/clsxm';
 import { HTMLInputTypeAttribute } from 'react';
 import { RegisterOptions, UseFormRegister } from 'react-hook-form';
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -25,6 +25,8 @@ type HelperProps = {
 type propType = {
   label: string;
   placeholder: string;
+  min?: number | string;
+  max?: number | string;
   formValue?: string | number;
   setFormValue?: (value: string | number) => void;
   type?: HTMLInputTypeAttribute;
@@ -39,6 +41,8 @@ type propType = {
 };
 
 const Input = ({
+  min,
+  max,
   label,
   formValue,
   type = 'text',
@@ -52,6 +56,8 @@ const Input = ({
   inputClassName,
   containerClassName,
 }: propType) => {
+  const exceptThisSymbols = ['e', 'E', '+', '-', '.'];
+
   return (
     <div className={containerClassName}>
       <div>
@@ -62,13 +68,24 @@ const Input = ({
           <input
             disabled={disabled}
             type={type}
-            className={clsxm(inputClassName, 'w-full border-none outline-none')}
+            className={clsxm(
+              inputClassName,
+              '[&::-webkit-inner-spin-button]:appearance-none w-full border-none outline-none'
+            )}
+            min={min ?? undefined}
+            max={max ?? undefined}
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}
             defaultValue={formValue && formValue}
             onChange={(e) => {
               setFormValue && setFormValue(e.target.value);
             }}
+            onKeyDown={(e) =>
+              (type ==
+                'number' &&
+                exceptThisSymbols.includes(e.key) &&
+                e.preventDefault())
+            }
           />
         </div>
         {helper?.type === 'danger' && (

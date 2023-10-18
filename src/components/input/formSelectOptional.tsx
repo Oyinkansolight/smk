@@ -58,7 +58,7 @@ const Input = ({
               <option
                 key={id}
                 value={item.id}
-                selected={formValue === item.name}
+                selected={formValue === item.id}
               >
                 {item.name}
               </option>

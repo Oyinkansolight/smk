@@ -11,7 +11,8 @@ import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
-import { useGetTeacherById } from '@/server/institution';
+import { getFromLocalStorage } from '@/lib/helper';
+import { useGetSubjectAssignedToTeacher, useGetTeacherById } from '@/server/institution';
 import TeacherLibrary from 'app/teacher/library/page';
 import { useSearchParams } from 'next/navigation';
 import router from 'next/router';
@@ -23,6 +24,8 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 const SingleTeacherDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridIdx, setGridIdx] = useState(0);
+  const currentSessionId: string =
+    getFromLocalStorage('currentSessionId') ?? '';
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();
   const {
@@ -32,6 +35,15 @@ const SingleTeacherDashboard = () => {
   } = useGetTeacherById({
     id: p?.get('id'),
   });
+
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
+    }`;
+
+  const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
+    p?.get('id'),
+    currentSessionId
+  );
+
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
@@ -184,7 +196,11 @@ const SingleTeacherDashboard = () => {
                   Download Report
                 </Button>
               </div>
-              <SubjectList studentSubjectsList={[]} />
+              <SubjectList
+                studentSubjectsList={studentSubjectsList}
+                managedClassArm={staff.managedClassArm}
+                teacher={teacherName}
+              />
             </>
           )}
         </div>

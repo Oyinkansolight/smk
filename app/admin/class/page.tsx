@@ -8,7 +8,7 @@ import SingleStudentAttendanceTracker from '@/components/views/admin/student/Sin
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import { useGetClassArmInfo } from '@/server/institution/class';
-import { useGetClassArmStudents } from '@/server/institution/class-arm';
+// import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';

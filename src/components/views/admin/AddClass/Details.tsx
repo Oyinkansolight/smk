@@ -9,10 +9,16 @@ import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
   errors: any;
+  classArmInfo?: any;
   control: Control<FieldValues, any>;
   staffs: any;
   profile?: UserProfile;
@@ -20,9 +26,17 @@ type Iprops = {
 
 // const Capacity: string[] = numbers;
 
-const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
+const Biodata = ({
+  register,
+  errors,
+  control,
+  staffs,
+  profile,
+  classArmInfo,
+}: Iprops) => {
   const { data: allClasses } = useGetClassesList();
   const { data: allSubjects } = useGetSubjectList();
+
 
   const filteredClass = useMemo(() => {
     const response =
@@ -30,10 +44,19 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
+
+  const staffData = (staffs?.data ?? []).map((v) => ({
+    label: v?.user ? `${v?.user?.firstName} ${v?.user?.lastName}` : ' ',
+    value: v.id,
+  }));
+
+  const selectedTeacherIndex = (staffData ?? []).findIndex(
+    (item) => item.value == classArmInfo?.teacher.id
+  );
 
   return (
     <section className=''>
@@ -45,6 +68,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
           <FormSelectClassDefault
             label='Select Class'
             name='class'
+            formValue={classArmInfo?.class?.id ?? ''}
             options={filteredClass ?? []}
             register={register}
             validation={{
@@ -63,6 +87,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
             label='Input class capacity'
             placeholder='Number of students in class'
             name='classCapacity'
+            formValue={classArmInfo?.capacity ?? ''}
             register={register}
             validation={{
               required: 'Class Capacity is required',
@@ -87,6 +112,7 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
           label='Class Arm'
           placeholder='A'
           name='classArm'
+          formValue={classArmInfo?.arm ?? ''}
           register={register}
           validation={{
             required: 'Class Arm Name is required',
@@ -107,12 +133,8 @@ const Biodata = ({ register, errors, control, staffs, profile }: Iprops) => {
               <div className='font-bold'>Select Class Teacher</div>
               <ReactSelect
                 required
-                options={(staffs?.data ?? []).map((v) => ({
-                  label: v?.user
-                    ? `${v?.user?.firstName} ${v?.user?.lastName}`
-                    : ' ',
-                  value: v.id,
-                }))}
+                options={staffData}
+                defaultValue={staffData[selectedTeacherIndex]}
                 {...field}
                 className='h-auto mt-2 select'
               />

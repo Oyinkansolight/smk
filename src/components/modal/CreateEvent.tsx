@@ -1,4 +1,5 @@
 import FormInput from '@/components/input/formInput';
+import { subtractMonthsFromCurrentDate } from '@/lib/helper';
 import React, { useState } from 'react';
 import Close from '~/svg/close.svg';
 
@@ -39,17 +40,19 @@ function AddActivityName({ onClickHandler }: propType) {
             <div></div>
 
             <FormInput
-              label='Select Start Date'
-              name='schoolType'
               type='date'
+              name='schoolType'
+              label='Select Start Date'
               placeholder='Select an option'
+              min={subtractMonthsFromCurrentDate()}
             />
             {isOpen && (
               <FormInput
-                label='Select End Date'
-                name='schoolType'
                 type='date'
+                name='schoolType'
+                label='Select End Date'
                 placeholder='Select an option'
+                min={subtractMonthsFromCurrentDate()}
               />
             )}
           </div>

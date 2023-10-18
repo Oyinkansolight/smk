@@ -2,40 +2,9 @@
 'use client';
 
 import FormSelect from '@/components/input/formSelectClass';
-import FormSelectTeacher from '@/components/input/formSelectteachers';
 import { getFromLocalStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
-import { useGetTeachersListByInstitution } from '@/server/institution';
 import { useGetInstituteClassArms } from '@/server/institution/class';
-import { useEffect } from 'react';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
@@ -52,9 +21,9 @@ const Education = ({ register, errors }: Iprops) => {
     institutionId,
     currentSessionId
   );
-  const { data: teachers } = useGetTeachersListByInstitution({
-    instituteId: institutionId,
-  });
+  // const { data: teachers } = useGetTeachersListByInstitution({
+  //   instituteId: institutionId,
+  // });
 
   // const [teachers, setteachers] = useState();
   // const getData = async () => {
@@ -63,9 +32,9 @@ const Education = ({ register, errors }: Iprops) => {
   //   });
   //   setteachers(d.data.data.data.data as any);
   // };
-  useEffect(() => {
-    // getData();
-  }, [teachers]);
+  // useEffect(() => {
+  //   // getData();
+  // }, [teachers]);
   // const { data: staffsList } = useGetTeachersList();
   // logger(staffsList);
 
@@ -92,7 +61,7 @@ const Education = ({ register, errors }: Iprops) => {
             }
           />
         </div>
-        <div>
+        {/* <div>
           {teachers && (
             <FormSelectTeacher
               label='Class Teacher'
@@ -110,7 +79,7 @@ const Education = ({ register, errors }: Iprops) => {
               }
             />
           )}
-        </div>
+        </div> */}
       </div>
     </section>
   );

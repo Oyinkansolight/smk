@@ -35,13 +35,14 @@ const nextConfig = {
 
   // Uncoment to add domain whitelist
   images: {
-    domains: [
-      'res.cloudinary.com',
-      'firebasestorage.googleapis.com',
-      'placeimg.com',
-      'picsum.photos',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
+
 
   webpack(config) {
     config.module.rules.push({

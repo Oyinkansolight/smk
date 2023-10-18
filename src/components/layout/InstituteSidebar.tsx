@@ -24,15 +24,15 @@ const InstituteSidebar = ({
   const router = useRouter();
   // const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm('Are you sure you want to logout?');
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
       if (typeof window !== 'undefined') {
-        localStorage.clear()
-        sessionStorage.clear();
+        await sessionStorage.clear();
+        await localStorage.clear();
       }
       router.push('/auth/user');
     }
@@ -92,7 +92,7 @@ const InstituteSidebar = ({
           open={open}
           icon={<Trend className='#C3CAD9' />}
           title='Subject'
-          href='/admin/#'
+          href='/admin/all-subject'
           active={routeDetails && routeDetails.includes('all-subject') && true}
         />
         <SideBarButton
@@ -112,7 +112,7 @@ const InstituteSidebar = ({
           open={open}
           icon={<Messenger className='#C3CAD9' />}
           title='Communication'
-          href='/admin/#'
+          href='/admin/all-communication'
           active={
             routeDetails && routeDetails.includes('all-communication') && true
           }
@@ -124,7 +124,7 @@ const InstituteSidebar = ({
           open={open}
           icon={<Company className='#C3CAD9' />}
           title='Accounting and Settings'
-          href='/admin#'
+          href='/admin/account'
           active={routeDetails && routeDetails.includes('Accounting') && true}
         />
         <SideBarButton

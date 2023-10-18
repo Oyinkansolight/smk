@@ -1,4 +1,5 @@
 import FormInput from '@/components/input/formInput';
+import { subtractMonthsFromCurrentDate } from '@/lib/helper';
 import React from 'react';
 import Close from '~/svg/close.svg';
 
@@ -12,7 +13,7 @@ interface propType {
 
 //Change to trigger build
 
-function AddSingleSchool({ onClickHandler, start, end }: propType) {
+function ActivityTime({ onClickHandler, start, end }: propType) {
   function handleSubmit() {
     onClickHandler && onClickHandler();
   }
@@ -35,6 +36,7 @@ function AddSingleSchool({ onClickHandler, start, end }: propType) {
           <div className='w-full'>
             <FormInput
               type='date'
+              min={subtractMonthsFromCurrentDate()}
               label='Select Start Date'
               // setFormValue={setStartDate}
               formValue={start}
@@ -44,6 +46,7 @@ function AddSingleSchool({ onClickHandler, start, end }: propType) {
           <div className='w-full'>
             <FormInput
               type='date'
+              min={subtractMonthsFromCurrentDate()}
               label='Select End Date'
               // setFormValue={setEndDate}
               formValue={end}
@@ -65,4 +68,4 @@ function AddSingleSchool({ onClickHandler, start, end }: propType) {
   );
 }
 
-export default AddSingleSchool;
+export default ActivityTime;

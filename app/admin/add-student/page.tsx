@@ -24,6 +24,7 @@ export default function AddStudent() {
 
   const {
     register,
+    getValues,
     formState: { errors },
     handleSubmit,
   } = useForm({
@@ -37,6 +38,7 @@ export default function AddStudent() {
   const [imageData, setImageData] = useState<File | undefined>();
 
   const [publishData, setpublishData] = useState(null);
+
 
   const handleCreateStudent = useCreateStudent();
   /**
@@ -54,7 +56,7 @@ export default function AddStudent() {
     ) {
       setStage(stage + 1);
     }
-    if (stage === 2 && data.phoneNumber && data.address && data.townId) {
+    if (stage === 2 && data.phoneNumber && data.address) {
       setStage(stage + 1);
     }
     if (
@@ -62,14 +64,13 @@ export default function AddStudent() {
       data.parentphoneNumber &&
       data.parentEmail &&
       data.parentAddress &&
-      data.parenttownId &&
       data.parentName &&
       data.parentOccupation &&
       data.parentStatus
     ) {
       setStage(stage + 1);
     }
-    if (stage === 4 && data.teacher && data.class) {
+    if (stage === 4 && data.class) {
       // setStage(stage + 1);
       const environment = isLocal ? 'staging' : 'production';
       const array = await imageData?.arrayBuffer();
@@ -91,16 +92,15 @@ export default function AddStudent() {
         password: '12345678',
         phoneNumber: data.phoneNumber,
         address: data.address,
-        lga: data.townId,
+        lga: "",
         parentDetails: {
           name: data.parentName,
           phoneNumber: data.parentphoneNumber,
           email: data.parentEmail,
           address: data.parentAddress,
-          lga: data.parenttownId,
+          lga: "",
         },
         classArmId: data.class,
-        classTeacherId: data.teacher,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
       // console.log(studentData);
@@ -202,8 +202,8 @@ export default function AddStudent() {
               setImageData={(v) => setImageData(v)}
             />
           )}
-          {stage === 2 && <Contact register={register} errors={errors} />}
-          {stage === 3 && <ParentContact register={register} errors={errors} />}
+          {stage === 2 && <Contact register={register} errors={errors} getValues={getValues} />}
+          {stage === 3 && <ParentContact register={register} errors={errors} getValues={getValues} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
 

@@ -1,6 +1,7 @@
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
 import { INSTITUTION_TYPES } from '@/constant/institution';
+import { subtractMonthsFromCurrentDate } from '@/lib/helper';
 import React from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
@@ -87,6 +88,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setfirststartDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
                 <FormInput
                   label='Select End Date'
@@ -94,6 +96,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setfirstendDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
               </div>
             </div>
@@ -115,6 +118,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setsecondstartDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
                 <FormInput
                   label='Select End Date'
@@ -122,6 +126,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setsecondendDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
               </div>
             </div>
@@ -143,6 +148,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setthirdstartDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
                 <FormInput
                   label='Select End Date'
@@ -150,6 +156,7 @@ function AddActivityName({
                   type='date'
                   placeholder='Select an option'
                   setFormValue={setthirdendDate}
+                  min={subtractMonthsFromCurrentDate()}
                 />
               </div>
             </div>

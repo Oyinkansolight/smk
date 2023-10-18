@@ -24,8 +24,8 @@ const Account = ({
   password,
   setPassword,
 }: // password
-// setPassword
-AccountProps) => {
+  // setPassword
+  AccountProps) => {
   return (
     <section className=''>
       <h2 className='text-2xl font-bold'>Account Details</h2>
@@ -41,12 +41,12 @@ AccountProps) => {
         />
       </div>
 
-      <div className='mb-10 flex items-center  gap-6 w-1/2'>
+      <div className='mb-10 flex items-center gap-6 w-1/2'>
         <FormInput
           label='Enter Password*'
           setFormValue={(v) => setPassword(v as string)}
           formValue={password}
-          placeholder='Details here'
+          placeholder='Password here'
         />
         <div className='mt-4'>
           <Button onClick={() => setPassword(generate({ length: 10 }))}>

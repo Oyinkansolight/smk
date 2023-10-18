@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { useGetAdminRoles } from '@/server/onboard';
 import { PaginationParams } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import { Institution, Student, Subject } from '@/types/institute';
@@ -21,7 +20,7 @@ export interface CreateInstitutionParams {
   town?: string;
   email?: string;
   password?: string;
-  role?: number;
+  role: string;
   id?: string;
 }
 
@@ -32,15 +31,12 @@ export interface CreateSubjectParams {
 }
 
 export function useCreateInstitution() {
-  const { data } = useGetAdminRoles();
-  const admin = data?.find((item) => item.name === 'Admin') ?? '';
-
   const mutation = useMutation({
     mutationKey: 'create_institution',
     mutationFn: (params: CreateInstitutionParams) =>
       request.post(
         '/v1/government/institutes/add-institute',
-        { ...params, role: admin.id },
+        { ...params },
         {
           withCredentials: true,
         }
@@ -53,7 +49,7 @@ export function useCreateInstitution() {
 export function useInviteInstitution() {
   const mutation = useMutation({
     mutationKey: 'invite_institution',
-    mutationFn: (params: CreateInstitutionParams) =>
+    mutationFn: (params: Partial<CreateInstitutionParams>) =>
       request.post('/v1/government/institutes/invite-institute', params, {
         withCredentials: true,
       }),
@@ -185,10 +181,10 @@ export function useGetStudentById(params?: PaginationParams) {
     queryFn: async () => {
       if (params?.id) {
         try {
-          const d = await request.get('/v1/government/students/get-students', {
+          const d = await request.get('/v1/government/students/get-student-by-id', {
             params,
           });
-          return d.data.data.data.data[0] as Student;
+          return d.data.data.data as Student;
         } catch (error) {
           logger(error);
           throw error;
@@ -395,7 +391,10 @@ export function useCreateStaff() {
   });
   return mutation;
 }
+
 export function useUpdateStaffSubject() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'update-staff-subject',
     mutationFn: (params: any) =>
@@ -406,14 +405,48 @@ export function useUpdateStaffSubject() {
           withCredentials: true,
         }
       ),
+    onSettled: () => {
+      client.refetchQueries('get_teacher_subject_list');
+    },
   });
   return mutation;
 }
+
+export function useRemoveStaffSubject() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete-staff-subject',
+    mutationFn: (params: any) =>
+      request.delete(
+        '/v1/government/classes-subjects/un-assign-subject-to-teacher',
+        {
+          params,
+          withCredentials: true,
+        }
+      ),
+    onSettled() {
+      client.refetchQueries('get_teacher_subject_list');
+    },
+  });
+  return mutation;
+}
+
 export function useCreateClassArm() {
   const mutation = useMutation({
-    mutationKey: 'create-classs-arm',
+    mutationKey: 'create-class-arm',
     mutationFn: (params: any) =>
       request.post('/v1/institutions/class-arm/create/', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useUpdateClassArm() {
+  const mutation = useMutation({
+    mutationKey: 'update-class-arm',
+    mutationFn: (params: any) =>
+      request.put('/v1/institutions/class-arm/update', params, {
         withCredentials: true,
       }),
   });
@@ -498,6 +531,24 @@ export function useGetSubjectAssignedToTeacher(
       try {
         const d = await request.get(
           `/v1/government/classes-subjects/teacher-subjects?teacherId=${id}&&sessionId=${sessionId}`
+        );
+
+        return d.data.data.data as [];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
+export function useGetTeacherAttendanceLog() {
+  const query = useQuery({
+    queryKey: 'get_teacher_subject_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/institutions/clock/list-clock-in`
         );
 
         return d.data.data.data as [];

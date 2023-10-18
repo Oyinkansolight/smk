@@ -109,7 +109,7 @@ import '../../../../styles/calendar.css';
 import Table from '@/components/tables/TableComponent';
 import { TableColumn } from 'react-data-table-component';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 // const report = [
 //   {
 //     subject: 'Mathematics',

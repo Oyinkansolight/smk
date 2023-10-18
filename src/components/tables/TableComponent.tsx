@@ -46,15 +46,14 @@ export default function Table<T>(
     <div className='flex flex-col gap-4'>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
-          {props.showFilter ||
-            (props.showFilter === undefined && (
-              <select
-                name=''
-                className='border-none bg-transparent outline-none'
-              >
-                <option value=''>Filter</option>
-              </select>
-            ))}
+          {props.showFilter && (
+            <select
+              name=''
+              className='border-none bg-transparent outline-none'
+            >
+              <option value=''>Filter</option>
+            </select>
+          )}
           {props.showSearch ||
             (props.showSearch === undefined && (
               <BasicSearch

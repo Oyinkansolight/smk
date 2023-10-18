@@ -9,122 +9,7 @@ import FormSelect from '@/components/input/formSelect';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import Webcam from 'react-webcam';
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { subtractYearsFromCurrentDate } from '@/lib/helper';
 
 type Iprops = {
   register: any;
@@ -241,8 +126,8 @@ const Biodata = ({
           label='Staff type'
           name='staffType'
           options={[
-            'TEACHER',
-            'TEACHING', 
+            'TEACHING',
+            'NON TEACHING',
           ]}
           register={register}
           validation={{
@@ -315,6 +200,7 @@ const Biodata = ({
           <FormInput
             label='Date of birth'
             type='date'
+            max={subtractYearsFromCurrentDate(18)}
             placeholder='Details here'
             name='dob'
             register={register}

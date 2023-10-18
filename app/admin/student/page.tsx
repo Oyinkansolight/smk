@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -11,6 +12,7 @@ import StudentDashboardView from '@/components/views/single-student/StudentDashb
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
@@ -23,6 +25,8 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -33,11 +37,13 @@ const Page = () => {
   const p = useSearchParams();
   const studentId = p?.get('id');
   const { data, error } = useGetStudentList({
-    id: p?.get('id'),
+    query: p?.get('id'),
   });
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 
-  const student = data?.data[0];
+  const student = data;
+  console.log(student);
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -49,12 +55,31 @@ const Page = () => {
     if (studentId) {
       try {
         const res = await mutateAsync(studentId);
-        res && router.replace('/admin/all-staff');
+        toggleModal();
       } catch (error) {
         logger(error);
       }
     }
   };
+  const [url, setUrl] = useState<string | any>(
+    'https://www.bu.edu/wll/files/2017/10/avatar.png'
+  );
+  const [content, setContent] = useState([]);
+  const getFileURL = async () => {
+    setUrl(url);
+    await getURL(data?.profileImg ?? ' ').then((v) => setUrl(v));
+    logger(url);
+  };
+  useEffect(() => {
+    const getFileURL = async () => {
+      if (student?.profileImg) {
+        await getURL(student?.profileImg).then((imageUrl) => {
+          setUrl(imageUrl);
+        });
+      }
+    };
+    getFileURL();
+  }, [data]);
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -67,8 +92,8 @@ const Page = () => {
         toggleModal={toggleModal}
         content={
           <DeleteModalContent
-            title='Delete Staff'
-            body='Are you sure you want to delete this staff?'
+            title='Delete Student'
+            body='Are you sure you want to delete this student?'
             toggleModal={toggleModal}
             handleDelete={handleDelete}
           />
@@ -76,9 +101,10 @@ const Page = () => {
         className='max-w-[777px] w-full h-[267px]'
       />
       <StudentTeacherProfileCard
-        image='/images/test_student.png'
-        name={`${(student?.user ?? [])[0]?.firstName} ${(student?.user ?? [])[0]?.lastName
-          }`}
+        image={url}
+        name={`${(student?.user ?? [])[0]?.firstName} ${
+          (student?.user ?? [])[0]?.lastName
+        }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -115,15 +141,23 @@ const Page = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <StudentDashboardView />}
+          {tabIdx === 0 && (
+            <StudentDashboardView
+              schoolType={'Secondary'}
+              classArm={
+                `${student?.class?.class.name}  ${student?.class?.arm}` ?? ''
+              }
+              studentAve={0}
+              totalSubject={0}
+            />
+          )}
           {tabIdx === 1 && (
             <ExamReportView
-              report={[
-                { name: 'Mathematics', score: 58, date: new Date() },
-                { name: 'Mathematics', score: 88, date: new Date() },
-                { name: 'Mathematics', score: 45, date: new Date() },
-                { name: 'Mathematics', score: 34, date: new Date() },
-              ]}
+              report={
+                [
+                  // { name: 'Mathematics', score: 58, date: new Date() },
+                ]
+              }
             />
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}
@@ -177,7 +211,7 @@ const Page = () => {
                   }}
                   className='flex flex-row items-center justify-center space-x-2 w-[168px] whitespace-nowrap'
                 >
-                  <span>Delete Staff</span>
+                  <span>Delete Student</span>
                 </Button>
               </div>
               <div className='bg-white px-8'>

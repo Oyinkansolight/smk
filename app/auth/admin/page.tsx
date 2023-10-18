@@ -3,9 +3,11 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
+import GenericLoader from '@/components/layout/Loader';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
+import { getStorageValueWithExpiry, setStorageValueWithExpiry } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Cookies from 'js-cookie';
@@ -13,24 +15,45 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function AdminAuth() {
   const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [checkUserLogin, setCheckUserLogin] = useState(false);
+
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignInParams, unknown>({
     reValidateMode: 'onChange',
     mode: 'all',
   });
 
+  const toggleCheckbox = () => {
+    setIsChecked(!isChecked);
+  }
+
+  const setUserDashboard = (path: string) => {
+    setStorageValueWithExpiry(
+      'local',
+      'dashboard',
+      path,
+      1000 * 60 * 60 * 24 * 7
+    );
+  }
+
   const { mutateAsync } = useSignIn();
+
   const onSubmit = async (data: SignInParams) => {
     setLoading(true);
     localStorage.clear()
     sessionStorage.clear();
+
+    if (isChecked) {
+      data.rememberMe = true;
+    }
 
     try {
       const response = await mutateAsync(data);
@@ -41,10 +64,12 @@ export default function AdminAuth() {
           response.data.data.data.type === 'DEFAULT'
         ) {
           router.push(ROUTES.SUPER_ADMIN);
+          if (isChecked) setUserDashboard(ROUTES.SUPER_ADMIN);
         } else if (
           response.data.data.data.type === USER_ROLES.INSTITUTION_ADMIN
         ) {
           router.push(ROUTES.ADMIN);
+          if (isChecked) setUserDashboard(ROUTES.ADMIN);
         } else if (response.data.data.data.type === USER_ROLES.TEACHER) {
           if (typeof window !== 'undefined') {
             sessionStorage.setItem(
@@ -53,8 +78,10 @@ export default function AdminAuth() {
             );
           }
           router.push(ROUTES.TEACHER);
+          if (isChecked) setUserDashboard(ROUTES.TEACHER);
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
+          if (isChecked) setUserDashboard(ROUTES.STUDENT);
         }
 
         toast.success(response.data.data.message);
@@ -86,6 +113,25 @@ export default function AdminAuth() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setCheckUserLogin(true);
+    const validSession = getStorageValueWithExpiry('local', 'TOKEN_KEY');
+    const userPath = getStorageValueWithExpiry('local', 'dashboard');
+    if (validSession && userPath) {
+      router.push(userPath);
+    } else {
+      setCheckUserLogin(false);
+    }
+  }, [router]);
+
+
+  if (typeof window === 'undefined' || checkUserLogin) {
+    return (
+      <GenericLoader />
+    )
+  }
+
   return (
     <Layout>
       <main>
@@ -168,7 +214,7 @@ export default function AdminAuth() {
                       <div className='-m-2 mb-4 flex flex-wrap justify-between'>
                         <div className='w-auto p-2'>
                           <div className='flex items-center'>
-                            <Checkbox type='warning' />
+                            <Checkbox type='warning' isChecked={isChecked} onClick={toggleCheckbox} />
                             <label
                               className='ml-2 text-sm font-medium text-gray-900'
                               htmlFor='default-checkbox'

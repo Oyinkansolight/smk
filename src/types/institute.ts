@@ -27,11 +27,14 @@ export interface Student {
   dob?: Date;
   height?: string;
   weight?: string;
+  profileImg?: string;
   parentName?: string;
   parentOccupation?: string;
   user?: User[];
   institution?: Institution;
   class?: any;
+  studentId?: string;
+  teacher?: string;
 }
 
 export interface FlattenedStudent {
@@ -41,6 +44,7 @@ export interface FlattenedStudent {
   height?: string;
   weight?: string;
   parentName?: string;
+  profileImg?: string;
   parentOccupation?: string;
   'user.0.id'?: number;
   'user.0.firstName'?: string;

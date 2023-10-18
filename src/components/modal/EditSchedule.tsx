@@ -208,13 +208,13 @@ function AddActivityName({
           </div>
           {type === 'period' ? (
             <div>
-              {data && subjectId1 && (
+              {((data && subjectId1) || activityname1) && (
                 <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                   <div className='bg-white border rounded p-4'>
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Monday</h1>
                     </div>
-                    {activity1  ? (
+                    {activity1 ? (
                       <FormInput
                         label='Enter Activity Name*'
                         name='activity'
@@ -238,7 +238,7 @@ function AddActivityName({
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Tuesday</h1>
                     </div>
-                    {activity2  ? (
+                    {activity2 ? (
                       <FormInput
                         label='Enter Activity Name*'
                         name='activity'
@@ -262,7 +262,7 @@ function AddActivityName({
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Wednesday</h1>
                     </div>
-                    {activity3  ? (
+                    {activity3 ? (
                       <FormInput
                         label='Enter Activity Name*'
                         name='activity'
@@ -286,7 +286,7 @@ function AddActivityName({
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Thursday</h1>
                     </div>
-                    {activity4  ? (
+                    {activity4 ? (
                       <FormInput
                         label='Enter Activity Name*'
                         name='activity'
@@ -310,7 +310,7 @@ function AddActivityName({
                     <div className='border-b py-1 mb-2'>
                       <h1 className='text-lg text-[#A5A5A5]'>Friday</h1>
                     </div>
-                    {activity5  ? (
+                    {activity5 ? (
                       <FormInput
                         label='Enter Activity Name*'
                         name='activity'

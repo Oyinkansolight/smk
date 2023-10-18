@@ -3,6 +3,7 @@ import BackButton from '@/components/buttons/BackButton';
 import ScoreStatus from '@/components/profile/ScoreStatus';
 import Table from '@/components/tables/TableComponent';
 import clsxm from '@/lib/clsxm';
+import { getCurrentDate } from '@/lib/helper';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BsArrowRightCircle } from 'react-icons/bs';
@@ -43,6 +44,7 @@ export default function StudentClassAttendanceReport() {
           type='date'
           className='border border-gray-300 rounded text-sm'
           placeholder=''
+          min={getCurrentDate()}
         />
       </div>
       <div className='rounded bg-[#F8FDFF] p-5 flex items-center justify-between'>

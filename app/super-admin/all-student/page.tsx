@@ -13,7 +13,6 @@ import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
 // import Back from '@/'
 // import clsxm from '@/lib/clsxm';
-import AvrilImage from '~/svg/avril.svg';
 
 const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
   {
@@ -26,8 +25,7 @@ const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
     name: 'Name',
     selector: (row) => row['user.0.firstName'] ?? '',
     cell: (row) => (
-      <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-        <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
+      <div className='col-span-3 w-max text-left  text-[#525F7F] flex space-x-2 items-center'>
         <Link href={`/super-admin/student?id=${row.id}`}>
           <h2 className='text-sm font-medium capitalize'>
             {row['user.0.lastName'] ?? row['user.lastName']} {row['user.0.firstName'] ?? row['user.firstName']}

@@ -61,10 +61,10 @@ export function useGetPermissions() {
 
 export function useGetAdminRoles() {
   const query = useQuery({
+    cacheTime: Infinity,
     queryKey: 'get_all_admin_roles',
     queryFn: async () =>
-      (await request.get(`/v1/government/roles/find-role`)).data.data.data
-        .roles,
+      (await request.get(`/v1/government/roles/find-role`)).data.data.data,
   });
 
   return query;

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isLocal } from '@/constant/env';
+import { setStorageValueWithExpiry } from '@/lib/helper';
 import request from '@/server';
 import { UserProfile } from '@/types/auth';
 import { useMutation, useQuery } from 'react-query';
@@ -9,6 +11,8 @@ export interface SignUpParams {
   password: string;
   username?: string;
   fullName: string;
+  loginHash?: string;
+  rememberMe?: boolean;
 }
 export interface ResetParams {
   password: string;
@@ -26,13 +30,39 @@ export function useSignUp() {
 }
 
 export function useSignIn() {
+  let rememberMe;
   const mutation = useMutation({
     mutationKey: 'sign_in',
 
-    mutationFn: (params: SignInParams) =>
-      request.post('/v1/authentication/login', params),
+    mutationFn: (params: SignInParams) => {
+      rememberMe = params.rememberMe;
+      if (isLocal) {
+        params.loginHash =
+          'd34715a258ed084b1c8a42c6ccf34a9d5f5bafd1aeed2e8c875dbb2b04eeefab';
+      }
+
+      const body = {
+        email: params.email,
+        password: params.password,
+      };
+
+      if (params.loginHash) {
+        body['loginHash'] = params.loginHash;
+      }
+
+      return request.post('/v1/authentication/login', body);
+    },
     onSuccess: (response) => {
       sessionStorage.setItem('TOKEN_KEY', response.data.data.data.token);
+      //* Expires in 7 days
+      if (rememberMe) {
+        setStorageValueWithExpiry(
+          'local',
+          'TOKEN_KEY',
+          response.data.data.data.token,
+          1000 * 60 * 60 * 24 * 7
+        );
+      }
     },
   });
   return mutation;

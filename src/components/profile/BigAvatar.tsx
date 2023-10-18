@@ -10,6 +10,7 @@ export function BigAvatar({ src }: { src: string }) {
           width={100}
           height={100}
           alt='student-profile-picture'
+          className='rounded-full bg-cover'
         />
       </div>
     </div>

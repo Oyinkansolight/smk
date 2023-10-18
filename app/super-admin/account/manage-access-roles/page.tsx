@@ -43,7 +43,7 @@ const roles = [
       {
         role: 'Director',
         description:
-          'This role is for the Ministry of Education Staffs such as, Directors, EMIS Heads, e.t.c',
+          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
       },
       {
         role: 'EMIS Head',
@@ -67,7 +67,7 @@ const roles = [
       {
         role: 'Director',
         description:
-          'This role is for the Ministry of Education Staffs such as, Directors, EMIS Heads, e.t.c',
+          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
       },
       {
         role: 'EMIS Head',
@@ -96,7 +96,7 @@ const roles = [
       {
         role: 'Director',
         description:
-          'This role is for the Ministry of Education Staffs such as, Directors, EMIS Heads, e.t.c',
+          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
       },
       {
         role: 'EMIS Head',
@@ -117,7 +117,7 @@ const roles = [
       {
         role: 'Director',
         description:
-          'This role is for the Ministry of Education Staffs such as, Directors, EMIS Heads, e.t.c',
+          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
       },
       {
         role: 'EMIS Head',

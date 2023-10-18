@@ -2,10 +2,9 @@ import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
-import { BsFillCloudyFill, BsFillSendFill } from 'react-icons/bs';
+import { BsFillCloudyFill } from 'react-icons/bs';
 import { FaUser, FaUserFriends } from 'react-icons/fa';
-import { MdChromeReaderMode, MdLocalPhone, MdMail } from 'react-icons/md';
-import { RiDashboardFill, RiUserFill, RiWhatsappFill } from 'react-icons/ri';
+import { RiDashboardFill, RiUserFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 
 export default function StudentProfile({
@@ -65,7 +64,7 @@ export default function StudentProfile({
         buttonActiveClassName='border-fun-green-500 text-fun-green-500'
       />
       <div className='h-12' />
-      <div className='text-[#ADB8CC]'>Contact School</div>
+      {/* <div className='text-[#ADB8CC]'>Contact School</div>
       <div className='h-2' />
       <div className='flex space-x-3 rounded-full border-2 border-[#EDEFF2] p-3'>
         <MdLocalPhone className='h-5 w-5 text-[#FF6633]' />
@@ -73,7 +72,7 @@ export default function StudentProfile({
         <MdChromeReaderMode className='h-5 w-5 text-[#8833FF]' />
         <BsFillSendFill className='h-5 w-5 text-[#33BFFF]' />
         <RiWhatsappFill className='h-5 w-5 text-green-500' />
-      </div>
+      </div> */}
     </div>
   );
 }

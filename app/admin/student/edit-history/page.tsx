@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiUser } from 'react-icons/bi';
 import { MdArrowBackIos } from 'react-icons/md';
@@ -48,14 +48,18 @@ export default function Page() {
       location: 'Benin',
     },
   ];
+  const router = useRouter();
 
   const [eccede] = useState(mockData);
   return (
     <div className='h-full px-12'>
-      <Link href='/admin/student' className='cursor-pointer flex items-center'>
+      <div
+        onClick={() => router.back()}
+        className='cursor-pointer flex items-center'
+      >
         <MdArrowBackIos className='text-[#42BBFF]' />
         <div>Back</div>
-      </Link>
+      </div>
       <div className='text-3xl font-bold py-8'>
         Account Details Change History
       </div>

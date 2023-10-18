@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
+import { subtractMonthsFromCurrentDate } from '@/lib/helper';
 import React, { useState } from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import Close from '~/svg/close.svg';
@@ -21,12 +22,12 @@ function AddActivityName({
   setstartDate,
   loading,
 }: propType) {
- 
+
 
   const [isOpen, setIsOpen] = useState(true);
   function handleVisibility() {
     setIsOpen(!isOpen);
-}
+  }
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
@@ -53,19 +54,21 @@ function AddActivityName({
             <div></div>
 
             <FormInput
-              label='Select Start Date'
-              name='startDate'
               type='date'
-              placeholder='Select an option'
+              name='startDate'
+              label='Select Start Date'
               setFormValue={setstartDate}
+              placeholder='Select an option'
+              min={subtractMonthsFromCurrentDate()}
             />
             {isOpen && (
               <FormInput
-                label='Select End Date'
-                name='endDate'
                 type='date'
-                placeholder='Select an option'
+                name='endDate'
+                label='Select End Date'
                 setFormValue={setendDate}
+                placeholder='Select an option'
+                min={subtractMonthsFromCurrentDate()}
               />
             )}
           </div>

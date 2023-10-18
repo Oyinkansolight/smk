@@ -1,7 +1,24 @@
 import EmptyView from '@/components/misc/EmptyView';
+import clsxm from '@/lib/clsxm';
 import { ResponsivePie } from '@nivo/pie';
 
-const AttendanceRate = ({ data }) => {
+interface AttendanceRateProps {
+  data: {
+    student: {
+      present: number;
+      absent: number;
+      late: number;
+    };
+    staff: {
+      present: number;
+      absent: number;
+      late: number;
+    };
+  };
+  institute?: boolean;
+}
+
+const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
   const studentDataKeys = Object.keys(data.student ?? {});
   const staffDataKeys = Object.keys(data.staff ?? {});
 
@@ -37,11 +54,16 @@ const AttendanceRate = ({ data }) => {
 
   return (
     // <ChartWrapper className='bg-[#EDF5F2]' title='Attendance Rate'>
-    <div className='flex gap-1 justify-between px-6'>
+    <div className={clsxm(
+      institute ? '' : 'px-6',
+      'flex gap-1 justify-between'
+    )}>
       {
         <div className='flex flex-col items-center text-center'>
           <div className='h4'>Staff Attendance</div>
-          <div className='h-80 w-56'>
+          <div className={clsxm(
+            institute ? 'h-64 w-56' : 'h-80 w-56',
+          )}>
             {totalStaffSum > 0 ?
               <ResponsivePie
                 data={parsedStaffData}
@@ -88,7 +110,7 @@ const AttendanceRate = ({ data }) => {
                   },
                 ]}
               /> : (
-                <EmptyView label='No Staff Data' useStandardHeight />
+                <EmptyView label='No Staff Data' />
               )}
           </div>
         </div>
@@ -96,7 +118,9 @@ const AttendanceRate = ({ data }) => {
       {
         <div className='flex flex-col items-center text-center'>
           <div className='h4'>Student Attendance</div>
-          <div className='h-80 w-56'>
+          <div className={clsxm(
+            institute ? 'h-64 w-56' : 'h-80 w-56',
+          )}>
             {totalStudentSum > 0 ?
               <ResponsivePie
                 data={parsedStudentData}
@@ -143,7 +167,7 @@ const AttendanceRate = ({ data }) => {
                   },
                 ]}
               /> : (
-                <EmptyView label='No Student Data' useStandardHeight />
+                <EmptyView label='No Student Data' />
               )}
           </div>
         </div>

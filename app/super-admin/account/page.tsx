@@ -3,7 +3,7 @@
 import GenericLoader from '@/components/layout/Loader';
 import TabBar from '@/components/layout/TabBar';
 import GradeBookSettings from '@/components/views/account-settings/GradeBookSettings';
-import Role from '@/components/views/account-settings/YourRoles';
+import YourRoles from '@/components/views/account-settings/YourRoles';
 import AccountDetails from '@/components/views/account-settings/AccountDetails';
 import EditHistory from '@/components/views/account-settings/EditHistory';
 import Schooltype from '@/components/views/super-admin/Account/Schooltype';
@@ -13,6 +13,7 @@ import { BsFilterLeft } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { MdOutlineDateRange } from 'react-icons/md';
+import Role from '@/components/views/super-admin/Account/Role';
 
 const Account = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -47,7 +48,10 @@ const Account = () => {
             icon: <IoMdTrendingUp className='h-5 w-5' />,
             label: 'Your Roles & Permissions',
           },
-
+          {
+            icon: <IoMdTrendingUp className='h-5 w-5' />,
+            label: 'Admins & Roles',
+          },
           {
             icon: <IoMdTrendingUp className='h-5 w-5' />,
             label: 'Change History',
@@ -60,8 +64,9 @@ const Account = () => {
       {tabIdx === 0 && <AccountDetails />}
       {tabIdx === 1 && <GradeBookSettings profile={profile} />}
       {tabIdx === 2 && <Schooltype />}
-      {tabIdx === 3 && <Role />}
-      {tabIdx === 4 && <EditHistory />}
+      {tabIdx === 3 && <YourRoles />}
+      {tabIdx === 4 && <Role />}
+      {tabIdx === 5 && <EditHistory />}
     </section>
   );
 };

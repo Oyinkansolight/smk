@@ -1,5 +1,5 @@
 import clsxm from '@/lib/clsxm';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { GrCheckbox, GrCheckboxSelected } from 'react-icons/gr';
 
 interface CheckboxProps {
@@ -14,28 +14,20 @@ const Checkbox = ({
   onClick,
   isChecked = false,
 }: CheckboxProps) => {
-  const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    setChecked(isChecked);
-  }, [isChecked]);
-
-  const handleCheck = () => {
-    setChecked(!checked);
-    if (onClick) onClick();
-  };
 
   return (
     <div>
       <input
         name={Math.random().toString()}
         type='checkbox'
-        checked={checked}
-        onChange={handleCheck}
+        checked={isChecked}
         className='peer/checkbox hidden'
       />
 
       <div
+        onClick={() => {
+          onClick && onClick();
+        }}
         className={clsxm([
           type === 'primary' &&
           'hidden h-4 w-4 text-primary peer-checked/checkbox:block',
@@ -62,6 +54,9 @@ const Checkbox = ({
       </div>
 
       <GrCheckbox
+        onClick={() => {
+          onClick && onClick();
+        }}
         className={clsxm([
           type === 'primary' &&
           'h-4 w-4 text-primary peer-checked/checkbox:hidden',
