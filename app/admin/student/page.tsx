@@ -37,7 +37,7 @@ const Page = () => {
   const p = useSearchParams();
   const studentId = p?.get('id');
   const { data, error } = useGetStudentList({
-    query: p?.get('id'),
+    id: p?.get('id'),
   });
   const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
 

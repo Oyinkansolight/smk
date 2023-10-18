@@ -25,7 +25,7 @@ export default function StudentDashboardView() {
 
         <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px] mt-6'>
           <CountCard count={12566} title='Total Students' variant='basic' />
-          <CountCard count={66} title='Total Staffs' variant='basic' />
+          <CountCard count={66} title='Total Staff' variant='basic' />
           <CountCard count={12} title='Total Classes' variant='basic' />
           <CountCard count={12566} title='Total Subjects' variant='basic' />
         </div>

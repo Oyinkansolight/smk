@@ -12,7 +12,10 @@ import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
-import { useGetSubjectAssignedToTeacher, useGetTeacherById } from '@/server/institution';
+import {
+  useGetSubjectAssignedToTeacher,
+  useGetTeacherById,
+} from '@/server/institution';
 import TeacherLibrary from 'app/teacher/library/page';
 import { useSearchParams } from 'next/navigation';
 import router from 'next/router';
@@ -36,8 +39,9 @@ const SingleTeacherDashboard = () => {
     id: p?.get('id'),
   });
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
-    }`;
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${
+    (staff?.user ?? {})?.lastName
+  }`;
 
   const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
     p?.get('id'),
@@ -48,8 +52,9 @@ const SingleTeacherDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
-          }`}
+        name={`${(staff?.user ?? {})?.firstName} ${
+          (staff?.user ?? {})?.lastName
+        }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
         id={staff?.oracleNumber ?? staff?.staffId}
         student={false}
