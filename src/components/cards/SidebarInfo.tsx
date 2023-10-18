@@ -277,7 +277,7 @@ export const AdminSidebarInfoCardThree = (data: DashboardOverview | any) => {
     >
       <div className='mx-auto flex flex-col justify-center gap-y-7'>
         <div className='flex flex-row justify-between px-[18px]'>
-          <div className='text-xs font-bold text-[#6B7A99]'>Total Staffs</div>
+          <div className='text-xs font-bold text-[#6B7A99]'>Total Staff</div>
           <div>{/* <LineGraphComponent width={95.5} height={27} /> */}</div>
         </div>
 

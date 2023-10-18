@@ -57,7 +57,7 @@ export default function SchoolProfileCard({
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,
-            label: 'Staffs',
+            label: 'Staff',
           },
           {
             icon: <AiFillCloud className='h-5 w-5' />,

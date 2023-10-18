@@ -81,7 +81,7 @@ const InstituteSidebar = ({
           }}
           open={open}
           icon={<Trend className='#C3CAD9' />}
-          title='Staffs'
+          title='Staff'
           href='/admin/all-staff'
           active={routeDetails && routeDetails.includes('all-staff') && true}
         />

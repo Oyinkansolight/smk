@@ -23,6 +23,14 @@ const psychomotor = [
   'Outdoor Games',
   'Vocational Skills',
 ];
+// const proficiency = ['POOR', 'EMERGING', 'INTERMEDIATE', 'GOOD', 'UNSPECIFIED'];
+const proficiency = [
+  { label: 'POOR', value: 'POOR' },
+  { label: 'EMERGING', value: 'EMERGING' },
+  { label: 'INTERMEDIATE', value: 'INTERMEDIATE' },
+  { label: 'GOOD', value: 'GOOD' },
+  { label: 'UNSPECIFIED', value: 'UNSPECIFIED' },
+];
 
 export default function Page() {
   return (
@@ -114,6 +122,20 @@ export default function Page() {
         </div>
       </div>
       <div className='p-8 flex flex-col gap-5 bg-white rounded-lg'>
+        <AccordionAlt
+          titleClassName='bg-[#EFF7F6]'
+          title={<div> Reading Proficiency </div>}
+          length={500}
+        >
+          <div className='flex justify-center mt-4'>
+            <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
+              <h2 className='font-medium'>Proficiency Level</h2>
+              <div className='grid  items-center'>
+                <ReactSelect options={proficiency} className='min-w-[20rem]' />
+              </div>
+            </div>
+          </div>
+        </AccordionAlt>
         <AccordionAlt
           titleClassName='bg-[#EFF7F6]'
           title={<div>Affective Domain</div>}
