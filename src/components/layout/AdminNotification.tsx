@@ -14,9 +14,9 @@ const Notification = ({ link }: { link: string }) => {
       <div className='header pb-2 pt-6 border-b-2 mb-4 px-6'>
         <h1 className='text-[#016938] font-medium text-base '>Notification</h1>
       </div>
-      {data && data.length > 0 && (
+      {data && data.length > 0 && !isLoading && (
         <div>
-          {(data ?? []).slice(0, 5).map((item, idx) => (
+          {data.slice(0, 5).map((item, idx) => (
             <div
               className='px-6 py-3 mb-6 space-y-2 group hover:bg-[#EDF3FE]'
               key={idx}
@@ -44,7 +44,7 @@ const Notification = ({ link }: { link: string }) => {
       )}
 
       {isLoading && (
-        <div className='py-10'>
+        <div className='-mt-20'>
           <GenericLoader width='50' />
         </div>
       )}
