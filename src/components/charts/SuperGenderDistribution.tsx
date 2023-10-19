@@ -6,8 +6,8 @@ import { ResponsiveBar } from '@nivo/bar';
 const SuperGenderDistribution = ({ data }) => {
   const dataKeys = Object.keys(data ?? {});
   const parsedData = dataKeys.map((item) => ({
-    staffColor: '#7F0CA7',
-    studentColor: '#00CABE',
+    staffColor: '#5754F7',
+    studentColor: '#35CFFF',
     staff: data[item].staff,
     student: data[item].student,
     gender: item[0].toUpperCase(),
@@ -27,21 +27,24 @@ const SuperGenderDistribution = ({ data }) => {
   return (
     <div className='h-80'>
       <ResponsiveBar
-        data={parsedData}
-        keys={['student', 'staff']}
+        padding={0.3}
         indexBy='gender'
+        innerPadding={5}
+        data={parsedData}
+        groupMode='grouped'
+        keys={['student', 'staff']}
         margin={{ top: 0, right: 30, bottom: 60, left: 60 }}
-        padding={0.7}
         valueScale={{ type: 'linear' }}
         colors={(p) =>
           p.data[`${p.id}Color` as keyof (typeof data)[number]] as string
         }
-        layout='horizontal'
-        animate={false}
+        layout='vertical'
+        animate={true}
         enableLabel={false}
         axisTop={null}
         axisRight={null}
-        enableGridY={false}
+        enableGridY={true}
+        borderRadius={16}
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,

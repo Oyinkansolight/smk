@@ -10,9 +10,7 @@ import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution
 import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions'
 import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable'
 import { useGetAdminCharts } from '@/server/dashboard';
-import Button, { ButtonVariant } from '@/components/buttons/Button';
-import Link from 'next/link';
-import ReactSelect from 'react-select';
+import { ButtonVariant } from '@/components/buttons/Button';
 import SearchLoader from '@/components/layout/SearchLoader';
 import LowBatteriesTable from '@/components/tables/LowBatteriesTable';
 
@@ -31,7 +29,7 @@ const SuperAdminCharts = ({
 
   return (
     <>
-      <div className='flex flex-col gap-8 p-[30px]'>
+      {/* <div className='flex flex-col gap-8 p-[30px]'>
         <div className='flex justify-between'>
           <div className='text-xl font-bold'>Data Generator</div>
           <Link href='#' className='text-[#3361FF] '>
@@ -64,7 +62,7 @@ const SuperAdminCharts = ({
             Apply
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className='flex flex-col'>
         <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
@@ -73,14 +71,16 @@ const SuperAdminCharts = ({
             <GenericChart
               titleClassName='bg-[#DADEE6]'
               title='Attendance Tracker'
+              description='Total number that were present'
               content={<BarChart data={chartData?.attendanceTracker} />}
             />
 
             <GenericChart
-              title='Attendance Rate'
-              content={<AttendanceRate data={chartData?.attendanceRate} />}
-              className='border-[#EDF5F2]'
+              title='Attendance Report'
               titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Total rate of attendance in the state'
+              content={<AttendanceRate data={chartData?.attendanceRate} />}
             />
 
             {/* <GenericChart
@@ -94,11 +94,21 @@ const SuperAdminCharts = ({
             <GenericChart
               title='Enrolment Analysis'
               content={<EnrolmentAnalysis />}
+              description='Total number of enrolment in the state'
             />
 
             <GenericChart
               title='Low Batteries Notifications'
+              description='Total number of low batteries in the state'
               content={<LowBatteriesTable data={chartData?.lowBatteryUsers} />}
+            />
+
+            <GenericChart
+              title='Admin Login Log'
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Recent admin login logs'
+              content={<LoginLogsTable data={chartData?.loginLogs} />}
             />
           </div>
 
@@ -107,6 +117,7 @@ const SuperAdminCharts = ({
               title='Gender Distribution'
               className='border-[#E6FFF7]'
               titleClassName='bg-[#E6FFF7]'
+              description='Total Number of gender in the state'
               content={<SuperGenderDistribution data={chartData?.genderDistribution} />}
             />
 
@@ -114,6 +125,7 @@ const SuperAdminCharts = ({
               className='border-[#FFF6EC]'
               titleClassName='bg-[#FFF6EC]'
               title='Recently Added Institutions'
+              description='View all recently added Institutions'
               content={<RecentlyAddedInstitutions data={chartData.recentInstitutions} />}
             />
 
@@ -121,21 +133,16 @@ const SuperAdminCharts = ({
               title='Event/Calendar'
               titleClassName='bg-[#E6FFF7]'
               className='border-[#E6FFF7]'
+              description='Recent events across institutions/state/country'
               content={<EventCalendarTable data={chartData.events} />}
             />
 
             <GenericChart
               title='Transfer Requests'
-              content={<EmptyView label='No Data' /> ?? <SuperTransferRequestsTable />}
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
-            />
-
-            <GenericChart
-              title='Admin Login Log'
-              content={<LoginLogsTable data={chartData?.loginLogs} />}
-              titleClassName='bg-[#EDF5F2]'
-              className='border-[#EDF5F2]'
+              description='Recent staff/student transfer requests in the state'
+              content={<EmptyView label='No Data' useStandardHeight /> ?? <SuperTransferRequestsTable />}
             />
           </div>
         </div>

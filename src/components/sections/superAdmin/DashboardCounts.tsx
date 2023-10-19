@@ -1,16 +1,19 @@
-import { SchoolTotalCard, IndividualTotal } from '@/components/cards'
+import Overview from '@/components/cards/overview';
 import { useGetDashboardOverview } from '@/server/dashboard';
+import { useGetSubjectList } from '@/server/institution';
 import Cookies from 'js-cookie';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import InstituteCount from '~/svg/institutecount.svg';
 
 interface DashboardCountsProps {
   handleSetOpen: (value: boolean) => void;
-};
+}
 
 const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
   const [adminType, setAdminType] = useState<string | undefined>();
 
   const { data } = useGetDashboardOverview();
+  const { data: AllSubject } = useGetSubjectList();
 
   useEffect(() => {
     const AT = Cookies.get('adminType');
@@ -18,12 +21,15 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
   }, []);
 
   return (
-    <div className='flex gap-5 w-full'>
-      <div
+    <div className='flex flex-col  w-full'>
+      <h1 className='text-4xl'>Welcome</h1>
+      <h2 className='text-[#8C8C8C] text-base font-normal'>
+        This is your dashboard overview
+      </h2>
+      {/* <div
         className={` ${adminType === 'NORMAL' ? 'w-4/5' : 'w-full'
           }  'flex flex-col gap-[10px]  md:w-full bg-white rounded-[10px] p-5`}
-      >
-        <h1 className='font-bold text-[28px] leading-[27px]'>
+      > <h1 className='font-bold text-[28px] leading-[27px]'>
           Dashboard Statistic
         </h1>
 
@@ -121,9 +127,81 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
             </div>
           </div>
         </div>
-      )}
-    </div>
-  )
-}
+      )} */}
 
-export default DashboardCounts
+      <div className='z-10 relative bg-[#00031D] flex flex-col gap-6 mt-4 rounded-2xl p-4 overflow-hidden'>
+        <div className='absolute z-[5] bg-[#FBCA7D] w-28 h-28 rounded-full -top-7 -right-7'>
+          {' '}
+        </div>
+        <div className='grid sm:grid-cols-2 gap-4'>
+          <div className='rounded-2xl bg-white/10 space-y-2 px-2 py-4'>
+            <div>
+              <div>
+                <InstituteCount className='h-8 w-8' />
+              </div>
+              <p className='text-sm text-[#8E8E8E]'>Total Institution</p>
+            </div>
+            <div>
+              <h1 className='text-white'>{data?.Total_Schools ?? 0} </h1>
+              <span className='text-green-500 text-xl mr-2'>+30%</span>
+              <span className='text-white text-xs'>This Week</span>
+            </div>
+          </div>
+          <div className='rounded-2xl space-y-2 px-2 py-4'>
+            <p className='text-sm text-[#8E8E8E]'>Institution Types</p>
+            <div className=' grid grid-cols-2 gap-4 w-full'>
+              <div className='flex space-x-2 items-center'>
+                <div className='h-2 w-2 bg-green-500 rounded-full'></div>{' '}
+                <p className='text-white text-base font-light'>
+                  ECCDE - {data?.Total_ECCDE ?? 0}
+                </p>
+              </div>
+              <div className='flex space-x-2 items-center'>
+                <div className='h-2 w-2 bg-blue-500 rounded-full'></div>{' '}
+                <p className='text-white text-base font-light'>
+                  Primary - {data?.Total_Primary ?? 0}
+                </p>
+              </div>
+            </div>
+            <div className=' grid grid-cols-2 gap-6 w-full'>
+              <div className='flex space-x-2 items-center'>
+                <div className='h-2 w-2 bg-red-500 rounded-full'></div>{' '}
+                <p className='text-white text-base font-light'>
+                  Tertiary - {data?.Total_Tertiary ?? 0}{' '}
+                </p>
+              </div>
+              <div className='flex space-x-2 items-center'>
+                <div className='h-2 w-2 bg-yellow-500 rounded-full'></div>
+                <p className='text-white text-base font-light'>
+                  Secondary - {data?.Total_Secondary ?? 0}{' '}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='grid sm:grid-cols-3  gap-4'>
+          <Overview
+            src='/svg/studentcount.svg'
+            title='Total Student'
+            count={data?.Total_Students ?? 0}
+            link='/super/all-student'
+          />
+          <Overview
+            src='/svg/staffcount.svg'
+            title='Total Staff'
+            count={data?.Total_Staff ?? 0}
+            link='/super/all-staff'
+          />
+          <Overview
+            src='/svg/subjectcount.svg'
+            title='Total Subject'
+            count={AllSubject?.length ?? 0}
+            link='/super/all-subject'
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardCounts;

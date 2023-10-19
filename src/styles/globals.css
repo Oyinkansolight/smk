@@ -226,3 +226,18 @@
   width: 40vw !important;
   height: 100% !important;
 }
+
+.navigationScrollbar::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 48px;
+}
+
+.navigationScrollbar::-webkit-scrollbar-thumb {
+  background: #6b76d2;
+  border-radius: 48px;
+  border: 2px solid #c3c4d3;
+}
+
+.navigationScrollbar::-webkit-scrollbar-track {
+  background: #e4e5eb;
+}

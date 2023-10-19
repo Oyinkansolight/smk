@@ -7,8 +7,8 @@ const BarChart = ({ data }) => {
   const dataKeys = Object.keys(data ?? {});
   const parsedData = dataKeys.map((item) => ({
     day: item[0],
-    staffColor: '#7F0CA7',
-    studentColor: '#00CABE',
+    staffColor: '#BF74FF',
+    studentColor: '#FFB62B',
     staff: data[item].staff,
     student: data[item].student
   }));
@@ -25,38 +25,41 @@ const BarChart = ({ data }) => {
   }
 
   return (
-    <div className='h-80'>
+    <div className='h-[368px]'>
       <ResponsiveBar
+        groupMode='grouped'
         data={parsedData}
         keys={['student', 'staff']}
         indexBy='day'
-        margin={{ top: 0, right: 30, bottom: 60, left: 30 }}
-        padding={0.7}
+        innerPadding={5}
+        margin={{ top: 50, right: 30, bottom: 60, left: 30 }}
+        padding={0}
         valueScale={{ type: 'linear' }}
         colors={(p) =>
           p.data[`${p.id}Color` as keyof (typeof data)[number]] as string
         }
-        animate={false}
+        animate={true}
         enableLabel={false}
         axisTop={null}
         axisRight={null}
-        enableGridY={false}
-        axisBottom={{
+        enableGridY={true}
+        borderRadius={16}
+        axisLeft={{
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
           legend: '',
           legendPosition: 'middle',
-          legendOffset: +1,
+          legendOffset: -40,
         }}
         legends={[
           {
             dataFrom: 'keys',
-            anchor: 'bottom',
+            anchor: 'top-left',
             direction: 'row',
             justify: false,
             translateX: 0,
-            translateY: 50,
+            translateY: -50,
             itemsSpacing: 2,
             itemWidth: 100,
             itemHeight: 20,

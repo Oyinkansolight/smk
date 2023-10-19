@@ -1,21 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
+import ROUTES from '@/constant/routes';
 import clsxm from '@/lib/clsxm';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
-import { BiExit } from 'react-icons/bi';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { IoDocumentOutline } from 'react-icons/io5';
+import { IoExitSharp } from 'react-icons/io5';
 import { toast } from 'react-toastify';
-import Calendar_icon from '~/svg/calendar_icon.svg';
-import Chat from '~/svg/chats_teardrop.svg';
-import Folder from '~/svg/folder_notch.svg';
-import ID from '~/svg/id_icon.svg';
-import IDBadge from '~/svg/identification_badge.svg';
-import NoteBook from '~/svg/notebook.svg';
-import OpenBook from '~/svg/open_book.svg';
-import UsersThree from '~/svg/users_three.svg';
-import ROUTES from '@/constant/routes';
 
 interface AdminSidebarProps {
   open: boolean;
@@ -48,199 +38,111 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
   return (
     <aside
       className={clsxm(
-        open ? 'w-52' : 'w-20',
-        'absolute order-first transition-all delay-100 flex h-screen flex-col items-center overflow-y-auto border-r-2 bg-[#F7F8FA] py-8 rtl:border-l rtl:border-r-0'
+        'w-full absolute transition-all delay-100 flex flex-col items-center overflow-y-auto navigationScrollbar'
       )}
     >
-      <nav className='flex flex-1 flex-col space-y-3 md:space-y-6'>
-        <div
-          onClick={handleToggle}
-          className={clsxm(
-            'flex w-12 justify-center cursor-pointer bg-primary-50 bg-opacity-30 p-4 rounded-full'
-          )}
-        >
-          <GiHamburgerMenu />
-        </div>
-
-        <SideBarButton
-          open={open}
-          icon={
-            <ID
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
+      <nav className='flex flex-1 flex-col space-y-3 md:space-y-6 w-full max-w-[383px]'>
+        <SideBarButtonTwo
+          active={routeDetails && routeDetails === '/super-admin' && true}
           title='Dashboard'
-          href='/super-admin'
-          active={routeDetails && routeDetails.includes('dashboard') && true}
-        />
-        <SideBarButton
-          onClick={handleToggle}
-          open={open}
-          icon={
-            <NoteBook
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Institutions'
-          href='/super-admin/all-school'
-          active={routeDetails && routeDetails.includes('school') && true}
-        />
-        <SideBarButton
-          open={open}
-          icon={
-            <OpenBook
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Students'
-          href='/super-admin/all-student'
-          active={routeDetails && routeDetails.includes('student') && true}
+          onClick={() => {
+            router.push('/super-admin');
+            handleToggle();
+          }}
         />
 
-        <SideBarButton
-          open={open}
-          icon={
-            <IDBadge
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Staff'
-          href='/super-admin/all-staff'
+        <SideBarButtonTwo
+          active={routeDetails && routeDetails.includes('school') && true}
+          title='Institutions'
+          onClick={() => {
+            router.push('/super-admin/all-school');
+            handleToggle();
+          }}
+        />
+
+        <SideBarButtonTwo
+          active={routeDetails && routeDetails.includes('student') && true}
+          title='Students'
+          onClick={() => {
+            router.push('/super-admin/all-student');
+            handleToggle();
+          }}
+        />
+
+        <SideBarButtonTwo
           active={
             routeDetails && routeDetails.includes('teacher' || 'staff') && true
           }
+          title='Staff'
+          onClick={() => {
+            router.push('/super-admin/all-staff');
+            handleToggle();
+          }}
         />
 
-        <SideBarButton
-          open={open}
-          icon={
-            <IoDocumentOutline
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Subjects'
-          href='/super-admin/all-subject'
+        <SideBarButtonTwo
           active={routeDetails && routeDetails.includes('subject') && true}
+          title='Subjects'
+          onClick={() => {
+            router.push('/super-admin/all-subject');
+            handleToggle();
+          }}
         />
 
-        <SideBarButton
-          open={open}
-          icon={
-            <Calendar_icon
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Academic Timetable'
-          href='/super-admin/academic-calendar'
+        <SideBarButtonTwo
           active={routeDetails && routeDetails.includes('calendar') && true}
+          title='Academic Timetable'
+          onClick={() => {
+            router.push('/super-admin/academic-calendar');
+            handleToggle();
+          }}
         />
 
-        {/* <SideBarButton
-          open={open}
-          icon={
-            <PieChart
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Budgets'
-          href='/super-admin/#'
-          active={routeDetails && routeDetails.includes('budget') && true}
-        /> */}
-        <SideBarButton
-          open={open}
-          icon={
-            <Folder
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Library'
-          href='/super-admin/library'
+        <SideBarButtonTwo
           active={routeDetails && routeDetails.includes('library') && true}
+          title='Library'
+          onClick={() => {
+            router.push('/super-admin/library');
+            handleToggle();
+          }}
         />
-        <SideBarButton
-          open={open}
-          icon={
-            <UsersThree
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Account and settings'
-          href='/super-admin/account'
+
+        <SideBarButtonTwo
           active={routeDetails && routeDetails.includes('account') && true}
+          title='Account and settings'
+          onClick={() => {
+            router.push('/super-admin/account');
+            handleToggle();
+          }}
         />
-        {/* <SideBarButton
-          open={open}
-          icon={
-            <NoteBook
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Blog'
-          href='/super-admin/#'
-          active={routeDetails && routeDetails.includes('blog') && true}
-        /> */}
-        <SideBarButton
-          open={open}
-          icon={
-            <Chat
-              className={clsxm(
-                'fill-current',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Communication'
-          href='/super-admin/communication'
+
+        <SideBarButtonTwo
           active={
             routeDetails && routeDetails.includes('communication') && true
           }
+          title='Communication'
+          onClick={() => {
+            router.push('/super-admin/communication');
+            handleToggle();
+          }}
         />
 
-        <SideBarButton
-          open={open}
-          icon={
-            <BiExit
-              className={clsxm(
-                'fill-red-500',
-                open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
-              )}
-            />
-          }
-          title='Logout'
-          href='#'
-          onClick={handleLogout}
-          active={routeDetails && routeDetails.includes('message') && true}
-        />
+        <button
+          onClick={() => {
+            handleLogout();
+            handleToggle();
+          }}
+          className={clsxm(
+            'bg-[#FFF4F5] font-bold text-[#9D9D9D] !mt-20 !mb-6',
+            'flex rounded-[40px] p-3 justify-center items-center gap-3 self-stretch',
+            'h-11 w-full overflow-hidden border-0 shadow-none hover:bg-[#FFF4F5] hover:text-[#9D9D9D]'
+          )}
+        >
+          <div className='flex flex-row justify-center items-center gap-3 '>
+            <IoExitSharp className='text-[#C3CAD9] h-6 w-6' />
+            <div className='whitespace-nowrap text-[14px]'>Logout</div>
+          </div>
+        </button>
       </nav>
     </aside>
   );
@@ -290,5 +192,32 @@ export const SideBarButton = ({
     </ButtonLink>
   </>
 );
+
+interface SideBarButtonTwoProps {
+  title: string;
+  active: boolean | any;
+  onClick?: () => void;
+}
+
+const SideBarButtonTwo = ({
+  title,
+  active,
+  onClick,
+}: SideBarButtonTwoProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsxm(
+        active
+          ? 'bg-[#5754F7] font-bold text-white'
+          : 'bg-transparent text-[#9D9D9D]',
+        'flex rounded-[40px] p-3 justify-center items-center gap-3 self-stretch',
+        'h-11 w-full overflow-hidden border-0 shadow-none hover:bg-[#5754F7] hover:text-white'
+      )}
+    >
+      {title}
+    </button>
+  );
+};
 
 export default AdminSidebar;

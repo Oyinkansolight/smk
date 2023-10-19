@@ -13,8 +13,7 @@ const Page = () => {
   const handleSetOpen = (value: boolean) => setIsOpen(value);
 
   return (
-    <div className='layout flex flex-col gap-[27px] px-4 pt-6'>
-      <div className='flex h1 mb-7'>Welcome</div>
+    <div className='layout flex flex-col gap-y-[27px] pt-6'>
 
       {isOpen && (
         <AddSingleSchool
