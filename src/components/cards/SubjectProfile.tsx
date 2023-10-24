@@ -43,16 +43,16 @@ export default function SubjectProfileCard({
     currentUserInfo = JSON.parse(currentSession);
   }
 
-  const eccdeSession = currentUserInfo.find((item) =>
+  const eccdeSession = currentUserInfo?.find((item) =>
     typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.ECCDE.toLowerCase())
   );
-  const secondarySession = currentUserInfo.find((item) =>
+  const secondarySession = currentUserInfo?.find((item) =>
     typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.SECONDARY.toLowerCase())
   );
-  const primarySession = currentUserInfo.find((item) =>
+  const primarySession = currentUserInfo?.find((item) =>
     typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.PRIMARY.toLowerCase())
   );
-  const tertiarySession = currentUserInfo.find((item) =>
+  const tertiarySession = currentUserInfo?.find((item) =>
     typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.TERTIARY.toLowerCase())
   );
 

@@ -106,6 +106,24 @@ export function useGetCategoryByInstitutionType(
 
   return query;
 }
+export function useGetProfienciencies() {
+  const query = useQuery({
+    queryKey: 'get_proficiencies_level',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/students/get-student-proficiency-list'
+        );
+        return d.data.data.data as PaginatedData<GradeCategory>;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  return query;
+}
 
 export interface CreateCategory {
   institutionType?: string;

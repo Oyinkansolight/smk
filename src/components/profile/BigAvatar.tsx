@@ -8,7 +8,7 @@ export function BigAvatar({ src }: { src: string }) {
         <NextImage
           src={src}
           width={100}
-          height={100}
+          height={120}
           alt='student-profile-picture'
           className='rounded-full bg-cover'
         />

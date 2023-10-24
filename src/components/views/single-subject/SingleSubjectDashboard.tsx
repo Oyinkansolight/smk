@@ -56,7 +56,7 @@ const SingleSubjectDashboard = () => {
   };
 
   useEffect(() => {
-    if (termId && academicyear.id && id) {
+    if (termId && academicyear?.id && id) {
       GetAllClasses();
     }
 
@@ -108,7 +108,7 @@ const SingleSubjectDashboard = () => {
               params={params}
               curriculumClicked={() => setPage(3)}
               schoolType={schoolType}
-              academicyear={academicyear.session}
+              academicyear={academicyear?.session}
               classList={allclasses || []}
               sessionterms={sessionterms || []}
               settermId={settermId}
@@ -121,7 +121,7 @@ const SingleSubjectDashboard = () => {
             <TestExamListView
               curriculumClicked={() => setPage(4)}
               schoolType={schoolType}
-              academicyear={academicyear.session}
+              academicyear={academicyear?.session}
               classList={allclasses || []}
               sessionterms={sessionterms || []}
               settermId={settermId}
@@ -154,7 +154,7 @@ const SingleSubjectDashboard = () => {
               </div>
               <AllCurriculumView
                 termId={termId}
-                sessionId={academicyear.id}
+                sessionId={academicyear?.id}
                 classId={classId}
               />
             </>

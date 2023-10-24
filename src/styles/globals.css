@@ -44,6 +44,24 @@
   .cursor-newtab {
     cursor: url('/images/new-tab.png') 10 10, pointer;
   }
+  .progress {
+    animation: progress 1s infinite linear;
+  }
+
+  .left-right {
+    transform-origin: 0% 50%;
+  }
+  @keyframes progress {
+    0% {
+      transform: translateX(0) scaleX(0);
+    }
+    40% {
+      transform: translateX(0) scaleX(0.4);
+    }
+    100% {
+      transform: translateX(100%) scaleX(0.5);
+    }
+  }
 
   /* #region  /**=========== Typography =========== */
   .h0 {
@@ -225,4 +243,19 @@
   margin: 0 auto;
   width: 40vw !important;
   height: 100% !important;
+}
+
+.navigationScrollbar::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 48px;
+}
+
+.navigationScrollbar::-webkit-scrollbar-thumb {
+  background: #6b76d2;
+  border-radius: 48px;
+  border: 2px solid #c3c4d3;
+}
+
+.navigationScrollbar::-webkit-scrollbar-track {
+  background: #e4e5eb;
 }

@@ -25,7 +25,7 @@ const columns: TableColumn<LoginLogsTableProps>[] = [
         <div className='h-6 w-6 rounded-full bg-gray-200' />
         <div className='grid grid-cols-2 gap-4 md:gap-10'>
           <div className='max-w-[100px] sm:max-w-[200px] lg:max-w-[120px] overflow-hidden text-ellipsis'>{(event.user.lastName && event.user.firstName) ? `${event.user.lastName} ${event.user.firstName}` : 'Admin User'}</div>
-          <div className='flex self-start items-center justify-center bg-[#FFF3EF] text-xs font-normal text-[#FF6633] py-1 px-2 rounded-full max-w-[70px] overflow-hidden'>
+          <div className='bg-[#FFF3EF] text-center text-[8px] font-normal text-[#FF6633] py-1 px-2 rounded-full min-w-[120px] overflow-hidden text-ellipsis'>
             {event.user.type}
           </div>
         </div>
@@ -36,7 +36,7 @@ const columns: TableColumn<LoginLogsTableProps>[] = [
     name: 'Time',
     selector: (event) => event.createdAt,
     cell: (event) => (
-      <div className='font-bold text-[#ADB8CC]'>{moment(event.createdAt).format('DD MMM hh:mm a')}</div>
+      <div className='font-medium text-[#ADB8CC]'>{moment(event.createdAt).format('DD MMM hh:mm a')}</div>
     ),
   },
 ];

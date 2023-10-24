@@ -7,7 +7,7 @@ const DashboardCounts = () => {
   const { data } = useGetInstitutionDashboardOverview();
 
   return (
-    <div className='grid md:grid-cols-3 sm:grid-cols-2  gap-3 md:gap-[20px] xl:gap-[27px]'>
+    <div className='grid lg:grid-cols-3 sm:grid-cols-2  gap-3 md:gap-[20px] xl:gap-[27px]'>
       <CountCardAlt
         count={data?.Total_Students ?? 0}
         title='Total Students'
