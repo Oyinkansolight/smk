@@ -25,12 +25,14 @@ export interface Student {
   id?: string;
   gender?: string;
   dob?: Date;
+  firstName?: string;
+  lastName?: string;
   height?: string;
   weight?: string;
   profileImg?: string;
   parentName?: string;
   parentOccupation?: string;
-  user?: User[];
+  user?: User[] | User;
   institution?: Institution;
   class?: any;
   studentId?: string;
@@ -527,4 +529,11 @@ export interface ClassArmStudents {
   institution: Institution;
   user: User;
   classArmId: string;
+}
+
+export interface StudentsListByInstitution {
+  page?: number;
+  limit?: number;
+  query?: string;
+  instituteId: string;
 }

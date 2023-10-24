@@ -44,6 +44,7 @@ export interface PaginationParams {
   id?: any;
   limit?: number;
   page?: number;
+  query?: string;
 }
 
 export interface ChartParams {

@@ -12,9 +12,11 @@ import { useEffect, useState } from 'react';
 import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
 
 const AllStaff = () => {
   const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
   const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
 
@@ -49,8 +51,15 @@ const AllStaff = () => {
   };
 
   useEffect(() => {
-    refetch()
-  }, [refetch, pagingData, query]);
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch()
+      }
+    };
+
+    refetchSearchRecords();
+
+  }, [refetch, debouncedSearchTerm]);
 
   useEffect(() => {
     if (error) {
@@ -111,14 +120,14 @@ const AllStaff = () => {
           ) : (
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (staff?.data?.staffs ?? []).map((item: Staff, idx: number) => (
-              <div className='grid grid-cols-12 p-4 border-b' key={idx}>
+              <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
                   {(pagingData.page - 1) * 10 + (staff?.paging?.itemCount ?? idx + 1)}
                   {/* item_index = (page_number - 1) * items_per_page + item_on_page */}
                 </div>
 
                 <div className='col-span-2'>
-                  {item?.oracleNumber ?? item?.id}
+                  {item?.oracleNumber ?? "-"}
                 </div>
 
                 <div className='col-span-4'>
