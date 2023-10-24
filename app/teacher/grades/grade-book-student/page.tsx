@@ -2,8 +2,14 @@
 
 import AccordionAlt from '@/components/accordions/AccordionAlt';
 import Button from '@/components/buttons/Button';
+import { getErrMsg } from '@/server';
+import { useUpdateStudent } from '@/server/government/student';
+import { useGetProfienciencies } from '@/server/institution/grade';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
 import ReactSelect from 'react-select';
+import { toast } from 'react-toastify';
 
 const affective = [
   'Attentiveness',
@@ -25,14 +31,30 @@ const psychomotor = [
 ];
 // const proficiency = ['POOR', 'EMERGING', 'INTERMEDIATE', 'GOOD', 'UNSPECIFIED'];
 const proficiency = [
+  { label: 'UNSPECIFIED', value: 'UNSPECIFIED' },
   { label: 'POOR', value: 'POOR' },
   { label: 'EMERGING', value: 'EMERGING' },
   { label: 'INTERMEDIATE', value: 'INTERMEDIATE' },
   { label: 'GOOD', value: 'GOOD' },
-  { label: 'UNSPECIFIED', value: 'UNSPECIFIED' },
 ];
 
 export default function Page() {
+  const { data } = useGetProfienciencies();
+  const p = useSearchParams();
+  const studentId = p?.get('studentid');
+  const update = useUpdateStudent();
+
+  const updateStudentProficiencyLevel = async (value) => {
+    try {
+      const response = await update.mutateAsync({
+        id: studentId ?? '',
+        readingProficiency: value.value,
+      });
+      response && toast.success('Student reading proficiency updated');
+    } catch (error) {
+      toast.error(getErrMsg(error));
+    }
+  };
   return (
     <div className='h-full layout flex flex-col gap-6'>
       <div className='text-black font-bold py-8 text-2xl'>Grade Book</div>
@@ -131,7 +153,11 @@ export default function Page() {
             <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
               <h2 className='font-medium'>Proficiency Level</h2>
               <div className='grid  items-center'>
-                <ReactSelect options={proficiency} className='min-w-[20rem]' />
+                <ReactSelect
+                  options={proficiency}
+                  onChange={updateStudentProficiencyLevel}
+                  className='min-w-[20rem]'
+                />
               </div>
             </div>
           </div>

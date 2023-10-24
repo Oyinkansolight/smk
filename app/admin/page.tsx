@@ -22,8 +22,8 @@ const Page = () => {
         </Link>
       </div>
       <div className='bg-white p-[20px] rounded-[10px]'>
-        <div className='text-[#333333] font-bold text-2xl mb-5'>
-          Your Dashboard Statistic
+        <div className='text-[#333333] font-bold text-lg sm:text-2xl mb-5'>
+          Your Dashboard Statistics
         </div>
         <DashboardCounts />
       </div>

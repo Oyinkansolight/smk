@@ -2,6 +2,7 @@ import Overview from '@/components/cards/overview';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useGetSubjectList } from '@/server/institution';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import InstituteCount from '~/svg/institutecount.svg';
 
@@ -143,12 +144,22 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
             </div>
             <div>
               <h1 className='text-white'>{data?.Total_Schools ?? 0} </h1>
-              <span className='text-green-500 text-xl mr-2'>+30%</span>
-              <span className='text-white text-xs'>This Week</span>
+              <div className='flex justify-between items-center'>
+                <div>
+                  <span className='text-green-500 text-xl mr-2'>+30%</span>
+                  <span className='text-white text-xs'>This Week</span>
+                </div>
+                <Link
+                  href='/super-admin/all-school'
+                  className='mt-3 text-base text-secondary'
+                >
+                  Click to View Details
+                </Link>
+              </div>
             </div>
           </div>
           <div className='rounded-2xl space-y-2 px-2 py-4'>
-            <p className='text-sm text-[#8E8E8E]'>Institution Types</p>
+            <p className='text-sm text-[#8f8f8f]'>Institution Types</p>
             <div className=' grid grid-cols-2 gap-4 w-full'>
               <div className='flex space-x-2 items-center'>
                 <div className='h-2 w-2 bg-green-500 rounded-full'></div>{' '}
@@ -184,19 +195,19 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
             src='/svg/studentcount.svg'
             title='Total Student'
             count={data?.Total_Students ?? 0}
-            link='/super/all-student'
+            link='/super-admin/all-student'
           />
           <Overview
             src='/svg/staffcount.svg'
             title='Total Staff'
             count={data?.Total_Staff ?? 0}
-            link='/super/all-staff'
+            link='/super-admin/all-staff'
           />
           <Overview
             src='/svg/subjectcount.svg'
             title='Total Subject'
             count={AllSubject?.length ?? 0}
-            link='/super/all-subject'
+            link='/super-admin/all-subject'
           />
         </div>
       </div>

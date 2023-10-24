@@ -2,55 +2,102 @@
 'use client';
 
 import { BasicSearch } from '@/components/search';
+import { INSTITUTION_TYPES } from '@/constant/institution';
 import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import { useGetTeachersList } from '@/server/institution';
-import { Staff } from '@/types/institute';
-import Image from 'next/image';
+import { FlattenedStudent } from '@/types/institute';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
+import Castle from '~/svg/castle.svg';
+import NextArrow from '~/svg/nextarrow.svg';
+import PrevArrow from '~/svg/prevarrow.svg';
+import Staff from '~/svg/staff.svg';
 
-const AllStaff = () => {
-  const [query, setQuery] = useState('');
-  const [action, setAction] = useState<number | null>(null);
-  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
+  {
+    name: 'No',
+    selector: (row) => row.idx,
+    cell: (row) => <div>#{row.idx + 1}</div>,
+  },
+  { name: 'Student ID', selector: (row) => row.id ?? '' },
+  {
+    name: 'Name',
+    selector: (row) => row['user.0.firstName'] ?? '',
+    cell: (row) => (
+      <div className='col-span-3 w-max text-left  text-[#525F7F] flex space-x-2 items-center'>
+        <Link href={`/super-admin/student?id=${row.id}`}>
+          <h2 className='text-sm font-medium capitalize'>
+            {row['user.0.lastName'] ?? row['user.lastName']}{' '}
+            {row['user.0.firstName'] ?? row['user.firstName']}
+          </h2>
+        </Link>
+      </div>
+    ),
+  },
+  { name: 'Type', selector: (row) => row['user.0.type'] ?? '-' },
+  {
+    name: 'Institution',
+    selector: (row) => row['institution.instituteName'] ?? '-',
+  },
+  {
+    name: 'Institution Type',
+    selector: (row) => row['institution.instituteType'] ?? '-',
+  },
+];
+
+const AllStudent = () => {
+  const [lastName, setLastName] = useState('');
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    lastName,
+  });
   const {
-    data: staff,
+    data: staffs,
     error,
     isLoading,
-    refetch
+    refetch,
   } = useGetTeachersList({ ...pagingData });
 
   const handleSearch = (value: string) => {
-    setQuery(value);
-    setPagingData({ ...pagingData, query: value });
-  };
-
-
-  const handleNextPage = () => {
-    setPagingData({ ...pagingData, page: pagingData.page + 1 });
-  };
-
-  const handlePrevPage = () => {
-    if (pagingData.page === 1) return;
-    setPagingData({ ...pagingData, page: pagingData.page - 1 });
-  };
-
-  const handleJumpToStart = () => {
-    setPagingData({ ...pagingData, page: 1 });
-  };
-
-  const handleJumpToEnd = () => {
-    if (staff) setPagingData({ ...pagingData, page: staff?.paging?.totalPage });
+    setLastName(value);
+    setPagingData({ ...pagingData, lastName: value });
   };
 
   useEffect(() => {
-    refetch()
-  }, [refetch, pagingData, query]);
+    refetch();
+  }, [pagingData, refetch]);
 
   useEffect(() => {
     if (error) {
@@ -58,9 +105,38 @@ const AllStaff = () => {
     }
   }, [error]);
 
+  console.log(staffs);
+
+  const InstituteTypeCard = ({ type, title, count }) => {
+    return (
+      <div
+        className={clsxm(
+          type === 'ECCDE' && 'bg-[#FFFEF5] border-[#FFE664]',
+          type === 'Primary' && 'bg-[#FFF8F4] border-[#FFCAAB]',
+          type === 'Tertiary' && 'bg-[#F9FFFA] border-[#73ED95]',
+          type === 'Secondary' && 'bg-[#FAFDFF] border-[#A4DEFF]',
+          'p-4 space-y-2 rounded-lg  border-[0.5px] '
+        )}
+      >
+        <h4
+          className={clsxm(
+            type === 'ECCDE' && ' text-[#D9B80E]',
+            type === 'Primary' && ' text-[#AC4407]',
+            type === 'Tertiary' && ' text-[#008F28]',
+            type === 'Secondary' && ' text-[#6699B6]',
+            'text-sm font-normal '
+          )}
+        >
+          {title}
+        </h4>
+        <h1 className='text-4xl'>{count}</h1>
+      </div>
+    );
+  };
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <Link href='/super-admin'>
+      {/* <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -73,231 +149,233 @@ const AllStaff = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Staff</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Students</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
-          <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{staff?.data?.count ?? 0}</h1>
+          <p className='text-[#615F5F]'>Total Students</p>
+          <h1 className='font-semibold text-2xl'>
+            {pagingData.limit * (students?.paging.totalPage ?? 0)}
+          </h1>
         </div>
       </div>
 
-      {/* <div className='flex space-x-2 py-2 border-b'>
-        <button>All Staff</button>
-        <button>Transfer Requests</button>
+      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+        {isLoading ? (
+          <div className='text-center'>Loading...</div>
+        ) : (
+          <Table
+            handleSearchParam={handleSearch}
+            data={
+              students?.data?.map(
+                (v, i) =>
+                ({
+                  idx:
+                    pagingData.page * pagingData.limit - pagingData.limit + i,
+                  ...flattenObject(v),
+                } as FlattenedStudent & {
+                  idx: number;
+                })
+              ) ?? []
+            }
+            columns={studentListColumns}
+            paginationServer
+            paginationTotalRows={
+              pagingData.limit * (students?.paging.totalPage ?? 0)
+            }
+            onChangePage={(page) => {
+              setPagingData({ page, limit: pagingData.limit, lastName });
+            }}
+            onChangeRowsPerPage={(limit, page) => {
+              setPagingData({ page, limit, lastName });
+            }}
+          />
+        )}
+        {!isLoading && students?.data?.length === 0 && (
+          <div className='text-red-500 py-4 text-center'>No record found</div>
+        )}
       </div> */}
 
-      <div className='flex flex-col gap-4'>
-        <div className='flex justify-end'>
-          <div className='flex w-[300px] space-x-2'>
+      <div className='rounded-2xl p-4 bg-[#F4E7FF]'>
+        <div className='flex justify-between items-center'>
+          <div>
+            <h1 className='text-4xl'>Staff</h1>
+            <h2 className='text-[#8C8C8C] text-base font-normal'>
+              An overview of all staff
+            </h2>
+          </div>
+          <Link
+            href='/super-admin/add-staff'
+            className='w-max h-fit py-3 rounded-3xl border bg-[#5754F7] px-3  text-center text-xs text-white '
+          >
+            Add Staff
+          </Link>
+        </div>
 
-            <BasicSearch
-              placeholder='Search...'
-              handleSearch={handleSearch}
-            />
+        <div className='space-y-4 my-4 pt-4'>
+          <InstituteTypeCard
+            type='ECCDE'
+            title='Total ECCDE Staffs'
+            count={0}
+          />
+          <InstituteTypeCard
+            type='Primary'
+            title='Total Primary Staffs'
+            count={0}
+          />
+          <InstituteTypeCard
+            type='Secondary'
+            title='Total Secondary Staffs'
+            count={23}
+          />
+          <InstituteTypeCard
+            type='Tertiary'
+            title='Total Tertiary Staffs'
+            count={0}
+          />
+        </div>
+      </div>
+      <div className='flex space-x-2 py-4 mt-8'>
+        <button className='w-max h-fit py-2 rounded-3xl border bg-[#5754F7] px-3  text-center text-xs text-white '>
+          All Staff List
+        </button>
+        <button className='w-max h-fit py-2 rounded-3xl border bg-[#fff]  px-3  text-center text-xs text-gray-500 '>
+          Transfer Staff List
+        </button>
+      </div>
+      <div className='rounded-2xl p-4 mt-2 bg-[#FFF]'>
+        <div className='flex sm:flex-row flex-col sm:justify-between justify-start  sm:items-end'>
+          <div className='space-y-3'>
+            <h2 className='text-[#8C8C8C] text-base font-normal'>
+              List of all the staff in the state
+            </h2>
+            <BasicSearch />
+          </div>
+          <div className='sm:mt-0 mt-2 flex space-x-2 pb-4'>
+            <button className='bg-black  rounded-lg flex space-x-2 p-2 text-white'>
+              <span>Filter by institution</span>
+              <span>
+                <svg
+                  width='17'
+                  height='16'
+                  viewBox='0 0 17 16'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    fill-rule='evenodd'
+                    clip-rule='evenodd'
+                    d='M4.2651 5.65967C4.46036 5.44678 4.77694 5.44678 4.97221 5.65967L8.2651 9.25C8.46036 9.4629 8.77694 9.4629 8.97221 9.25L12.2651 5.65968C12.4604 5.44678 12.7769 5.44678 12.9722 5.65968C13.1675 5.87257 13.1675 6.21775 12.9722 6.43065L9.67931 10.021C9.09353 10.6597 8.14378 10.6597 7.55799 10.021L4.2651 6.43065C4.06984 6.21775 4.06984 5.87257 4.2651 5.65967Z'
+                    fill='#D9D9D9'
+                  />
+                </svg>
+              </span>
+            </button>
+            <button className='bg-black  rounded-lg flex space-x-2 p-2 text-white'>
+              <span>Filter by location</span>
+              <span>
+                <svg
+                  width='17'
+                  height='16'
+                  viewBox='0 0 17 16'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    fill-rule='evenodd'
+                    clip-rule='evenodd'
+                    d='M4.2651 5.65967C4.46036 5.44678 4.77694 5.44678 4.97221 5.65967L8.2651 9.25C8.46036 9.4629 8.77694 9.4629 8.97221 9.25L12.2651 5.65968C12.4604 5.44678 12.7769 5.44678 12.9722 5.65968C13.1675 5.87257 13.1675 6.21775 12.9722 6.43065L9.67931 10.021C9.09353 10.6597 8.14378 10.6597 7.55799 10.021L4.2651 6.43065C4.06984 6.21775 4.06984 5.87257 4.2651 5.65967Z'
+                    fill='#D9D9D9'
+                  />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
-        <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
-          <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
-            <div className='col-span-1'>No</div>
-            <div className='col-span-2'>Staff ID</div>
-            <div className='col-span-4'>Name</div>
-            <div className='hidden lg:block col-span-1'>Type</div>
-            <div className='hidden lg:block col-span-2'>Institution</div>
-            <div className='hidden lg:block col-span-1'>Institution Type</div>
+        {staffs?.data && (
+          <div className='space-y-2 mt-4'>
+            {staffs?.data?.staffs.map((item, idx) => (
+              <InstitutionCard data={item} key={idx} />
+            ))}
           </div>
-          {isLoading ? (
-            <div className='text-center'>Loading...</div>
-          ) : (
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (staff?.data?.staffs ?? []).map((item: Staff, idx: number) => (
-              <div className='grid grid-cols-12 p-4 border-b' key={idx}>
-                <div className='col-span-1'>
-                  {(pagingData.page - 1) * 10 + (staff?.paging?.itemCount ?? idx + 1)}
-                  {/* item_index = (page_number - 1) * items_per_page + item_on_page */}
-                </div>
+        )}
 
-                <div className='col-span-2'>
-                  {item?.oracleNumber ?? item?.id}
-                </div>
-
-                <div className='col-span-4'>
-                  <Link href={`/super-admin/teacher?id=${item.id}`}>
-                    {item?.user?.lastName || 'N/A'} {item?.user?.firstName || 'N/A'}
-                  </Link>
-                </div>
-
-                <div className='hidden lg:block col-span-1'> {item?.staffType || 'N/A'}</div>
-
-                <div className='col-span-4 lg:col-span-2'>
-                  {' '}
-                  {item?.institution?.instituteName || 'N/A'}{' '}
-                </div>
-
-                <div className='hidden lg:block col-span-1'>
-                  {' '}
-                  {item?.institution?.instituteType || 'N/A'}{' '}
-                </div>
-
-                <div className='col-span-1 justify-end flex'>
-                  <button
-                    onClick={() => {
-                      setAction(idx + 1);
-                    }}
-                    className='relative'
-                  >
-                    <BsThreeDotsVertical />
-                    {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
-                          Edit
-                        </button>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </button>
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
-                      onClick={() => {
-                        setAction(null);
-                      }}
-                    ></div>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
-          {!isLoading && staff?.data?.staffs?.length === 0 && (
-            <div className='text-red-500 py-4 text-center'>No record found</div>
-          )}
-
-          {staff && staff?.data?.staffs?.length > 0 && (
-            <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
-              <button
-                onClick={handleJumpToStart}
-                disabled={pagingData.page === 1}
-                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
-              >
-                <BiChevronsLeft />
-              </button>
-
-              <button
-                onClick={handlePrevPage}
-                disabled={pagingData.page === 1}
-                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
-              >
-                <svg
-                  width='6'
-                  height='8'
-                  viewBox='0 0 6 8'
-                  fill='none'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <path
-                    fillRule='evenodd'
-                    clipRule='evenodd'
-                    d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
-                    fill='#8898AA'
-                  />
-                </svg>
-              </button>
-
-              {Array(staff.paging.totalPage)
-                .fill(0)
-                .slice(0, 2)
-                .map((item, idx: number) => (
-                  <div
-                    key={Math.random() * 100}
-                    className={clsxm(
-                      pagingData.page === idx + 1
-                        ? 'bg-[#008146] text-white'
-                        : 'bg-white text-gray-500',
-                      'grid h-7 w-7 place-content-center rounded-full border p-2'
-                    )}
-                  >
-                    {idx + 1}
-                  </div>
-                ))}
-
-              {staff.paging.totalPage > 3 &&
-                <div
-                  key={Math.random() * 100}
-                  className={clsxm(
-                    pagingData.page === 3 ||
-                      (pagingData.page > 3 && pagingData.page < staff.paging.totalPage)
-                      ? 'bg-[#008146] text-white'
-                      : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
-                  )}
-                >
-                  {pagingData.page > 3 && pagingData.page < staff.paging.totalPage
-                    ? pagingData.page
-                    : 3}
-                </div>
-              }
-
-              {staff.paging.totalPage > 4 && (
-                <div
-                  key={Math.random() * 100}
-                  className={clsxm(
-                    'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
-                  )}
-                >
-                  ...
-                </div>
-              )}
-
-              {staff.paging.totalPage > 1 &&
-                <div
-                  className={clsxm(
-                    pagingData.page === staff.paging.totalPage
-                      ? 'bg-[#008146] text-white'
-                      : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
-                  )}
-                >
-                  {staff.paging.totalPage}
-                </div>
-              }
-
-              <button
-                onClick={handleNextPage}
-                disabled={staff && staff?.data?.staffs?.length < 10}
-                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
-              >
-                <svg
-                  width='6'
-                  height='8'
-                  viewBox='0 0 6 8'
-                  fill='none'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <path
-                    fillRule='evenodd'
-                    clipRule='evenodd'
-                    d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
-                    fill='#8898AA'
-                  />
-                </svg>
-              </button>
-
-              <button
-                onClick={handleJumpToEnd}
-                disabled={staff && staff?.data?.staffs?.length < 10}
-                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
-              >
-                <BiChevronsRight />
-              </button>
-            </div>
-          )}
+        <div className='flex justify-between py-4 border-t mt-5'>
+          <div>Page 1 of 30</div>
+          <div className='flex space-x-2 items-center'>
+            <button className='bg-[#f7f7f7]   shadow-[2px] border px-3 py-1 rounded-3xl font-bold flex items-center space-x-2'>
+              {' '}
+              <PrevArrow /> <span>Previous</span>
+            </button>
+            <button className='bg-[#f7f7f7] shadow-[2px] border px-3 py-1 rounded-3xl font-bold flex items-center space-x-2'>
+              {' '}
+              <span>Next</span> <NextArrow />
+            </button>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default AllStaff;
+const InstitutionCard = ({ data }) => {
+  const isECCDE =
+    data.institution.instituteType.toLowerCase() ===
+    INSTITUTION_TYPES.ECCDE.toLowerCase();
+  const isTertiary =
+    data.institution.instituteType.toLowerCase() ===
+    INSTITUTION_TYPES.TERTIARY.toLowerCase();
+  const isSecondary =
+    data.institution.instituteType.toLowerCase() ===
+    INSTITUTION_TYPES.SECONDARY.toLowerCase();
+  const isPrimary =
+    data.institution.instituteType.toLowerCase() ===
+      INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
+    data.institution.instituteType.toLowerCase() === 'basic';
+
+  return (
+    <div
+      className={clsxm(
+        isECCDE && 'bg-[#FFFEF9] border-[#FFE664]',
+        isPrimary && 'bg-[#FFF8F4] border-[#FFCAAB]',
+        isTertiary && 'bg-[#F9FFFA] border-[#73ED95]',
+        isSecondary && 'bg-[#FAFDFF] border-[#A4DEFF]',
+        'flex flex-row justify-between border-[0.25px] border-l-2 rounded-lg p-2 h-fit'
+      )}
+    >
+      <div className='text-sm flex flex-col items-start capitalize gap-2 font-medium whitespace-nowrap overflow-hidden'>
+        <div className=' text-ellipsis overflow-hidden'>
+          {`${data.user.firstName} ${data.user.lastName}`}
+        </div>
+        <div
+          className={clsxm(
+            isECCDE && 'bg-[#FFE664]',
+            isPrimary && 'bg-[#FFCAAB]',
+            isTertiary && 'bg-[#73ED95]',
+            isSecondary && 'bg-[#6699B6]',
+            'flex items-center text-[10px] px-[5px] h-5 font-normal text-white rounded-full capitalize'
+          )}
+        >
+          {data?.institution.instituteType ?? ''}
+        </div>
+
+        <div className='text-xs font-light text-[#8B8B8B] flex space-x-2'>
+          <Castle className='h-4 w-4 self-end opacity-50' />
+          <span>{data?.institution.instituteName ?? ''}</span>
+        </div>
+        <div className='text-xs font-light text-[#98988E]'>
+          Subject: <span className='font-medium'>{data?.subjects.length}</span>
+        </div>
+        <div className='text-xs font-light text-[#98988E]'>
+          Classes: <span className='font-medium'>{data?.classes.length}</span>
+        </div>
+      </div>
+
+      <div className='flex  flex-col-reverse gap-3'>
+        <Staff className='h-8 w-8 self-end opacity-50' />
+      </div>
+    </div>
+  );
+};
+
+export default AllStudent;

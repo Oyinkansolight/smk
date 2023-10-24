@@ -27,7 +27,7 @@ export default function GridTabBar({
           key={i}
           onClick={() => {
             if (setacademicyear) setacademicyear(item.sessionInfo);
-            if (Fetchterms) Fetchterms(item.sessionInfo.id);
+            if (Fetchterms) Fetchterms(item.sessionInfo?.id);
             if (onSelect) onSelect(i);
           }}
           className={clsxm(

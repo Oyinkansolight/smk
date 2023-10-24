@@ -25,6 +25,7 @@ interface UpdateStudentParams {
   lastName?: string;
   email?: string;
   phoneNumber?: string;
+  readingProficiency?: string;
 }
 
 export function useUpdateStudent() {

@@ -1,28 +1,29 @@
-import React from 'react'
-import { BarChart } from '@/components/charts'
-import EmptyView from '@/components/misc/EmptyView'
-import GenericChart from '@/components/cards/GenericChart';
-import AttendanceRate from '@/components/charts/AttendanceRate'
-import LoginLogsTable from '@/components/tables/LoginLogsTable'
-import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis'
-import EventCalendarTable from '@/components/tables/EventCalendarTable'
-import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution'
-import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions'
-import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable'
-import { useGetAdminCharts } from '@/server/dashboard';
 import { ButtonVariant } from '@/components/buttons/Button';
+import GenericChart from '@/components/cards/GenericChart';
+import { BarChart } from '@/components/charts';
+import AttendanceRate from '@/components/charts/AttendanceRate';
+import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
+import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution';
 import SearchLoader from '@/components/layout/SearchLoader';
+import EmptyView from '@/components/misc/EmptyView';
+import EventCalendarTable from '@/components/tables/EventCalendarTable';
+import LoginLogsTable from '@/components/tables/LoginLogsTable';
 import LowBatteriesTable from '@/components/tables/LowBatteriesTable';
+import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions';
+import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable';
+import { useGetAdminCharts } from '@/server/dashboard';
+import React from 'react';
 
 const SuperAdminCharts = ({
   variant,
+  setIsDataLoading,
 }: {
   variant?: (typeof ButtonVariant)[number];
+  setIsDataLoading?: (v: boolean) => void;
 }) => {
-  const { data: chartData, isLoading } = useGetAdminCharts({
+  const { data: chartData, isLoading } = useGetAdminCharts({});
 
-  });
-
+  setIsDataLoading && setIsDataLoading(isLoading);
   if (!chartData || isLoading) {
     return <SearchLoader />;
   }
@@ -67,7 +68,6 @@ const SuperAdminCharts = ({
       <div className='flex flex-col'>
         <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
           <div className='flex flex-col gap-y-7'>
-
             <GenericChart
               titleClassName='bg-[#DADEE6]'
               title='Attendance Tracker'
@@ -118,7 +118,9 @@ const SuperAdminCharts = ({
               className='border-[#E6FFF7]'
               titleClassName='bg-[#E6FFF7]'
               description='Total Number of gender in the state'
-              content={<SuperGenderDistribution data={chartData?.genderDistribution} />}
+              content={
+                <SuperGenderDistribution data={chartData?.genderDistribution} />
+              }
             />
 
             <GenericChart
@@ -126,7 +128,11 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#FFF6EC]'
               title='Recently Added Institutions'
               description='View all recently added Institutions'
-              content={<RecentlyAddedInstitutions data={chartData.recentInstitutions} />}
+              content={
+                <RecentlyAddedInstitutions
+                  data={chartData.recentInstitutions}
+                />
+              }
             />
 
             <GenericChart
@@ -142,7 +148,11 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
               description='Recent staff/student transfer requests in the state'
-              content={<EmptyView label='No Data' useStandardHeight /> ?? <SuperTransferRequestsTable />}
+              content={
+                <EmptyView label='No Data' useStandardHeight /> ?? (
+                  <SuperTransferRequestsTable />
+                )
+              }
             />
           </div>
         </div>
@@ -260,7 +270,7 @@ const SuperAdminCharts = ({
         </div> */}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SuperAdminCharts
+export default SuperAdminCharts;

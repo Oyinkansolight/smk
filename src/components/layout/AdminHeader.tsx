@@ -1,6 +1,7 @@
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
@@ -17,22 +18,22 @@ interface AdminHeaderProps {
 export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
   const { data } = useGetProfile();
   const [isOpen, setIsOpen] = useState(false);
-  // const isGenericApp = Cookies.get('isGenericApp');
+  const isGenericApp = Cookies.get('isGenericApp');
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-white'>
-      <div className='mx-auto flex py-7 min-h-[5rem] h-auto items-center lg:justify-between px-4 gap-10 lg:gap-28'>
-        <div>
-          {/* <div className='flex flex-row items-center gap-9'> */}
-          <div
-            onClick={handleToggle}
-            className={clsxm(
-              'flex w-16 h-16 justify-center items-center cursor-pointer bg-[#5754F7] p-4 rounded-full'
-            )}
-          >
-            <GiHamburgerMenu className='fill-current text-[#C3CAD9]' />
-          </div>
-          {/* {isGenericApp === 'Y' && (
+      <div className='mx-auto flex py-7 min-h-[5rem] h-auto items-center lg:justify-between px-4'>
+        <div className='flex w-full flex-row gap-28'>
+          <div className='flex flex-row items-center gap-9'>
+            <div
+              onClick={handleToggle}
+              className={clsxm(
+                'flex w-16 h-16 justify-center items-center cursor-pointer bg-[#5754F7] p-4 rounded-full'
+              )}
+            >
+              <GiHamburgerMenu className='fill-current text-[#C3CAD9]' />
+            </div>
+            {/* {isGenericApp === 'Y' && (
               <div className='hidden lg:block w-[54px] h-4' />
             )}
 
@@ -46,7 +47,7 @@ export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
               />
             )} */}
 
-          {/* <div className='flex flex-row items-center justify-center gap-[15px]'>
+            {/* <div className='flex flex-row items-center justify-center gap-[15px]'>
               <Image
                 width={40}
                 height={40}
@@ -71,10 +72,10 @@ export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
                 />
               </div>
             </div> */}
-          {/* </div> */}
+          </div>
         </div>
         <nav className='w-full'>
-          <div className='flex flex-row items-center gap-[48px] pr-10 relative'>
+          <div className='flex flex-row items-center gap-[48px] pr-10 relative mt-4 lg:mt-0'>
             <BasicSearch />
 
             <div className='flex flex-row items-center justify-center gap-3'>
@@ -105,7 +106,6 @@ export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
                 <AdminNotification link='/super-admin/all-notification' />
               </div>
             )}
-
             {isOpen && (
               <div
                 className='bg-transparent fixed inset-0 z-[1]'
