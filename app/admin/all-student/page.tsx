@@ -2,81 +2,30 @@
 'use client';
 
 // import AvrilImage from '~/svg/avril.svg';
-import NextImage from '@/components/NextImage';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
-import Table from '@/components/tables/TableComponent';
 import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
 import { getURL } from '@/firebase/init';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
-import { flattenObject } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import {
   useCreateBulkStudent,
   useGetStudentsListByInstitution,
 } from '@/server/institution';
-import { FlattenedStudent } from '@/types/institute';
+import { Student } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import Router from 'next/router';
 import { useEffect, useState } from 'react';
-import { TableColumn } from 'react-data-table-component';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { BasicSearch } from '@/components/search';
+import clsxm from '@/lib/clsxm';
+import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
+import { useDebounce } from 'usehooks-ts';
 
 const AllStudent = () => {
-  // const getFileURL = async (path) => {
-  //   let result = '';
-  //   await getURL(path).then((v) => {
-  //     result = v;
-  //   });
-  //   return result;
-  // };
-
   async function fetchProfileImageSrc(item) {
     try {
       const profileImgUrl = await getURL(item.profileImg);
@@ -87,19 +36,8 @@ const AllStudent = () => {
     }
   }
 
-  const institutionId = getFromLocalStorage('institutionId');
+  const instituteId = getFromLocalStorage('institutionId');
 
-  // const fetchStudent = ()=>{
-  //   if (typeof window !== 'undefined') {
-  //     const institutionId = localStorage.getItem("institutionId")
-  //   }
-  // }
-
-  const {
-    data: students,
-    error,
-    isLoading,
-  } = useGetStudentsListByInstitution(institutionId);
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setisBulk] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -109,6 +47,44 @@ const AllStudent = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
+
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+
+  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query, instituteId });
+
+
+  const {
+    data: students,
+    error,
+    isLoading,
+    refetch
+  } = useGetStudentsListByInstitution({ ...pagingData });
+
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, query: value });
+  };
+
+
+  const handleNextPage = () => {
+    setPagingData({ ...pagingData, page: pagingData.page + 1 });
+  };
+
+  const handlePrevPage = () => {
+    if (pagingData.page === 1) return;
+    setPagingData({ ...pagingData, page: pagingData.page - 1 });
+  };
+
+  const handleJumpToStart = () => {
+    setPagingData({ ...pagingData, page: 1 });
+  };
+
+  const handleJumpToEnd = () => {
+    if (students) setPagingData({ ...pagingData, page: students?.paging?.totalPage });
+  };
+
 
   const handleCreateBulkStudent = useCreateBulkStudent();
   const bulkStudentUpload = async () => {
@@ -132,9 +108,11 @@ const AllStudent = () => {
       toast.error(getErrMsg(error));
     }
   };
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   const { mutateAsync } = useDeleteStudent();
 
   const handleDelete = async () => {
@@ -149,111 +127,37 @@ const AllStudent = () => {
       }
     }
   };
+
   useEffect(() => {
     // Map over the array and fetch profile image URLs for each item
-    Promise.all((students ?? []).map((item) => fetchProfileImageSrc(item)))
+    Promise.all(students?.data.map((item) => fetchProfileImageSrc(item)))
       .then((urls) => {
         setProfileImgSrcs(urls);
       })
       .catch((error) => {
-        console.error('Error fetching profile image URLs:', error);
+        logger('Error fetching profile image URLs:', error)
         setProfileImgSrcs([]); // Provide a fallback or handle the error appropriately
       });
   }, [students]); // Make sure to include any dependencies that trigger the update
 
-  const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] =
-    [
-      { name: 'Student ID', selector: (row) => row.id ?? '' },
-      {
-        name: 'Name',
-        selector: (row) => row['user.0.firstName'] ?? '',
-        cell: (row, id) => (
-          <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
-            <div className='relative h-8 w-8 rounded-full'>
-              <NextImage
-                src={
-                  imageError
-                    ? 'https://www.bu.edu/wll/files/2017/10/avatar.png'
-                    : profileImgSrcs[id]
-                }
-                className='rounded-full object-contain'
-                style={{ objectFit: 'contain' }}
-                layout='fill'
-                alt='student-profile-picture'
-                onError={() => setImageError(true)}
-              />
-            </div>
+  useEffect(() => {
+    const searchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch()
+      }
+    };
 
-            <Link href={`/admin/student?id=${row.id}`}>
-              <h2 className='text-sm font-medium capitalize'>
-                {row['user.0.firstName']} {row['user.0.lastName']}
-              </h2>
-            </Link>
-          </div>
-        ),
-      },
-      { name: 'Type', selector: (row) => row['user.0.type'] ?? '' },
-      {
-        name: 'Institution',
-        selector: (row) => row['institution.instituteName'] ?? '',
-      },
-      {
-        name: 'Institution Type',
-        selector: (row) => row['institution.instituteType'] ?? '',
-      },
-      {
-        name: '',
-        grow: 0,
-        width: '20px',
-        cell: (row, idx) => {
-          return (
-            <div>
-              <div
-                onClick={() => {
-                  setAction(idx + 1);
-                }}
-                className='relative'
-              >
-                <BsThreeDotsVertical className='text-lg' />
+    searchRecords();
 
-                {action == idx + 1 && (
-                  <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => {
-                        // item.setDeleteFileId(item?.id ?? '');
-                        setItemToDelete(row.id);
-                        toggleModal();
-                      }}
-                      className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
+  }, [refetch, pagingData, debouncedSearchTerm]);
 
-              {action && (
-                <div
-                  className='fixed inset-0 z-[1]'
-                  onClick={() => {
-                    setAction(null);
-                  }}
-                ></div>
-              )}
-            </div>
-          );
-        },
-      },
-    ];
 
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
     }
   }, [error]);
+
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -288,7 +192,7 @@ const AllStudent = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>{students?.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{students?.paging?.totalInstitutionStudents ?? 0}</h1>
         </div>
 
         {isBulk && (
@@ -365,26 +269,209 @@ const AllStudent = () => {
         </div>
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
-        {isLoading ? (
-          <div className='text-center'>Loading...</div>
-        ) : (
-          <Table
-            data={
-              students?.map(
-                (v, i) =>
-                  ({ idx: i, ...flattenObject(v) } as FlattenedStudent & {
-                    idx: number;
-                  })
-              ) ?? []
-            }
-            columns={studentListColumns}
-          />
-        )}
-        {!isLoading && students?.length === 0 && (
-          <div className='text-red-500 py-4 text-center'>No record found</div>
-        )}
+      <div className='flex flex-col gap-4'>
+        <div className='flex justify-end'>
+          <div className='flex w-[300px] space-x-2'>
+
+            <BasicSearch
+              placeholder='Search...'
+              handleSearch={handleSearch}
+            />
+          </div>
+        </div>
+        <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
+          <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
+            <div className='col-span-1'>No</div>
+            <div className='col-span-5'>Name</div>
+            <div className='hidden lg:block col-span-4'>Institution</div>
+            <div className='hidden lg:block col-span-1'>Institution Type</div>
+          </div>
+
+          {isLoading &&
+            <div className='text-center'>Loading...</div>
+          }
+
+          {!isLoading && students && students?.data?.length > 0 && (
+            students?.data.map((item: Student, idx: number) => (
+              <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
+                <div className='col-span-1'>
+                  {(pagingData.page - 1) * 10 + (students?.paging?.itemCount ?? idx + 1)}
+                </div>
+
+                <div className='col-span-5'>
+                  <Link href={`/admin/student?id=${item.id}`}>
+                    {item?.user?.[0]?.lastName || item?.lastName || 'N/A'} {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
+                  </Link>
+                </div>
+
+                <div className='col-span-4 lg:col-span-4'>
+                  {' '}
+                  {item?.institution?.instituteName || 'N/A'}{' '}
+                </div>
+
+                <div className='hidden lg:block col-span-1'>
+                  {' '}
+                  {item?.institution?.instituteType || 'N/A'}{' '}
+                </div>
+
+                <div className='col-span-1 justify-end flex'>
+                  <button
+                    onClick={() => {
+                      setAction(idx + 1);
+                    }}
+                    className='relative'
+                  >
+                    <BsThreeDotsVertical />
+                    {action == idx + 1 && (
+                      <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                        <button className='p-4 hover:bg-gray-200 w-full'>
+                          Edit
+                        </button>
+                        <button className='p-4 hover:bg-gray-200 w-full'>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </button>
+                  {action && (
+                    <div
+                      className='fixed inset-0 z-[1]'
+                      onClick={() => {
+                        setAction(null);
+                      }}
+                    ></div>
+                  )}
+                </div>
+              </div>
+            )))}
+
+          {!isLoading && students?.data?.length === 0 && (
+            <div className='text-red-500 py-4 text-center'>No record found</div>
+          )}
+
+          {students && students?.data?.length > 0 && (
+            <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
+              <button
+                onClick={handleJumpToStart}
+                disabled={pagingData.page === 1}
+                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+              >
+                <BiChevronsLeft />
+              </button>
+
+              <button
+                onClick={handlePrevPage}
+                disabled={pagingData.page === 1}
+                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+              >
+                <svg
+                  width='6'
+                  height='8'
+                  viewBox='0 0 6 8'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    fillRule='evenodd'
+                    clipRule='evenodd'
+                    d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
+                    fill='#8898AA'
+                  />
+                </svg>
+              </button>
+
+              {Array(students.paging.totalPage)
+                .fill(0)
+                .slice(0, 2)
+                .map((item, idx: number) => (
+                  <div
+                    key={Math.random() * 100}
+                    className={clsxm(
+                      pagingData.page === idx + 1
+                        ? 'bg-[#008146] text-white'
+                        : 'bg-white text-gray-500',
+                      'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    )}
+                  >
+                    {idx + 1}
+                  </div>
+                ))}
+
+              {students.paging.totalPage > 3 &&
+                <div
+                  key={Math.random() * 100}
+                  className={clsxm(
+                    pagingData.page === 3 ||
+                      (pagingData.page > 3 && pagingData.page < students.paging.totalPage)
+                      ? 'bg-[#008146] text-white'
+                      : 'bg-white text-gray-500',
+                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                  )}
+                >
+                  {pagingData.page > 3 && pagingData.page < students.paging.totalPage
+                    ? pagingData.page
+                    : 3}
+                </div>
+              }
+
+              {students.paging.totalPage > 4 && (
+                <div
+                  key={Math.random() * 100}
+                  className={clsxm(
+                    'bg-white text-gray-500',
+                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                  )}
+                >
+                  ...
+                </div>
+              )}
+
+              {students.paging.totalPage > 1 &&
+                <div
+                  className={clsxm(
+                    pagingData.page === students.paging.totalPage
+                      ? 'bg-[#008146] text-white'
+                      : 'bg-white text-gray-500',
+                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                  )}
+                >
+                  {students.paging.totalPage}
+                </div>
+              }
+
+              <button
+                onClick={handleNextPage}
+                disabled={students && students?.data?.length < 10}
+                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+              >
+                <svg
+                  width='6'
+                  height='8'
+                  viewBox='0 0 6 8'
+                  fill='none'
+                  xmlns='http://www.w3.org/2000/svg'
+                >
+                  <path
+                    fillRule='evenodd'
+                    clipRule='evenodd'
+                    d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
+                    fill='#8898AA'
+                  />
+                </svg>
+              </button>
+
+              <button
+                onClick={handleJumpToEnd}
+                disabled={students && students?.data?.length < 10}
+                className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+              >
+                <BiChevronsRight />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+
     </section>
   );
 };

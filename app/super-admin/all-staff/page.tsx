@@ -11,84 +11,19 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { toast } from 'react-toastify';
+
 import Castle from '~/svg/castle.svg';
 import NextArrow from '~/svg/nextarrow.svg';
 import PrevArrow from '~/svg/prevarrow.svg';
 import Staff from '~/svg/staff.svg';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const studentListColumns: TableColumn<FlattenedStudent & { idx: number }>[] = [
-  {
-    name: 'No',
-    selector: (row) => row.idx,
-    cell: (row) => <div>#{row.idx + 1}</div>,
-  },
-  { name: 'Student ID', selector: (row) => row.id ?? '' },
-  {
-    name: 'Name',
-    selector: (row) => row['user.0.firstName'] ?? '',
-    cell: (row) => (
-      <div className='col-span-3 w-max text-left  text-[#525F7F] flex space-x-2 items-center'>
-        <Link href={`/super-admin/student?id=${row.id}`}>
-          <h2 className='text-sm font-medium capitalize'>
-            {row['user.0.lastName'] ?? row['user.lastName']}{' '}
-            {row['user.0.firstName'] ?? row['user.firstName']}
-          </h2>
-        </Link>
-      </div>
-    ),
-  },
-  { name: 'Type', selector: (row) => row['user.0.type'] ?? '-' },
-  {
-    name: 'Institution',
-    selector: (row) => row['institution.instituteName'] ?? '-',
-  },
-  {
-    name: 'Institution Type',
-    selector: (row) => row['institution.instituteType'] ?? '-',
-  },
-];
-
-const AllStudent = () => {
-  const [lastName, setLastName] = useState('');
-  const [pagingData, setPagingData] = useState<any>({
-    page: 1,
-    limit: 10,
-    lastName,
-  });
-  const {
-    data: staffs,
-    error,
-    isLoading,
-    refetch,
-  } = useGetTeachersList({ ...pagingData });
+const AllStaff = () => {
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+  const [action, setAction] = useState<number | null>(null);
+  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
 
   const handleSearch = (value: string) => {
     setLastName(value);
@@ -96,16 +31,21 @@ const AllStudent = () => {
   };
 
   useEffect(() => {
-    refetch();
-  }, [pagingData, refetch]);
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch()
+      }
+    };
+
+    refetchSearchRecords();
+
+  }, [refetch, debouncedSearchTerm]);
 
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
     }
   }, [error]);
-
-  console.log(staffs);
 
   const InstituteTypeCard = ({ type, title, count }) => {
     return (
@@ -211,6 +151,83 @@ const AllStudent = () => {
             Add Staff
           </Link>
         </div>
+
+        <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
+          <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
+            <div className='col-span-1'>No</div>
+            <div className='col-span-2'>Staff ID</div>
+            <div className='col-span-4'>Name</div>
+            <div className='hidden lg:block col-span-1'>Type</div>
+            <div className='hidden lg:block col-span-2'>Institution</div>
+            <div className='hidden lg:block col-span-1'>Institution Type</div>
+          </div>
+          {isLoading ? (
+            <div className='text-center'>Loading...</div>
+          ) : (
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (staff?.data?.staffs ?? []).map((item: Staff, idx: number) => (
+              <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
+                <div className='col-span-1'>
+                  {(pagingData.page - 1) * 10 + (staff?.paging?.itemCount ?? idx + 1)}
+                  {/* item_index = (page_number - 1) * items_per_page + item_on_page */}
+                </div>
+
+                <div className='col-span-2'>
+                  {item?.oracleNumber ?? "-"}
+                </div>
+
+                <div className='col-span-4'>
+                  <Link href={`/super-admin/teacher?id=${item.id}`}>
+                    {item?.user?.lastName || 'N/A'} {item?.user?.firstName || 'N/A'}
+                  </Link>
+                </div>
+
+                <div className='hidden lg:block col-span-1'> {item?.staffType || 'N/A'}</div>
+
+                <div className='col-span-4 lg:col-span-2'>
+                  {' '}
+                  {item?.institution?.instituteName || 'N/A'}{' '}
+                </div>
+
+                <div className='hidden lg:block col-span-1'>
+                  {' '}
+                  {item?.institution?.instituteType || 'N/A'}{' '}
+                </div>
+
+                <div className='col-span-1 justify-end flex'>
+                  <button
+                    onClick={() => {
+                      setAction(idx + 1);
+                    }}
+                    className='relative'
+                  >
+                    <BsThreeDotsVertical />
+                    {action == idx + 1 && (
+                      <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                        <button className='p-4 hover:bg-gray-200 w-full'>
+                          Edit
+                        </button>
+                        <button className='p-4 hover:bg-gray-200 w-full'>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </button>
+                  {action && (
+                    <div
+                      className='fixed inset-0 z-[1]'
+                      onClick={() => {
+                        setAction(null);
+                      }}
+                    ></div>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+          {!isLoading && staff?.data?.staffs?.length === 0 && (
+            <div className='text-red-500 py-4 text-center'>No record found</div>
+          )}
 
         <div className='space-y-4 my-4 pt-4'>
           <InstituteTypeCard
@@ -378,4 +395,4 @@ const InstitutionCard = ({ data }) => {
   );
 };
 
-export default AllStudent;
+export default AllStaff;
