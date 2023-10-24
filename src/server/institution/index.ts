@@ -3,7 +3,12 @@ import logger from '@/lib/logger';
 import request from '@/server';
 import { PaginationParams } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
-import { Institution, Student, Subject } from '@/types/institute';
+import {
+  Institution,
+  Student,
+  StudentsListByInstitution,
+  Subject,
+} from '@/types/institute';
 import { Staff } from '@/types/institute';
 import { PaginatedData, StaffPaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
@@ -157,15 +162,22 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
   });
   return query;
 }
-export function useGetStudentsListByInstitution(instituteId: any) {
+
+export function useGetStudentsListByInstitution(
+  params: StudentsListByInstitution
+) {
   const query = useQuery({
     queryKey: 'get_student_list_By_institution',
     queryFn: async () => {
       try {
         const d = await request.get(
-          `/v1/government/students/get-students-by-institution?institutionId=${instituteId}`
+          `/v1/government/students/get-students-by-institution?institutionId=${
+            params.instituteId
+          }${params.limit ? `&limit=${params.limit}` : ''}${
+            params.page ? `&page=${params.page}` : ''
+          }${params.query ? `&query=${params.query}` : ''}`
         );
-        return d.data.data.data.data as Student[] | any[];
+        return d.data.data.data as PaginatedData<Student> | any;
       } catch (error) {
         logger(error);
         throw error;
@@ -181,9 +193,12 @@ export function useGetStudentById(params?: PaginationParams) {
     queryFn: async () => {
       if (params?.id) {
         try {
-          const d = await request.get('/v1/government/students/get-student-by-id', {
-            params,
-          });
+          const d = await request.get(
+            '/v1/government/students/get-student-by-id',
+            {
+              params,
+            }
+          );
           return d.data.data.data as Student;
         } catch (error) {
           logger(error);
@@ -301,6 +316,7 @@ export function useGetClassesList() {
   });
   return query;
 }
+
 export function useGetSchools(params: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_school_list',
@@ -442,6 +458,7 @@ export function useCreateClassArm() {
   });
   return mutation;
 }
+
 export function useUpdateClassArm() {
   const mutation = useMutation({
     mutationKey: 'update-class-arm',
@@ -452,6 +469,7 @@ export function useUpdateClassArm() {
   });
   return mutation;
 }
+
 export function useCreateStudent() {
   const mutation = useMutation({
     mutationKey: 'create-student',
@@ -462,6 +480,7 @@ export function useCreateStudent() {
   });
   return mutation;
 }
+
 export function useCreateBulkStudent() {
   const mutation = useMutation({
     mutationKey: 'create-student',
@@ -472,6 +491,7 @@ export function useCreateBulkStudent() {
   });
   return mutation;
 }
+
 export function useCreateBulkStaff() {
   const mutation = useMutation({
     mutationKey: 'create-student',
@@ -521,6 +541,7 @@ export function useGetIncidentReports(id?: string) {
   });
   return query;
 }
+
 export function useGetSubjectAssignedToTeacher(
   id?: string | null | undefined,
   sessionId?: string | null | undefined
@@ -542,14 +563,13 @@ export function useGetSubjectAssignedToTeacher(
   });
   return query;
 }
+
 export function useGetTeacherAttendanceLog() {
   const query = useQuery({
     queryKey: 'get_teacher_subject_list',
     queryFn: async () => {
       try {
-        const d = await request.get(
-          `/v1/institutions/clock/list-clock-in`
-        );
+        const d = await request.get(`/v1/institutions/clock/list-clock-in`);
 
         return d.data.data.data as [];
       } catch (error) {

@@ -34,7 +34,7 @@ const Page = () => {
         classTeacher={`${classArmInfo?.teacher?.user?.firstName ?? ''} ${
           classArmInfo?.teacher?.user?.lastName ?? ''
         }`}
-        school='Avril Price School'
+        school=''
         id=''
         student={false}
         showAcademicYear

@@ -130,7 +130,7 @@ function StudentGradeListItem({
   student: ClassArmStudents;
 }) {
   return (
-    <Link href='/teacher/grades/grade-book-student'>
+    <Link href={`/teacher/grades/grade-book-student?studentid=${student.id}`}>
       <div className='grid text-black grid-cols-8 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>

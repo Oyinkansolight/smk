@@ -154,7 +154,7 @@ const AddStaff = () => {
         email: data.email,
         phoneNumber: data.phoneNumber,
         address: data.address,
-        lga: "",
+        // lga: "",
         nextOfKin: data.nextOfKin,
         relationshipToNextOfKin: data.relationshipToNextOfKin,
         addressOfNextOfKin: data.addressOfNextOfKin,

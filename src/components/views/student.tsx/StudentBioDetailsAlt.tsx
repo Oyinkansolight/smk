@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
-import { getErrMsg } from '@/server';
 import { useUpdateStudent } from '@/server/government/student';
 import { Student } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { getErrMsg } from '@/server';
 import { toast } from 'react-toastify';
 
 export default function StudentBioDetailsAlt({
