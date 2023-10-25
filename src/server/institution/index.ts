@@ -162,7 +162,7 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
   return query;
 }
@@ -188,7 +188,7 @@ export function useGetStudentsListByInstitution(
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
@@ -215,7 +215,7 @@ export function useGetStudentById(params?: PaginationParams) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params?.id, refetch]);
 
   return query;
@@ -238,7 +238,7 @@ export function useGetTeachersList(params?: PaginationParams) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
 
   return query;
@@ -278,7 +278,7 @@ export function useGetTeachersListByInstitution(props: Props) {
 
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [limit, page, instituteId, refetch]);
   return query;
 }
@@ -340,7 +340,7 @@ export function useGetSchools(params: Partial<PaginationParams>) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.limit, params.id, params.page, params.query, refetch]);
 
   return query;
@@ -523,7 +523,7 @@ export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
   const { refetch } = query;
 
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [refetch, termId]);
 
   return query;

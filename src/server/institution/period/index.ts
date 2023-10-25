@@ -58,7 +58,7 @@ export function useGetWeekPeriodsBySubject(
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [
     refetch,
     params.sessionId,

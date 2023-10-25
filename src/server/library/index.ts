@@ -169,7 +169,7 @@ export function useGetFolderAndFiles(folderId?: string, subjectId?: string) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [refetch, folderId]);
 
   return query;

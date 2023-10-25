@@ -183,7 +183,7 @@ export function useGetClassActivity(params: GetClassActivity) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [
     params.classArmId,
     params.sessionId,
@@ -220,7 +220,7 @@ export function useGetStudentSubmittedActivity(
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.classArmId, params.subjectId, params.type, refetch]);
   return query;
 }
@@ -246,7 +246,7 @@ export function useGetAllLessonNotes(params: GetAllLessonNotesParams) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.page, params.limit, params.sessionId, params.termId, refetch]);
   return query;
 }

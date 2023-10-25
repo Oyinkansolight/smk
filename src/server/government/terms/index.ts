@@ -19,7 +19,7 @@ export function useGetSessionTerms(params: { sessionId?: string }) {
   const { refetch } = query;
   useEffect(() => {
     if (params.sessionId) {
-      refetch();
+      refetch({ cancelRefetch: true });
     }
   }, [params.sessionId, refetch]);
 
@@ -44,7 +44,7 @@ export function useGetCurrentSessionTerm(params: { sessionId?: string }) {
   const { refetch } = query;
   useEffect(() => {
     if (params.sessionId) {
-      refetch();
+      refetch({ cancelRefetch: true });
     }
   }, [params.sessionId, refetch]);
 

@@ -26,7 +26,7 @@ export function useGetAllClassArms(params: {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.classId, params.institutionId, params.sessionId, refetch]);
   return query;
 }
@@ -52,7 +52,7 @@ export function useGetTeacherClassArms(params: {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.teacherId, params.sessionId, refetch]);
   return query;
 }
@@ -76,7 +76,7 @@ export function useGetClassArmAttendance(params: { classArmId?: string }) {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.classArmId, refetch]);
   return query;
 }
@@ -143,7 +143,7 @@ export function useGetClassArmStudents(params: { classArmId?: string | null | un
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.classArmId, refetch]);
   return query;
 }

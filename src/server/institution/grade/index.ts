@@ -100,7 +100,7 @@ export function useGetCategoryByInstitutionType(
   const { refetch } = query;
   useEffect(() => {
     if (params?.termId) {
-      refetch();
+      refetch({ cancelRefetch: true });
     }
   }, [params?.termId, refetch]);
 

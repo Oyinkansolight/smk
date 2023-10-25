@@ -45,7 +45,7 @@ export function useGetInstituteClassArms(
 
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [instituteId, currentSessionId, refetch]);
   return query;
 }
