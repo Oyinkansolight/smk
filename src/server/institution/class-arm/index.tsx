@@ -124,7 +124,7 @@ export function useUpdateClassArmAttendance() {
   return mutation;
 }
 
-export function useGetClassArmStudents(params: { classArmId?: string | null | undefined    }) {
+export function useGetClassArmStudents(params: { classArmId?: string | null | undefined }) {
   const query = useQuery({
     queryKey: `get_students_in_class`,
     queryFn: async () => {

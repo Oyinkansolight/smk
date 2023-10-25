@@ -36,11 +36,11 @@ export default function MultiChoiceQuestion({
             .fill(0)
             .map((v, i) => (
               <Input
-                key={i + Math.random() * 100}
+                key={i}
                 placeholder={`Option ${i + 1}`}
                 label=''
                 formValue={
-                  ((value.options ?? [])[i] ?? [])[(value?.options ?? [])[i]]
+                  ((value.options ?? [])[i])
                 }
                 setFormValue={(v) => {
                   const newOpt: string[] = [

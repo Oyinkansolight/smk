@@ -21,7 +21,7 @@ export function getErrMsg(error: any) {
   return error.response?.data?.message ?? 'NO DATA';
 }
 
-request.interceptors.request.use(function (
+request.interceptors.request.use(function(
   config: AxiosRequestConfig<any>
 ): InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>> {
   const token = getFromSessionStorage(TOKEN_KEY);

@@ -160,6 +160,10 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
   return query;
 }
 
@@ -171,10 +175,8 @@ export function useGetStudentsListByInstitution(
     queryFn: async () => {
       try {
         const d = await request.get(
-          `/v1/government/students/get-students-by-institution?institutionId=${
-            params.instituteId
-          }${params.limit ? `&limit=${params.limit}` : ''}${
-            params.page ? `&page=${params.page}` : ''
+          `/v1/government/students/get-students-by-institution?institutionId=${params.instituteId
+          }${params.limit ? `&limit=${params.limit}` : ''}${params.page ? `&page=${params.page}` : ''
           }${params.query ? `&query=${params.query}` : ''}`
         );
         return d.data.data.data as PaginatedData<Student> | any;
@@ -184,6 +186,10 @@ export function useGetStudentsListByInstitution(
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
 
@@ -233,7 +239,7 @@ export function useGetTeachersList(params?: PaginationParams) {
   const { refetch } = query;
   useEffect(() => {
     refetch();
-  }, [params?.limit, params?.page, params?.id, refetch]);
+  }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
 
   return query;
 }
@@ -258,8 +264,7 @@ export function useGetTeachersListByInstitution(props: Props) {
       if (instituteId) {
         try {
           const d = await request.get(
-            `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
-              limit ? `&limit=${limit}` : ''
+            `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${limit ? `&limit=${limit}` : ''
             }${page ? `&page=${page}` : ''}`
           );
           return d.data.data.data as PaginatedData<Staff>;
@@ -336,7 +341,7 @@ export function useGetSchools(params: Partial<PaginationParams>) {
   const { refetch } = query;
   useEffect(() => {
     refetch();
-  }, [params.limit, params.id, params.page, refetch]);
+  }, [params.limit, params.id, params.page, params.query, refetch]);
 
   return query;
 }
@@ -509,10 +514,10 @@ export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
     queryFn: async () =>
       termId
         ? ((
-            await request.get(`/v1/institutions/institutes/get-term-weeks`, {
-              params: { termId },
-            })
-          ).data.data as PaginatedData<Week>)
+          await request.get(`/v1/institutions/institutes/get-term-weeks`, {
+            params: { termId },
+          })
+        ).data.data as PaginatedData<Week>)
         : undefined,
   });
   const { refetch } = query;

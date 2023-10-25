@@ -1,6 +1,7 @@
 'use client';
 
 import WeekSelector from '@/components/input/WeekSelector';
+import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
@@ -44,7 +45,7 @@ export default function Page() {
     }
   }
 
-  const { data } = useGetWeekPeriodsBySubject({
+  const { data, isLoading } = useGetWeekPeriodsBySubject({
     termId: term,
     sessionId: profile?.currentSession?.[0]?.id,
     weekId: sortedWeeks[currentWeek]?.id,
@@ -54,7 +55,11 @@ export default function Page() {
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { data: subject } = useGetSubjectById(params?.get('id') as string);
+  const { data: subject, isLoading: subjectLoading } = useGetSubjectById(params?.get('id') as string);
+
+  if (!data) {
+    return <GenericLoader />
+  }
 
   if (data?.data && data.data.length > 0) {
     return (
