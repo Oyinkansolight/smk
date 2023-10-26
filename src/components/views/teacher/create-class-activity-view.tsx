@@ -345,7 +345,7 @@ export default function CreateClassActivityView() {
             </div>
           </div>
         )}
-        {format === 'Multiple Choice' && (
+        {type !== activityTypes[3].value && format === 'Multiple Choice' && (
           <>
             {questions.map((v, i) => (
               <div key={i} className='flex gap-4'>

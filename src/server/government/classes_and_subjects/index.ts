@@ -130,7 +130,7 @@ export function useGetStudentsInTeacherClass(params: {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.classArmId, params.institutionId, refetch]);
   return query;
 }
@@ -158,7 +158,7 @@ export function useGetLessonAttendance(params: {
   });
   const { refetch } = query;
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [params.periodId, refetch]);
   return query;
 }

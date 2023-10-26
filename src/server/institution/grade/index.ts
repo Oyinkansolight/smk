@@ -100,12 +100,13 @@ export function useGetCategoryByInstitutionType(
   const { refetch } = query;
   useEffect(() => {
     if (params?.termId) {
-      refetch();
+      refetch({ cancelRefetch: true });
     }
   }, [params?.termId, refetch]);
 
   return query;
 }
+
 export function useGetProfienciencies() {
   const query = useQuery({
     queryKey: 'get_proficiencies_level',

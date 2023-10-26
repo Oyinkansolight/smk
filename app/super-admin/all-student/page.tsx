@@ -42,7 +42,7 @@ const AllStudent = () => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, query: debouncedSearchTerm });
+    setPagingData({ ...pagingData, query: value });
   };
 
 
@@ -347,3 +347,4 @@ const AllStudent = () => {
 };
 
 export default AllStudent;
+

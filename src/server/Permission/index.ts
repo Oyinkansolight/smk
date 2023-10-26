@@ -22,7 +22,7 @@ export function useGetAdminList(page: number) {
   const { refetch } = query;
 
   useEffect(() => {
-    refetch();
+    refetch({ cancelRefetch: true });
   }, [page, refetch]);
 
   return query;
