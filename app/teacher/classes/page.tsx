@@ -67,7 +67,9 @@ export default function Page() {
                   }}
                   key={v.subject.id}
                   isNext={i == 0}
-                  subject={v.subject.name ?? '[NULL]'}
+                  subject={v?.subject
+                    ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                    : 'Subject Name'}
                   assignmentDue={2}
                   tasks={4}
                   className={colors[i % colors.length]}

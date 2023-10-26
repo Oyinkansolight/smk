@@ -165,7 +165,7 @@ const AllStudent = () => {
             students?.data.map((item: Student, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
-                  {(pagingData.page - 1) * 10 + (students?.paging?.itemCount ?? idx + 1)}
+                  {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
                 <div className='col-span-5'>

@@ -113,8 +113,7 @@ const AllStaff = () => {
             (staff?.data?.staffs ?? []).map((item: Staff, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={idx}>
                 <div className='col-span-1'>
-                  {(pagingData.page - 1) * 10 + (staff?.paging?.itemCount ?? idx + 1)}
-                  {/* item_index = (page_number - 1) * items_per_page + item_on_page */}
+                  {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
                 <div className='col-span-2'>

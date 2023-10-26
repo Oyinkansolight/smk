@@ -125,6 +125,7 @@ export function useGetProfienciencies() {
   return query;
 }
 
+
 export interface CreateCategory {
   institutionType?: string;
   gradeCategory?: GradeCategory[];

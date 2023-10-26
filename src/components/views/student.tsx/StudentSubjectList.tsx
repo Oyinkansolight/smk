@@ -4,10 +4,19 @@ import EmptyView from '@/components/misc/EmptyView';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteControlledModal from '@/components/modal/DeleteModalContent';
 import PeriodStatusModal from '@/components/modals/period-status-modal';
-import { useRemoveStaffSubject } from '@/server/institution';
+import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import logger from '@/lib/logger';
+import request from '@/server';
+import { getErrMsg } from '@/server';
+import {
+  useGetAcademicSessionsTermsWeek,
+  useRemoveStaffSubject,
+} from '@/server/institution';
 import { useState } from 'react';
 import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
+import { BsArrowDownCircle } from 'react-icons/bs';
 import { RiDeleteBin2Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
@@ -25,8 +34,28 @@ export default function SubjectList({
   const [itemId, setItemId] = useState('');
   const [currentView, setCurrentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
+  const [showcontent, setShowContent] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [periods, setperiods] = useState<any[]>([]);
+  const [periodsList, setperiodsList] = useState<any[]>([]);
+  const [weekid, setWeekId] = useState<string | number>(0);
+  const [subjectId, setSubjectId] = useState<string | number>(0);
+  const [classId, setClassId] = useState<string | number>(0);
+
+  // const [periodsUpdate, setperiodsUpdate] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const removeSubject = useRemoveStaffSubject();
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+
+  let currentTermInfo;
+
+  if (currentTerm) {
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const { data } = useGetAcademicSessionsTermsWeek(currentTermInfo?.id ?? '');
+  console.log(data);
 
   const handleDeleteSubject = async () => {
     const response = await removeSubject.mutateAsync({
@@ -44,6 +73,28 @@ export default function SubjectList({
   const toggleDeleteModal = () => {
     setShowDeleteModal(!showDeleteModal);
   };
+
+  function fetchPeriods(weekId: string | number) {
+    setWeekId(weekId);
+    setLoading(true);
+
+    request
+      .get(
+        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${currentSessionId}&termId=${currentTermInfo?.id}&weekId=${weekId}&subjectId=${subjectId}&classId=${classId}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        setLoading(false);
+        setperiods(res.data.data.data.data);
+        // setperiodsList(getOccurrences(res.data.data.data.data));
+      })
+      .catch((err) => {
+        logger(err);
+        setLoading(false);
+      });
+  }
 
   return (
     <>
@@ -107,13 +158,17 @@ export default function SubjectList({
                           <div>{v?.subject?.name?.substring(0, 1)}</div>
                         </div>
                         <div
-                          className='font-bold text-center text-lg cursor-pointer'
+                          className='font-medium text-center text-sm cursor-pointer'
                           onClick={() => {
                             setCurrentView(1);
+                            setSubjectId(v?.subject?.id);
+                            setClassId(v?.subject?.class?.class?.id);
                             setSubjectName(v?.subject?.name);
                           }}
                         >
-                          {v?.subject?.name ?? 'Subject Name'}
+                          {v?.subject
+                            ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                            : 'Subject Name'}
                         </div>
                       </div>
                     ))}
@@ -187,11 +242,11 @@ export default function SubjectList({
               <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
                 <div className='grid grid-cols-2 items-center'>
                   <div>Class:</div>
-                  <div className='text-bold text-2xl text-[#5A5A5A]'>
-                    Primary 1
+                  <div className='text-bold text-base text-[#5A5A5A]'>
+                    {managedClassArm?.arm ?? ''}
                   </div>
                   <div>Subject:</div>
-                  <div className='text-bold text-2xl text-[#5A5A5A]'>
+                  <div className='text-bold text-base text-[#5A5A5A]'>
                     {subjectName}
                   </div>
                 </div>
@@ -199,61 +254,99 @@ export default function SubjectList({
                   <div className='text-end'>Class Teacher:</div>
                   <div className='flex gap-4 items-center'>
                     <div className='bg-gray-500 rounded-full h-10 w-10' />
-                    <div className='text-[#8898AA] font-bold text-lg'>
-                      James Grace
+                    <div className='text-[#8898AA] font-medium text-base'>
+                      {teacher ?? ''}
                     </div>
                   </div>
                 </div>
               </div>
               <div className='h-12' />
               <div className='flex gap-4 flex-col'>
-                {Array(16)
-                  .fill(0)
-                  .map((v, i) => (
-                    <AccordionAlt
-                      key={i}
-                      bordered
-                      title={
-                        <div className='flex text-[#6B7A99] items-center'>
-                          <div className='font-extrabold'>Week {i + 1}</div>
-                          <div className='w-20' />
-                          <AiFillFlag className='h-6 w-6' />
-                          <div className='w-10' />
-                          <div>
-                            Theme:{' '}
-                            <span className='font-bold'>Number Theory</span>
+                <div className='flex flex-col space-y-6'>
+                  {(data?.data || []).map((v: any, i: number) => {
+                    return (
+                      <div key={v.id}>
+                        <div
+                          onClick={() => {
+                            setShowContent(!showcontent);
+                            setCurrentIndex(i);
+                            fetchPeriods(v.id);
+                          }}
+                          className='border-b flex items-center justify-between gap-4 py-4 cursor-pointer'
+                        >
+                          <div className='flex space-x-2 items-center'>
+                            <BsArrowDownCircle
+                              className={clsxm(
+                                'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
+                                showcontent && currentIndex === i
+                                  ? 'rotate-180'
+                                  : 'text-[#C3CAD9]'
+                              )}
+                            />
+                            <h2 className='text-xs font-normal'>
+                              Week {v.name}
+                            </h2>
                           </div>
-                          <div className='w-20' />
-                          <div>
-                            Topic/Sub Theme:{' '}
-                            <span className='font-bold'>Number Theory</span>
+                          {/* <div className='col-span-4'>
+                  Theme: <span className='font-bold'>{v.theme}</span>
+                </div>
+                <div className='col-span-4'>
+                  Topic/Sub-Theme:
+                  <span className='font-bold'>{v.topic}</span>
+                </div> */}
+                          <div className=''>
+                            <button
+                              className='border border-primary text-primary p-2 rounded-sm'
+                              onClick={() => {
+                                fetchPeriods(v.id);
+                              }}
+                            >
+                              View Curricullum
+                            </button>
                           </div>
                         </div>
-                      }
-                      length={200}
-                    >
-                      <div className='flex flex-col px-4'>
-                        {Array(4)
-                          .fill(0)
-                          .map((v, i) => (
-                            <PeriodStatusModal key={i}>
-                              <div className='grid grid-cols-4 cursor-pointer py-4 border-y'>
-                                <div>Period 1</div>
-                                <div className='text-[#6B7A99]'>
-                                  Title:{' '}
-                                  <span className='font-bold'>
-                                    Even Numbers
-                                  </span>
+                        {showcontent && currentIndex === i && (
+                          <div className='w-full border duration-200 transition-all flex flex-col divide-y-2 !text-xs mt-[33px]'>
+                            {periods.map((v: any, j: number) => {
+                              return (
+                                <div
+                                  key={v.id ?? j}
+                                  className={clsxm(
+                                    'grid grid-cols-3 py-[22px] px-5'
+                                  )}
+                                >
+                                  <div>Period {j + 1}</div>
+                                  <div>
+                                    <span className='text-[#8898AA] mr-1'>
+                                      Topic/Sub-Theme:
+                                    </span>
+                                    {v.theme}
+                                  </div>
+                                  <div>
+                                    <span className='text-[#8898AA] mr-1'>
+                                      Title
+                                    </span>
+                                    {v.title}
+                                  </div>
                                 </div>
-                                <div className='flex text-[#6B7A99] col-span-2 justify-end'>
-                                  <div className='cursor-pointer'>View</div>
-                                </div>
+                              );
+                            })}
+                            {loading && (
+                              <div className='text-center tetx-xs'>
+                                Loading..
                               </div>
-                            </PeriodStatusModal>
-                          ))}
+                            )}
+                            {periods.length === 0 && !loading && (
+                              <div className='text-center tetx-xs py-4'>
+                                No Period Found
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    </AccordionAlt>
-                  ))}
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
