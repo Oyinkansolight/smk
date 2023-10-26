@@ -158,7 +158,7 @@ export default function SubjectList({
                           <div>{v?.subject?.name?.substring(0, 1)}</div>
                         </div>
                         <div
-                          className='font-bold text-center text-base cursor-pointer'
+                          className='font-medium text-center text-sm cursor-pointer'
                           onClick={() => {
                             setCurrentView(1);
                             setSubjectId(v?.subject?.id);
@@ -167,7 +167,7 @@ export default function SubjectList({
                           }}
                         >
                           {v?.subject
-                            ? `${v?.subject?.name} -  ${v?.class?.arm}  `
+                            ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
                             : 'Subject Name'}
                         </div>
                       </div>
