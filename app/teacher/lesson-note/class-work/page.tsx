@@ -149,7 +149,7 @@ function LessonTaskListItem({
       <div>{moment(dateCreated).format('MMMM DD')}</div>
       <div className='flex justify-between items-center'>
         <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
-          {moment(dueDate).format('MMMM DD')}
+          {dueDate ? moment(dueDate).format('MMMM DD') : '-'}
         </div>
         <BiChevronRight className='h-10 w-10' />
       </div>

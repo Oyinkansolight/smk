@@ -65,6 +65,10 @@ export function useGetClassArmInfo(classArmId: string | null | undefined) {
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [classArmId, refetch]);
   return query;
 }
 

@@ -2,9 +2,14 @@
 
 import AccordionAlt from '@/components/accordions/AccordionAlt';
 import Button from '@/components/buttons/Button';
+import GenericLoader from '@/components/layout/Loader';
+import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
 import { useUpdateStudent } from '@/server/government/student';
+import { useGetStudentById, useGetStudentSubjectPosition, useGetStudentTotalScoreAndTotalAttendance } from '@/server/institution';
 import { useGetProfienciencies } from '@/server/institution/grade';
+import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
@@ -44,6 +49,22 @@ export default function Page() {
   const studentId = p?.get('studentid');
   const update = useUpdateStudent();
 
+  const { data: student } = useGetStudentById({ id: studentId })
+  const { data: profile } = useGetProfile();
+  const { data: positionData } = useGetStudentSubjectPosition({
+    sessionId: (profile?.currentSession ?? [])[0]?.id,
+    termId: profile?.currentTerm?.id,
+    classArmId: student?.class.id,
+    studentId: studentId ?? undefined,
+  })
+
+  const { data: totalData } = useGetStudentTotalScoreAndTotalAttendance({
+    sessionId: (profile?.currentSession ?? [])[0]?.id,
+    termId: profile?.currentTerm?.id,
+    classArmId: student?.class.id,
+  })
+  console.log(totalData);
+
   const updateStudentProficiencyLevel = async (value) => {
     try {
       const response = await update.mutateAsync({
@@ -55,6 +76,7 @@ export default function Page() {
       toast.error(getErrMsg(error));
     }
   };
+
   return (
     <div className='h-full layout flex flex-col gap-6'>
       <div className='text-black font-bold py-8 text-2xl'>Grade Book</div>
@@ -63,16 +85,16 @@ export default function Page() {
           <div className='h-20 rounded-full w-20 bg-slate-300' />
           <div className='text-lg font-bold'>
             <div>
-              Name: <span className='text-[#746D69]'>Ahmed Ighosa</span>
+              Name: <span className='text-[#746D69]'>{student?.firstName} {student?.lastName}</span>
             </div>
             <div>
-              Sex: <span className='text-[#746D69]'>Male</span>
+              Sex: <span className='text-[#746D69]'>{student?.gender}</span>
             </div>
             <div>
-              Age: <span className='text-[#746D69]'>15</span>
+              Age: <span className='text-[#746D69]'>{student?.dob ? moment().diff(moment(student.dob, "DD-MM-YYYY"), "years") : ''}</span>
             </div>
             <div>
-              Class: <span className='text-[#746D69]'>SS1 Ferret</span>
+              Class: <span className='text-[#746D69]'>{student?.class.arm}</span>
             </div>
           </div>
         </div>
@@ -115,7 +137,7 @@ export default function Page() {
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>
         <div className='bg-[#EFF7F6] p-6 overflow-y-auto w-full'>
-          <table className='min-w-[800px]'>
+          {!positionData ? <GenericLoader /> : !positionData.cognitive?.length ? <EmptyView label='No cogintive domain data' /> : <table className='min-w-[800px]'>
             <tr className='text-[#746D69] text-lg'>
               <th>Subjects</th>
               <th>Assignment 1</th>
@@ -140,7 +162,7 @@ export default function Page() {
                   <td>Fail</td>
                 </tr>
               ))}
-          </table>
+          </table>}
         </div>
       </div>
       <div className='p-8 flex flex-col gap-5 bg-white rounded-lg'>
