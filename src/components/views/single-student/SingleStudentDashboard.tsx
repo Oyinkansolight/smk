@@ -16,7 +16,6 @@ import {
   useGetStudentSubjectList,
 } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
-import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
@@ -99,7 +98,7 @@ const SingleStudentDashboard = () => {
 
           {tabIdx === 0 && (
             <StudentDashboardView
-              schoolType={'Secondary'}
+              schoolType='Secondary'
               classArm={
                 ` ${student?.class?.class.name}  ${student?.class?.arm} ` ?? ''
               }

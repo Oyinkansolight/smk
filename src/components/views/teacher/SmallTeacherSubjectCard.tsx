@@ -45,7 +45,7 @@ export default function SmallTeacherSubjectCard({
           fill
         />
       </div>
-      <div className='font-bold text-2xl'>{subject}</div>
+      <div className='font-bold text-base'>{subject}</div>
       {showTasks && (
         <div className='w-full p-2'>
           <div className='w-full h-[90px] rounded-lg bg-white p-4'>

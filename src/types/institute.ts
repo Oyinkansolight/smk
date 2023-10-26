@@ -147,7 +147,18 @@ export interface ClassInterface {
   institutionType: string;
   createdAt: string;
   updatedAt: string;
-  arms: Arm[];
+  class: {
+    arms: Arm[];
+    createdAt: string;
+    curriculum: string;
+    endTime: null;
+    id: string;
+    institutionType: string;
+    name: string;
+    startTime: null;
+    updatedAt: string;
+  };
+  arm: string;
 }
 
 export interface Arm {

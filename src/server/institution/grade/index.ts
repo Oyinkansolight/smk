@@ -106,7 +106,6 @@ export function useGetCategoryByInstitutionType(
 
   return query;
 }
-
 export function useGetProfienciencies() {
   const query = useQuery({
     queryKey: 'get_proficiencies_level',
@@ -125,6 +124,7 @@ export function useGetProfienciencies() {
 
   return query;
 }
+
 
 export interface CreateCategory {
   institutionType?: string;
