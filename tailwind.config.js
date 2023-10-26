@@ -9,6 +9,7 @@ module.exports = {
       fontFamily: {
         primary: ['Inter', ...fontFamily.sans],
       },
+
       colors: {
         primary: {
           // Customize it on globals.css :root
@@ -92,6 +93,7 @@ module.exports = {
       animation: {
         flicker: 'flicker 3s linear infinite',
         shimmer: 'shimmer 1.3s linear infinite',
+        progress: 'progress 1s infinite linear',
       },
     },
   },
