@@ -38,7 +38,7 @@ export default function PaginatedCounter({
           </div>
         ))}
 
-      {currentPage !== undefined &&
+      {currentPage !== undefined && pageCount > 3 &&
         <div
           key={Math.random() * 100}
           className={clsxm(
@@ -64,7 +64,7 @@ export default function PaginatedCounter({
         </div>
       )}
 
-      <div
+      {/* <div
         className={clsxm(
           currentPage === pageCount
           && 'bg-[#1A8FE3] border-none text-white shadow-md',
@@ -72,7 +72,7 @@ export default function PaginatedCounter({
         )}
       >
         {pageCount}
-      </div>
+      </div> */}
 
       <div
         onClick={() => {

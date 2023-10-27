@@ -23,7 +23,7 @@ export default function SmallTeacherSubjectCard({
       onClick={onClick}
       className={clsxm(
         showTasks ? 'h-[284px]' : 'h-[220px]',
-        'flex flex-col items-center w-[240px] justify-center gap-2 cursor-pointer self-center rounded-lg',
+        'flex flex-col items-center w-[240px] justify-center gap-2 cursor-pointer self-center rounded-lg overflow-hidden',
         className
       )}
     >
@@ -45,7 +45,7 @@ export default function SmallTeacherSubjectCard({
           fill
         />
       </div>
-      <div className='font-bold text-base'>{subject}</div>
+      <div className='font-bold text-sm text-center'>{subject}</div>
       {showTasks && (
         <div className='w-full p-2'>
           <div className='w-full h-[90px] rounded-lg bg-white p-4'>

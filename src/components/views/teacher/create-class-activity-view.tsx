@@ -8,7 +8,7 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
 import useCustomEditor from '@/hooks/useEditor';
 import clsxm from '@/lib/clsxm';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getCurrentDate, getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetAllClassArms } from '@/server/institution/class-arm';
@@ -53,7 +53,11 @@ const activityFormats = [
   { key: 'SUBJECTIVE', value: 'Subjective' },
 ];
 
-export default function CreateClassActivityView() {
+interface CreateClassActivityViewProps {
+  closeModal: () => void;
+}
+
+export default function CreateClassActivityView({ closeModal }: CreateClassActivityViewProps) {
   const editor = useCustomEditor();
   const { register, watch, handleSubmit, getValues, control } = useForm({
     mode: 'all',
@@ -106,11 +110,6 @@ export default function CreateClassActivityView() {
           return;
         }
 
-        if (!v.correctOption) {
-          toast.error('Please select a correct option');
-          return;
-        }
-
         if (v.options.length < 4) {
           toast.error('Please add at least 4 options');
           return;
@@ -138,7 +137,7 @@ export default function CreateClassActivityView() {
       questionsV2 = questions.map((v) => ({
         question: v.question,
         options: v.options,
-        correctOption: v.correctOption,
+        correctOption: v?.correctOption ?? v?.options?.[0],
       }));
     }
 
@@ -206,6 +205,7 @@ export default function CreateClassActivityView() {
           addToGradeList,
         });
         toast.success(res.data.data.message);
+        closeModal();
       } else {
         const res = await create.mutateAsync({
           ...data,
@@ -276,6 +276,7 @@ export default function CreateClassActivityView() {
               label='Due Date'
               placeholder='Due date'
               type='date'
+              min={getCurrentDate()}
               className='rounded-lg h-10 !p-0'
             />
           )}

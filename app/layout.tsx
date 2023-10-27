@@ -1,5 +1,6 @@
 'use client';
 
+import useWindowDimensions from '@/hooks/useWindowDimension';
 import logger from '@/lib/logger';
 import request from '@/server';
 // Import the styles provided by the react-pdf-viewer packages
@@ -32,13 +33,24 @@ export default function RootLayout({
     charging,
   } = useBattery();
 
+  // const [mounted, setMounted] = useState(false);
+  // useEffect(() => {
+  //   setMounted(true)
+  // }, [])
+
+
+
   // const { data: isValidDevice } = useGetValidIMEI();
   // console.log(isValidDevice);
+  const { width, height } = useWindowDimensions();
 
   const isValidDevice = true;
+  // const isHydrated = (width && width > 0) && (height && height > 0);
 
 
   useEffect(() => {
+    // logger(width);
+    // logger(height);
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
       if (currentBattery <= 20 && !charging) {
@@ -73,13 +85,15 @@ export default function RootLayout({
         </body>
       </html>
     );
-  } else {
-    return (
-      <div className='flex flex-col justify-center items-center h-screen'>
-        <div className='text-2xl font-bold text-[#6B7A99]'>
-          This device is not authorized to use this app.
-        </div>
-      </div>
-    );
   }
+
+  // else {
+  //   return (
+  //     <div className='flex flex-col justify-center items-center h-screen'>
+  //       <div className='text-2xl font-bold text-[#6B7A99]'>
+  //         This device is not authorized to use this app.
+  //       </div>
+  //     </div>
+  //   );
+  // }
 }

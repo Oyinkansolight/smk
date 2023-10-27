@@ -11,7 +11,6 @@ import { useGetStudentById, useGetStudentSubjectPosition, useGetStudentTotalScor
 import { useGetProfienciencies } from '@/server/institution/grade';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
@@ -137,7 +136,7 @@ export default function Page() {
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>
         <div className='bg-[#EFF7F6] p-6 overflow-y-auto w-full'>
-          {!positionData ? <GenericLoader /> : !positionData.cognitive?.length ? <EmptyView label='No cogintive domain data' /> : <table className='min-w-[800px]'>
+          {!positionData ? <GenericLoader /> : !positionData.cognitive?.length ? <EmptyView label='No cogintive domain data' useStandardHeight /> : <table className='min-w-[800px]'>
             <tr className='text-[#746D69] text-lg'>
               <th>Subjects</th>
               <th>Assignment 1</th>
