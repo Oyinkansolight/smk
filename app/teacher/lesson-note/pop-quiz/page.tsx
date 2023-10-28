@@ -76,10 +76,10 @@ export default function Page() {
                 key={i}
                 href={
                   activity.format === 'MULTIPLE_CHOICE'
-                    ? `/teacher/lesson-note/assignment/offline-submissions?subjectId=${activity.subject.id
+                    ? `/teacher/lesson-note/pop-quiz/offline-submissions?subjectId=${activity.subject.id
                     }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
                     }`
-                    : `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
+                    : `/teacher/lesson-note/pop-quiz/submissions?subjectId=${activity.subject.id
                     }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
                     }`
                 }

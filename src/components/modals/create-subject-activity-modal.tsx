@@ -49,7 +49,7 @@ export default function CreateSubjectActivityModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-h-[800px] max-w-[744px] transform overflow-x-auto rounded-2xl bg-white p-6 text-start shadow-xl transition-all'>
-                  <CreateClassActivityView />
+                  <CreateClassActivityView closeModal={closeModal} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

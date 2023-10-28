@@ -16,7 +16,7 @@ const nextConfig = {
 
   reactStrictMode: true,
   swcMinify: true,
-  experimental: { appDir: true },
+  //  experimental: { appDir: true },
 
   async redirects() {
     return [
@@ -42,7 +42,6 @@ const nextConfig = {
       },
     ],
   },
-
 
   webpack(config) {
     config.module.rules.push({

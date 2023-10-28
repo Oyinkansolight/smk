@@ -51,6 +51,8 @@ type propType = {
   helper?: HelperProps;
   className?: string;
   isRequired?: boolean;
+  min?: string;
+  max?: string;
 };
 
 const InputReactForm = ({
@@ -64,6 +66,8 @@ const InputReactForm = ({
   helper,
   className,
   isRequired = false,
+  min,
+  max,
 }: propType) => {
   return (
     <div className=''>
@@ -78,6 +82,8 @@ const InputReactForm = ({
             required={isRequired}
             disabled={disabled}
             type={type}
+            min={min && min}
+            max={max && max}
             className='w-full border-none outline-none'
             placeholder={placeholder}
             {...(register ? register(name as string, validation) : {})}

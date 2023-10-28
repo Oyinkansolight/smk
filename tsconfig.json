@@ -45,7 +45,8 @@
     "src/components/views/super-admin/Account/Schooltype.jsx",
     "app/super-admin/test.js",
     "app/super-admin/schedule/page.js",
-    "src/components/views/single-school/test.js"
+    "src/components/views/single-school/test.js",
+    "src/hooks/useWindowDimension.js"
   ],
   "exclude": [
     "node_modules"

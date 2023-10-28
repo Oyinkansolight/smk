@@ -1,5 +1,6 @@
 'use client';
 
+import GenericLoader from '@/components/layout/Loader';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { getURL } from '@/firebase/init';
 import Link from 'next/link';
@@ -34,7 +35,7 @@ export default function Page() {
       </div> */}
       <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll mt-10'>
         <div className='flex justify-center'>
-          <CustomPDFReader url={fileDownloadURL} />
+          {fileDownloadURL === '' ? <GenericLoader /> : <CustomPDFReader url={fileDownloadURL} />}
         </div>
       </div>
     </div>

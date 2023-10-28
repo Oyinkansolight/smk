@@ -221,6 +221,71 @@ export function useGetStudentById(params?: PaginationParams) {
   return query;
 }
 
+export function useGetStudentSubjectPosition(params?: {
+  studentId?: string;
+  termId?: string;
+  sessionId?: string;
+  classArmId?: string;
+}) {
+  const query = useQuery({
+    queryKey: `get_student_subject_position_${params?.studentId}`,
+    queryFn: async () => {
+      if (params?.classArmId && params?.studentId && params?.sessionId && params?.termId) {
+        try {
+          const d = await request.get(
+            '/v1/government/test_exam_score/get-student-subject-position',
+            {
+              params,
+            }
+          );
+          return d.data.data.data;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.studentId, params?.classArmId, params?.termId, params?.sessionId, refetch]);
+
+  return query;
+}
+
+export function useGetStudentTotalScoreAndTotalAttendance(params?: {
+  termId?: string;
+  sessionId?: string;
+  classArmId?: string;
+}) {
+  const query = useQuery({
+    queryKey: `get_student_total_score_and_attendance`,
+    queryFn: async () => {
+      if (params?.classArmId && params?.sessionId && params?.termId) {
+        try {
+          const d = await request.get(
+            '/v1/government/test_exam_score/get-student-total-score-and-total-attendance',
+            {
+              params,
+            }
+          );
+          return d.data;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.classArmId, params?.termId, params?.sessionId, refetch]);
+
+  return query;
+}
+
 export function useGetTeachersList(params?: PaginationParams) {
   const query = useQuery({
     queryKey: 'get_teachers_list',
@@ -247,12 +312,13 @@ export function useGetTeachersList(params?: PaginationParams) {
 interface Props {
   instituteId?: string | null;
   limit?: number;
+  query?: string;
   page?: number;
   enabled?: boolean;
 }
 
 export function useGetTeachersListByInstitution(props: Props) {
-  const { instituteId, limit, page } = props;
+  const { instituteId, limit, page, query: q } = props;
   let { enabled } = props;
 
   if (enabled !== false) enabled = true;
@@ -264,8 +330,7 @@ export function useGetTeachersListByInstitution(props: Props) {
       if (instituteId) {
         try {
           const d = await request.get(
-            `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${limit ? `&limit=${limit}` : ''
-            }${page ? `&page=${page}` : ''}`
+            `/v1/government/teachers/institution-staffs`, { params: { institutionId: instituteId, limit, page } }
           );
           return d.data.data.data as PaginatedData<Staff>;
         } catch (error) {
@@ -400,6 +465,10 @@ export function useGetSubjectById(id?: string) {
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [refetch, id]);
   return query;
 }
 export function useCreateStaff() {

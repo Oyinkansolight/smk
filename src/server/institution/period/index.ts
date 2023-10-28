@@ -31,10 +31,12 @@ export function useGetTeacherClassPeriod(params: GetTeacherClassPeriodParams) {
 }
 
 export interface GetWeekPeriodsBySubjectParams {
-  sessionId?: string;
+  page?: number;
   termId?: string;
+  staffId?: string;
+  sessionId?: string;
   weekId?: number | string | null;
-  classArmId?: number | string | null;
+  classId?: number | string | null;
   subjectId?: number | string | null;
 }
 
@@ -65,7 +67,8 @@ export function useGetWeekPeriodsBySubject(
     params.subjectId,
     params.termId,
     params.weekId,
-    params.classArmId,
+    params.classId,
+    params.page,
   ]);
 
   return query;

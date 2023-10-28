@@ -29,7 +29,7 @@ const BasicSearch = ({ handleSearch, placeholder }: propTypes) => {
         <input
           type='text'
           id='simple-search'
-          className='block h-[53px] w-full min-w-[180px] max-w-[581px] rounded-[13px] border border-[#DEDEDE] bg-[#F9FAFB] p-2.5 pl-[54px] text-sm text-[#DEDEDE] shadow-sm placeholder:text-[#ADB8CC] focus:border-blue-500 focus:ring-blue-500'
+          className='block h-[53px] w-full min-w-[180px] max-w-[581px] rounded-[13px] border border-[#DEDEDE] bg-[#F9FAFB] p-2.5 pl-[54px] text-sm text-black shadow-sm placeholder:text-[#ADB8CC] focus:border-blue-500 focus:ring-blue-500'
           placeholder={placeholder ? placeholder : 'Search...'}
           required
           onChange={(e) => {

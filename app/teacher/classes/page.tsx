@@ -63,7 +63,7 @@ export default function Page() {
               data?.map((v, i) => (
                 <SmallTeacherSubjectCard
                   onClick={() => {
-                    router.push(`/teacher/classes/subject?id=${v.subject.id}`);
+                    router.push(`/teacher/classes/subject?id=${v.subject.id}&classArmId=${v.class.id}&classId=${v.class.class.id}&armName=${`${v?.class?.class?.name} ${v.class.arm}`}`);
                   }}
                   key={v.subject.id}
                   isNext={i == 0}
