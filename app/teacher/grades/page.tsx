@@ -10,10 +10,8 @@ import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { ClassArmStudents } from '@/types/institute';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import ordinal from 'ordinal';
 import { useEffect, useState } from 'react';
 import { BiBookContent } from 'react-icons/bi';
-import { BsArrowUp } from 'react-icons/bs';
 import { FaUsers } from 'react-icons/fa';
 
 export default function Page() {
@@ -106,10 +104,10 @@ export default function Page() {
           <div className='grid grid-cols-8 py-8 text-[#746D69] text-base'>
             <div />
             <div className='col-span-3 px-4'>Student</div>
-            <div>Group</div>
+            {/* <div>Group</div>
             <div>Homework</div>
             <div>Attendance</div>
-            <div>Standing</div>
+            <div>Standing</div> */}
           </div>
           <div className='flex flex-col gap-4'>
             {allStudents && allStudents.map((student, i) => (
@@ -137,13 +135,13 @@ function StudentGradeListItem({
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
           <div>{student.lastName + ' ' + student.firstName}</div>
         </div>
-        <div className='text-black'>Group Name</div>
+        {/* <div className='text-black'>Group Name</div>
         <div>24/24</div>
         <div className='text-black'>16/19</div>
         <div className='text-black flex items-center'>
           <div>{ordinal(id)}</div>
           <BsArrowUp className='h-5 w-5 text-green-500' />
-        </div>
+        </div> */}
       </div>
     </Link>
   );
