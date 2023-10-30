@@ -8,12 +8,7 @@ import { UserProfile } from '@/types/auth';
 import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import GenericLoader from '@/components/layout/Loader';
 
 type Iprops = {
   register: any;
@@ -34,8 +29,8 @@ const Biodata = ({
   profile,
   classArmInfo,
 }: Iprops) => {
-  const { data: allClasses } = useGetClassesList();
-  const { data: allSubjects } = useGetSubjectList();
+  const { data: allClasses, isLoading: isLoadingClasses } = useGetClassesList();
+  const { data: allSubjects, isLoading: isLoadingSubjects } = useGetSubjectList();
 
 
   const filteredClass = useMemo(() => {
@@ -44,7 +39,7 @@ const Biodata = ({
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -57,6 +52,14 @@ const Biodata = ({
   const selectedTeacherIndex = (staffData ?? []).findIndex(
     (item) => item.value == classArmInfo?.teacher.id
   );
+
+  if (isLoadingClasses || isLoadingSubjects || (classArmInfo?.teacher.id && !staffData[selectedTeacherIndex])) {
+    return (
+      <div className='flex justify-center items-center'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <section className=''>
@@ -133,10 +136,10 @@ const Biodata = ({
               <div className='font-bold'>Select Class Teacher</div>
               <ReactSelect
                 required
-                options={staffData}
-                defaultValue={staffData[selectedTeacherIndex]}
                 {...field}
+                options={staffData}
                 className='h-auto mt-2 select'
+                defaultValue={staffData[selectedTeacherIndex]}
               />
             </div>
           )}
