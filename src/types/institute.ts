@@ -11,6 +11,15 @@ export interface AssignedSubject {
   session: Session;
   subject: Subject;
 }
+export interface classType {
+  arm: string;
+  capacity: number;
+  createdAt: string;
+  curriculum: string;
+  id: string;
+  institutionType: null;
+  updatedAt: string;
+}
 
 export interface Subject {
   id?: string;
@@ -31,6 +40,7 @@ export interface Student {
   weight?: string;
   profileImg?: string;
   parentName?: string;
+  readingProficiency?: string;
   parentOccupation?: string;
   user?: User[] | User;
   institution?: Institution;
@@ -295,6 +305,7 @@ export interface Institution {
   isOnboardingCompleted?: boolean;
   students?: Student[];
   staff?: Staff[];
+  classes?: classType[];
   studentCount?: number;
   staffCount?: number;
   totalClassArm?: number | string;

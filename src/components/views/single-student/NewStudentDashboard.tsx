@@ -4,7 +4,7 @@ import StudentActionCard from '@/components/cards/StudentActionCard';
 import NewStudentClock from '@/components/views/single-student/NewStudentClock';
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromSessionStorage, time24Converter } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetStudentOngoingPeriod } from '@/server/government/student';
@@ -12,9 +12,12 @@ import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useGetTodaysPeriod } from '@/server/student';
 import { useClockIn, useClockOut } from '@/server/teacher';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { BiUser } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
+import Books from '~/svg/books.svg';
 
 export default function NewStudentDashboard() {
   const { data: profile } = useGetProfile();
@@ -144,13 +147,42 @@ export default function NewStudentDashboard() {
           <div className='h4 text-[#746D69]'>Your Actions</div>
           {!isLoading ? (
             <div className='flex flex-wrap gap-4 mt-2'>
-              {(data ?? [1]).map((v: unknown, i: number) => (
-                <StudentActionCard
-                  key={i}
-                  ongoing={i === 0}
-                  img='/images/sidebar-icons/Dashboard.png'
-                  type='assignment'
-                />
+              {(data ?? []).map((v: any, i: number) => (
+                <div
+                  key={v.id ?? i}
+                  className='h-[250px] relative w-full border-[#3361FF] border rounded-lg bg-[#F2F5FF] p-[10px]'
+                >
+                  <div className='flex justify-between items-center'>
+                    <div>
+                      <h1 className='font-bold text-base'>
+                        {' '}
+                        {v?.subject?.name}{' '}
+                      </h1>
+                      <p className='text-[#808080] text-[10px] '>
+                        {time24Converter(v.startTime)} -{' '}
+                        {time24Converter(v.endTime)}
+                      </p>
+                    </div>
+                    <div>
+                      <Books className='h-8 w-8 ' />
+                    </div>
+                  </div>
+                  <h1 className='font-bold mt-3 text-sm'>Topic:</h1>
+                  <p className='text-[#808080] text-[10px] '>{v.theme}</p>
+                  <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
+                  <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
+                    <BiUser className='h-8 w-8' /> <p> {v?.teacher ?? ''}</p>
+                  </div>
+
+                  <div className='flex justify-center absolute bottom-4 w-full'>
+                    <Link
+                      href={`/student/period/subject?name=${v.id}`}
+                      className='bg-[#3361FF] font-medium text-white px-2 py-1 rounded-2xl'
+                    >
+                      Go to Period
+                    </Link>
+                  </div>
+                </div>
               ))}
             </div>
           ) : (

@@ -29,21 +29,21 @@ const items = [
     label: 'Timetable',
   },
 
-  {
-    img: '/images/sidebar-icons/Assignment.png',
-    url: '/student/assignment',
-    label: 'Assignments',
-  },
-  {
-    img: '/images/sidebar-icons/testandexam.png',
-    url: '/student/test-and-exam',
-    label: 'Test and Exam',
-  },
-  {
-    img: '/images/sidebar-icons/Performance.png',
-    url: '/student/performance',
-    label: 'Grade Book',
-  },
+  // {
+  //   img: '/images/sidebar-icons/Assignment.png',
+  //   url: '/student/assignment',
+  //   label: 'Assignments',
+  // },
+  // {
+  //   img: '/images/sidebar-icons/testandexam.png',
+  //   url: '/student/test-and-exam',
+  //   label: 'Test and Exam',
+  // },
+  // {
+  //   img: '/images/sidebar-icons/Performance.png',
+  //   url: '/student/performance',
+  //   label: 'Grade Book',
+  // },
   {
     img: '/images/sidebar-icons/Dashboard-4.png',
     url: '/student/profile',
@@ -73,7 +73,7 @@ export default function NewStudentSidebar() {
     <div
       className={clsxm(
         open ? 'w-40 ' : 'w-16 ',
-        'absolute hideScroll overflow-y-auto flex bg-[#f5f9ff] flex-col gap-8 transition-all duration-200 items-center  py-4 border-r '
+        'absolute hideScroll h-screen overflow-y-auto flex bg-[#f5f9ff] flex-col gap-8 transition-all duration-200 items-center  py-4 border-r '
       )}
     >
       <div

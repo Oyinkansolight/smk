@@ -7,10 +7,12 @@ export default function AssignmentQuestionView({
   question,
   options,
   correctOption = 0,
+  showAssesment = false,
 }: {
   question: string;
   options: string[];
   correctOption?: number;
+  showAssesment?: boolean;
 }) {
   const [selectedOption, setSelectedOption] = useState<number>();
   return (
@@ -26,6 +28,7 @@ export default function AssignmentQuestionView({
               idx === selectedOption && idx !== correctOption && 'bg-gray-50',
               selectedOption === idx &&
                 correctOption === idx &&
+                showAssesment &&
                 'border-[#1BB449]'
             )}
             key={idx}
@@ -35,26 +38,29 @@ export default function AssignmentQuestionView({
                 'border-2 rounded-full h-4 w-4 relative flex items-center justify-center',
                 idx === correctOption &&
                   idx === selectedOption &&
+                  showAssesment &&
                   'border-[#1BB449]'
               )}
             >
               {selectedOption === idx && (
                 <div
                   className={clsxm(
-                    'inset-[3px] h-2 w-2 bg-gray-200 rounded-full',
-                    idx === correctOption && 'bg-[#1BB449]'
+                    'inset-[3px] h-2 w-2 bg-gray-600 rounded-full',
+                    idx === correctOption && showAssesment && 'bg-[#1BB449]'
                   )}
                 />
               )}
             </div>
             <div className='w-8' />
             <div className='font-bold text-xl'>{option}</div>
-            {selectedOption === idx && correctOption === idx && (
-              <>
-                <div className='flex-1' />
-                <TbCircleCheckFilled className='text-[#1BB449] h-5 w-5' />
-              </>
-            )}
+            {selectedOption === idx &&
+              correctOption === idx &&
+              showAssesment && (
+                <>
+                  <div className='flex-1' />
+                  <TbCircleCheckFilled className='text-[#1BB449] h-5 w-5' />
+                </>
+              )}
           </div>
         ))}
       </div>

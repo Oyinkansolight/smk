@@ -2,10 +2,18 @@
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
+import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import SmallStudentSubjectCard from '@/components/views/student.tsx/SmallStudentSubjectCard';
 import { getFromSessionStorage } from '@/lib/helper';
 import { useGetStudentSubjectList } from '@/server/institution';
+import { useGetClassArmInfo } from '@/server/institution/class';
 import { useRouter } from 'next/navigation';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const colors = [
@@ -22,37 +30,16 @@ export default function Page() {
     user = JSON.parse(userData);
   }
 
-  const { data: studentSubjectsList } = useGetStudentSubjectList(
-    user?.currentStudentInfo?.id
+  const { data: classArmInfo } = useGetClassArmInfo(
+    user?.currentStudentInfo?.class?.id
   );
   return (
     <div className='layout h-full'>
       <div className='flex flex-col bg-white h-screen'>
         <div className='flex flex-row items-center justify-between'>
           <div className='font-bold py-8 text-4xl'>
-            Subjects
-            <div>
-              <SearchInput
-                placeholder='Search'
-                className='max-w-[343px] w-full'
-              />
-            </div>
-            <div className='h-px bg-black mt-[22px] mb-10' />
-            <div className='flex flex-wrap gap-x-[52px] gap-y-10 justify-items-center'>
-              {studentSubjectsList ? (
-                studentSubjectsList.map((v: any, i: number) => (
-                  <SmallStudentSubjectCard
-                    onClick={() => {
-                      router.push(`/student/subjects/subject?id=${v.id}`);
-                    }}
-                    key={i}
-                    subject={v ?? '[NULL]'}
-                    className={colors[i % colors.length]}
-                  />
-                ))
-              ) : (
-                <div></div>
-              )}
+            <div className='flex flex-wrap gap-x-[52px] gap-y-10 justify-items-center w-full'>
+              <SubjectList studentSubjectsList={classArmInfo?.subjects} />
             </div>
           </div>
         </div>

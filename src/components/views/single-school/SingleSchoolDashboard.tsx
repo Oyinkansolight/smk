@@ -16,8 +16,7 @@ import Files from '@/components/views/super-admin/Library/Files';
 import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
 import {
-  useGetSchoolById,
-  // useGetStudentsListByInstitution,
+  useGetSchoolById, // useGetStudentsListByInstitution,
   // useGetTeachersListByInstitution,
 } from '@/server/institution';
 import Cookies from 'js-cookie';
@@ -29,18 +28,6 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -65,9 +52,7 @@ const studentListColumns: TableColumn<any>[] = [
   },
   {
     name: 'Attendance Rate',
-    cell: () => (
-      <div className='text-gray-500 font-bold text-center'>{0}%</div>
-    ),
+    cell: () => <div className='text-gray-500 font-bold text-center'>{0}%</div>,
   },
 ];
 const staffListColumns: TableColumn<any>[] = [
@@ -87,9 +72,7 @@ const staffListColumns: TableColumn<any>[] = [
   },
   {
     name: 'Attendance Rate',
-    cell: () => (
-      <div className='text-gray-500 font-bold text-center'>{0}%</div>
-    ),
+    cell: () => <div className='text-gray-500 font-bold text-center'>{0}%</div>,
   },
 ];
 
@@ -101,7 +84,7 @@ const SingleSchoolDashboard = () => {
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const params = useSearchParams();
-  const { data: school } = useGetSchoolById({ id: params?.get('id') });
+  const { data: school } = useGetSchoolById({ query: params?.get('id') });
   // const instituteId = params?.get('id');
   // const { data: getInstitutionStudents } =
   //   useGetStudentsListByInstitution(instituteId);

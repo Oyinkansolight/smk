@@ -3,7 +3,7 @@ import { BasicCard, CountCard } from '@/components/cards';
 interface Iprop {
   schoolType?: string;
   classArm?: string;
-  studentAve?: number;
+  studentAve?: string;
   totalSubject?: number;
 }
 export default function StudentDashboardView({
@@ -24,10 +24,10 @@ export default function StudentDashboardView({
             title='School Type'
             variant='basic'
           />
-          <CountCard count={classArm ?? '1A'} title='Class' variant='basic' />
+          <CountCard count={classArm ?? 'Loading...'} title='Class' variant='basic' />
           <CountCard
-            count={studentAve ?? '0%'}
-            title='Student Average'
+            count={studentAve ?? 'Loading...'}
+            title='Student Reading Proficiency'
             variant='basic'
           />
           <CountCard
