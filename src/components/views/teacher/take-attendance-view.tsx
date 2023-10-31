@@ -4,11 +4,10 @@ import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
   useGetLessonAttendance,
-  useGetStudentsInTeacherClass,
 } from '@/server/government/classes_and_subjects';
 import { useTakeAttendance } from '@/server/government/student';
 import { useGetSessionTerms } from '@/server/government/terms';
-import { useGetAllClassArms } from '@/server/institution/class-arm';
+import { useGetAllClassArms, useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useGetPeriodById } from '@/server/institution/period';
 import { Institution } from '@/types/institute';
 import { useSearchParams } from 'next/navigation';
@@ -32,10 +31,10 @@ export default function TakeAttendanceView() {
   });
   const arm = (arms ?? [])[0];
   const { data: students, isLoading: studentsLoading } =
-    useGetStudentsInTeacherClass({
+    useGetClassArmStudents({
       classArmId: arm?.id,
-      institutionId: institution?.id,
     });
+
   const { data: attendance } = useGetLessonAttendance({ periodId: id });
 
   const { data: terms } = useGetSessionTerms({
