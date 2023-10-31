@@ -7,7 +7,7 @@ import {
 } from '@/server/government/classes_and_subjects';
 import { useTakeAttendance } from '@/server/government/student';
 import { useGetSessionTerms } from '@/server/government/terms';
-import { useGetAllClassArms, useGetClassArmStudents } from '@/server/institution/class-arm';
+import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useGetPeriodById } from '@/server/institution/period';
 import { Institution } from '@/types/institute';
 import { useSearchParams } from 'next/navigation';
@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 export default function TakeAttendanceView() {
   const params = useSearchParams();
   const id = params?.get('id');
+  const classArmId = params?.get('classArmId');
   const { data: profile } = useGetProfile();
   const { data: period } = useGetPeriodById(id ? id : undefined);
   const { mutateAsync: takeAttendance } = useTakeAttendance();
@@ -24,15 +25,10 @@ export default function TakeAttendanceView() {
     ? (JSON.parse(institutionString) as Institution)
     : undefined;
 
-  const { data: arms } = useGetAllClassArms({
-    classId: period?.class?.id,
-    institutionId: institution?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
-  const arm = (arms ?? [])[0];
+
   const { data: students, isLoading: studentsLoading } =
     useGetClassArmStudents({
-      classArmId: arm?.id,
+      classArmId: classArmId,
     });
 
   const { data: attendance } = useGetLessonAttendance({ periodId: id });
