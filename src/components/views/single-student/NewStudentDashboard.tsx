@@ -1,7 +1,5 @@
 'use client';
 
-import StudentActionCard from '@/components/cards/StudentActionCard';
-import NewStudentClock from '@/components/views/single-student/NewStudentClock';
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
 import { getFromSessionStorage, time24Converter } from '@/lib/helper';
@@ -200,12 +198,12 @@ export default function NewStudentDashboard() {
       </div>
 
       <div className='px-7 md:px-0  md:max-w-sm flex md:flex-col flex-row gap-8 md:pr-11 pt-[35px]'>
-        <NewStudentClock
+        {/* <NewStudentClock
           handleClockIn={handleClockIn}
           handleClockOut={handleClockOut}
           clockInfo={clockInfo}
-        />
-        <div className='flex flex-col gap-y-[14px] p-4 rounded-xl border bg-[#FAFAFA] w-full max-w-[296px]'>
+        /> */}
+        <div className='flex flex-col gap-y-[14px] p-4 rounded-xl border bg-[#FAFAFA] w-full md:w-[300px]'>
           <div className='font-bold text-xl '>Today's Timetable</div>
           <NewStudentSmallTimetable
             loading={loading}

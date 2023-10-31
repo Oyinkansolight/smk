@@ -3,12 +3,35 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import TimetableView from '@/components/views/teacher/TimetableView';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { useGetTeacherTimetable } from '@/server/Schedule';
+import { useGetProfile } from '@/server/auth';
 import { useGetSessionCalendar } from '@/server/institution/time-table';
 import { useState } from 'react';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
-  const { data: sessionCalendarData } = useGetSessionCalendar(1);
+
+  const { data: profile } = useGetProfile();
+
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  let currentTermInfo;
+
+  if (currentTerm) {
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const { data: sessionCalendarData } = useGetSessionCalendar(currentSessionId ?? "");
+
+  const { data, isLoading } = useGetTeacherTimetable({
+    // sessionId: currentSessionId,
+    // termId: currentTermInfo?.id,
+    classId: profile?.userInfo?.staff?.managedClassArm?.class?.id,
+    teacherId: profile?.userInfo?.staff?.id,
+  });
+
+  console.log(data);
+
   return (
     <div className='layout flex justify-center'>
       <div className='w-full max-w-5xl'>
@@ -19,11 +42,11 @@ export default function Page() {
           onChange={setIdx}
         />
         {idx === 0 ? (
-          <TimetableView />
+          <TimetableView data={data} isLoading={isLoading} />
         ) : idx === 1 ? (
           <AcademicCalendar sessionCalendarData={sessionCalendarData} />
         ) : (
-          <TimetableView />
+          <AcademicCalendar sessionCalendarData={sessionCalendarData} />
         )}
       </div>
     </div>

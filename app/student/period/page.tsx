@@ -47,10 +47,9 @@ const Page = () => {
 
   const { isLoading, data } = useGetTodaysPeriod({
     classId: user?.currentStudentInfo.class.class.id,
-    day: "Friday",
+    day: currentDay,
     weekid: currentWeekInfo?.id,
   });
-
   return (
     <div className='flex gap x-4 gap-y-10'>
       <div className='w-full px-4'>
@@ -96,7 +95,7 @@ const Page = () => {
                   <p className='text-[#808080] text-[10px] '>{item.theme}</p>
                   <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
                   <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
-                    <BiUser className='h-8 w-8' /> <p> {item?.teacher ?? ''}</p>
+                    <BiUser className='h-8 w-8' /> <p> {item?.teacher[0]?.staffType ?? ''}</p>
                   </div>
 
                   <div className='flex justify-center absolute bottom-4 w-full'>
