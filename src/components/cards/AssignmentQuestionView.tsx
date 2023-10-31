@@ -18,7 +18,7 @@ export default function AssignmentQuestionView({
   answers,
   qId,
 }: {
-  qId: string;
+  qId?: string;
   question: string;
   options: string[];
   correctOption?: number;
@@ -40,7 +40,7 @@ export default function AssignmentQuestionView({
     } else {
       setAnswers([...answersCopy, { questionId: qId, answerOption: optionIdx }]);
     }
-    console.log(result);
+
   }
   return (
     <div className='bg-white px-4 py-[18px] rounded-[9px]'>
@@ -56,15 +56,14 @@ export default function AssignmentQuestionView({
               //   { questionId: qId, answerOption: option },
               // ]);
               handleOptionSelection(qId, idx);
-              console.log(answers);
             }}
             className={clsxm(
               'border-gray-300 px-4 text-lg cursor-pointer h-12 border rounded-md flex items-center',
               idx === selectedOption && idx !== correctOption && 'bg-gray-50',
               selectedOption === idx &&
-                correctOption === idx &&
-                showAssesment &&
-                'border-[#1BB449]'
+              correctOption === idx &&
+              showAssesment &&
+              'border-[#1BB449]'
             )}
             key={idx}
           >
@@ -72,9 +71,9 @@ export default function AssignmentQuestionView({
               className={clsxm(
                 'border-2 rounded-full h-4 w-4 relative flex items-center justify-center',
                 idx === correctOption &&
-                  idx === selectedOption &&
-                  showAssesment &&
-                  'border-[#1BB449]'
+                idx === selectedOption &&
+                showAssesment &&
+                'border-[#1BB449]'
               )}
             >
               {selectedOption === idx && (
