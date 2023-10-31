@@ -63,7 +63,7 @@ export default function TakeAttendanceView() {
               onTakeAttendance={async (status) => {
                 try {
                   await takeAttendance({
-                    classArmId: arm?.id,
+                    classArmId: classArmId,
                     institutionId: institution?.id,
                     periodId: id,
                     sessionId: profile?.currentSession?.[0]?.id,
