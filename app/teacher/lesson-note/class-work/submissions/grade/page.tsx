@@ -2,28 +2,41 @@
 
 import Button from '@/components/buttons/Button';
 import clsxm from '@/lib/clsxm';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReactSelect from 'react-select';
 import Toggle from 'react-toggle';
-import { SAMPLE_ASSETS } from '@/constant/assets';
-import { getURL } from '@/firebase/init';
-import CustomPDFReader from '@/components/pdfReader/Reader';
+import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
+import { useSearchParams } from 'next/navigation';
+import logger from '@/lib/logger';
+import GenericLoader from '@/components/layout/Loader';
+import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 
 export default function Page() {
-  const [url, setUrl] = useState('');
+  const params = useSearchParams();
   const [addToGradeList, setAddToGradeList] = useState(false);
+  const classArmId = params?.get('classArmId');
+  const subjectId = params?.get('subjectId');
+  const studentId = params?.get('studentId');
+  const { data: submissions, isLoading: isLoadingActivity } =
+    useGetStudentSubmittedActivity({
+      type: 'CLASS_WORK',
+      classArmId,
+      subjectId,
+      studentId
+    });
 
-  useEffect(() => {
-    const getFileURL = async () => {
-      const path = SAMPLE_ASSETS.SAMPLE_PDFS.ASSIGNMENT;
+  logger(submissions);
 
-      await getURL(path).then((v) => setUrl(v));
-    };
-    getFileURL();
-  }, [url]);
+  if (isLoadingActivity) {
+    return (
+      <div className='flex justify-center items-center h-[40vh]'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout mt-10'>
       <div className='text-3xl text-[#D4D5D7]'>
         {'Assignments > Submissions > Grade'}
       </div>
@@ -32,14 +45,26 @@ export default function Page() {
       </div>
       <div className='font-bold pb-4 flex items-center gap-4'>
         <div className='h-10 w-10 rounded-full bg-gray-200' />
-        <div>Ighosa Ahmed</div>
+        <div>{`${submissions?.[0]?.student?.lastName} ${submissions?.[0]?.student?.firstName}`}</div>
       </div>
       <div className='flex lg:flex-row flex-col gap-4'>
         <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden w-full'>
-          <div className='flex justify-center'>
-            {url.length > 0 && (
-              <CustomPDFReader url={url} />
-            )}
+          <div className='flex justify-start p-4'>
+            {
+              submissions?.[0]?.activity?.questionsV2?.map((question, idx) => (
+                <div className='flex flex-row gap-6 w-full items-center' key={submissions[idx].id}>
+                  <div className="h3">{idx + 1}.</div>
+                  <div className='w-full'>
+                    <AssignmentQuestionView
+                      showAssesment
+                      question={question.question ?? ""}
+                      options={question.options ?? []}
+                      correctOption={question.correctOption}
+                    />
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
         <div className=' rounded-lg bg-white p-2'>
@@ -77,7 +102,7 @@ function EditStudentGrade() {
         <div>Score</div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array(7)
+        {Array(1)
           .fill(0)
           .map((v, i) => (
             <div

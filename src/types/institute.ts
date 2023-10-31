@@ -407,6 +407,7 @@ export interface ClassActivity1 {
   format: string;
   timeLimit: string;
   questions: Question[];
+  questionsV2: Question[];
   dueDate: Date;
   teacher: Teacher;
   lessonNote: null;
@@ -453,6 +454,7 @@ export interface SubmittedActivity {
   typeOfActivity: string;
   status: string;
   questions: SubmittedQuestion[];
+  questionsV2: SubmittedQuestion[];
   createdAt: Date;
   updatedAt: Date;
   class: ClassInterface;

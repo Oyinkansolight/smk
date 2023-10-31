@@ -54,6 +54,7 @@ export function useGetClassArmInfo(classArmId: string | null | undefined) {
   const query = useQuery({
     queryKey: 'get_class_arm_in_a_institution',
     queryFn: async () => {
+      if (!classArmId) return;
       try {
         const d = await request.get(
           `/v1/institutions/class-arm/class-arm-by-id?classArmId=${classArmId}`

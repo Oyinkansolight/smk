@@ -1,7 +1,6 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
-import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import EmptyView from '@/components/misc/EmptyView';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
 import clsxm from '@/lib/clsxm';
@@ -17,7 +16,6 @@ export default function Page() {
     classArmId: params?.get('classArmId'),
     subjectId: params?.get('subjectId'),
     type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
-    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
   });
   return (
     <div className='h-full layout'>
@@ -62,23 +60,23 @@ export default function Page() {
                       'subjectId'
                     )}&classArmId=${params?.get(
                       'classArmId'
-                    )}&type=${params?.get('type')}`}
-                    key={i}
+                    )}&type=${params?.get('type')}&submissionId=${submission.id}&format=${submission.activity.format}
+                    &studentId=${submission.student.id}`}
+                    key={submission.id}
                   >
                     <AssignmentListItem
+                      id={i + 1}
+                      key={submission.id}
                       title={`${submission?.student?.lastName} ${submission?.student?.firstName}`}
                       dateSubmitted={moment(submission.createdAt).format(
                         'MMMM DD'
                       )}
-                      dueDate={submission.activity.dueDate}
-                      key={i}
-                      id={i + 1}
                     />
                   </Link>
                 ))
               ))}
           </div>
-          <PaginatedCounter pageCount={10} currentPage={0} />
+          {/* <PaginatedCounter pageCount={10} currentPage={0} /> */}
         </>
       ) : (
         <EmptyView
@@ -94,12 +92,10 @@ function AssignmentListItem({
   id,
   title,
   dateSubmitted,
-  dueDate,
 }: {
   id: number;
   title: string;
   dateSubmitted?: string;
-  dueDate?: Date;
 }) {
   return (
     <div
@@ -113,7 +109,7 @@ function AssignmentListItem({
         <div>{title}</div>
       </div>
       <div>{dateSubmitted ? dateSubmitted : '-'}</div>
-      <div>{moment(dueDate).format('MMMM DD')}</div>
+      <div>-</div>
       <div className='flex justify-end '>
         <Button
           disabled={!dateSubmitted}

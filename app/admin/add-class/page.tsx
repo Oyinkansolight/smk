@@ -123,7 +123,7 @@ const AddClass = () => {
           textLink='Manage Classes'
         />
       )}
-      <Link href='/admin'>
+      <Link href='/admin/all-classes'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'

@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
+import GenericLoader from '@/components/layout/Loader';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
@@ -17,27 +18,20 @@ import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { useSessionStorage } from 'usehooks-ts';
 
 export default function Page() {
-  const [idx, setIdx] = useState(0);
+  const [idx, setIdx] = useState(1);
   const params = useSearchParams();
-  const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
+  const { data: profile, isLoading: isLoadingProfile } = useGetProfile();
+  const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
 
   const [institution] = useSessionStorage('institution', {} as Institution);
 
-  const { data: arms } = useGetTeacherClassArms({
+  const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.[0]?.id,
   });
-
-  // const { data: activities } = useGetClassActivity({
-  //   typeOfActivity: 'ASSIGNMENT',
-  //   classArmId: (arms ?? [])[idx]?.id as unknown as string,
-  //   termId: term as unknown as string,
-  //   sessionId: profile?.currentSession?.[0]?.id,
-  // });
 
   const {
     data: gradeList,
@@ -54,6 +48,14 @@ export default function Page() {
   useEffect(() => {
     refetch();
   }, [idx, refetch]);
+
+  if (isLoadingArms && isLoadingProfile && isLoadingTerms) {
+    return (
+      <div className='flex flex-col w-full h-full'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <div className='h-full layout'>

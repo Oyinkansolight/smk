@@ -1,5 +1,6 @@
 'use client';
 
+import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
@@ -12,7 +13,7 @@ import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
+import { BiChevronRight } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
@@ -21,16 +22,24 @@ export default function Page() {
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
-  const { data: arms } = useGetTeacherClassArms({
+  const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.[0]?.id,
   });
-  const { data: activities } = useGetClassActivity({
+  const { data: activities, isLoading: isLoadingActivity } = useGetClassActivity({
     typeOfActivity: 'CLASS_WORK',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
     sessionId: profile?.currentSession?.[0]?.id,
   });
+
+  if (isLoadingActivity || isLoadingArms) {
+    return (
+      <div className='flex flex-col justify-center items-center h-1/2'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <div className='h-full layout'>
@@ -46,7 +55,7 @@ export default function Page() {
         onChange={setIdx}
         selectedIdx={idx}
       />
-      <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
+      {/* <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
         <input className='rounded-full border p-3' placeholder='search' />
         <div className='flex-1' />
         <div className='flex items-center'>
@@ -54,15 +63,20 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
-      </div>
+      </div> */}
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-6'>
-        <div className='col-span-2'>Title</div>
-        <div>Subject</div>
-        <div>Class</div>
-        <div>Date Assigned</div>
-        <div>Date Due</div>
-      </div>
+
+      {activities?.data &&
+        activities?.data.length > 0 &&
+        <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-6'>
+          <div className='col-span-2'>Title</div>
+          <div>Subject</div>
+          <div>Class</div>
+          <div>Date Assigned</div>
+          <div>Date Due</div>
+        </div>
+      }
+
       <div className='flex flex-col gap-2'>
         {activities?.data &&
           (activities?.data.length === 0 ? (
@@ -75,16 +89,23 @@ export default function Page() {
               <Link
                 key={i}
                 href={
-                  !activity.id
-                    ? '/teacher/lesson-note/class-work/offline-submissions'
+                  activity.mode === 'OFFLINE'
+                    ? `/teacher/lesson-note/class-work/offline-submissions?subjectId=${activity.subject.id
+                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                    }&format=${activity.format}`
                     : `/teacher/lesson-note/class-work/submissions?subjectId=${activity.subject.id
                     }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
+                    }&format=${activity.format}`
                 }
               >
                 <LessonTaskListItem
-                  isOfflineSubmission={false}
-                  title={activity.typeOfActivity ?? '[NULL]'}
+                  isOfflineSubmission={activity.mode === 'OFFLINE'}
+                  title={
+                    activity.typeOfActivity
+                      ? `${activity.typeOfActivity} -  ${activity.format}`
+                        .replace('_', ' ')
+                        .toLowerCase()
+                      : '[NULL]'}
                   subject={activity.subject.name ?? '[NULL]'}
                   classString={
                     (arms ?? [])[idx].arm
@@ -100,7 +121,11 @@ export default function Page() {
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={5} currentPage={0} />
+
+      {activities?.data &&
+        activities?.data.length > 0 &&
+        <PaginatedCounter pageCount={activities?.paging.totalPage} currentPage={activities?.paging.currentPage} />
+      }
     </div>
   );
 }
@@ -137,7 +162,7 @@ function LessonTaskListItem({
             fill
           />
         </div>
-        <div>{title}</div>
+        <div className='capitalize'>{title}</div>
         {isOfflineSubmission && (
           <div className='font-normal bg-[#A5A5A5] text-white text-sm py-[1px] px-3 rounded'>
             Offline

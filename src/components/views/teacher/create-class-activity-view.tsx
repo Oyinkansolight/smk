@@ -218,6 +218,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
           addToGradeList,
         });
         toast.success(res.data.data.message);
+        closeModal();
       }
     } catch (error) {
       toast.error(getErrMsg(error));

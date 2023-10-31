@@ -154,6 +154,10 @@ const Biodata = ({
               <ReactSelect
                 isMulti
                 required
+                defaultValue={classArmInfo?.subjects?.map((v) => ({
+                  label: v?.name,
+                  value: v.id,
+                }))}
                 options={(allSubjects ?? []).map((v) => ({
                   label: v?.name,
                   value: v.id,
