@@ -30,11 +30,7 @@ const InstituteSidebar = ({
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
-      if (typeof window !== 'undefined') {
-        await sessionStorage.clear();
-        await localStorage.clear();
-      }
-      router.push('/auth/user');
+      router.push('/auth/user?action=logout');
     }
   };
   const handleToggle = () => setOpen(!open);
@@ -148,8 +144,9 @@ const InstituteSidebar = ({
           )}
         >
           <div
-            className={` ${open ? ' justify-between px-2' : 'justify-center'
-              } flex w-full items-center gap-[14.25px] `}
+            className={` ${
+              open ? ' justify-between px-2' : 'justify-center'
+            } flex w-full items-center gap-[14.25px] `}
           >
             <div className='flex items-center justify-center space-x-2'>
               <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
@@ -238,8 +235,9 @@ export const SideBarButton = ({
     )}
   >
     <div
-      className={` ${open ? ' justify-between px-2' : 'justify-center'
-        } flex w-full items-center gap-[14.25px] `}
+      className={` ${
+        open ? ' justify-between px-2' : 'justify-center'
+      } flex w-full items-center gap-[14.25px] `}
     >
       <div className='flex items-center justify-center space-x-2'>
         {icon}

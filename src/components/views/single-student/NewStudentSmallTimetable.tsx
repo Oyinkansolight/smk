@@ -13,7 +13,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   });
 
   return (
-    <div className='w-full max-w-[290px] max-h-[500px] overflow-y-auto'>
+    <div className='w-full md:w-[290px] max-h-[500px] overflow-y-auto'>
       <div className='flex justify-end'>
         <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-max px-2 h-[30px] whitespace-nowrap'>
           {formattedDate}

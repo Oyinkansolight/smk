@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
 import { LessonNoteObject } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
@@ -102,6 +103,22 @@ export function useGetPeriodActivity(params?: any) {
                 params,
               }
             )
+          ).data.data.data as any)
+        : undefined;
+    },
+  });
+  return query;
+}
+
+export function useGetClassActivity(params?: any) {
+  const query = useQuery({
+    queryKey: 'get_class_activity',
+    queryFn: async () => {
+      return params
+        ? ((
+            await request.get(`v1/institutions/lessons/get-class-activty`, {
+              params,
+            })
           ).data.data.data as any)
         : undefined;
     },

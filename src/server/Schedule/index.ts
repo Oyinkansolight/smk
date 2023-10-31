@@ -55,14 +55,14 @@ export function useGetAcademicTimetable({
   classId,
   termId,
   type = 'DEFAULT',
-  teacherId = '',
+
 }: timetableArg) {
   const query = useQuery({
     queryKey: 'academic_timetable',
     queryFn: () =>
       request
         .get(
-          `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${termId}&type=${type}&teacherId=${teacherId}&limit=10000`
+          `/v1/government/time-table/time-table-by-type?sessionId=${sessionId}&classId=${classId}&term=${termId}&type=${type}&limit=10000`
         )
         .then((res) => res.data.data.data),
   });

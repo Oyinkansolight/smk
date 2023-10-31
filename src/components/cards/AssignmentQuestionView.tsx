@@ -40,7 +40,6 @@ export default function AssignmentQuestionView({
     } else {
       setAnswers([...answersCopy, { questionId: qId, answerOption: optionIdx }]);
     }
-
   }
   return (
     <div className='bg-white px-4 py-[18px] rounded-[9px]'>

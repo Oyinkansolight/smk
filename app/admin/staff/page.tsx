@@ -156,8 +156,8 @@ const Page = () => {
     }
   };
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
-    }`;
+  const teacherName = `${staff ? (staff?.user ?? {})?.firstName : 'Loading...'
+    } ${staff ? (staff?.user ?? {})?.lastName : ''}`;
 
   return (
     <div className='flex flex-col lg:flex-row'>
@@ -235,7 +235,10 @@ const Page = () => {
           )}
           {tabIdx === 1 && (
             <div>
-              <EmptyView label='Timetable Not Available Yet' useStandardHeight />
+              <EmptyView
+                label='Timetable Not Available Yet'
+                useStandardHeight
+              />
             </div>
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}

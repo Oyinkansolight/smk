@@ -29,11 +29,11 @@ const items = [
     label: 'Timetable',
   },
 
-  // {
-  //   img: '/images/sidebar-icons/Assignment.png',
-  //   url: '/student/assignment',
-  //   label: 'Assignments',
-  // },
+  {
+    img: '/images/sidebar-icons/Assignment.png',
+    url: '/student/assignment',
+    label: 'Assignments',
+  },
   // {
   //   img: '/images/sidebar-icons/testandexam.png',
   //   url: '/student/test-and-exam',
@@ -60,11 +60,7 @@ export default function NewStudentSidebar() {
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
-      if (typeof window !== 'undefined') {
-        await sessionStorage.clear();
-        await localStorage.clear();
-      }
-      router.push('/auth/user');
+      router.push('/auth/user?action=logout');
     }
   };
   const handleToggle = () => setOpen(!open);
