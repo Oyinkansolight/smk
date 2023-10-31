@@ -116,7 +116,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
           }}
         />
 
-        <SideBarButtonTwo
+        {/* <SideBarButtonTwo
           active={
             routeDetails && routeDetails.includes('communication') && true
           }
@@ -125,7 +125,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
             router.push('/super-admin/communication');
             handleToggle();
           }}
-        />
+        /> */}
 
         <button
           onClick={() => {

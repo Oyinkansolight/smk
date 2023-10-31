@@ -126,7 +126,7 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher?.user.firstName
+                        ? data?.teacher[0]?.user.firstName
                         : 'No_name'}{' '}
                     </div>
                   </div>

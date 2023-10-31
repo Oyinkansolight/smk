@@ -2,7 +2,7 @@
 import request from '@/server';
 import { useQuery } from 'react-query';
 
-export function useGetSessionCalendar(id: number) {
+export function useGetSessionCalendar(id: string) {
   const query = useQuery({
     queryKey: 'academic_sessions_calendar',
     queryFn: () =>

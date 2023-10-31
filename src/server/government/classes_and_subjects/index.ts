@@ -45,16 +45,34 @@ export interface GetSubjectGradeBookParams {
 }
 
 export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
+  const allParamsPresent = Object.values(params).every((v) => v);
+
   const query = useQuery({
     queryKey: 'get_subject_grade_book',
     queryFn: async () => {
-      const d = await request.get(
-        '/v1/institutions/grade-book/get-subject-grade-books',
-        { params, withCredentials: true }
-      );
-      return d.data.data.data.data as GradeListItem[];
+      if (allParamsPresent) {
+        const d = await request.get(
+          '/v1/institutions/grade-book/get-subject-grade-books',
+          { params, withCredentials: true }
+        );
+        return d.data.data.data.data as GradeListItem[];
+      }
     },
+
+    enabled: allParamsPresent ? true : false,
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [
+    params.sessionId,
+    params.termId,
+    params.institutionId,
+    params.classArmId,
+    params.subjectId,
+    refetch,
+  ]);
   return query;
 }
 

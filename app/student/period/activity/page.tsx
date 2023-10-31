@@ -2,20 +2,37 @@
 
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { getErrMsg } from '@/server';
 import {
   useGetPeriodActivity,
   useGetPeriodById,
 } from '@/server/institution/period';
+import { useSubmitActivity } from '@/server/student';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
 import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
+export interface answers {
+  questionId?: string;
+  answerOption?: number;
+  answerText?: string;
+}
 const Page = () => {
   const router = useRouter();
   // Get the URL query string
   const queryString = useSearchParams();
+  const userData = getFromSessionStorage('user');
+  const [answers, setAnswers] = useState([]);
+  const [loading, setloading] = useState(false);
+
+  let user;
+  if (userData) {
+    user = JSON.parse(userData);
+  }
   const periodId = queryString?.get('name');
   const activityType = queryString?.get('activityType');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
@@ -241,6 +258,37 @@ const Page = () => {
     updatedAt: '2023-09-08T19:08:50.225Z',
   };
 
+  useSubmitActivity;
+  const handleSubmitActivity = useSubmitActivity();
+
+  const submissionData = {
+    activityId: activities?.data[0]?.id,
+    periodId: periodId,
+    online: activities?.data[0]?.id.mode === 'ONLINE',
+    classArmId: activities?.data[0]?.classes.id,
+    answers,
+    studentId: user?.currentStudentInfo.id ?? '',
+    subjectId: activities?.data[0]?.subject.id,
+    type: activityType,
+  };
+
+  async function handleSubmitTask() {
+    try {
+      setloading(true);
+      const response = await handleSubmitActivity.mutateAsync(submissionData);
+
+      if (response) {
+        toast.success(`${activityType} Submitted succesfully`);
+        router.back();
+        setloading(false);
+
+        //2 Second - Open Success Modal
+      }
+    } catch (error) {
+      setloading(false);
+      toast.error(getErrMsg(error));
+    }
+  }
   return (
     <div className='layout flex flex-col gap-5'>
       {!isLoading ? (
@@ -303,7 +351,7 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher?.user.firstName
+                        ? data?.teacher[0]?.user.firstName
                         : 'No_name'}
                     </div>
                   </div>
@@ -324,7 +372,7 @@ const Page = () => {
                 {activityType === 'CLASS_WORK' ? 'Classwork' : 'Pop Quiz'}
               </div>
               <div className='flex flex-col gap-[14px] pb-32'>
-                {activities  && activities?.data.length > 0 ? (
+                {activities && activities?.data.length > 0 ? (
                   <div>
                     {activities?.data[0]?.questionsV2?.map((item, idx) => (
                       <div key={idx}>
@@ -332,11 +380,23 @@ const Page = () => {
                           question={item.question}
                           options={item.options}
                           correctOption={item.correctOption}
+                          answers={answers}
+                          setAnswers={setAnswers}
+                          qId={item.id}
                         />
                       </div>
                     ))}
-                    <button className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '>
-                      Submit Activity
+                    <button
+                      onClick={() => {
+                        handleSubmitTask();
+                      }}
+                      className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
+                    >
+                      {loading ? (
+                        <ImSpinner2 className='animate-spin' />
+                      ) : (
+                        ' Submit Activity'
+                      )}
                     </button>
                   </div>
                 ) : (
