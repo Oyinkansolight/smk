@@ -11,19 +11,27 @@ import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
-import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import { useGetStudentList } from '@/server/government/student';
-import { useGetStudentSubjectList } from '@/server/institution';
+import { useGetClassArmInfo } from '@/server/institution/class';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -39,10 +47,10 @@ const Page = () => {
   const { data, error } = useGetStudentList({
     id: p?.get('id'),
   });
-  const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
-
+  
   const student = data;
   console.log(student);
+  const { data: classArmData } = useGetClassArmInfo(student?.class?.id);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -102,8 +110,8 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName} ${
-          (student?.user ?? [])[0]?.lastName
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
+          (student?.user ?? [])[0]?.lastName ?? ''
         }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
@@ -144,10 +152,10 @@ const Page = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType={'Secondary'}
-              classArm={
-                `${student?.class?.class.name}  ${student?.class?.arm}` ?? ''
-              }
-              studentAve={0}
+              classArm={`${
+                student ? student?.class?.class.name : 'Loading...'
+              }  ${student ? student?.class?.arm : ''}`}
+              studentAve={student?.readingProficiency}
               totalSubject={0}
             />
           )}
@@ -245,7 +253,7 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <>
-              <SubjectList studentSubjectsList={studentSubjectsList} />
+              <SubjectList studentSubjectsList={classArmData?.subjects ?? []} />
             </>
           )}
         </div>

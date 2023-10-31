@@ -47,7 +47,7 @@ const Page = () => {
   const { data, error } = useGetTeacherById({
     id: p?.get('id'),
   });
-  const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
+  const { data: SubjectsList } = useGetSubjectAssignedToTeacher(
     p?.get('id'),
     currentSessionId
   );
@@ -339,7 +339,7 @@ const Page = () => {
                 </Button>
               </div>
               <SubjectList
-                studentSubjectsList={studentSubjectsList}
+                studentSubjectsList={SubjectsList}
                 managedClassArm={data.managedClassArm}
                 teacher={teacherName}
               />

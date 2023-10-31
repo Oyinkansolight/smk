@@ -28,14 +28,14 @@ const CountCard = ({
         variant === 'secondary' && '!bg-[#F8E6FF] text-[#660195]',
         variant === 'tertiary' && '!bg-[#E3FFF5] text-[#02A369]',
         variant === 'basic' && '!bg-[#F8FDFF] text-[#200E32]',
-        '!m-0 flex h-[156px] w-full min-w-[180px] items-center whitespace-nowrap',
+        '!m-0 flex h-[156px] w-full min-w-[180px] items-center',
         '!rounded-[9px] px-[36px] py-[21px] shadow-sm lg:w-[180px] xl:w-[230px]',
         className
       )}
     >
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-2'>
-          <div className='text-[21px] font-bold'>
+          <div className='text-[21px] font-bold leading-[20px]'>
             {count || count === 0 ? commaNumber(count) : text}
           </div>
           <div className='text-4 font-semibold capitalize'>{title}</div>

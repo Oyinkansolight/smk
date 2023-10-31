@@ -15,6 +15,7 @@ import {
   useGetStudentById,
   useGetStudentSubjectList,
 } from '@/server/institution';
+import { useGetClassArmInfo } from '@/server/institution/class';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -33,7 +34,7 @@ const SingleStudentDashboard = () => {
   const {
     data: student,
     // error: studentError,
-    // isLoading: isStudentLoading,
+    isLoading: isStudentLoading,
   } = useGetStudentById({
     id: p?.get('id'),
   });
@@ -52,16 +53,16 @@ const SingleStudentDashboard = () => {
     getFileURL(student?.profileImg);
   }, [student]);
 
-  const { data: studentSubjectsList } = useGetStudentSubjectList(studentId);
+  const { data: classArmData } = useGetClassArmInfo(student?.class?.id);
 
   return (
     <div className='flex'>
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName} ${
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
           (student?.user ?? [])[0]?.lastName
         }`}
-        school={student?.institution?.instituteName ?? '[NULL]'}
+        school={student?.institution?.instituteName ?? 'Loading...'}
         id={student?.studentId ?? ''}
         student
         currentGridIdx={gridTabIdx}
@@ -99,10 +100,10 @@ const SingleStudentDashboard = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={
-                ` ${student?.class?.class.name}  ${student?.class?.arm} ` ?? ''
-              }
-              studentAve={0}
+              classArm={`${
+                !isStudentLoading ? student?.class?.class.name : 'Loading...'
+              }  ${!isStudentLoading ? student?.class?.arm : ''}`}
+              studentAve={student?.readingProficiency}
               totalSubject={0}
             />
           )}
@@ -195,7 +196,7 @@ const SingleStudentDashboard = () => {
           {tabIdx === 0 && (
             <>
               <SubjectList
-                studentSubjectsList={studentSubjectsList}
+                studentSubjectsList={classArmData?.subjects}
                 teacher={student?.teacher ?? 'No Name'}
                 managedClassArm={{
                   arm: ` ${student?.class?.class.name}  ${student?.class?.arm} `,

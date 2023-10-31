@@ -89,3 +89,22 @@ export function useGetPeriodById(id?: string) {
   });
   return query;
 }
+
+export function useGetPeriodActivity(params?: any) {
+  const query = useQuery({
+    queryKey: 'get_week_periods_activity',
+    queryFn: async () => {
+      return params
+        ? ((
+            await request.get(
+              `/v1/institutions/lessons/get-period-class-activities`,
+              {
+                params,
+              }
+            )
+          ).data.data.data as any)
+        : undefined;
+    },
+  });
+  return query;
+}

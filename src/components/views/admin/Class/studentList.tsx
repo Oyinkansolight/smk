@@ -10,7 +10,7 @@ import { TableColumn } from 'react-data-table-component';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface Iprop {
-  classArmId: string | null | undefined  ;
+  classArmId: string | null | undefined;
 }
 // const report = [
 //   {
@@ -63,7 +63,6 @@ interface Iprop {
 
 const studentListColumns: TableColumn<any>[] = [
   { name: 'Number', cell: (row) => <div className='truncate'> {row.id}</div> },
-  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
   {
     name: 'Name',
     cell: (row) => (
@@ -73,14 +72,12 @@ const studentListColumns: TableColumn<any>[] = [
     ),
   },
   {
-    name: 'Academic Performance',
-    cell: () => <div>{0}%</div>,
+    name: 'Reading Proficiency',
+    cell: (row) => <div>{row.readingProficiency} </div>,
   },
   {
     name: 'Attendance Rate',
-    cell: () => (
-      <div className='text-gray-500 font-bold text-center'>{0}%</div>
-    ),
+    cell: () => <div className='text-gray-500 font-bold text-center'>{0}%</div>,
   },
 ];
 
@@ -88,8 +85,6 @@ export default function StudentList({ classArmId }: Iprop) {
   const { data: getInstitutionStudents } = useGetClassArmStudents({
     classArmId: classArmId,
   });
-  
-  logger(getInstitutionStudents)
 
 
   return (

@@ -4,6 +4,7 @@ export interface PaginatedData<T> {
     totalPage: number;
     currentPage: number;
     itemCount: number;
+    totalItems: number;
     totalPlatformStudents?: number;
     totalInstitutionStudents?: number;
   };

@@ -207,16 +207,14 @@ export function useGetStudentSubmittedActivity(
   const query = useQuery({
     queryKey: 'get_student_submitted_activity',
     queryFn: async () =>
-      params.classArmId && params.subjectId && params.type
-        ? ((
-            await request.get(
-              `/v1/institutions/lessons/get-submittted-class-activties-by-subject`,
-              {
-                params,
-              }
-            )
-          ).data.data.data as SubmittedActivity[])
-        : undefined,
+      (
+        await request.get(
+          `/v1/institutions/lessons/get-submittted-class-activties-by-subject`,
+          {
+            params,
+          }
+        )
+      ).data.data.data as SubmittedActivity[],
   });
   const { refetch } = query;
   useEffect(() => {

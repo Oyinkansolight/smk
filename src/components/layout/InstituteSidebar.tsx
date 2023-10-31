@@ -85,7 +85,7 @@ const InstituteSidebar = ({
           href='/admin/all-staff'
           active={routeDetails && routeDetails.includes('all-staff') && true}
         />
-        <SideBarButton
+        {/* <SideBarButton
           onClick={() => {
             setOpen(false);
           }}
@@ -94,7 +94,7 @@ const InstituteSidebar = ({
           title='Subject'
           href='/admin/all-subject'
           active={routeDetails && routeDetails.includes('all-subject') && true}
-        />
+        /> */}
         <SideBarButton
           onClick={() => {
             setOpen(false);
@@ -105,7 +105,7 @@ const InstituteSidebar = ({
           href='/admin/all-classes'
           active={routeDetails && routeDetails.includes('all-classes') && true}
         />
-        <SideBarButton
+        {/* <SideBarButton
           onClick={() => {
             setOpen(false);
           }}
@@ -116,7 +116,7 @@ const InstituteSidebar = ({
           active={
             routeDetails && routeDetails.includes('all-communication') && true
           }
-        />
+        /> */}
         <SideBarButton
           onClick={() => {
             setOpen(false);

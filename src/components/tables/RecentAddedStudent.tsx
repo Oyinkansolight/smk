@@ -1,4 +1,5 @@
 import { timeConverter } from '@/lib/helper';
+import moment from 'moment';
 import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
 import { BiChevronRight } from 'react-icons/bi';
@@ -26,37 +27,29 @@ import { BiChevronRight } from 'react-icons/bi';
 //   },
 // ];
 
-export default function ClockInClockOutTimeTable({ data }) {
+export default function RecentAddedStudent({ data }) {
   const columns: TableColumn<(typeof data)[number]>[] = [
     {
       name: 'Event Name',
-      selector: (event) => event.user.firstName,
+      selector: (data) => data.user[0].firstName,
       grow: 3,
-      cell: (event) => (
+      cell: (data) => (
         <div className='text-lg flex items-center gap-2 font-semibold whitespace-nowrap overflow-hidden'>
           {/* <div className='h-6 w-6 rounded-full bg-gray-200' /> */}
-          <div>{event.user.firstName}</div>
+          <div>{data.user[0].firstName}</div>
           <div className='bg-[#FFF3EF] text-xs font-normal text-[#FF6633] py-1 px-2 rounded-full'>
             Student
           </div>
         </div>
       ),
     },
+
     {
-      name: 'Clock In Time',
-      selector: (event) => event.clockInTime,
-      cell: (event) => (
+      name: 'Added',
+      selector: (data) => data.createdAt,
+      cell: (data) => (
         <div className='font-bold text-[#ADB8CC]'>
-          {event.clockInTime ? timeConverter(event.clockInTime) : ''}
-        </div>
-      ),
-    },
-    {
-      name: 'Clock Out Time',
-      selector: (event) => event.clockOutTime,
-      cell: (event) => (
-        <div className='font-bold text-[#ADB8CC]'>
-          {event.clockOutTime ? timeConverter(event.clockOutTime) : ''}
+          {moment(data.createdAt).fromNow()}
         </div>
       ),
     },

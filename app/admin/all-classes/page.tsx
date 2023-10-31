@@ -109,7 +109,7 @@ const AllClasses = () => {
         </div> */}
       </div>
 
-      <div className='table-add-student mt-5 pb-4 pt-1 overflow-x-auto w-full'>
+      <div className='table-add-student mt-5 pb-20 pt-1 overflow-x-auto w-full h-full'>
         <div className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b-2 border-gray-400 bg-white py-4 px-1 text-[#8898AA] font-semibold'>
           <div className='col-span-3'>Class Arm</div>
           <div className='col-span-3'>Capacity</div>

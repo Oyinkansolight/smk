@@ -170,19 +170,25 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
 export function useGetStudentsListByInstitution(
   params: StudentsListByInstitution
 ) {
+  const { instituteId } = params;
+
   const query = useQuery({
     queryKey: 'get_student_list_By_institution',
     queryFn: async () => {
-      try {
-        const d = await request.get(
-          `/v1/government/students/get-students-by-institution?institutionId=${params.instituteId
-          }${params.limit ? `&limit=${params.limit}` : ''}${params.page ? `&page=${params.page}` : ''
-          }${params.query ? `&query=${params.query}` : ''}`
-        );
-        return d.data.data.data as PaginatedData<Student> | any;
-      } catch (error) {
-        logger(error);
-        throw error;
+      if (instituteId) {
+        try {
+          const d = await request.get(
+            `/v1/government/students/get-students-by-institution?institutionId=${instituteId}${
+              params.limit ? `&limit=${params.limit}` : ''
+            }${params.page ? `&page=${params.page}` : ''}${
+              params.query ? `&query=${params.query}` : ''
+            }`
+          );
+          return d.data.data.data as PaginatedData<Student> | any;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
       }
     },
   });
@@ -230,7 +236,12 @@ export function useGetStudentSubjectPosition(params?: {
   const query = useQuery({
     queryKey: `get_student_subject_position_${params?.studentId}`,
     queryFn: async () => {
-      if (params?.classArmId && params?.studentId && params?.sessionId && params?.termId) {
+      if (
+        params?.classArmId &&
+        params?.studentId &&
+        params?.sessionId &&
+        params?.termId
+      ) {
         try {
           const d = await request.get(
             '/v1/government/test_exam_score/get-student-subject-position',
@@ -249,7 +260,13 @@ export function useGetStudentSubjectPosition(params?: {
   const { refetch } = query;
   useEffect(() => {
     refetch({ cancelRefetch: true });
-  }, [params?.studentId, params?.classArmId, params?.termId, params?.sessionId, refetch]);
+  }, [
+    params?.studentId,
+    params?.classArmId,
+    params?.termId,
+    params?.sessionId,
+    refetch,
+  ]);
 
   return query;
 }
@@ -330,7 +347,9 @@ export function useGetTeachersListByInstitution(props: Props) {
       if (instituteId) {
         try {
           const d = await request.get(
-            `/v1/government/teachers/institution-staffs`, { params: { institutionId: instituteId, limit, page } }
+            `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
+              limit ? `&limit=${limit}` : ''
+            }${page ? `&page=${page}` : ''}`
           );
           return d.data.data.data as PaginatedData<Staff>;
         } catch (error) {
@@ -413,7 +432,7 @@ export function useGetSchools(params: Partial<PaginationParams>) {
 
 export function useGetSchoolById(params: PaginationParams) {
   const query = useQuery({
-    queryKey: `get_school_list_${params.id}`,
+    queryKey: `get_school_list_${params.query}`,
     queryFn: async () => {
       try {
         const d = await request.get(
@@ -583,10 +602,10 @@ export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
     queryFn: async () =>
       termId
         ? ((
-          await request.get(`/v1/institutions/institutes/get-term-weeks`, {
-            params: { termId },
-          })
-        ).data.data as PaginatedData<Week>)
+            await request.get(`/v1/institutions/institutes/get-term-weeks`, {
+              params: { termId },
+            })
+          ).data.data as PaginatedData<Week>)
         : undefined,
   });
   const { refetch } = query;
@@ -645,7 +664,7 @@ export function useGetTeacherAttendanceLog() {
       try {
         const d = await request.get(`/v1/institutions/clock/list-clock-in`);
 
-        return d.data.data.data as [];
+        return d.data.data.data.data as [];
       } catch (error) {
         logger(error);
         throw error;

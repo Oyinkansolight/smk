@@ -96,7 +96,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>{title}</p>
-          <h1 className='font-semibold text-2xl'>{pagingData.limit * (schools?.paging.totalPage ?? 0)}</h1>
+          <h1 className='font-semibold text-2xl'>{schools?.paging.totalItems ?? 0}</h1>
         </div>
       </div>
 

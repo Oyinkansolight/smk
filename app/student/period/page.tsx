@@ -1,6 +1,6 @@
 'use client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getFromSessionStorage, time24Converter } from '@/lib/helper';
 import { useGetTodaysPeriod } from '@/server/student';
 import Link from 'next/link';
@@ -21,6 +21,7 @@ const Page = () => {
     'Friday',
     'Saturday',
   ];
+
 
   const currentDate = new Date();
   const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
@@ -46,7 +47,7 @@ const Page = () => {
 
   const { isLoading, data } = useGetTodaysPeriod({
     classId: user?.currentStudentInfo.class.class.id,
-    day: currentDay,
+    day: "Friday",
     weekid: currentWeekInfo?.id,
   });
 
@@ -80,7 +81,7 @@ const Page = () => {
                     <div>
                       <h1 className='font-bold text-base'>
                         {' '}
-                        {item.subject.name}{' '}
+                        {item?.subject?.name}{' '}
                       </h1>
                       <p className='text-[#808080] text-[10px] '>
                         {time24Converter(item.startTime)} -{' '}
@@ -95,7 +96,7 @@ const Page = () => {
                   <p className='text-[#808080] text-[10px] '>{item.theme}</p>
                   <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
                   <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
-                    <BiUser className='h-8 w-8' /> <p> Babafemi Akanni</p>
+                    <BiUser className='h-8 w-8' /> <p> {item?.teacher ?? ''}</p>
                   </div>
 
                   <div className='flex justify-center absolute bottom-4 w-full'>

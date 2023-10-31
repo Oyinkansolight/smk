@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import GenericLoader from '@/components/layout/Loader';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/AddClass/Details';
 import Publish from '@/components/views/admin/AddClass/publish';
 import { getErrMsg } from '@/server';
-import { useGetCurrentSession, useGetProfile } from '@/server/auth';
+import { useGetProfile } from '@/server/auth';
 import {
-  useCreateClassArm,
   useGetTeachersListByInstitution,
   useUpdateClassArm,
 } from '@/server/institution';
@@ -17,7 +17,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 // import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
@@ -30,10 +30,9 @@ const EditClass = () => {
   const p = useSearchParams();
   const classArmId = p?.get('id');
 
-  const { data: classArmInfo } = useGetClassArmInfo(classArmId);
+  const { data: classArmInfo, refetch: refetchClassArm, isRefetching: isRefetchingArms, isLoading: isLoadingArms } = useGetClassArmInfo(classArmId);
 
   const { data: institutionProfile } = useGetProfile();
-  const { data: currentSessionInfo } = useGetCurrentSession();
   const { data: staffs } = useGetTeachersListByInstitution({
     instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
     limit: 1000,
@@ -121,6 +120,19 @@ const EditClass = () => {
     },
   ];
 
+  useEffect(() => {
+    refetchClassArm();
+  }, [refetchClassArm, classArmId])
+
+
+  if (isLoadingArms || isRefetchingArms) {
+    return (
+      <div className='flex justify-center items-center h-1/2'>
+        <GenericLoader />
+      </div>
+    )
+  }
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
@@ -132,7 +144,7 @@ const EditClass = () => {
           textLink='Manage Classes'
         />
       )}
-      <Link href='/admin'>
+      <Link href='/admin/all-classes'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'

@@ -17,8 +17,8 @@ export default function Page() {
     classArmId: params?.get('classArmId'),
     subjectId: params?.get('subjectId'),
     type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
-    studentId: 'cae64147-24d8-49f1-aa33-02b6aea56054',
   });
+
   return (
     <div className='h-full layout'>
       <div className='text-3xl pt-8 text-[#D4D5D7]'>

@@ -7,6 +7,7 @@ import Subject from '@/components/views/admin/Class/subject';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
+import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import { useGetClassArmInfo } from '@/server/institution/class';
 // import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useSearchParams } from 'next/navigation';
@@ -23,11 +24,10 @@ const Page = () => {
 
   const { data: classArmInfo } = useGetClassArmInfo(classArmId);
 
-
   return (
-    <div className='flex'>
+    <div className='flex md:flex-row flex-col'>
       <StudentTeacherProfileCard
-        image={classArmInfo?.arm ?? ''}
+        image={classArmInfo?.arm.charAt(0) ?? ''}
         name={`${classArmInfo?.class?.name ?? 'Loading...'} ${
           classArmInfo?.arm ?? ''
         }`}
@@ -85,7 +85,9 @@ const Page = () => {
             </div>
           )}
           {tabIdx === 1 && <StudentList classArmId={classArmId} />}
-          {tabIdx === 2 && <Subject />}
+          {tabIdx === 2 && (
+            <SubjectList studentSubjectsList={classArmInfo?.subjects} />
+          )}
           {tabIdx === 3 && <SingleStudentAttendanceTracker />}
         </div>
       )}

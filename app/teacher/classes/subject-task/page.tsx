@@ -21,6 +21,7 @@ export default function Page() {
   const [url, setUrl] = useState('');
   const params = useSearchParams();
   const id = params?.get('id');
+  const classArmId = params?.get('classArmId');
   const { data: period, isLoading } = useGetPeriodById(id ? id : undefined);
 
   useEffect(() => {
@@ -118,6 +119,7 @@ export default function Page() {
                 'Activity Name';
               return (
                 <SideBarItem
+                  classArmId={classArmId ?? ""}
                   key={activity.id}
                   period={period}
                   type={activity.typeOfActivity}
@@ -165,10 +167,12 @@ function SideBarItem({
   type,
   children,
   period,
+  classArmId
 }: {
   type: (typeof ACTIVITY_TYPES)[number] | string;
   children: JSX.Element | JSX.Element[] | string;
   period: LessonNoteObject;
+  classArmId?: string;
 }) {
   if (period?.subject?.id) {
     return (
@@ -176,13 +180,13 @@ function SideBarItem({
         className='max-h-[38px]'
         href={
           type === 'ASSIGNMENT'
-            ? `/teacher/lesson-note/assignment/submissions?subjectId=${period.subject.id}&type=${type}`
+            ? `/teacher/lesson-note/assignment/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
             : type === 'CLASS_WORK'
-              ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}`
+              ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
               : type === 'LESSON_NOTE'
-                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}`
+                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                 : type === 'QUIZ'
-                  ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}`
+                  ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                   : '#'
         }
       >

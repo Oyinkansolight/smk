@@ -111,7 +111,7 @@ const Page = () => {
                 <p className='text-[#B1B1B1] text-[32px] '>Lesson Note</p>
               </Link>
               <Link
-                href={`/student/period/classwork?name=${data?.id}`}
+                href={`/student/period/activity?name=${data?.id}&activityType=CLASS_WORK`}
                 className='h-[250px] w-full rounded-lg bg-[#EFF6F7] grid place-content-center text-center'
               >
                 <Image
@@ -123,7 +123,7 @@ const Page = () => {
                 <p className='text-[#B1B1B1] text-[32px] '>Class Work</p>
               </Link>
               <Link
-                href={`/student/period/quiz?name=${data?.id}`}
+                href={`/student/period/activity?name=${data?.id}&activityType=QUIZ`}
                 className='h-[250px] w-full rounded-lg bg-[#F4EFF7] grid place-content-center text-center'
               >
                 <Image
@@ -134,6 +134,10 @@ const Page = () => {
                 />
                 <p className='text-[#B1B1B1] text-[32px] '>Pop Quiz</p>
               </Link>
+
+
+          
+
             </div>
           </div>
         </div>

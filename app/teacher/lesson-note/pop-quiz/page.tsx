@@ -1,5 +1,6 @@
 'use client';
 
+import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
@@ -12,7 +13,7 @@ import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { BiChevronDown, BiChevronRight, BiSortUp } from 'react-icons/bi';
+import { BiChevronRight } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
@@ -21,16 +22,24 @@ export default function Page() {
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
-  const { data: arms } = useGetTeacherClassArms({
+  const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.[0]?.id,
   });
-  const { data: activities } = useGetClassActivity({
+  const { data: activities, isLoading: isLoadingActivity } = useGetClassActivity({
     typeOfActivity: 'QUIZ',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
     sessionId: profile?.currentSession?.[0]?.id,
   });
+
+  if (isLoadingActivity || isLoadingArms) {
+    return (
+      <div className='flex flex-col justify-center items-center h-1/2'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <div className='h-full layout'>
@@ -46,7 +55,8 @@ export default function Page() {
         onChange={setIdx}
         selectedIdx={idx}
       />
-      <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
+
+      {/* <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
         <input className='rounded-full border p-3' placeholder='search' />
         <div className='flex-1' />
         <div className='flex items-center'>
@@ -54,15 +64,21 @@ export default function Page() {
           <BiChevronDown className='w-6 h-6' />
         </div>
         <BiSortUp className='h-6 w-6' />
-      </div>
+      </div> */}
+
       <div className='h-4' />
-      <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-5 md:grid-cols-6'>
-        <div className='col-span-2'>Title</div>
-        <div>Subject</div>
-        <div className='hidden md:block'>Class</div>
-        <div>Date Assigned</div>
-        <div>Date Due</div>
-      </div>
+
+      {activities?.data &&
+        activities?.data.length > 0 &&
+        <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-5 md:grid-cols-6'>
+          <div className='col-span-2'>Title</div>
+          <div>Subject</div>
+          <div className='hidden md:block'>Class</div>
+          <div>Date Assigned</div>
+          <div>Date Due</div>
+        </div>
+      }
+
       <div className='flex flex-col gap-2'>
         {activities?.data &&
           (activities?.data.length === 0 ? (
@@ -108,7 +124,11 @@ export default function Page() {
             ))
           ))}
       </div>
-      <PaginatedCounter pageCount={5} currentPage={0} />
+
+      {activities?.data &&
+        activities?.data.length > 0 &&
+        <PaginatedCounter pageCount={activities?.paging.totalPage} currentPage={activities?.paging.currentPage} />
+      }
     </div>
   );
 }
@@ -156,7 +176,7 @@ function LessonTaskListItem({
       <div>{moment(dateCreated).format('MMMM DD')}</div>
       <div className='flex justify-between items-center'>
         <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
-          {moment(dueDate).format('MMMM DD')}
+          {dueDate ? moment(dueDate).format('MMMM DD') : "-"}
         </div>
         <BiChevronRight className='h-10 w-10' />
       </div>

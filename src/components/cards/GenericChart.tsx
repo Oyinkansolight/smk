@@ -17,7 +17,6 @@ const GenericChart = ({
   content,
   className,
   description,
-  titleClassName,
   contentClassName,
 }: GenericChartProps) => {
   return (
@@ -30,7 +29,7 @@ const GenericChart = ({
       <div className='flex flex-col'>
         <div
           className={clsxm(
-            'flex flex-col gap-4 bg-white pb-3',
+            'flex flex-col gap-4 bg-white pb-3'
             // titleClassName
           )}
         >
@@ -38,11 +37,7 @@ const GenericChart = ({
             <div className='flex flex-col gap-2'>
               <div className='text-3xl font-bold'>{title}</div>
 
-              {description &&
-                <p className='text-[#545454]'>
-                  {description}
-                </p>
-              }
+              {description && <p className='text-[#545454]'>{description}</p>}
             </div>
             {/* <Select
               name='filter'

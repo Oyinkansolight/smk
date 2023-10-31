@@ -31,7 +31,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
                 img='/images/sidebar-icons/Subjects.png'
                 subtitle={`${time24Converter(v.startTime)} -
                   ${time24Converter(v.endTime)}`}
-                title={v.subject.name ?? 'Subject_Name'}
+                title={v?.subject?.name ?? 'Subject_Name'}
               />
             ))}
           </div>

@@ -1,11 +1,15 @@
 'use client';
 
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
-import { useGetPeriodById } from '@/server/institution/period';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import {
+  useGetPeriodActivity,
+  useGetPeriodById,
+} from '@/server/institution/period';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
 const Page = () => {
@@ -13,8 +17,25 @@ const Page = () => {
   // Get the URL query string
   const queryString = useSearchParams();
   const periodId = queryString?.get('name');
+  const activityType = queryString?.get('activityType');
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  let currentTermInfo;
+  if (currentTerm) {
+    currentTermInfo = JSON.parse(currentTerm);
+  }
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
+  const { data: activities, isLoading: activitiesLoading } =
+    useGetPeriodActivity({
+      sessionId: currentSessionId,
+      typeOfActivity: activityType,
+      periodId,
+      termId: currentTermInfo?.id,
+    });
+  console.log(data);
+  console.log(activities?.data);
+
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -22,6 +43,9 @@ const Page = () => {
     day: 'numeric',
   });
 
+  useEffect(() => {
+    console.log(activities?.data);
+  }, [activities]);
   const qadata = {
     typeOfActivity: 'CLASS_WORK',
     format: 'MULTIPLE_CHOICE',
@@ -280,7 +304,7 @@ const Page = () => {
                       {' '}
                       {data?.teacher
                         ? data?.teacher?.user.firstName
-                        : 'No_name'}{' '}
+                        : 'No_name'}
                     </div>
                   </div>
                 </div>
@@ -295,16 +319,29 @@ const Page = () => {
             </div>
 
             <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
-              <div className='h3'>Pop Quiz</div>
-              <div className='flex flex-col gap-[14px]'>
-                {qadata.questionsV2.map((item, idx) => (
-                  <AssignmentQuestionView
-                    key={idx}
-                    question={item.question}
-                    options={item.options}
-                    correctOption={item.correctOption}
-                  />
-                ))}
+              <div className='h3'>
+                {' '}
+                {activityType === 'CLASS_WORK' ? 'Classwork' : 'Pop Quiz'}
+              </div>
+              <div className='flex flex-col gap-[14px] pb-32'>
+                {activities  && activities?.data.length > 0 ? (
+                  <div>
+                    {activities?.data[0]?.questionsV2?.map((item, idx) => (
+                      <div key={idx}>
+                        <AssignmentQuestionView
+                          question={item.question}
+                          options={item.options}
+                          correctOption={item.correctOption}
+                        />
+                      </div>
+                    ))}
+                    <button className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '>
+                      Submit Activity
+                    </button>
+                  </div>
+                ) : (
+                  <div>No Activity yet</div>
+                )}
               </div>
             </div>
           </div>
