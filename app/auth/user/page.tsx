@@ -9,18 +9,24 @@ import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
-import { getStorageValueWithExpiry, setStorageValueWithExpiry } from '@/lib/helper';
+import {
+  getStorageValueWithExpiry,
+  setStorageValueWithExpiry,
+} from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { SignInParams, useSignIn } from '@/server/auth';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 export default function StudentAuth() {
+  const queryString = useSearchParams();
+  const actionName = queryString?.get('action');
+
   const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = React.useState(false);
   const [isChecked, setIsChecked] = React.useState(false);
@@ -41,11 +47,15 @@ export default function StudentAuth() {
     } else {
       setCheckUserLogin(false);
     }
+    if (actionName === 'logout' && typeof window !== 'undefined') {
+      sessionStorage.clear();
+      localStorage.clear();
+    }
   }, [router]);
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
-  }
+  };
 
   const setUserDashboard = (path: string) => {
     setStorageValueWithExpiry(
@@ -54,7 +64,7 @@ export default function StudentAuth() {
       path,
       1000 * 60 * 60 * 24 * 7
     );
-  }
+  };
 
   const { mutateAsync } = useSignIn();
   const onSubmit = async (data: SignInParams) => {
@@ -65,7 +75,7 @@ export default function StudentAuth() {
     if (isChecked) {
       data.rememberMe = true;
     }
-
+   
     try {
       const response = await mutateAsync(data);
 
@@ -127,9 +137,7 @@ export default function StudentAuth() {
   };
 
   if (typeof window === 'undefined' || checkUserLogin) {
-    return (
-      <GenericLoader />
-    )
+    return <GenericLoader />;
   }
 
   return (
@@ -184,7 +192,11 @@ export default function StudentAuth() {
                   <div className='-m-2 mb-4 flex flex-wrap justify-between'>
                     <div className='w-auto p-2'>
                       <div className='flex items-center'>
-                        <Checkbox type='warning' isChecked={isChecked} onClick={toggleCheckbox} />
+                        <Checkbox
+                          type='warning'
+                          isChecked={isChecked}
+                          onClick={toggleCheckbox}
+                        />
                         <label
                           className='ml-2 text-sm font-medium text-gray-900'
                           htmlFor='default-checkbox'

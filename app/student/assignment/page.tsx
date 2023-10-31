@@ -2,19 +2,39 @@
 'use client';
 
 import NextImage from '@/components/NextImage';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetAcademicSessions } from '@/server/dashboard';
 import { useGetSubjectList } from '@/server/institution';
+import { useGetClassActivity } from '@/server/institution/period';
 import Link from 'next/link';
+import { useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { AiOutlineSearch } from 'react-icons/ai';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
   const { data: allSession } = useGetAcademicSessions();
   const { data: allSubject } = useGetSubjectList();
+  const [subjectId, setSubjectId] = useState('');
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  let currentTermInfo;
+  if (currentTerm) {
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const userData = getFromSessionStorage('user');
+  // allSubject && setSubjectId(allSubject[0]);
+
+  let user;
+  if (userData) {
+    user = JSON.parse(userData);
+  }
+
+  const { data: activities, isLoading: activitiesLoading } =
+    useGetClassActivity({
+      subjectId,
+      typeOfActivity: 'ASSIGNMENT',
+      classArmId: user?.currentStudentInfo?.class.id ?? '',
+    });
 
   return (
     <div className='flex flex-col w-full px-4 gap-y-10'>
@@ -23,6 +43,9 @@ const Page = () => {
         <div className='flex justify-end'>
           <div className='flex justify-end   text-gray-500'>
             <select
+              onChange={(e) => {
+                setSubjectId(e.target.value);
+              }}
               name=''
               id=''
               className='p-2 bg-[#FFF6E7] border !text-xs rounded'
@@ -30,8 +53,7 @@ const Page = () => {
               <option value=''> Session & Term</option>
               {(allSession?.data ?? []).map((v: any, i: number) => (
                 <option key={i} value={v.id}>
-                  {' '}
-                  {v.session}{' '}
+                  {v.session}
                 </option>
               ))}
             </select>
@@ -39,7 +61,7 @@ const Page = () => {
         </div>
         <div className='my-4 flex justify-between items-center border-y py-4 border-black'>
           <div className='w-[250px] h-9 rounded-full border px-3 py-1 flex justify-center items-center'>
-            <AiOutlineSearch size={20} />{' '}
+            <AiOutlineSearch size={20} />
             <input
               type='text'
               placeholder='Search....'
@@ -55,8 +77,7 @@ const Page = () => {
               <option value=''>Subject</option>
               {(allSubject ?? []).map((v: any, i: number) => (
                 <option key={i} value={v.id}>
-                  {' '}
-                  {v.name}{' '}
+                  {v.name}
                 </option>
               ))}
             </select>

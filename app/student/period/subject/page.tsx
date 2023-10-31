@@ -134,6 +134,18 @@ const Page = () => {
                 />
                 <p className='text-[#B1B1B1] text-[32px] '>Pop Quiz</p>
               </Link>
+              <Link
+                href={`/student/period/activity?name=${data?.id}&activityType=ASSIGNMENT`}
+                className='h-[250px] w-full rounded-lg bg-[#F4EFF7] grid place-content-center text-center'
+              >
+                <Image
+                  src='/images/sidebar-icons/Assignment.png'
+                  width={180}
+                  height={175}
+                  alt='quiz'
+                />
+                <p className='text-[#B1B1B1] text-[32px] '>Assignment</p>
+              </Link>
 
 
           

@@ -8,10 +8,9 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import { uploadDocument } from '@/firebase/init';
 import useCustomEditor from '@/hooks/useEditor';
 import clsxm from '@/lib/clsxm';
-import { getCurrentDate, getFromSessionStorage } from '@/lib/helper';
+import { getCurrentDate } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useGetAllClassArms } from '@/server/institution/class-arm';
 import {
   CreateClassActivityParams,
   CreateLessonNoteTypes,
@@ -19,7 +18,6 @@ import {
   useCreateClassActivity,
   useCreateLessonNote,
 } from '@/server/institution/lesson-note';
-import { Institution } from '@/types/classes-and-subjects';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -33,6 +31,8 @@ import BookSVG from '~/svg/book.svg';
 import ComputerUploadSVG from '~/svg/computer_upload.svg';
 import TakePictureSVG from '~/svg/take_picture.svg';
 import { isLocal } from '@/constant/env';
+import { useSearchParams } from 'next/navigation';
+import { BaseInput } from '@/components/input';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
@@ -58,6 +58,8 @@ interface CreateClassActivityViewProps {
 }
 
 export default function CreateClassActivityView({ closeModal }: CreateClassActivityViewProps) {
+  const params = useSearchParams();
+  const classArmId = params?.get('classArmId');
   const editor = useCustomEditor();
   const { register, watch, handleSubmit, getValues, control } = useForm({
     mode: 'all',
@@ -72,21 +74,12 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
   const { data: profile } = useGetProfile();
-  const institutionString = getFromSessionStorage('institution');
+
   const [createActivityParams] = useSessionStorage(
     'create_activity_params',
     {} as CreateClassActivityParams
   );
-  const institution = institutionString
-    ? (JSON.parse(institutionString) as Institution)
-    : undefined;
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const { data: arms } = useGetAllClassArms({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    classId: createActivityParams.classes,
-    institutionId: institution?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
+
 
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
@@ -98,7 +91,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    if (data.format.value === activityFormats[0].key) {
+    if (type !== activityTypes[3]?.value && data?.format?.value === activityFormats[0].key) {
       questions.forEach((v) => {
         if (!v.question) {
           toast.error('Please fill all questions');
@@ -124,7 +117,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
       });
     }
 
-    if (data.format.value === activityFormats[1].key) {
+    if (type !== activityTypes[3].value && data.format.value === activityFormats[1].key) {
       if (editor?.getHTML() === '' || editor?.getHTML() === '<p></p>') {
         toast.error('Please fill all questions');
         return;
@@ -133,7 +126,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
 
     let questionsV2;
 
-    if (data.format.value === activityFormats[0].key) {
+    if (type !== activityTypes[3].value && data.format.value === activityFormats[0].key) {
       questionsV2 = questions.map((v) => ({
         question: v.question,
         options: v.options,
@@ -141,7 +134,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
       }));
     }
 
-    if (data.format.value === activityFormats[1].key) {
+    if (type !== activityTypes[3].value && data.format.value === activityFormats[1].key) {
       questionsV2 = [
         {
           question: editor?.getHTML() ?? '',
@@ -178,9 +171,9 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
           periodId: createActivityParams?.periodId,
           subjectId: createActivityParams?.subject,
           teacherId: profile?.userInfo?.staff?.id,
-          title: 'Title',
-          classArmId: createActivityParams?.classes,
-          instructionalTeachingActivity: editor?.getHTML() ?? '',
+          title: data?.lessonTitle,
+          classArmId: classArmId,
+          instructionalTeachingActivity: editor?.getHTML() !== '<p></p>' ? editor?.getHTML() : '',
         };
 
         if (!path) delete payload.uploadUrl;
@@ -248,6 +241,19 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
               }}
             />
           </div>
+
+          {type === activityTypes[3].value && (
+            <div className='col-span-2 mt-2'>
+              <BaseInput
+                required
+                name='lessonTitle'
+                label='Title'
+                register={register}
+                placeholder='Lesson Note Title'
+              />
+            </div>
+          )}
+
           {type !== activityTypes[3].value && (
             <div>
               <div className='font-bold text-xs pb-1'>Format</div>

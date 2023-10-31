@@ -32,14 +32,14 @@ export default function NextPeriod({
               <div className='h-28 w-28 rounded-lg bg-slate-400' />
               <div className='flex flex-col gap-3 flex-1'>
                 <div className='text-[#3479EA] font-semibold text-sm leading-5'>
-                  4th Period, {data.startTime} - {data.endTime}
+                  {data.startTime} - {data.endTime}
                 </div>
                 <div className='text-[#615E83] font-bold text-2xl leading-7'>
                   {data.subject.name}
                 </div>
                 <div>
                   <div className='text-[#615E83] font-bold'>
-                    <span className='text-[#333F4859]'>Time Left:</span> 32 Mins
+                    <span className='text-[#333F4859]'>Time Left:</span> A Few Moments
                   </div>
                   <div className='w-full h-2 bg-[#DADADA] rounded-full overflow-hidden'>
                     <div className='w-20 h-full bg-[#FFC136]' />

@@ -39,6 +39,8 @@ type BaseInputProps<
   onClick?: (e?: any) => void;
   disable?: boolean;
   value?: string;
+  labelGap?: boolean;
+  required?: boolean;
 };
 
 const helperTextClasses: Record<string, string> = {
@@ -72,6 +74,8 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
   onClick,
   value,
   disable = false,
+  labelGap = true,
+  required = false,
   ...otherInputProps
 }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -97,7 +101,10 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
     );
 
   return (
-    <div className='space-y-2 w-full'>
+    <div className={clsxm(
+      'w-full',
+      labelGap ? 'space-y-2' : 'space-y-0'
+    )}>
       <label
         htmlFor={name}
         className={clsxm(
@@ -125,6 +132,7 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
               disable && 'bg-[#E5E5E5]'
             )}
             value={value}
+            required={required}
             {...otherInputProps}
             {...(register ? register(name, validation) : {})}
           />

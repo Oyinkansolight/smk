@@ -50,6 +50,7 @@ const Page = () => {
     day: currentDay,
     weekid: currentWeekInfo?.id,
   });
+
   return (
     <div className='flex gap x-4 gap-y-10'>
       <div className='w-full px-4'>
@@ -73,7 +74,7 @@ const Page = () => {
             <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-6'>
               {data?.data.map((item: any, i: number) => (
                 <div
-                  key={item.id ?? i}
+                  key={i}
                   className='h-[250px] relative w-full border-[#3361FF] border rounded-lg bg-[#F2F5FF] p-[10px]'
                 >
                   <div className='flex justify-between items-center'>
