@@ -16,7 +16,7 @@ export default function NewStudentAvatar() {
       <div className='font-bold flex flex-col'>
         <div className='text-[#615E83]'>{user?.name ?? ''} </div>
         <div className='text-[#E87F1E]'>
-          {user?.currentStudentInfo.class.class.name}
+          {user?.currentStudentInfo?.class?.class?.name}
         </div>
       </div>
       <div>
