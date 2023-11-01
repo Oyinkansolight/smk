@@ -50,7 +50,7 @@ export default function NewStudentDashboard() {
     weekId: currentWeekInfo?.id ?? '',
   });
   const { isLoading: loading, data: todaysPeriod } = useGetTodaysPeriod({
-    classId: user?.currentStudentInfo.class.class.id,
+    classId: user?.currentStudentInfo?.class?.class?.id,
     day: currentDay,
     weekid: currentWeekInfo?.id ?? '',
   });
