@@ -48,6 +48,10 @@ const AllStudent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
 
+  const [isReplace, setIsReplace] = useState(false);
+
+  const handleIsReplace = () => setIsReplace(!isReplace);
+
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
 
@@ -90,6 +94,10 @@ const AllStudent = () => {
   const bulkStudentUpload = async () => {
     const formData = new FormData();
     formData.append('file', files);
+
+    if (isReplace) {
+      formData.append('replace', 'true');
+    }
 
     try {
       setLoading(true);
@@ -198,11 +206,13 @@ const AllStudent = () => {
         {isBulk && (
           <BulkUser
             loading={loading}
+            isReplace={isReplace}
             onClickHandler={() => {
               setisBulk(!isBulk);
             }}
             setFile={setFile}
             file={files}
+            handleIsReplace={handleIsReplace}
             link='/pdfs/upload_student_template.xlsx'
             bulkStudentUpload={bulkStudentUpload}
           />

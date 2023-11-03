@@ -31,6 +31,9 @@ const AllStaff = () => {
   const [loading, setLoading] = useState(false);
   const [files, setFile] = useState<File | undefined>(undefined);
 
+  const [isReplace, setIsReplace] = useState(false);
+
+  const handleIsReplace = () => setIsReplace(!isReplace);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
@@ -58,6 +61,11 @@ const AllStaff = () => {
     if (files) {
       formData.append('file', files);
     }
+
+    if (isReplace) {
+      formData.append('replace', 'true');
+    }
+
     try {
       setLoading(true);
       const response = await handleCreateBulkStudent.mutateAsync(formData);
@@ -149,11 +157,13 @@ const AllStaff = () => {
         {isBulk && (
           <BulkUser
             loading={loading}
+            isReplace={isReplace}
             onClickHandler={() => {
               setIsBulk(!isBulk);
             }}
             setFile={setFile}
             file={files}
+            handleIsReplace={handleIsReplace}
             bulkStudentUpload={bulkStudentUpload}
             link='/pdfs/upload_teacher_template.csv'
           />

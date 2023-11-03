@@ -127,7 +127,7 @@ const Biodata = ({
           name='staffType'
           options={[
             'TEACHING',
-            'NON TEACHING',
+            'NON_TEACHING',
           ]}
           register={register}
           validation={{
