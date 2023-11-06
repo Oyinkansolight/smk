@@ -38,7 +38,7 @@ const Page = () => {
   const [startActivity, setStartActivity] = useState(false);
   const [currentView, setCurrentView] = useState(0);
   const [answers, setAnswers] = useState<any>([]);
-  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  // const currentTerm = getFromSessionStorage('currentTerm') ?? '';
 
   const userData = getFromSessionStorage('user');
   // allSubject && setSubjectId(allSubject[0]);
@@ -129,8 +129,8 @@ const Page = () => {
               className='p-2 bg-[#FFF6E7] border !text-xs rounded'
             >
               <option value=''> Session & Term</option>
-              {(allSession?.data ?? []).map((v: any, i: number) => (
-                <option key={i} value={v.id}>
+              {(allSession?.data ?? []).map((v: any) => (
+                <option key={v.id} value={v.id}>
                   {v.session}
                 </option>
               ))}
