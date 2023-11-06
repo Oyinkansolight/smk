@@ -20,6 +20,7 @@ export default function Page() {
   const studentId = params?.get('studentId');
   const classArmId = params?.get('classArmId');
   const activityId = params?.get('activityId');
+  const submissionId = params?.get('submissionId');
   const [scores, setScores] = useState([]);
 
   const { mutateAsync: submitAssessment } = useGradeSubmission()
@@ -45,7 +46,7 @@ export default function Page() {
 
   const handleGrading = async () => {
     const res = await submitAssessment({
-      submissionId: submissions?.id ?? "",
+      submissionId: submissionId ?? "",
       answers: scores,
       // scores,
       // addToGradeList
@@ -69,7 +70,7 @@ export default function Page() {
   return (
     <div className='h-full layout mt-10'>
       <div className='text-3xl text-[#D4D5D7]'>
-        {'Assignments > Submissions > Grade'}
+        {'Classwork > Submissions > Grade'}
       </div>
       <div className='font-bold text-3xl py-8 h3'>
         <div>Grade</div>

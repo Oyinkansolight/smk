@@ -138,13 +138,21 @@ export function useGetFolderFiles(folderId?: number) {
   return query;
 }
 
-export function useGetFolderAndFiles(folderId?: string, subjectId?: string) {
+export function useGetFolderAndFiles(
+  folderId?: string,
+  subjectId?: string,
+  search?: string
+) {
   let currentParams;
 
   if (subjectId) {
     currentParams = { id: folderId, subjectId };
   } else {
     currentParams = { id: folderId };
+  }
+
+  if (search) {
+    currentParams = { ...currentParams, search };
   }
 
   const query = useQuery({

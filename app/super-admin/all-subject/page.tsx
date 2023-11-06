@@ -134,10 +134,10 @@ const AllSubjects = () => {
               <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
                 {item?.classes?.length ?? '0'}{' '}
               </div>
-              <div className='col-span-3 text-center'>
+              {/* <div className='col-span-3 text-center'>
                 {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
-              </div>
-              <div className='col-span-2 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
+              </div> */}
+              <div className='col-span-5 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
                 <button
                   onClick={() => {
                     router.push(`/super-admin/subject?id=${item.id ?? ''}`);

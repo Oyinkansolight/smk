@@ -54,7 +54,7 @@ export default function RootLayout({
           )}
           <div className='flex flex-1 flex-row overflow-y-hidden h-[100vh]'>
             <div className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
-              <div className='px-2'>{children}</div>
+              <div className='layout'>{children}</div>
             </div>
 
             {/* <AdminSidebar open={open} handleToggle={handleToggle} /> */}

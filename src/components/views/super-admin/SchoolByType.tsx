@@ -130,8 +130,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
             (schools?.data ?? []).map((item: Institution, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
-                  {idx + 1}
-                  {/* {(pagingData.page - 1) * 10 + (schools?.paging?.totalPage ?? idx + 1)} */}
+                  {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
                 <div className='col-span-5 lg:col-span-3'>

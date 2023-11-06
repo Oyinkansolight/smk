@@ -33,6 +33,7 @@ import { toast } from 'react-toastify';
 import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
+import { useDebounce } from 'usehooks-ts';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -322,6 +323,9 @@ const UploadDocument = ({
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
 
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+
   const pathname = usePathname();
 
 
@@ -344,11 +348,15 @@ const UploadDocument = ({
     setOpenUploadModal(!openUploadModal);
   };
 
+  const handleSearch = (value: string) => {
+    setQuery(value);
+  };
+
   const {
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id);
+  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, "", query);
 
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
@@ -388,6 +396,17 @@ const UploadDocument = ({
       setCurrentFile('');
     }
   }, [currentFile, isModalOpen, url]);
+
+  useEffect(() => {
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm || debouncedSearchTerm === '') {
+        refetchFolderFiles()
+      }
+    };
+
+    refetchSearchRecords();
+
+  }, [refetchFolderFiles, debouncedSearchTerm]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
   const handleUseAssignSubjectsToFolder = useAssignSubjectsToFolder();
@@ -673,6 +692,7 @@ const UploadDocument = ({
           </div>
 
           <Table
+            handleSearchParam={handleSearch}
             columns={columns}
             data={
               [...(folderContent ?? [])]
