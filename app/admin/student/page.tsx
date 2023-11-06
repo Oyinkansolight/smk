@@ -25,16 +25,6 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -43,13 +33,13 @@ const Page = () => {
 
   const router = useRouter();
   const p = useSearchParams();
-  const studentId = p?.get('id');
+
   const { data, error } = useGetStudentList({
     id: p?.get('id'),
   });
-  
+
   const student = data;
-  console.log(student);
+
   const { data: classArmData } = useGetClassArmInfo(student?.class?.id);
 
   const toggleModal = () => {
@@ -110,9 +100,8 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
-          (student?.user ?? [])[0]?.lastName ?? ''
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
+          }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -151,10 +140,9 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <StudentDashboardView
-              schoolType={'Secondary'}
-              classArm={`${
-                student ? student?.class?.class.name : 'Loading...'
-              }  ${student ? student?.class?.arm : ''}`}
+              schoolType="Secondary"
+              classArm={`${student ? student?.class?.class.name : 'Loading...'
+                }  ${student ? student?.class?.arm : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={0}
             />

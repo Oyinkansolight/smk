@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
 import { Student } from '@/types/institute';
-import { PaginatedData } from '@/types/pagination';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetStudentList(params: any) {
@@ -96,6 +95,28 @@ export function useTakeAttendance() {
       (
         await request.post(
           '/v1/institutions/institutes/take-attendance',
+          params,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data.data.data,
+  });
+  return mutation;
+}
+
+interface UpdateSubjectAttendanceParams {
+  attendenceId?: string;
+  status?: 'PRESENT' | 'ABSENT' | 'LATE';
+}
+
+export function useUpdateSubjectAttendance() {
+  const mutation = useMutation({
+    mutationKey: 'take_attendance',
+    mutationFn: async (params: UpdateSubjectAttendanceParams) =>
+      (
+        await request.put(
+          '/v1/institutions/institutes/update-attendance',
           params,
           {
             withCredentials: true,

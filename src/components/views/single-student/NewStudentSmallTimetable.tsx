@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import clsxm from '@/lib/clsxm';
-import { time24Converter } from '@/lib/helper';
+import { currentSchedule, time24Converter } from '@/lib/helper';
 import Image from 'next/image';
 import { RotatingLines } from 'react-loader-spinner';
 
@@ -13,7 +13,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
   });
 
   return (
-    <div className='w-full md:w-[290px] max-h-[500px] overflow-y-auto'>
+    <div className='w-full max-h-[500px] overflow-y-auto'>
       <div className='flex justify-end'>
         <div className='flex justify-center items-center p-2 border border-[#EE9D50] rounded-sm bg-[#FFF6E7] w-max px-2 h-[30px] whitespace-nowrap'>
           {formattedDate}
@@ -27,7 +27,7 @@ export default function NewStudentSmallTimetable({ loading, todaysPeriod }) {
             {(todaysPeriod ?? []).map((v: any, i: number) => (
               <TimetableItem
                 key={i}
-                isCurrent={i === 0}
+                isCurrent={currentSchedule(v.startTime, v.endTime)}
                 img='/images/sidebar-icons/Subjects.png'
                 subtitle={`${time24Converter(v.startTime)} -
                   ${time24Converter(v.endTime)}`}

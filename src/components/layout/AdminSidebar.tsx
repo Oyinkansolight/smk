@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ButtonLink from '@/components/links/ButtonLink';
-import ROUTES from '@/constant/routes';
 import clsxm from '@/lib/clsxm';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
@@ -22,16 +21,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully');
-      if (typeof window !== 'undefined') {
-        await sessionStorage.clear();
-        await localStorage.clear();
-      }
-
-      toast.info('Redirecting to login page...');
-
-      setTimeout(() => {
-        router.push(ROUTES.ADMIN_AUTH);
-      }, 1500);
+      router.push('/auth/user?action=logout');
     }
   };
 

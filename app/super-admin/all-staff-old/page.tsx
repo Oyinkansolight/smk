@@ -27,7 +27,7 @@ const AllStaff = () => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, query: value });
+    setPagingData({ ...pagingData, page: 1, query: value });
   };
 
 

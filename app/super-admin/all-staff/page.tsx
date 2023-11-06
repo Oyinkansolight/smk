@@ -29,7 +29,7 @@ const AllStaff = () => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, query: value });
+    setPagingData({ ...pagingData, page: 1, query: value });
   };
 
 
@@ -274,7 +274,7 @@ const AllStaff = () => {
 
               <button
                 onClick={handleNextPage}
-                disabled={staff && staff?.data?.staffs?.length < 10}
+                disabled={staff && staff?.data?.staffs?.length < 10 || pagingData.page === staff.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -295,7 +295,7 @@ const AllStaff = () => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={staff && staff?.data?.staffs?.length < 10}
+                disabled={staff && staff?.data?.staffs?.length < 10 || pagingData.page === staff.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

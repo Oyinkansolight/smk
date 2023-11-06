@@ -13,7 +13,6 @@ import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import {
   useGetStudentById,
-  useGetStudentSubjectList,
 } from '@/server/institution';
 import { useGetClassArmInfo } from '@/server/institution/class';
 import { useSearchParams } from 'next/navigation';
@@ -29,7 +28,6 @@ const SingleStudentDashboard = () => {
   );
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();
-  const studentId = p?.get('id');
 
   const {
     data: student,
@@ -38,7 +36,6 @@ const SingleStudentDashboard = () => {
   } = useGetStudentById({
     id: p?.get('id'),
   });
-  console.log(student);
 
   const getFileURL = async (path) => {
     let result = '';
@@ -59,9 +56,8 @@ const SingleStudentDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
-          (student?.user ?? [])[0]?.lastName
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName
+          }`}
         school={student?.institution?.instituteName ?? 'Loading...'}
         id={student?.studentId ?? ''}
         student
@@ -100,9 +96,8 @@ const SingleStudentDashboard = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${
-                !isStudentLoading ? student?.class?.class.name : 'Loading...'
-              }  ${!isStudentLoading ? student?.class?.arm : ''}`}
+              classArm={`${!isStudentLoading ? student?.class?.class.name : 'Loading...'
+                }  ${!isStudentLoading ? student?.class?.arm : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={0}
             />

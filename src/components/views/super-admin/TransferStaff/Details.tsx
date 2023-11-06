@@ -2,25 +2,27 @@
 'use client';
 
 import FormInput from '@/components/input/formInput';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import FormSelectInstitution from '@/components/input/formSelectInstitution';
+import FormSelectTeachers from '@/components/input/formSelectteachers';
 
 type Iprops = {
   register: any;
   errors: any;
+  staffs: any;
+  schools: any;
 };
 
-const Biodata = ({ register, errors }: Iprops) => {
+const Biodata = ({ register, errors, staffs, schools }: Iprops) => {
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Bio Details</h2>
       <p>Kindly enter the details below:</p>
 
-      <div className='my-10 w-1/2 gap-6'>
-        <FormInput
-          label='Enter Staff ID No'
-          placeholder='Details here'
+      <div className='my-10 w-full gap-6'>
+        <FormSelectTeachers
+          label='Select staff to transfer'
           name='staffId'
+          options={staffs}
           register={register}
           validation={{
             required: 'Staff Id is required',
@@ -33,24 +35,24 @@ const Biodata = ({ register, errors }: Iprops) => {
           }
         />
       </div>
-
-      <div className='my-10 gap-6'>
-        <FormInput
-          label='Staff Name'
-          placeholder='Details here'
-          name='staffName'
+      <div className='my-10 w-full gap-6'>
+        <FormSelectInstitution
+          label='Select new institution'
+          name='newInstitutionId'
+          options={schools}
           register={register}
           validation={{
-            required: 'Staff Name is required',
+            required: 'New Institution is required',
           }}
           helper={
-            errors?.staffName && {
-              message: errors?.studentName?.message,
+            errors?.newInstitutionId && {
+              message: errors?.newInstitutionId?.message,
               type: 'danger',
             }
           }
         />
       </div>
+
       <div className='my-10 '>
         <FormInput
           label='Enter Reason for Transfer'

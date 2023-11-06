@@ -13,7 +13,7 @@ import {
   useGetAcademicEvent,
 } from '@/server/Schedule';
 import moment from 'moment';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
@@ -30,13 +30,15 @@ interface dataType {
 }
 export default function StudentDashboardView({ currentTermId }: any) {
   const [schoolType, setschoolType] = useState<string | null>('');
+  const routeDetails = usePathname();
+  const isAdmin = routeDetails?.includes('super-admin') && true;
 
   const queryString = useSearchParams();
   const { data, isLoading } = useGetAcademicEvent();
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditEvent, setIsEditEvent] = useState(false);
-  const [session, setsession] = useState<string | null>('');
+  const [session, setSession] = useState<string | null>('');
   const [title, settitle] = useState('');
   const [startDate, setstartDate] = useState('');
   const [endDate, setendDate] = useState('');
@@ -114,13 +116,13 @@ export default function StudentDashboardView({ currentTermId }: any) {
     }
 
     try {
-      setloading(true);
+      setLoading(true);
       if (!isEditEvent) {
         const response = await handdleCreateAcademicCalendar.mutateAsync(data);
 
         if (response) {
           toast.success('Event created successfully');
-          setloading(false);
+          setLoading(false);
           setIsOpen(false);
           //2 Second - Open Success Modal
         }
@@ -133,14 +135,14 @@ export default function StudentDashboardView({ currentTermId }: any) {
 
         if (response) {
           toast.success('Event updated successfully');
-          setloading(false);
+          setLoading(false);
           setIsEditEvent(false);
           //2 Second - close Success Modal
         }
       }
       resetState();
     } catch (error) {
-      setloading(false);
+      setLoading(false);
       resetState();
       toast.error(getErrMsg(error));
     }
@@ -158,7 +160,7 @@ export default function StudentDashboardView({ currentTermId }: any) {
     // initial data: Secondary school, Output: "Secondary"
     setschoolType(st && st.replace(' School', ''));
     // setterm(currrentterm);
-    setsession(currrentsession);
+    setSession(currrentsession);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -186,15 +188,17 @@ export default function StudentDashboardView({ currentTermId }: any) {
           }
           className='max-w-[777px] w-full h-[267px]'
         />
-        <div className='flex flex-row gap-x-7'>
-          <Button
-            onClick={handleModal}
-            variant='outline'
-            className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
-          >
-            Add Event
-          </Button>
-        </div>
+        {isAdmin && (
+          <div className='flex flex-row gap-x-7'>
+            <Button
+              onClick={handleModal}
+              variant='outline'
+              className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
+            >
+              Add Event
+            </Button>
+          </div>
+        )}
       </div>
       {isOpen && (
         <AddEvent
@@ -270,46 +274,48 @@ export default function StudentDashboardView({ currentTermId }: any) {
                     {moment(item.endDate).format('ll')}
                   </p>
                 </div>
-                <div className='relative flex items-center justify-end  space-x-2 col-span-2'>
-                  {action == idx + 1 && (
-                    <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[100px] z-10'>
-                      <button
+                {isAdmin && (
+                  <div className='relative flex items-center justify-end  space-x-2 col-span-2'>
+                    {action == idx + 1 && (
+                      <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[100px] z-10'>
+                        <button
+                          onClick={() => {
+                            setItemToEdit(item ?? '');
+                            handleModalEditEvent();
+                            setAction(null);
+                          }}
+                          className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setItemToDelete(item.id ?? '');
+                            toggleModal();
+                          }}
+                          className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                    {action && (
+                      <div
+                        className='fixed inset-0 z-[1]'
                         onClick={() => {
-                          setItemToEdit(item ?? '');
-                          handleModalEditEvent();
                           setAction(null);
                         }}
-                        className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setItemToDelete(item.id ?? '');
-                          toggleModal();
-                        }}
-                        className='w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
+                      ></div>
+                    )}
+                    <BsThreeDotsVertical
                       onClick={() => {
-                        setAction(null);
+                        setAction(idx + 1);
                       }}
-                    ></div>
-                  )}
-                  <BsThreeDotsVertical
-                    onClick={() => {
-                      setAction(idx + 1);
-                    }}
-                    size={20}
-                  />
-                </div>
+                      size={20}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           ))

@@ -31,7 +31,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, query: value });
+    setPagingData({ ...pagingData, page: 1, query: value });
   };
 
 
@@ -283,7 +283,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               <button
                 onClick={handleNextPage}
-                disabled={schools && schools?.data?.length < 10}
+                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -304,7 +304,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={schools && schools?.data?.length < 10}
+                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

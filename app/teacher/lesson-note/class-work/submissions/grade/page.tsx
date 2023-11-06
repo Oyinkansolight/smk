@@ -1,31 +1,62 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
 import clsxm from '@/lib/clsxm';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactSelect from 'react-select';
 import Toggle from 'react-toggle';
-import { useGetStudentSubmittedActivity } from '@/server/institution/lesson-note';
+import { useGetStudentSingleSubmittedActivity, useGradeSubmission } from '@/server/institution/lesson-note';
 import { useSearchParams } from 'next/navigation';
-import logger from '@/lib/logger';
 import GenericLoader from '@/components/layout/Loader';
+import SubjectiveViewer from '@/components/cards/SubjectiveViewer';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
+import { SubmissionAnswer } from '@/types/test-and-exam';
+import { toast } from 'react-toastify';
 
 export default function Page() {
   const params = useSearchParams();
   const [addToGradeList, setAddToGradeList] = useState(false);
-  const classArmId = params?.get('classArmId');
-  const subjectId = params?.get('subjectId');
   const studentId = params?.get('studentId');
+  const classArmId = params?.get('classArmId');
+  const activityId = params?.get('activityId');
+  const [scores, setScores] = useState([]);
+
+  const { mutateAsync: submitAssessment } = useGradeSubmission()
+
   const { data: submissions, isLoading: isLoadingActivity } =
-    useGetStudentSubmittedActivity({
+    useGetStudentSingleSubmittedActivity({
       type: 'CLASS_WORK',
       classArmId,
-      subjectId,
+      activityId,
       studentId
     });
 
-  logger(submissions);
+  useEffect(() => {
+    if (submissions?.[0]?.activity?.questionsV2) {
+      setScores(
+        submissions?.[0]?.activity?.questionsV2?.map((question, idx) => ({
+          answerId: question.id,
+          score: 0,
+        }))
+      );
+    }
+  }, [submissions?.[0]?.activity?.questionsV2]);
+
+  const handleGrading = async () => {
+    const res = await submitAssessment({
+      submissionId: submissions?.id ?? "",
+      answers: scores,
+      // scores,
+      // addToGradeList
+    })
+
+    if (res) {
+      toast.success('Assessment graded successfully')
+    } else {
+      toast.error('An error occurred')
+    }
+  }
 
   if (isLoadingActivity) {
     return (
@@ -50,24 +81,39 @@ export default function Page() {
       <div className='flex lg:flex-row flex-col gap-4'>
         <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden w-full'>
           <div className='flex justify-start p-4'>
-            {
+            {submissions?.[0]?.activity?.format === 'MULTIPLE_CHOICE' &&
               submissions?.[0]?.activity?.questionsV2?.map((question, idx) => (
                 <div className='flex flex-row gap-6 w-full items-center' key={submissions[idx].id}>
                   <div className="h3">{idx + 1}.</div>
                   <div className='w-full'>
                     <AssignmentQuestionView
-                      showAssesment
+                      showAssessment
                       question={question.question ?? ""}
                       options={question.options ?? []}
                       correctOption={question.correctOption}
+                      studentAnswer={submissions?.[0]?.answers?.[idx]?.answerOption}
                     />
                   </div>
                 </div>
               ))
             }
+
+            {submissions?.[0]?.activity?.format === 'SUBJECTIVE' && submissions?.[0]?.activity?.questionsV2[0]?.question && (
+              <div className='flex flex-col gap-10'>
+                <SubjectiveViewer content={submissions?.[0]?.activity?.questionsV2[0]?.question} />
+
+                <div className='flex flex-col gap-4'>
+                  <div className='h3 px-6'>Student Answer</div>
+                  <div className='-mt-10'>
+                    <SubjectiveViewer content={submissions?.[0]?.answers?.[0]?.answerText} />
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
-        <div className=' rounded-lg bg-white p-2'>
+        <div className=' rounded-lg bg-white p-4'>
           <div className='font-bold text-xl'>Grade Assessment</div>
           <div className='flex flex-col gap-4 mt-6'>
             <div>Add to grade list</div>
@@ -85,7 +131,7 @@ export default function Page() {
                 <span>{addToGradeList ? <div>Yes</div> : <div>No</div>}</span>
               </div>
             </label>
-            <EditStudentGrade />
+            <EditStudentGrade questions={submissions?.[0]?.activity?.questionsV2} setScores={setScores} handleGrading={handleGrading} />
           </div>
         </div>
       </div>
@@ -93,8 +139,17 @@ export default function Page() {
   );
 }
 
-function EditStudentGrade() {
+function EditStudentGrade({ questions, setScores, handleGrading }: { questions: any[], setScores: Dispatch<SetStateAction<never[]>>, handleGrading: () => void }) {
   const [isEditing, setIsEditing] = useState(false);
+
+  const handleScoreChange = (score: number, idx: number) => {
+    setScores((prev): any => {
+      const newScores: SubmissionAnswer[] = [...prev];
+      newScores[idx].score = score;
+      return newScores;
+    });
+  }
+
   return (
     <div className='font-bold'>
       <div className='grid py-4 grid-cols-2'>
@@ -102,15 +157,14 @@ function EditStudentGrade() {
         <div>Score</div>
       </div>
       <div className='flex flex-col gap-2'>
-        {Array(1)
-          .fill(0)
+        {questions
           .map((v, i) => (
             <div
               className='grid grid-cols-2 items-center bg-[#EFF7F6] p-3 rounded-lg'
-              key={i}
+              key={v.id}
             >
               <div>Question {i + 1}</div>
-              <EditableFormSelect isEditing={isEditing} />
+              <EditableFormSelect isEditing={isEditing} handleScoreChange={handleScoreChange} />
             </div>
           ))}
       </div>
@@ -119,7 +173,10 @@ function EditStudentGrade() {
           <Button
             variant='secondary'
             className='bg-[#1A8FE3] text-xs w-36 justify-center'
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={() => {
+              setIsEditing(!isEditing);
+              isEditing && handleGrading();
+            }}
           >
             Submit
           </Button>
@@ -136,7 +193,7 @@ function EditStudentGrade() {
   );
 }
 
-function EditableFormSelect({ isEditing }: { isEditing: boolean }) {
+function EditableFormSelect({ isEditing, handleScoreChange }: { isEditing: boolean, handleScoreChange: (score: number, idx: number) => void }) {
   const [value, setValue] = useState<{ label: number } | null>(null);
   const className = 'min-w-[10rem] h-10';
   const getBorderColor = () => {
@@ -146,10 +203,14 @@ function EditableFormSelect({ isEditing }: { isEditing: boolean }) {
   };
   return isEditing ? (
     <ReactSelect
+      isSearchable={false}
       className={className}
-      onChange={(v) => setValue(v)}
+      onChange={(v) => {
+        setValue(v)
+        handleScoreChange(v?.label as number, 0)
+      }}
       value={value}
-      options={Array(6)
+      options={Array(11)
         .fill(0)
         .map((v, i) => ({ label: i }))}
     />

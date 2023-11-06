@@ -3,7 +3,7 @@
 import TabBar from '@/components/layout/TabBar';
 import ExamCalendar from '@/components/views/student.tsx/Examtimetable';
 import Timetable from '@/components/views/student.tsx/Timetable';
-import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
+import ClassCalendarContent from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarContent';
 // import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -38,7 +38,7 @@ const Page = () => {
       </div>
 
       {page === 0 && <Timetable isClassTimeTable={true} />}
-      {page === 1 && <AcademicCalendar sessionCalendarData={[]} />}
+      {page === 1 && <ClassCalendarContent />}
       {page === 2 && <ExamCalendar isClassTimeTable={false} />}
     </div>
   );

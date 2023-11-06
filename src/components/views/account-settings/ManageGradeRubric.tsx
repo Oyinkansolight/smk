@@ -96,14 +96,12 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
     refetch();
 
     setTimeout(() => {
-      console.log(isLoadingRubric);
-      console.log(isError);
-
-
+      // console.log(isLoadingRubric);
+      // console.log(isError);
 
       if (!isLoadingRubric || !isError) {
-        console.log(data);
-        console.log(isError);
+        // console.log(data);
+        // console.log(isError);
 
 
         if (data && data?.length > 0) {

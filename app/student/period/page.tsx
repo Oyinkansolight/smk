@@ -22,7 +22,6 @@ const Page = () => {
     'Saturday',
   ];
 
-
   const currentDate = new Date();
   const currentDayIndex = currentDate.getDay(); // Returns a number from 0 (Sunday) to 6 (Saturday)
   const currentDay = daysOfWeek[currentDayIndex];
@@ -96,7 +95,8 @@ const Page = () => {
                   <p className='text-[#808080] text-[10px] '>{item.theme}</p>
                   <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
                   <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
-                    <BiUser className='h-8 w-8' /> <p> {item?.teacher[0]?.staffType ?? ''}</p>
+                    <BiUser className='h-8 w-8' />{' '}
+                    <p> {item?.teacher[0]?.user?.firstName ?? ''}</p>
                   </div>
 
                   <div className='flex justify-center absolute bottom-4 w-full'>

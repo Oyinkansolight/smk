@@ -8,6 +8,7 @@ import {
   SubmittedActivity,
 } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
+import { SubmissionParams } from '@/types/test-and-exam';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -223,6 +224,35 @@ export function useGetStudentSubmittedActivity(
   return query;
 }
 
+export interface GetStudentSingleSubmittedActivity {
+  type?: (typeof ACTIVITY_TYPES)[number];
+  classArmId?: string | number | null;
+  studentId?: string | number | null;
+  activityId?: string | number | null;
+}
+
+export function useGetStudentSingleSubmittedActivity(
+  params: GetStudentSingleSubmittedActivity
+) {
+  const query = useQuery({
+    queryKey: 'get_student_single_submitted_activity',
+    queryFn: async () =>
+      (
+        await request.get(
+          `/v1/institutions/lessons/get-submittted-class-activties`,
+          {
+            params,
+          }
+        )
+      ).data.data.data as SubmittedActivity,
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params.activityId, params.studentId, refetch]);
+  return query;
+}
+
 export interface GetAllLessonNotesParams {
   page?: string | number | null;
   limit?: string | number | null;
@@ -247,4 +277,15 @@ export function useGetAllLessonNotes(params: GetAllLessonNotesParams) {
     refetch({ cancelRefetch: true });
   }, [params.page, params.limit, params.sessionId, params.termId, refetch]);
   return query;
+}
+
+export function useGradeSubmission() {
+  const mutation = useMutation({
+    mutationKey: 'grade_submission',
+    mutationFn: (params: SubmissionParams) =>
+      request.post('v1/institutions/lessons/mark-activity-submission', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
 }

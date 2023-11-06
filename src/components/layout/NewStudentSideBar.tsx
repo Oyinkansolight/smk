@@ -1,4 +1,5 @@
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -7,6 +8,13 @@ import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 
+const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+const currentSession = getFromLocalStorage('currentSession') ?? '';
+
+let currentSessionInfo;
+if (currentSession) {
+  currentSessionInfo = JSON.parse(currentSession);
+}
 const items = [
   {
     img: '/images/sidebar-icons/Dashboard.png',
@@ -25,7 +33,7 @@ const items = [
   },
   {
     img: '/images/sidebar-icons/Dashboard-1.png',
-    url: '/student/timetable',
+    url: `/student/timetable?session=${currentSessionId}&schooltype=${currentSessionInfo[0]?.institutionType}`,
     label: 'Timetable',
   },
 
@@ -39,11 +47,11 @@ const items = [
   //   url: '/student/test-and-exam',
   //   label: 'Test and Exam',
   // },
-  // {
-  //   img: '/images/sidebar-icons/Performance.png',
-  //   url: '/student/performance',
-  //   label: 'Grade Book',
-  // },
+  {
+    img: '/images/sidebar-icons/Performance.png',
+    url: '/student/performance',
+    label: 'Grade Book',
+  },
   {
     img: '/images/sidebar-icons/Dashboard-4.png',
     url: '/student/profile',

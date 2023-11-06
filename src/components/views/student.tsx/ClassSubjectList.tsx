@@ -1,23 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AccordionAlt from '@/components/accordions/AccordionAlt';
 import EmptyView from '@/components/misc/EmptyView';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteControlledModal from '@/components/modal/DeleteModalContent';
-import PeriodStatusModal from '@/components/modals/period-status-modal';
-import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
-import logger from '@/lib/logger';
-import request from '@/server';
-import { getErrMsg } from '@/server';
 import {
-  useGetAcademicSessionsTermsWeek,
   useRemoveStaffSubject,
 } from '@/server/institution';
 import { useState } from 'react';
-import { AiFillFlag } from 'react-icons/ai';
-import { BiChevronLeft } from 'react-icons/bi';
-import { BsArrowDownCircle } from 'react-icons/bs';
-import { RiDeleteBin2Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
 export default function SubjectList({
@@ -30,32 +18,13 @@ export default function SubjectList({
   managedClassArm?: any;
   teacher?: string;
 }) {
-  // const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
-  const [itemId, setItemId] = useState('');
-  const [currentView, setCurrentView] = useState(0);
+  const [itemId] = useState('');
+  const [currentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
-  const [showcontent, setShowContent] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [periods, setperiods] = useState<any[]>([]);
-  const [periodsList, setperiodsList] = useState<any[]>([]);
-  const [weekid, setWeekId] = useState<string | number>(0);
-  const [subjectId, setSubjectId] = useState<string | number>(0);
-  const [classId, setClassId] = useState<string | number>(0);
+  const [, setSubjectId] = useState<string | number>(0);
 
-  // const [periodsUpdate, setperiodsUpdate] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const removeSubject = useRemoveStaffSubject();
-  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
-  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
-
-  let currentTermInfo;
-
-  if (currentTerm) {
-    currentTermInfo = JSON.parse(currentTerm);
-  }
-  const { data } = useGetAcademicSessionsTermsWeek(currentTermInfo?.id ?? '');
-  console.log(data);
 
   const handleDeleteSubject = async () => {
     const response = await removeSubject.mutateAsync({
@@ -73,28 +42,6 @@ export default function SubjectList({
   const toggleDeleteModal = () => {
     setShowDeleteModal(!showDeleteModal);
   };
-
-  function fetchPeriods(weekId: string | number) {
-    setWeekId(weekId);
-    setLoading(true);
-
-    request
-      .get(
-        `/v1/institutions/institutes/get-week-periods-by-subject?sessionId=${currentSessionId}&termId=${currentTermInfo?.id}&weekId=${weekId}&subjectId=${subjectId}&classId=${classId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        setLoading(false);
-        setperiods(res.data.data.data.data);
-        // setperiodsList(getOccurrences(res.data.data.data.data));
-      })
-      .catch((err) => {
-        logger(err);
-        setLoading(false);
-      });
-  }
 
   return (
     <>

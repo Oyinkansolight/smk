@@ -3,7 +3,6 @@ import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
 import BasicModal from '@/components/modal/Basic';
 import LogoutModalContent from '@/components/modals/logout';
-import ROUTES from '@/constant/routes';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
@@ -31,12 +30,13 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
   const { data: profileData } = useGetProfile();
 
   const handleLogout = async () => {
-    toast.success('You have been logged out successfully');
-    if (typeof window !== 'undefined') {
-      await sessionStorage.clear();
-      await localStorage.clear();
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm('Are you sure you want to logout?');
+    if (confirm) {
+      // eslint-disable-next-line no-alert
+      toast.success('You have been logged out successfully');
+      router.push('/auth/user?action=logout');
     }
-    router.push(ROUTES.USER_AUTH);
   };
 
   return (

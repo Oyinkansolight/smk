@@ -77,7 +77,7 @@ const EditClass = () => {
     }
 
     if (stage === 2) {
-      const assignedSubjects = data.subjects.map((subject) => subject.value);
+      // const assignedSubjects = data.subjects.map((subject) => subject.value);
 
       const classArmData = {
         id: classArmId,
