@@ -4,17 +4,20 @@ import { useEffect, useState } from 'react';
 export default function TeacherAttendanceListItem({
   index,
   name,
-  onTakeAttendance,
   status,
+  onTakeAttendance,
+  onUpdateAttendance
 }: {
   index: number;
   name: string;
   status?: 'ABSENT' | 'PRESENT' | 'LATE' | undefined;
   onTakeAttendance?: (status: 'ABSENT' | 'PRESENT' | 'LATE') => void;
+  onUpdateAttendance?: (status: 'ABSENT' | 'PRESENT' | 'LATE') => void;
 }) {
   const [isPresent, setIsPresent] = useState<
     'present' | 'absent' | 'late' | null
   >(null);
+  const [isTouched, setIsTouched] = useState(false); // to check if the record has been touched
 
   useEffect(() => {
     if (status) {
@@ -22,8 +25,8 @@ export default function TeacherAttendanceListItem({
         status === 'ABSENT'
           ? 'absent'
           : status === 'PRESENT'
-          ? 'present'
-          : 'late'
+            ? 'present'
+            : 'late'
       );
     }
   }, [status]);
@@ -51,7 +54,9 @@ export default function TeacherAttendanceListItem({
             disabled={isPresent === 'present'}
             onClick={() => {
               setIsPresent('present');
-              onTakeAttendance && onTakeAttendance('PRESENT');
+              setIsTouched(true);
+              !isTouched && onTakeAttendance && onTakeAttendance('PRESENT');
+              isTouched && onUpdateAttendance && onUpdateAttendance('PRESENT');
             }}
             className='py-3 px-12 rounded-sm bg-green-500 font-bold text-white items-center flex justify-center'
           >
@@ -67,7 +72,9 @@ export default function TeacherAttendanceListItem({
             className='py-3 px-12 rounded-sm bg-red-500 font-bold text-white items-center flex justify-center'
             onClick={() => {
               setIsPresent('absent');
-              onTakeAttendance && onTakeAttendance('ABSENT');
+              setIsTouched(true);
+              !isTouched && onTakeAttendance && onTakeAttendance('ABSENT');
+              isTouched && onUpdateAttendance && onUpdateAttendance('ABSENT');
             }}
           >
             Absent
@@ -82,7 +89,9 @@ export default function TeacherAttendanceListItem({
             className='py-3 px-12 rounded-sm bg-yellow-500 font-bold text-white items-center flex justify-center'
             onClick={() => {
               setIsPresent('late');
-              onTakeAttendance && onTakeAttendance('LATE');
+              setIsTouched(true);
+              !isTouched && onTakeAttendance && onTakeAttendance('LATE');
+              isTouched && onUpdateAttendance && onUpdateAttendance('LATE');
             }}
           >
             Late

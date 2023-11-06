@@ -12,9 +12,8 @@ import {
   useGetAcademicSessionsTermsWeek,
   useGetSubjectById,
 } from '@/server/institution';
-import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
-import { ClassArm, Week } from '@/types/classes-and-subjects';
+import { Week } from '@/types/classes-and-subjects';
 import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -26,17 +25,17 @@ export default function Page() {
   const { data: terms, isLoading: isLoadingSessions } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
   });
-  const [idx, setIdx] = useState(0);
+
   const term = terms?.data[0]?.id;
   const [currentPage, setCurrentPage] = useState(1);
   const { data: weeks, isLoading: isLoadingTermWeeks } = useGetAcademicSessionsTermsWeek(term);
   const [currentWeek, setCurrentWeek] = useState(0);
   const isGenericApp = Cookies.get('isGenericApp') === 'Y';
 
-  const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
-    teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
+  // const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
+  //   teacherId: profile?.userInfo?.staff?.id,
+  //   sessionId: profile?.currentSession?.[0]?.id,
+  // });
 
   const sortedWeeks: Week[] = [];
 
@@ -46,16 +45,13 @@ export default function Page() {
     }
   }
 
-  const foundClasses: any = [];
-  const parsedArms: (ClassArm | any)[] | undefined = arms?.map((arm) => {
-    console.log(arm.class?.id);
-
-    console.log(!foundClasses.includes(arm.class?.id));
-    if (!foundClasses.includes(arm.class?.id)) {
-      foundClasses.push(arm.class?.id);
-      return arm;
-    }
-  });
+  // const foundClasses: any = [];
+  // const parsedArms: (ClassArm | any)[] | undefined = arms?.map((arm) => {
+  //   if (!foundClasses.includes(arm.class?.id)) {
+  //     foundClasses.push(arm.class?.id);
+  //     return arm;
+  //   }
+  // });
 
   const {
     data,
@@ -76,7 +72,7 @@ export default function Page() {
 
   const { data: subject, isLoading: subjectLoading } = useGetSubjectById(params?.get('id') as string);
 
-  const isLoadingData = isLoadingSessions || isLoadingTermWeeks || isLoadingArms || isLoadingPeriodSubjects;
+  const isLoadingData = isLoadingSessions || isLoadingTermWeeks || subjectLoading || isLoadingPeriodSubjects;
 
   if (!data || isLoadingData) {
     return (

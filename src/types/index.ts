@@ -1,3 +1,5 @@
+import { Term } from '@/types/classes-and-subjects';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface DashboardOverview {
   Total_Students?: number;
@@ -64,4 +66,18 @@ export interface ChartParams {
 export interface BatteryLevel {
   battryLevel?: number;
   deviceId?: string;
+}
+
+export interface EnrollmentAnalysis {
+  TERTIARY: any[];
+  ECCDE: any[];
+  BTVET: any[];
+  PRIMARY: any[];
+  TVET: any[];
+  SECONDARY: SecondaryEnrollment[];
+}
+
+export interface SecondaryEnrollment {
+  term: Term;
+  enrollmentCount: number;
 }

@@ -61,7 +61,7 @@ export default function Page() {
                     )}&classArmId=${params?.get(
                       'classArmId'
                     )}&type=${params?.get('type')}&submissionId=${submission.id}&format=${submission.activity.format}
-                    &studentId=${submission.student.id}`}
+                    &studentId=${submission.student.id}&activityId=${submission.activity.id}`}
                     key={submission.id}
                   >
                     <AssignmentListItem

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type OpenGraphType = {
@@ -41,6 +42,27 @@ export function getFromSessionStorage(key: string): string | null {
     return sessionStorage.getItem(key);
   }
   return null;
+}
+
+export function currentSchedule(startTime, endTime) {
+  const currentDay = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+  });
+  const currentTime = new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  // Find the schedule entry for the current day
+
+  // If there is no schedule entry for the current day, the restaurant is closed
+  if (!startTime || !endTime) {
+    return false;
+  }
+
+  // Compare the current time with the opening and closing times
+  return currentTime >= startTime && currentTime <= endTime;
 }
 
 export function convertTimestampToTime(timestamp: string) {
@@ -203,3 +225,34 @@ export const getStorageValueWithExpiry = (
   }
   return item.value;
 };
+
+export function getDueDate(dueDate: string) {
+  // Get the current date and time
+  const currentDate = new Date();
+
+  // Replace this with the date you want to compare
+  const givenDate = new Date(dueDate); // Example: November 2, 2023
+
+  // Compare the given date with the current date
+  if (givenDate > currentDate) {
+    return true;
+  } else false;
+}
+
+export function extractMinutesFromString(inputString) {
+  // Use a regular expression to match and extract the minute number
+  const match = inputString.match(/\d+/);
+
+  if (match) {
+    // Convert the matched text to a number
+    const minutes = parseInt(match[0], 10);
+    return minutes;
+  } else {
+    // If no match is found, return a default value or handle it accordingly
+    return 0; // Return 0 in case of no match
+  }
+}
+
+//function to render and preserve the structure of an html string in react
+export const renderHTML = (rawHTML: string) =>
+  React.createElement('div', { dangerouslySetInnerHTML: { __html: rawHTML } });

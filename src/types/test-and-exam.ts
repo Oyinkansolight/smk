@@ -53,3 +53,13 @@ export interface Term {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface SubmissionParams {
+  submissionId: string;
+  answers: SubmissionAnswer[];
+}
+
+export interface SubmissionAnswer {
+  answerId: string;
+  score: number;
+}

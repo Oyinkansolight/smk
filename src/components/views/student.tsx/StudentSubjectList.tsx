@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import AccordionAlt from '@/components/accordions/AccordionAlt';
 import EmptyView from '@/components/misc/EmptyView';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteControlledModal from '@/components/modal/DeleteModalContent';
-import PeriodStatusModal from '@/components/modals/period-status-modal';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import request from '@/server';
-import { getErrMsg } from '@/server';
 import {
   useGetAcademicSessionsTermsWeek,
   useRemoveStaffSubject,
 } from '@/server/institution';
 import { useState } from 'react';
-import { AiFillFlag } from 'react-icons/ai';
 import { BiChevronLeft } from 'react-icons/bi';
 import { BsArrowDownCircle } from 'react-icons/bs';
 import { RiDeleteBin2Line } from 'react-icons/ri';
@@ -30,20 +26,17 @@ export default function SubjectList({
   managedClassArm?: any;
   teacher?: string;
 }) {
-  // const subjects = ['Mathematics', 'Further Mathematics', 'English', 'Civic'];
   const [itemId, setItemId] = useState('');
   const [currentView, setCurrentView] = useState(0);
   const [subjectName, setSubjectName] = useState('');
-  const [showcontent, setShowContent] = useState(false);
+  const [showContent, setShowContent] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [periods, setperiods] = useState<any[]>([]);
-  const [periodsList, setperiodsList] = useState<any[]>([]);
-  const [weekid, setWeekId] = useState<string | number>(0);
+  const [periods, setPeriods] = useState<any[]>([]);
+  const [, setWeekId] = useState<string | number>(0);
   const [subjectId, setSubjectId] = useState<string | number>(0);
   const [classId, setClassId] = useState<string | number>(0);
 
-  // const [periodsUpdate, setperiodsUpdate] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const removeSubject = useRemoveStaffSubject();
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
@@ -55,7 +48,6 @@ export default function SubjectList({
     currentTermInfo = JSON.parse(currentTerm);
   }
   const { data } = useGetAcademicSessionsTermsWeek(currentTermInfo?.id ?? '');
-  console.log(data);
 
   const handleDeleteSubject = async () => {
     const response = await removeSubject.mutateAsync({
@@ -87,7 +79,7 @@ export default function SubjectList({
       )
       .then((res) => {
         setLoading(false);
-        setperiods(res.data.data.data.data);
+        setPeriods(res.data.data.data.data);
         // setperiodsList(getOccurrences(res.data.data.data.data));
       })
       .catch((err) => {
@@ -268,7 +260,7 @@ export default function SubjectList({
                       <div key={v.id}>
                         <div
                           onClick={() => {
-                            setShowContent(!showcontent);
+                            setShowContent(!showContent);
                             setCurrentIndex(i);
                             fetchPeriods(v.id);
                           }}
@@ -278,7 +270,7 @@ export default function SubjectList({
                             <BsArrowDownCircle
                               className={clsxm(
                                 'h-[27px] w-[27px] text-[#7F9CFF] transition-transform duration-300',
-                                showcontent && currentIndex === i
+                                showContent && currentIndex === i
                                   ? 'rotate-180'
                                   : 'text-[#C3CAD9]'
                               )}
@@ -305,7 +297,7 @@ export default function SubjectList({
                             </button>
                           </div>
                         </div>
-                        {showcontent && currentIndex === i && (
+                        {showContent && currentIndex === i && (
                           <div className='w-full border duration-200 transition-all flex flex-col divide-y-2 !text-xs mt-[33px]'>
                             {periods.map((v: any, j: number) => {
                               return (

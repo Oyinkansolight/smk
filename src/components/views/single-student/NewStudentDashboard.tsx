@@ -2,24 +2,15 @@
 
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
-import { getFromSessionStorage, time24Converter } from '@/lib/helper';
-import { getErrMsg } from '@/server';
-import { useGetProfile } from '@/server/auth';
+import { getFromSessionStorage } from '@/lib/helper';
 import { useGetStudentOngoingPeriod } from '@/server/government/student';
-import { useGetSessionTerms } from '@/server/government/terms';
-import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useGetTodaysPeriod } from '@/server/student';
-import { useClockIn, useClockOut } from '@/server/teacher';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { BiUser } from 'react-icons/bi';
 import { RotatingLines } from 'react-loader-spinner';
-import { toast } from 'react-toastify';
-import Books from '~/svg/books.svg';
 
 export default function NewStudentDashboard() {
-  const { data: profile } = useGetProfile();
-
   const daysOfWeek = [
     'Sunday',
     'Monday',
@@ -45,44 +36,46 @@ export default function NewStudentDashboard() {
     // currentTermInfo = JSON.parse(currentTerm);
     currentWeekInfo = JSON.parse(currentWeek) ?? {};
   }
-  const { data, isLoading } = useGetStudentOngoingPeriod({
+  const { data: ongoingPeriod, isLoading } = useGetStudentOngoingPeriod({
     studentId: user?.currentStudentInfo.id ?? '',
     weekId: currentWeekInfo?.id ?? '',
   });
+
   const { isLoading: loading, data: todaysPeriod } = useGetTodaysPeriod({
     classId: user?.currentStudentInfo?.class?.class?.id,
     day: currentDay,
     weekid: currentWeekInfo?.id ?? '',
   });
 
-  const clockIn = useClockIn();
-  const clockOut = useClockOut();
-  const { data: clockInfo } = useGetClockInfo();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0].id,
-  });
-  const handleClockIn = async () => {
-    try {
-      const res = await clockIn.mutateAsync({
-        sessionId: profile?.currentSession?.[0]?.id ?? 0,
-        termId: (terms?.data ?? [])[0].id,
-      });
-      toast.success(res.data.data.message);
-    } catch (error) {
-      toast.error(getErrMsg(error));
-    }
-  };
+  // const clockIn = useClockIn();
+  // const clockOut = useClockOut();
+  // const { data: clockInfo } = useGetClockInfo();
+  // const { data: terms } = useGetSessionTerms({
+  //   sessionId: profile?.currentSession?.[0].id,
+  // });
 
-  const handleClockOut = async () => {
-    try {
-      const res = await clockOut.mutateAsync({
-        clockOutTime: `${new Date().toISOString()}`,
-      });
-      toast.success(res.data.data.message);
-    } catch (error) {
-      toast.error(getErrMsg(error));
-    }
-  };
+  // const handleClockIn = async () => {
+  //   try {
+  //     const res = await clockIn.mutateAsync({
+  //       sessionId: profile?.currentSession?.[0]?.id ?? 0,
+  //       termId: (terms?.data ?? [])[0].id,
+  //     });
+  //     toast.success(res.data.data.message);
+  //   } catch (error) {
+  //     toast.error(getErrMsg(error));
+  //   }
+  // };
+
+  // const handleClockOut = async () => {
+  //   try {
+  //     const res = await clockOut.mutateAsync({
+  //       clockOutTime: `${new Date().toISOString()}`,
+  //     });
+  //     toast.success(res.data.data.message);
+  //   } catch (error) {
+  //     toast.error(getErrMsg(error));
+  //   }
+  // };
 
   // ===========================================================
 
@@ -143,47 +136,61 @@ export default function NewStudentDashboard() {
 
         <div className='p-4 rounded-xl border bg-[#FAFAFA]'>
           <div className='h4 text-[#746D69]'>Your Actions</div>
-          {!isLoading ? (
+          {!isLoading && ongoingPeriod && (
             <div className='flex flex-wrap gap-4 mt-2'>
-              {(data ?? []).map((v: any, i: number) => (
-                <div
-                  key={v.id ?? i}
-                  className='h-[250px] relative w-full border-[#3361FF] border rounded-lg bg-[#F2F5FF] p-[10px]'
-                >
-                  <div className='flex justify-between items-center'>
-                    <div>
-                      <h1 className='font-bold text-base'>
-                        {' '}
-                        {v?.subject?.name}{' '}
-                      </h1>
-                      <p className='text-[#808080] text-[10px] '>
-                        {time24Converter(v.startTime)} -{' '}
-                        {time24Converter(v.endTime)}
-                      </p>
-                    </div>
-                    <div>
-                      <Books className='h-8 w-8 ' />
-                    </div>
-                  </div>
-                  <h1 className='font-bold mt-3 text-sm'>Topic:</h1>
-                  <p className='text-[#808080] text-[10px] '>{v.theme}</p>
-                  <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
-                  <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
-                    <BiUser className='h-8 w-8' /> <p> {v?.teacher ?? ''}</p>
-                  </div>
+              <div className='h-[250px] max-w-[250px] relative w-full flex flex-col space-y-4 items-center border rounded-lg bg-[#fff] p-[10px]'>
+                <div className='bg-[#BB7101] rounded-md py-1 px-3 text-base font-bold text-white'>
+                  1 Ongoing Period
+                </div>
 
-                  <div className='flex justify-center absolute bottom-4 w-full'>
-                    <Link
-                      href={`/student/period/subject?name=${v.id}`}
-                      className='bg-[#3361FF] font-medium text-white px-2 py-1 rounded-2xl'
-                    >
-                      Go to Period
-                    </Link>
+                <div>
+                  <Image
+                    src='/images/sidebar-icons/Classes.png'
+                    height={76}
+                    width={76}
+                    alt='period'
+                  />
+                </div>
+
+                <h1 className='text-lg'>Periods</h1>
+
+                <Link
+                  href={`/student/period/subject?name=${ongoingPeriod.id}`}
+                  className='border border-[#3361FF] bg-[#fff] font-medium  text-lg  px-4 py-1 rounded-lg'
+                >
+                  View
+                </Link>
+
+                {/* <div className='flex justify-between items-center'>
+                  <div>
+                    <h1 className='font-bold text-base'>
+                      {' '}
+                      {ongoingPeriod?.subject?.name}{' '}
+                    </h1>
+                    <p className='text-[#808080] text-[10px] '>
+                      {time24Converter(ongoingPeriod.startTime)} -{' '}
+                      {time24Converter(ongoingPeriod.endTime)}
+                    </p>
+                  </div>
+                  <div>
+                    <Books className='h-8 w-8 ' />
                   </div>
                 </div>
-              ))}
+                <h1 className='font-bold mt-3 text-sm'>Topic:</h1>
+                <p className='text-[#808080] text-[10px] '>
+                  {ongoingPeriod.theme}
+                </p>
+                <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
+                <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
+                  <BiUser className='h-8 w-8' />{' '}
+                  <p> {ongoingPeriod?.teacher[0]?.user?.firstName ?? ''}</p>
+                </div> */}
+
+                <div className='flex justify-center absolute bottom-4 w-full'></div>
+              </div>
             </div>
-          ) : (
+          )}
+          {isLoading && (
             <div className='flex justify-center'>
               <RotatingLines
                 width='100'

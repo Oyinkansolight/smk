@@ -1,4 +1,5 @@
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -7,52 +8,63 @@ import { BiExit } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 
-const items = [
-  {
-    img: '/images/sidebar-icons/Dashboard.png',
-    url: '/student',
-    label: 'Dashboard',
-  },
-  {
-    img: '/images/sidebar-icons/Classes.png',
-    url: '/student/period',
-    label: 'Period',
-  },
-  {
-    img: '/images/sidebar-icons/Subjects.png',
-    url: '/student/subjects',
-    label: 'Subjects',
-  },
-  {
-    img: '/images/sidebar-icons/Dashboard-1.png',
-    url: '/student/timetable',
-    label: 'Timetable',
-  },
-
-  {
-    img: '/images/sidebar-icons/Assignment.png',
-    url: '/student/assignment',
-    label: 'Assignments',
-  },
-  // {
-  //   img: '/images/sidebar-icons/testandexam.png',
-  //   url: '/student/test-and-exam',
-  //   label: 'Test and Exam',
-  // },
-  // {
-  //   img: '/images/sidebar-icons/Performance.png',
-  //   url: '/student/performance',
-  //   label: 'Grade Book',
-  // },
-  {
-    img: '/images/sidebar-icons/Dashboard-4.png',
-    url: '/student/profile',
-    label: 'Settings',
-  },
-];
 export default function NewStudentSidebar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  const currentSession = getFromLocalStorage('currentSession') ?? '';
+
+  let currentSessionInfo;
+
+  if (currentSession) {
+    currentSessionInfo = JSON.parse(currentSession);
+  }
+
+  const items = [
+    {
+      img: '/images/sidebar-icons/Dashboard.png',
+      url: '/student',
+      label: 'Dashboard',
+    },
+    {
+      img: '/images/sidebar-icons/Classes.png',
+      url: '/student/period',
+      label: 'Period',
+    },
+    {
+      img: '/images/sidebar-icons/Subjects.png',
+      url: '/student/subjects',
+      label: 'Subjects',
+    },
+    {
+      img: '/images/sidebar-icons/Dashboard-1.png',
+      url: `/student/timetable?session=${currentSessionId}&schooltype=${currentSessionInfo[0]?.institutionType}`,
+      label: 'Timetable',
+    },
+
+    {
+      img: '/images/sidebar-icons/Assignment.png',
+      url: '/student/assignment',
+      label: 'Assignments',
+    },
+    // {
+    //   img: '/images/sidebar-icons/testandexam.png',
+    //   url: '/student/test-and-exam',
+    //   label: 'Test and Exam',
+    // },
+    {
+      img: '/images/sidebar-icons/Performance.png',
+      url: '/student/performance',
+      label: 'Grade Book',
+    },
+    {
+      img: '/images/sidebar-icons/Dashboard-4.png',
+      url: '/student/profile',
+      label: 'Settings',
+    },
+  ];
+
 
   const handleLogout = async () => {
     // eslint-disable-next-line no-alert
@@ -63,6 +75,7 @@ export default function NewStudentSidebar() {
       router.push('/auth/user?action=logout');
     }
   };
+
   const handleToggle = () => setOpen(!open);
 
   return (

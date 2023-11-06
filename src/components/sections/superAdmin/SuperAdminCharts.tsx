@@ -12,6 +12,7 @@ import LowBatteriesTable from '@/components/tables/LowBatteriesTable';
 import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions';
 import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable';
 import { useGetAdminCharts } from '@/server/dashboard';
+import { EnrollmentAnalysis } from '@/types';
 import React from 'react';
 
 const SuperAdminCharts = ({
@@ -93,8 +94,8 @@ const SuperAdminCharts = ({
 
             <GenericChart
               title='Enrolment Analysis'
-              content={<EnrolmentAnalysis />}
               description='Total number of enrolment in the state'
+              content={<EnrolmentAnalysis instituteIndex={null} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
             />
 
             <GenericChart

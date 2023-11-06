@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Checkbox } from '@/components/input';
 import DragDropGeneric from '@/components/input/DragDropGeneric';
 import React from 'react';
 import { ImSpinner2 } from 'react-icons/im';
@@ -13,15 +14,19 @@ interface propType {
   loading: boolean;
   file: File | undefined;
   link?: string;
+  isReplace?: boolean;
+  handleIsReplace?: () => void;
 }
 
-function AddActivityName({
+function BulkUser({
   onClickHandler,
   setFile,
   file,
   bulkStudentUpload,
   loading = false,
   link,
+  isReplace,
+  handleIsReplace
 }: propType) {
   return (
     <div className='fixed inset-0 z-10 grid place-content-center rounded-sm bg-black/30'>
@@ -75,17 +80,24 @@ function AddActivityName({
         </div> */}
         <DragDropGeneric value={file} onChange={setFile} link={link} />
 
-        <div className='flex justify-center mt-2'>
-          <button
-            onClick={bulkStudentUpload}
-            className='w-max rounded border bg-secondary px-8 py-3 text-xs text-[#fff] '
-          >
-            {loading ? <ImSpinner2 className='animate-spin' /> : 'Submit'}
-          </button>
+        <div className='flex flex-col gap-4'>
+          <div className='flex justify-center mt-2'>
+            <button
+              onClick={bulkStudentUpload}
+              className='w-max rounded border bg-secondary px-8 py-3 text-xs text-[#fff] '
+            >
+              {loading ? <ImSpinner2 className='animate-spin' /> : 'Submit'}
+            </button>
+          </div>
+
+          <div className='flex flex-row items-center gap-4 justify-end'>
+            <div className='text-xs font-bold'>Replace all</div>
+            <Checkbox isChecked={isReplace} onClick={handleIsReplace} />
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default AddActivityName;
+export default BulkUser;

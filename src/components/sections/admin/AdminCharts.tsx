@@ -17,6 +17,7 @@ import {
   useGetStudentsListByInstitution,
   useGetTeacherAttendanceLog,
 } from '@/server/institution';
+import { EnrollmentAnalysis } from '@/types';
 import Link from 'next/link';
 import React from 'react';
 
@@ -105,7 +106,7 @@ const AdminCharts = ({
 
             <GenericChart
               title='Enrolment Analysis'
-              content={<EnrolmentAnalysis />}
+              content={<EnrolmentAnalysis instituteIndex={0} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
             />
 
             <GenericChart

@@ -1,7 +1,5 @@
-import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
@@ -11,18 +9,16 @@ import { GoBell } from 'react-icons/go';
 import AdminNotification from './AdminNotification';
 
 interface AdminHeaderProps {
-  open: boolean;
   handleToggle: () => void;
 }
 
-export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
+export default function AdminHeader({ handleToggle }: AdminHeaderProps) {
   const { data } = useGetProfile();
   const [isOpen, setIsOpen] = useState(false);
-  const isGenericApp = Cookies.get('isGenericApp');
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-white'>
-      <div className='mx-auto flex py-7 min-h-[5rem] h-auto items-center lg:justify-between px-4'>
+      <div className='layout mx-auto flex py-7 min-h-[5rem] h-auto items-center lg:justify-between'>
         <div className='flex w-full flex-row gap-28'>
           <div className='flex flex-row items-center gap-9'>
             <div
@@ -75,44 +71,39 @@ export default function AdminHeader({ open, handleToggle }: AdminHeaderProps) {
           </div>
         </div>
         <nav className='w-full'>
-          <div className='flex flex-row items-center gap-[48px] pr-10 relative mt-4 lg:mt-0'>
-            <BasicSearch />
+          <div className='flex flex-row items-center justify-end gap-3'>
+            <button
+              onClick={() => setIsOpen(true)}
+              className='focus:outline-none relative flex w-16 h-16 items-center justify-center rounded-full bg-[#F4F6FF] shadow-sm transition-colors duration-200 hover:bg-gray-200'
+            >
+              <GoBell className='fill-current text-[#5754F7] h-10 w-10' />
+              <div className='absolute -top-2 -right-2 h-[12px] w-[12px] rounded-full bg-[#5754F7]'></div>
+            </button>
 
-            <div className='flex flex-row items-center justify-center gap-3'>
-              <button
-                onClick={() => setIsOpen(true)}
-                className='focus:outline-none relative flex h-[60px] w-[75px] items-center justify-center rounded-full bg-[#F4F6FF] shadow-sm transition-colors duration-200 hover:bg-gray-200'
-              >
-                <GoBell className='fill-current text-[#5754F7] h-10 w-10 ' />
-                <div className='absolute -top-2 -right-2 h-[12px] w-[12px] rounded-full bg-[#5754F7]'></div>
-              </button>
-
-              <Image
-                width={64}
-                height={64}
-                alt='Profile Picture'
-                src={
-                  (data?.userInfo?.firstName ?? '') ===
-                    ('Godwin Nogheghase Obaseki' as string)
-                    ? '/images/governor.png'
-                    : '/images/avatar.png'
-                }
-              />
-            </div>
-
-
-            {isOpen && (
-              <div className='absolute z-10 right-10 top-4'>
-                <AdminNotification link='/super-admin/all-notification' />
-              </div>
-            )}
-            {isOpen && (
-              <div
-                className='bg-transparent fixed inset-0 z-[1]'
-                onClick={() => setIsOpen(false)}
-              ></div>
-            )}
+            <Image
+              width={64}
+              height={64}
+              alt='Profile Picture'
+              src={
+                (data?.userInfo?.firstName ?? '') ===
+                  ('Godwin Nogheghase Obaseki' as string)
+                  ? '/images/governor.png'
+                  : '/images/avatar.png'
+              }
+            />
           </div>
+
+          {isOpen && (
+            <div className='absolute z-10 right-10 top-4'>
+              <AdminNotification link='/super-admin/all-notification' />
+            </div>
+          )}
+          {isOpen && (
+            <div
+              className='bg-transparent fixed inset-0 z-[1]'
+              onClick={() => setIsOpen(false)}
+            ></div>
+          )}
         </nav>
       </div>
     </header>

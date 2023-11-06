@@ -14,30 +14,6 @@ import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
 
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 export default function RootLayout({
   children,
 }: {
@@ -70,7 +46,7 @@ export default function RootLayout({
             setMaxLoadingCount,
           }}
         >
-          <AdminHeader open={open} handleToggle={handleToggle} />
+          <AdminHeader handleToggle={handleToggle} />
           {isDataLoading && (
             <div className='h-1.5 w-full bg-blue-100 overflow-hidden'>
               <div className='progress w-full h-full bb-[#007AFF] left-right' />
@@ -78,7 +54,7 @@ export default function RootLayout({
           )}
           <div className='flex flex-1 flex-row overflow-y-hidden h-[100vh]'>
             <div className='hideScroll flex-1 overflow-y-auto p-2 text-xs'>
-              <div className='px-2'>{children}</div>
+              <div className='layout'>{children}</div>
             </div>
 
             {/* <AdminSidebar open={open} handleToggle={handleToggle} /> */}

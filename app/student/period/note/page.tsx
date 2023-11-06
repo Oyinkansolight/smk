@@ -1,15 +1,57 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import TaskAccordion from '@/components/accordions/TaskAccordion';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
 import logger from '@/lib/logger';
-import { useGetPeriodById } from '@/server/institution/period';
+import {
+  useGetPeriodById,
+  useGetPeriodLessonById,
+} from '@/server/institution/period';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -23,6 +65,9 @@ const Page = () => {
   const periodId = queryString?.get('name');
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
+  const { data: LessonNote, isLoading: LessonNoteLoading } =
+    useGetPeriodLessonById(periodId ? periodId : '');
+
   const [url, setUrl] = useState<string | any>('');
   const [videoUrl, setVideoUrl] = useState('');
 
@@ -126,7 +171,7 @@ const Page = () => {
                     <div className='h4 font-semibold'>
                       {' '}
                       {data?.teacher
-                        ? data?.teacher[0]?.user.firstName
+                        ? data?.teacher[0]?.user?.firstName
                         : 'No_name'}{' '}
                     </div>
                   </div>
@@ -143,7 +188,7 @@ const Page = () => {
 
             <div className='flex-1 mb-8 rounded-lg bg-white w-full'>
               <div className='w-full'>
-                {url.length > 0 ? (
+                {/* {url.length > 0 ? (
                   <CustomPDFReader url={url} />
                 ) : (
                   <video
@@ -152,7 +197,31 @@ const Page = () => {
                     className='w-full h-[60vh] md:h-[70vh] lg:h-[80vh]'
                     src={videoUrl}
                   ></video>
-                )}
+                )} */}
+                {!LessonNoteLoading &&
+                  LessonNote?.data &&
+                  LessonNote?.data.map((v: any, i: number) => (
+                    <TaskAccordion
+                      key={i}
+                      taskName={`Lesson Note ${i + 1} - ${v.title}`}
+                      onClick={() => {
+                        logger(v);
+                      }}
+                    >
+                      <div className='flex flex-wrap mt-4 gap-[27px] px-6'>
+                        {v?.uploadUrl ? (
+                          <LessonNoteGenerator noteUrl={v.uploadUrl} />
+                        ) : (
+                          <div
+                            className='font-bold text-xl'
+                            dangerouslySetInnerHTML={{
+                              __html: v?.instructionalTeachingActivity,
+                            }}
+                          />
+                        )}
+                      </div>
+                    </TaskAccordion>
+                  ))}
               </div>
             </div>
           </div>
@@ -172,45 +241,19 @@ const Page = () => {
   );
 };
 
-// interface AssignmentCardProps {
-//   title: string;
-//   status?: 'completed' | 'pending' | 'overdue';
-// }
+function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
+  const [url, setUrl] = useState<string | any>('');
 
-// function AssignmentCard({ title, status = 'pending' }: AssignmentCardProps) {
-//   return (
-//     <div className='w-full bg-white rounded-[10px] h-[93px] max-w-[775px] px-[22px] py-5 cursor-pointer'>
-//       <div className='flex flex-row items-center justify-between w-full'>
-//         <div className='flex flex-row gap-6'>
-//           <NextImage
-//             width={57}
-//             height={54}
-//             alt='Assignment Icon'
-//             src='/images/sidebar-icons/Assignment.png'
-//           />
-
-//           <div className='flex flex-col gap-1'>
-//             <div className='text-[#615E83] font-bold text-2xl leading-7'>
-//               {title}
-//             </div>
-//             <div
-//               className={clsxm(
-//                 status === 'completed' && 'bg-[#08643A]',
-//                 status === 'pending' && 'bg-[#E0A03B]',
-//                 'flex items-center justify-center w-[109px] h-[24px] rounded text-white text-[10px] font-semibold capitalize'
-//               )}
-//             >
-//               {status}
-//             </div>
-//           </div>
-//         </div>
-
-//         <div>
-//           <BiChevronRight className='w-[50px] h-[50px]' />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+  let path;
+  if (noteUrl) {
+    path = noteUrl;
+    getURL(path).then((v) => setUrl(v));
+  }
+  return (
+    <div>
+      <CustomPDFReader url={url} />
+    </div>
+  );
+}
 
 export default Page;

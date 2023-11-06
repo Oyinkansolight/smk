@@ -53,16 +53,16 @@ export default function ClockInTime() {
     }
   };
 
-  const handleClockOut = async () => {
-    try {
-      const res = await clockOut.mutateAsync({
-        clockOutTime: `${new Date().toISOString()}`,
-      });
-      toast.success(res.data.data.message);
-    } catch (error) {
-      toast.error(getErrMsg(error));
-    }
-  };
+  // const handleClockOut = async () => {
+  //   try {
+  //     const res = await clockOut.mutateAsync({
+  //       clockOutTime: `${new Date().toISOString()}`,
+  //     });
+  //     toast.success(res.data.data.message);
+  //   } catch (error) {
+  //     toast.error(getErrMsg(error));
+  //   }
+  // };
 
   useEffect(() => {
     setIsLoading(loading);
@@ -115,21 +115,22 @@ export default function ClockInTime() {
     </div>
   ) : clockInfo?.isClockedIn ? (
     <div className='flex items-center'>
-      <div>
-        Time Online:{' '}
+      <div className='flex items-center gap-2'>
+        <span>Time Online:</span>
+
         <span className='text-xl text-[#FB6340]'>
           {clockedInTime?.hours().toString().padStart(2, '0')}:
           {clockedInTime?.minutes().toString().padStart(2, '0')}:
           {clockedInTime?.seconds().toString().padStart(2, '0')}
         </span>
       </div>
-      <div className='w-4' />
+      {/* <div className='w-4' />
       <button
         onClick={handleClockOut}
         className='h-[40px] w-[120px] rounded-[3.2px] border border-[#007AFF] bg-white py-2 px-5 text-[#007AFF]'
       >
         Stop Clock
-      </button>
+      </button> */}
     </div>
   ) : (
     <div className='flex items-center'>

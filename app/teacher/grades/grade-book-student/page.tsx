@@ -7,8 +7,7 @@ import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useUpdateStudent } from '@/server/government/student';
-import { useGetStudentById, useGetStudentSubjectPosition, useGetStudentTotalScoreAndTotalAttendance } from '@/server/institution';
-import { useGetProfienciencies } from '@/server/institution/grade';
+import { useGetStudentById, useGetStudentSubjectPosition } from '@/server/institution';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
 import { FiTrendingUp } from 'react-icons/fi';
@@ -43,7 +42,7 @@ const proficiency = [
 ];
 
 export default function Page() {
-  const { data } = useGetProfienciencies();
+  // const { data } = useGetProfienciencies();
   const p = useSearchParams();
   const studentId = p?.get('studentid');
   const update = useUpdateStudent();
@@ -57,12 +56,11 @@ export default function Page() {
     studentId: studentId ?? undefined,
   })
 
-  const { data: totalData } = useGetStudentTotalScoreAndTotalAttendance({
-    sessionId: (profile?.currentSession ?? [])[0]?.id,
-    termId: profile?.currentTerm?.id,
-    classArmId: student?.class.id,
-  })
-  console.log(totalData);
+  // const { data: totalData } = useGetStudentTotalScoreAndTotalAttendance({
+  //   sessionId: (profile?.currentSession ?? [])[0]?.id,
+  //   termId: profile?.currentTerm?.id,
+  //   classArmId: student?.class.id,
+  // })
 
   const updateStudentProficiencyLevel = async (value) => {
     try {
@@ -98,7 +96,7 @@ export default function Page() {
           </div>
         </div>
         <div className='flex-1' />
-        <div className='grid md:grid-cols-2 gap-4'>
+        {/* <div className='grid md:grid-cols-2 gap-4'>
           <FlashCard
             title={
               <div>
@@ -131,7 +129,7 @@ export default function Page() {
             }
             subtitle='Position in class'
           />
-        </div>
+        </div> */}
       </div>
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>

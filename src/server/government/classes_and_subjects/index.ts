@@ -168,6 +168,7 @@ export function useGetLessonAttendance(params: {
           }
         );
         return d.data.data.data.data as {
+          id?: string;
           status: 'PRESENT' | 'ABSENT';
           student: { id: string };
         }[];

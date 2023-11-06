@@ -90,6 +90,24 @@ export function useGetPeriodById(id?: string) {
   });
   return query;
 }
+export function useGetPeriodLessonById(id?: string) {
+  const query = useQuery({
+    queryKey: 'get_lesson_periods_by_id',
+    queryFn: async () => {
+      return id
+        ? ((
+            await request.get(
+              `/v1/institutions/lessons/get-period-lesson-note`,
+              {
+                params: { periodId: id },
+              }
+            )
+          ).data.data.data as any)
+        : undefined;
+    },
+  });
+  return query;
+}
 
 export function useGetPeriodActivity(params?: any) {
   const query = useQuery({

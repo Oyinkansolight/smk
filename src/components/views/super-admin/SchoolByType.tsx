@@ -6,6 +6,7 @@ import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import { useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
 const SchoolByType = ({ name, title }: { name: string; title: string }) => {
+  const AT = Cookies.get('adminType');
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
@@ -29,7 +31,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, query: value });
+    setPagingData({ ...pagingData, page: 1, query: value });
   };
 
 
@@ -84,14 +86,16 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>{name}</h1>
 
-      <div className='mb-6 flex justify-between items-end'>
-        <Link
-          href='/super-admin/add-school'
-          className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Institution
-        </Link>
-      </div>
+      {AT === "SUPER" &&
+        <div className='mb-6 flex justify-between items-end'>
+          <Link
+            href='/super-admin/add-school'
+            className='w-max rounded border border-[#007AFF] px-6 py-3 text-center text-xs text-[#007AFF] '
+          >
+            Add Institution
+          </Link>
+        </div>
+      }
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
@@ -126,8 +130,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
             (schools?.data ?? []).map((item: Institution, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
-                  {idx + 1}
-                  {/* {(pagingData.page - 1) * 10 + (schools?.paging?.totalPage ?? idx + 1)} */}
+                  {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
                 <div className='col-span-5 lg:col-span-3'>
@@ -279,7 +282,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               <button
                 onClick={handleNextPage}
-                disabled={schools && schools?.data?.length < 10}
+                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -300,7 +303,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={schools && schools?.data?.length < 10}
+                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

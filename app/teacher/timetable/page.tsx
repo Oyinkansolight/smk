@@ -3,7 +3,7 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import TimetableView from '@/components/views/teacher/TimetableView';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { getFromLocalStorage } from '@/lib/helper';
 import { useGetTeacherTimetable } from '@/server/Schedule';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionCalendar } from '@/server/institution/time-table';
@@ -14,13 +14,13 @@ export default function Page() {
 
   const { data: profile } = useGetProfile();
 
-  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  // const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
-  let currentTermInfo;
+  // let currentTermInfo;
 
-  if (currentTerm) {
-    currentTermInfo = JSON.parse(currentTerm);
-  }
+  // if (currentTerm) {
+  //   currentTermInfo = JSON.parse(currentTerm);
+  // }
   const { data: sessionCalendarData } = useGetSessionCalendar(currentSessionId ?? "");
 
   const { data, isLoading } = useGetTeacherTimetable({
@@ -29,8 +29,6 @@ export default function Page() {
     classId: profile?.userInfo?.staff?.managedClassArm?.class?.id,
     teacherId: profile?.userInfo?.staff?.id,
   });
-
-  console.log(data);
 
   return (
     <div className='layout flex justify-center'>

@@ -1,7 +1,11 @@
 'use client';
 
 import NewHeader from '@/components/layout/NewHeader';
-import NewStudentSidebar from '@/components/layout/NewStudentSideBar';
+import dynamic from 'next/dynamic';
+const NewStudentSidebar = dynamic(
+  () => import('@/components/layout/NewStudentSideBar'),
+  { ssr: false }
+);
 import 'react-circular-progressbar/dist/styles.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';

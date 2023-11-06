@@ -6,10 +6,39 @@ import Stepper from '@/components/stepper';
 import Details from '@/components/views/super-admin/TransferStaff/Details';
 import Publish from '@/components/views/super-admin/TransferStaff/publish';
 import logger from '@/lib/logger';
+import { useGetProfile } from '@/server/auth';
+import {
+  useGetSchools,
+  useGetTeachersListByInstitution,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TransferStaff = () => {
   const {
@@ -21,6 +50,24 @@ const TransferStaff = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+  const [query, setQuery] = useState('');
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 100,
+    query,
+  });
+
+  const { data: schools, error, refetch } = useGetSchools({ ...pagingData });
+  const { data: institutionProfile } = useGetProfile();
+
+  const { data: staffs, isLoading } = useGetTeachersListByInstitution({
+    instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
+    limit: 1000,
+  });
+
+  console.log(schools);
+
   const [stage, setStage] = useState(1);
   const [isOpen, setisOpen] = useState(false);
   const [publishData] = useState(null);
@@ -112,7 +159,14 @@ const TransferStaff = () => {
 
       <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {stage === 1 && <Details register={register} errors={errors} />}
+          {stage === 1 && staffs?.data && (
+            <Details
+              register={register}
+              errors={errors}
+              staffs={staffs?.data}
+              schools={schools?.data}
+            />
+          )}
 
           {stage === 2 && <Publish publishData={publishData} />}
           <div className='my-10 flex justify-end'>

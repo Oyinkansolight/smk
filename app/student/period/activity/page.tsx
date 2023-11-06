@@ -1,18 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import NextImage from '@/components/NextImage';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import TaskTimer from '@/components/counter/TaskTimer';
+import useCustomEditor from '@/hooks/useEditor';
+import {
+  extractMinutesFromString,
+  getDueDate,
+  getFromLocalStorage,
+  getFromSessionStorage,
+} from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import {
   useGetPeriodActivity,
   useGetPeriodById,
 } from '@/server/institution/period';
 import { useSubmitActivity } from '@/server/student';
+import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { BsPlay } from 'react-icons/bs';
 import { ImSpinner2 } from 'react-icons/im';
+import { IoChevronBack } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
@@ -28,6 +40,9 @@ const Page = () => {
   const userData = getFromSessionStorage('user');
   const [answers, setAnswers] = useState([]);
   const [loading, setloading] = useState(false);
+  const [startActivity, setStartActivity] = useState(false);
+  const [currentView, setCurrentView] = useState(0);
+  const [activity, setActivity] = useState<any>();
 
   let user;
   if (userData) {
@@ -43,15 +58,15 @@ const Page = () => {
   }
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
-  const { data: activities, isLoading: activitiesLoading } =
+  const { data: activities } =
     useGetPeriodActivity({
       sessionId: currentSessionId,
       typeOfActivity: activityType,
       periodId,
       termId: currentTermInfo?.id,
     });
-  console.log(data);
-  console.log(activities?.data);
+
+  const editor = useCustomEditor();
 
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -60,216 +75,14 @@ const Page = () => {
     day: 'numeric',
   });
 
-  useEffect(() => {
-    console.log(activities?.data);
-  }, [activities]);
-  // const qadata = {
-  //   typeOfActivity: 'CLASS_WORK',
-  //   format: 'MULTIPLE_CHOICE',
-  //   timeLimit: '40 minutes',
-  //   questionsV2: [
-  //     {
-  //       question: 'Food with protien nutrient',
-  //       options: ['egg', 'rice', 'mango', 'none'],
-  //       correctOption: 0,
-  //       correctText: null,
-  //       id: '0e6b9f0e-b273-42fe-a588-b885e5b04f92',
-  //       createdAt: '2023-09-08T19:08:50.225Z',
-  //       updatedAt: '2023-09-08T19:08:50.225Z',
-  //     },
-  //     {
-  //       question: 'Food with carbohydrate nutrient',
-  //       options: ['egg', 'rice', 'mango', 'none'],
-  //       correctOption: 1,
-  //       correctText: null,
-  //       id: '9299bdac-5cf7-43d1-b10c-567b4cadf3f7',
-  //       createdAt: '2023-09-08T19:08:50.225Z',
-  //       updatedAt: '2023-09-08T19:08:50.225Z',
-  //     },
-  //     {
-  //       question: 'Food with Vitamin-C nutrient',
-  //       options: ['egg', 'rice', 'mango', 'none'],
-  //       correctOption: 2,
-  //       correctText: null,
-  //       id: '976564e5-abea-4bc0-8d9f-78a536b81343',
-  //       createdAt: '2023-09-08T19:08:50.225Z',
-  //       updatedAt: '2023-09-08T19:08:50.225Z',
-  //     },
-  //   ],
-  //   addToGradeList: false,
-  //   dueDate: '2023-06-09T07:48:00',
-  //   teacher: {
-  //     id: '0f01463e-4bc2-4d31-af6e-2260cead6f2b',
-  //     firstName: 'OGIE',
-  //     lastName: 'CATHERINE',
-  //     deviceToken: null,
-  //     batteryLevel: null,
-  //     phoneNumber: '9510278930',
-  //     email: 'jim.parker@xyz.com',
-  //     address: null,
-  //     resetPasswordToken: null,
-  //     resetPasswordTokenExpires: null,
-  //     type: 'DEFAULT',
-  //     loginCount: 95,
-  //     suspended: false,
-  //     createdAt: '2023-07-26T12:34:36.551Z',
-  //     updatedAt: '2023-09-08T18:27:57.501Z',
-  //   },
-  //   lessonNote: null,
-  //   classes: {
-  //     id: '14a4ebbd-5280-4934-a6d2-e371b3cbe594',
-  //     arm: 'A',
-  //     capacity: 20,
-  //     curriculum: 'DEFAULT',
-  //     institutionType: null,
-  //     createdAt: '2023-08-03T09:21:32.772Z',
-  //     updatedAt: '2023-08-28T19:54:13.101Z',
-  //   },
-  //   subject: {
-  //     id: '2133d2a1-8da7-4513-aaba-7a0d04784335',
-  //     name: 'Biology ',
-  //     description: 'All About Body',
-  //     createdBy: null,
-  //     createdAt: '2023-08-02T06:50:29.756Z',
-  //     updatedAt: '2023-08-28T20:36:16.664Z',
-  //   },
-  //   period: {
-  //     id: '1ac06957-4085-42aa-b41e-158c87946f0a',
-  //     title: 'Protein',
-  //     theme: 'Protein',
-  //     subTheme: null,
-  //     instructionalObjective: null,
-  //     teachingMethod: null,
-  //     teachingTheme: null,
-  //     teacherPreparationForLesson: null,
-  //     instructionalMaterial: null,
-  //     lessonProcedure: null,
-  //     startTime: '11:00',
-  //     endTime: '12:00',
-  //     day: 'Friday',
-  //     eventName: null,
-  //     institutionType: 'SECONDARY',
-  //     teacherActivity: null,
-  //     lessonInstructionalObjective: null,
-  //     lessonTopic: null,
-  //     createdAt: '2023-08-18T09:56:30.710Z',
-  //     updatedAt: '2023-09-08T18:40:08.824Z',
-  //     classActivities: [
-  //       {
-  //         id: '0a192873-d600-4624-8e36-e2627e785d40',
-  //         typeOfActivity: 'ASSIGNMENT',
-  //         status: 'PENDING',
-  //         latePenalty: null,
-  //         mode: 'ONLINE',
-  //         format: 'MULTIPLE_CHOICE',
-  //         timeLimit: '40 minutes',
-  //         questions: null,
-  //         dueDate: '2023-06-09T07:48:00.000Z',
-  //         createdAt: '2023-09-08T19:06:20.626Z',
-  //         updatedAt: '2023-09-08T19:06:20.626Z',
-  //         questionsV2: [
-  //           {
-  //             id: 'a446109f-bec0-47e0-8bfe-7ab4d624e7c3',
-  //             question: 'Food with protien nutrient',
-  //             options: ['egg', 'rice', 'mango', 'none'],
-  //             correctOption: 0,
-  //             correctText: null,
-  //             createdAt: '2023-09-08T19:06:20.626Z',
-  //             updatedAt: '2023-09-08T19:06:20.626Z',
-  //           },
-  //           {
-  //             id: '9319afda-5922-47b4-b9b4-d294b0ff1f94',
-  //             question: 'Food with carbohydrate nutrient',
-  //             options: ['egg', 'rice', 'mango', 'none'],
-  //             correctOption: 1,
-  //             correctText: null,
-  //             createdAt: '2023-09-08T19:06:20.626Z',
-  //             updatedAt: '2023-09-08T19:06:20.626Z',
-  //           },
-  //           {
-  //             id: '64260906-6a19-4b9b-b54a-0cd38e27efae',
-  //             question: 'Food with Vitamin-C nutrient',
-  //             options: ['egg', 'rice', 'mango', 'none'],
-  //             correctOption: 2,
-  //             correctText: null,
-  //             createdAt: '2023-09-08T19:06:20.626Z',
-  //             updatedAt: '2023-09-08T19:06:20.626Z',
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //     subject: {
-  //       id: '2133d2a1-8da7-4513-aaba-7a0d04784335',
-  //       name: 'Biology ',
-  //       description: 'All About Body',
-  //       createdBy: null,
-  //       createdAt: '2023-08-02T06:50:29.756Z',
-  //       updatedAt: '2023-08-28T20:36:16.664Z',
-  //     },
-  //     session: {
-  //       id: '8c089e47-ebe2-48ae-843d-9979621d4f69',
-  //       session: 'Academic Year 2023/2024',
-  //       institutionType: 'SECONDARY',
-  //       NumberOfWeeks: 56,
-  //       NumberOfTerms: 3,
-  //       isCurrent: true,
-  //       startDate: '2023-07-20T13:52:06.950Z',
-  //       endDate: '2024-08-15T20:21:28.051Z',
-  //       createdAt: '2023-08-17T11:36:06.766Z',
-  //       updatedAt: '2023-09-08T14:42:35.368Z',
-  //     },
-  //     term: {
-  //       id: 'c42523e7-b0cd-40d4-9833-865fd2fff3e7',
-  //       name: '1',
-  //       noOfWeeks: 12,
-  //       startDate: '2023-07-20T13:52:06.950Z',
-  //       endDate: '2023-10-15T20:21:28.051Z',
-  //       createdAt: '2023-08-17T11:36:06.777Z',
-  //       updatedAt: '2023-08-17T11:36:06.777Z',
-  //     },
-  //   },
-  //   session: {
-  //     id: '8c089e47-ebe2-48ae-843d-9979621d4f69',
-  //     session: 'Academic Year 2023/2024',
-  //     institutionType: 'SECONDARY',
-  //     NumberOfWeeks: 56,
-  //     NumberOfTerms: 3,
-  //     isCurrent: true,
-  //     startDate: '2023-07-20T13:52:06.950Z',
-  //     endDate: '2024-08-15T20:21:28.051Z',
-  //     createdAt: '2023-08-17T11:36:06.766Z',
-  //     updatedAt: '2023-09-08T14:42:35.368Z',
-  //   },
-  //   term: {
-  //     id: 'c42523e7-b0cd-40d4-9833-865fd2fff3e7',
-  //     name: '1',
-  //     noOfWeeks: 12,
-  //     startDate: '2023-07-20T13:52:06.950Z',
-  //     endDate: '2023-10-15T20:21:28.051Z',
-  //     createdAt: '2023-08-17T11:36:06.777Z',
-  //     updatedAt: '2023-08-17T11:36:06.777Z',
-  //   },
-  //   mode: 'ONLINE',
-  //   latePenalty: null,
-  //   questions: null,
-  //   id: 'e65885f0-441a-4727-bf5f-5b12654170cb',
-  //   status: 'PENDING',
-  //   createdAt: '2023-09-08T19:08:50.225Z',
-  //   updatedAt: '2023-09-08T19:08:50.225Z',
-  // };
-
-  useSubmitActivity;
   const handleSubmitActivity = useSubmitActivity();
 
   const submissionData = {
-    activityId: activities?.data[0]?.id,
-    periodId: periodId,
-    online: activities?.data[0]?.id.mode === 'ONLINE',
-    classArmId: activities?.data[0]?.classes.id,
+    activityId: activity?.id,
+    classArmId: activity?.classes.id,
     answers,
     studentId: user?.currentStudentInfo.id ?? '',
-    subjectId: activities?.data[0]?.subject.id,
-    type: activityType,
+    subjectId: activity?.subject.id,
   };
 
   async function handleSubmitTask() {
@@ -278,7 +91,7 @@ const Page = () => {
       const response = await handleSubmitActivity.mutateAsync(submissionData);
 
       if (response) {
-        toast.success(`${activityType} Submitted succesfully`);
+        toast.success(`${activityType} Submitted successfully`);
         router.back();
         setloading(false);
 
@@ -374,35 +187,121 @@ const Page = () => {
                 {activityType === 'ASSIGNMENT' && 'Assignment'}
               </div>
               <div className='flex flex-col gap-[14px] pb-32'>
-                {activities && activities?.data.length > 0 ? (
+                {currentView === 0 && (
                   <div>
-                    {activities?.data[0]?.questionsV2?.map((item, idx) => (
-                      <div key={idx}>
-                        <AssignmentQuestionView
-                          question={item.question}
-                          options={item.options}
-                          correctOption={item.correctOption}
-                          answers={answers}
-                          setAnswers={setAnswers}
-                          qId={item.id}
-                        />
+                    <div className='border border-[#D5D7D8] rounded-md p-3 bg-[#FAFAFA]'>
+                      <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-5'>
+                        {activities && activities?.data.length > 0 ? (
+                          activities?.data.map((item, i) => (
+                            <div
+                              key={i}
+                              className='cursor-pointer rounded-xl bg-white border p-3 flex space-x-4'
+                              onClick={() => {
+                                setActivity(item);
+                                setCurrentView(1);
+                              }}
+                            >
+                              <NextImage
+                                width={57}
+                                height={54}
+                                alt='Assignment Icon'
+                                src='/images/sidebar-icons/Assignment.png'
+                              />
+                              <div className='flex-1 flex flex-col'>
+                                <p className='text-xs text-blue-500'>
+                                  {item?.subject?.name}
+                                </p>
+                                <p className='text-xs text-[#615E83]'>
+                                  Format: {item?.format}
+                                </p>
+                                <div className='mt-4 text-[10px] flex justify-between items-center'>
+                                  <div>
+                                    <span>Due Date:</span>
+                                    {moment(item?.duedate).format('ll')}
+                                  </div>
+                                  {getDueDate(item?.dueDate) && (
+                                    <div className='rounded bg-[#E5A500] text-white p-1'>
+                                      Overdue
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div>No Activity yet</div>
+                        )}
                       </div>
-                    ))}
-                    <button
-                      onClick={() => {
-                        handleSubmitTask();
-                      }}
-                      className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
-                    >
-                      {loading ? (
-                        <ImSpinner2 className='animate-spin' />
-                      ) : (
-                        ' Submit Activity'
-                      )}
-                    </button>
+                    </div>
                   </div>
-                ) : (
-                  <div>No Activity yet</div>
+                )}
+                {currentView === 1 && (
+                  <div>
+                    <div className='my-4 px-4 flex justify-between items-center'>
+                      <button
+                        className='bg-gray-200 rounded-md text-lg font-medium px-3 py-2 flex items-center space-x-2'
+                        onClick={() => {
+                          setCurrentView(0);
+                        }}
+                      >
+                        <IoChevronBack size={20} />
+                        <span>Back</span>
+                      </button>
+                      {!startActivity && (
+                        <button
+                          className='bg-green-500 rounded-md text-lg text-white font-medium px-3 py-2 flex items-center space-x-2'
+                          onClick={() => {
+                            setStartActivity(!startActivity);
+                          }}
+                        >
+                          <BsPlay size={20} />
+                          <span>Start</span>
+                        </button>
+                      )}
+                      {startActivity && (
+                        <TaskTimer
+                          timeLimit={
+                            Number(
+                              extractMinutesFromString(
+                                activity?.timeLimit ?? '30 Mins'
+                              )
+                            ) * 60000
+                          }
+                        />
+                      )}
+                      {/* MULTIPLE_CHOICE */}
+                    </div>
+                    {startActivity && (
+                      <div>
+                        {activity?.questionsV2?.map((item, idx) => (
+                          <div key={idx}>
+                            <AssignmentQuestionView
+                              question={item.question}
+                              options={item.options}
+                              correctOption={item.correctOption}
+                              answers={answers}
+                              setAnswers={setAnswers}
+                              qId={item.id}
+                              format={activity?.format}
+                              editor={editor}
+                            />
+                          </div>
+                        ))}
+                        <button
+                          onClick={() => {
+                            handleSubmitTask();
+                          }}
+                          className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
+                        >
+                          {loading ? (
+                            <ImSpinner2 className='animate-spin' />
+                          ) : (
+                            ' Submit Activity'
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
