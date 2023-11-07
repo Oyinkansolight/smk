@@ -1,5 +1,5 @@
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
+// import { getFromLocalStorage } from '@/lib/helper';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -12,14 +12,14 @@ export default function NewStudentSidebar() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
-  const currentSession = getFromLocalStorage('currentSession') ?? '';
+  // const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  // const currentSession = getFromLocalStorage('currentSession') ?? '';
 
-  let currentSessionInfo;
+  // let currentSessionInfo;
 
-  if (currentSession) {
-    currentSessionInfo = JSON.parse(currentSession);
-  }
+  // if (currentSession) {
+  //   currentSessionInfo = JSON.parse(currentSession);
+  // }
 
   const items = [
     {
@@ -39,7 +39,7 @@ export default function NewStudentSidebar() {
     },
     {
       img: '/images/sidebar-icons/Dashboard-1.png',
-      url: `/student/timetable?session=${currentSessionId}&schooltype=${currentSessionInfo[0]?.institutionType}`,
+      url: `/student/timetable`,
       label: 'Timetable',
     },
 

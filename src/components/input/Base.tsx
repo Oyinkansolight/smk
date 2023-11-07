@@ -29,7 +29,7 @@ type BaseInputProps<
 > = {
   className?: string;
   helper?: HelperProps | any;
-  label: string | JSX.Element;
+  label?: string | JSX.Element;
   name: string;
   register?: UseFormRegister<any>;
   validation?: RegisterOptions<TFieldValues, TFieldName>;
@@ -101,21 +101,20 @@ const BaseInput: FC<BaseInputProps<any, any>> = ({
     );
 
   return (
-    <div className={clsxm(
-      'w-full',
-      labelGap ? 'space-y-2' : 'space-y-0'
-    )}>
-      <label
-        htmlFor={name}
-        className={clsxm(
-          'block text-sm font-semibold text-gray-400 text-left',
-          helper?.type && helper?.type !== 'info'
-            ? helperTextClasses[helper.type]
-            : 'text-primary-dark'
-        )}
-      >
-        {label}
-      </label>
+    <div className={clsxm('w-full', labelGap ? 'space-y-2' : 'space-y-0')}>
+      {label && (
+        <label
+          htmlFor={name}
+          className={clsxm(
+            'block text-sm font-semibold text-gray-400 text-left',
+            helper?.type && helper?.type !== 'info'
+              ? helperTextClasses[helper.type]
+              : 'text-primary-dark'
+          )}
+        >
+          {label}
+        </label>
+      )}
       <div className='space-y-2'>
         <div className='relative'>
           <input

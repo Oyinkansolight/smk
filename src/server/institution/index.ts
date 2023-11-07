@@ -51,6 +51,18 @@ export function useCreateInstitution() {
   return mutation;
 }
 
+export function useDeleteInstitution() {
+  const mutation = useMutation({
+    mutationKey: 'delete_institution',
+    mutationFn: async (id?: string) =>
+      (
+        await request.delete('/v1/government/institutes/delete-by-id', {
+          data: { id },
+        })
+      ).data,
+  });
+  return mutation;
+}
 export function useInviteInstitution() {
   const mutation = useMutation({
     mutationKey: 'invite_institution',
@@ -311,7 +323,7 @@ export function useGetTeachersList(params?: PaginationParams) {
         const d = await request.get('/v1/government/teachers/get-staffs', {
           params,
         });
-        return d.data.data.data as StaffPaginatedData<Staff>;
+        return d.data.data.data as any;
       } catch (error) {
         logger(error);
         throw error;
@@ -426,6 +438,24 @@ export function useGetSchools(params: Partial<PaginationParams>) {
   useEffect(() => {
     refetch({ cancelRefetch: true });
   }, [params.limit, params.id, params.page, params.query, refetch]);
+
+  return query;
+}
+export function useGetInstituteTypes() {
+  const query = useQuery({
+    queryKey: 'get_school_list_types',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/institutes/get-institute-type'
+        );
+        return d.data.data.data as any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
 
   return query;
 }

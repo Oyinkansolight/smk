@@ -21,6 +21,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { HiOutlineEnvelope } from 'react-icons/hi2';
 import { toast } from 'react-toastify';
 
 export default function StudentAuth() {
@@ -75,7 +76,7 @@ export default function StudentAuth() {
     if (isChecked) {
       data.rememberMe = true;
     }
-   
+
     try {
       const response = await mutateAsync(data);
 
@@ -102,7 +103,6 @@ export default function StudentAuth() {
           router.push(ROUTES.SUPER_ADMIN);
           if (isChecked) setUserDashboard(ROUTES.SUPER_ADMIN);
         }
-        //fetch profile info
 
         toast.success(response.data.data.message);
         toast.info('Redirecting to dashboard...');
@@ -144,50 +144,83 @@ export default function StudentAuth() {
   return (
     <Layout>
       <main>
-        <section className='authBackground relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
+        <section className='relative flex h-screen max-h-screen w-screen flex-col items-center justify-center overflow-hidden bg-[#F8F9FA]'>
+          <Image
+            width={228}
+            height={224}
+            alt={APP_LOGOS.APP_LOGO.alt}
+            src='/images/topleft.png'
+            className='absolute left-0 top-0 z-1'
+          />
+          <Image
+            width={228}
+            height={224}
+            alt={APP_LOGOS.APP_LOGO.alt}
+            src='/images/topright.png'
+            className='absolute top-0 right-0 z-1'
+          />
+          <Image
+            width={228}
+            height={224}
+            alt={APP_LOGOS.APP_LOGO.alt}
+            src='/images/downleft.png'
+            className='absolute left-0 bottom-0 z-1'
+          />
+          <Image
+            width={228}
+            height={224}
+            alt={APP_LOGOS.APP_LOGO.alt}
+            src='/images/downright.png'
+            className='absolute right-0 bottom-0 z-1'
+          />
+
           {isGenericApp === 'N' && (
-            <Image
-              width={154}
-              height={53}
-              alt={APP_LOGOS.APP_LOGO.alt}
-              src={APP_LOGOS.APP_LOGO.asset}
-              className='absolute left-[60px] top-[60px] z-20'
-            />
+            <div className='absolute top-0 inset-x-0 bg-white py-3 flex justify-center items-center z-10'>
+              <Image
+                width={154}
+                height={53}
+                alt={APP_LOGOS.APP_LOGO.alt}
+                src={APP_LOGOS.APP_LOGO.asset}
+                className=''
+              />
+            </div>
           )}
 
-          <div className='container flex flex-col items-center gap-8 px-4 md:px-0'>
-            <div className='h1'>Welcome</div>
-
+          <div className='container flex justify-between items-center gap-8 px-4 md:px-0 z-20'>
             <div className='container m-auto'>
-              <BasicCard className='mx-auto max-w-[550px] p-6 md:p-10'>
+              <BasicCard className='mx-auto max-w-[470px] p-6 md:p-10'>
                 <form
                   onSubmit={handleSubmit(onSubmit)}
-                  className='mx-auto flex w-full flex-col gap-6 md:max-w-lg'
+                  className='mx-auto flex w-full flex-col gap-5 md:max-w-lg'
                 >
-                  <div className='h2'>Sign in</div>
+                  <div className='h2'>Log in</div>
+                  <span className='text-xs text-black/60'>
+                    Enter your credentials to access your account
+                  </span>
                   <BaseInput
-                    name='email'
+                    name='Username'
                     type='email'
-                    label='Username'
                     register={register}
-                    placeholder='Enter username here'
+                    placeholder='Email'
+                    icon={
+                      <HiOutlineEnvelope className='text-black/60' size={22} />
+                    }
                   />
 
                   <BaseInput
-                    label='Password'
                     name='password'
                     type='password'
                     register={register}
-                    placeholder='Enter password here'
+                    placeholder='Password'
                   />
 
                   <Button
                     type='submit'
                     isLoading={loading}
-                    variant='secondary'
-                    className='h-[54px] justify-center'
+                    variant='base'
+                    className='h-[54px] rounded-full justify-center'
                   >
-                    Sign In
+                    Log into Account
                   </Button>
 
                   <div className='-m-2 mb-4 flex flex-wrap justify-between'>
@@ -208,7 +241,7 @@ export default function StudentAuth() {
                     </div>
                     <div className='w-auto p-2'>
                       <Link
-                        className='text-sm font-medium hover:text-primary'
+                        className='text-sm font-medium text-[#5754F7] hover:text-primary'
                         href='/auth/user/forgotpassword/'
                       >
                         Forgot Password?
@@ -216,14 +249,35 @@ export default function StudentAuth() {
                     </div>
                   </div>
 
-                  <div className='flex flex-wrap gap-1 whitespace-nowrap'>
+                  {/* <div className='flex flex-wrap gap-1 whitespace-nowrap'>
                     <div>Don’t have an account?</div>
                     <PrimaryLink variant='secondary' href={ROUTES.USER_AUTH}>
                       Sign Up
                     </PrimaryLink>
-                  </div>
+                  </div> */}
                 </form>
               </BasicCard>
+            </div>
+            <div className='md:flex hidden  flex-col items-center justify-center container m-auto'>
+              <Image
+                width={562}
+                height={424}
+                alt={APP_LOGOS.APP_LOGO.alt}
+                src='/images/signin_right_image.gif'
+                className=''
+              />
+              <div className='flex justify-center items-center flex-col max-w-[250px]'>
+                <h2 className='text-2xl mb-2'>Easy Access</h2>
+                <span className='text-xs text-black/60'>
+                  You can easily access all the information about the
+                  educational system of the state
+                </span>
+                <div className='flex space-x-2 mt-3'>
+                  <div className='bg-white h-1 w-4 rounded-[7px]' />
+                  <div className='bg-[#F0AF3D] h-1 w-8 rounded-[7px]' />
+                  <div className='bg-white h-1 w-4 rounded-[7px]' />
+                </div>
+              </div>
             </div>
           </div>
         </section>

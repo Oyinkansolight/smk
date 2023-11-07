@@ -166,14 +166,14 @@ const Page = () => {
             <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
               <div className='h3'>Class Work</div>
               <div className='flex flex-col gap-[14px]'>
-                <AssignmentQuestionView
+                {/* <AssignmentQuestionView
                   question='1. What is 2 + 2?'
                   options={['4', '6', '5', '7']}
                 />
                 <AssignmentQuestionView
                   question='2. What is 2 + 2?'
                   options={['4', '6', '5', '7']}
-                />
+                /> */}
               </div>
             </div>
           )}
@@ -181,7 +181,7 @@ const Page = () => {
           {page === 3 && (
             <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
               <div className='h3'>Pop Quiz</div>
-              <div className='flex flex-col gap-[14px]'>
+              {/* <div className='flex flex-col gap-[14px]'>
                 <AssignmentQuestionView
                   question='1. What is 2 + 2?'
                   options={['4', '6', '5', '7']}
@@ -189,8 +189,9 @@ const Page = () => {
                 <AssignmentQuestionView
                   question='2. What is 2 + 2?'
                   options={['4', '6', '5', '7']}
-                />
+                /> 
               </div>
+              */}
             </div>
           )}
         </div>

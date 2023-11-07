@@ -1,6 +1,5 @@
 'use client';
 
-import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -119,7 +118,7 @@ const Page = () => {
 
           <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
             <div className='h3'>Assignment</div>
-            <div className='flex flex-col gap-[14px]'>
+            {/* <div className='flex flex-col gap-[14px]'>
               <AssignmentQuestionView
                 question='1. What is 2 + 2?'
                 options={['4', '6', '5', '7']}
@@ -128,7 +127,7 @@ const Page = () => {
                 question='2. What is 2 + 2?'
                 options={['4', '6', '5', '7']}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import clsxm from '@/lib/clsxm';
-import { useCreateSubject } from '@/server/institution';
+import { useCreateSubject, useGetInstituteTypes } from '@/server/institution';
 import { useGetAllClasses } from '@/server/institution/class';
 import { Label } from '@/types';
 import { useEffect, useState } from 'react';
@@ -15,6 +15,10 @@ interface AddSubjectViewProps {
 }
 
 export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
+  const { data } = useGetInstituteTypes();
+
+  console.log(data);
+
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
   const { mutateAsync } = useCreateSubject();
   const [classes1, setClasses] = useState(new Set());
@@ -73,6 +77,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
     const payload = {
       classId: ids,
       name: data.subject,
+      // institutionTypeId: institutionProfile?.userInfo?.esiAdmin?.id,
     };
 
     const response = await mutateAsync(payload);

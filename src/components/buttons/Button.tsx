@@ -10,7 +10,8 @@ export const ButtonVariant = [
   'ghost',
   'light',
   'dark',
-  'danger'
+  'danger',
+  'base',
 ] as const;
 const ButtonSize = ['sm', 'base'] as const;
 
@@ -65,6 +66,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           //#endregion  //*======== Size ===========
           //#region  //*=========== Variants ===========
           [
+            variant === 'base' && [
+              'bg-[#5754F7] text-white',
+              'hover:bg-[#5754F7]/80 hover:text-white',
+              'active:bg-primary-700',
+              'disabled:bg-primary-700',
+            ],
             variant === 'primary' && [
               'bg-primary-500 text-white',
               'hover:bg-primary-600 hover:text-white',
