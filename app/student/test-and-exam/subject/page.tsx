@@ -98,14 +98,14 @@ const Page = () => {
           <div className='flex flex-col gap-[14px] bg-[#FAFAFA] py-[14px] px-5 rounded-[5px]'>
             <div className='h3'>{type}</div>
             <div className='flex flex-col gap-[14px]'>
-              <AssignmentQuestionView
+              {/* <AssignmentQuestionView
                 question='1. What is 2 + 2?'
                 options={['4', '6', '5', '7']}
               />
               <AssignmentQuestionView
                 question='2. What is 2 + 2?'
                 options={['4', '6', '5', '7']}
-              />
+              /> */}
             </div>
           </div>
         </div>

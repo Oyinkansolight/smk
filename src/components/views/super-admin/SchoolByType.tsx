@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useGetSchools } from '@/server/institution';
+import { useDeleteInstitution, useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
@@ -15,25 +18,49 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const SchoolByType = ({ name, title }: { name: string; title: string }) => {
   const AT = Cookies.get('adminType');
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
-  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+  });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string>();
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+  const { mutateAsync } = useDeleteInstitution();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        const res = await mutateAsync(itemToDelete);
+        toggleModal();
+        setAction(null);
+        toast.success('Institution removed successfully');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
   const {
     data: schools,
     error,
     isLoading,
-    refetch
+    refetch,
   } = useGetSchools({ ...pagingData });
 
   const handleSearch = (value: string) => {
     setQuery(value);
     setPagingData({ ...pagingData, page: 1, query: value });
   };
-
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -49,18 +76,18 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
   };
 
   const handleJumpToEnd = () => {
-    if (schools) setPagingData({ ...pagingData, page: schools?.paging?.totalPage });
+    if (schools)
+      setPagingData({ ...pagingData, page: schools?.paging?.totalPage });
   };
 
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm) {
-        refetch()
+        refetch();
       }
     };
 
     refetchSearchRecords();
-
   }, [refetch, debouncedSearchTerm]);
 
   useEffect(() => {
@@ -71,6 +98,19 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Institution'
+            body='Are you sure you want to delete this institution?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -86,7 +126,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>{name}</h1>
 
-      {AT === "SUPER" &&
+      {AT === 'SUPER' && (
         <div className='mb-6 flex justify-between items-end'>
           <Link
             href='/super-admin/add-school'
@@ -95,23 +135,21 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
             Add Institution
           </Link>
         </div>
-      }
+      )}
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>{title}</p>
-          <h1 className='font-semibold text-2xl'>{schools?.paging.totalItems ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {schools?.paging.totalItems ?? 0}
+          </h1>
         </div>
       </div>
 
       <div className='flex flex-col gap-4'>
         <div className='flex justify-end'>
           <div className='flex w-[300px] space-x-2'>
-
-            <BasicSearch
-              placeholder='Search...'
-              handleSearch={handleSearch}
-            />
+            <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
           </div>
         </div>
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
@@ -135,15 +173,20 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
                 <div className='col-span-5 lg:col-span-3'>
                   <Link href={`/super-admin/school?id=${item.id}`}>
-                    <h2 className='text-sm font-medium'>{item?.instituteName}</h2>
+                    <h2 className='text-sm font-medium'>
+                      {item?.instituteName}
+                    </h2>
                   </Link>
                 </div>
 
                 <div className='hidden lg:block col-span-1'>
-                  {item?.instituteType ?? "-"}
+                  {item?.instituteType ?? '-'}
                 </div>
 
-                <div className='hidden lg:block col-span-1'> {item?.studentCount ?? item?.students?.length ?? 0}</div>
+                <div className='hidden lg:block col-span-1'>
+                  {' '}
+                  {item?.studentCount ?? item?.students?.length ?? 0}
+                </div>
 
                 <div className='hidden lg:block col-span-1'>
                   {' '}
@@ -152,7 +195,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
                 <div className='col-span-5 lg:col-span-4'>
                   {' '}
-                  {item?.instituteAddress ?? "-"}{' '}
+                  {item?.instituteAddress ?? '-'}{' '}
                 </div>
 
                 <div className='col-span-1 justify-end flex'>
@@ -164,11 +207,17 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   >
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                      <div className='shadow-lg rounded-xl  bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                        <Link href={`/super-admin/school?id=${item.id}`} className='block p-4 hover:bg-gray-200 w-full'>
                           Edit
-                        </button>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setItemToDelete(item.id);
+                            toggleModal();
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
                           Delete
                         </button>
                       </div>
@@ -238,22 +287,24 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   </div>
                 ))}
 
-              {schools.paging.totalPage > 3 &&
+              {schools.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
-                      (pagingData.page > 3 && pagingData.page < schools.paging.totalPage)
+                      (pagingData.page > 3 &&
+                        pagingData.page < schools.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
-                  {pagingData.page > 3 && pagingData.page < schools.paging.totalPage
+                  {pagingData.page > 3 &&
+                  pagingData.page < schools.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
-              }
+              )}
 
               {schools.paging.totalPage > 4 && (
                 <div
@@ -267,7 +318,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                 </div>
               )}
 
-              {schools.paging.totalPage > 1 &&
+              {schools.paging.totalPage > 1 && (
                 <div
                   className={clsxm(
                     pagingData.page === schools.paging.totalPage
@@ -278,11 +329,14 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                 >
                   {schools.paging.totalPage}
                 </div>
-              }
+              )}
 
               <button
                 onClick={handleNextPage}
-                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
+                disabled={
+                  (schools && schools?.data?.length < 10) ||
+                  pagingData.page === schools.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -303,7 +357,10 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={schools && schools?.data?.length < 10 || pagingData.page === schools.paging.totalPage}
+                disabled={
+                  (schools && schools?.data?.length < 10) ||
+                  pagingData.page === schools.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

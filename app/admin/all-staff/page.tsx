@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
+import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useDeleteStaff } from '@/server/government/classes_and_subjects';
-import { useCreateBulkStaff, useGetTeachersListByInstitution } from '@/server/institution';
+import {
+  useCreateBulkStaff,
+  useGetTeachersListByInstitution,
+} from '@/server/institution';
 import { Staff } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,8 +22,10 @@ import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
-import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
-import { getFromLocalStorage } from '@/lib/helper';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStaff = () => {
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
@@ -24,7 +33,11 @@ const AllStaff = () => {
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
-  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setIsBulk] = useState(false);
@@ -47,7 +60,7 @@ const AllStaff = () => {
       try {
         const res = await mutateAsync(itemToDelete);
         toggleModal();
-        setAction(null)
+        setAction(null);
         toast.success('Staff removed successfully');
       } catch (error) {
         logger(error);
@@ -88,14 +101,16 @@ const AllStaff = () => {
     data: staff,
     error,
     isLoading,
-    refetch
-  } = useGetTeachersListByInstitution({ ...pagingData, instituteId: institutionId, });
+    refetch,
+  } = useGetTeachersListByInstitution({
+    ...pagingData,
+    instituteId: institutionId,
+  });
 
   const handleSearch = (value: string) => {
     setQuery(value);
     setPagingData({ ...pagingData, page: 1, query: value });
   };
-
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -117,12 +132,11 @@ const AllStaff = () => {
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm) {
-        refetch()
+        refetch();
       }
     };
 
     refetchSearchRecords();
-
   }, [refetch, debouncedSearchTerm]);
 
   useEffect(() => {
@@ -133,6 +147,19 @@ const AllStaff = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Staff'
+            body='Are you sure you want to delete this staff?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -151,7 +178,9 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Staff</p>
-          <h1 className='font-semibold text-2xl'>{staff?.paging.itemCount ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {staff?.paging.itemCount ?? 0}
+          </h1>
         </div>
 
         {isBulk && (
@@ -238,11 +267,7 @@ const AllStaff = () => {
       <div className='flex flex-col gap-4'>
         <div className='flex justify-end'>
           <div className='flex w-[300px] space-x-2'>
-
-            <BasicSearch
-              placeholder='Search...'
-              handleSearch={handleSearch}
-            />
+            <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
           </div>
         </div>
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
@@ -262,13 +287,12 @@ const AllStaff = () => {
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-4'>
-                  {item?.oracleNumber ?? "-"}
-                </div>
+                <div className='col-span-4'>{item?.oracleNumber ?? '-'}</div>
 
                 <div className='col-span-4'>
                   <Link href={`/admin/staff?id=${item.id}`}>
-                    {item?.user?.lastName || 'N/A'} {item?.user?.firstName || 'N/A'}
+                    {item?.user?.lastName || 'N/A'}{' '}
+                    {item?.user?.firstName || 'N/A'}
                   </Link>
                 </div>
 
@@ -284,10 +308,19 @@ const AllStaff = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        <Link
+                          href={`/admin/staff?id=${item.id}`}
+                          className='p-4 hover:bg-gray-200 w-full block'
+                        >
                           Edit
-                        </button>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setItemToDelete(item.id);
+                            toggleModal();
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
                           Delete
                         </button>
                       </div>
@@ -357,22 +390,24 @@ const AllStaff = () => {
                   </div>
                 ))}
 
-              {staff.paging.totalPage > 3 &&
+              {staff.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
-                      (pagingData.page > 3 && pagingData.page < staff.paging.totalPage)
+                      (pagingData.page > 3 &&
+                        pagingData.page < staff.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
-                  {pagingData.page > 3 && pagingData.page < staff.paging.totalPage
+                  {pagingData.page > 3 &&
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
-              }
+              )}
 
               {staff.paging.totalPage > 4 && (
                 <div
@@ -386,7 +421,7 @@ const AllStaff = () => {
                 </div>
               )}
 
-              {staff.paging.totalPage > 1 &&
+              {staff.paging.totalPage > 1 && (
                 <div
                   className={clsxm(
                     pagingData.page === staff.paging.totalPage
@@ -397,11 +432,14 @@ const AllStaff = () => {
                 >
                   {staff.paging.totalPage}
                 </div>
-              }
+              )}
 
               <button
                 onClick={handleNextPage}
-                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -422,7 +460,10 @@ const AllStaff = () => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

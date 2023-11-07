@@ -10,8 +10,8 @@ import SingleStudentAttendanceTracker from '@/components/views/admin/student/Sin
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
-import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
+import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -24,6 +24,8 @@ import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -100,8 +102,9 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
-          }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
+          (student?.user ?? [])[0]?.lastName ?? ''
+        }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -140,9 +143,10 @@ const Page = () => {
 
           {tabIdx === 0 && (
             <StudentDashboardView
-              schoolType="Secondary"
-              classArm={`${student ? student?.class?.class.name : 'Loading...'
-                }  ${student ? student?.class?.arm : ''}`}
+              schoolType='Secondary'
+              classArm={`${
+                student ? student?.class?.class.name || 'null' : 'Loading...'
+              }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={0}
             />

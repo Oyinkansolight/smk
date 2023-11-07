@@ -45,6 +45,8 @@ export default function Page() {
     termId: term as unknown as string,
   });
 
+  console.log(gradeList);
+
   useEffect(() => {
     refetch();
   }, [idx, refetch]);
