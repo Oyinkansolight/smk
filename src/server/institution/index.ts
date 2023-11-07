@@ -323,7 +323,7 @@ export function useGetTeachersList(params?: PaginationParams) {
         const d = await request.get('/v1/government/teachers/get-staffs', {
           params,
         });
-        return d.data.data.data as StaffPaginatedData<Staff>;
+        return d.data.data.data as any;
       } catch (error) {
         logger(error);
         throw error;

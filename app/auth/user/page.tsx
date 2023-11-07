@@ -102,6 +102,7 @@ export default function StudentAuth() {
           router.push(ROUTES.SUPER_ADMIN);
           if (isChecked) setUserDashboard(ROUTES.SUPER_ADMIN);
         }
+        //fetch profile info
 
         toast.success(response.data.data.message);
         toast.info('Redirecting to dashboard...');

@@ -3,6 +3,7 @@
 import NewStudentSmallTimetable from '@/components/views/single-student/NewStudentSmallTimetable';
 import NextPeriod from '@/components/views/single-student/NextPeriod';
 import { getFromSessionStorage } from '@/lib/helper';
+import { useGetProfile } from '@/server/auth';
 import { useGetStudentOngoingPeriod } from '@/server/government/student';
 import { useGetTodaysPeriod } from '@/server/student';
 import Image from 'next/image';
@@ -11,6 +12,9 @@ import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function NewStudentDashboard() {
+  //fetch profile info
+
+  useGetProfile();
   const daysOfWeek = [
     'Sunday',
     'Monday',
