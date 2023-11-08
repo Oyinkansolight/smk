@@ -54,6 +54,7 @@ type TableItemData = (UserFolder | UserFile) & {
   // setDeleteFileId: (fileId: string) => void;
   setConentType: (fileId: string) => void;
   toggleDeleteModal: () => void;
+  setQuery: (value: string) => void;
 };
 
 const columns: TableColumn<TableItemData>[] = [
@@ -84,7 +85,10 @@ const columns: TableColumn<TableItemData>[] = [
       } else if ('folderName' in item) {
         return (
           <div
-            onClick={() => item.id && item.onFolderClick(item)}
+            onClick={() => {
+              item.id && item.onFolderClick(item)
+              item.setQuery && item.setQuery("")
+            }}
             className='col-span-4 cursor-pointer w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'
           >
             <div>
@@ -706,6 +710,7 @@ const UploadDocument = ({
                     action,
                     isAssign,
                     openModal,
+                    setQuery,
                     setAction,
                     setIsAssign,
                     idx: item.id ? item.id : idx,
