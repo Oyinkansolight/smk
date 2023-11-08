@@ -2,7 +2,6 @@
 
 import NewHeader from '@/components/layout/NewHeader';
 import NewStudentSidebar from '@/components/layout/NewStudentSideBar';
-import dynamic from 'next/dynamic';
 // const NewStudentSidebar = dynamic(
 //   () => import('@/components/layout/NewStudentSideBar'),
 //   { ssr: false }
@@ -19,8 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <head />
+    <>
       <div className='flex h-screen min-h-screen flex-col'>
         <NewHeader />
         <div className='flex flex-1 flex-row overflow-y-hidden'>
@@ -30,6 +28,6 @@ export default function RootLayout({
           </main>
         </div>
       </div>
-    </html>
+    </>
   );
 }

@@ -17,8 +17,7 @@ export default function RootLayout({
   // const routeDetails = usePathname();
   const [open, setOpen] = useState(false);
   return (
-    <html>
-      <head />
+    <>
       <div className='flex h-screen min-h-screen flex-col bg-[#F7F8FA]'>
         <Header />
 
@@ -39,6 +38,6 @@ export default function RootLayout({
           {/* {routeDetails === '/admin' && <RightSidebar />} */}
         </div>
       </div>
-    </html>
+    </>
   );
 }

@@ -42,16 +42,18 @@ export default function StudentAuth() {
     setCheckUserLogin(true);
     const validSession = getStorageValueWithExpiry('local', 'TOKEN_KEY');
     const userPath = getStorageValueWithExpiry('local', 'dashboard');
+
     if (validSession && userPath) {
       router.push(userPath);
     } else {
       setCheckUserLogin(false);
     }
+
     if (actionName === 'logout' && typeof window !== 'undefined') {
       sessionStorage.clear();
       localStorage.clear();
     }
-  }, [router]);
+  }, [actionName, router]);
 
   const toggleCheckbox = () => {
     setIsChecked(!isChecked);
@@ -75,7 +77,7 @@ export default function StudentAuth() {
     if (isChecked) {
       data.rememberMe = true;
     }
-   
+
     try {
       const response = await mutateAsync(data);
 

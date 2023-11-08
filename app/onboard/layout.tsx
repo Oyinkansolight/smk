@@ -6,9 +6,8 @@ import React from 'react';
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const isGenericApp = Cookies.get('isGenericApp');
   return (
-    <html>
-      <head />
-      <body className='flex h-screen max-h-screen flex-col overflow-hidden'>
+    <>
+      <div className='flex h-screen max-h-screen flex-col overflow-hidden'>
         <header className='flex h-[158px] flex-row items-center gap-x-[109px] bg-[#E8FFF7] px-16 text-3xl font-bold md:text-5xl'>
           {isGenericApp === 'N' && (
             <Image
@@ -25,8 +24,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className='mx-11 mt-[22px] h-full overflow-hidden rounded-lg border-x border-[#E5E5E5] px-5 py-8'>
           {children}
         </div>
-      </body>
-    </html>
+      </div>
+    </>
   );
 };
 

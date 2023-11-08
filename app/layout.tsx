@@ -1,6 +1,5 @@
 'use client';
 
-import useWindowDimensions from '@/hooks/useWindowDimension';
 import logger from '@/lib/logger';
 import request from '@/server';
 // Import the styles provided by the react-pdf-viewer packages
@@ -33,24 +32,11 @@ export default function RootLayout({
     charging,
   } = useBattery();
 
-  // const [mounted, setMounted] = useState(false);
-  // useEffect(() => {
-  //   setMounted(true)
-  // }, [])
-
-
-
   // const { data: isValidDevice } = useGetValidIMEI();
   // console.log(isValidDevice);
-  const { width, height } = useWindowDimensions();
 
   const isValidDevice = true;
-  // const isHydrated = (width && width > 0) && (height && height > 0);
-
-
   useEffect(() => {
-    // logger(width);
-    // logger(height);
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
       if (currentBattery <= 20 && !charging) {
