@@ -200,7 +200,7 @@ const AllStudent = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>{students?.totalInstitutionStudents ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{students?.paging?.totalItems ?? 0}</h1>
         </div>
 
         {isBulk && (
