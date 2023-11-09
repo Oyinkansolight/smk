@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
-import BasicModal from '@/components/modal/Basic';
-import LogoutModalContent from '@/components/modals/logout';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
@@ -29,7 +27,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
   const { mutateAsync: clockOut } = useClockOut();
   const { data: profileData } = useGetProfile();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm('Are you sure you want to logout?');
     if (confirm) {
@@ -179,7 +177,36 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
 
             <div className='h-4' />
 
-            {open && (
+            {open &&
+              <Button
+                title='Logout'
+                className={clsxm(
+                  'min-w-[170px]',
+                  'bg-[#1A8FE3] font-bold text-white',
+                  'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg',
+                )}
+                onClick={handleLogout}
+              >
+                <div className='flex flex-row items-center gap-[14.25px]'>
+                  <BiExit
+                    className={clsxm(
+                      'fill-red-500',
+                      open ? 'md:w-auto md:h-auto' : 'w-6 h-6'
+                    )}
+                  />
+                  <div
+                    className={clsxm(
+                      open ? 'block' : 'hidden',
+                      'whitespace-nowrap text-[14px] '
+                    )}
+                  >
+                    Logout
+                  </div>
+                </div>
+              </Button>
+            }
+
+            {/* {open && (
               <BasicModal
                 className='z-[100000000] mx-auto max-w-[450px]'
                 content={<LogoutModalContent handleLogout={handleLogout} />}
@@ -199,7 +226,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
                   title='Logout'
                 />
               </BasicModal>
-            )}
+            )} */}
           </div>
         </nav>
       </aside>

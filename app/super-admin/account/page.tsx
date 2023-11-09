@@ -4,12 +4,9 @@ import GenericLoader from '@/components/layout/Loader';
 import TabBar from '@/components/layout/TabBar';
 import GradeBookSettings from '@/components/views/account-settings/GradeBookSettings';
 import YourRoles from '@/components/views/account-settings/YourRoles';
-import AccountDetails from '@/components/views/account-settings/AccountDetails';
-import EditHistory from '@/components/views/account-settings/EditHistory';
 import Schooltype from '@/components/views/super-admin/Account/Schooltype';
 import { useGetProfile } from '@/server/auth';
 import { useState } from 'react';
-import { BsFilterLeft } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdTrendingUp } from 'react-icons/io';
 import { MdOutlineDateRange } from 'react-icons/md';
@@ -32,10 +29,10 @@ const Account = () => {
         selected={tabIdx}
         onSelect={(i) => setTabIdx(i)}
         items={[
-          {
-            icon: <BsFilterLeft className='h-5 w-5' />,
-            label: 'Account Details',
-          },
+          // {
+          //   icon: <BsFilterLeft className='h-5 w-5' />,
+          //   label: 'Account Details',
+          // },
           {
             icon: <MdOutlineDateRange className='h-5 w-5' />,
             label: 'Grade Book Settings',
@@ -52,21 +49,21 @@ const Account = () => {
             icon: <IoMdTrendingUp className='h-5 w-5' />,
             label: 'Admins & Roles',
           },
-          {
-            icon: <IoMdTrendingUp className='h-5 w-5' />,
-            label: 'Change History',
-          },
+          // {
+          //   icon: <IoMdTrendingUp className='h-5 w-5' />,
+          //   label: 'Change History',
+          // },
         ]}
       />
 
 
 
-      {tabIdx === 0 && <AccountDetails />}
-      {tabIdx === 1 && <GradeBookSettings profile={profile} />}
-      {tabIdx === 2 && <Schooltype />}
-      {tabIdx === 3 && <YourRoles />}
-      {tabIdx === 4 && <Role />}
-      {tabIdx === 5 && <EditHistory />}
+      {/* {tabIdx === 0 && <AccountDetails profile={profile} />} */}
+      {tabIdx === 0 && <GradeBookSettings profile={profile} />}
+      {tabIdx === 1 && <Schooltype />}
+      {tabIdx === 2 && <YourRoles />}
+      {tabIdx === 3 && <Role />}
+      {/* {tabIdx === 4 && <EditHistory />} */}
     </section>
   );
 };

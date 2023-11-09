@@ -33,9 +33,8 @@ export default function RootLayout({
   }, [routeDetails]);
 
   return (
-    <html>
-      <head />
-      <body className='flex h-screen min-h-screen flex-col bg-[#EFF3F7]'>
+    <>
+      <div className='flex h-screen min-h-screen flex-col bg-[#EFF3F7]'>
         <MyGlobalContext.Provider
           value={{
             isDataLoading,
@@ -82,7 +81,7 @@ export default function RootLayout({
             }
           />
         </MyGlobalContext.Provider>
-      </body>
-    </html>
+      </div>
+    </>
   );
 }

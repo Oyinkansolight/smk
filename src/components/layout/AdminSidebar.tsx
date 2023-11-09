@@ -20,7 +20,9 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
     const confirm = window.confirm('Are you sure you want to logout?');
     if (confirm) {
       // eslint-disable-next-line no-alert
-      toast.success('You have been logged out successfully');
+      toast.success('You have been logged out successfully', {
+        toastId: "super-admin-logout"
+      });
       router.push('/auth/user?action=logout');
     }
   };

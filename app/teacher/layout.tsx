@@ -35,9 +35,8 @@ export default function RootLayout({
   }, [routeDetails]);
 
   return (
-    <html>
-      <head />
-      <body className='flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
+    <>
+      <div className='flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
         <div className='flex flex-1 flex-col overflow-y-hidden'>
           <Header handleToggle={handleToggle} />
 
@@ -54,7 +53,7 @@ export default function RootLayout({
             </main>
           </div>
         </div>
-      </body>
-    </html>
+      </div>
+    </>
   );
 }

@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Avatar from '~/svg/governor.svg';
 
-const Page = ({ profile } : { profile?: any }) => {
+const Page = ({ profile }: { profile?: any }) => {
   const router = useRouter();
   // const currentSessionId: string =
   //   getFromLocalStorage('currentSessionId') ?? '';

@@ -6,7 +6,7 @@ import { ResponsiveBar } from '@nivo/bar';
 const BarChart = ({ data }) => {
   const dataKeys = Object.keys(data ?? {});
   const parsedData = dataKeys.map((item) => ({
-    day: item[0],
+    day: item.slice(0, 3),
     staffColor: '#BF74FF',
     studentColor: '#FFB62B',
     staff: data[item].staff,
@@ -31,7 +31,7 @@ const BarChart = ({ data }) => {
         data={parsedData}
         keys={['student', 'staff']}
         indexBy='day'
-        innerPadding={5}
+        innerPadding={0}
         margin={{ top: 50, right: 30, bottom: 60, left: 30 }}
         padding={0}
         valueScale={{ type: 'linear' }}
