@@ -87,7 +87,7 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{staff?.paging.itemCount ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{staff?.paging.totalItems ?? 0}</h1>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ const AllStaff = () => {
             <div className='text-center'>Loading...</div>
           ) : (
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (staff?.data?.staffs ?? []).map((item: Staff, idx: number) => (
+            (staff?.data ?? []).map((item: Staff, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
                   {(pagingData.page - 1) * 10 + (idx + 1)}
@@ -178,11 +178,11 @@ const AllStaff = () => {
               </div>
             ))
           )}
-          {!isLoading && staff?.data?.staffs?.length === 0 && (
+          {!isLoading && staff?.data?.length === 0 && (
             <div className='text-red-500 py-4 text-center'>No record found</div>
           )}
 
-          {staff && staff?.data?.staffs?.length > 0 && (
+          {staff && staff?.data?.length > 0 && (
             <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
               <button
                 onClick={handleJumpToStart}
@@ -274,7 +274,7 @@ const AllStaff = () => {
 
               <button
                 onClick={handleNextPage}
-                disabled={staff && staff?.data?.staffs?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -295,7 +295,7 @@ const AllStaff = () => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={staff && staff?.data?.staffs?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />
