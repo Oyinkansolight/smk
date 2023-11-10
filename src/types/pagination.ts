@@ -1,5 +1,6 @@
 export interface PaginatedData<T> {
   data: T[];
+  count: number;
   paging: {
     totalPage: number;
     currentPage: number;

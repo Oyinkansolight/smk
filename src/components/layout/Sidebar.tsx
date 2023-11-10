@@ -120,6 +120,16 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
 
           <SideBarButton
             open={open}
+            icon={<FaRegIdCard className='#C3CAD9' />}
+            title='Manual Grade Book'
+            href='/teacher/manual-gradebook'
+            active={
+              routeDetails && routeDetails.includes('manual-gradebook') && true
+            }
+          />
+
+          <SideBarButton
+            open={open}
             icon={<BiBookContent className='#C3CAD9' />}
             title='Messages'
             href='/teacher/messages'
