@@ -13,7 +13,6 @@ import { RotatingLines } from 'react-loader-spinner';
 
 export default function NewStudentDashboard() {
   //fetch profile info
-
   useGetProfile();
   const daysOfWeek = [
     'Sunday',

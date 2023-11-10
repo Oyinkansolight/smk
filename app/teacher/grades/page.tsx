@@ -28,15 +28,14 @@ export default function Page() {
   const [isGradeManually, setIsGradeManually] = useState(false);
 
   const { data: profile } = useGetProfile();
+  const { data: allStudents } = useGetClassArmStudents({
+    classArmId: profile?.userInfo?.staff?.managedClassArm?.id,
+  });
 
   const { data, refetch } = useGetSubjectsAssignedToTeacher(
     profile?.userInfo?.staff?.id,
     profile?.currentSession?.[0]?.id
   );
-
-  const { data: allStudents } = useGetClassArmStudents({
-    classArmId: profile?.userInfo?.staff?.managedClassArm?.id,
-  });
 
   useEffect(() => {
     if (profile?.userInfo?.staff?.id) {

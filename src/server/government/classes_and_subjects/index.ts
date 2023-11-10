@@ -4,6 +4,19 @@ import { AssignedSubject, Subject, User } from '@/types/institute';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+export interface CreateGradeSettingsParams {
+  gradeType?: string;
+  gradeList?: GradeList[];
+  classId?: string;
+  subjectId?: string;
+  sessionId?: string;
+  termId?: string;
+  institutionId?: string;
+  classArmId?: string;
+  ca1_score?: number;
+  ca2_score?: number;
+  exams_score?: number;
+}
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
     queryKey: 'get_subject_list_gov',
@@ -75,6 +88,52 @@ export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
   ]);
   return query;
 }
+export function useCreateSubjectGradeBook() {
+  const mutation = useMutation({
+    mutationKey: 'create-gradebook',
+    mutationFn: (params: CreateGradeSettingsParams) =>
+      request.post('/v1/institutions/manual_grade', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useEditSubjectGradeBook() {
+  const mutation = useMutation({
+    mutationKey: 'create-gradebook',
+    mutationFn: (params: any) => {
+      const gradeBookId = params.id;
+      delete params.id;
+      return request.patch(
+        `/v1/institutions/manual_grade/${gradeBookId}`,
+        params,
+        {
+          withCredentials: true,
+        }
+      );
+    },
+  });
+  return mutation;
+}
+export function useGetSubjectGradeList(params: GetSubjectGradeBookParams) {
+  const query = useQuery({
+    queryKey: 'get_subject_grade_List',
+    queryFn: async () => {
+      if (params?.subjectId) {
+        const d = await request.get(
+          `/v1/institutions/manual_grade/subject/${params.subjectId}`
+        );
+        return d.data.data.data as any[];
+      }
+    },
+  });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params.subjectId, refetch]);
+  return query;
+}
 
 export function useGetSubjectsAssignedToTeacher(
   teacherId?: string,
@@ -95,16 +154,6 @@ export function useGetSubjectsAssignedToTeacher(
   return query;
 }
 
-export interface CreateGradeSettingsParams {
-  gradeType?: string;
-  gradeList?: GradeList[];
-  classId?: string;
-  subjectId?: string;
-  sessionId?: string;
-  termId?: string;
-  institutionId?: string;
-}
-
 export interface GradeList {
   gradeListType?: string;
   percentage?: string;
@@ -115,13 +164,9 @@ export function useCreateGradeSettings() {
     mutationKey: 'create_grade_book',
     mutationFn: async (params: CreateGradeSettingsParams) =>
       (
-        await request.post(
-          '/v1/institutions/grade-book/create-grade-book',
-          params,
-          {
-            withCredentials: true,
-          }
-        )
+        await request.post('/v1/institutions/manual_grade', params, {
+          withCredentials: true,
+        })
       ).data.data.data,
   });
   return mutation;

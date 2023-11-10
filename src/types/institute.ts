@@ -553,6 +553,7 @@ export interface ClassArmStudents {
   institution: Institution;
   user: User;
   classArmId: string;
+  grade?: any;
 }
 
 export interface StudentsListByInstitution {

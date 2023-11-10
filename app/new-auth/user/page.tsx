@@ -5,7 +5,6 @@ import { BasicCard } from '@/components/cards';
 import { BaseInput, Checkbox } from '@/components/input';
 import Layout from '@/components/layout/Layout';
 import GenericLoader from '@/components/layout/Loader';
-import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
@@ -259,14 +258,16 @@ export default function StudentAuth() {
               </BasicCard>
             </div>
             <div className='md:flex hidden  flex-col items-center justify-center container m-auto'>
-              <Image
-                width={562}
-                height={424}
-                alt={APP_LOGOS.APP_LOGO.alt}
-                src='/images/signin_right_image.gif'
-                className=''
-              />
-              <div className='flex justify-center items-center flex-col max-w-[250px]'>
+              <div className='bg-white rounded-3xl p-4'>
+                <Image
+                  width={410}
+                  height={410}
+                  alt={APP_LOGOS.APP_LOGO.alt}
+                  src='/images/Bookmarks-cuate.png'
+                  className=''
+                />
+              </div>
+              <div className='mt-3 flex justify-center items-center flex-col max-w-[250px]'>
                 <h2 className='text-2xl mb-2'>Easy Access</h2>
                 <span className='text-xs text-black/60'>
                   You can easily access all the information about the
