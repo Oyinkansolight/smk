@@ -187,7 +187,7 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
 
       <ResponsiveLine
         data={typeof (instituteIndex) === 'number' ? [parsedData[instituteIndex]] : parsedData}
-        margin={{ top: 50, right: 40, bottom: 70, left: 50 }}
+        margin={{ top: 130, right: 40, bottom: 70, left: 50 }}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
@@ -226,11 +226,11 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
         useMesh={true}
         legends={[
           {
-            anchor: 'bottom-right',
+            anchor: 'top-left',
             direction: 'column',
             justify: false,
-            translateX: -30,
-            translateY: 70,
+            translateX: -50,
+            translateY: -130,
             itemsSpacing: 0,
             itemDirection: 'left-to-right',
             itemWidth: 80,

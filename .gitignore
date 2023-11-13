@@ -42,5 +42,6 @@ sitemap.xml
 sitemap-*.xml
 
 # lock files
+# We are now including yarn.lock in the repo to make sure that deployments go in faster.
 package-lock.json
 .pnpm-lock.yaml
