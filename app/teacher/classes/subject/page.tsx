@@ -6,6 +6,7 @@ import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import EmptyView from '@/components/misc/EmptyView';
 import SmallTeacherSubjectListItem from '@/components/views/teacher/SmallTeacherSubjectListItem';
+import { getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
 import {
@@ -16,11 +17,12 @@ import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
 import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
+  const currentWeekFromSession = getFromSessionStorage('currentWeek');
   const { data: profile } = useGetProfile();
   const { data: terms, isLoading: isLoadingSessions } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
@@ -32,10 +34,23 @@ export default function Page() {
   const [currentWeek, setCurrentWeek] = useState(0);
   const isGenericApp = Cookies.get('isGenericApp') === 'Y';
 
-  // const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
-  //   teacherId: profile?.userInfo?.staff?.id,
-  //   sessionId: profile?.currentSession?.[0]?.id,
-  // });
+  useMemo(() => {
+    //* Handle the current week index
+    const getCurrentWeekIndex = () => {
+      if (weeks) {
+        const parsedCurrentWeek = JSON.parse(currentWeekFromSession ?? "");
+        if (parsedCurrentWeek) {
+          weeks?.data.forEach((week, index) => {
+            if (week?.id === parsedCurrentWeek?.id) {
+              setCurrentWeek(index);
+            }
+          });
+        }
+      }
+    }
+
+    getCurrentWeekIndex();
+  }, [currentWeekFromSession, weeks]);
 
   const sortedWeeks: Week[] = [];
 
@@ -134,7 +149,7 @@ export default function Page() {
                         ? i % 2 === 0
                           ? '/teacher/classes/subject-task-doc'
                           : '/teacher/classes/subject-task-video'
-                        : `/teacher/classes/subject-task?id=${period.id}&classArmId=${params?.get('classArmId')}`
+                        : `/teacher/classes/subject-task?id=${period.id}&classArmId=${params?.get('classArmId')}&armName=${params?.get('armName')}`
                     )
                   }
                   key={period?.id ?? i}

@@ -1,7 +1,5 @@
 import { timeConverter } from '@/lib/helper';
-import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
-import { BiChevronRight } from 'react-icons/bi';
 
 // const data = [
 //   {
@@ -64,7 +62,7 @@ export default function ClockInClockOutTimeTable({ data }) {
   return (
     <div>
       <Table columns={columns} data={data.slice(0, 5)} />
-      <div className='flex justify-end'>
+      {/* <div className='flex justify-end'>
         <Link
           className='flex items-center text my-2 px-4 text-[#007AFF]'
           href='#'
@@ -72,7 +70,7 @@ export default function ClockInClockOutTimeTable({ data }) {
           <div>View All</div>
           <BiChevronRight className='h-5 w-5' />
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }

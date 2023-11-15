@@ -239,6 +239,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
             <div className='text-red-500 py-4 text-center'>No record found</div>
           )}
 
+          {/* //Pagination */}
           {schools && schools?.data?.length > 0 && (
             <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
               <button
@@ -300,7 +301,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < schools.paging.totalPage
+                    pagingData.page < schools.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

@@ -1,5 +1,4 @@
 import Pill from '@/components/buttons/Pill';
-import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import * as React from 'react';
@@ -19,7 +18,7 @@ export default function Header({ handleToggle }: HeaderProps) {
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
-      <div className='mx-auto flex h-20 items-center justify-between px-4'>
+      <div className='mx-auto flex h-20 items-center justify-end px-4'>
         {handleToggle && (
           <div
             onClick={handleToggle}
@@ -31,9 +30,9 @@ export default function Header({ handleToggle }: HeaderProps) {
           </div>
         )}
 
-        <div className='flex w-full flex-row gap-28 ml-20'>
+        {/* <div className='flex w-full flex-row gap-28 ml-20'>
           <BasicSearch />
-        </div>
+        </div> */}
         <nav>
           <div className='flex flex-row items-center gap-[27px] px-10'>
             <div className='flex flex-row items-center gap-[18px]'>

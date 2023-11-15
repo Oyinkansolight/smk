@@ -11,6 +11,7 @@ import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { Institution } from '@/types/institute';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -61,6 +62,19 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <Link href='/teacher/grades'>
+        <div className='flex items-center space-x-4 pt-4'>
+          <Image
+            src='/svg/back.svg'
+            width={10}
+            height={10}
+            alt='back'
+            className='h-4 w-4'
+          />
+          <h3 className='text-[10px] font-medium'>Back</h3>
+        </div>
+      </Link>
+
       <div className='text-[#D4D5D7] py-8 text-xl'>
         Grade Book {'>'} {params?.get('subjectName')}
       </div>

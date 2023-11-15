@@ -148,7 +148,7 @@ const Page = () => {
                 student ? student?.class?.class.name || 'null' : 'Loading...'
               }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
-              totalSubject={0}
+              totalSubject={classArmData?.subjects.length ?? 0}
             />
           )}
           {tabIdx === 1 && (

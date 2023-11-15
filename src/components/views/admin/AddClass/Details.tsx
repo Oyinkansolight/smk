@@ -30,7 +30,7 @@ const Biodata = ({
   classArmInfo,
 }: Iprops) => {
   const { data: allClasses, isLoading: isLoadingClasses } = useGetClassesList();
-  const { data: allSubjects, isLoading: isLoadingSubjects } = useGetSubjectList();
+  const { data: allSubjects, isLoading: isLoadingSubjects } = useGetSubjectList({ limit: 100 });
 
 
   const filteredClass = useMemo(() => {
@@ -158,7 +158,7 @@ const Biodata = ({
                   label: v?.name,
                   value: v.id,
                 }))}
-                options={(allSubjects ?? []).map((v) => ({
+                options={(allSubjects?.data ?? []).map((v) => ({
                   label: v?.name,
                   value: v.id,
                 }))}

@@ -180,6 +180,7 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
 
         const res = await createLessonNote(payload);
         toast.success(res.data.data.message);
+        closeModal();
       } else if (
         type === activityTypes[1].value ||
         type === activityTypes[2].value

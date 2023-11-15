@@ -98,6 +98,7 @@ export function useResetPassword() {
 export function useGetProfile() {
   const query = useQuery({
     // staleTime: Number.POSITIVE_INFINITY,
+    refetchOnWindowFocus: false,
     queryKey: 'get_profile',
     queryFn: async () => {
       const response = (

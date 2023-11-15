@@ -31,7 +31,7 @@ const SubjectToClasses = ({
   addMoreClass,
   submissionList,
 }: Iprops) => {
-  const { data } = useGetSubjectList();
+  const { data } = useGetSubjectList({ limit: 100 });
 
   return (
     <section className=''>
@@ -70,7 +70,7 @@ const SubjectToClasses = ({
           <FormSelectSubject
             label='Select Subject available'
             name='subject'
-            options={data ?? []}
+            options={data?.data ?? []}
             register={register}
             validation={{
               required: 'Subject is required',

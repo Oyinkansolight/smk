@@ -216,7 +216,7 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
             isLoading={isLoadingSubjects}
             src='/svg/subjectcount.svg'
             title='Total Subject'
-            count={AllSubject?.length ?? 0}
+            count={AllSubject?.paging?.totalItems ?? 0}
             link='/super-admin/all-subject'
           />
         </div>

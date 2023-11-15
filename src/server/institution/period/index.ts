@@ -45,6 +45,7 @@ export function useGetWeekPeriodsBySubject(
   params: GetWeekPeriodsBySubjectParams
 ) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'get_week_periods_by_subject',
     queryFn: async () => {
       return params.sessionId && params.termId && params.weekId

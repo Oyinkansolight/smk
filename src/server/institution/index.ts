@@ -10,7 +10,7 @@ import {
   Subject,
 } from '@/types/institute';
 import { Staff } from '@/types/institute';
-import { PaginatedData, StaffPaginatedData } from '@/types/pagination';
+import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -118,24 +118,27 @@ export function useCreateSubject() {
   return mutation;
 }
 
-export function useGetSubjectList() {
+export function useGetSubjectList(params?: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_subject_list',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list?limit=10000000',
-          {
-            withCredentials: true,
-          }
+          '/v1/government/institutes/get-subject-list',
+          { params, withCredentials: true }
         );
-        return d.data.data.data.data as Subject[];
+        return d.data.data.data as PaginatedData<Subject>;
       } catch (error) {
         logger(error);
         throw error;
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.id, params?.page, params?.query, refetch]);
+
   return query;
 }
 
@@ -361,7 +364,7 @@ export function useGetTeachersListByInstitution(props: Props) {
           const d = await request.get(
             `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
               limit ? `&limit=${limit}` : ''
-            }${page ? `&page=${page}` : ''}`
+            }${page ? `&page=${page}` : ''}${q ? `&query=${q}` : ''}`
           );
           return d.data.data.data as PaginatedData<Staff>;
         } catch (error) {
@@ -375,7 +378,7 @@ export function useGetTeachersListByInstitution(props: Props) {
   const { refetch } = query;
   useEffect(() => {
     refetch({ cancelRefetch: true });
-  }, [limit, page, instituteId, refetch]);
+  }, [limit, page, q, instituteId, refetch]);
   return query;
 }
 
@@ -628,6 +631,7 @@ export function useCreateBulkStaff() {
 
 export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'academic_sessions_terms',
     queryFn: async () =>
       termId

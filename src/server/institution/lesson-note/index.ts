@@ -10,7 +10,7 @@ import {
 import { PaginatedData } from '@/types/pagination';
 import { SubmissionParams } from '@/types/test-and-exam';
 import { useEffect } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export interface CreateAssignmentParams {
   title?: string;
@@ -109,12 +109,17 @@ export interface SubmittedOption {
 }
 
 export function useCreateClassActivity() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'create_activity',
     mutationFn: (params: CreateClassActivityParams) =>
       request.post('/v1/institutions/lessons/create-class-activty', params, {
         withCredentials: true,
       }),
+    onSettled: () => {
+      client.refetchQueries('get_week_periods_by_id');
+    },
   });
   return mutation;
 }
@@ -147,12 +152,17 @@ export type CreateLessonNoteTypes = {
 };
 
 export function useCreateLessonNote() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'create_lesson_note',
     mutationFn: (params: CreateLessonNoteParams) =>
       request.post('/v1/institutions/lessons/create-lesson-note', params, {
         withCredentials: true,
       }),
+    onSettled: () => {
+      client.refetchQueries('get_week_periods_by_id');
+    },
   });
   return mutation;
 }

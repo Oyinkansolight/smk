@@ -51,7 +51,7 @@ const SubjectList = () => {
     }
   };
   useEffect(() => {
-    setSubjects(data);
+    setSubjects(data?.data);
   }, [data]);
 
   const InfoCard = ({ type, title, count }) => {
@@ -155,7 +155,7 @@ const SubjectList = () => {
         ) : (
           subjects && (
             <div className='space-y-2 mt-4'>
-              {data?.map((item, idx) => (
+              {data?.data?.map((item, idx) => (
                 <SubjectCard
                   key={idx}
                   data={item}

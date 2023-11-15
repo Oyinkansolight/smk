@@ -31,7 +31,7 @@ function AddActivityName({
   handleSubjectClassChange,
   loading,
 }: propType) {
-  const { data: allSubjects, isLoading } = useGetSubjectList();
+  const { data: allSubjects, isLoading } = useGetSubjectList({ limit: 100 });
   const { data: institutionProfile } = useGetProfile();
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
@@ -80,7 +80,7 @@ function AddActivityName({
                       >
                         <option value=''> -- Select an option -- </option>
 
-                        {(allSubjects ?? []).map((item, id) => (
+                        {(allSubjects?.data ?? []).map((item, id) => (
                           <option key={item?.id ?? id} value={item?.id}>
                             {item?.name}
                           </option>

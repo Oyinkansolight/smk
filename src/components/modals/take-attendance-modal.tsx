@@ -1,6 +1,7 @@
 import TakeAttendanceView from '@/components/views/teacher/take-attendance-view';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import { IoCloseCircle } from 'react-icons/io5';
 
 export default function TakeAttendanceModal({
   children,
@@ -49,7 +50,16 @@ export default function TakeAttendanceModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-h-[618px] max-w-[1032px] text-start transform overflow-auto rounded-2xl bg-white p-6 shadow-xl transition-all'>
-                  <TakeAttendanceView />
+                  <div className='flex relative'>
+                    <IoCloseCircle
+                      onClick={closeModal}
+                      className='w-6 h-6 lg:w-10 lg:h-10 absolute right-0'
+                    />
+
+                    <span className='w-full'>
+                      <TakeAttendanceView />
+                    </span>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

@@ -56,15 +56,7 @@ export default function Page() {
           <div className='flex space-x-4 items-center w-[350px]'>
             <Button
               variant='secondary'
-              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-              onClickHandler={() => {
-                setIsGradeManually(!isGradeManually);
-              }}
-            >
-              Grade manually
-            </Button>
-            <Button
-              variant='secondary'
+              onClick={() => router.push('/teacher/grades/grade-list')}
               className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
             >
               View Grade List

@@ -27,7 +27,7 @@ function EditWeek({
   setperiodsUpdate,
 }: propType) {
   const params = useSearchParams();
-  const { data } = useGetSubjectList();
+  const { data } = useGetSubjectList({ limit: 100 });
   const subjectId = params?.get('id') as string;
   const [currentPeriodIndex, setCurrentPeriodIndex] = useState(0);
   const [files, setFiles] = useState<Record<number, string>>({});
@@ -190,7 +190,7 @@ function EditWeek({
               </p>
 
               <div>
-                {data && (
+                {data?.data && (
                   <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                     {periodsList.map((v: any, idx: number) => (
                       <div key={v.id} className='bg-white border rounded p-4'>

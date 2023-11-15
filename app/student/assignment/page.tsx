@@ -26,7 +26,7 @@ import { toast } from 'react-toastify';
 
 const Page = () => {
   const { data: allSession } = useGetAcademicSessions();
-  const { data: allSubject } = useGetSubjectList();
+  const { data: allSubject } = useGetSubjectList({ limit: 1000 });
   // const [subjectId, setSubjectId] = useState('');
   const [myPendingAssignment, setMyPendingAssignment] = useState<any>([]);
   const [myCompletedAssignment, setMyCompletedAssignment] = useState<any>([]);
@@ -157,7 +157,7 @@ const Page = () => {
               className='p-2 bg-[#FFF6E7] border !text-xs rounded'
             >
               <option value=''>Subject</option>
-              {(allSubject ?? []).map((v: any, i: number) => (
+              {(allSubject?.data ?? []).map((v: any, i: number) => (
                 <option key={i} value={v.id}>
                   {v.name}
                 </option>

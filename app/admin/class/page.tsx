@@ -3,11 +3,10 @@
 import StudentTeacherProfileCard from '@/components/cards/Classprofile';
 import TabBar from '@/components/layout/TabBar';
 import StudentList from '@/components/views/admin/Class/studentList';
-import Subject from '@/components/views/admin/Class/subject';
 import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
-import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
+import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import { useGetClassArmInfo } from '@/server/institution/class';
 // import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useSearchParams } from 'next/navigation';

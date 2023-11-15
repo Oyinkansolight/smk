@@ -100,7 +100,7 @@ function AddActivityName({
   type,
   setType,
 }: propType) {
-  const { data } = useGetSubjectList();
+  const { data } = useGetSubjectList({ limit: 100 });
 
   useEffect(() => {
     setStartTime(convertTimestampToTime(itemToEdit.startTime));
@@ -208,7 +208,7 @@ function AddActivityName({
           </div>
           {type === 'period' ? (
             <div>
-              {((data && subjectId1) || activityname1) && (
+              {((data?.data && subjectId1) || activityname1) && (
                 <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                   <div className='bg-white border rounded p-4'>
                     <div className='border-b py-1 mb-2'>

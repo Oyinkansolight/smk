@@ -3,6 +3,7 @@
 
 import AddSession from '@/components/modal/AddSession';
 import { BasicSearch } from '@/components/search';
+import { INSTITUTION_TYPES } from '@/constant/institution';
 import logger from '@/lib/logger';
 // import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
@@ -16,12 +17,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AcademicCalendar = () => {
   const handleCreateAcademicCalendar = useCreateAcademicCalendar();
@@ -103,7 +98,7 @@ const AcademicCalendar = () => {
     const allFilteredSessions = data?.data.filter(
       (item: any) =>
         typeof item.institutionType === 'string' &&
-        item.institutionType.toLowerCase() === e.target.value.toLowerCase()
+        item.institutionType.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setFilteredSessions(allFilteredSessions);
   };
@@ -183,10 +178,10 @@ const AcademicCalendar = () => {
             className='border-none bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg'
           >
             <option value=''>Filter by Institution type</option>
-            <option value='Eccde'>ECCDE</option>
-            <option value='Primary School'>Primary</option>
-            <option value='Secondary School'>Secondary</option>
-            <option value='Tertiary'>Tertiary</option>
+            <option value={INSTITUTION_TYPES.ECCDE}>ECCDE</option>
+            <option value={INSTITUTION_TYPES.PRIMARY}>Primary</option>
+            <option value={INSTITUTION_TYPES.SECONDARY}>Secondary</option>
+            <option value={INSTITUTION_TYPES.TERTIARY}>Tertiary</option>
           </select>
 
           <BasicSearch
