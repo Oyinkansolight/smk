@@ -125,7 +125,7 @@ export default function Page() {
 
         {period?.classActivities && period?.classActivities.length > 0 && (
           <div className='flex flex-wrap gap-[17px] justify-end h-fit self-end mb-4'>
-            {period?.classActivities.map((activity) => {
+            {period?.classActivities.filter(activity => activity?.typeOfActivity).map((activity) => {
               const parsedActivityName = activity.typeOfActivity.includes('_')
                 ? activity.typeOfActivity[0] +
                 activity.typeOfActivity
@@ -144,6 +144,19 @@ export default function Page() {
                   type={activity.typeOfActivity}
                 >
                   {parsedActivityName}
+                </SideBarItem>
+              );
+            })}
+
+            {period?.classActivities.filter(activity => !activity?.typeOfActivity).map((activity) => {
+              return (
+                <SideBarItem
+                  period={period}
+                  key={activity.id}
+                  type="LESSON_NOTE"
+                  classArmId={classArmId ?? ""}
+                >
+                  Lesson Note
                 </SideBarItem>
               );
             })}
