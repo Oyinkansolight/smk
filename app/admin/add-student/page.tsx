@@ -31,7 +31,7 @@ export default function AddStudent() {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-  const [stage, setStage] = useState(3);
+  const [stage, setStage] = useState(1);
   const [imgSrc, setImgSrc] = useState(null);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
