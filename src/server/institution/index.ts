@@ -127,7 +127,7 @@ export function useGetSubjectList(params?: Partial<PaginationParams>) {
           '/v1/government/institutes/get-subject-list',
           { params, withCredentials: true }
         );
-        return d.data.data.data 
+        return d.data.data.data;
       } catch (error) {
         logger(error);
         throw error;
@@ -224,7 +224,7 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
             params.limit ? `&limit=${params.limit}` : ''
           }${params.page ? `&page=${params.page}` : ''}`
         );
-        return d.data.data.data as PaginatedData<Student> | any;
+        return d.data.data as PaginatedData<Student> | any;
       } catch (error) {
         logger(error);
         throw error;

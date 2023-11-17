@@ -12,7 +12,6 @@ import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import { useCreateBulkStudent, useGetParents } from '@/server/institution';
-import { Student } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -199,9 +198,10 @@ const AllParents = () => {
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
           <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
             <div className='col-span-1'>No</div>
-            <div className='col-span-5'>Name</div>
-            <div className='hidden lg:block col-span-4'>Institution</div>
-            <div className='hidden lg:block col-span-1'>Institution Type</div>
+            <div className='col-span-2'>Last Name</div>
+            <div className='hidden lg:block col-span-2'>First Name</div>
+            <div className='hidden lg:block col-span-3'>Email</div>
+            <div className='hidden lg:block col-span-4'>Address</div>
           </div>
 
           {isLoading && <div className='text-center'>Loading...</div>}
@@ -209,27 +209,32 @@ const AllParents = () => {
           {!isLoading &&
             parents &&
             parents?.data?.length > 0 &&
-            parents?.data.map((item: Student, idx: number) => (
+            parents?.data.map((item: any, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-5'>
-                  <Link href={`/admin/student?id=${item.id}`}>
-                    {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
-                    {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
-                  </Link>
+                <div className='col-span-2'>
+                  {/* <Link href={`/admin/student?id=${item.id}`}> */}
+                  {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
+                  {/* </Link> */}
+                </div>
+
+                <div className='col-span-2'>
+                  {/* <Link href={`/admin/student?id=${item.id}`}> */}
+                  {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
+                  {/* </Link> */}
                 </div>
 
                 <div className='col-span-4 lg:col-span-4'>
                   {' '}
-                  {item?.institution?.instituteName || 'N/A'}{' '}
+                  {item?.email || 'N/A'}{' '}
                 </div>
 
                 <div className='hidden lg:block col-span-1'>
                   {' '}
-                  {item?.institution?.instituteType || 'N/A'}{' '}
+                  {item?.address || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-1 justify-end flex'>
@@ -337,7 +342,7 @@ const AllParents = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < parents.paging.totalPage
+                    pagingData.page < parents.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
