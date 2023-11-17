@@ -1,23 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import GenericLoader from '@/components/layout/Loader';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
-import Details from '@/components/views/admin/AddClass/Details';
-import Publish from '@/components/views/admin/AddClass/publish';
+import Details from '@/components/views/admin/LinkStudent/Details';
+import Publish from '@/components/views/admin/LinkStudent/publish';
 import { getErrMsg } from '@/server';
-import { useGetProfile } from '@/server/auth';
+import { useGetCurrentSession, useGetProfile } from '@/server/auth';
 import {
+  useCreateClassArm,
   useGetTeachersListByInstitution,
-  useUpdateClassArm,
 } from '@/server/institution';
-import { useGetClassArmInfo } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
-// import { useGetClassArmStudents } from '@/server/institution/class-arm';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
@@ -26,24 +22,9 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const EditClass = () => {
-  const p = useSearchParams();
-  const classArmId = p?.get('id');
-
-  const {
-    data: classArmInfo,
-    refetch: refetchClassArm,
-    isRefetching: isRefetchingArms,
-    isLoading: isLoadingArms,
-  } = useGetClassArmInfo(classArmId);
-
+const AddClass = () => {
   const { data: institutionProfile } = useGetProfile();
+  const { data: currentSessionInfo } = useGetCurrentSession();
   const { data: staffs } = useGetTeachersListByInstitution({
     instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
     limit: 1000,
@@ -63,11 +44,9 @@ const EditClass = () => {
   const [loading, setLoading] = useState(false);
   const [publishData, setPublishedData] = useState(null);
 
-  const handleUpdateClassArm = useUpdateClassArm();
+  const handleCreateStaff = useCreateClassArm();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
-
     if (
       !data.class ||
       !data.classArm ||
@@ -90,23 +69,23 @@ const EditClass = () => {
     }
 
     if (stage === 2) {
-      // const assignedSubjects: string[] = [];
-      // data.subjects.map((subject) => assignedSubjects.push(subject.value));
+      const assignedSubjects = data.subjects.map((subject) => subject.value);
 
       const classArmData = {
-        id: classArmId,
         arm: data.classArm.toUpperCase(),
         capacity: Number(data.classCapacity),
         classId: data.class,
+        subjects: assignedSubjects,
         teacherId: data.classTeacher.value,
-        // subjects: assignedSubjects,
+        sessionId: currentSessionInfo?.id,
+        institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
       try {
         setLoading(true);
-        const response = await handleUpdateClassArm.mutateAsync(classArmData);
+        const response = await handleCreateStaff.mutateAsync(classArmData);
 
         if (response) {
-          toast.success('Class Arm updated successfully');
+          toast.success('Class Arm created successfully');
           setLoading(false);
           //2 Second - Open Success Modal
           setIsOpen(true);
@@ -135,30 +114,18 @@ const EditClass = () => {
     },
   ];
 
-  useEffect(() => {
-    refetchClassArm();
-  }, [refetchClassArm, classArmId]);
-
-  if (isLoadingArms || isRefetchingArms) {
-    return (
-      <div className='flex justify-center items-center h-1/2'>
-        <GenericLoader />
-      </div>
-    );
-  }
-
   return (
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Class arm updated successfully'
+          title='Class arm created successfully'
           description='Hurray!'
           link='/admin/all-classes'
           homeLink='/admin'
           textLink='Manage Classes'
         />
       )}
-      <Link href='/admin/all-classes'>
+      <Link href='/admin/all-parent'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -171,7 +138,7 @@ const EditClass = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'> Edit Class Details</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Class Details</h1>
 
       <Stepper
         variant='#007AFF'
@@ -189,7 +156,6 @@ const EditClass = () => {
               control={control}
               staffs={staffs}
               profile={institutionProfile}
-              classArmInfo={classArmInfo}
             />
           )}
 
@@ -221,4 +187,4 @@ const EditClass = () => {
   );
 };
 
-export default EditClass;
+export default AddClass;

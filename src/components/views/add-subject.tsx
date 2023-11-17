@@ -77,7 +77,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
     const payload = {
       classId: ids,
       name: data.subject,
-      // institutionTypeId: institutionProfile?.userInfo?.esiAdmin?.id,
+      institutionTypeId: ["SECONDARY"],
     };
 
     const response = await mutateAsync(payload);

@@ -7,20 +7,20 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
+import logger from '@/lib/logger';
 import { useGetProfile } from '@/server/auth';
 import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
+import { GradeList } from '@/types/classes-and-subjects';
 import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import ordinal from 'ordinal';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { useSessionStorage } from 'usehooks-ts';
-import ordinal from 'ordinal';
-import { GradeList } from '@/types/classes-and-subjects';
-import logger from '@/lib/logger';
 
 export default function Page() {
   const [idx, setIdx] = useState(1);
@@ -145,7 +145,7 @@ export default function Page() {
                 gradeList={list}
                 name={list.class?.name}
               />
-            ))}
+            ))} */}
           </div>
         </>
       ) : (
@@ -181,9 +181,7 @@ function StudentGradeListItem({
         <div>0</div>
         <div className='text-black'>Fail</div>
         <div className='text-black flex items-center'>
-          <div>
-            {ordinal(id)}
-          </div>
+          <div>{ordinal(id)}</div>
         </div>
       </div>
     </StudentGradeModal>

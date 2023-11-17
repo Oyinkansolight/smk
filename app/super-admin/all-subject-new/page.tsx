@@ -191,9 +191,12 @@ const SubjectCard = ({
       )}
     >
       <div className='text-sm flex flex-col items-start capitalize gap-x-2 gap-y-5 font-medium whitespace-nowrap overflow-hidden'>
-        <div className='text-[#000] max-w-[250px] 2xl:max-w-[200px] text-[22xl] text-ellipsis overflow-hidden'>
+        <Link
+          href='/super-admin/all-subject-schooltype-new'
+          className='text-[#000] max-w-[250px] 2xl:max-w-[200px] text-[22xl] text-ellipsis overflow-hidden'
+        >
           {data.name}
-        </div>
+        </Link>
 
         <div className='text-xs font-light text-[#98988E]'>
           Classes:

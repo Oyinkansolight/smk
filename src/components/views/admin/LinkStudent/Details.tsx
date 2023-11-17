@@ -14,6 +14,14 @@ import ReactSelect from 'react-select';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -72,111 +80,46 @@ const Biodata = ({
 
   return (
     <section className=''>
-      <h2 className='text-3xl font-bold'>Class Details</h2>
+      <h2 className='text-3xl font-bold'>Link Student</h2>
       <p>Kindly enter the details below:</p>
 
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormSelectClassDefault
-            label='Select Class'
-            name='class'
+            label='Select Student'
+            name='student'
             formValue={classArmInfo?.class?.id ?? ''}
             options={filteredClass ?? []}
             register={register}
             validation={{
-              required: 'Class is required',
+              required: 'student is required',
             }}
             helper={
               errors?.class && {
-                message: errors?.class?.message,
+                message: errors?.student?.message,
                 type: 'danger',
               }
             }
           />
         </div>
         <div>
-          <FormInput
-            label='Input class capacity'
-            placeholder='Number of students in class'
-            name='classCapacity'
-            formValue={classArmInfo?.capacity ?? ''}
+          <FormSelectClassDefault
+            label='Select Student'
+            name='student'
+            formValue={classArmInfo?.class?.id ?? ''}
+            options={['Father', 'Mother', 'Brother', 'Guardian']}
             register={register}
             validation={{
-              required: 'Class Capacity is required',
-              // validate: {
-              //   //* count should be less than or equal to 50
-              //   lessThan: (v) => {
-              //     return parseInt(v) <= 50;
-              //   },
-              // },
+              required: 'student is required',
             }}
             helper={
-              errors?.classCapacity && {
-                message: 'Class capacity is required',
+              errors?.class && {
+                message: errors?.student?.message,
                 type: 'danger',
               }
             }
           />
         </div>
-      </div>
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <FormInput
-          label='Class Arm'
-          placeholder='A'
-          name='classArm'
-          formValue={classArmInfo?.arm ?? ''}
-          register={register}
-          validation={{
-            required: 'Class Arm Name is required',
-          }}
-          helper={
-            errors?.className && {
-              message: errors?.classArm?.message,
-              type: 'danger',
-            }
-          }
-        />
-
-        <Controller
-          control={control}
-          name='classTeacher'
-          render={({ field }) => (
-            <div>
-              <div className='font-bold'>Select Class Teacher</div>
-              <ReactSelect
-                required
-                {...field}
-                options={staffData}
-                className='h-auto mt-2 select'
-                defaultValue={staffData[selectedTeacherIndex]}
-              />
-            </div>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name='subjects'
-          render={({ field }) => (
-            <div>
-              <div className='font-bold'>Select Class Subjects</div>
-              <ReactSelect
-                isMulti
-                required
-                defaultValue={classArmInfo?.subjects?.map((v) => ({
-                  label: v?.name,
-                  value: v.id,
-                }))}
-                options={(allSubjects?.data ?? []).map((v) => ({
-                  label: v?.name,
-                  value: v.id,
-                }))}
-                {...field}
-                className='h-auto mt-2 select'
-              />
-            </div>
-          )}
-        />
       </div>
     </section>
   );

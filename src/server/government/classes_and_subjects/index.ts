@@ -16,6 +16,7 @@ export interface CreateGradeSettingsParams {
   ca1_score?: number;
   ca2_score?: number;
   exams_score?: number;
+  limit?: number;
 }
 export function useGetGovernmentSubjectList() {
   const query = useQuery({
@@ -89,6 +90,21 @@ export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
   return query;
 }
 export function useCreateSubjectGradeBook() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'create-gradebook',
+    mutationFn: (params: CreateGradeSettingsParams) =>
+      request.post('/v1/institutions/manual_grade', params, {
+        withCredentials: true,
+      }),
+    onSettled: () => {
+      client.refetchQueries(`create-gradebook-scoresheet`);
+    },
+  });
+  return mutation;
+}
+export function useCreateResultFromGradeBook() {
   const mutation = useMutation({
     mutationKey: 'create-gradebook',
     mutationFn: (params: CreateGradeSettingsParams) =>
@@ -98,7 +114,35 @@ export function useCreateSubjectGradeBook() {
   });
   return mutation;
 }
+export function useGetSubjectScoreSheet(params: CreateGradeSettingsParams) {
+  const query = useQuery({
+    queryKey: 'create-gradebook-scoresheet',
+    queryFn: async () => {
+      if (params.sessionId && params.termId) {
+        const d = await request.get(
+          `/v1/institutions/manual_grade/class/subject/`,
+          { params }
+        );
+        return d.data.data.data;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [
+    params.sessionId,
+    params.termId,
+    params.institutionId,
+    params.classArmId,
+    params.subjectId,
+    refetch,
+  ]);
+  return query;
+}
 export function useEditSubjectGradeBook() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'create-gradebook',
     mutationFn: (params: any) => {
@@ -106,11 +150,11 @@ export function useEditSubjectGradeBook() {
       delete params.id;
       return request.patch(
         `/v1/institutions/manual_grade/${gradeBookId}`,
-        params,
-        {
-          withCredentials: true,
-        }
+        params
       );
+    },
+    onSettled: () => {
+      client.refetchQueries(`create-gradebook-scoresheet`);
     },
   });
   return mutation;

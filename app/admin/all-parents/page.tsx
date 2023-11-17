@@ -11,10 +11,7 @@ import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import {
-  useCreateBulkStudent,
-  useGetParents,
-} from '@/server/institution';
+import { useCreateBulkStudent, useGetParents } from '@/server/institution';
 import { Student } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,6 +20,12 @@ import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllParents = () => {
   const { error: profileError } = useGetProfile();
@@ -185,81 +188,6 @@ const AllParents = () => {
             {parents?.paging?.totalItems ?? 0}
           </h1>
         </div>
-
-        {/* {isBulk && (
-          <BulkUser
-            loading={loading}
-            isReplace={isReplace}
-            onClickHandler={() => {
-              setIsBulk(!isBulk);
-            }}
-            setFile={setFile}
-            file={files}
-            handleIsReplace={handleIsReplace}
-            link='/pdfs/upload_student_template.xlsx'
-            bulkStudentUpload={bulkStudentUpload}
-          />
-        )}
-        <div className='mb-6 flex justify-end items-end relative'>
-          <button
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
-            className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
-          >
-            Add Student
-            <span className='ml-4'>
-              <svg
-                width='9'
-                height='6'
-                viewBox='0 0 9 6'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path
-                  d='M0.136086 0.607068C0.300449 0.43941 0.557649 0.424168 0.738891 0.561343L0.790815 0.607068L4.50049 4.3913L8.21016 0.607068C8.37452 0.43941 8.63172 0.424168 8.81296 0.561343L8.86489 0.607068C9.02925 0.774727 9.04419 1.03708 8.90972 1.22196L8.86489 1.27493L4.82785 5.39293C4.66349 5.56059 4.40629 5.57583 4.22505 5.43866L4.17312 5.39293L0.136086 1.27493C-0.0447111 1.0905 -0.0447111 0.791493 0.136086 0.607068Z'
-                  fill='#3361FF'
-                />
-              </svg>
-            </span>
-          </button>
-          {isOpen && (
-            <div
-              className='fixed inset-0 z-[9]'
-              onClick={() => {
-                setIsOpen(!isOpen);
-              }}
-            />
-          )}
-          {isOpen && (
-            <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[200px] h-max absolute top-12 right-0 z-10'>
-              <Link
-                href='/admin/add-student'
-                className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-              >
-                Add Single Student
-              </Link>
-
-              <input type='file' name='upload_file' id='upload_file' hidden />
-              <button
-                onClick={() => {
-                  setIsOpen(!isOpen);
-
-                  setIsBulk(!isBulk);
-                }}
-                className='w-full p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-              >
-                Upload Bulk Student
-              </button>
-              <input
-                type='file'
-                name='upload_folder'
-                id='upload_folder'
-                hidden
-              />
-            </div>
-          )}
-        </div> */}
       </div>
 
       <div className='flex flex-col gap-4'>
@@ -409,7 +337,7 @@ const AllParents = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < parents.paging.totalPage
+                  pagingData.page < parents.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

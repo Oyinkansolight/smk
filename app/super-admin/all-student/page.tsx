@@ -4,22 +4,24 @@
 // import AvrilImage from '~/svg/avril.svg';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
+import { BasicSearch } from '@/components/search';
+import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import {
-  useGetStudentsList,
-} from '@/server/institution';
+import { useGetStudentsList } from '@/server/institution';
 import { Student } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import { BasicSearch } from '@/components/search';
-import clsxm from '@/lib/clsxm';
-import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStudent = () => {
   const [action, setAction] = useState<number | null>(null);
@@ -29,22 +31,23 @@ const AllStudent = () => {
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
 
-  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
-
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+  });
 
   const {
     data: students,
     error,
     isLoading,
-    refetch
+    refetch,
   } = useGetStudentsList({ ...pagingData });
-
 
   const handleSearch = (value: string) => {
     setQuery(value);
     setPagingData({ ...pagingData, page: 1, query: value });
   };
-
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -60,7 +63,8 @@ const AllStudent = () => {
   };
 
   const handleJumpToEnd = () => {
-    if (students) setPagingData({ ...pagingData, page: students?.paging?.totalPage });
+    if (students)
+      setPagingData({ ...pagingData, page: students?.paging?.totalPage });
   };
 
   const toggleModal = () => {
@@ -73,7 +77,7 @@ const AllStudent = () => {
     if (itemToDelete) {
       try {
         toggleModal();
-        setAction(null)
+        setAction(null);
         const res = await mutateAsync(itemToDelete);
         toast.success('Student removed successfully');
       } catch (error) {
@@ -85,14 +89,12 @@ const AllStudent = () => {
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm) {
-        refetch()
+        refetch();
       }
     };
 
     refetchSearchRecords();
-
   }, [refetch, debouncedSearchTerm]);
-
 
   useEffect(() => {
     if (error) {
@@ -135,18 +137,16 @@ const AllStudent = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Students</p>
-          <h1 className='font-semibold text-2xl'>{students?.paging.totalItems ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {students?.paging.totalItems ?? 0}
+          </h1>
         </div>
       </div>
 
       <div className='flex flex-col gap-4'>
         <div className='flex justify-end'>
           <div className='flex w-[300px] space-x-2'>
-
-            <BasicSearch
-              placeholder='Search...'
-              handleSearch={handleSearch}
-            />
+            <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
           </div>
         </div>
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
@@ -157,11 +157,11 @@ const AllStudent = () => {
             <div className='hidden lg:block col-span-1'>Institution Type</div>
           </div>
 
-          {isLoading &&
-            <div className='text-center'>Loading...</div>
-          }
+          {isLoading && <div className='text-center'>Loading...</div>}
 
-          {!isLoading && students && students?.data?.length > 0 && (
+          {!isLoading &&
+            students &&
+            students?.data?.length > 0 &&
             students?.data.map((item: Student, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
@@ -170,7 +170,8 @@ const AllStudent = () => {
 
                 <div className='col-span-5'>
                   <Link href={`/super-admin/student?id=${item.id}`}>
-                    {item?.user?.[0]?.lastName || item?.lastName || 'N/A'} {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
+                    {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
+                    {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
                   </Link>
                 </div>
 
@@ -194,10 +195,19 @@ const AllStudent = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        <Link
+                          href={`/super-admin/student?id=${item.id}`}
+                          className='p-4 hover:bg-gray-200 w-full block'
+                        >
                           Edit
-                        </button>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setItemToDelete(item.id);
+                            toggleModal();
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
                           Delete
                         </button>
                       </div>
@@ -213,7 +223,7 @@ const AllStudent = () => {
                   )}
                 </div>
               </div>
-            )))}
+            ))}
 
           {!isLoading && students?.data?.length === 0 && (
             <div className='text-red-500 py-4 text-center'>No record found</div>
@@ -267,22 +277,24 @@ const AllStudent = () => {
                   </div>
                 ))}
 
-              {students.paging.totalPage > 3 &&
+              {students.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
-                      (pagingData.page > 3 && pagingData.page < students.paging.totalPage)
+                      (pagingData.page > 3 &&
+                        pagingData.page < students.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
-                  {pagingData.page > 3 && pagingData.page < students.paging.totalPage
+                  {pagingData.page > 3 &&
+                  pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
-              }
+              )}
 
               {students.paging.totalPage > 4 && (
                 <div
@@ -296,7 +308,7 @@ const AllStudent = () => {
                 </div>
               )}
 
-              {students.paging.totalPage > 1 &&
+              {students.paging.totalPage > 1 && (
                 <div
                   className={clsxm(
                     pagingData.page === students.paging.totalPage
@@ -307,11 +319,14 @@ const AllStudent = () => {
                 >
                   {students.paging.totalPage}
                 </div>
-              }
+              )}
 
               <button
                 onClick={handleNextPage}
-                disabled={students && students?.data?.length < 10 || pagingData.page === students.paging.totalPage}
+                disabled={
+                  (students && students?.data?.length < 10) ||
+                  pagingData.page === students.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -332,7 +347,10 @@ const AllStudent = () => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={students && students?.data?.length < 10 || pagingData.page === students.paging.totalPage}
+                disabled={
+                  (students && students?.data?.length < 10) ||
+                  pagingData.page === students.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />
@@ -341,10 +359,8 @@ const AllStudent = () => {
           )}
         </div>
       </div>
-
     </section>
   );
 };
 
 export default AllStudent;
-

@@ -3,6 +3,7 @@
 
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
+import { BasicSearch } from '@/components/search';
 import ROUTES from '@/constant/routes';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -15,6 +16,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllClasses = () => {
   const router = useRouter();
@@ -101,12 +108,12 @@ const AllClasses = () => {
         </Link>
       </div>
       <div className='flex justify-end'>
-        {/* <div className='flex w-[300px] space-x-2'>
+        <div className='flex w-[300px] space-x-2'>
           <select name='' className='border-none bg-transparent outline-none'>
             <option value=''>Filter</option>
           </select>
-          <BasicSearch handleSearch={handleSearch} />
-        </div> */}
+          <BasicSearch />
+        </div>
       </div>
 
       <div className='table-add-student mt-5 pb-20 pt-1 overflow-x-auto w-full h-full'>

@@ -127,7 +127,7 @@ export function useGetSubjectList(params?: Partial<PaginationParams>) {
           '/v1/government/institutes/get-subject-list',
           { params, withCredentials: true }
         );
-        return d.data.data.data as PaginatedData<Subject>;
+        return d.data.data.data 
       } catch (error) {
         logger(error);
         throw error;
