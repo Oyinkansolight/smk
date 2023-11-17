@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import ControlledModal from '@/components/modal/ControlledModal';
-import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -98,7 +96,7 @@ const AllStaff = () => {
   }, [error]);
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -282,7 +280,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < staff.paging.totalPage
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

@@ -68,7 +68,7 @@ const SchoolList = () => {
   };
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <div className='rounded-2xl p-4 bg-[#F0FFFF]'>
         <div className='flex justify-between items-center'>
           <div>

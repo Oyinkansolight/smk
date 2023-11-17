@@ -105,7 +105,7 @@ const AllStudent = () => {
   const totalPage = students?.paging?.totalPage ?? 0;
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
@@ -290,7 +290,7 @@ const AllStudent = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < students.paging.totalPage
+                    pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

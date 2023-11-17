@@ -278,7 +278,7 @@ const StaffCard = ({ data, currentTab }) => {
             </div>
           </div>
         )}
-        {}
+        { }
       </div>
 
       <div className='flex  flex-col-reverse gap-3'>
@@ -348,7 +348,7 @@ const AllStaffNew = () => {
   };
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       {/* <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -453,11 +453,10 @@ const AllStaffNew = () => {
           onClick={() => {
             setCurrentTab('regular');
           }}
-          className={`${
-            currentTab === 'regular'
+          className={`${currentTab === 'regular'
               ? 'bg-[#5754F7] text-white'
               : 'bg-[#fff] text-gray-500'
-          } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
+            } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
         >
           All Staff List
         </button>
@@ -465,11 +464,10 @@ const AllStaffNew = () => {
           onClick={() => {
             setCurrentTab('transfer');
           }}
-          className={`${
-            currentTab === 'transfer'
+          className={`${currentTab === 'transfer'
               ? 'bg-[#5754F7] text-white'
               : 'bg-[#fff] text-gray-500'
-          } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
+            } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
         >
           Transfer Staff List
         </button>

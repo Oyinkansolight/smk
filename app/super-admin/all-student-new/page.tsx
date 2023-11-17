@@ -287,7 +287,7 @@ const AllStudent = () => {
   };
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <div className='rounded-2xl p-4 bg-[#FFF4DF]'>
         <div className='flex justify-between items-center'>
           <div>
@@ -332,11 +332,10 @@ const AllStudent = () => {
           onClick={() => {
             setCurrentTab('regular');
           }}
-          className={`${
-            currentTab === 'regular'
+          className={`${currentTab === 'regular'
               ? 'bg-[#5754F7] text-white'
               : 'bg-[#fff] text-gray-500'
-          } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
+            } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
         >
           All Student List
         </button>
@@ -344,11 +343,10 @@ const AllStudent = () => {
           onClick={() => {
             setCurrentTab('transfer');
           }}
-          className={`${
-            currentTab === 'transfer'
+          className={`${currentTab === 'transfer'
               ? 'bg-[#5754F7] text-white'
               : 'bg-[#fff] text-gray-500'
-          } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
+            } w-max h-fit py-2 rounded-3xl border  px-3  text-center text-xs `}
         >
           Transfer Student List
         </button>
@@ -462,7 +460,7 @@ const InstitutionCard = ({ data, currentTab }) => {
     INSTITUTION_TYPES.SECONDARY.toLowerCase();
   const isPrimary =
     data.institution.instituteType.toLowerCase() ===
-      INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
+    INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
     data.institution.instituteType.toLowerCase() === 'basic';
 
   return (

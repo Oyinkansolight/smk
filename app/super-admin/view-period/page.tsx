@@ -11,7 +11,7 @@ const ViewPeriod = () => {
   const router = useRouter();
   const [isOpen] = useState(false);
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image

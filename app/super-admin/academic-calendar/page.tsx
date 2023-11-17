@@ -113,7 +113,7 @@ const AcademicCalendar = () => {
   }, [data?.data, filterCurrent]);
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       {isOpen && (
         <AddSession
           onClickHandler={handleModal}
