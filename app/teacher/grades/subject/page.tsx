@@ -145,7 +145,7 @@ export default function Page() {
                 gradeList={list}
                 name={list.class?.name}
               />
-            ))} */}
+            ))}
           </div>
         </>
       ) : (
