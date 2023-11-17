@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -17,6 +18,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { useSessionStorage } from 'usehooks-ts';
+import ordinal from 'ordinal';
+import { GradeList } from '@/types/classes-and-subjects';
+import logger from '@/lib/logger';
 
 export default function Page() {
   const [idx, setIdx] = useState(1);
@@ -134,10 +138,11 @@ export default function Page() {
           </div>
 
           <div className='flex flex-col gap-4'>
-            {gradeList.map((list, i) => (
+            {gradeList.map((list: any, i) => (
               <StudentGradeListItem
                 key={list.id}
                 id={i + 1}
+                gradeList={list}
                 name={list.class?.name}
               />
             ))}
@@ -153,10 +158,14 @@ export default function Page() {
 function StudentGradeListItem({
   id,
   name,
+  gradeList,
 }: {
   id: number;
+  gradeList: GradeList;
   name: string | undefined;
 }) {
+  logger(gradeList);
+
   return (
     <StudentGradeModal>
       <div className='grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-6 bg-white'>
@@ -173,7 +182,7 @@ function StudentGradeListItem({
         <div className='text-black'>Fail</div>
         <div className='text-black flex items-center'>
           <div>
-            {id} {id === 1 ? 'st' : id === 2 ? 'nd' : id === 3 ? 'rd' : 'th'}
+            {ordinal(id)}
           </div>
         </div>
       </div>

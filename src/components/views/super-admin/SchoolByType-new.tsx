@@ -1,7 +1,6 @@
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Link from 'next/link';
 import clsxm from '@/lib/clsxm';
 import { useEffect, useState } from 'react';
 import { BasicSearch } from '@/components/search';
@@ -13,8 +12,12 @@ import { useGetDashboardOverview } from '@/server/dashboard';
 
 import Castle from '~/svg/castle.svg';
 import InstitutionCardSkeleton from '@/components/skeletons/InstitutionCard';
+import AddInstitutionModal from '@/components/modal/AddInstitution';
+import ControlledModal from '@/components/modal/ControlledModal';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const SchoolList = () => {
+  const [open, setOpen] = useState(false);
   const { data: overviewData, isLoading: isLoadingOverview } = useGetDashboardOverview();
   const [instituteName, setInstituteName] = useState('');
   const [pagingData, setPagingData] = useState({
@@ -23,6 +26,8 @@ const SchoolList = () => {
     instituteName,
   });
   const { data, isLoading, refetch } = useGetSchools({ ...pagingData });
+
+  const handleToggle = () => setOpen(!open);
 
   const handleSetInstitutionName = (name: string) => {
     setInstituteName(name);
@@ -72,12 +77,39 @@ const SchoolList = () => {
               An overview of all institution
             </h2>
           </div>
-          <Link
+
+          <ControlledModal
+            isOpen={open}
+            closeIcon={false}
+            toggleModal={handleToggle}
+            className='w-screen h-[95vh] !overflow-y-auto px-[6px] md:px-14 py-12 lg:py-6 max-w-[800px]'
+            content={
+              <div className='relative'>
+                <div
+                  onClick={handleToggle}
+                  className='flex flex-row items-center gap-1 text-[#808080] absolute -top-10 right-2 md:right-10 lg:right-[10%] cursor-pointer'
+                >
+                  Close
+                  <AiOutlineClose className='fill-current' />
+                </div>
+                <AddInstitutionModal />
+              </div>
+            }
+          />
+
+          <button
+            onClick={handleToggle}
+            className='w-max h-fit py-3 rounded-3xl border bg-[#5754F7] px-3 text-center text-xs text-white'
+          >
+            Add Institution
+          </button>
+
+          {/* <Link
             href='/super-admin/add-school'
             className='w-max h-fit py-3 rounded-3xl border bg-[#5754F7] px-3  text-center text-xs text-white '
           >
             Add Institution
-          </Link>
+          </Link> */}
         </div>
 
         <div className='space-y-4 my-4 pt-4'>

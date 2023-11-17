@@ -17,6 +17,8 @@ import { BiChevronRight } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
@@ -27,6 +29,7 @@ export default function Page() {
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data: activities, isLoading: isLoadingActivity } = useGetClassActivity({
+    page: currentPage,
     typeOfActivity: 'QUIZ',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
@@ -54,6 +57,7 @@ export default function Page() {
         ]}
         onChange={setIdx}
         selectedIdx={idx}
+        callback={() => setCurrentPage(1)}
       />
 
       {/* <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
@@ -127,7 +131,11 @@ export default function Page() {
 
       {activities?.data &&
         activities?.data.length > 0 &&
-        <PaginatedCounter pageCount={activities?.paging.totalPage} currentPage={activities?.paging.currentPage} />
+        <PaginatedCounter
+          currentPage={currentPage}
+          onChange={setCurrentPage}
+          pageCount={activities?.paging?.totalPage ?? 1}
+        />
       }
     </div>
   );

@@ -124,8 +124,30 @@ const Biodata = ({
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
+            label='Email'
+            placeholder='student@mail.com'
+            name='studentEmail'
+            register={register}
+            validation={{
+              required: 'Student email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Please Enter A Valid Email!',
+              },
+            }}
+            helper={
+              errors?.studentEmail && {
+                message: errors?.studentEmail?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+
+        <div>
+          <FormInput
             label='First name'
-            placeholder='Details here'
+            placeholder='Student first name'
             name='firstName'
             register={register}
             validation={{
@@ -142,7 +164,7 @@ const Biodata = ({
         <div>
           <FormInput
             label='Last name'
-            placeholder='Details here'
+            placeholder='Student last name'
             name='lastName'
             register={register}
             validation={{

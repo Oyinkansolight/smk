@@ -26,6 +26,7 @@ type propType = {
   name?: string;
   helper?: HelperProps;
   required?: boolean;
+  onClick?: () => void;
 };
 
 const Select = ({
@@ -38,8 +39,9 @@ const Select = ({
   name,
   helper,
   required,
+  onClick
 }: propType) => {
-  
+
   return (
     <div className=''>
       <div>
@@ -52,6 +54,7 @@ const Select = ({
           <select
             id=''
             required={required}
+            onClick={onClick && onClick}
             className='w-full border-none outline-none bg-transparent  text-gray-400'
             {...(register ? register(name as string, validation) : {})}
             onChange={(e) => {

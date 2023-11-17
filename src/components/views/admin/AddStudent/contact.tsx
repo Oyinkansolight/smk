@@ -42,26 +42,7 @@ const Contact = ({ register, errors }: Iprops) => {
             }
           />
         </div>
-        {/* <div>
-          <FormSelect
-            label='Local Government Area'
-            name='townId'
-            options={Array.prototype.concat.apply([], towns)}
-            register={register}
-            validation={{
-              required: 'Town is required',
-            }}
-            formValue={ getValues ? `${getValues('townId')}` : ""}
-            helper={
-              errors?.townId && {
-                message: errors?.townId?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div> */}
-      </div>
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
+
         <div>
           <FormInput
             label='Phone Number'
@@ -80,6 +61,25 @@ const Contact = ({ register, errors }: Iprops) => {
             }
           />
         </div>
+
+        {/* <div>
+          <FormSelect
+            label='Local Government Area'
+            name='townId'
+            options={Array.prototype.concat.apply([], towns)}
+            register={register}
+            validation={{
+              required: 'Town is required',
+            }}
+            formValue={ getValues ? `${getValues('townId')}` : ""}
+            helper={
+              errors?.townId && {
+                message: errors?.townId?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div> */}
       </div>
     </section>
   );

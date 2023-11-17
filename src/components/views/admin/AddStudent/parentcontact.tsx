@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
+import Select from '@/components/input/formSelect';
+import PopOverSelect from '@/components/input/PopOverSelect';
+import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
+import { useGetParents } from '@/server/institution';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
 
 type Iprops = {
   register: any;
@@ -10,167 +16,69 @@ type Iprops = {
   getValues?: any
 };
 const Contact = ({ register, errors }: Iprops) => {
-  // const locals = useGetLocalGovernments();
-  // const [towns, setTowns] = useState<any>([]);
+  const [open, setOpen] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
-  const StatusOptions: string[] = [
-    'Single Parents',
-    'Orphans',
-    'Domestic Helps',
-    'Unemployed Parents',
-    'Not Applicable ',
-  ];
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
 
-  // useEffect(() => {
-  //   if (!locals.isLoading && locals.data && locals.data.length > 0) {
-  //     locals.data.forEach((local: any) => {
-  //       setTowns((prev: any) => [...prev, local.towns]);
-  //     });
-  //   }
-  // }, [locals.data, locals.isLoading]);
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    // query,
+  });
+
+  const {
+    data: parents,
+    error,
+    refetch,
+  } = useGetParents({ ...pagingData });
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
+
+  logger(parents);
+
+  useEffect(() => {
+    const searchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch();
+      }
+    };
+
+    searchRecords();
+  }, [refetch, pagingData, debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
 
   return (
     <section className=''>
-      <h2 className='text-3xl font-bold'>Parent Contact Details</h2>
-      <p>Kindly enter the details below:</p>
+      <h2 className='text-3xl font-bold'>Parent Details</h2>
+      <p>Select student's parent below:</p>
 
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Phone Number'
-            type='number'
-            placeholder='Details here'
-            name='parentphoneNumber'
-            register={register}
-            validation={{
-              required: 'Phone Number is required',
-            }}
-            helper={
-              errors?.parentphoneNumber && {
-                message: errors?.parentphoneNumber?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Email'
-            placeholder='Details here'
-            name='parentEmail'
-            register={register}
-            validation={{
-              required: 'Email Number is required',
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: 'Please Enter A Valid Email!',
-              },
-            }}
-            helper={
-              errors?.parentEmail && {
-                message: errors?.parentEmail?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Address'
-            placeholder='Details here'
-            name='parentAddress'
-            register={register}
-            validation={{
-              required: 'Address is required',
-            }}
-            helper={
-              errors?.parentAddress && {
-                message: errors?.parentAddress?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        {/* <div>
-          <FormSelectOption
-            label='Town'
-            name='parenttownId'
-            options={Array.prototype.concat.apply([], towns)}
-            register={register}
-            validation={{
-              required: 'Town is required',
-            }}
-            formValue={ getValues ? `${getValues('parenttownId')}` : ""}
+      <PopOverSelect
+        data={[
+          'Parent 1',
+          'Parent 2',
+          'Parent 3',
+          'Parent 4',
+        ]}
+        open={open}
+        title='All Parents'
+        setOpen={setOpen}
+        handleSearch={handleSearch}
+        description="Select student's parent"
+        setSelectedItemIndex={setSelectedItemIndex}
+      />
 
-            helper={
-              errors?.parenttownId && {
-                message: errors?.parenttownId?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div> */}
-      </div>
-
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Parent Name'
-            type='text'
-            placeholder='Details here'
-            name='parentName'
-            register={register}
-            validation={{
-              required: 'Parent Name is required',
-            }}
-            helper={
-              errors?.parentName && {
-                message: errors?.parentName?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-        <div>
-          <FormInput
-            label='Parent Occupation'
-            type='text'
-            placeholder='Details here'
-            name='parentOccupation'
-            register={register}
-            validation={{
-              required: 'Parent Occupation is required',
-            }}
-            helper={
-              errors?.parentOccupation && {
-                message: errors?.parentOccupation?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
-      </div>
-
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <div>
-          <FormSelect
-            label='Parental/Guardian Status'
-            name='parentStatus'
-            options={StatusOptions}
-            register={register}
-            validation={{
-              required: 'Parental/Guardian status is required',
-            }}
-            helper={
-              errors?.parentStatus && {
-                message: errors?.parentStatus?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
+      <div className='my-10'>
+        <Select onClick={() => setOpen(!open)} label="All Parents" options={[]} />
       </div>
     </section>
   );

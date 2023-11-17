@@ -3,12 +3,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { BiExit } from 'react-icons/bi';
+import { BiExit, BiUserVoice } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import Company from '~/svg/company.svg';
 import Globe from '~/svg/globe.svg';
-import Messenger from '~/svg/messenger.svg';
 import Sidebararrow from '~/svg/sidebararrow.svg';
 import Star from '~/svg/star.svg';
 import Trend from '~/svg/trend_up.svg';
@@ -81,6 +80,18 @@ const InstituteSidebar = ({
           href='/admin/all-staff'
           active={routeDetails && routeDetails.includes('all-staff') && true}
         />
+
+        <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
+          open={open}
+          icon={<BiUserVoice className='text-[#C3CAD9] fill-current' />}
+          title='Parents'
+          href='/admin/all-parents'
+          active={routeDetails && routeDetails.includes('all-parents') && true}
+        />
+
         {/* <SideBarButton
           onClick={() => {
             setOpen(false);
@@ -113,7 +124,7 @@ const InstituteSidebar = ({
             routeDetails && routeDetails.includes('all-communication') && true
           }
         /> */}
-        <SideBarButton
+        {/* <SideBarButton
           onClick={() => {
             setOpen(false);
           }}
@@ -122,7 +133,7 @@ const InstituteSidebar = ({
           title='Accounting and Settings'
           href='/admin/account'
           active={routeDetails && routeDetails.includes('Accounting') && true}
-        />
+        /> */}
         <SideBarButton
           onClick={() => {
             setOpen(false);
@@ -144,9 +155,8 @@ const InstituteSidebar = ({
           )}
         >
           <div
-            className={` ${
-              open ? ' justify-between px-2' : 'justify-center'
-            } flex w-full items-center gap-[14.25px] `}
+            className={` ${open ? ' justify-between px-2' : 'justify-center'
+              } flex w-full items-center gap-[14.25px] `}
           >
             <div className='flex items-center justify-center space-x-2'>
               <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
@@ -235,9 +245,8 @@ export const SideBarButton = ({
     )}
   >
     <div
-      className={` ${
-        open ? ' justify-between px-2' : 'justify-center'
-      } flex w-full items-center gap-[14.25px] `}
+      className={` ${open ? ' justify-between px-2' : 'justify-center'
+        } flex w-full items-center gap-[14.25px] `}
     >
       <div className='flex items-center justify-center space-x-2'>
         {icon}

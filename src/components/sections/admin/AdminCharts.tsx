@@ -145,9 +145,7 @@ const AdminCharts = ({
 
             <GenericChart
               title='Transfer Requests'
-              content={
-                <EmptyView label='No transfer requests at the moment' /> ?? <TransferRequestsTable />
-              }
+              content={<TransferRequestsTable data={[...chartData.staffTransferRequests, ...chartData.studentTransferRequests]} />}
             />
 
             <GenericChart

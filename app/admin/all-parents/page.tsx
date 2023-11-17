@@ -5,8 +5,6 @@
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
-import BulkUser from '@/components/views/admin/AddStudent/bulkusers';
-import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -15,7 +13,7 @@ import { useGetProfile } from '@/server/auth';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import {
   useCreateBulkStudent,
-  useGetStudentsListByInstitution,
+  useGetParents,
 } from '@/server/institution';
 import { Student } from '@/types/institute';
 import Image from 'next/image';
@@ -26,31 +24,15 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const AllStudent = () => {
+const AllParents = () => {
   const { error: profileError } = useGetProfile();
-
-  async function fetchProfileImageSrc(item) {
-    try {
-      const profileImgUrl = await getURL(item.profileImg);
-      return profileImgUrl;
-    } catch (error) {
-      console.error('Error fetching profile image URL:', error);
-      return ''; // Provide a fallback URL or handle the error appropriately
-    }
-  }
 
   const instituteId = getFromLocalStorage('institutionId');
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isBulk, setisBulk] = useState(false);
+  const [isBulk, setIsBulk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [files, setFile] = useState<any>(null);
-  const [profileImgSrcs, setProfileImgSrcs] = useState<string[]>([]);
-  const [imageError, setImageError] = useState(false);
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
@@ -65,16 +47,15 @@ const AllStudent = () => {
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    query,
-    instituteId,
+    // query,
   });
 
   const {
-    data: students,
+    data: parents,
     error,
     isLoading,
     refetch,
-  } = useGetStudentsListByInstitution({ ...pagingData });
+  } = useGetParents({ ...pagingData });
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -95,8 +76,8 @@ const AllStudent = () => {
   };
 
   const handleJumpToEnd = () => {
-    if (students)
-      setPagingData({ ...pagingData, page: students?.paging?.totalPage });
+    if (parents)
+      setPagingData({ ...pagingData, page: parents?.paging?.totalPage });
   };
 
   const handleCreateBulkStudent = useCreateBulkStudent();
@@ -115,7 +96,7 @@ const AllStudent = () => {
       if (response) {
         toast.success('Student(s) Added successfully');
         setLoading(false);
-        setisBulk(!isBulk);
+        setIsBulk(!isBulk);
 
         //2 Second - Open Success Modal
         // setisOpen(true);
@@ -144,18 +125,6 @@ const AllStudent = () => {
       }
     }
   };
-
-  useEffect(() => {
-    // Map over the array and fetch profile image URLs for each item
-    Promise.all(students?.data.map((item) => fetchProfileImageSrc(item)))
-      .then((urls) => {
-        setProfileImgSrcs(urls);
-      })
-      .catch((error) => {
-        logger('Error fetching profile image URLs:', error);
-        setProfileImgSrcs([]); // Provide a fallback or handle the error appropriately
-      });
-  }, [students]); // Make sure to include any dependencies that trigger the update
 
   useEffect(() => {
     const searchRecords = () => {
@@ -207,22 +176,22 @@ const AllStudent = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>All Students</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>All parents</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
-          <p className='text-[#615F5F]'>Total Students</p>
+          <p className='text-[#615F5F]'>Total parents</p>
           <h1 className='font-semibold text-2xl'>
-            {students?.paging?.totalItems ?? 0}
+            {parents?.paging?.totalItems ?? 0}
           </h1>
         </div>
 
-        {isBulk && (
+        {/* {isBulk && (
           <BulkUser
             loading={loading}
             isReplace={isReplace}
             onClickHandler={() => {
-              setisBulk(!isBulk);
+              setIsBulk(!isBulk);
             }}
             setFile={setFile}
             file={files}
@@ -276,7 +245,7 @@ const AllStudent = () => {
                 onClick={() => {
                   setIsOpen(!isOpen);
 
-                  setisBulk(!isBulk);
+                  setIsBulk(!isBulk);
                 }}
                 className='w-full p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
               >
@@ -290,7 +259,7 @@ const AllStudent = () => {
               />
             </div>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className='flex flex-col gap-4'>
@@ -310,9 +279,9 @@ const AllStudent = () => {
           {isLoading && <div className='text-center'>Loading...</div>}
 
           {!isLoading &&
-            students &&
-            students?.data?.length > 0 &&
-            students?.data.map((item: Student, idx: number) => (
+            parents &&
+            parents?.data?.length > 0 &&
+            parents?.data.map((item: Student, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
                   {(pagingData.page - 1) * 10 + (idx + 1)}
@@ -375,11 +344,11 @@ const AllStudent = () => {
               </div>
             ))}
 
-          {!isLoading && students?.data?.length === 0 && (
+          {!isLoading && parents?.data?.length === 0 && (
             <div className='text-red-500 py-4 text-center'>No record found</div>
           )}
 
-          {students && students?.data?.length > 0 && (
+          {parents && parents?.data?.length > 0 && (
             <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
               <button
                 onClick={handleJumpToStart}
@@ -410,7 +379,7 @@ const AllStudent = () => {
                 </svg>
               </button>
 
-              {Array(students.paging.totalPage)
+              {Array(parents.paging.totalPage)
                 .fill(0)
                 .slice(0, 2)
                 .map((item, idx: number) => (
@@ -427,26 +396,26 @@ const AllStudent = () => {
                   </div>
                 ))}
 
-              {students.paging.totalPage > 3 && (
+              {parents.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
                       (pagingData.page > 3 &&
-                        pagingData.page < students.paging.totalPage)
+                        pagingData.page < parents.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < students.paging.totalPage
+                    pagingData.page < parents.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
               )}
 
-              {students.paging.totalPage > 4 && (
+              {parents.paging.totalPage > 4 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
@@ -458,24 +427,24 @@ const AllStudent = () => {
                 </div>
               )}
 
-              {students.paging.totalPage > 1 && (
+              {parents.paging.totalPage > 1 && (
                 <div
                   className={clsxm(
-                    pagingData.page === students.paging.totalPage
+                    pagingData.page === parents.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
-                  {students.paging.totalPage}
+                  {parents.paging.totalPage}
                 </div>
               )}
 
               <button
                 onClick={handleNextPage}
                 disabled={
-                  (students && students?.data?.length < 10) ||
-                  pagingData.page === students.paging.totalPage
+                  (parents && parents?.data?.length < 10) ||
+                  pagingData.page === parents.paging.totalPage
                 }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
@@ -498,8 +467,8 @@ const AllStudent = () => {
               <button
                 onClick={handleJumpToEnd}
                 disabled={
-                  (students && students?.data?.length < 10) ||
-                  pagingData.page === students.paging.totalPage
+                  (parents && parents?.data?.length < 10) ||
+                  pagingData.page === parents.paging.totalPage
                 }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
@@ -513,4 +482,4 @@ const AllStudent = () => {
   );
 };
 
-export default AllStudent;
+export default AllParents;

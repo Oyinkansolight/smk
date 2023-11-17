@@ -214,6 +214,30 @@ export function useGetStudentsListByInstitution(
   return query;
 }
 
+export function useGetParents(params: Partial<StudentsListByInstitution>) {
+  const query = useQuery({
+    queryKey: 'get_parents',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/parent?${
+            params.limit ? `&limit=${params.limit}` : ''
+          }${params.page ? `&page=${params.page}` : ''}`
+        );
+        return d.data.data.data as PaginatedData<Student> | any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
+
 export function useGetStudentById(params?: PaginationParams) {
   const query = useQuery({
     queryKey: `get_student_${params?.id}`,
