@@ -187,6 +187,14 @@ const AllParents = () => {
             {parents?.paging?.totalItems ?? 0}
           </h1>
         </div>
+
+        <div className='mb-6 flex justify-end items-end relative'>
+          <button
+            className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
+          >
+            Add Parent
+          </button>
+        </div>
       </div>
 
       <div className='flex flex-col gap-4'>
@@ -198,10 +206,10 @@ const AllParents = () => {
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
           <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
             <div className='col-span-1'>No</div>
-            <div className='col-span-2'>Last Name</div>
-            <div className='hidden lg:block col-span-2'>First Name</div>
+            <div className='col-span-4 lg:col-span-2'>Last Name</div>
+            <div className='col-span-4 lg:col-span-2'>First Name</div>
             <div className='hidden lg:block col-span-3'>Email</div>
-            <div className='hidden lg:block col-span-4'>Address</div>
+            <div className='hidden lg:block col-span-3'>Address</div>
           </div>
 
           {isLoading && <div className='text-center'>Loading...</div>}
@@ -211,33 +219,33 @@ const AllParents = () => {
             parents?.data?.length > 0 &&
             parents?.data.map((item: any, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
-                <div className='col-span-1'>
+                <div className='col-span-2 lg:col-span-1'>
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-2'>
+                <div className='col-span-4 lg:col-span-2'>
                   {/* <Link href={`/admin/student?id=${item.id}`}> */}
                   {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
                   {/* </Link> */}
                 </div>
 
-                <div className='col-span-2'>
+                <div className='col-span-4 lg:col-span-2'>
                   {/* <Link href={`/admin/student?id=${item.id}`}> */}
                   {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
                   {/* </Link> */}
                 </div>
 
-                <div className='col-span-4 lg:col-span-4'>
+                <div className='hidden lg:block col-span-3'>
                   {' '}
                   {item?.email || 'N/A'}{' '}
                 </div>
 
-                <div className='hidden lg:block col-span-1'>
+                <div className='hidden lg:block col-span-3'>
                   {' '}
                   {item?.address || 'N/A'}{' '}
                 </div>
 
-                <div className='col-span-1 justify-end flex'>
+                <div className='col-span-2 lg:col-span-1 justify-end flex'>
                   <button
                     onClick={() => {
                       setAction(idx + 1);
@@ -247,12 +255,12 @@ const AllParents = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <Link
-                          href={`/admin/student?id=${item.id}`}
+                        <span
+                          // href={`/admin/student?id=${item.id}`}
                           className='p-4 hover:bg-gray-200 w-full block'
                         >
                           Edit
-                        </Link>
+                        </span>
                         <button
                           onClick={() => {
                             setItemToDelete(item.id);
