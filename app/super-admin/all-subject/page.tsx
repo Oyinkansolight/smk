@@ -5,6 +5,7 @@ import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import AddSubjectModal from '@/components/modals/add-subject-modal';
 import { BasicSearch } from '@/components/search';
+import { INSTITUTION_TYPES } from '@/constant/institution';
 import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import { useDeleteSubject } from '@/server/government/classes_and_subjects';
@@ -21,12 +22,15 @@ import { useDebounce } from 'usehooks-ts';
 const AllSubjects = () => {
   const router = useRouter();
 
-  const [query, setQuery] = useState('');
-  const debouncedSearchTerm = useDebounce(query, 1500);
+  const [name, setName] = useState('');
+  const [institutionType, setInstitutionType] = useState<string>('');
+
+  const debouncedSearchTerm = useDebounce(name, 1500);
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    // query,
+    institutionType,
+    name,
   });
 
   const { data, error, isLoading, refetch } = useGetSubjectList({ ...pagingData });
@@ -39,9 +43,14 @@ const AllSubjects = () => {
   };
 
   const handleSearch = (value: string) => {
-    setQuery(value);
-    setPagingData({ ...pagingData, page: 1, query: value });
+    setName(value);
+    setPagingData({ ...pagingData, page: 1, name: value });
   };
+
+  const handleFilter = (value: string) => {
+    setInstitutionType(value);
+    setPagingData({ ...pagingData, page: 1, institutionType: value });
+  }
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -120,10 +129,18 @@ const AllSubjects = () => {
           </div>
         </AddSubjectModal>
       </div>
-      <div className='flex justify-end'>
-        <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
+      <div className='flex flex-col gap-2 sm:flex-row justify-end'>
+        <div className='flex w-[400px] space-x-2'>
+          <select
+            name='institutionTypes'
+            onChange={(event) => handleFilter(event.target.value)}
+            className='border-none bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg'
+          >
             <option value=''>Filter</option>
+            <option value={INSTITUTION_TYPES.ECCDE}>ECCDE</option>
+            <option value={INSTITUTION_TYPES.PRIMARY}>Primary</option>
+            <option value={INSTITUTION_TYPES.SECONDARY}>Secondary</option>
+            <option value={INSTITUTION_TYPES.TERTIARY}>Tertiary</option>
           </select>
           <BasicSearch handleSearch={handleSearch} />
         </div>

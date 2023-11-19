@@ -2,15 +2,31 @@
 
 import TextTabBar from '@/components/layout/TextTabBar';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
+import Image from 'next/image';
 import { useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [idx, setIdx] = useState(0);
   return (
-    <div className='h-full layout'>
-      <div className='font-bold text-2xl'>Grade List</div>
+    <div className='h-full layout mt-6'>
+      <div
+        onClick={() => router.push("/teacher/grades")}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        <Image
+          src='/svg/back.svg'
+          width={10}
+          height={10}
+          alt='back'
+          className='h-4 w-4'
+        />
+        <h3 className='text-[10px] font-medium'>Back</h3>
+      </div>
+
+      <div className='font-bold text-2xl mt-6'>Grade List</div>
       <TextTabBar
         tabs={[
           'All',

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { PaginationParams } from '@/types';
+import { PaginationParams, SubjectList } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import {
   Institution,
@@ -118,14 +118,22 @@ export function useCreateSubject() {
   return mutation;
 }
 
-export function useGetSubjectList(params?: Partial<PaginationParams>) {
+export function useGetSubjectList(params?: SubjectList) {
   const query = useQuery({
     queryKey: 'get_subject_list',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list',
-          { params, withCredentials: true }
+          `/v1/government/institutes/get-subject-list?${
+            params?.limit ? `&limit=${params?.limit}` : ''
+          }${params?.page ? `&page=${params?.page}` : ''}${
+            params?.name ? `&name=${params?.name}` : ''
+          }${
+            params?.institutionType
+              ? `&institutionType=${params?.institutionType}`
+              : ''
+          }`,
+          { withCredentials: true }
         );
         return d.data.data.data;
       } catch (error) {
@@ -137,7 +145,14 @@ export function useGetSubjectList(params?: Partial<PaginationParams>) {
   const { refetch } = query;
   useEffect(() => {
     refetch({ cancelRefetch: true });
-  }, [params?.limit, params?.id, params?.page, params?.query, refetch]);
+  }, [
+    params?.limit,
+    params?.id,
+    params?.page,
+    params?.name,
+    params?.institutionType,
+    refetch,
+  ]);
 
   return query;
 }

@@ -16,14 +16,15 @@ import { GradeList } from '@/types/classes-and-subjects';
 import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ordinal from 'ordinal';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { useSessionStorage } from 'usehooks-ts';
 
 export default function Page() {
-  const [idx, setIdx] = useState(1);
+  const router = useRouter();
+  const [idx, setIdx] = useState(0);
   const params = useSearchParams();
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile();
   const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
@@ -50,7 +51,15 @@ export default function Page() {
     termId: term as unknown as string,
   });
 
-  console.log(gradeList);
+  const appendParamsToURL = (id?: string) => {
+    if (id) {
+      const path = `/teacher/grades/subject?id=${params?.get(
+        'id'
+      )}${`&classArmId=${id}`}&subjectName=${params?.get('subjectName')}`;
+
+      router.push(path);
+    }
+  }
 
   useEffect(() => {
     refetch();
@@ -91,6 +100,7 @@ export default function Page() {
         ]}
         onChange={setIdx}
         selectedIdx={idx}
+        callback={() => arms?.[idx]?.id && appendParamsToURL(arms?.[idx]?.id)}
       />
 
       {isLoading ? (
@@ -98,7 +108,13 @@ export default function Page() {
       ) : gradeList && gradeList.length ? (
         <>
           <div className='flex justify-end gap-4 mb-4'>
-            <GradeSettingsModal>
+            <GradeSettingsModal
+              callBack={() => {
+                if (!params?.get('classArmId')) {
+                  arms?.[idx]?.id && appendParamsToURL(arms?.[idx]?.id)
+                }
+              }}
+            >
               <Button
                 variant='secondary'
                 className='flex justify-center h-[46px] bg-[#1A8FE3] min-w-[186px] w-full font-semibold !text-xs rounded-lg'

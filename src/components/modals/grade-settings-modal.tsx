@@ -7,13 +7,16 @@ import { useCreateGradeSettings } from '@/server/government/classes_and_subjects
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetCategoryByInstitutionType } from '@/server/institution/grade';
 import { Dialog, Transition } from '@headlessui/react';
+import { useSearchParams } from 'next/navigation';
 import { Fragment, useEffect, useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 import ReactSelect from 'react-select';
 
 export default function GradeSettingsModal({
   children,
+  callBack
 }: {
+  callBack?: () => void;
   children: JSX.Element;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +40,13 @@ export default function GradeSettingsModal({
   function openModal() {
     setIsOpen(true);
   }
+
+  useEffect(() => {
+    if (callBack) {
+      callBack();
+    }
+  }
+    , []);
 
   useEffect(() => {
     refetchTerms();
@@ -79,9 +89,7 @@ export default function GradeSettingsModal({
                       profile?.userInfo?.staff?.institution?.instituteType ?? ''
                     }
                     sessionId={profile?.currentSession?.[0]?.id ?? ''}
-                    subjectId='2'
                     termId={term ?? ''}
-                    institutionId={institutionId ?? ''}
                   />
                 </Dialog.Panel>
               </Transition.Child>
@@ -97,24 +105,23 @@ function GradeSettingsView({
   institutionType,
   sessionId,
   termId,
-  subjectId,
-  institutionId,
 }: {
-  institutionId: string;
   institutionType: string;
   sessionId: string;
   termId: string;
-  subjectId: string;
 }) {
+  const params = useSearchParams();
+  const subjectId = params?.get('id') ?? '';
+  const classArmId = params?.get('classArmId') ?? '';
+
   const { data: items, refetch } = useGetCategoryByInstitutionType({
-    institutionId,
     institutionType,
     sessionId,
     termId,
   });
   useEffect(() => {
     refetch();
-  }, [institutionType, refetch, sessionId]);
+  }, [refetch, sessionId]);
 
   const [count, setCount] = useState<
     {
@@ -131,8 +138,7 @@ function GradeSettingsView({
     for (let i = 0; i < count.length; i++) {
       const e = count[i];
       await createSettings({
-        classId: '1',
-        institutionId,
+        classArmId,
         subjectId,
         termId,
         sessionId,
@@ -222,7 +228,7 @@ function GradeSettingsView({
         ))}
       <div className='flex justify-center'>
         <Button
-          onClick={() => handleSubmit}
+          onClick={handleSubmit}
           variant='secondary'
           className='w-[260px] justify-center'
         >

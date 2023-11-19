@@ -81,3 +81,11 @@ export interface SecondaryEnrollment {
   term: Term;
   enrollmentCount: number;
 }
+
+export interface SubjectList {
+  id?: any;
+  limit?: number;
+  page?: number;
+  institutionType?: string | null;
+  name?: string | null;
+}
