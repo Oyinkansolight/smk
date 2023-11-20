@@ -73,4 +73,23 @@ export interface UserInfo {
   };
   staff?: Staff;
   student?: null;
+  role?: Role[];
+}
+
+export interface Role {
+  id?: string;
+  name?: string;
+  isoverride?: boolean;
+  permissions?: Permissions[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface Permissions {
+  id: string;
+  action: string;
+  target: string;
+  negate: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

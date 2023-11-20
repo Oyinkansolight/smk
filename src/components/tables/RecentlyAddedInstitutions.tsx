@@ -37,10 +37,10 @@ export default function RecentlyAddedInstitutions({ data }) {
 }
 
 const InstitutionCard = ({ data }) => {
-  const isECCDE = data.instituteType.toLowerCase() === INSTITUTION_TYPES.ECCDE.toLowerCase();
-  const isTertiary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.TERTIARY.toLowerCase();
-  const isSecondary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.SECONDARY.toLowerCase();
-  const isPrimary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.PRIMARY.toLowerCase() || data.instituteType.toLowerCase() === 'basic';
+  const isECCDE = data?.instituteType ? data?.instituteType?.toLowerCase() === INSTITUTION_TYPES.ECCDE.toLowerCase() : false;
+  const isTertiary = data?.instituteType ? data?.instituteType?.toLowerCase() === INSTITUTION_TYPES.TERTIARY.toLowerCase() : false;
+  const isSecondary = data?.instituteType ? data?.instituteType?.toLowerCase() === INSTITUTION_TYPES.SECONDARY.toLowerCase() : false;
+  const isPrimary = data?.instituteType ? data?.instituteType?.toLowerCase() === INSTITUTION_TYPES.PRIMARY.toLowerCase() || data.instituteType.toLowerCase() === 'basic' : false;
 
   return (
     <div className={clsxm(
