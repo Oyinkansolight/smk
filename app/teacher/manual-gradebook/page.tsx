@@ -5,7 +5,6 @@ import GradeSubjectCard from '@/components/views/teacher/GradeSubjectCard';
 import { useGetProfile } from '@/server/auth';
 import { useGetSubjectsAssignedToTeacher } from '@/server/government/classes_and_subjects';
 import { useGetClassArmInfo } from '@/server/institution/class';
-import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -49,16 +48,16 @@ export default function Page() {
         </div>
         <div className='flex flex-wrap gap-4 justify-items-center'>
           {classArmInfo?.subjects && classArmInfo?.subjects.length > 0 ? (
-            classArmInfo?.subjects.map((v, i) => (
+            classArmInfo?.subjects.map((v) => (
               <GradeSubjectCard
+                key={v.id}
+                className={colors[0]}
+                subject={v.name ?? 'N/A'}
                 onClick={() => {
                   router.push(
-                    `/teacher/manual-gradebook/subject?id=${v.subject.id}&subjectName=${v.subject.name}&classArmId=${v.class.id}`
+                    `/teacher/manual-gradebook/subject?id=${v.id}&subjectName=${v.name}&classArmId=${classArmInfo.id}`
                   );
                 }}
-                key={i}
-                subject={v.subject.name ?? 'N/A'}
-                className={colors[0]}
               />
             ))
           ) : (
