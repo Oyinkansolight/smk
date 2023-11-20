@@ -25,7 +25,6 @@ export default function Page() {
   const router = useRouter();
 
   const [idx, setIdx] = useState(0);
-  const [isGradeManually, setIsGradeManually] = useState(false);
 
   const { data: profile } = useGetProfile();
   const { data: allStudents } = useGetClassArmStudents({
@@ -107,9 +106,9 @@ export default function Page() {
           <div className='grid grid-cols-8 py-8 text-[#746D69] text-base'>
             <div />
             <div className='col-span-3 px-4'>Student</div>
-            {isGradeManually && <div>CA1</div>}
-            {isGradeManually && <div>CA2</div>}
-            {isGradeManually && <div>Exam</div>}
+            {/* <div>CA1</div>
+            <div>CA2</div>
+            <div>Exam</div> */}
             {/*   <div>Attendance</div>
             <div>Standing</div> */}
           </div>
@@ -120,7 +119,6 @@ export default function Page() {
                   key={student?.id ?? i}
                   id={i + 1}
                   student={student}
-                  isGradeManually={isGradeManually}
                 />
               ))}
           </div>
@@ -133,11 +131,9 @@ export default function Page() {
 function StudentGradeListItem({
   id,
   student,
-  isGradeManually,
 }: {
   id: number;
   student: ClassArmStudents;
-  isGradeManually: boolean;
 }) {
   return (
     <Link href={`/teacher/grades/grade-book-student?studentid=${student.id}`}>
@@ -147,40 +143,7 @@ function StudentGradeListItem({
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
           <div>{student.lastName + ' ' + student.firstName}</div>
         </div>
-        {isGradeManually && (
-          <div className=''>
-            <input
-              type='number'
-              className='rounded-lg w-full outline-none bg-transparent'
-            />
-          </div>
-        )}
-        {isGradeManually && (
-          <div>
-            <input
-              type='number'
-              className='rounded-lg w-full outline-none bg-transparent'
-            />
-          </div>
-        )}
-        {isGradeManually && (
-          <div className=''>
-            <input
-              type='number'
-              className='rounded-lg w-full outline-none bg-transparent'
-            />
-          </div>
-        )}
-        {isGradeManually && (
-          <div className=''>
-            <Button
-              variant='secondary'
-              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-            >
-              Save
-            </Button>
-          </div>
-        )}
+
         {/*  <div className='text-black flex items-center'>
           <div>{ordinal(id)}</div>
           <BsArrowUp className='h-5 w-5 text-green-500' />

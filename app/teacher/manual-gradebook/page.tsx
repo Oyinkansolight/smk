@@ -42,7 +42,7 @@ export default function Page() {
       <div className='text-[#D4D5D7] py-8 text-xl'>Grade Book</div>
       <div className='pb-10 font-bold text-[32px]'>Gradebook</div>
 
-      <div className='bg-white h-screen px-10'>
+      <div className='bg-white h-screen px-10 overflow-y-scroll overflow-x-hidden'>
         <div className='font-bold py-8 text-xl'>
           <div>Choose a Subject</div>
         </div>

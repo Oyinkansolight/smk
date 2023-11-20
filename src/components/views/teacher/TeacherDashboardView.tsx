@@ -77,13 +77,17 @@ export default function TeacherDashboardView() {
               <GenericLoader />
             )}
 
-            {nextClassData && nextClassData?.length > 0 && nextClassData.slice(0, 5).map((nextClass) => (
-              <NextClassCard
-                key={nextClass.id}
-                nextClass={nextClass}
-                isActive={isWithinTime(nextClass?.startTime ?? "", nextClass?.endTime ?? "")}
-              />
-            ))}
+            {nextClassData && nextClassData?.length > 0 && nextClassData.slice(0, 5).map((nextClass) => {
+              if (!nextClass) return null;
+
+              return (
+                <NextClassCard
+                  key={nextClass?.id}
+                  nextClass={nextClass}
+                  isActive={isWithinTime(nextClass?.startTime ?? "", nextClass?.endTime ?? "")}
+                />
+              )
+            })}
 
             {(!nextClassData || nextClassData?.length === 0 &&
               <EmptyView label='No Data' />
