@@ -32,7 +32,7 @@ const AllStaff = () => {
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    // query,
+    query,
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -175,7 +175,7 @@ const AllStaff = () => {
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Staff</p>
           <h1 className='font-semibold text-2xl'>
-            {staff?.paging.itemCount ?? 0}
+            {staff?.paging.totalItems ?? 0}
           </h1>
         </div>
 
