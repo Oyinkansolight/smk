@@ -105,7 +105,12 @@ const AdminCharts = ({
 
             <GenericChart
               title='Enrolment Analysis'
-              content={<EnrolmentAnalysis instituteIndex={0} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
+              content={
+                <EnrolmentAnalysis
+                  instituteIndex={0}
+                  data={chartData?.enrollmentAnalysis as EnrollmentAnalysis}
+                />
+              }
             />
 
             <GenericChart
@@ -145,7 +150,14 @@ const AdminCharts = ({
 
             <GenericChart
               title='Transfer Requests'
-              content={<TransferRequestsTable data={[...chartData.staffTransferRequests, ...chartData.studentTransferRequests]} />}
+              content={
+                <TransferRequestsTable
+                  data={[
+                    ...chartData.staffTransferRequests,
+                    ...chartData.studentTransferRequests,
+                  ]}
+                />
+              }
             />
 
             <GenericChart
@@ -156,7 +168,7 @@ const AdminCharts = ({
             />
 
             <GenericChart
-              title='Click In/Clock Out Logs'
+              title='Click In/Out Logs'
               content={
                 clockInOutLog ? (
                   <ClockInClockOutTable data={clockInOutLog} />

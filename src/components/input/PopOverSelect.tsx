@@ -1,21 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ControlledModal from "@/components/modal/ControlledModal";
 import { BasicSearch } from "@/components/search";
+import clsxm from "@/lib/clsxm";
+import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { FaCheckCircle } from "react-icons/fa";
 
 interface PopOverSelectProps {
   data?: any[];
+  key1: string;
+  key2?: string;
   open: boolean;
   title: string;
   handleSearch?: any;
   description?: string;
   setOpen: (v: boolean) => void;
-  setSelectedItemIndex: (v: number) => void;
+  setSelectedItem?: (v: string) => void;
+  setSelectedIndex?: (v: number) => void;
 }
 
 const PopOverSelect = (props: PopOverSelectProps) => {
-
+  const [selected, setSelected] = useState<null | number>(null);
   const handleToggle = () => props.setOpen(!open);
+
+  // useEffect(() => {
+  //   console.log("props.data", props.data);
+
+  // }, [props.data]);
 
   return (
     <ControlledModal
@@ -46,15 +57,31 @@ const PopOverSelect = (props: PopOverSelectProps) => {
             </div>
 
             <div className='flex flex-col gap-3'>
-              {props.data?.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => props.setSelectedItemIndex(index)}
-                  className="text-lg font-medium px-3 py-[3px] min-h-[30px] bg-gray-100 rounded-md whitespace-nowrap overflow-hidden text-ellipsis"
-                >
-                  <div>{item}</div>
-                </div>
-              ))}
+              {props.data?.map((item, index) => {
+                if (!item[props.key1] || props.key2 && !item[props.key2]) return null;
+
+                return (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setSelected(index);
+                      props.setSelectedIndex && props.setSelectedIndex(index);
+                      props.setSelectedItem && props.setSelectedItem(item.id);
+                      setTimeout(() => {
+                        handleToggle();
+                      }, 100);
+                    }}
+                    className={clsxm(
+                      'flex justify-between items-center cursor-pointer',
+                      index === selected && 'border border-[#007AFF]',
+                      "text-lg font-medium px-3 py-[3px] min-h-[30px] bg-gray-100 rounded-md whitespace-nowrap overflow-hidden text-ellipsis"
+                    )}
+                  >
+                    <div>{item[props.key1]} {props.key2 && item[props.key2]}</div>
+                    {index === selected && <FaCheckCircle className="fill-current text-[#007AFF] h-4 w-4" />}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

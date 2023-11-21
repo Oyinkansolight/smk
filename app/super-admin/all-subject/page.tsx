@@ -49,6 +49,10 @@ const AllSubjects = () => {
 
   const handleFilter = (value: string) => {
     setInstitutionType(value);
+    if (value === 'asc' || value === 'desc') {
+      setPagingData({ ...pagingData, page: 1, order: value });
+      return;
+    }
     setPagingData({ ...pagingData, page: 1, institutionType: value });
   }
 
@@ -137,6 +141,8 @@ const AllSubjects = () => {
             className='border-none bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg'
           >
             <option value=''>Filter</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
             <option value={INSTITUTION_TYPES.ECCDE}>ECCDE</option>
             <option value={INSTITUTION_TYPES.PRIMARY}>Primary</option>
             <option value={INSTITUTION_TYPES.SECONDARY}>Secondary</option>

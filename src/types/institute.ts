@@ -563,3 +563,8 @@ export interface StudentsListByInstitution {
   query?: string;
   instituteId: string;
 }
+
+export interface AssignStudentToParent {
+  id: string;
+  studentId: string;
+}

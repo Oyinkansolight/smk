@@ -11,7 +11,7 @@ import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useCreateStudent } from '@/server/institution';
+import { useAssignStudentToParent, useCreateStudent } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 
 export default function AddStudent() {
   const { data: institutionProfile } = useGetProfile();
+  const assignStudentToParent = useAssignStudentToParent();
 
   const {
     register,
@@ -31,13 +32,19 @@ export default function AddStudent() {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
-  const [stage, setStage] = useState(1);
+  const [stage, setStage] = useState(4);
   const [imgSrc, setImgSrc] = useState(null);
   const [isOpen, setisOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imageData, setImageData] = useState<File | undefined>();
 
   const [publishData, setpublishData] = useState(null);
+
+  const [parentId, setParentId] = useState("");
+
+  const handleParentId = (id: string) => {
+    setParentId(id);
+  }
 
 
   const handleCreateStudent = useCreateStudent();
@@ -60,13 +67,7 @@ export default function AddStudent() {
       setStage(stage + 1);
     }
     if (
-      stage === 3 &&
-      data.parentphoneNumber &&
-      data.parentEmail &&
-      data.parentAddress &&
-      data.parentName &&
-      data.parentOccupation &&
-      data.parentStatus
+      stage === 3
     ) {
       setStage(stage + 1);
     }
@@ -88,18 +89,11 @@ export default function AddStudent() {
         parentStatus: data.parentStatus,
         parentName: data.parentName,
         parentOccupation: data.parentOccupation,
-        email: data.parentEmail,
+        email: data.studentEmail,
         password: '12345',
         phoneNumber: data.phoneNumber,
         address: data.address,
-        // lga: "",
-        parentDetails: {
-          name: data.parentName,
-          phoneNumber: data.parentphoneNumber,
-          email: data.parentEmail,
-          address: data.parentAddress,
-          // lga: "",
-        },
+        parentId,
         classArmId: data.class,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
@@ -112,7 +106,19 @@ export default function AddStudent() {
         const response = await handleCreateStudent.mutateAsync(studentData);
 
         if (response) {
+          if (parentId) {
+            const parentData = {
+              id: parentId,
+              studentId: response.data.id,
+            };
+            const parentLinkResponse = await assignStudentToParent.mutateAsync(parentData);
+
+            if (!parentLinkResponse) {
+              toast.error('Error linking parent to student');
+            }
+          }
           toast.success('Student Added successfully');
+
           setloading(false);
 
           //2 Second - Open Success Modal
@@ -202,7 +208,7 @@ export default function AddStudent() {
             />
           )}
           {stage === 2 && <Contact register={register} errors={errors} getValues={getValues} />}
-          {stage === 3 && <ParentContact register={register} errors={errors} getValues={getValues} />}
+          {stage === 3 && <ParentContact handleParentId={handleParentId} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
 

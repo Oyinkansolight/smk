@@ -39,7 +39,7 @@ const Page = () => {
   const queryString = useSearchParams();
   const userData = getFromSessionStorage('user');
   const [answers, setAnswers] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [startActivity, setStartActivity] = useState(false);
   const [currentView, setCurrentView] = useState(0);
   const [activity, setActivity] = useState<any>();
@@ -85,20 +85,29 @@ const Page = () => {
     subjectId: activity?.subject.id,
   };
 
-  async function handleSubmitTask() {
+  async function handleSubmitTask(type: string, qId?: string) {
+    if (type !== "MULTIPLE_CHOICE") {
+      const answers: any = [{
+        questionId: qId,
+        answerText: editor?.getHTML(),
+      }];
+
+      submissionData.answers = answers;
+    }
+
     try {
-      setloading(true);
+      setLoading(true);
       const response = await handleSubmitActivity.mutateAsync(submissionData);
 
       if (response) {
         toast.success(`${activityType} Submitted successfully`);
         router.back();
-        setloading(false);
+        setLoading(false);
 
         //2 Second - Open Success Modal
       }
     } catch (error) {
-      setloading(false);
+      setLoading(false);
       toast.error(getErrMsg(error));
     }
   }
@@ -269,8 +278,8 @@ const Page = () => {
                           }
                         />
                       )}
-                      {/* MULTIPLE_CHOICE */}
                     </div>
+
                     {startActivity && (
                       <div>
                         {activity?.questionsV2?.map((item, idx) => (
@@ -289,7 +298,7 @@ const Page = () => {
                         ))}
                         <button
                           onClick={() => {
-                            handleSubmitTask();
+                            handleSubmitTask(activity?.format, activity?.questionsV2?.[0]?.id);
                           }}
                           className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
                         >

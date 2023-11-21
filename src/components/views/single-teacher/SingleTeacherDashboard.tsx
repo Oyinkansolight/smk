@@ -52,8 +52,8 @@ const SingleTeacherDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? {})?.firstName} ${
-          (staff?.user ?? {})?.lastName
+        name={`${(staff?.user ?? {})?.firstName || 'Loading...'} ${
+          (staff?.user ?? {})?.lastName || ''
         }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
         id={staff?.oracleNumber ?? staff?.staffId}

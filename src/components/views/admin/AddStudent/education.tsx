@@ -48,7 +48,7 @@ const Education = ({ register, errors }: Iprops) => {
           <FormSelect
             label='Assign Class'
             name='class'
-            options={allclasses ?? []}
+            options={allclasses?.data ?? []}
             register={register}
             validation={{
               required: 'Class is required',

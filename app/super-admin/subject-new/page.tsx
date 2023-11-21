@@ -19,6 +19,7 @@ import {
   useGetTeacherById,
 } from '@/server/institution';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import TeacherLibrary from 'app/teacher/library/page';
 import { useSearchParams } from 'next/navigation';
@@ -148,13 +149,15 @@ const SingleSubjectInstitutionType = () => {
                   <div className='flex justify-between'>
                     <h4 className='text-[#6B7A99]'>ECCDE {item}</h4>
                     <div>
-                      <Image
-                        src='/svg/subjectarrow.svg'
-                        height={24}
-                        width={24}
-                        alt='Bg_Layout'
-                        className=''
-                      />
+                      <Link href='/super-admin/subject-manage-new'>
+                        <Image
+                          src='/svg/subjectarrow.svg'
+                          height={24}
+                          width={24}
+                          alt='Bg_Layout'
+                          className=''
+                        />
+                      </Link>
                     </div>
                   </div>
                   <div className='mt-6'>

@@ -84,6 +84,7 @@ export interface SecondaryEnrollment {
 
 export interface SubjectList {
   id?: any;
+  order?: string;
   limit?: number;
   page?: number;
   institutionType?: string | null;

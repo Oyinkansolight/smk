@@ -9,26 +9,26 @@ import { BiChevronRight } from 'react-icons/bi';
 const columns: TableColumn<(any)[number]>[] = [
   {
     name: 'Institution From',
-    selector: (event) => event.id,
+    selector: (event) => event.currentInstitution.instituteName,
     grow: 3,
     cell: (event) => (
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] overflow-hidden text-ellipsis'>
-          {event.id}
+          {event.currentInstitution.instituteName}
         </div>
       </div>
     ),
   },
   {
     name: 'Institution To',
-    selector: (event) => event.status,
+    selector: (event) => event.newInstitution.instituteName,
     grow: 3,
     cell: (event) => (
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] text-ellipsis overflow-hidden'>
-          {event.status}
+          {event.newInstitution.instituteName}
         </div>
       </div>
     ),

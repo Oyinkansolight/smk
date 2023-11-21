@@ -4,6 +4,7 @@ import request from '@/server';
 import { PaginationParams, SubjectList } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import {
+  AssignStudentToParent,
   Institution,
   Student,
   StudentsListByInstitution,
@@ -132,7 +133,7 @@ export function useGetSubjectList(params?: SubjectList) {
             params?.institutionType
               ? `&institutionType=${params?.institutionType}`
               : ''
-          }`,
+          }${params?.order ? `&order=${params?.order}` : ''}`,
           { withCredentials: true }
         );
         return d.data.data.data;
@@ -150,6 +151,7 @@ export function useGetSubjectList(params?: SubjectList) {
     params?.id,
     params?.page,
     params?.name,
+    params?.order,
     params?.institutionType,
     refetch,
   ]);
@@ -237,7 +239,9 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
         const d = await request.get(
           `/v1/government/parent?${
             params.limit ? `&limit=${params.limit}` : ''
-          }${params.page ? `&page=${params.page}` : ''}`
+          }${params.page ? `&page=${params.page}` : ''}${
+            params.query ? `&query=${params.query}` : ''
+          }`
         );
         return d.data.data as PaginatedData<Student> | any;
       } catch (error) {
@@ -251,6 +255,19 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
+}
+
+export function useAssignStudentToParent() {
+  const mutation = useMutation({
+    mutationKey: 'assign_student_to_parent',
+    mutationFn: async (params: AssignStudentToParent) =>
+      request.post(`/v1/government/parent/${params.id}/assign-student`, {
+        body: {
+          studentId: params.studentId,
+        },
+      }),
+  });
+  return mutation;
 }
 
 export function useGetStudentById(params?: PaginationParams) {
@@ -483,6 +500,7 @@ export function useGetSchools(params: Partial<PaginationParams>) {
 
   return query;
 }
+
 export function useGetInstituteTypes() {
   const query = useQuery({
     queryKey: 'get_school_list_types',

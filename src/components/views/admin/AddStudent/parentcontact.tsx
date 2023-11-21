@@ -11,13 +11,11 @@ import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
 type Iprops = {
-  register: any;
-  errors: any;
-  getValues?: any
+  handleParentId?: (id: string) => void
 };
-const Contact = ({ register, errors }: Iprops) => {
+const Contact = ({ handleParentId }: Iprops) => {
   const [open, setOpen] = useState(false);
-  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+  const [itemIndex, setItemIndex] = useState<null | number>(null);
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -25,21 +23,34 @@ const Contact = ({ register, errors }: Iprops) => {
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    // query,
+    query,
   });
 
   const {
-    data: parents,
     error,
     refetch,
+    data: parents,
   } = useGetParents({ ...pagingData });
 
   const handleSearch = (value: string) => {
+    logger(value);
     setQuery(value);
     setPagingData({ ...pagingData, page: 1, query: value });
   };
 
-  logger(parents);
+  const handleItemIndex = (index: number) => {
+    setItemIndex(index);
+  };
+
+  const getSelectedParent = () => {
+    if (!itemIndex) return [""];
+
+    console.log(`${parents?.data[itemIndex]?.lastName} ${parents?.data[itemIndex]?.firstName}`);
+
+    return [
+      `${parents?.data[itemIndex]?.lastName} ${parents?.data[itemIndex]?.firstName}`
+    ]
+  };
 
   useEffect(() => {
     const searchRecords = () => {
@@ -57,28 +68,28 @@ const Contact = ({ register, errors }: Iprops) => {
     }
   }, [error]);
 
+  // usseff
+
   return (
     <section className=''>
       <h2 className='text-3xl font-bold'>Parent Details</h2>
       <p>Select student's parent below:</p>
 
       <PopOverSelect
-        data={[
-          'Parent 1',
-          'Parent 2',
-          'Parent 3',
-          'Parent 4',
-        ]}
         open={open}
-        title='All Parents'
+        key1='lastName'
+        key2='firstName'
         setOpen={setOpen}
+        title='All Parents'
+        data={parents?.data}
         handleSearch={handleSearch}
         description="Select student's parent"
-        setSelectedItemIndex={setSelectedItemIndex}
+        setSelectedItem={handleParentId}
+        setSelectedIndex={handleItemIndex}
       />
 
       <div className='my-10'>
-        <Select onClick={() => setOpen(!open)} label="All Parents" options={[]} />
+        <Select onClick={() => setOpen(!open)} label="All Parents" options={getSelectedParent()} />
       </div>
     </section>
   );

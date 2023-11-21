@@ -15,6 +15,7 @@ export function useGetTodaysPeriod({
   day,
 }: timetableArg) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'get_today_period',
     queryFn: () =>
       request
@@ -25,7 +26,6 @@ export function useGetTodaysPeriod({
   });
   return query;
 }
-
 
 export function useSubmitActivity() {
   const mutation = useMutation({

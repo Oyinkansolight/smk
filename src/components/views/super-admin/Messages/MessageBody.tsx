@@ -1,7 +1,13 @@
+import { messages } from '@/types/comms';
+import moment from 'moment';
 import { BsFillReplyFill } from 'react-icons/bs';
 import { RiShareForwardFill } from 'react-icons/ri';
 
-export default function MessageBody({ reply }: { reply?: () => void }) {
+type propType = {
+  reply?: () => void;
+  message?: messages | undefined;
+};
+export default function MessageBody({ reply, message }: propType) {
   return (
     <div className='grid grid-cols-12 gap-6 px-4 bg-transparent'>
       <div className='col-span-1 pt-11'>
@@ -23,28 +29,28 @@ export default function MessageBody({ reply }: { reply?: () => void }) {
         </svg>
       </div>
       <div className='col-span-11 p-4'>
-        <h1 className='text-base font-medium mb-4'>School Registration</h1>
+        <h1 className='text-base font-medium mb-4'>
+          {' '}
+          {message?.messageTitle}{' '}
+        </h1>
         <div className='flex justify-between'>
           <div className='flex space-x-5'>
-            <p>Admin</p>
-            <p className='text-gray-400'>(Admin@schooladress.com)</p>
+            <p>{message?.sender.firstName}</p>
+            <p className='text-gray-400'>({message?.sender.email})</p>
           </div>
-          <div className='text-gray-400'>16:08 (3 hrs ago)</div>
+          <div className='text-gray-400'>
+            {moment(message?.createdAt).subtract(1, 'hours').format('LT')}{' '}
+            {moment(message?.createdAt)
+              .subtract(1, 'hours')
+              .startOf('hour')
+              .fromNow()}
+          </div>
         </div>
 
         <div className='mt-8 space-y-5'>
           <p>Hello,</p>
 
-          <p>
-            We are delighted to inform you that School Name has successfully
-            completed the registration process and is now officially recognized
-            as a registered educational institution. This achievement is a
-            testament to our collective efforts and commitment to providing
-            quality education to our students.
-          </p>
-
-          <p>Cheers,</p>
-          <p>John Doherty</p>
+          <p>{message?.messageBody}</p>
 
           <div className='flex space-x-4 mt-8'>
             <button
