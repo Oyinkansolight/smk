@@ -46,7 +46,7 @@ const AllSubjects = () => {
   ];
   const [, setsubjects] = useState(mockData);
 
-  const { data, error, isLoading } = useGetSubjectList();
+  const { data, error, isLoading } = useGetSubjectList({ limit: 100 });
   const handleSearch = (value: string) => {
     const result = mockData.filter((data) =>
       data.name.toLowerCase().includes(value.toLowerCase())
@@ -61,7 +61,7 @@ const AllSubjects = () => {
   }, [error]);
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -80,7 +80,7 @@ const AllSubjects = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Subjects</p>
-          <h1 className='font-semibold text-2xl'>{data?.length ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>{data?.paging?.totalItems ?? 0}</h1>
         </div>
         <AddSubjectModal>
           <div className='cursor-pointer w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '>
@@ -106,7 +106,7 @@ const AllSubjects = () => {
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
-          (data ?? []).map((item, idx) => (
+          (data?.data ?? []).map((item, idx) => (
             <div
               className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center  text-[#8898AA] p-3 px-1'
               key={idx}

@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 
 export function useGetSessionTerms(params: { sessionId?: string }) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: `get_session_terms_${params.sessionId ?? ''}`,
     queryFn: async () => {
       if (params.sessionId) {

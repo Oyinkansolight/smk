@@ -18,7 +18,7 @@ const Page = () => {
   const handleSetOpen = (value: boolean) => setIsOpen(value);
 
   return (
-    <div className='layout flex flex-col gap-y-[27px] pt-6'>
+    <div className='flex flex-col gap-y-[27px] pt-6'>
       {isOpen && (
         <AddSingleSchool
           onClickHandler={() => {

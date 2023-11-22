@@ -21,7 +21,7 @@ const Account = () => {
   }
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <h1 className='mt-5 mb-6 text-2xl font-bold'>Account and Settings</h1>
 
       <TabBar

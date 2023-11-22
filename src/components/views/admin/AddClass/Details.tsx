@@ -3,12 +3,16 @@
 
 import FormSelectClassDefault from '@/components/input/FormSelectClassDefault';
 import FormInput from '@/components/input/formInput';
+import GenericLoader from '@/components/layout/Loader';
 import { useGetClassesList, useGetSubjectList } from '@/server/institution';
 import { UserProfile } from '@/types/auth';
 import { useMemo } from 'react';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import ReactSelect from 'react-select';
-import GenericLoader from '@/components/layout/Loader';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
@@ -30,8 +34,9 @@ const Biodata = ({
   classArmInfo,
 }: Iprops) => {
   const { data: allClasses, isLoading: isLoadingClasses } = useGetClassesList();
-  const { data: allSubjects, isLoading: isLoadingSubjects } = useGetSubjectList();
-
+  const { data: allSubjects, isLoading: isLoadingSubjects } = useGetSubjectList(
+    { limit: 50 }
+  );
 
   const filteredClass = useMemo(() => {
     const response =
@@ -39,7 +44,7 @@ const Biodata = ({
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -53,7 +58,11 @@ const Biodata = ({
     (item) => item.value == classArmInfo?.teacher.id
   );
 
-  if (isLoadingClasses || isLoadingSubjects || (classArmInfo?.teacher.id && !staffData[selectedTeacherIndex])) {
+  if (
+    isLoadingClasses ||
+    isLoadingSubjects ||
+    (classArmInfo?.teacher.id && !staffData[selectedTeacherIndex])
+  ) {
     return (
       <div className='flex justify-center items-center'>
         <GenericLoader />
@@ -158,7 +167,7 @@ const Biodata = ({
                   label: v?.name,
                   value: v.id,
                 }))}
-                options={(allSubjects ?? []).map((v) => ({
+                options={(allSubjects?.data ?? []).map((v) => ({
                   label: v?.name,
                   value: v.id,
                 }))}

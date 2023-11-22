@@ -21,7 +21,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
     if (confirm) {
       // eslint-disable-next-line no-alert
       toast.success('You have been logged out successfully', {
-        toastId: "super-admin-logout"
+        toastId: 'super-admin-logout',
       });
       router.push('/auth/user?action=logout');
     }
@@ -108,7 +108,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
           }}
         />
 
-        {/* <SideBarButtonTwo
+        <SideBarButtonTwo
           active={
             routeDetails && routeDetails.includes('communication') && true
           }
@@ -117,7 +117,7 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
             router.push('/super-admin/communication');
             handleToggle();
           }}
-        /> */}
+        />
 
         <button
           onClick={() => {

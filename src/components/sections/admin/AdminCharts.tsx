@@ -18,7 +18,6 @@ import {
   useGetTeacherAttendanceLog,
 } from '@/server/institution';
 import { EnrollmentAnalysis } from '@/types';
-import Link from 'next/link';
 import React from 'react';
 
 const AdminCharts = ({
@@ -42,14 +41,14 @@ const AdminCharts = ({
 
   return (
     <>
-      <div className='flex flex-col gap-8 p-[30px]'>
+      {/* <div className='flex flex-col gap-8 p-[30px]'>
         <div className='flex justify-between'>
           <div className='text-xl font-bold'>Data Generator</div>
           <Link href='#' className='text-[#3361FF] '>
             View Advanced Report
           </Link>
         </div>
-        {/* <div className='text-[#6B7A99]'>
+        <div className='text-[#6B7A99]'>
           Select the variables that would feed the stat section below.
         </div>
         <div className='grid grid-cols-4 gap-4'>
@@ -74,8 +73,8 @@ const AdminCharts = ({
           <Button className='justify-center max-w-[160px]' variant={variant}>
             Apply
           </Button>
-        </div> */}
-      </div>
+        </div>
+      </div> */}
 
       <div className='grid md:grid-cols-2 gap-[20px]'>
         <div>
@@ -106,7 +105,12 @@ const AdminCharts = ({
 
             <GenericChart
               title='Enrolment Analysis'
-              content={<EnrolmentAnalysis instituteIndex={0} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
+              content={
+                <EnrolmentAnalysis
+                  instituteIndex={0}
+                  data={chartData?.enrollmentAnalysis as EnrollmentAnalysis}
+                />
+              }
             />
 
             <GenericChart
@@ -147,7 +151,12 @@ const AdminCharts = ({
             <GenericChart
               title='Transfer Requests'
               content={
-                <EmptyView label='No transfer requests at the moment' /> ?? <TransferRequestsTable />
+                <TransferRequestsTable
+                  data={[
+                    ...chartData.staffTransferRequests,
+                    ...chartData.studentTransferRequests,
+                  ]}
+                />
               }
             />
 
@@ -159,7 +168,7 @@ const AdminCharts = ({
             />
 
             <GenericChart
-              title='Click In/Clock Out Logs'
+              title='Click In/Out Logs'
               content={
                 clockInOutLog ? (
                   <ClockInClockOutTable data={clockInOutLog} />

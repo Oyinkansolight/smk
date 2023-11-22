@@ -1,6 +1,12 @@
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  updateMetadata,
+  uploadBytes,
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDEn6jkFcOq9x-eRhFO4l_o0BnG_A8FOZk',
@@ -34,4 +40,8 @@ export async function uploadDocument(
 
 export async function getURL(path: string) {
   return await getDownloadURL(ref(getStorage(), path));
+}
+
+export async function updateDocumentMetadata(path: string, metadata: any) {
+  return await updateMetadata(ref(getStorage(), path), metadata);
 }

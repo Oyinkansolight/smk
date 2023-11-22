@@ -76,7 +76,7 @@ export default function PaginatedCounter({
 
       <div
         onClick={() => {
-          if (currentPage === pageCount - 1) return;
+          if (currentPage === pageCount) return;
           onChange && onChange((currentPage ?? 1) + 1);
         }}
         className='rounded-full border cursor-pointer bg-white h-10 w-10 flex items-center justify-center'

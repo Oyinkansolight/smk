@@ -9,7 +9,7 @@ import CreateFolder from '@/components/modal/createFolder';
 import UpdateFolder from '@/components/modal/updateFolder';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import Table from '@/components/tables/TableComponent';
-import { getURL } from '@/firebase/init';
+import { getURL, updateDocumentMetadata } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import {
@@ -392,6 +392,16 @@ const UploadDocument = ({
     logger(currentFile);
     if (isModalOpen) {
       const getFileURL = async () => {
+        if (mediaType !== 'video') {
+          const newMetadata = {
+            contentType: 'application/pdf'
+          };
+          await updateDocumentMetadata(
+            currentFile,
+            newMetadata
+          );
+        }
+
         await getURL(currentFile).then((v) => setUrl(v));
         logger(url);
       };

@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { BiExit } from 'react-icons/bi';
+import { BiExit, BiUserVoice } from 'react-icons/bi';
+import { BsMessenger } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import Company from '~/svg/company.svg';
 import Globe from '~/svg/globe.svg';
-import Messenger from '~/svg/messenger.svg';
 import Sidebararrow from '~/svg/sidebararrow.svg';
 import Star from '~/svg/star.svg';
 import Trend from '~/svg/trend_up.svg';
@@ -81,6 +81,18 @@ const InstituteSidebar = ({
           href='/admin/all-staff'
           active={routeDetails && routeDetails.includes('all-staff') && true}
         />
+
+        <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
+          open={open}
+          icon={<BiUserVoice className='text-[#C3CAD9] fill-current' />}
+          title='Parents'
+          href='/admin/all-parents'
+          active={routeDetails && routeDetails.includes('all-parents') && true}
+        />
+
         {/* <SideBarButton
           onClick={() => {
             setOpen(false);
@@ -101,18 +113,18 @@ const InstituteSidebar = ({
           href='/admin/all-classes'
           active={routeDetails && routeDetails.includes('all-classes') && true}
         />
-        {/* <SideBarButton
+        <SideBarButton
           onClick={() => {
             setOpen(false);
           }}
           open={open}
-          icon={<Messenger className='#C3CAD9' />}
+          icon={<BsMessenger className='#C3CAD9' />}
           title='Communication'
           href='/admin/all-communication'
           active={
             routeDetails && routeDetails.includes('all-communication') && true
           }
-        /> */}
+        />
         <SideBarButton
           onClick={() => {
             setOpen(false);

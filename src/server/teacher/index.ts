@@ -1,6 +1,7 @@
 import request from '@/server';
 import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface ClockInParams {
@@ -90,10 +91,10 @@ export function useTakeAttendance() {
 }
 
 export interface GetTeacherNextClassParams {
-  teacherId?: number;
-  sessionId?: number;
-  termId?: number;
-  weekId?: number;
+  teacherId?: string;
+  sessionId?: string;
+  termId?: string;
+  weekId?: string;
   day?:
     | 'Monday'
     | 'Tuesday'
@@ -106,14 +107,34 @@ export interface GetTeacherNextClassParams {
 
 export function useGetTeacherNextClass(params: GetTeacherNextClassParams) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'get_teacher_next_class',
     queryFn: async () => {
-      const d = await request.get(
-        `/v1/government/teachers/teacher-next-class`,
-        { params }
-      );
-      return d.data.data.data as TeacherNextClass;
+      if (
+        params.teacherId &&
+        params.sessionId &&
+        params.termId &&
+        params.weekId
+      ) {
+        const d = await request.get(
+          `/v1/government/teachers/teacher-next-class`,
+          { params }
+        );
+        return d.data.data.data as TeacherNextClass[];
+      }
     },
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [
+    params.teacherId,
+    params.sessionId,
+    params.termId,
+    params.weekId,
+    refetch,
+  ]);
+
   return query;
 }

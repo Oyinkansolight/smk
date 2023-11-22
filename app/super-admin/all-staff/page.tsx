@@ -3,7 +3,9 @@
 
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useDeleteStaff } from '@/server/government/classes_and_subjects';
 import { useGetTeachersList } from '@/server/institution';
 import { Staff } from '@/types/institute';
 import Image from 'next/image';
@@ -14,17 +16,26 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
-  const [pagingData, setPagingData] = useState<any>({ page: 1, limit: 10, query });
-
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string>();
   const {
     data: staff,
     error,
     isLoading,
-    refetch
+    refetch,
   } = useGetTeachersList({ ...pagingData });
 
   const handleSearch = (value: string) => {
@@ -32,6 +43,24 @@ const AllStaff = () => {
     setPagingData({ ...pagingData, page: 1, query: value });
   };
 
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const { mutateAsync } = useDeleteStaff();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        toggleModal();
+        setAction(null);
+        const res = await mutateAsync(itemToDelete);
+        toast.success('Student removed successfully');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -53,12 +82,11 @@ const AllStaff = () => {
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm) {
-        refetch()
+        refetch();
       }
     };
 
     refetchSearchRecords();
-
   }, [refetch, debouncedSearchTerm]);
 
   useEffect(() => {
@@ -68,7 +96,7 @@ const AllStaff = () => {
   }, [error]);
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -87,7 +115,9 @@ const AllStaff = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Teacher</p>
-          <h1 className='font-semibold text-2xl'>{staff?.paging.totalItems ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {staff?.paging.totalItems ?? 0}
+          </h1>
         </div>
       </div>
 
@@ -99,11 +129,7 @@ const AllStaff = () => {
       <div className='flex flex-col gap-4'>
         <div className='flex justify-end'>
           <div className='flex w-[300px] space-x-2'>
-
-            <BasicSearch
-              placeholder='Search...'
-              handleSearch={handleSearch}
-            />
+            <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
           </div>
         </div>
         <div className='table-add-student mt-3 py-4 pb-4 bg-white overflow-x-scroll'>
@@ -125,17 +151,19 @@ const AllStaff = () => {
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-2'>
-                  {item?.oracleNumber ?? "-"}
-                </div>
+                <div className='col-span-2'>{item?.oracleNumber ?? '-'}</div>
 
                 <div className='col-span-4'>
                   <Link href={`/super-admin/teacher?id=${item.id}`}>
-                    {item?.user?.lastName || 'N/A'} {item?.user?.firstName || 'N/A'}
+                    {item?.user?.lastName || 'N/A'}{' '}
+                    {item?.user?.firstName || 'N/A'}
                   </Link>
                 </div>
 
-                <div className='hidden lg:block col-span-1'> {item?.staffType || 'N/A'}</div>
+                <div className='hidden lg:block col-span-1'>
+                  {' '}
+                  {item?.staffType || 'N/A'}
+                </div>
 
                 <div className='col-span-4 lg:col-span-2'>
                   {' '}
@@ -157,10 +185,19 @@ const AllStaff = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        <Link
+                          href={`/super-admin/staff?id=${item.id}`}
+                          className='p-4 hover:bg-gray-200 w-full block'
+                        >
                           Edit
-                        </button>
-                        <button className='p-4 hover:bg-gray-200 w-full'>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setItemToDelete(item.id);
+                            toggleModal();
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
                           Delete
                         </button>
                       </div>
@@ -230,22 +267,24 @@ const AllStaff = () => {
                   </div>
                 ))}
 
-              {staff.paging.totalPage > 3 &&
+              {staff.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
-                      (pagingData.page > 3 && pagingData.page < staff.paging.totalPage)
+                      (pagingData.page > 3 &&
+                        pagingData.page < staff.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
-                  {pagingData.page > 3 && pagingData.page < staff.paging.totalPage
+                  {pagingData.page > 3 &&
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
-              }
+              )}
 
               {staff.paging.totalPage > 4 && (
                 <div
@@ -259,7 +298,7 @@ const AllStaff = () => {
                 </div>
               )}
 
-              {staff.paging.totalPage > 1 &&
+              {staff.paging.totalPage > 1 && (
                 <div
                   className={clsxm(
                     pagingData.page === staff.paging.totalPage
@@ -270,11 +309,14 @@ const AllStaff = () => {
                 >
                   {staff.paging.totalPage}
                 </div>
-              }
+              )}
 
               <button
                 onClick={handleNextPage}
-                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <svg
@@ -295,7 +337,10 @@ const AllStaff = () => {
 
               <button
                 onClick={handleJumpToEnd}
-                disabled={staff && staff?.data?.length < 10 || pagingData.page === staff.paging.totalPage}
+                disabled={
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
+                }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
                 <BiChevronsRight />

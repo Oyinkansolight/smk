@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import Button from '@/components/buttons/Button';
@@ -6,19 +7,24 @@ import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import GradeSettingsModal from '@/components/modals/grade-settings-modal';
 import StudentGradeModal from '@/components/modals/student-grade-modal';
+import logger from '@/lib/logger';
 import { useGetProfile } from '@/server/auth';
 import { useGetSubjectGradeBook } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
+import { GradeList } from '@/types/classes-and-subjects';
 import { Institution } from '@/types/institute';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ordinal from 'ordinal';
 import { useEffect, useState } from 'react';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { useSessionStorage } from 'usehooks-ts';
 
 export default function Page() {
-  const [idx, setIdx] = useState(1);
+  const router = useRouter();
+  const [idx, setIdx] = useState(0);
   const params = useSearchParams();
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile();
   const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
@@ -45,7 +51,15 @@ export default function Page() {
     termId: term as unknown as string,
   });
 
-  console.log(gradeList);
+  const appendParamsToURL = (id?: string) => {
+    if (id) {
+      const path = `/teacher/grades/subject?id=${params?.get(
+        'id'
+      )}${`&classArmId=${id}`}&subjectName=${params?.get('subjectName')}`;
+
+      router.push(path);
+    }
+  }
 
   useEffect(() => {
     refetch();
@@ -61,6 +75,19 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <Link href='/teacher/grades'>
+        <div className='flex items-center space-x-4 pt-4'>
+          <Image
+            src='/svg/back.svg'
+            width={10}
+            height={10}
+            alt='back'
+            className='h-4 w-4'
+          />
+          <h3 className='text-[10px] font-medium'>Back</h3>
+        </div>
+      </Link>
+
       <div className='text-[#D4D5D7] py-8 text-xl'>
         Grade Book {'>'} {params?.get('subjectName')}
       </div>
@@ -73,6 +100,7 @@ export default function Page() {
         ]}
         onChange={setIdx}
         selectedIdx={idx}
+        callback={() => arms?.[idx]?.id && appendParamsToURL(arms?.[idx]?.id)}
       />
 
       {isLoading ? (
@@ -80,7 +108,13 @@ export default function Page() {
       ) : gradeList && gradeList.length ? (
         <>
           <div className='flex justify-end gap-4 mb-4'>
-            <GradeSettingsModal>
+            <GradeSettingsModal
+              callBack={() => {
+                if (!params?.get('classArmId')) {
+                  arms?.[idx]?.id && appendParamsToURL(arms?.[idx]?.id)
+                }
+              }}
+            >
               <Button
                 variant='secondary'
                 className='flex justify-center h-[46px] bg-[#1A8FE3] min-w-[186px] w-full font-semibold !text-xs rounded-lg'
@@ -120,10 +154,11 @@ export default function Page() {
           </div>
 
           <div className='flex flex-col gap-4'>
-            {gradeList.map((list, i) => (
+            {gradeList.map((list: any, i) => (
               <StudentGradeListItem
                 key={list.id}
                 id={i + 1}
+                gradeList={list}
                 name={list.class?.name}
               />
             ))}
@@ -139,10 +174,14 @@ export default function Page() {
 function StudentGradeListItem({
   id,
   name,
+  gradeList,
 }: {
   id: number;
+  gradeList: GradeList;
   name: string | undefined;
 }) {
+  logger(gradeList);
+
   return (
     <StudentGradeModal>
       <div className='grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-6 bg-white'>
@@ -158,9 +197,7 @@ function StudentGradeListItem({
         <div>0</div>
         <div className='text-black'>Fail</div>
         <div className='text-black flex items-center'>
-          <div>
-            {id} {id === 1 ? 'st' : id === 2 ? 'nd' : id === 3 ? 'rd' : 'th'}
-          </div>
+          <div>{ordinal(id)}</div>
         </div>
       </div>
     </StudentGradeModal>

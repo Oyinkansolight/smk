@@ -10,6 +10,8 @@ import {
   useUpdateClassArmAttendance,
 } from '@/server/institution/class-arm';
 import moment from 'moment';
+import { useRouter } from 'next/navigation';
+import { MdArrowBackIos } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
 export default function Page() {
@@ -19,10 +21,18 @@ export default function Page() {
   });
   const { mutateAsync: takeAttendance } = useTakeClassArmAttendance();
   const { mutateAsync: updateAttendance } = useUpdateClassArmAttendance();
+  const router = useRouter();
 
   return (
     <div className='flex flex-col layout'>
-      <div className='font-bold text-3xl my-12'>Class Attendance</div>
+      <div
+        onClick={() => router.back()}
+        className='cursor-pointer flex items-center mt-6'
+      >
+        <MdArrowBackIos className='text-[#42BBFF]' />
+        <div>Back</div>
+      </div>
+      <div className='font-bold text-3xl mt-6 mb-12'>Class Attendance</div>
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col gap-[10px] font-bold text-xl leading-6 text-[#746D69] bg-white rounded-xl py-[18px] px-[50px]'>
           <div>

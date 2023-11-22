@@ -47,6 +47,7 @@ export interface Student {
   class?: any;
   studentId?: string;
   teacher?: string;
+  createdAt?: string;
 }
 
 export interface FlattenedStudent {
@@ -561,4 +562,9 @@ export interface StudentsListByInstitution {
   limit?: number;
   query?: string;
   instituteId: string;
+}
+
+export interface AssignStudentToParent {
+  id: string;
+  studentId: string;
 }

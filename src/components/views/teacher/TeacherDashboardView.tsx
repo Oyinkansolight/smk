@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BasicCard } from '@/components/cards';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
@@ -5,11 +6,38 @@ import { useGetProfile } from '@/server/auth';
 import { useGetStaffDashboardOverview } from '@/server/dashboard';
 import { BiUser } from 'react-icons/bi';
 import EmptyView from '@/components/misc/EmptyView';
+import NextImage from '@/components/NextImage';
+import clsxm from '@/lib/clsxm';
+import { useState } from 'react';
+import { useGetTeacherNextClass, GetTeacherNextClassParams } from '@/server/teacher';
+import moment from 'moment';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { TeacherNextClass } from '@/types/classes-and-subjects';
+import GenericLoader from '@/components/layout/Loader';
 
 export default function TeacherDashboardView() {
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? "";
+  const term: any = getFromSessionStorage('currentTerm');
+  const week: any = getFromSessionStorage('currentWeek');
+
   const { data: profileData } = useGetProfile();
   const { data: overviewData } = useGetStaffDashboardOverview();
+  const { data: nextClassData, isLoading: isLoadingNextClass } = useGetTeacherNextClass({
+    day: moment().format('dddd') as GetTeacherNextClassParams['day'],
+    sessionId,
+    teacherId: profileData?.userInfo?.staff?.id,
+    termId: JSON.parse(term)?.id,
+    weekId: JSON.parse(week)?.id,
+  });
   // const { data: sessionCalendarData } = useGetSessionCalendar(1);
+
+  const isWithinTime = (startTime: string, endTime: string) => {
+    const currentTime = moment().format('HH:mm');
+    return moment(currentTime, 'HH:mm').isBetween(
+      moment(startTime, 'HH:mm'),
+      moment(endTime, 'HH:mm')
+    );
+  }
 
   return (
     <div className='flex flex-col layout'>
@@ -45,10 +73,27 @@ export default function TeacherDashboardView() {
         <div className='grid grid-rows-2 gap-6 w-full'>
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>
-            <EmptyView label='No Data' />
-            {/* <NextClassCard isActive />
-            <NextClassCard />
-            <div className='font-bold text-right'>See all</div> */}
+            {isLoadingNextClass && (
+              <GenericLoader />
+            )}
+
+            {nextClassData && nextClassData?.length > 0 && nextClassData.slice(0, 5).map((nextClass) => {
+              if (!nextClass) return null;
+
+              return (
+                <NextClassCard
+                  key={nextClass?.id}
+                  nextClass={nextClass}
+                  isActive={isWithinTime(nextClass?.startTime ?? "", nextClass?.endTime ?? "")}
+                />
+              )
+            })}
+
+            {(!nextClassData || nextClassData?.length === 0 &&
+              <EmptyView label='No Data' />
+            )}
+
+            {nextClassData && nextClassData?.length > 0 && <div className='font-bold text-right'>See all</div>}
           </BasicCard>
 
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
@@ -82,120 +127,125 @@ export default function TeacherDashboardView() {
   );
 }
 
-// const NextClassCard = ({ isActive = false }) => {
-//   const [active] = useState(isActive);
-//   return (
-//     <BasicCard
-//       className={clsxm(
-//         active ? '!bg-[#6A2B56] text-[#EFF7F6]' : '!bg-[#EFF7F6]',
-//         '!rounded-[5px] h-24 !px-4 !py-6'
-//       )}
-//     >
-//       <div className='flex flex-row gap-6'>
-//         <NextImage
-//           width={50}
-//           height={50}
-//           alt='Stacked Books'
-//           src='/images/book_stack.png'
-//           className={clsxm(
-//             active ? 'ring-white' : 'ring-[#DADEE6]',
-//             'ring-[0.1px] ring-offset-1 p-1 rounded-full h-fit'
-//           )}
-//         />
+interface NextClassCardProps {
+  isActive?: boolean;
+  nextClass: TeacherNextClass;
+}
 
-//         <div className='flex flex-row gap-3 items-center'>
-//           <div className='flex flex-col gap-1'>
-//             <div className='text-[10px] leading-[12px]'>Subject:</div>
-//             <div className='text-[10px] leading-[12px]'>Class:</div>
-//             <div className='text-[10px] leading-[12px]'>Time:</div>
-//           </div>
+const NextClassCard = ({ isActive = false, nextClass }: NextClassCardProps) => {
+  const [active] = useState(isActive);
+  return (
+    <BasicCard
+      className={clsxm(
+        active ? '!bg-[#6A2B56] text-[#EFF7F6]' : '!bg-[#EFF7F6]',
+        '!rounded-[5px] h-24 !px-4 !py-6'
+      )}
+    >
+      <div className='flex flex-row gap-6'>
+        <NextImage
+          width={50}
+          height={50}
+          alt='Stacked Books'
+          src='/images/book_stack.png'
+          className={clsxm(
+            active ? 'ring-white' : 'ring-[#DADEE6]',
+            'ring-[0.1px] ring-offset-1 p-1 rounded-full h-fit'
+          )}
+        />
 
-//           <div className='flex flex-col gap-1'>
-//             <div className='text-xs font-bold leading-[14px]'>Mathematics</div>
-//             <div className='text-xs font-bold leading-[14px]'>Primary 1A</div>
-//             <div className='text-xs font-bold leading-[14px]'>
-//               12:00 PM - 01:00 PM
-//             </div>
-//           </div>
+        <div className='flex flex-row gap-3 items-center'>
+          <div className='flex flex-col gap-1'>
+            <div className='text-[10px] leading-[12px]'>Subject:</div>
+            <div className='text-[10px] leading-[12px]'>Class:</div>
+            <div className='text-[10px] leading-[12px]'>Time:</div>
+          </div>
 
-//           <div className='flex gap-3'></div>
-//         </div>
-//       </div>
-//     </BasicCard>
-//   );
-// };
+          <div className='flex flex-col gap-1'>
+            <div className='text-xs font-bold leading-[14px]'>{nextClass?.subject?.name}</div>
+            <div className='text-xs font-bold leading-[14px]'>{nextClass?.class?.name}</div>
+            <div className='text-xs font-bold leading-[14px]'>
+              {nextClass?.startTime} - {nextClass?.endTime}
+            </div>
+          </div>
 
-// const AssignmentsCard = ({ isActive = false, today = false }) => {
-//   const [active] = useState(isActive);
-//   return (
-//     <BasicCard
-//       className={clsxm(
-//         active ? 'border !border-[#E5002B] text-[#E5002B]' : 'text-[#746D69]',
-//         '!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]'
-//       )}
-//     >
-//       <div className='flex flex-row gap-6'>
-//         <NextImage
-//           width={50}
-//           height={50}
-//           alt='Stacked Books'
-//           src='/images/book_stack.png'
-//           className={clsxm(
-//             active ? 'ring-white' : 'ring-[#DADEE6]',
-//             'ring-[0.1px] ring-offset-1 p-1 rounded-full h-fit'
-//           )}
-//         />
+          <div className='flex gap-3'></div>
+        </div>
+      </div>
+    </BasicCard>
+  );
+};
 
-//         <div className='flex flex-row gap-3 items-center'>
-//           <div className='flex flex-col gap-1'>
-//             <div className='text-[10px] leading-[12px]'>Subject:</div>
-//             <div className='text-[10px] leading-[12px]'>Class:</div>
-//             <div className='text-[10px] leading-[12px]'>Time:</div>
-//           </div>
+const AssignmentsCard = ({ isActive = false, today = false }) => {
+  const [active] = useState(isActive);
+  return (
+    <BasicCard
+      className={clsxm(
+        active ? 'border !border-[#E5002B] text-[#E5002B]' : 'text-[#746D69]',
+        '!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]'
+      )}
+    >
+      <div className='flex flex-row gap-6'>
+        <NextImage
+          width={50}
+          height={50}
+          alt='Stacked Books'
+          src='/images/book_stack.png'
+          className={clsxm(
+            active ? 'ring-white' : 'ring-[#DADEE6]',
+            'ring-[0.1px] ring-offset-1 p-1 rounded-full h-fit'
+          )}
+        />
 
-//           <div className='flex flex-col gap-1'>
-//             <div className='text-xs font-bold leading-[14px]'>Mathematics</div>
-//             <div className='text-xs font-bold leading-[14px]'>Primary 1A</div>
-//             <div className='text-xs font-bold leading-[14px]'>
-//               12:00 PM - 01:00 PM
-//             </div>
-//           </div>
+        <div className='flex flex-row gap-3 items-center'>
+          <div className='flex flex-col gap-1'>
+            <div className='text-[10px] leading-[12px]'>Subject:</div>
+            <div className='text-[10px] leading-[12px]'>Class:</div>
+            <div className='text-[10px] leading-[12px]'>Time:</div>
+          </div>
 
-//           <div className='flex gap-3'></div>
-//         </div>
+          <div className='flex flex-col gap-1'>
+            <div className='text-xs font-bold leading-[14px]'>Mathematics</div>
+            <div className='text-xs font-bold leading-[14px]'>Primary 1A</div>
+            <div className='text-xs font-bold leading-[14px]'>
+              12:00 PM - 01:00 PM
+            </div>
+          </div>
 
-//         {today ? (
-//           <div className='text-[#E5002B] ml-6 flex justify-center items-center font-bold'>
-//             Today
-//           </div>
-//         ) : (
-//           <div className='flex flex-col text-white bg-[#6A2B56] items-center justify-center p-1 rounded-[9px] w-12 h-12 ml-6'>
-//             <div className='text-[14px]'>Tue</div>
-//             <div className='font-semibold'>29</div>
-//           </div>
-//         )}
-//       </div>
-//     </BasicCard>
-//   );
-// };
+          <div className='flex gap-3'></div>
+        </div>
 
-// const MessageCard = () => {
-//   return (
-//     <BasicCard
-//       className={clsxm('!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]')}
-//     >
-//       <div className='flex flex-row justify-between items-center'>
-//         <div className='flex flex-col gap-2'>
-//           <div className='text-[10px] leading-[12px] font-bold'>
-//             Tola Ogunjimi
-//           </div>
-//           <div className='text-[10px] leading-[12px]'>
-//             I am writing to inform you that my assignment will...
-//           </div>
-//         </div>
+        {today ? (
+          <div className='text-[#E5002B] ml-6 flex justify-center items-center font-bold'>
+            Today
+          </div>
+        ) : (
+          <div className='flex flex-col text-white bg-[#6A2B56] items-center justify-center p-1 rounded-[9px] w-12 h-12 ml-6'>
+            <div className='text-[14px]'>Tue</div>
+            <div className='font-semibold'>29</div>
+          </div>
+        )}
+      </div>
+    </BasicCard>
+  );
+};
 
-//         <div>3 hrs ago</div>
-//       </div>
-//     </BasicCard>
-//   );
-// };
+const MessageCard = () => {
+  return (
+    <BasicCard
+      className={clsxm('!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]')}
+    >
+      <div className='flex flex-row justify-between items-center'>
+        <div className='flex flex-col gap-2'>
+          <div className='text-[10px] leading-[12px] font-bold'>
+            Tola Ogunjimi
+          </div>
+          <div className='text-[10px] leading-[12px]'>
+            I am writing to inform you that my assignment will...
+          </div>
+        </div>
+
+        <div>3 hrs ago</div>
+      </div>
+    </BasicCard>
+  );
+};

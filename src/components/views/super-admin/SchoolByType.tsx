@@ -7,9 +7,9 @@ import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
 import { useDeleteInstitution, useGetSchools } from '@/server/institution';
 import { Institution } from '@/types/institute';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ import { useDebounce } from 'usehooks-ts';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const SchoolByType = ({ name, title }: { name: string; title: string }) => {
-  const AT = Cookies.get('adminType');
+  const { data: profile } = useGetProfile();
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [action, setAction] = useState<number | null>(null);
@@ -33,6 +33,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -50,6 +51,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
       }
     }
   };
+
   const {
     data: schools,
     error,
@@ -96,8 +98,19 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
     }
   }, [error]);
 
+
+  const canAddSchool = () => {
+    let response = false;
+    if (profile) {
+      const addSchool = profile?.userInfo?.role?.[0]?.permissions?.filter((permission) => permission?.target === "institutes" && permission?.action === "create")
+      response = addSchool?.length ? addSchool?.length > 0 : false;
+    }
+
+    return response;
+  }
+
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
@@ -126,7 +139,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>{name}</h1>
 
-      {AT === 'SUPER' && (
+      {canAddSchool() && (
         <div className='mb-6 flex justify-between items-end'>
           <Link
             href='/super-admin/add-school'
@@ -239,6 +252,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
             <div className='text-red-500 py-4 text-center'>No record found</div>
           )}
 
+          {/* //Pagination */}
           {schools && schools?.data?.length > 0 && (
             <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
               <button
@@ -300,7 +314,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < schools.paging.totalPage
+                    pagingData.page < schools.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

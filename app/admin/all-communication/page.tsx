@@ -3,104 +3,42 @@
 import TabBar from '@/components/layout/TabBar';
 import { BasicSearch } from '@/components/search';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
+import {
+  useGetSenderMessages,
+  useReadMessage,
+} from '@/server/government/communication';
+import { messages } from '@/types/comms';
+import moment from 'moment';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiArrowDropDownLine, RiDashboardFill } from 'react-icons/ri';
 
 const AllNotification = () => {
-  const mockData = [
-    {
-      id: 1,
-      title: 'School Registration',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'unread',
-      due: true,
-      due_date: 'Fri,  10:51 am',
-      date_recieved: 'Tue,  10:51 am',
-      date: '6, June 2023',
-      type: 'recieved',
-    },
-    {
-      id: 2,
-      title: 'New Timetable',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'read',
-      due: true,
-      due_date: 'Fri,  10:51 am',
-      date_recieved: 'Tue,  10:51 am',
-      date: '6, June 2023',
-      type: 'sent',
-    },
-    {
-      id: 3,
-      title: 'New School Added',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'unread',
-      due: false,
-      date_recieved: 'Tue,  10:51 am',
-      date: '7, June 2023',
-      type: 'recieved',
-    },
-    {
-      id: 4,
-      title: 'New Student added',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'unread',
-      due: true,
-      due_date: 'Fri,  10:51 am',
-      date_recieved: 'Tue,  10:51 am',
-      date: '7, June 2023',
-      type: 'sent',
-    },
-    {
-      id: 4,
-      title: 'New Teacher Added',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'read',
-      due: true,
-      due_date: 'Fri,  10:51 am',
-      date_recieved: 'Tue,  10:51 am',
-      date: '7, June 2023',
-      type: 'recieved',
-    },
-    {
-      id: 5,
-      title: 'School Registration',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'read',
-      due: false,
-      date_recieved: 'Tue,  10:51 am',
-      date: '7, June 2023',
-      type: 'recieved',
-    },
-    {
-      id: 6,
-      title: 'New Admin Registration',
-      body: 'Avril secondary has uploaded the list of students in there school...',
-      status: 'read',
-      due: true,
-      due_date: 'Fri,  10:51 am',
-      date_recieved: 'Tue,  10:51 am',
-      date: '8, June 2023',
-      type: 'send',
-    },
-  ];
-  const [allnotification, setallnotification] = useState(mockData);
+  const { data, isLoading } = useGetSenderMessages();
+
+  console.log(data);
+
+  const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
   const [dropDown, setDropDown] = useState(false);
   const [active, setActive] = useState(false);
   const [isReply, setIsReply] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState<messages>();
 
   function handleReply() {
     setIsReply(!isReply);
   }
 
   const handleSearch = (value: string) => {
-    const result = mockData.filter((data) =>
-      data.title.toLowerCase().includes(value.toLowerCase())
-    );
-    setallnotification(result);
+    // const result = data.filter((data) =>
+    //   data.title.toLowerCase().includes(value.toLowerCase())
+    // );
+    // setallnotification(result);
+  };
+
+  const ReadMessage = (messageId: string) => {
+    useReadMessage({ id: messageId });
   };
 
   return (
@@ -128,16 +66,16 @@ const AllNotification = () => {
           {dropDown && (
             <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-14 transition-all duration-200 right-0 z-10'>
               <Link
-                href='/admin/send-message'
+                href='/super-admin/send-message'
                 className='p-3 hover:bg-slate-100  text-left font-medium w-full'
               >
                 Send Message
               </Link>
               <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
-                Send Broadcast{' '}
+                Send Broadcast
               </button>
               <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
-                Send Report{' '}
+                Send Report
               </button>
             </div>
           )}
@@ -170,8 +108,7 @@ const AllNotification = () => {
         <div className='flex items-center space-x-4'>
           <div>Filter</div>
           <div className='w-[200px]'>
-            {' '}
-            <BasicSearch handleSearch={handleSearch} />{' '}
+            <BasicSearch handleSearch={handleSearch} />
           </div>
         </div>
       </div>
@@ -186,7 +123,6 @@ const AllNotification = () => {
             />
           </div>
           <div className='flex justify-end mt-6'>
-            {' '}
             <button
               onClick={() => {
                 setIsReply(false);
@@ -200,14 +136,18 @@ const AllNotification = () => {
       )}
       <div className='grid grid-cols-2 border-y'>
         <div className='border-r'>
-          {allnotification.map((item, i) => (
+          {(data ?? []).map((item, i) => (
             <div
               key={i}
               onClick={() => {
                 setActive(!active);
+                setCurrentMessage(item);
+                if (!item.read) {
+                  ReadMessage(item.id);
+                }
               }}
               className={`${
-                item.status === 'unread' && 'bg-[#EDF3FE]'
+                !item.read && 'bg-[#EDF3FE]'
               } mb-3 grid grid-cols-12 p-2 font-light items-center`}
             >
               <div className='col-span-1 flex justify-center'>
@@ -222,15 +162,16 @@ const AllNotification = () => {
                 className={`col-span-7 
                   } flex flex-col space-y-2`}
               >
-                <h1 className='font-bold text-base'>{item.title} </h1>
-                <p className='text-[#848689]'> {item.body} </p>
+                <h1 className='font-bold text-base'>{item.messageTitle} </h1>
+                <p className='text-[#848689]'>
+                  {item.messageBody.substring(0, 50)}
+                </p>
               </div>
               <div className='col-span-4 flex items-end flex-col space-y-3'>
-                {' '}
-                <div>{item.date_recieved}</div>{' '}
-                <div className='text-gray-300 text-[10px]  capitalize'>
+                <div>{moment(item.createdAt).format('ll')}</div>
+                {/* <div className='text-gray-300 text-[10px]  capitalize'>
                   {item.type}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}
@@ -242,7 +183,7 @@ const AllNotification = () => {
               <h1 className='text-base'>No messages selected</h1>
             </div>
           ) : (
-            <MessageBody reply={handleReply} />
+            <MessageBody message={currentMessage} reply={handleReply} />
           )}
         </div>
       </div>

@@ -6,9 +6,12 @@ import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
+  CreateGradeSettingsParams,
+  useCreateResultFromGradeBook,
   useCreateSubjectGradeBook,
   useEditSubjectGradeBook,
   useGetSubjectGradeList,
+  useGetSubjectScoreSheet,
 } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
@@ -25,6 +28,9 @@ export default function Page() {
   const [ca2_score, setCa2_Score] = useState(0);
   const [exams_score, setExam] = useState(0);
   const [loading, setloading] = useState(false);
+  const [isLoadingCreateGradebook, setIsLoadingCreateGradebook] =
+    useState(false);
+  const [isLoadingGenerateResult, setIsLoadingGenerateResult] = useState(false);
   const [isModify, setIsModify] = useState(false);
   const params = useSearchParams();
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile();
@@ -35,6 +41,7 @@ export default function Page() {
 
   const [institution] = useSessionStorage('institution', {} as Institution);
   const handleCreateGradebook = useCreateSubjectGradeBook();
+  const handleCreateResultFromGradebook = useCreateResultFromGradeBook();
   const handleEditGradebook = useEditSubjectGradeBook();
 
   // const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
@@ -44,30 +51,18 @@ export default function Page() {
   //TODO: edit data pre-fill
   //TODO: input max | min set rule
 
-  const studentGrades: any[] = [];
-  const { data: allStudents, isLoading: isLoadingStudent } =
-    useGetClassArmStudents({
-      classArmId: profile?.userInfo?.staff?.managedClassArm?.id,
-    });
-
-  const {
-    data: gradeList,
-    refetch,
-    isLoading,
-  } = useGetSubjectGradeList({
+  const genericPayload: CreateGradeSettingsParams = {
     subjectId: params?.get('id') as string,
-  });
+    classArmId: params?.get('classArmId') as string,
+    institutionId: institution?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
+    termId: term as unknown as string,
+    limit: 100,
+  };
 
-  if (allStudents && gradeList) {
-    allStudents.map((v) => {
-      const grade = gradeList.find((item) => item.student.id === v.id);
-      studentGrades.push({ ...v, grade });
-    });
-  }
-
-  useEffect(() => {
-    refetch();
-  }, [idx, refetch]);
+  const { data: StudentScoreSheet, isLoading: isScoreSheetLoading } =
+    useGetSubjectScoreSheet(genericPayload);
+  // console.log('StudentScoreSheet', StudentScoreSheet);
 
   if (isLoadingProfile && isLoadingTerms) {
     return (
@@ -77,29 +72,40 @@ export default function Page() {
     );
   }
 
-  const handleGradeBookLog = async (studentId: string) => {
-    const payload = {
-      subjectId: params?.get('id') as string,
-      classArmId: params?.get('classArmId') as string,
-      institutionId: institution?.id,
-      sessionId: profile?.currentSession?.[0]?.id,
-      termId: term as unknown as string,
-      studentId,
-      ca1_score: Number(ca1_score),
-      ca2_score: Number(ca2_score),
-      exams_score: Number(exams_score),
-    };
+  const handleGenerateGradeBook = async () => {
+    delete genericPayload.limit;
 
     try {
-      setloading(true);
-      const response = await handleCreateGradebook.mutateAsync(payload);
+      setIsLoadingCreateGradebook(true);
+      const response = await handleCreateGradebook.mutateAsync(genericPayload);
 
       if (response) {
-        toast.success('Gradebook stored successfully');
-        setloading(false);
+        toast.success('Gradebook generated successfully');
+
+        setIsLoadingCreateGradebook(false);
       }
     } catch (error) {
-      setloading(false);
+      setIsLoadingCreateGradebook(false);
+      toast.error(getErrMsg(error));
+    }
+  };
+  const handleGenerateResult = async () => {
+    delete genericPayload.limit;
+    delete genericPayload.institutionId;
+
+    try {
+      setIsLoadingGenerateResult(true);
+      const response = await handleCreateResultFromGradebook.mutateAsync(
+        genericPayload
+      );
+
+      if (response) {
+        toast.success('Result released successfully');
+
+        setIsLoadingGenerateResult(false);
+      }
+    } catch (error) {
+      setIsLoadingGenerateResult(false);
       toast.error(getErrMsg(error));
     }
   };
@@ -117,6 +123,8 @@ export default function Page() {
 
       if (response) {
         toast.success('Gradebook updated successfully');
+        setIsModify(false);
+
         setloading(false);
       }
     } catch (error) {
@@ -130,7 +138,42 @@ export default function Page() {
       <div className='text-[#D4D5D7] py-8 text-xl'>
         Grade Book {'>'} {params?.get('subjectName')}
       </div>
-      <div className='font-bold text-2xl'>{params?.get('subjectName')}</div>
+      <div className='flex justify-between'>
+        <h2 className='font-bold text-2xl'>{params?.get('subjectName')}</h2>
+        <div className='flex space-x-1'>
+          {StudentScoreSheet && StudentScoreSheet.length > 0 && (
+            <Button
+              onClickHandler={() => {
+                handleGenerateResult();
+              }}
+              variant='secondary'
+              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+            >
+              {isLoadingGenerateResult ? (
+                <ImSpinner2 className='animate-spin' />
+              ) : (
+                'Generate Result'
+              )}
+            </Button>
+          )}
+
+          {StudentScoreSheet && StudentScoreSheet.length === 0 && (
+            <Button
+              onClickHandler={() => {
+                handleGenerateGradeBook();
+              }}
+              variant='secondary'
+              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+            >
+              {isLoadingCreateGradebook ? (
+                <ImSpinner2 className='animate-spin' />
+              ) : (
+                'Generate Score Sheet'
+              )}
+            </Button>
+          )}
+        </div>
+      </div>
       {/* <TextTabBar
         tabs={[
           ...(arms ?? []).map((arm) =>
@@ -141,32 +184,31 @@ export default function Page() {
         selectedIdx={idx}
       /> */}
 
-      {isLoadingStudent ? (
+      {isScoreSheetLoading ? (
         <div className='text-center'>Loading...</div>
-      ) : allStudents && allStudents.length ? (
+      ) : StudentScoreSheet && StudentScoreSheet.length ? (
         <div className='bg-white min-h-screen px-10 mt-3'>
-          <div className='grid grid-cols-10 py-8 text-[#746D69] text-base'>
+          <div className='grid grid-cols-11 py-8 text-[#746D69] text-base'>
             <div />
             <div className='col-span-3 px-4'>Student</div>
             <div>CA1</div>
             <div>CA2</div>
             <div>Exam</div>
             <div>Total</div>
-            {/*   <div>Attendance</div>
-              <div>Standing</div> */}
+            <div>Grade</div>
+            <div>Position</div>
           </div>
           <div className='flex flex-col gap-4'>
-            {allStudents &&
-              studentGrades.map((student, i) => (
+            {StudentScoreSheet &&
+              StudentScoreSheet.map((student, i) => (
                 <StudentGradeListItem
                   key={student?.id ?? i}
                   id={i + 1}
-                  student={student}
+                  item={student}
                   isModify={isModify}
                   setCa1_Score={setCa1_Score}
                   setCa2_Score={setCa2_Score}
                   setExam={setExam}
-                  handleGradeBookLog={handleGradeBookLog}
                   handleGradeBookEdit={handleGradeBookEdit}
                   loading={loading}
                   setIsModify={setIsModify}
@@ -183,35 +225,33 @@ export default function Page() {
 
 function StudentGradeListItem({
   id,
-  student,
+  item,
   isModify,
   setCa1_Score,
   setCa2_Score,
   setExam,
-  handleGradeBookLog,
   handleGradeBookEdit,
   loading,
   setIsModify,
 }: {
   id: number;
-  student: ClassArmStudents;
+  item: any;
   isModify: boolean;
   setIsModify: (v: boolean) => void;
   setCa1_Score: (v: number) => void;
   setCa2_Score: (v: number) => void;
   setExam: (v: number) => void;
-  handleGradeBookLog: (v: string) => void;
   handleGradeBookEdit: (v: string) => void;
   loading: boolean;
 }) {
   const [lineToModify, setLineToModify] = useState<number | null>();
   return (
     <div>
-      <div className=' space-x-1 grid text-black grid-cols-10 items-center text-base rounded-lg border p-4 py-6 bg-white'>
+      <div className=' space-x-1 grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
-          <div>{student.lastName + ' ' + student.firstName}</div>
+          <div>{item.student.lastName + ' ' + item.student.firstName}</div>
         </div>
         {isModify && lineToModify === id ? (
           <div className=''>
@@ -224,7 +264,7 @@ function StudentGradeListItem({
             />
           </div>
         ) : (
-          <div>{student?.grade?.ca1_score ?? 0}</div>
+          <div>{item?.ca1_score ?? 0}</div>
         )}
         {isModify && lineToModify === id ? (
           <div>
@@ -237,7 +277,7 @@ function StudentGradeListItem({
             />
           </div>
         ) : (
-          <div>{student?.grade?.ca2_score ?? 0}</div>
+          <div>{item?.ca2_score ?? 0}</div>
         )}
         {isModify && lineToModify === id ? (
           <div className=''>
@@ -250,98 +290,56 @@ function StudentGradeListItem({
             />
           </div>
         ) : (
-          <div>{student?.grade?.exams_score ?? 0}</div>
+          <div>{item?.exams_score ?? 0}</div>
         )}
-        <div>{student?.grade?.total ?? 0}</div>
+        <div>{item?.total ?? 0}</div>
+        <div>{item?.grade ?? 'N/A'}</div>
+        <div>{item?.position ?? 'N/A'}</div>
 
         <div className='flex items-center space-x-2'>
-          {student?.grade ? (
-            <div>
-              {!isModify ? (
+          <div>
+            {!isModify ? (
+              <Button
+                onClickHandler={() => {
+                  setIsModify(true);
+                  setLineToModify(id);
+                  console.log(id);
+                }}
+                variant='secondary'
+                className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+              >
+                {loading ? <ImSpinner2 className='animate-spin' /> : 'Modify'}
+              </Button>
+            ) : (
+              <div className='flex space-x-1'>
                 <Button
                   onClickHandler={() => {
-                    setIsModify(true);
-                    setLineToModify(id);
+                    handleGradeBookEdit(item.id);
                   }}
                   variant='secondary'
                   className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
                 >
-                  {loading ? <ImSpinner2 className='animate-spin' /> : 'Modify'}
+                  {loading && lineToModify ? (
+                    <ImSpinner2 className='animate-spin' />
+                  ) : (
+                    'Save'
+                  )}
                 </Button>
-              ) : (
-                <div className='flex space-x-1'>
+                {lineToModify === id && (
                   <Button
                     onClickHandler={() => {
-                      handleGradeBookEdit(student.grade.id);
+                      setLineToModify(null);
+                      setIsModify(false);
                     }}
                     variant='secondary'
-                    className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+                    className='flex justify-center h-[46px] bg-[#e3241a] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
                   >
-                    {loading && lineToModify ? (
-                      <ImSpinner2 className='animate-spin' />
-                    ) : (
-                      'Save'
-                    )}
+                    Cancel
                   </Button>
-                  {lineToModify === id && (
-                    <Button
-                      onClickHandler={() => {
-                        setLineToModify(null);
-                        setIsModify(false);
-                      }}
-                      variant='secondary'
-                      className='flex justify-center h-[46px] bg-[#e3241a] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              {!isModify ? (
-                <Button
-                  onClickHandler={() => {
-                    setIsModify(true);
-                    setLineToModify(id);
-                  }}
-                  variant='secondary'
-                  className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-                >
-                  {loading ? <ImSpinner2 className='animate-spin' /> : 'Create'}
-                </Button>
-              ) : (
-                <div className='flex space-x-1'>
-                  <Button
-                    onClickHandler={() => {
-                      handleGradeBookLog(student.id);
-                    }}
-                    variant='secondary'
-                    className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-                  >
-                    {loading && lineToModify ? (
-                      <ImSpinner2 className='animate-spin' />
-                    ) : (
-                      'Save'
-                    )}
-                  </Button>
-                  {lineToModify === id && (
-                    <Button
-                      onClickHandler={() => {
-                        setLineToModify(null);
-                        setIsModify(false);
-                      }}
-                      variant='secondary'
-                      className='flex justify-center h-[46px] bg-[#e3241a] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/*  <div className='text-black flex items-center'>

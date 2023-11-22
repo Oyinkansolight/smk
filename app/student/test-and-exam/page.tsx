@@ -14,7 +14,7 @@ import { BiListCheck } from 'react-icons/bi';
 const Page = () => {
   const [page, setPage] = useState(0);
   const { data: allSession } = useGetAcademicSessions();
-  const { data: allSubject } = useGetSubjectList();
+  const { data: allSubject } = useGetSubjectList({ limit: 100 });
 
   return (
     <div className='flex flex-col w-full px-4 gap-y-10'>
@@ -75,7 +75,7 @@ const Page = () => {
               className='p-2 bg-[#FFF6E7] border !text-xs rounded'
             >
               <option value=''>Subject</option>
-              {(allSubject ?? []).map((v: any, i: number) => (
+              {(allSubject?.data ?? []).map((v: any, i: number) => (
                 <option key={i} value={v.id}>
                   {' '}
                   {v.name}{' '}

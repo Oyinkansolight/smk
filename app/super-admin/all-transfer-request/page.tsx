@@ -64,7 +64,7 @@ const AlltransferRequest = () => {
   };
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
+    <section className='py-6'>
       <div className='flex items-center space-x-4'>
         <Image
           src='/svg/back.svg'

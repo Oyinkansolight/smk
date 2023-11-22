@@ -1,10 +1,13 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { BiChevronDown, BiSortUp } from 'react-icons/bi';
 import { BsArrowUp } from 'react-icons/bs';
 
 export default function Page() {
+  const router = useRouter();
   const Names = [
     'Ighosa Ahmed',
     'David Keyan',
@@ -13,6 +16,19 @@ export default function Page() {
   ];
   return (
     <div className='h-full layout'>
+      <div
+        onClick={() => router.back()}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        <Image
+          src='/svg/back.svg'
+          width={10}
+          height={10}
+          alt='back'
+          className='h-4 w-4'
+        />
+        <h3 className='text-[10px] font-medium'>Back</h3>
+      </div>
+
       <div className='text-black font-bold py-8 text-2xl'>Grade Book</div>
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
         <input className='rounded-full border p-3' placeholder='search' />

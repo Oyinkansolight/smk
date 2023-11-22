@@ -39,12 +39,12 @@ const Education = ({
   removeRemoveSubjectClass,
   handleSubjectClassChange,
 }: Iprops) => {
-  const { data: allSubjects, isLoading } = useGetSubjectList();
+  const { data: allSubjects, isLoading } = useGetSubjectList({ limit: 100 });
   const { data: institutionProfile } = useGetProfile();
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
-  const { data: allclasses } = useGetInstituteClassArms(
+  const { data: allClasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
@@ -71,7 +71,7 @@ const Education = ({
                   >
                     <option value=''> -- Select an option -- </option>
 
-                    {(allSubjects ?? []).map((item, id) => (
+                    {(allSubjects?.data ?? []).map((item, id) => (
                       <option key={id} value={item.id}>
                         {item.name}
                       </option>
@@ -93,7 +93,7 @@ const Education = ({
                   >
                     <option value=''> -- Select an option -- </option>
 
-                    {(allclasses ?? []).map((item: any, id: number) => (
+                    {(allClasses?.data ?? []).map((item: any, id: number) => (
                       <option key={id} value={item.id}>
                         {`${item.class.name} ${item.arm}`}
                       </option>

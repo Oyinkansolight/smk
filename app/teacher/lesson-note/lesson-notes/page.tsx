@@ -17,6 +17,8 @@ import { BiChevronRight } from 'react-icons/bi';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
@@ -27,6 +29,7 @@ export default function Page() {
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const { data: lessonNotes, isLoading: isLoadingActivity } = useGetAllLessonNotes({
+    page: currentPage,
     sessionId: profile?.currentSession?.[0]?.id,
     termId: term,
   });
@@ -52,6 +55,7 @@ export default function Page() {
         ]}
         onChange={setIdx}
         selectedIdx={idx}
+        callback={() => setCurrentPage(1)}
       />
 
       {/* <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
@@ -101,7 +105,11 @@ export default function Page() {
 
       {lessonNotes?.data &&
         lessonNotes?.data.length > 0 &&
-        <PaginatedCounter pageCount={lessonNotes?.paging.totalPage} currentPage={lessonNotes?.paging.currentPage} />
+        <PaginatedCounter
+          currentPage={currentPage}
+          onChange={setCurrentPage}
+          pageCount={lessonNotes?.paging?.totalPage ?? 1}
+        />
       }
     </div>
   );

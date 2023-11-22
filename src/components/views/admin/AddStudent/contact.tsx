@@ -42,6 +42,30 @@ const Contact = ({ register, errors }: Iprops) => {
             }
           />
         </div>
+
+        <div>
+          <FormInput
+            label='Phone Number'
+            type='number'
+            placeholder='Details here'
+            name='phoneNumber'
+            register={register}
+            validation={{
+              required: 'Phone Number is required',
+              maxLength: {
+                value: 11,
+                message: 'Phone Number should not exceed 11 characters',
+              },
+            }}
+            helper={
+              errors?.phoneNumber && {
+                message: errors?.phoneNumber?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+
         {/* <div>
           <FormSelect
             label='Local Government Area'
@@ -60,26 +84,6 @@ const Contact = ({ register, errors }: Iprops) => {
             }
           />
         </div> */}
-      </div>
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <div>
-          <FormInput
-            label='Phone Number'
-            type='number'
-            placeholder='Details here'
-            name='phoneNumber'
-            register={register}
-            validation={{
-              required: 'Phone Number is required',
-            }}
-            helper={
-              errors?.phoneNumber && {
-                message: errors?.phoneNumber?.message,
-                type: 'danger',
-              }
-            }
-          />
-        </div>
       </div>
     </section>
   );

@@ -3,17 +3,15 @@ import { INSTITUTION_TYPES } from '@/constant/institution';
 import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import Link from 'next/link';
-import Castle from '~/svg/castle.svg';
 import { usePathname } from 'next/navigation';
 import { BiChevronRight } from 'react-icons/bi';
+import Castle from '~/svg/castle.svg';
 
 export default function RecentlyAddedInstitutions({ data }) {
   const routeDetails = usePathname();
 
   if (!data || !data.length) {
-    return (
-      <EmptyView label='No Institution Data' useStandardHeight />
-    );
+    return <EmptyView label='No Institution Data' useStandardHeight />;
   }
 
   return (
@@ -37,21 +35,38 @@ export default function RecentlyAddedInstitutions({ data }) {
 }
 
 const InstitutionCard = ({ data }) => {
-  const isECCDE = data.instituteType.toLowerCase() === INSTITUTION_TYPES.ECCDE.toLowerCase();
-  const isTertiary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.TERTIARY.toLowerCase();
-  const isSecondary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.SECONDARY.toLowerCase();
-  const isPrimary = data.instituteType.toLowerCase() === INSTITUTION_TYPES.PRIMARY.toLowerCase() || data.instituteType.toLowerCase() === 'basic';
+  const isECCDE = data?.instituteType
+    ? data?.instituteType?.toLowerCase() ===
+      INSTITUTION_TYPES.ECCDE.toLowerCase()
+    : false;
+  const isTertiary = data?.instituteType
+    ? data?.instituteType?.toLowerCase() ===
+      INSTITUTION_TYPES.TERTIARY.toLowerCase()
+    : false;
+  const isSecondary = data?.instituteType
+    ? data?.instituteType?.toLowerCase() ===
+      INSTITUTION_TYPES.SECONDARY.toLowerCase()
+    : false;
+  const isPrimary = data?.instituteType
+    ? data?.instituteType?.toLowerCase() ===
+        INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
+      data.instituteType.toLowerCase() === 'basic'
+    : false;
 
   return (
-    <div className={clsxm(
-      isECCDE && 'bg-[#FFFEF9] border-[#FFE664]',
-      isPrimary && 'bg-[#FFF8F4] border-[#FFCAAB]',
-      isTertiary && 'bg-[#F9FFFA] border-[#73ED95]',
-      isSecondary && 'bg-[#FAFDFF] border-[#A4DEFF]',
-      'flex flex-row justify-between border-[0.25px] border-l-2 rounded-lg p-2 h-[91px]',
-    )}>
+    <div
+      className={clsxm(
+        isECCDE && 'bg-[#FFFEF9] border-[#FFE664]',
+        isPrimary && 'bg-[#FFF8F4] border-[#FFCAAB]',
+        isTertiary && 'bg-[#F9FFFA] border-[#73ED95]',
+        isSecondary && 'bg-[#FAFDFF] border-[#A4DEFF]',
+        'flex flex-row justify-between border-[0.25px] border-l-2 rounded-lg p-2 h-[91px]'
+      )}
+    >
       <div className='text-sm flex flex-col items-start capitalize gap-2 font-medium whitespace-nowrap overflow-hidden'>
-        <div className='text-[#525F7F] max-w-[150px] 2xl:max-w-[200px] text-ellipsis overflow-hidden'>{data.instituteName}</div>
+        <div className='text-[#525F7F] max-w-[150px] 2xl:max-w-[200px] text-ellipsis overflow-hidden'>
+          {data.instituteName}
+        </div>
         <div
           className={clsxm(
             isECCDE && 'bg-[#FFE664]',
@@ -64,7 +79,9 @@ const InstitutionCard = ({ data }) => {
           {data.instituteType}
         </div>
 
-        <div className='text-sm text-[#855201]'>Benin{data?.lga && `, ${data?.lga}`}</div>
+        <div className='text-sm text-[#855201]'>
+          Benin{data?.lga && `, ${data?.lga}`}
+        </div>
       </div>
 
       <div className='flex flex-col gap-3'>
@@ -73,8 +90,8 @@ const InstitutionCard = ({ data }) => {
           {moment(data.createdAt).fromNow()}
         </div>
 
-        <Castle className="h-8 w-8 self-end opacity-50" />
+        <Castle className='h-8 w-8 self-end opacity-50' />
       </div>
     </div>
-  )
-}
+  );
+};

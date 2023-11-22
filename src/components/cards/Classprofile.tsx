@@ -1,8 +1,10 @@
 import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
+import { useRouter } from 'next/navigation';
 import { AiFillCloud } from 'react-icons/ai';
-import { BiListCheck } from 'react-icons/bi';
+import { BiArrowBack, BiListCheck } from 'react-icons/bi';
 import { BiUser } from 'react-icons/bi';
+import { BsBack } from 'react-icons/bs';
 import { RiUserFill } from 'react-icons/ri';
 import { SlOptions } from 'react-icons/sl';
 import ReactSelect from 'react-select';
@@ -28,11 +30,15 @@ export default function StudentTeacherProfileCard({
   student,
   setGridIdx,
 }: StudentTeacherProfileCardProps) {
+  const router = useRouter();
+
   return (
     <div className='flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
-        <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
-        <CircleButton icon={<SlOptions className='h-4 w-4' />} />
+        <CircleButton
+          onClick={() => router.back()}
+          icon={<BiArrowBack className='h-4 w-4' />}
+        />
       </div>
       <div className=' h-[117px] w-[117px] rounded-full border-2 p-2 border-[#DADEE6]'>
         <div className='w-full bg-[#00000033] h-full rounded-full grid place-content-center text-white text-2xl font-bold'>

@@ -11,9 +11,7 @@ import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetai
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
-import {
-  useGetStudentById,
-} from '@/server/institution';
+import { useGetStudentById } from '@/server/institution';
 import { useGetClassArmInfo } from '@/server/institution/class';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -56,8 +54,9 @@ const SingleStudentDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName
-          }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
+          (student?.user ?? [])[0]?.lastName
+        }`}
         school={student?.institution?.instituteName ?? 'Loading...'}
         id={student?.studentId ?? ''}
         student
@@ -96,8 +95,11 @@ const SingleStudentDashboard = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${!isStudentLoading ? student?.class?.class.name : 'Loading...'
-                }  ${!isStudentLoading ? student?.class?.arm : ''}`}
+              classArm={`${
+                !isStudentLoading
+                  ? student?.class?.class?.name || 'N/A'
+                  : 'Loading...'
+              }  ${!isStudentLoading ? student?.class?.arm || "N/A" : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={0}
             />

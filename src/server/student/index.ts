@@ -15,17 +15,17 @@ export function useGetTodaysPeriod({
   day,
 }: timetableArg) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'get_today_period',
     queryFn: () =>
       request
         .get(
-          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}`
+          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}&limit=20`
         )
         .then((res) => res.data.data.data),
   });
   return query;
 }
-
 
 export function useSubmitActivity() {
   const mutation = useMutation({

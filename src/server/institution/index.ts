@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { PaginationParams } from '@/types';
+import { PaginationParams, SubjectList } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import {
+  AssignStudentToParent,
   Institution,
   Student,
   StudentsListByInstitution,
   Subject,
 } from '@/types/institute';
 import { Staff } from '@/types/institute';
-import { PaginatedData, StaffPaginatedData } from '@/types/pagination';
+import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -118,24 +119,43 @@ export function useCreateSubject() {
   return mutation;
 }
 
-export function useGetSubjectList() {
+export function useGetSubjectList(params?: SubjectList) {
   const query = useQuery({
     queryKey: 'get_subject_list',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-subject-list?limit=10000000',
-          {
-            withCredentials: true,
-          }
+          `/v1/government/institutes/get-subject-list?${
+            params?.limit ? `&limit=${params?.limit}` : ''
+          }${params?.page ? `&page=${params?.page}` : ''}${
+            params?.name ? `&name=${params?.name}` : ''
+          }${
+            params?.institutionType
+              ? `&institutionType=${params?.institutionType}`
+              : ''
+          }${params?.order ? `&order=${params?.order}` : ''}`,
+          { withCredentials: true }
         );
-        return d.data.data.data.data as Subject[];
+        return d.data.data.data;
       } catch (error) {
         logger(error);
         throw error;
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [
+    params?.limit,
+    params?.id,
+    params?.page,
+    params?.name,
+    params?.order,
+    params?.institutionType,
+    refetch,
+  ]);
+
   return query;
 }
 
@@ -209,6 +229,43 @@ export function useGetStudentsListByInstitution(
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
+}
+
+export function useGetParents(params: Partial<StudentsListByInstitution>) {
+  const query = useQuery({
+    queryKey: 'get_parents',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/government/parent?${
+            params.limit ? `&limit=${params.limit}` : ''
+          }${params.page ? `&page=${params.page}` : ''}${
+            params.query ? `&query=${params.query}` : ''
+          }`
+        );
+        return d.data.data as PaginatedData<Student> | any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
+
+export function useAssignStudentToParent() {
+  const mutation = useMutation({
+    mutationKey: 'assign_student_to_parent',
+    mutationFn: async (params: AssignStudentToParent) =>
+      request.patch(`/v1/government/parent/${params.id}/assign-student`, {
+        studentId: params.studentId,
+      }),
+  });
+  return mutation;
 }
 
 export function useGetStudentById(params?: PaginationParams) {
@@ -361,7 +418,7 @@ export function useGetTeachersListByInstitution(props: Props) {
           const d = await request.get(
             `/v1/government/teachers/institution-staffs?institutionId=${instituteId}${
               limit ? `&limit=${limit}` : ''
-            }${page ? `&page=${page}` : ''}`
+            }${page ? `&page=${page}` : ''}${q ? `&query=${q}` : ''}`
           );
           return d.data.data.data as PaginatedData<Staff>;
         } catch (error) {
@@ -375,7 +432,7 @@ export function useGetTeachersListByInstitution(props: Props) {
   const { refetch } = query;
   useEffect(() => {
     refetch({ cancelRefetch: true });
-  }, [limit, page, instituteId, refetch]);
+  }, [limit, page, q, instituteId, refetch]);
   return query;
 }
 
@@ -441,6 +498,7 @@ export function useGetSchools(params: Partial<PaginationParams>) {
 
   return query;
 }
+
 export function useGetInstituteTypes() {
   const query = useQuery({
     queryKey: 'get_school_list_types',
@@ -628,6 +686,7 @@ export function useCreateBulkStaff() {
 
 export function useGetAcademicSessionsTermsWeek(termId?: number | string) {
   const query = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: 'academic_sessions_terms',
     queryFn: async () =>
       termId

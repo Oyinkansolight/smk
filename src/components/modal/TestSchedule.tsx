@@ -80,7 +80,7 @@ function AddActivityName({
   type,
   setType,
 }: propType) {
-  const { data } = useGetSubjectList();
+  const { data } = useGetSubjectList({ limit: 100 });
 
   return (
     <div className='fixed inset-0 z-[999]  grid place-content-center rounded-sm bg-black/30'>
@@ -123,7 +123,7 @@ function AddActivityName({
           </div>
           {type === 'period' ? (
             <div>
-              {data && (
+              {data?.data && (
                 <div className='w-full grid md:grid-cols-2 gap-4 p-3 bg-[#F5F6F7] rounded-lg'>
                   <div className='bg-white border rounded p-4'>
                     <div className='border-b py-1 mb-2'>

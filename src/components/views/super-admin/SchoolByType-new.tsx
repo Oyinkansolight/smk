@@ -1,91 +1,24 @@
 'use client';
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BasicSearch } from '@/components/search';
-import { INSTITUTION_TYPES } from '@/constant/institution';
+
 import clsxm from '@/lib/clsxm';
-import { useGetSchools } from '@/server/institution';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { BasicSearch } from '@/components/search';
+import ShortTextSkeleton from '@/components/skeletons/ShortText';
+
+import { useGetSchools } from '@/server/institution';
+import { INSTITUTION_TYPES } from '@/constant/institution';
+import { useGetDashboardOverview } from '@/server/dashboard';
+
 import Castle from '~/svg/castle.svg';
+import InstitutionCardSkeleton from '@/components/skeletons/InstitutionCard';
+import AddInstitutionModal from '@/components/modal/AddInstitution';
+import ControlledModal from '@/components/modal/ControlledModal';
+import { AiOutlineClose } from 'react-icons/ai';
 
-// const columns: TableColumn<Institution & { idx: string }>[] = [
-//   {
-//     name: 'No',
-//     selector: (item) => item.idx,
-//     cell: (item) => <div>#{item.idx + 1}</div>,
-//     width: '90px',
-//     sortable: true,
-//   },
-//   {
-//     name: 'Name',
-//     grow: 2,
-//     selector: (item) => item.instituteName ?? '',
-//     sortable: true,
-//     cell: (item) => {
-//       return (
-//         <div className='flex items-center gap-4 text-[#525F7F]'>
-//           {!item.instituteLogo ? (
-//             <AvrilImage
-//               alt='avril'
-//               className='h-8 w-8 min-w-[32px] min-h-[32px] rounded-full'
-//             />
-//           ) : !item.instituteLogo?.includes('profile_picture') ? (
-//             <Image
-//               src={
-//                 item.instituteLogo.includes('placeimg') ||
-//                 item.instituteLogo.includes('picsum')
-//                   ? item.instituteLogo
-//                   : `/${item.instituteLogo}`
-//               }
-//               className='h-8 w-8 rounded-full'
-//               alt=''
-//               width={20}
-//               height={10}
-//             />
-//           ) : (
-//             <FirebaseLogo path={item.instituteLogo} sizePixels={32} />
-//           )}
-//           <Link href={`/super-admin/school?id=${item.id}`}>
-//             <h2 className='text-sm font-medium'>{item.instituteName}</h2>
-//           </Link>
-//         </div>
-//       );
-//     },
-//   },
-//   {
-//     name: 'Type',
-//     selector: (item) => item.instituteType ?? '',
-//     sortable: true,
-//     cell: (item) => <div className='col-span-2'>{item.instituteType} </div>,
-//   },
-//   {
-//     name: 'Number of Students',
-//     selector: (item) => item.studentCount ?? '',
-//     sortable: true,
-//     cell: (item) => (
-//       <div className='col-span-2'>
-//         {item.studentCount ?? item.students?.length}
-//       </div>
-//     ),
-//   },
-//   {
-//     name: 'Number of Staff',
-//     selector: (item) => item.studentCount ?? '',
-//     sortable: true,
-//     cell: (item) => (
-//       <div className='col-span-2'>{item.staffCount ?? item.staff?.length}</div>
-//     ),
-//   },
-//   {
-//     name: 'Location',
-//     selector: (item) => item.instituteAddress ?? '',
-//     sortable: true,
-//     cell: (item) => <div className='col-span-2'> {item.instituteAddress} </div>,
-//   },
-// ];
-
-const SchoolList = ({ name, title }: { name: string; title: string }) => {
+const SchoolList = () => {
+  const [open, setOpen] = useState(false);
+  const { data: overviewData, isLoading: isLoadingOverview } = useGetDashboardOverview();
   const [instituteName, setInstituteName] = useState('');
   const [pagingData, setPagingData] = useState({
     page: 1,
@@ -93,6 +26,8 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
     instituteName,
   });
   const { data, isLoading, refetch } = useGetSchools({ ...pagingData });
+
+  const handleToggle = () => setOpen(!open);
 
   const handleSetInstitutionName = (name: string) => {
     setInstituteName(name);
@@ -125,62 +60,15 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
         >
           {title}
         </h4>
-        <h1 className='text-4xl'>{count}</h1>
+        <h1 className='text-4xl'>
+          {isLoadingOverview ? <ShortTextSkeleton /> : count}
+        </h1>
       </div>
     );
   };
 
   return (
-    <section className='md:px-[60px] px-5 py-6'>
-      {/* <Link href='/super-admin'>
-        <div className='flex items-center space-x-4'>
-          <Image
-            src='/svg/back.svg'
-            width={10}
-            height={10}
-            alt='back'
-            className='h-4 w-4'
-          />
-          <h3 className='text-[10px] font-medium'>Dashboard</h3>
-        </div>
-      </Link>
-
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>{name}</h1>
-
-      <div className='mb-6 flex justify-between items-end'>
-        <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
-          <p className='text-[#615F5F]'> {title} </p>
-          <h1 className='font-semibold text-2xl'>
-            {pagingData.limit * (data?.paging.totalPage ?? 0)}
-          </h1>
-        </div>
-
-        <Link
-          href='/super-admin/add-school'
-          className='w-max rounded border bg-[#5754F7] px-6 py-3 text-center text-xs text-[#007AFF] '
-        >
-          Add Institution
-        </Link>
-      </div>
-      <Table
-        handleSearchParam={handleSetInstitutionName}
-        data={((data?.data ?? []) as any[]).map((item, i) => ({
-          idx: pagingData.page * pagingData.limit - pagingData.limit + i,
-          ...item,
-        }))}
-        columns={columns}
-        progressPending={isLoading || !data}
-        progressComponent={<div className='font-bold'>Loading...</div>}
-        paginationServer
-        paginationTotalRows={pagingData.limit * (data?.paging.totalPage ?? 0)}
-        onChangePage={(page) => {
-          setPagingData({ page, limit: pagingData.limit, instituteName });
-        }}
-        onChangeRowsPerPage={(limit, page) => {
-          setPagingData({ page, limit, instituteName });
-        }}
-      /> */}
-
+    <section className='py-6'>
       <div className='rounded-2xl p-4 bg-[#F0FFFF]'>
         <div className='flex justify-between items-center'>
           <div>
@@ -189,34 +77,61 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
               An overview of all institution
             </h2>
           </div>
-          <Link
+
+          <ControlledModal
+            isOpen={open}
+            closeIcon={false}
+            toggleModal={handleToggle}
+            className='w-screen h-[95vh] !overflow-y-auto px-[6px] md:px-14 py-12 lg:py-6 max-w-[800px]'
+            content={
+              <div className='relative'>
+                <div
+                  onClick={handleToggle}
+                  className='flex flex-row items-center gap-1 text-[#808080] absolute -top-10 right-2 md:right-10 lg:right-[10%] cursor-pointer'
+                >
+                  Close
+                  <AiOutlineClose className='fill-current' />
+                </div>
+                <AddInstitutionModal />
+              </div>
+            }
+          />
+
+          <button
+            onClick={handleToggle}
+            className='w-max h-fit py-3 rounded-3xl border bg-[#5754F7] px-3 text-center text-xs text-white'
+          >
+            Add Institution
+          </button>
+
+          {/* <Link
             href='/super-admin/add-school'
             className='w-max h-fit py-3 rounded-3xl border bg-[#5754F7] px-3  text-center text-xs text-white '
           >
             Add Institution
-          </Link>
+          </Link> */}
         </div>
 
         <div className='space-y-4 my-4 pt-4'>
           <InstituteTypeCard
             type='ECCDE'
             title='Total ECCDE Institution'
-            count={0}
+            count={overviewData?.Total_ECCDE ?? 0}
           />
           <InstituteTypeCard
             type='Primary'
             title='Total Primary Institution'
-            count={0}
+            count={overviewData?.Total_Primary ?? 0}
           />
           <InstituteTypeCard
             type='Secondary'
             title='Total Secondary Institution'
-            count={data?.count ?? 0}
+            count={overviewData?.Total_Secondary ?? 0}
           />
           <InstituteTypeCard
             type='Tertiary'
             title='Total Tertiary Institution'
-            count={0}
+            count={overviewData?.Total_Tertiary ?? 0}
           />
         </div>
       </div>
@@ -240,8 +155,8 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
-                    clip-rule='evenodd'
+                    fillRule='evenodd'
+                    clipRule='evenodd'
                     d='M4.2651 5.65967C4.46036 5.44678 4.77694 5.44678 4.97221 5.65967L8.2651 9.25C8.46036 9.4629 8.77694 9.4629 8.97221 9.25L12.2651 5.65968C12.4604 5.44678 12.7769 5.44678 12.9722 5.65968C13.1675 5.87257 13.1675 6.21775 12.9722 6.43065L9.67931 10.021C9.09353 10.6597 8.14378 10.6597 7.55799 10.021L4.2651 6.43065C4.06984 6.21775 4.06984 5.87257 4.2651 5.65967Z'
                     fill='#D9D9D9'
                   />
@@ -259,8 +174,8 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
-                    clip-rule='evenodd'
+                    fillRule='evenodd'
+                    clipRule='evenodd'
                     d='M4.2651 5.65967C4.46036 5.44678 4.77694 5.44678 4.97221 5.65967L8.2651 9.25C8.46036 9.4629 8.77694 9.4629 8.97221 9.25L12.2651 5.65968C12.4604 5.44678 12.7769 5.44678 12.9722 5.65968C13.1675 5.87257 13.1675 6.21775 12.9722 6.43065L9.67931 10.021C9.09353 10.6597 8.14378 10.6597 7.55799 10.021L4.2651 6.43065C4.06984 6.21775 4.06984 5.87257 4.2651 5.65967Z'
                     fill='#D9D9D9'
                   />
@@ -269,13 +184,19 @@ const SchoolList = ({ name, title }: { name: string; title: string }) => {
             </button>
           </div>
         </div>
-        {data?.data && (
-          <div className='space-y-2 mt-4'>
-            {data?.data.map((item, idx) => (
-              <InstitutionCard data={item} key={idx} />
-            ))}
-          </div>
-        )}
+
+        <div className='space-y-2 mt-4'>
+          {!isLoading && data?.data && data?.data.map((item) => (
+            <InstitutionCard data={item} key={item.id} />
+          ))}
+
+          {isLoading && (
+            Array.from({ length: 10 }).map((_, idx) => (
+              <InstitutionCardSkeleton key={idx} />
+            ))
+          )}
+
+        </div>
       </div>
     </section>
   );
@@ -292,7 +213,7 @@ const InstitutionCard = ({ data }) => {
     INSTITUTION_TYPES.SECONDARY.toLowerCase();
   const isPrimary =
     data.instituteType.toLowerCase() ===
-      INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
+    INSTITUTION_TYPES.PRIMARY.toLowerCase() ||
     data.instituteType.toLowerCase() === 'basic';
 
   return (

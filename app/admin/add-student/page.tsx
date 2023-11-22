@@ -9,9 +9,8 @@ import ParentContact from '@/components/views/admin/AddStudent/parentcontact';
 import Publish from '@/components/views/admin/AddStudent/publish';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
-import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useCreateStudent } from '@/server/institution';
+import { useAssignStudentToParent, useCreateStudent } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -21,6 +20,7 @@ import { toast } from 'react-toastify';
 
 export default function AddStudent() {
   const { data: institutionProfile } = useGetProfile();
+  const assignStudentToParent = useAssignStudentToParent();
 
   const {
     register,
@@ -38,6 +38,12 @@ export default function AddStudent() {
   const [imageData, setImageData] = useState<File | undefined>();
 
   const [publishData, setpublishData] = useState(null);
+
+  const [parentId, setParentId] = useState("");
+
+  const handleParentId = (id: string) => {
+    setParentId(id);
+  }
 
 
   const handleCreateStudent = useCreateStudent();
@@ -60,13 +66,7 @@ export default function AddStudent() {
       setStage(stage + 1);
     }
     if (
-      stage === 3 &&
-      data.parentphoneNumber &&
-      data.parentEmail &&
-      data.parentAddress &&
-      data.parentName &&
-      data.parentOccupation &&
-      data.parentStatus
+      stage === 3
     ) {
       setStage(stage + 1);
     }
@@ -88,42 +88,47 @@ export default function AddStudent() {
         parentStatus: data.parentStatus,
         parentName: data.parentName,
         parentOccupation: data.parentOccupation,
-        email: data.parentEmail,
+        email: data.studentEmail,
         password: '12345',
         phoneNumber: data.phoneNumber,
         address: data.address,
-        // lga: "",
-        parentDetails: {
-          name: data.parentName,
-          phoneNumber: data.parentphoneNumber,
-          email: data.parentEmail,
-          address: data.parentAddress,
-          // lga: "",
-        },
+        parentId,
         classArmId: data.class,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
-      // console.log(studentData);
 
       setpublishData(data);
 
-      try {
-        setloading(true);
-        const response = await handleCreateStudent.mutateAsync(studentData);
+      setloading(true);
+      const response = await handleCreateStudent.mutateAsync(studentData);
 
-        if (response) {
-          toast.success('Student Added successfully');
-          setloading(false);
+      if (response.status === 201) {
+        toast.success('Student Added successfully');
 
-          //2 Second - Open Success Modal
-          setisOpen(true);
+        if (parentId) {
+          const parentData = {
+            id: parentId,
+            studentId: response.data.data.data.id,
+          };
+          const parentLinkResponse = await assignStudentToParent.mutateAsync(parentData);
+
+          if (!parentLinkResponse) {
+            toast.error('Error linking parent to student');
+            setloading(false);
+          }
         }
-      } catch (error) {
+
         setloading(false);
-        toast.error(getErrMsg(error));
+
+        //2 Second - Open Success Modal
+        setisOpen(true);
+      } else {
+        toast.error('Error adding student');
+        setloading(false);
       }
     }
-  };
+  }
+
 
   // const nextHandler = (): void => {
   //   if (stage >= 1 && stage <= 4) {
@@ -202,7 +207,7 @@ export default function AddStudent() {
             />
           )}
           {stage === 2 && <Contact register={register} errors={errors} getValues={getValues} />}
-          {stage === 3 && <ParentContact register={register} errors={errors} getValues={getValues} />}
+          {stage === 3 && <ParentContact handleParentId={handleParentId} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}
 

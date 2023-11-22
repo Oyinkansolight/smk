@@ -22,7 +22,7 @@ function AssignSubject({
   handleSubmit,
   control,
 }: Iprops) {
-  const getSubjects = useGetSubjectList();
+  const getSubjects = useGetSubjectList({ limit: 100 });
   const [allSubjects, setAllSubjects] = useState<Subject[]>([]);
 
 
@@ -30,9 +30,9 @@ function AssignSubject({
   useEffect(() => {
     if (!getSubjects.isLoading) {
       // setAllSubjectsData(getSubjects.data);
-      getSubjects.data && setAllSubjects(getSubjects.data);
+      getSubjects.data?.data && setAllSubjects(getSubjects?.data?.data);
     }
-  }, [getSubjects.data, getSubjects.isLoading]);
+  }, [getSubjects.data?.data, getSubjects.isLoading]);
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>

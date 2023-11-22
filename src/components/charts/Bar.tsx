@@ -10,19 +10,21 @@ const BarChart = ({ data }) => {
     staffColor: '#BF74FF',
     studentColor: '#FFB62B',
     staff: data[item].staff,
-    student: data[item].student
+    student: data[item].student,
   }));
 
   const totalSum = dataKeys.reduce((acc, curr) => {
     return acc + data[curr].student + data[curr].staff;
-  }
-    , 0);
+  }, 0);
 
-  const isEmpty = !data || !dataKeys?.length || !parsedData?.length || totalSum === 0;
+  const isEmpty =
+    !data || !dataKeys?.length || !parsedData?.length || totalSum === 0;
 
   if (isEmpty) {
     return <EmptyView label='No Data' />;
   }
+  
+  console.log(data);
 
   return (
     <div className='h-[368px]'>

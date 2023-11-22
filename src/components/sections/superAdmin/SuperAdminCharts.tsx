@@ -4,8 +4,7 @@ import { BarChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
 import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
 import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution';
-import SearchLoader from '@/components/layout/SearchLoader';
-import EmptyView from '@/components/misc/EmptyView';
+import ChartSkeleton from '@/components/skeletons/Chart';
 import EventCalendarTable from '@/components/tables/EventCalendarTable';
 import LoginLogsTable from '@/components/tables/LoginLogsTable';
 import LowBatteriesTable from '@/components/tables/LowBatteriesTable';
@@ -25,8 +24,18 @@ const SuperAdminCharts = ({
   const { data: chartData, isLoading } = useGetAdminCharts({});
 
   setIsDataLoading && setIsDataLoading(isLoading);
-  if (!chartData || isLoading) {
-    return <SearchLoader />;
+
+  if (isLoading || !chartData) {
+    return (
+      <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
+        <ChartSkeleton />
+        <ChartSkeleton />
+        <ChartSkeleton />
+        <ChartSkeleton />
+        <ChartSkeleton />
+        <ChartSkeleton />
+      </div>
+    );
   }
 
   return (
@@ -149,11 +158,7 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
               description='Recent staff/student transfer requests in the state'
-              content={
-                <EmptyView label='No Data' useStandardHeight /> ?? (
-                  <SuperTransferRequestsTable />
-                )
-              }
+              content={<SuperTransferRequestsTable data={[...chartData.staffTransferRequests, ...chartData.studentTransferRequests]} />}
             />
           </div>
         </div>

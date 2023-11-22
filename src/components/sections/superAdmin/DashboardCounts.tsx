@@ -13,8 +13,8 @@ interface DashboardCountsProps {
 const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
   const [adminType, setAdminType] = useState<string | undefined>();
 
-  const { data } = useGetDashboardOverview();
-  const { data: AllSubject } = useGetSubjectList();
+  const { data, isLoading: isLoadingOverview } = useGetDashboardOverview();
+  const { data: AllSubject, isLoading: isLoadingSubjects } = useGetSubjectList();
 
   useEffect(() => {
     const AT = Cookies.get('adminType');
@@ -143,19 +143,26 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
               <p className='text-sm text-[#8E8E8E]'>Total Institution</p>
             </div>
             <div>
-              <h1 className='text-white'>{data?.Total_Schools ?? 0} </h1>
-              <div className='flex justify-between items-center'>
-                <div>
-                  <span className='text-green-500 text-xl mr-2'>+30%</span>
-                  <span className='text-white text-xs'>This Week</span>
+              <h1 className='text-white'>{
+                isLoadingOverview ? <div className='animate-pulse h-8 bg-gray-50/50 rounded-full w-32 mb-2' /> : data?.Total_Schools ?? 0
+              }</h1>
+              {isLoadingOverview ?
+                <div className='animate-pulse h-8 bg-gray-50/50 rounded-full w-32' /> :
+                <div className='flex justify-between items-center'>
+                  <div>
+                    <span className='text-green-500 text-xl mr-2'>
+                      +30%
+                    </span>
+                    <span className='text-white text-xs'>This Week</span>
+                  </div>
+                  <Link
+                    href='/super-admin/all-school'
+                    className='mt-3 text-base text-secondary'
+                  >
+                    Click to View Details
+                  </Link>
                 </div>
-                <Link
-                  href='/super-admin/all-school'
-                  className='mt-3 text-base text-secondary'
-                >
-                  Click to View Details
-                </Link>
-              </div>
+              }
             </div>
           </div>
           <div className='rounded-2xl space-y-2 px-2 py-4'>
@@ -163,28 +170,28 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
             <div className=' grid grid-cols-2 gap-4 w-full'>
               <div className='flex space-x-2 items-center'>
                 <div className='h-2 w-2 bg-green-500 rounded-full'></div>{' '}
-                <p className='text-white text-base font-light'>
-                  ECCDE - {data?.Total_ECCDE ?? 0}
+                <p className='text-white text-base font-light whitespace-nowrap flex items-center'>
+                  ECCDE - {isLoadingOverview ? <div className="h-2.5 bg-gray-50/50 rounded-full w-6" /> : data?.Total_ECCDE ?? 0}
                 </p>
               </div>
               <div className='flex space-x-2 items-center'>
                 <div className='h-2 w-2 bg-blue-500 rounded-full'></div>{' '}
-                <p className='text-white text-base font-light'>
-                  Primary - {data?.Total_Primary ?? 0}
+                <p className='text-white text-base font-light whitespace-nowrap flex items-center'>
+                  Primary - {isLoadingOverview ? <div className="h-2.5 bg-gray-50/50 rounded-full w-6" /> : data?.Total_Primary ?? 0}
                 </p>
               </div>
             </div>
             <div className=' grid grid-cols-2 gap-6 w-full'>
               <div className='flex space-x-2 items-center'>
                 <div className='h-2 w-2 bg-red-500 rounded-full'></div>{' '}
-                <p className='text-white text-base font-light'>
-                  Tertiary - {data?.Total_Tertiary ?? 0}{' '}
+                <p className='text-white text-base font-light whitespace-nowrap flex items-center'>
+                  Tertiary - {isLoadingOverview ? <div className="h-2.5 bg-gray-50/50 rounded-full w-6" /> : data?.Total_Tertiary ?? 0}
                 </p>
               </div>
               <div className='flex space-x-2 items-center'>
                 <div className='h-2 w-2 bg-yellow-500 rounded-full'></div>
-                <p className='text-white text-base font-light'>
-                  Secondary - {data?.Total_Secondary ?? 0}{' '}
+                <p className='text-white text-base font-light whitespace-nowrap flex items-center'>
+                  Secondary - {isLoadingOverview ? <div className="h-2.5 bg-gray-50/50 rounded-full w-6" /> : data?.Total_Secondary ?? 0}
                 </p>
               </div>
             </div>
@@ -192,21 +199,24 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
         </div>
         <div className='grid sm:grid-cols-3  gap-4'>
           <Overview
+            isLoading={isLoadingOverview}
             src='/svg/studentcount.svg'
             title='Total Student'
             count={data?.Total_Students ?? 0}
             link='/super-admin/all-student'
           />
           <Overview
+            isLoading={isLoadingOverview}
             src='/svg/staffcount.svg'
             title='Total Staff'
             count={data?.Total_Staff ?? 0}
             link='/super-admin/all-staff'
           />
           <Overview
+            isLoading={isLoadingSubjects}
             src='/svg/subjectcount.svg'
             title='Total Subject'
-            count={AllSubject?.length ?? 0}
+            count={AllSubject?.paging?.totalItems ?? 0}
             link='/super-admin/all-subject'
           />
         </div>

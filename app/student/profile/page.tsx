@@ -87,25 +87,25 @@ const Page = () => {
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Full Name</h1>
               <p className='text-base font-medium'>
-                {user?.firstName} {user?.lastName}{' '}
+                {user?.firstName ?? "N/A"} {user?.lastName ?? "N/A"}{' '}
               </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Gender</h1>
-              <p className='text-base font-medium uppercase'>{user?.gender} </p>
+              <p className='text-base font-medium uppercase'>{user?.gender ?? "N/A"} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Year/Level</h1>
-              <p className='text-base font-medium'>{user?.classArmId}</p>
+              <p className='text-base font-medium'>{user?.class?.class?.name ?? "N/A"}</p>
             </div>
 
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Student ID Number</h1>
-              <p className='text-base font-medium'>{user?.studentId} </p>
+              <p className='text-base font-medium'>{user?.studentId ?? "N/A"} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Date of Birth</h1>
-              <p className='text-base font-medium'>{user?.dob} </p>
+              <p className='text-base font-medium'>{user?.dob ?? "N/A"} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Nationality</h1>
@@ -130,14 +130,14 @@ const Page = () => {
               Request Edit
             </button>
           </div>
-          <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gapx-4 gap-y-10'>
+          <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10'>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
-              <p className='text-base font-medium'>{info?.email} </p>
+              <p className='text-base font-medium'>{info?.email ?? 'N/A'} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Address</h1>
-              <p className='text-base font-medium'>{user?.address ?? 'null'}</p>
+              <p className='text-base font-medium'>{user?.address ?? 'N/A'}</p>
             </div>
           </div>
           <div className='py-2 border-b flex justify-between mt-5'>
@@ -150,27 +150,27 @@ const Page = () => {
               Edit Now
             </button>
           </div>
-          <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gapx-4 gap-y-10'>
+          <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10'>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Full Name</h1>
               <p className='text-base font-medium'>
                 {' '}
-                {user?.parentDetails.name}{' '}
+                {user?.parentDetails?.name ?? 'N/A'}{' '}
               </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Relationship</h1>
-              <p className='text-base font-medium'> {user?.parentStatus} </p>
+              <p className='text-base font-medium'> {user?.parentStatus ?? "N/A"} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Occupation</h1>
-              <p className='text-base font-medium'>{user?.parentOccupation}</p>
+              <p className='text-base font-medium'>{user?.parentOccupation ?? "N/A"}</p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
               <p className='text-base font-medium'>
                 {' '}
-                {user?.parentDetails.email}{' '}
+                {user?.parentDetails?.email ?? "N/A"}{' '}
               </p>
             </div>
             <div>
@@ -180,7 +180,7 @@ const Page = () => {
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Phone Number</h1>
               <p className='text-base font-medium'>
-                {user?.parentDetails.phoneNumber}
+                {user?.parentDetails?.phoneNumber ?? "N/A"}
               </p>
             </div>
           </div>

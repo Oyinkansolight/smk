@@ -1,6 +1,7 @@
 import CreateClassActivityView from '@/components/views/teacher/create-class-activity-view';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import { IoCloseCircle } from 'react-icons/io5';
 
 export default function CreateSubjectActivityModal({
   children,
@@ -49,7 +50,16 @@ export default function CreateSubjectActivityModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-h-[800px] max-w-[744px] transform overflow-x-auto rounded-2xl bg-white p-6 text-start shadow-xl transition-all'>
-                  <CreateClassActivityView closeModal={closeModal} />
+                  <div className='flex relative'>
+                    <IoCloseCircle
+                      onClick={closeModal}
+                      className='w-6 h-6 lg:w-10 lg:h-10 absolute right-0'
+                    />
+
+                    <span className='w-full'>
+                      <CreateClassActivityView closeModal={closeModal} />
+                    </span>
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

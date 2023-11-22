@@ -26,11 +26,22 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const EditClass = () => {
   const p = useSearchParams();
   const classArmId = p?.get('id');
 
-  const { data: classArmInfo, refetch: refetchClassArm, isRefetching: isRefetchingArms, isLoading: isLoadingArms } = useGetClassArmInfo(classArmId);
+  const {
+    data: classArmInfo,
+    refetch: refetchClassArm,
+    isRefetching: isRefetchingArms,
+    isLoading: isLoadingArms,
+  } = useGetClassArmInfo(classArmId);
 
   const { data: institutionProfile } = useGetProfile();
   const { data: staffs } = useGetTeachersListByInstitution({
@@ -52,9 +63,11 @@ const EditClass = () => {
   const [loading, setLoading] = useState(false);
   const [publishData, setPublishedData] = useState(null);
 
-  const handleUpdateStaff = useUpdateClassArm();
+  const handleUpdateClassArm = useUpdateClassArm();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
+    console.log(data);
+
     if (
       !data.class ||
       !data.classArm ||
@@ -77,7 +90,8 @@ const EditClass = () => {
     }
 
     if (stage === 2) {
-      // const assignedSubjects = data.subjects.map((subject) => subject.value);
+      // const assignedSubjects: string[] = [];
+      // data.subjects.map((subject) => assignedSubjects.push(subject.value));
 
       const classArmData = {
         id: classArmId,
@@ -85,10 +99,11 @@ const EditClass = () => {
         capacity: Number(data.classCapacity),
         classId: data.class,
         teacherId: data.classTeacher.value,
+        // subjects: assignedSubjects,
       };
       try {
         setLoading(true);
-        const response = await handleUpdateStaff.mutateAsync(classArmData);
+        const response = await handleUpdateClassArm.mutateAsync(classArmData);
 
         if (response) {
           toast.success('Class Arm updated successfully');
@@ -122,15 +137,14 @@ const EditClass = () => {
 
   useEffect(() => {
     refetchClassArm();
-  }, [refetchClassArm, classArmId])
-
+  }, [refetchClassArm, classArmId]);
 
   if (isLoadingArms || isRefetchingArms) {
     return (
       <div className='flex justify-center items-center h-1/2'>
         <GenericLoader />
       </div>
-    )
+    );
   }
 
   return (

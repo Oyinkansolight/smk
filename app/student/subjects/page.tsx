@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
-import SmallStudentSubjectCard from '@/components/views/student.tsx/SmallStudentSubjectCard';
 import { getFromSessionStorage } from '@/lib/helper';
-import { useGetStudentSubjectList } from '@/server/institution';
 import { useGetClassArmInfo } from '@/server/institution/class';
 import { useRouter } from 'next/navigation';
 
