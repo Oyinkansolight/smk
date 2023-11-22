@@ -20,7 +20,7 @@ export function useGetTodaysPeriod({
     queryFn: () =>
       request
         .get(
-          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}`
+          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}&limit=20`
         )
         .then((res) => res.data.data.data),
   });
