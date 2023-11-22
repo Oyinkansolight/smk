@@ -38,7 +38,7 @@ const columns: TableColumn<(any)[number]>[] = [
     selector: (event) => event.createdAt,
     cell: (event) => (
       <div className='font-bold text-[#ADB8CC] whitespace-nowrap text-ellipsis'>{
-        moment(event.createdAt).format('DDD MMM YYYY')
+        moment(event.createdAt).format('DD MMM YYYY')
       }</div>
     ),
   },
