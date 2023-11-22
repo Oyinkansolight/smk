@@ -106,7 +106,7 @@ function AddActivityName({
                       >
                         <option value=''> -- Select an option -- </option>
 
-                        {(allClasses ?? []).map((item: any) => (
+                        {(allClasses?.data ?? []).map((item: any) => (
                           <option key={item?.id} value={item?.id}>
                             {`${item.class.name} ${item.arm}`}
                           </option>
