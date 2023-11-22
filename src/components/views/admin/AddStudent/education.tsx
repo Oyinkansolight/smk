@@ -17,7 +17,7 @@ const Education = ({ register, errors }: Iprops) => {
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
-  const { data: allclasses } = useGetInstituteClassArms(
+  const { data: allClasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
@@ -48,7 +48,7 @@ const Education = ({ register, errors }: Iprops) => {
           <FormSelect
             label='Assign Class'
             name='class'
-            options={allclasses?.data ?? []}
+            options={allClasses?.data ?? []}
             register={register}
             validation={{
               required: 'Class is required',

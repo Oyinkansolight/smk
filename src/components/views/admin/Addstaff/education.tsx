@@ -44,7 +44,7 @@ const Education = ({
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
-  const { data: allclasses } = useGetInstituteClassArms(
+  const { data: allClasses } = useGetInstituteClassArms(
     institutionId,
     currentSessionId
   );
@@ -93,7 +93,7 @@ const Education = ({
                   >
                     <option value=''> -- Select an option -- </option>
 
-                    {(allclasses ?? []).map((item: any, id: number) => (
+                    {(allClasses?.data ?? []).map((item: any, id: number) => (
                       <option key={id} value={item.id}>
                         {`${item.class.name} ${item.arm}`}
                       </option>
