@@ -7,7 +7,6 @@ import UploadMaterial from '@/components/modal/UploadMaterial';
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import UpdateFolder from '@/components/modal/updateFolder';
-import CustomPDFReader from '@/components/pdfReader/Reader';
 import Table from '@/components/tables/TableComponent';
 import { getURL, updateDocumentMetadata } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
@@ -34,6 +33,7 @@ import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
 import { useDebounce } from 'usehooks-ts';
+import SyncFusionPDFReader from '@/components/pdfReader/SycFusionReader';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -535,7 +535,7 @@ const UploadDocument = ({
           className='max-w-[777px] w-full h-[267px]'
         />
         <ControlledModal
-          className='mt-40 lg:mt-20'
+          className='mt-40 lg:mt-6'
           isOpen={isModalOpen}
           toggleModal={toggleModal}
           content={
@@ -551,7 +551,8 @@ const UploadDocument = ({
                         className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
                       ></video>
                     ) : (
-                      <CustomPDFReader url={url} />
+                      <SyncFusionPDFReader url={url} />
+                      // <CustomPDFReader url={url} />
                     ))}
                 </div>
               </div>
