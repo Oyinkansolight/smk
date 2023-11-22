@@ -9,7 +9,6 @@ import ParentContact from '@/components/views/admin/AddStudent/parentcontact';
 import Publish from '@/components/views/admin/AddStudent/publish';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
-import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useAssignStudentToParent, useCreateStudent } from '@/server/institution';
 import Image from 'next/image';
@@ -97,39 +96,39 @@ export default function AddStudent() {
         classArmId: data.class,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
-      // console.log(studentData);
 
       setpublishData(data);
 
-      try {
-        setloading(true);
-        const response = await handleCreateStudent.mutateAsync(studentData);
+      setloading(true);
+      const response = await handleCreateStudent.mutateAsync(studentData);
 
-        if (response) {
-          if (parentId) {
-            const parentData = {
-              id: parentId,
-              studentId: response.data.id,
-            };
-            const parentLinkResponse = await assignStudentToParent.mutateAsync(parentData);
+      if (response.status === 201) {
+        toast.success('Student Added successfully');
 
-            if (!parentLinkResponse) {
-              toast.error('Error linking parent to student');
-            }
+        if (parentId) {
+          const parentData = {
+            id: parentId,
+            studentId: response.data.data.data.id,
+          };
+          const parentLinkResponse = await assignStudentToParent.mutateAsync(parentData);
+
+          if (!parentLinkResponse) {
+            toast.error('Error linking parent to student');
+            setloading(false);
           }
-          toast.success('Student Added successfully');
-
-          setloading(false);
-
-          //2 Second - Open Success Modal
-          setisOpen(true);
         }
-      } catch (error) {
+
         setloading(false);
-        toast.error(getErrMsg(error));
+
+        //2 Second - Open Success Modal
+        setisOpen(true);
+      } else {
+        toast.error('Error adding student');
+        setloading(false);
       }
     }
-  };
+  }
+
 
   // const nextHandler = (): void => {
   //   if (stage >= 1 && stage <= 4) {

@@ -262,9 +262,7 @@ export function useAssignStudentToParent() {
     mutationKey: 'assign_student_to_parent',
     mutationFn: async (params: AssignStudentToParent) =>
       request.patch(`/v1/government/parent/${params.id}/assign-student`, {
-        body: {
-          studentId: params.studentId,
-        },
+        studentId: params.studentId,
       }),
   });
   return mutation;
