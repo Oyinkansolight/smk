@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 // import PageCounter from '@/components/counter/PageCounter';
 import React from 'react'
 // import { Viewer, Worker } from '@react-pdf-viewer/core';
@@ -16,41 +17,41 @@ interface CustomPDFReaderProps {
 const CustomPDFReader = ({ url }: CustomPDFReaderProps) => {
   // const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
-  // const [touchStartX, setTouchStartX] = useState(0);
-  // const [touchEndX, setTouchEndX] = useState(0);
-  // const [numberOfPages, setNumberOfPages] = useState(0);
-  // const [currentPage, setCurrentPage] = useState(1);
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // const handleTouchStart = (e: any) => {
-  //   setTouchStartX(e.touches[0].clientX);
-  // };
+  const handleTouchStart = (e: any) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
 
-  // const handleTouchMove = (e: any) => {
-  //   e.preventDefault(); // Prevent scrolling while swiping
-  // };
+  const handleTouchMove = (e: any) => {
+    e.preventDefault(); // Prevent scrolling while swiping
+  };
 
-  // const handleTouchEnd = (e: any) => {
-  //   setTouchEndX(e.changedTouches[0].clientX);
-  //   handleSwipe();
-  // };
+  const handleTouchEnd = (e: any) => {
+    setTouchEndX(e.changedTouches[0].clientX);
+    handleSwipe();
+  };
 
-  // const handleSwipe = () => {
-  //   const swipeThreshold = 50; // Minimum distance for swipe detection
+  const handleSwipe = () => {
+    const swipeThreshold = 50; // Minimum distance for swipe detection
 
-  //   const swipeDistance = touchEndX - touchStartX;
+    const swipeDistance = touchEndX - touchStartX;
 
-  //   if (Math.abs(swipeDistance) >= swipeThreshold) {
-  //     if (swipeDistance > 0) {
-  //       // Swipe Right
-  //       if (currentPage === 1) return;
-  //       setCurrentPage((page) => page - 1);
-  //     } else {
-  //       // Swipe Left
-  //       if (numberOfPages === currentPage) return;
-  //       setCurrentPage((page) => page + 1);
-  //     }
-  //   }
-  // };
+    if (Math.abs(swipeDistance) >= swipeThreshold) {
+      if (swipeDistance > 0) {
+        // Swipe Right
+        if (currentPage === 1) return;
+        setCurrentPage((page) => page - 1);
+      } else {
+        // Swipe Left
+        if (numberOfPages === currentPage) return;
+        setCurrentPage((page) => page + 1);
+      }
+    }
+  };
 
   return (
     /*  Server Component */
