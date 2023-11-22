@@ -34,11 +34,11 @@ export default function NextPeriod({
               <div className='h-28 w-28 rounded-lg bg-slate-400' />
               <div className='flex flex-col gap-3 flex-1'>
                 <div className='text-[#3479EA] font-semibold text-sm leading-5'>
-                  {time24Converter(data.startTime)} -
-                  {time24Converter(data.endTime)}
+                  {time24Converter(data?.startTime)} -
+                  {time24Converter(data?.endTime)}
                 </div>
                 <div className='text-[#615E83] font-bold text-2xl leading-7'>
-                  {data.subject.name}
+                  {data?.subject?.name ?? 'Subject Name'}
                 </div>
                 <div>
                   <div className='text-[#615E83] font-bold'>
@@ -51,7 +51,7 @@ export default function NextPeriod({
                 </div>
               </div>
               <Link
-                href={`/student/period/subject?name=${data.id}`}
+                href={`/student/period/subject?name=${data?.id}`}
                 className='rounded-lg bg-[#3361FF] p-2 text-white text-sm font-bold max-w-[142px] max-h-fit'
               >
                 Go To Period
