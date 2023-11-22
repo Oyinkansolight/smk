@@ -127,11 +127,11 @@ const AllClasses = () => {
           <div className='py-10 text-center'>Loading...</div>
         ) : (
           <div>
-            {allClasses && allClasses.length > 0 ? (
-              allClasses.map((item: any, idx: number) => (
+            {allClasses && allClasses?.data.length > 0 ? (
+              allClasses?.data?.map((item: any, idx: number) => (
                 <div
                   className=' min-w-[800px] table-header grid grid-cols-12 gap-4 rounded-t-md border-b bg-white py-4 px-1 text-[#8898AA] font-semibold'
-                  key={idx}
+                  key={item.id}
                 >
                   <div className='col-span-3'>
                     <Link href={`/admin/class?id=${item.id}`}>
