@@ -10,7 +10,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import { BiBookContent, BiDownload, BiExit, BiIdCard } from 'react-icons/bi';
 import { FaRegIdCard, FaUsers } from 'react-icons/fa';
-import { PiChatsTeardropDuotone } from 'react-icons/pi';
 import { TbMessage, TbTimelineEvent } from 'react-icons/tb';
 import { toast } from 'react-toastify';
 
@@ -157,7 +156,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
           />
 
           <div className='pt-20'>
-            {open && (
+            {/* {open && (
               <SideBarButton
                 open={open}
                 icon={<PiChatsTeardropDuotone />}
@@ -169,7 +168,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
               />
             )}
 
-            <div className='h-4' />
+            <div className='h-4' /> */}
 
             {open && clockInfo?.isClockedIn && (
               <SideBarButton

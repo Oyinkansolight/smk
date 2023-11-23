@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import GenericLoader from '@/components/layout/Loader';
@@ -5,19 +6,31 @@ import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
+import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
-import { useGetClassActivity } from '@/server/institution/lesson-note';
+import { GetClassActivity, useGetClassActivity } from '@/server/institution/lesson-note';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import { BiChevronRight } from 'react-icons/bi';
+import { useEffect, useState } from 'react';
+import { BiChevronRight, BiSortDown, BiSortUp } from 'react-icons/bi';
+import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [dir, setDir] = useState('DESC');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+  const [pagingData, setPagingData] = useState<any>({
+    query,
+    dir
+  });
 
   const { data: profile } = useGetProfile();
   const { data: terms } = useGetSessionTerms({
@@ -28,13 +41,61 @@ export default function Page() {
     teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.[0]?.id,
   });
-  const { data: activities, isLoading: isLoadingActivity } = useGetClassActivity({
+
+  const activityObject: GetClassActivity = {
     page: currentPage,
     typeOfActivity: 'QUIZ',
     classArmId: (arms ?? [])[idx]?.id as unknown as string,
     termId: term as unknown as string,
     sessionId: profile?.currentSession?.[0]?.id,
-  });
+    dir: pagingData.dir,
+  }
+
+  if (pagingData.query) {
+    activityObject['query'] = pagingData.query;
+  }
+
+  const { data: activities, isLoading: isLoadingActivity, refetch, error }
+    = useGetClassActivity(activityObject);
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, query: value });
+  };
+
+  const handleSort = (value: string) => {
+    setDir(value);
+    setPagingData({ ...pagingData, dir: value });
+  }
+
+  const stripHtml = (content: string) => {
+    //Checks if content has html tags with regex
+    const regex = /(<([^>]+)>)/ig;
+    if (regex.test(content)) {
+      const tmp = document.createElement('DIV');
+      tmp.innerHTML = content;
+      return tmp.textContent || tmp.innerText || '';
+    }
+
+    //if content does not have <p> tag return content
+    return content;
+  }
+
+  useEffect(() => {
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch();
+      }
+    };
+
+    refetchSearchRecords();
+  }, [refetch, debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(getErrMsg(error));
+    }
+  }, [error]);
 
   if (isLoadingActivity || isLoadingArms) {
     return (
@@ -46,6 +107,19 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <div
+        onClick={() => router.push("/teacher/lesson-note")}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        <Image
+          src='/svg/back.svg'
+          width={10}
+          height={10}
+          alt='back'
+          className='h-4 w-4'
+        />
+        <h3 className='text-[10px] font-medium'>Back</h3>
+      </div>
+
       <div className='font-bold text-3xl py-8 h3'>
         <div>Pop Quizzes</div>
       </div>
@@ -60,15 +134,24 @@ export default function Page() {
         callback={() => setCurrentPage(1)}
       />
 
-      {/* <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
-        <input className='rounded-full border p-3' placeholder='search' />
+      <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
+        <input onChange={(e) => handleSearch(e.target.value)} className='rounded-full border p-3' placeholder='Search activity' />
         <div className='flex-1' />
-        <div className='flex items-center'>
+        {/* <div className='flex items-center'>
           Filter By
           <BiChevronDown className='w-6 h-6' />
-        </div>
-        <BiSortUp className='h-6 w-6' />
-      </div> */}
+        </div> */}
+
+        {dir === 'DESC' && <div onClick={() => handleSort('ASC')} className='flex items-center'>
+          ASC
+          <BiSortUp className='h-6 w-6 cursor-pointer' />
+        </div>}
+
+        {dir === 'ASC' && <div onClick={() => handleSort('DESC')} className='flex items-center'>
+          DESC
+          <BiSortDown className='w-6 h-6 cursor-pointer' />
+        </div>}
+      </div>
 
       <div className='h-4' />
 
@@ -91,41 +174,44 @@ export default function Page() {
               label='No assignments created for this class.'
             />
           ) : (
-            activities?.data?.map((activity, i) => (
-              <Link
-                key={i}
-                href={
-                  activity.format === 'MULTIPLE_CHOICE'
-                    ? `/teacher/lesson-note/pop-quiz/offline-submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
-                    : `/teacher/lesson-note/pop-quiz/submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }`
-                }
-              >
-                <LessonTaskListItem
-                  isOfflineSubmission={false}
-                  title={
-                    activity.typeOfActivity
-                      ? `${activity.typeOfActivity} -  ${activity.format}`
-                        .replace('_', ' ')
-                        .toLowerCase()
-                      : '[NULL]'
-                  }
-                  subject={activity.subject.name ?? '[NULL]'}
-                  classString={
-                    (arms ?? [])[idx].arm
-                      ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
+            activities?.data?.map((activity, i) => {
+              const activityTitle = activity?.questionsV2?.[0]?.question;
+              return (
+                <Link
+                  key={activity.id ?? i}
+                  href={
+                    activity.format === 'MULTIPLE_CHOICE'
+                      ? `/teacher/lesson-note/pop-quiz/offline-submissions?subjectId=${activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
                       }`
-                      : '[NULL]'
+                      : `/teacher/lesson-note/pop-quiz/submissions?subjectId=${activity.subject.id
+                      }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
+                      }`
                   }
-                  dueDate={activity.dueDate}
-                  dateCreated={activity.createdAt}
-                  key={i}
-                />
-              </Link>
-            ))
+                >
+                  <LessonTaskListItem
+                    isOfflineSubmission={false}
+                    title={
+                      activity.typeOfActivity
+                        ? `${stripHtml(activityTitle?.slice(0, 25) ?? activity.typeOfActivity)} ${activityTitle && '...'} -  ${activity.format}`
+                          .replace('_', ' ')
+                          .toLowerCase()
+                        : '[NULL]'
+                    }
+                    subject={activity.subject.name ?? '[NULL]'}
+                    classString={
+                      (arms ?? [])[idx].arm
+                        ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
+                        }`
+                        : '[NULL]'
+                    }
+                    dueDate={activity.dueDate}
+                    dateCreated={activity.createdAt}
+                    key={i}
+                  />
+                </Link>
+              )
+            })
           ))}
       </div>
 
