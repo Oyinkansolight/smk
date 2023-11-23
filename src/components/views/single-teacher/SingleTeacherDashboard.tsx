@@ -18,7 +18,6 @@ import {
 } from '@/server/institution';
 import TeacherLibrary from 'app/teacher/library/page';
 import { useSearchParams } from 'next/navigation';
-import router from 'next/router';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { IoMdTrendingUp } from 'react-icons/io';
@@ -39,9 +38,8 @@ const SingleTeacherDashboard = () => {
     id: p?.get('id'),
   });
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${
-    (staff?.user ?? {})?.lastName
-  }`;
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
+    }`;
 
   const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
     p?.get('id'),
@@ -52,9 +50,8 @@ const SingleTeacherDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? {})?.firstName || 'Loading...'} ${
-          (staff?.user ?? {})?.lastName || ''
-        }`}
+        name={`${(staff?.user ?? {})?.firstName || 'Loading...'} ${(staff?.user ?? {})?.lastName || ''
+          }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
         id={staff?.oracleNumber ?? staff?.staffId}
         student={false}
@@ -62,6 +59,7 @@ const SingleTeacherDashboard = () => {
         setGridIdx={(value) => {
           setTabIdx(0);
           setGridIdx(value);
+          setIsEditingBioDetails(false);
         }}
       />
       {gridIdx === 0 && (
@@ -146,14 +144,14 @@ const SingleTeacherDashboard = () => {
                   isEditingBioDetails && 'opacity-50'
                 )}
               >
-                <Button
+                {/* <Button
                   onClick={() => router.push('/admin/student/edit-history')}
                   disabled={isEditingBioDetails}
                   variant='ghost'
                   className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
                 >
                   View Edit History
-                </Button>
+                </Button> */}
                 <Button
                   disabled={isEditingBioDetails}
                   onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}
