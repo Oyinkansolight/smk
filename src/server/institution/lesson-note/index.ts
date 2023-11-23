@@ -173,6 +173,8 @@ export interface GetClassActivity {
   termId?: string | number | null;
   sessionId?: string | number | null;
   page: number;
+  dir?: string;
+  query?: string;
 }
 
 export function useGetClassActivity(params: GetClassActivity) {
@@ -202,6 +204,8 @@ export function useGetClassActivity(params: GetClassActivity) {
     params.termId,
     params.typeOfActivity,
     params.page,
+    params.dir,
+    params.query,
     refetch,
   ]);
   return query;
