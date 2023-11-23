@@ -32,6 +32,14 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const EditClass = () => {
   const p = useSearchParams();
   const classArmId = p?.get('id');
@@ -54,6 +62,7 @@ const EditClass = () => {
     control,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -65,26 +74,17 @@ const EditClass = () => {
 
   const handleUpdateClassArm = useUpdateClassArm();
 
-  const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log(data);
+  useEffect(() => {
+    setValue('classArm', classArmInfo?.arm ?? '');
+    setValue('classCapacity', classArmInfo?.capacity ?? '');
+    setValue('class', classArmInfo?.class?.id ?? '');
+  }, []);
 
-    if (
-      !data.class ||
-      !data.classArm ||
-      !data.classTeacher ||
-      !data.classCapacity ||
-      !data.subjects
-    ) {
+  const onSubmit: SubmitHandler<any> = async (data) => {
+    if (!data.class || !data.classArm || !data.classCapacity) {
       toast.error('All fields must be completed');
     }
-    if (
-      stage === 1 &&
-      data.class &&
-      data.classArm &&
-      data.classTeacher &&
-      data.classCapacity &&
-      data.subjects
-    ) {
+    if (stage === 1 && data.class && data.classArm && data.classCapacity) {
       setPublishedData(data);
       setStage(stage + 1);
     }

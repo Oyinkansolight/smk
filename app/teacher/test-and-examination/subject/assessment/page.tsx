@@ -9,10 +9,16 @@ import { RiBookReadLine } from 'react-icons/ri';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { handleFlutterPDFReader } from '@/lib/helper';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const [idx, setIdx] = useState(0);
   const [url, setUrl] = useState('');
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -75,7 +81,7 @@ export default function Page() {
         <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
           <div className='flex justify-center'>
             {url.length > 0 && (
-              <CustomPDFReader url={url} />
+              isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
             )}
           </div>
         </div>

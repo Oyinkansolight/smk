@@ -1,7 +1,6 @@
 'use client';
 
 import NextImage from '@/components/NextImage';
-import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import TabBar from '@/components/layout/TabBar';
 import clsxm from '@/lib/clsxm';
 import Image from 'next/image';
@@ -13,11 +12,16 @@ import { RiDashboardFill } from 'react-icons/ri';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { useMediaQuery } from 'react-responsive'
+import { handleFlutterPDFReader } from '@/lib/helper';
 
 const Page = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [url, setUrl] = useState('');
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -143,7 +147,7 @@ const Page = () => {
             <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
               <div className='flex justify-center'>
                 {url.length > 0 && (
-                  <CustomPDFReader url={url} />
+                  isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
                 )}
               </div>
             </div>

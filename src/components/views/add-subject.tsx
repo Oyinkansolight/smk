@@ -16,7 +16,7 @@ interface AddSubjectViewProps {
 
 export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
   const { data } = useGetInstituteTypes();
-
+  const institutionTypes: string[] = [];
   console.log(data);
 
   const { register, handleSubmit } = useForm({ mode: 'onChange' });
@@ -74,10 +74,22 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
     classes3.forEach((v) => ids.push(d3[v as number].id));
     classes4.forEach((v) => ids.push(d4[v as number].id));
 
+    if (classes1.size > 0) {
+      institutionTypes.push('ECCDE');
+    }
+    if (classes2.size > 0) {
+      institutionTypes.push('PRIMARY');
+    }
+    if (classes3.size > 0) {
+      institutionTypes.push('SECONDARY');
+    }
+    if (classes4.size > 0) {
+      institutionTypes.push('TERTIARY');
+    }
     const payload = {
       classId: ids,
       name: data.subject,
-      institutionTypeId: ["SECONDARY"],
+      institutionTypes,
     };
 
     const response = await mutateAsync(payload);

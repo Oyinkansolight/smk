@@ -7,12 +7,17 @@ import TakeAttendanceModal from '@/components/modals/take-attendance-modal';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
+import { handleFlutterPDFReader } from '@/lib/helper';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const [url, setUrl] = useState('');
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   useEffect(() => {
     const getFileURL = async () => {
@@ -68,7 +73,7 @@ export default function Page() {
         <div className='flex-1 mb-8 rounded-lg bg-white min-h-[100vh] overflow-hidden overflow-x-scroll'>
           <div className='flex justify-center'>
             {url.length > 0 && (
-              <CustomPDFReader url={url} />
+              isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
             )}
           </div>
         </div>

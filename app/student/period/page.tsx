@@ -92,11 +92,20 @@ const Page = () => {
                     </div>
                   </div>
                   <h1 className='font-bold mt-3 text-sm'>Topic:</h1>
-                  <p className='text-[#808080] text-[10px] '>{item?.theme ?? 'N/A'}</p>
+                  <p className='text-[#808080] text-[10px] '>
+                    {item?.theme ?? 'N/A'}
+                  </p>
                   <h1 className='font-bold mt-3 text-sm'>Teacher:</h1>
                   <div className='flex text-[#808080] text-[10px] space-x-2 items-center'>
                     <BiUser className='h-8 w-8' />{' '}
-                    <p> {item?.teacher.filter(teacher => teacher?.employmentDetails?.schoolName === user?.currentStudentInfo?.institution?.instituteName)[0]?.user?.firstName ?? 'N/A'}</p>
+                    <p>
+                      {' '}
+                      {item?.teacher.filter(
+                        (teacher) =>
+                          teacher?.employmentDetails?.schoolName ===
+                          user?.currentStudentInfo?.institution?.instituteName
+                      )[0]?.user?.firstName ?? 'N/A'}
+                    </p>
                   </div>
 
                   <div className='flex justify-center absolute bottom-4 w-full'>

@@ -1,17 +1,12 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
-import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import clsxm from '@/lib/clsxm';
-import { getErrMsg } from '@/server';
-import {
-  // useGetSubjectAssignedToTeacher,
-  useGetTeacherById, // useUpdateStaffSubject,
-} from '@/server/institution';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useState } from 'react';
 import Avatar from '~/svg/governor.svg';
+
+import ProfileDetails from './ProfileDetails';
 
 const Page = ({ profile }: { profile?: any }) => {
   const router = useRouter();
@@ -22,9 +17,9 @@ const Page = ({ profile }: { profile?: any }) => {
   // const [loading, setLoading] = useState(false);
   // const [isAddSubject, setisAddSubject] = useState(false);
   // const p = useSearchParams();
-  const { data, error } = useGetTeacherById({
-    id: 'c23066f0-544f-4d4b-bb0a-02064f57f708',
-  });
+  // const { data, error } = useGetTeacherById({
+  //   id: 'c23066f0-544f-4d4b-bb0a-02064f57f708',
+  // });
 
   // const onClickHandler = () => {
   //   setisAddSubject(!isAddSubject);
@@ -59,13 +54,13 @@ const Page = ({ profile }: { profile?: any }) => {
   //   }
   // };
 
-  const staff = data;
+  // const staff = data;
 
-  useEffect(() => {
-    if (error) {
-      toast.error(getErrMsg(error));
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     toast.error(getErrMsg(error));
+  //   }
+  // }, [error]);
 
   return (
     <section>
@@ -118,10 +113,10 @@ const Page = ({ profile }: { profile?: any }) => {
           <div className='col-span-9'>
             <div>
               <div className='bg-white px-8'>
-                <TeacherBioDetails
+                <ProfileDetails
                   isEditing={isEditingBioDetails}
                   setIsEditing={setIsEditingBioDetails}
-                  initStaff={profile}
+                  initProfile={profile}
                 />
               </div>
             </div>

@@ -81,3 +81,20 @@ export function useUpdateStaff() {
   });
   return mutation;
 }
+export function useUpdateUser() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_user',
+    mutationFn: async (params: UpdateStaffParams) =>
+      (
+        await request.patch('/v1/authentication/update-user', params, {
+          withCredentials: true,
+        })
+      ).data.data.data,
+    // onSettled: (data) => {
+
+    //   client.refetchQueries(`get_staff_list_${data?.id ?? ''}`);
+    // },
+  });
+  return mutation;
+}

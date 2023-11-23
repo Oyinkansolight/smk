@@ -18,10 +18,17 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { useRouter } from 'next/navigation';
+import { handleFlutterPDFReader } from '@/lib/helper';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const router = useRouter();
   const [url, setUrl] = useState('');
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
+
   const params = useSearchParams();
   const id = params?.get('id');
   const classArmId = params?.get('classArmId');
@@ -103,7 +110,7 @@ export default function Page() {
                     <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                       <div className='flex justify-center'>
                         {url.length > 0 && (
-                          <CustomPDFReader url={url} />
+                          isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
                         )}
                       </div>
                     </div>

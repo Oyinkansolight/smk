@@ -34,6 +34,8 @@ import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
 import { useDebounce } from 'usehooks-ts';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { useMediaQuery } from 'react-responsive'
+import { handleFlutterPDFReader } from '@/lib/helper';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -308,6 +310,10 @@ const UploadDocument = ({
     mode: 'onChange',
   });
 
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  })
+
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
@@ -552,7 +558,8 @@ const UploadDocument = ({
                       ></video>
                     ) : (
                       // <SyncFusionPDFReader url={url} />
-                      <CustomPDFReader url={url} />
+                      isDesktopOrLaptop ?
+                        <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
                     ))}
                 </div>
               </div>
