@@ -57,7 +57,7 @@ export default function Table<T>(
           {props.showSearch ||
             (props.showSearch === undefined && (
               <BasicSearch
-                placeholder='Search User Name/ID'
+                placeholder='Search...'
                 handleSearch={props.handleSearchParam}
               />
             ))}

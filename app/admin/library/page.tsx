@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Folder from '~/svg/folder.svg';
 
@@ -42,22 +40,18 @@ const Library = () => {
                 icon: <GiHamburgerMenu className='h-5 w-5' />,
                 label: isGenericApp ? 'Library' : 'Government Library',
               },
-              {
-                icon: <BiListCheck className='h-5 w-5' />,
-                label: 'School Library',
-              },
+              // {
+              //   icon: <BiListCheck className='h-5 w-5' />,
+              //   label: 'School Library',
+              // },
             ]}
           />
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Files' className='pt-[14px]' />
-          </div>
         </div>
 
         {tabIdx === 0 && <Files variant='secondary' />}
-        {tabIdx === 1 && <Files variant='secondary' />}
+        {/* {tabIdx === 1 && <Files variant='secondary' />} */}
       </div>
     </div>
   );
