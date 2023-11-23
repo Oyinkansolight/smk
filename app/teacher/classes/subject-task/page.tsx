@@ -130,7 +130,7 @@ export default function Page() {
                 variant='secondary'
                 onClick={() => {
                   if (!isDesktopOrLaptop) {
-                    handleFlutterPDFReader(url)
+                    url.length > 0 && handleFlutterPDFReader(url)
                   }
                 }}>
                 View Scripted Lesson

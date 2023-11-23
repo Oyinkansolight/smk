@@ -547,7 +547,7 @@ const UploadDocument = ({
           toggleModal={toggleModal}
           showModal={isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')}
           content={
-            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video') ? (
+            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video') && isModalOpen ? (
               <div className='flex items-stretch gap-10'>
                 <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                   <div className='flex justify-center'>
@@ -567,7 +567,7 @@ const UploadDocument = ({
                 </div>
               </div>
             ) : (
-              handleFlutterPDFReader(url)
+              isModalOpen && url && handleFlutterPDFReader(url)
             )
           }
         />
