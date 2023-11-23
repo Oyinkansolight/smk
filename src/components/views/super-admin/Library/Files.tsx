@@ -33,7 +33,7 @@ import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
 import { useDebounce } from 'usehooks-ts';
-import SyncFusionPDFReader from '@/components/pdfReader/SycFusionReader';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -551,8 +551,8 @@ const UploadDocument = ({
                         className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
                       ></video>
                     ) : (
-                      <SyncFusionPDFReader url={url} />
-                      // <CustomPDFReader url={url} />
+                      // <SyncFusionPDFReader url={url} />
+                      <CustomPDFReader url={url} />
                     ))}
                 </div>
               </div>
