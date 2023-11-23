@@ -8,12 +8,14 @@ interface BasicModalProps {
   children: any;
   content: any;
   className?: string;
+  showContent?: boolean;
 }
 
 export default function BasicModal({
   children,
   content,
   className,
+  showContent = true
 }: BasicModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,6 +26,8 @@ export default function BasicModal({
   function openModal() {
     setIsOpen(true);
   }
+
+  if (!showContent) return <>{children}</>;
 
   return (
     <>

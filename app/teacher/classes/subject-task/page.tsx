@@ -104,13 +104,14 @@ export default function Page() {
 
             <BasicModal
               className='mt-20'
+              showContent={isDesktopOrLaptop}
               content={
                 <div className='flex items-stretch gap-10'>
                   {period?.file ? (
                     <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                       <div className='flex justify-center'>
                         {url.length > 0 && (
-                          isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
+                          <CustomPDFReader url={url} />
                         )}
                       </div>
                     </div>
@@ -125,7 +126,15 @@ export default function Page() {
                 </div>
               }
             >
-              <Button variant='secondary'>View Scripted Lesson</Button>
+              <Button
+                variant='secondary'
+                onClick={() => {
+                  if (!isDesktopOrLaptop) {
+                    handleFlutterPDFReader(url)
+                  }
+                }}>
+                View Scripted Lesson
+              </Button>
             </BasicModal>
           </div>
         </div>

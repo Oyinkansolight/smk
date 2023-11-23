@@ -10,6 +10,7 @@ interface BasicModalProps {
   toggleModal: () => void;
   className?: string;
   closeIcon?: boolean;
+  showModal?: boolean;
 }
 
 export default function ControlledModal({
@@ -18,7 +19,10 @@ export default function ControlledModal({
   className,
   closeIcon = true,
   toggleModal,
+  showModal = true
 }: BasicModalProps) {
+
+  if (!showModal) return (<></>);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

@@ -540,30 +540,35 @@ const UploadDocument = ({
           }
           className='max-w-[777px] w-full h-[267px]'
         />
+
         <ControlledModal
-          className='mt-40 lg:mt-6'
           isOpen={isModalOpen}
+          className='mt-10 lg:mt-6'
           toggleModal={toggleModal}
+          showModal={isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')}
           content={
-            <div className='flex items-stretch gap-10'>
-              <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
-                <div className='flex justify-center'>
-                  {url.length > 0 &&
-                    (mediaType === 'video' ? (
-                      <video
-                        src={url}
-                        controls
-                        title='Scripted lesson video player'
-                        className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
-                      ></video>
-                    ) : (
-                      // <SyncFusionPDFReader url={url} />
-                      isDesktopOrLaptop ?
-                        <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
-                    ))}
+            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video') ? (
+              <div className='flex items-stretch gap-10'>
+                <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+                  <div className='flex justify-center'>
+                    {url.length > 0 &&
+                      (mediaType === 'video' ? (
+                        <video
+                          src={url}
+                          controls
+                          title='Scripted lesson video player'
+                          className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                        ></video>
+                      ) : (
+                        // <SyncFusionPDFReader url={url} />
+                        <CustomPDFReader url={url} />
+                      ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              handleFlutterPDFReader(url)
+            )
           }
         />
 
