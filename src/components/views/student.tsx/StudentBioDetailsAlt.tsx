@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { isProd } from '@/constant/env';
+import { getURL } from '@/firebase/init';
+import { getErrMsg } from '@/server';
 import { useUpdateStudent } from '@/server/government/student';
 import { Student } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { getErrMsg } from '@/server';
 import { toast } from 'react-toastify';
 
 export default function StudentBioDetailsAlt({
@@ -18,19 +20,35 @@ export default function StudentBioDetailsAlt({
   setIsEditing: (value: boolean) => void;
   initStudent?: Student;
 }) {
-  const { control, setValue, handleSubmit } = useForm();
+  const { control, setValue, handleSubmit, getValues, register } = useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const [userImage, setUserImage] = useState('/images/add_image.png');
+
   const update = useUpdateStudent();
   const onSubmit = async (data: any) => {
+    console.log(data);
+
+    const environment = isProd ? 'production' : 'staging';
+    const array = await data?.image?.[0]?.arrayBuffer();
+    const uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
+    // if (array) {
+    //   uploadedImage = await uploadDocument(uploadedImage, array, environment);
+    // }
+
+    // console.log(uploadedImage);
+
+
     if (initStudent?.id) {
       setIsLoading(true);
       try {
         await update.mutateAsync({
-          email: data.studentEmail,
+          // profileImg: uploadedImage,
+          email: data.email,
           id: initStudent?.id,
           phoneNumber: data.studentPhone,
           firstName: (data.fullName as string).split(' ')[0],
           lastName: (data.fullName as string).split(' ')[1],
+          // address: data.address
         });
       } catch (error) {
         toast.error(getErrMsg(error));
@@ -42,8 +60,10 @@ export default function StudentBioDetailsAlt({
   };
 
   useEffect(() => {
-    // console.log('Student Changed', initStudent);
+    console.log('Student Changed', initStudent);
     if (initStudent) {
+      getURL(initStudent?.profileImg ?? '').then((v) => setUserImage(v));
+
       setValue('studentEmail', (initStudent?.user ?? [])[0]?.email);
       setValue('email', (initStudent?.user ?? [])[0]?.email);
       setValue('studentPhone', (initStudent?.user ?? [])[0]?.phoneNumber);
@@ -83,12 +103,18 @@ export default function StudentBioDetailsAlt({
               <Image
                 height={80}
                 width={80}
-                src='/images/add_image.png'
                 alt='add-image-logo'
+                src={userImage}
               />
               <div className='font-bold'>Click to capture image</div>
             </label>
-            <input id='image-upload' type='file' className='hidden' />
+            <input
+              type='file'
+              accept='image/*'
+              id='image-upload'
+              className='hidden'
+              {...(register ? register('image') : {})}
+            />
           </div>
         )}
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>

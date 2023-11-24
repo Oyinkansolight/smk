@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -15,6 +17,12 @@ import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -97,6 +105,19 @@ const AllStaff = () => {
 
   return (
     <section className='py-6'>
+      <ControlledModal
+        isOpen={isModalOpen}
+        toggleModal={toggleModal}
+        content={
+          <DeleteModalContent
+            title='Delete Staff'
+            body='Are you sure you want to delete this staff?'
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
+          />
+        }
+        className='max-w-[777px] w-full h-[267px]'
+      />
       <Link href='/super-admin'>
         <div className='flex items-center space-x-4'>
           <Image
@@ -186,7 +207,7 @@ const AllStaff = () => {
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
                         <Link
-                          href={`/super-admin/staff?id=${item.id}`}
+                          href={`/super-admin/teacher?id=${item.id}`}
                           className='p-4 hover:bg-gray-200 w-full block'
                         >
                           Edit
@@ -280,7 +301,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < staff.paging.totalPage
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

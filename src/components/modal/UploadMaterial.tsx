@@ -26,7 +26,11 @@ interface UploadMaterialProps {
   toggleUploadModal: () => void;
 }
 
-export default function UploadMaterial({ folderId, folderName, toggleUploadModal }: UploadMaterialProps) {
+export default function UploadMaterial({
+  folderId,
+  folderName,
+  toggleUploadModal,
+}: UploadMaterialProps) {
   const router = useRouter();
   const [data, setData] = useState<File>();
   const { data: profile } = useGetProfile();
@@ -54,6 +58,7 @@ export default function UploadMaterial({ folderId, folderName, toggleUploadModal
           folderId,
           userTypes: [],
           fileUrl: path,
+          size: 100,
           filename: d.title,
           createdBy: profile?.userInfo?.email,
           fileType: videoFileType === 'video' ? videoFileType : pdfFileType,
@@ -61,6 +66,7 @@ export default function UploadMaterial({ folderId, folderName, toggleUploadModal
       } else {
         fileUploadDetails = {
           userTypes: [],
+          size: 100,
           fileUrl: path,
           filename: d.title,
           createdBy: profile?.userInfo?.email,
@@ -94,8 +100,7 @@ export default function UploadMaterial({ folderId, folderName, toggleUploadModal
         </div>
         <div className='col-span-3'>
           <div className='h2 mb-6'>
-            Add a file{' '}
-            {folderName ? `to ${folderName}` : 'to the library'}
+            Add a file {folderName ? `to ${folderName}` : 'to the library'}
           </div>
 
           <BaseInput label='Title' name='title' register={register} />

@@ -12,6 +12,7 @@ export interface UploadFileParams {
   userTypes?: string[];
   subjects?: string[];
   createdBy?: string | number;
+  size?: string | number;
   folderId?: string | number | null;
 }
 
@@ -20,6 +21,7 @@ export interface UpdateFileSubjectParams {
   folderId?: string;
   classes?: string;
   subjectId: number[];
+  size?: string | number;
   schoolType?: string;
 }
 

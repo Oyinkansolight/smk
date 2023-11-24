@@ -66,7 +66,7 @@ const Page = () => {
           </div>
         </div>
 
-        <div className='rounded p-4 border bg-[#FAFAFA]'>
+        <div className='rounded px-4  pt-4 pb-20 border bg-[#FAFAFA] overflow-y-auto'>
           <h1 className='text-xl font-medium mb-3 mt-6'>Today’s Periods</h1>
 
           {!isLoading ? (

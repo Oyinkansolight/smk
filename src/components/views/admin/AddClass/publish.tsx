@@ -15,6 +15,12 @@ import { useGetClassesList } from '@/server/institution';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Publish = ({ publishData }: any) => {
   const { data: classes } = useGetClassesList();
 
@@ -50,6 +56,14 @@ const Publish = ({ publishData }: any) => {
           <div className='col-span-4'>
             <h2 className='text-xs mb-2 font-medium'>Class Teacher</h2>
             <p>{publishData?.classTeacher?.label || ''}</p>
+          </div>
+        </div>
+        <div className='grid grid-cols-12 gap-4 items-center mb-10'>
+          <div className='col-span-4'>
+            <h2 className='text-xs mb-2 font-medium'>Assigned Subjects</h2>
+            <p>
+              {(publishData.subjects ?? []).map((v: any) => v.label).join(', ')}
+            </p>
           </div>
         </div>
       </div>

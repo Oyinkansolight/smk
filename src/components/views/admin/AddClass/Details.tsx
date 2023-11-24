@@ -16,6 +16,8 @@ import ReactSelect from 'react-select';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   register: any;
   errors: any;
@@ -156,7 +158,7 @@ const Biodata = ({
           )}
         />
 
-        {/* <Controller
+        <Controller
           control={control}
           name='subjects'
           render={({ field }) => (
@@ -178,7 +180,7 @@ const Biodata = ({
               />
             </div>
           )}
-        /> */}
+        />
       </div>
     </section>
   );

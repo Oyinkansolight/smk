@@ -124,6 +124,7 @@ const Biodata = ({
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
+            type='email'
             label='Email'
             placeholder='student@mail.com'
             name='studentEmail'

@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import EmptyView from '@/components/misc/EmptyView';
@@ -21,6 +22,7 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <BackButton />
       <div className='text-3xl pt-8 text-[#D4D5D7]'>
         {'Assignments > Submissions'}
       </div>

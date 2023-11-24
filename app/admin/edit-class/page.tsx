@@ -9,6 +9,7 @@ import Publish from '@/components/views/admin/AddClass/publish';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
+  useAssignSubjectToClassArm,
   useGetTeachersListByInstitution,
   useUpdateClassArm,
 } from '@/server/institution';
@@ -21,6 +22,26 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -73,16 +94,47 @@ const EditClass = () => {
   const [publishData, setPublishedData] = useState(null);
 
   const handleUpdateClassArm = useUpdateClassArm();
+  const handleAssignSubjectToClassArm = useAssignSubjectToClassArm();
 
   useEffect(() => {
+    const staffData = (staffs?.data ?? []).map((v) => ({
+      label: v?.user ? `${v?.user?.firstName} ${v?.user?.lastName}` : ' ',
+      value: v.id,
+    }));
+
+    const selectedTeacherIndex = (staffData ?? []).findIndex(
+      (item) => item.value == classArmInfo?.teacher.id
+    );
     setValue('classArm', classArmInfo?.arm ?? '');
     setValue('classCapacity', classArmInfo?.capacity ?? '');
     setValue('class', classArmInfo?.class?.id ?? '');
-  }, []);
+    setValue('classTeacher', staffData[selectedTeacherIndex]);
+    setValue(
+      'subjects',
+      classArmInfo?.subjects?.map((v) => ({
+        label: v?.name,
+        value: v.id,
+      })) ?? ''
+    );
+  }, [
+    classArmInfo?.arm,
+    classArmInfo?.capacity,
+    classArmInfo?.class?.id,
+    classArmInfo?.subjects,
+    classArmInfo?.teacher.id,
+    setValue,
+    staffs?.data,
+  ]);
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    if (!data.class || !data.classArm || !data.classCapacity) {
+    if (
+      !data.class ||
+      !data.classArm ||
+      !data.classCapacity ||
+      !data.classTeacher
+    ) {
       toast.error('All fields must be completed');
+      return;
     }
     if (stage === 1 && data.class && data.classArm && data.classCapacity) {
       setPublishedData(data);
@@ -90,8 +142,8 @@ const EditClass = () => {
     }
 
     if (stage === 2) {
-      // const assignedSubjects: string[] = [];
-      // data.subjects.map((subject) => assignedSubjects.push(subject.value));
+      const assignedSubjects: string[] = [];
+      data.subjects.map((subject) => assignedSubjects.push(subject.value));
 
       const classArmData = {
         id: classArmId,
@@ -99,10 +151,15 @@ const EditClass = () => {
         capacity: Number(data.classCapacity),
         classId: data.class,
         teacherId: data.classTeacher.value,
-        // subjects: assignedSubjects,
+      };
+
+      const subjectPayload = {
+        classArmId,
+        subjects: assignedSubjects,
       };
       try {
         setLoading(true);
+        await handleAssignSubjectToClassArm.mutateAsync(subjectPayload);
         const response = await handleUpdateClassArm.mutateAsync(classArmData);
 
         if (response) {

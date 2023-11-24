@@ -265,3 +265,7 @@ export const handleFlutterPDFReader = (url: string) => {
 
   return null;
 };
+
+export const stripWhiteSpace = (value: string) => {
+  return value.replace(/\s/g, '');
+};

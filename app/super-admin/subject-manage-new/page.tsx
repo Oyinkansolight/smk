@@ -80,7 +80,7 @@ const SingleSubjectInstitutionType = () => {
               </button>
 
               <div className='rounded-full py-1 px-2 bg-slate-100'>
-                <span className='text-gray-300'>Subject Page</span> /
+                <span className='text-gray-300'>Subject Page</span>/
                 <span className='text-gray-300'>
                   ECCDE Institution Subjects
                 </span>
