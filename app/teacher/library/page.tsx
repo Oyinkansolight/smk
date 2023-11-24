@@ -6,16 +6,6 @@ import Files from '@/components/views/super-admin/Library/Files';
 import { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const TeacherLibrary = () => {
   const [tabIdx, setTabIdx] = useState(0);
 
@@ -37,14 +27,9 @@ const TeacherLibrary = () => {
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
 
-          {/* <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Files' className='pt-[14px]' />
-          </div> */}
         </div>
 
         {tabIdx === 0 && <Files variant='secondary' />}
-        {tabIdx === 1 && <Files variant='secondary' />}
-        {tabIdx === 2 && <Files variant='secondary' />}
       </div>
     </div>
   );

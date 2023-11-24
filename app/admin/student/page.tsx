@@ -25,8 +25,6 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -102,9 +100,8 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
-          (student?.user ?? [])[0]?.lastName ?? ''
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
+          }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -113,6 +110,7 @@ const Page = () => {
         setGridIdx={(v) => {
           setGridTabIdx(v);
           setTabIdx(0);
+          setIsEditingBioDetails(false);
         }}
       />
       {gridTabIdx === 0 && (
@@ -144,9 +142,8 @@ const Page = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${
-                student ? student?.class?.class.name || 'null' : 'Loading...'
-              }  ${student ? student?.class?.arm || '' : ''}`}
+              classArm={`${student ? student?.class?.class.name || 'null' : 'Loading...'
+                }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={classArmData?.subjects.length ?? 0}
             />
@@ -189,14 +186,14 @@ const Page = () => {
                   isEditingBioDetails && 'opacity-50'
                 )}
               >
-                <Button
+                {/* <Button
                   onClick={() => router.push('/admin/student/edit-history')}
                   disabled={isEditingBioDetails}
                   variant='ghost'
                   className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
                 >
                   View Edit History
-                </Button>
+                </Button> */}
                 <Button
                   disabled={isEditingBioDetails}
                   onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}

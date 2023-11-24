@@ -7,8 +7,9 @@ import Contact from '@/components/views/admin/AddStudent/contact';
 import Education from '@/components/views/admin/AddStudent/education';
 import ParentContact from '@/components/views/admin/AddStudent/parentcontact';
 import Publish from '@/components/views/admin/AddStudent/publish';
-import { isLocal } from '@/constant/env';
+import { isProd } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
+import { stripWhiteSpace } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useAssignStudentToParent, useCreateStudent } from '@/server/institution';
 import Image from 'next/image';
@@ -72,7 +73,7 @@ export default function AddStudent() {
     }
     if (stage === 4 && data.class) {
       // setStage(stage + 1);
-      const environment = isLocal ? 'staging' : 'production';
+      const environment = isProd ? 'production' : 'staging';
       const array = await imageData?.arrayBuffer();
       let uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
       if (array) {
@@ -88,7 +89,7 @@ export default function AddStudent() {
         parentStatus: data.parentStatus,
         parentName: data.parentName,
         parentOccupation: data.parentOccupation,
-        email: data.studentEmail,
+        email: stripWhiteSpace(data.studentEmail),
         password: '12345',
         phoneNumber: data.phoneNumber,
         address: data.address,

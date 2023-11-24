@@ -18,10 +18,17 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { useRouter } from 'next/navigation';
+import { handleFlutterPDFReader } from '@/lib/helper';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const router = useRouter();
   const [url, setUrl] = useState('');
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
+
   const params = useSearchParams();
   const id = params?.get('id');
   const classArmId = params?.get('classArmId');
@@ -97,6 +104,7 @@ export default function Page() {
 
             <BasicModal
               className='mt-20'
+              showContent={isDesktopOrLaptop}
               content={
                 <div className='flex items-stretch gap-10'>
                   {period?.file ? (
@@ -118,7 +126,15 @@ export default function Page() {
                 </div>
               }
             >
-              <Button variant='secondary'>View Scripted Lesson</Button>
+              <Button
+                variant='secondary'
+                onClick={() => {
+                  if (!isDesktopOrLaptop) {
+                    url.length > 0 && handleFlutterPDFReader(url)
+                  }
+                }}>
+                View Scripted Lesson
+              </Button>
             </BasicModal>
           </div>
         </div>

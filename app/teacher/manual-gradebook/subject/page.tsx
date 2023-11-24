@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import GenericLoader from '@/components/layout/Loader';
 import EmptyView from '@/components/misc/EmptyView';
@@ -10,14 +11,13 @@ import {
   useCreateResultFromGradeBook,
   useCreateSubjectGradeBook,
   useEditSubjectGradeBook,
-  useGetSubjectGradeList,
   useGetSubjectScoreSheet,
 } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
-import { useGetClassArmStudents } from '@/server/institution/class-arm';
-import { ClassArmStudents, Institution } from '@/types/institute';
+import { Institution } from '@/types/institute';
+import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 import { useSessionStorage } from 'usehooks-ts';
@@ -38,6 +38,7 @@ export default function Page() {
     sessionId: profile?.currentSession?.[0]?.id,
   });
   const term = terms?.data[0]?.id;
+  const router = useRouter();
 
   const [institution] = useSessionStorage('institution', {} as Institution);
   const handleCreateGradebook = useCreateSubjectGradeBook();
@@ -135,6 +136,7 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <BackButton />
       <div className='text-[#D4D5D7] py-8 text-xl'>
         Grade Book {'>'} {params?.get('subjectName')}
       </div>

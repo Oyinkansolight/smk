@@ -309,6 +309,7 @@ export function useDeleteStudent() {
       (await request.delete(`/v1/government/students/delete-by-id?id=${id}`))
         .data,
     onSettled: () => {
+      client.refetchQueries(`get_student_list`);
       client.refetchQueries(`get_student_list_By_institution`);
     },
   });

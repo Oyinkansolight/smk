@@ -48,7 +48,7 @@ const Library = () => {
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
 
           <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Files' className='pt-[14px]' />
+            <SearchInput placeholder='Search...' className='pt-[14px]' />
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import SearchInput from '@/components/input/SearchInput';
 import TabBar from '@/components/layout/TabBar';
 import Files from '@/components/views/super-admin/Library/Files';
 import { useState } from 'react';
@@ -42,10 +41,6 @@ const Library = () => {
           />
 
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
-
-          <div className='h-full border-b-[2px] border-[#EDEFF2]'>
-            <SearchInput placeholder='Search Files' className='pt-[14px]' />
-          </div>
         </div>
 
         {tabIdx === 0 && <Files variant='primary' />}

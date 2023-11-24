@@ -5,6 +5,7 @@ import TaskAccordion from '@/components/accordions/TaskAccordion';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
+import { handleFlutterPDFReader } from '@/lib/helper';
 import logger from '@/lib/logger';
 import {
   useGetPeriodById,
@@ -14,6 +15,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+import { useMediaQuery } from 'react-responsive';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -243,6 +245,9 @@ const Page = () => {
 
 function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
   const [url, setUrl] = useState<string | any>('');
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   let path;
   if (noteUrl) {
@@ -251,7 +256,8 @@ function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
   }
   return (
     <div>
-      <CustomPDFReader url={url} />
+      {isDesktopOrLaptop ?
+        <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)}
     </div>
   );
 }

@@ -20,9 +20,11 @@ export function useGetStudentList(params: any) {
 
 interface UpdateStudentParams {
   id: string;
-  firstName?: string;
-  lastName?: string;
   email?: string;
+  address?: string;
+  lastName?: string;
+  firstName?: string;
+  profileImg?: string;
   phoneNumber?: string;
   readingProficiency?: string;
 }

@@ -12,10 +12,16 @@ import Toggle from 'react-toggle';
 import { SAMPLE_ASSETS } from '@/constant/assets';
 import { getURL } from '@/firebase/init';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { handleFlutterPDFReader } from '@/lib/helper';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const [url, setUrl] = useState('');
   const [addToGradeList, setAddToGradeList] = useState(false);
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   const params = useSearchParams();
   const { data: submissions } = useGetStudentSubmittedActivity({
@@ -58,7 +64,7 @@ export default function Page() {
           <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
             <div className='flex justify-center'>
               {url.length > 0 && (
-                <CustomPDFReader url={url} />
+                isDesktopOrLaptop ? <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)
               )}
             </div>
           </div>

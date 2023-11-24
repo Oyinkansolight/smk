@@ -256,3 +256,16 @@ export function extractMinutesFromString(inputString) {
 //function to render and preserve the structure of an html string in react
 export const renderHTML = (rawHTML: string) =>
   React.createElement('div', { dangerouslySetInnerHTML: { __html: rawHTML } });
+
+export const handleFlutterPDFReader = (url: string) => {
+  if (window) {
+    console.log('handleFlutterPDFReader', url);
+    (window as any).flutter_inappwebview?.callHandler('open-pdf', url);
+  }
+
+  return null;
+};
+
+export const stripWhiteSpace = (value: string) => {
+  return value.replace(/\s/g, '');
+};

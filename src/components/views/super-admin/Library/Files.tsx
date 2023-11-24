@@ -34,6 +34,8 @@ import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
 import { useDebounce } from 'usehooks-ts';
 import CustomPDFReader from '@/components/pdfReader/Reader';
+import { useMediaQuery } from 'react-responsive'
+import { handleFlutterPDFReader } from '@/lib/helper';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -308,6 +310,10 @@ const UploadDocument = ({
     mode: 'onChange',
   });
 
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  })
+
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
@@ -534,29 +540,35 @@ const UploadDocument = ({
           }
           className='max-w-[777px] w-full h-[267px]'
         />
+
         <ControlledModal
-          className='mt-40 lg:mt-6'
           isOpen={isModalOpen}
+          className='mt-10 lg:mt-6'
           toggleModal={toggleModal}
+          showModal={isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')}
           content={
-            <div className='flex items-stretch gap-10'>
-              <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
-                <div className='flex justify-center'>
-                  {url.length > 0 &&
-                    (mediaType === 'video' ? (
-                      <video
-                        src={url}
-                        controls
-                        title='Scripted lesson video player'
-                        className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
-                      ></video>
-                    ) : (
-                      // <SyncFusionPDFReader url={url} />
-                      <CustomPDFReader url={url} />
-                    ))}
+            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video') && isModalOpen ? (
+              <div className='flex items-stretch gap-10'>
+                <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
+                  <div className='flex justify-center'>
+                    {url.length > 0 &&
+                      (mediaType === 'video' ? (
+                        <video
+                          src={url}
+                          controls
+                          title='Scripted lesson video player'
+                          className='w-[90%] h-[60vh] md:h-[70vh] lg:h-[80vh]'
+                        ></video>
+                      ) : (
+                        // <SyncFusionPDFReader url={url} />
+                        <CustomPDFReader url={url} />
+                      ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              isModalOpen && url && handleFlutterPDFReader(url)
+            )
           }
         />
 

@@ -33,7 +33,7 @@ export default function ClockInClockOutTimeTable({ data }) {
       cell: (event) => (
         <div className='text-lg flex items-center gap-2 font-semibold whitespace-nowrap overflow-hidden'>
           {/* <div className='h-6 w-6 rounded-full bg-gray-200' /> */}
-          <div>{event.user.firstName}</div>
+          <div>{event?.user?.firstName ?? "No Username"}</div>
           <div className='bg-[#FFF3EF] text-[8px] font-normal text-[#FF6633] py-[2px] px-4 text-center rounded-2xl'>
             {event.user.type}
           </div>

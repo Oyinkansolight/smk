@@ -3,13 +3,19 @@
 import GenericLoader from '@/components/layout/Loader';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { getURL } from '@/firebase/init';
+import { handleFlutterPDFReader } from '@/lib/helper';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const params = useSearchParams();
   const [fileDownloadURL, setFileDownloadURL] = useState<string>('');
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: "(min-width: 1224px)",
+  });
 
   useEffect(() => {
     const run = async () => {
@@ -35,7 +41,9 @@ export default function Page() {
       </div> */}
       <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll mt-10'>
         <div className='flex justify-center'>
-          {fileDownloadURL === '' ? <GenericLoader /> : <CustomPDFReader url={fileDownloadURL} />}
+          {fileDownloadURL === '' ? <GenericLoader /> : (
+            isDesktopOrLaptop ? <CustomPDFReader url={fileDownloadURL} /> : handleFlutterPDFReader(fileDownloadURL)
+          )}
         </div>
       </div>
     </div>

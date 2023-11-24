@@ -117,6 +117,7 @@ export interface Staff {
   address?: string;
   lastName?: string;
   firstName?: string;
+  middleName?: string;
   nextOfKin?: string;
   staffType?: string;
   document?: Document;

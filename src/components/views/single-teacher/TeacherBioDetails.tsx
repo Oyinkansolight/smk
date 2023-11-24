@@ -28,28 +28,28 @@ export default function TeacherBioDetails({
 
   useEffect(() => {
     async function getLga() {
-      const foundLga: any = await localGovernments?.filter((local) => local.id === initStaff?.lga)[0].name;
+      const foundLga: any = await localGovernments?.filter(
+        (local) => local.id === initStaff?.lga
+      )[0].name;
 
       if (foundLga) {
-        setUserLga(foundLga)
+        setUserLga(foundLga);
         return;
       }
 
       if (initStaff?.lga && initStaff?.lga?.length < 20) {
-        setUserLga(initStaff?.lga)
+        setUserLga(initStaff?.lga);
         return;
       }
 
       if (!initStaff?.lga || (initStaff?.lga && initStaff?.lga?.length > 20)) {
-        setUserLga('None')
+        setUserLga('None');
         return;
       }
-    };
+    }
 
     getLga();
-  }, [localGovernments, initStaff?.lga, userLga])
-
-
+  }, [localGovernments, initStaff?.lga, userLga]);
 
   const onSubmit = async (data: any) => {
     if (initStaff?.id) {
@@ -85,8 +85,8 @@ export default function TeacherBioDetails({
           highestQualification: data.highestQualification,
           DateOfFirstAppointment: data.dateOfAppointment,
         },
-        trainingDetails
-      }
+        trainingDetails,
+      };
 
       if (data.phone) {
         payload.phoneNumber = data.phone;
@@ -115,7 +115,8 @@ export default function TeacherBioDetails({
       setValue('gender', initStaff?.gender);
       setValue(
         'fullName',
-        `${(initStaff?.user ?? {})?.firstName} ${(initStaff?.user ?? {})?.lastName
+        `${(initStaff?.user ?? {})?.firstName} ${
+          (initStaff?.user ?? {})?.lastName
         }`
       );
       setValue('dateOfBirth', initStaff.dob);
@@ -148,7 +149,16 @@ export default function TeacherBioDetails({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         {isEditing && (
-          <div className='flex justify-end my-5'>
+          <div className='flex justify-end space-x-2 my-5'>
+            <Button
+              onClick={() => {
+                setIsEditing(!isEditing);
+              }}
+              type='button'
+              variant='ghost'
+            >
+              Cancel
+            </Button>
             <Button type='submit' variant='secondary'>
               Update Changes
             </Button>
@@ -322,12 +332,12 @@ export default function TeacherBioDetails({
           />
         </div>
 
-
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Training History
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-          {initStaff?.trainingDetails && initStaff.trainingDetails.length > 0 ? (
+          {initStaff?.trainingDetails &&
+          initStaff.trainingDetails.length > 0 ? (
             initStaff.trainingDetails?.map((training, index) => (
               <>
                 <Controller
@@ -338,8 +348,10 @@ export default function TeacherBioDetails({
                       isEditing={isEditing}
                       label='Name/Title of Training'
                       placeholder='Enter Name/Title of Training'
-                      {...field.field} />
-                  )} />
+                      {...field.field}
+                    />
+                  )}
+                />
 
                 <Controller
                   control={control}
@@ -349,8 +361,10 @@ export default function TeacherBioDetails({
                       isEditing={isEditing}
                       label='Year'
                       placeholder='Enter Year'
-                      {...field.field} />
-                  )} />
+                      {...field.field}
+                    />
+                  )}
+                />
               </>
             ))
           ) : (
@@ -363,8 +377,10 @@ export default function TeacherBioDetails({
                     isEditing={isEditing}
                     label='Name/Title of Training'
                     placeholder='Enter Name/Title of Training'
-                    {...field.field} />
-                )} />
+                    {...field.field}
+                  />
+                )}
+              />
 
               <Controller
                 control={control}
@@ -374,13 +390,13 @@ export default function TeacherBioDetails({
                     isEditing={isEditing}
                     label='Year'
                     placeholder='Enter Year'
-                    {...field.field} />
-                )} />
+                    {...field.field}
+                  />
+                )}
+              />
             </>
           )}
-
         </div>
-
 
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Employment Details

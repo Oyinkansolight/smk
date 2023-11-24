@@ -640,6 +640,20 @@ export function useCreateClassArm() {
   return mutation;
 }
 
+export function useAssignSubjectToClassArm() {
+  const mutation = useMutation({
+    mutationKey: 'update-class-arm',
+    mutationFn: (params: any) =>
+      request.post(
+        '/v1/government/classes-subjects/assign-subject-to-classarm',
+        params,
+        {
+          withCredentials: true,
+        }
+      ),
+  });
+  return mutation;
+}
 export function useUpdateClassArm() {
   const mutation = useMutation({
     mutationKey: 'update-class-arm',
