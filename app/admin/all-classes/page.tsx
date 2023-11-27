@@ -325,7 +325,7 @@ const AllClasses = () => {
               </div>
             )}
 
-            {allClasses.paging.totalPage > 1 && (
+            {allClasses.paging.totalPage > 2 && (
               <div
                 onClick={() => handleCurrentPage(allClasses.paging.totalPage)}
                 className={clsxm(

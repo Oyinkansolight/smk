@@ -26,7 +26,7 @@ import {
   useUpdateStaffSubject,
 } from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
@@ -42,6 +42,8 @@ const Page = () => {
   const [isAddSubject, setisAddSubject] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState('/images/teacher_1.png');
+
+  const [computedSubjectCount, setComputedSubjectCount] = useState(0);
 
   const p = useSearchParams();
   const { data, error } = useGetTeacherById({
@@ -65,6 +67,22 @@ const Page = () => {
       { classArmId: null, subjectId: null },
     ]);
   };
+
+  useMemo(() => {
+    //* Get total number of subjects a teacher is teaching by using the subject id
+    const seenSubjects = new Set();
+    const getTotalSubjects = () => {
+      SubjectsList?.map((item: any) => {
+        if (!seenSubjects.has(item.subject.id)) {
+          seenSubjects.add(item.subject.id);
+        }
+      });
+
+      setComputedSubjectCount(seenSubjects.size);
+    };
+
+    getTotalSubjects();
+  }, [SubjectsList])
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -227,8 +245,8 @@ const Page = () => {
                 </Button>
               </div>
               <StudentDashboardView
-                classCount={staff ? staff.classes.length : 0}
-                subjectCount={staff ? staff.subjects.length : 0}
+                subjectCount={computedSubjectCount}
+                classCount={staff ? staff.subjects.length : 0}
                 managedClass={staff ? staff.managedClassArm : {}}
               />
             </div>
