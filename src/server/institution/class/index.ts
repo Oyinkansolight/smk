@@ -35,7 +35,7 @@ export function useGetInstituteClassArms(
     queryFn: async () => {
       if (instituteId || currentSessionId) {
         const d = await request.get(
-          `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}`
+          `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}&limit=30`
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return d.data.data.data as any;
