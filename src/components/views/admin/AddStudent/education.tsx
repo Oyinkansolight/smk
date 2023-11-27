@@ -17,10 +17,14 @@ const Education = ({ register, errors }: Iprops) => {
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
-  const { data: allClasses } = useGetInstituteClassArms(
+
+  const params = {
     institutionId,
-    currentSessionId
-  );
+    currentSessionId,
+  };
+
+  const { data: allClasses } = useGetInstituteClassArms({ ...params });
+
   // const { data: teachers } = useGetTeachersListByInstitution({
   //   instituteId: institutionId,
   // });
