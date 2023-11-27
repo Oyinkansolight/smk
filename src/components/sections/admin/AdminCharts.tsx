@@ -168,7 +168,7 @@ const AdminCharts = ({
             />
 
             <GenericChart
-              title='Click In/Out Logs'
+              title='Clock In/Out Logs'
               content={
                 clockInOutLog ? (
                   <ClockInClockOutTable data={clockInOutLog} />
