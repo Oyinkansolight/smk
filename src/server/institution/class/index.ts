@@ -3,7 +3,7 @@ import logger from '@/lib/logger';
 import request from '@/server';
 import { PaginationParams } from '@/types';
 import { Class } from '@/types/classes-and-subjects';
-import { InstituteClass } from '@/types/institute';
+import { InstituteClass, InstituteClassArmsParams } from '@/types/institute';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
@@ -22,20 +22,29 @@ export function useGetInstituteClass(
   });
   return query;
 }
-export function useGetInstituteClassArms(
-  instituteId?: string,
-  currentSessionId?: string,
-  enabled?: boolean
-) {
-  if (enabled !== false) enabled = true;
+
+export function useGetInstituteClassArms(params?: InstituteClassArmsParams) {
+  if (params && params.enabled !== false) params.enabled = true;
+
+  const { enabled, institutionId, currentSessionId }: any = params;
 
   const query = useQuery({
     enabled,
     queryKey: 'get_institute_class_arm',
     queryFn: async () => {
-      if (instituteId || currentSessionId) {
+      if (institutionId || currentSessionId) {
         const d = await request.get(
-          `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}&limit=30`
+          `/v1/institutions/class-arm/get-institution-class-arm`,
+          {
+            // `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}&limit=30`
+            params: {
+              page: params?.page,
+              limit: params?.limit,
+              // query: params?.query,
+              institutionId,
+              sessionId: currentSessionId,
+            },
+          }
         );
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return d.data.data.data as any;
@@ -46,7 +55,14 @@ export function useGetInstituteClassArms(
   const { refetch } = query;
   useEffect(() => {
     refetch({ cancelRefetch: true });
-  }, [instituteId, currentSessionId, refetch]);
+  }, [
+    institutionId,
+    currentSessionId,
+    params?.limit,
+    params?.page,
+    params?.query,
+    refetch,
+  ]);
   return query;
 }
 

@@ -5,6 +5,7 @@ import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import ROUTES from '@/constant/routes';
+import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { useDeleteClass } from '@/server/government/classes_and_subjects';
@@ -13,9 +14,11 @@ import { useGetInstituteClassArms } from '@/server/institution/class';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -33,16 +36,55 @@ const AllClasses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string>();
 
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+    institutionId,
+    currentSessionId
+  });
+
   const {
     data: allClasses,
     isLoading,
     isError,
-  } = useGetInstituteClassArms(institutionId, currentSessionId);
+    refetch
+  } = useGetInstituteClassArms({ ...pagingData });
 
   const { data: staffs } = useGetTeachersListByInstitution({
     instituteId: institutionId,
     limit: 50,
   });
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
+
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  }
+
+  const handleNextPage = () => {
+    setPagingData({ ...pagingData, page: pagingData.page + 1 });
+  };
+
+  const handlePrevPage = () => {
+    if (pagingData.page === 1) return;
+    setPagingData({ ...pagingData, page: pagingData.page - 1 });
+  };
+
+  const handleJumpToStart = () => {
+    setPagingData({ ...pagingData, page: 1 });
+  };
+
+  const handleJumpToEnd = () => {
+    if (allClasses)
+      setPagingData({ ...pagingData, page: allClasses?.paging?.totalPage });
+  };
 
   const getTeacher = (teacherId: number) => {
     const teacherInfo = (staffs?.data ?? []).find(
@@ -69,6 +111,17 @@ const AllClasses = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch();
+      }
+    };
+
+    refetchSearchRecords();
+  }, [refetch, debouncedSearchTerm]);
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
       <ControlledModal
@@ -112,7 +165,7 @@ const AllClasses = () => {
           <select name='' className='border-none bg-transparent outline-none'>
             <option value=''>Filter</option>
           </select>
-          <BasicSearch />
+          <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
         </div>
       </div>
 
@@ -189,6 +242,137 @@ const AllClasses = () => {
             ) : (
               <div className='py-10 text-center'>No Class Arm Found</div>
             )}
+          </div>
+        )}
+
+        {allClasses && allClasses?.data?.length > 0 && (
+          <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
+            <button
+              onClick={handleJumpToStart}
+              disabled={pagingData.page === 1}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
+              <BiChevronsLeft />
+            </button>
+
+            <button
+              onClick={handlePrevPage}
+              disabled={pagingData.page === 1}
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
+              <svg
+                width='6'
+                height='8'
+                viewBox='0 0 6 8'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  fillRule='evenodd'
+                  clipRule='evenodd'
+                  d='M4.43018 0.169922L5.83643 1.5764L3.72705 3.68612L5.83643 5.79583L4.43018 7.20231L0.914551 3.68612L4.43018 0.169922Z'
+                  fill='#8898AA'
+                />
+              </svg>
+            </button>
+
+            {Array(allClasses.paging.totalPage)
+              .fill(0)
+              .slice(0, 2)
+              .map((item, idx: number) => (
+                <div
+                  key={Math.random() * 100}
+                  onClick={() => handleCurrentPage(idx + 1)}
+                  className={clsxm(
+                    pagingData.page === idx + 1
+                      ? 'bg-[#008146] text-white'
+                      : 'bg-white text-gray-500',
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
+                  )}
+                >
+                  {idx + 1}
+                </div>
+              ))}
+
+            {allClasses.paging.totalPage > 3 && (
+              <div
+                key={Math.random() * 100}
+                className={clsxm(
+                  pagingData.page === 3 ||
+                    (pagingData.page > 3 &&
+                      pagingData.page < allClasses.paging.totalPage)
+                    ? 'bg-[#008146] text-white'
+                    : 'bg-white text-gray-500',
+                  'grid h-7 w-7 place-content-center rounded-full border p-2'
+                )}
+              >
+                {pagingData.page > 3 &&
+                  pagingData.page < allClasses.paging.totalPage
+                  ? pagingData.page
+                  : 3}
+              </div>
+            )}
+
+            {allClasses.paging.totalPage > 4 && (
+              <div
+                key={Math.random() * 100}
+                className={clsxm(
+                  'bg-white text-gray-500',
+                  'grid h-7 w-7 place-content-center rounded-full border p-2'
+                )}
+              >
+                ...
+              </div>
+            )}
+
+            {allClasses.paging.totalPage > 1 && (
+              <div
+                onClick={() => handleCurrentPage(allClasses.paging.totalPage)}
+                className={clsxm(
+                  pagingData.page === allClasses.paging.totalPage
+                    ? 'bg-[#008146] text-white'
+                    : 'bg-white text-gray-500',
+                  'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
+                )}
+              >
+                {allClasses.paging.totalPage}
+              </div>
+            )}
+
+            <button
+              onClick={handleNextPage}
+              disabled={
+                (allClasses && allClasses?.data?.length < 10) ||
+                pagingData.page === allClasses.paging.totalPage
+              }
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
+              <svg
+                width='6'
+                height='8'
+                viewBox='0 0 6 8'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  fillRule='evenodd'
+                  clipRule='evenodd'
+                  d='M2.32031 0.169922L0.914062 1.5764L3.02344 3.68612L0.914062 5.79583L2.32031 7.20231L5.83594 3.68612L2.32031 0.169922Z'
+                  fill='#8898AA'
+                />
+              </svg>
+            </button>
+
+            <button
+              onClick={handleJumpToEnd}
+              disabled={
+                (allClasses && allClasses?.data?.length < 10) ||
+                pagingData.page === allClasses.paging.totalPage
+              }
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+            >
+              <BiChevronsRight />
+            </button>
           </div>
         )}
       </div>
