@@ -36,10 +36,11 @@ function AddActivityName({
 
   const institutionId = institutionProfile?.userInfo?.esiAdmin?.id;
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
-  const { data: allClasses } = useGetInstituteClassArms(
+  const params = {
     institutionId,
     currentSessionId
-  );
+  }
+  const { data: allClasses } = useGetInstituteClassArms({ ...params });
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
