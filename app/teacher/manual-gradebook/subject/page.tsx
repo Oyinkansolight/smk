@@ -138,7 +138,8 @@ export default function Page() {
     <div className='h-full layout'>
       <BackButton />
       <div className='text-[#D4D5D7] py-8 text-xl'>
-        Grade Book {'>'} {params?.get('subjectName')}
+        Grade Book {'>'} {params?.get('subjectName')} -{' '}
+        {params?.get('classArmName')}
       </div>
       <div className='flex justify-between'>
         <h2 className='font-bold text-2xl'>{params?.get('subjectName')}</h2>
