@@ -286,7 +286,7 @@ const AllStaff = () => {
                       pagingData.page === idx + 1
                         ? 'bg-[#008146] text-white'
                         : 'bg-white text-gray-500',
-                      'grid h-7 w-7 place-content-center rounded-full border p-2'
+                      'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                     )}
                   >
                     {idx + 1}
@@ -331,7 +331,7 @@ const AllStaff = () => {
                     pagingData.page === staff.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
                   {staff.paging.totalPage}

@@ -42,6 +42,10 @@ const AllSubjects = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  }
+
   const handleSearch = (value: string) => {
     setName(value);
     setPagingData({ ...pagingData, page: 1, name: value });
@@ -281,11 +285,12 @@ const AllSubjects = () => {
               .map((item, idx: number) => (
                 <div
                   key={Math.random() * 100}
+                  onClick={() => handleCurrentPage(idx + 1)}
                   className={clsxm(
                     pagingData.page === idx + 1
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
                   {idx + 1}
@@ -325,6 +330,7 @@ const AllSubjects = () => {
 
             {data?.paging?.totalPage > 1 && (
               <div
+                onClick={() => handleCurrentPage(data.paging.totalPage)}
                 className={clsxm(
                   pagingData.page === data.paging.totalPage
                     ? 'bg-[#008146] text-white'
@@ -366,7 +372,7 @@ const AllSubjects = () => {
                 (data && data?.data?.length < 10) ||
                 pagingData.page === data.paging.totalPage
               }
-              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
+              className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300 cursor-pointer'
             >
               <BiChevronsRight />
             </button>
