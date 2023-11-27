@@ -47,6 +47,7 @@ const Education = ({
   const params = {
     institutionId,
     currentSessionId,
+    limit: 100
   };
 
   const { data: allClasses } = useGetInstituteClassArms({ ...params });
