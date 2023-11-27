@@ -18,23 +18,19 @@ export default function StudentDashboardView({
 
         <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px] mt-6'>
           <CountCard
-            count={classCount}
-            title='Assigned Class arm'
             variant='basic'
+            count={classCount}
+            title={classCount === 1 ? 'Assigned Class arm' : 'Assigned Class arms'}
           />
           <CountCard count='0%' title='Attendance rate' variant='basic' />
           <CountCard
-            count={subjectCount}
-            title={
-              subjectCount === 0 || subjectCount > 1
-                ? 'Total Subjects'
-                : 'Total Subject'
-            }
             variant='basic'
+            count={subjectCount}
+            title='Total Subjects'
           />
           {managedClass?.arm &&
             <CountCard
-              count={managedClass?.arm ?? 'No class'}
+              count={`${managedClass?.class?.name} ${managedClass?.arm}` ?? 'No class'}
               title='Class Teacher'
               variant='basic'
             />}
