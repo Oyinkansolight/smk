@@ -776,3 +776,54 @@ export function useGetTeacherAttendanceLog() {
   });
   return query;
 }
+
+export function useGetStaffTransferRequests(
+  params?: Partial<PaginationParams>
+) {
+  const query = useQuery({
+    queryKey: 'get_staff_transfer_requests',
+    queryFn: async () => {
+      try {
+        const d = await request.get('/v1/institutions/staff/transfers', {
+          params,
+        });
+        return d.data.data as PaginatedData<any>;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
+
+export function useGetStudentTransferRequests(
+  params?: Partial<PaginationParams>
+) {
+  const query = useQuery({
+    queryKey: 'get_student_transfer_requests',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/institutions/student_transfer_request',
+          {
+            params,
+          }
+        );
+        return d.data.data as PaginatedData<any>;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
