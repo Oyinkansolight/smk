@@ -23,8 +23,6 @@ const BarChart = ({ data }) => {
   if (isEmpty) {
     return <EmptyView label='No Data' />;
   }
-  
-  console.log(data);
 
   return (
     <div className='h-[368px]'>

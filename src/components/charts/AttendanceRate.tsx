@@ -100,8 +100,8 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
                     enableArcLinkLabels={false}
                     legends={[
                       {
-                        anchor: 'bottom',
-                        direction: 'row',
+                        anchor: 'bottom-left',
+                        direction: 'column',
                         justify: false,
                         translateX: 10,
                         translateY: 56,
@@ -163,8 +163,8 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
                     enableArcLinkLabels={false}
                     legends={[
                       {
-                        anchor: 'bottom',
-                        direction: 'row',
+                        anchor: 'bottom-left',
+                        direction: 'column',
                         justify: false,
                         translateX: 10,
                         translateY: 56,
