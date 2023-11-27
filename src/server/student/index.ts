@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logger from '@/lib/logger';
 import request from '@/server';
+import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 interface timetableArg {
@@ -27,6 +29,50 @@ export function useGetTodaysPeriod({
   return query;
 }
 
+// v1/government/test_exam_score/get-student-subject-position?sessionId=d43a694d-6aa2-4642-8a84-52242d78d2e3&termId=6bcab477-8f8f-4586-9740-783e5760c198&studentId=33a87767-3684-4540-b1d5-5d1ad7bd8808&classArmId=14a4ebbd-5280-4934-a6d2-e371b3cbe594
+export function useGetStudentReportCard(params?: {
+  studentId?: string;
+  termId?: string;
+  sessionId?: string;
+  classArmId?: string;
+}) {
+  const query = useQuery({
+    queryKey: `get_student_subject_position_${params?.studentId}`,
+    queryFn: async () => {
+      if (
+        params?.classArmId &&
+        params?.studentId &&
+        params?.sessionId &&
+        params?.termId
+      ) {
+        try {
+          const d = await request.get(
+            '/v1/government/test_exam_score/get-student-subject-position',
+            {
+              params,
+            }
+          );
+          return d.data.data.data;
+        } catch (error) {
+          logger(error);
+          throw error;
+        }
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [
+    params?.studentId,
+    params?.classArmId,
+    params?.termId,
+    params?.sessionId,
+    refetch,
+  ]);
+
+  return query;
+}
 export function useSubmitActivity() {
   const mutation = useMutation({
     mutationKey: 'submit-activity',

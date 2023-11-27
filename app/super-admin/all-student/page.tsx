@@ -49,6 +49,10 @@ const AllStudent = () => {
     setPagingData({ ...pagingData, page: 1, query: value });
   };
 
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  }
+
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
   };
@@ -266,11 +270,12 @@ const AllStudent = () => {
                 .map((item, idx: number) => (
                   <div
                     key={Math.random() * 100}
+                    onClick={() => handleCurrentPage(idx + 1)}
                     className={clsxm(
                       pagingData.page === idx + 1
                         ? 'bg-[#008146] text-white'
                         : 'bg-white text-gray-500',
-                      'grid h-7 w-7 place-content-center rounded-full border p-2'
+                      'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                     )}
                   >
                     {idx + 1}
@@ -310,11 +315,12 @@ const AllStudent = () => {
 
               {students.paging.totalPage > 1 && (
                 <div
+                  onClick={() => handleCurrentPage(students.paging.totalPage)}
                   className={clsxm(
                     pagingData.page === students.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
                   {students.paging.totalPage}

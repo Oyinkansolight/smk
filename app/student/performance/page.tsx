@@ -1,9 +1,12 @@
 'use client';
 
 import Result from '@/components/cards/Result';
+import EmptyView from '@/components/misc/EmptyView';
 import EditRequest from '@/components/modal/EditRequest';
 import EditStudentProfile from '@/components/modal/EditStudentProfile';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
+import { useGetStudentReportCard } from '@/server/student';
 // import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
@@ -22,6 +25,24 @@ const Page = () => {
   function handleEditModal() {
     seteditContent(!editContent);
   }
+
+  const userData = getFromSessionStorage('user');
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+
+  let user;
+  let currentTermInfo;
+
+  if (userData && currentTerm) {
+    user = JSON.parse(userData);
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const { data } = useGetStudentReportCard({
+    studentId: user?.currentStudentInfo?.id ?? '',
+    termId: currentTermInfo?.id ?? '',
+    sessionId: currentSessionId,
+    classArmId: user?.currentStudentInfo?.class?.id,
+  });
 
   return (
     <div className='flex gapx-4 gap-y-10'>
@@ -60,35 +81,30 @@ const Page = () => {
         <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
           <Result
             Icon={Lightup}
-            upperLimit='98'
-            lowerLimit='120'
+            upperLimit='N/A'
+            lowerLimit='N/A'
             subtitle='Position in class'
           />
           <Result
             Icon={Lightupyellow}
-            upperLimit='524'
-            lowerLimit='920'
+            upperLimit='N/A'
+            lowerLimit='N/A'
             subtitle='Total Exam Score'
           />
           <Result
             Icon={Lightupblue}
-            upperLimit='89%'
+            upperLimit='0%'
             subtitle='Average Exam Score'
           />
           <Result
             Icon={Lightup}
-            upperLimit='PASSED'
-            subtitle='Average Exam Score'
+            upperLimit='N/A'
+            subtitle='Average Exam grade'
           />
-          <Result
-            Icon={Lightup}
-            upperLimit='524'
-            lowerLimit='920'
-            subtitle='Total Exam Score'
-          />
+
           <Result
             Icon={Lightupblue}
-            upperLimit='89%'
+            upperLimit='0%'
             subtitle='Attendance Rate'
           />
         </div>
@@ -101,9 +117,9 @@ const Page = () => {
                 <div className='col-span-3'>
                   <p className=''>Subjects</p>
                 </div>
-                <div className='col-span-1 transform rotate-90'>
+                <div className='col-span-1 '>
                   {' '}
-                  <div className=' transform rotate-90'> Assessment 1</div>
+                  <div className=' '> Assessment 1</div>
                 </div>
                 <div className='col-span-1'>Assessment 2</div>
                 <div className='col-span-1'>Examination</div>
@@ -113,7 +129,7 @@ const Page = () => {
                 <div className='col-span-1'>Remark</div>
               </div>
 
-              <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
+              {/* <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
                 <div className='col-span-3'>
                   <p className=''>Geography</p>
                 </div>
@@ -124,55 +140,9 @@ const Page = () => {
                 <div className='col-span-1 text-secondary-300'>4th</div>
                 <div className='col-span-1'>B</div>
                 <div className='col-span-1'>Good</div>
-              </div>
-              <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
-                <div className='col-span-3'>
-                  <p className=''>Mathematics</p>
-                </div>
-                <div className='col-span-1'>14</div>
-                <div className='col-span-1'>12</div>
-                <div className='col-span-1'>60</div>
-                <div className='col-span-1'>84</div>
-                <div className='col-span-1 text-secondary-300'>4th</div>
-                <div className='col-span-1'>B</div>
-                <div className='col-span-1'>Good</div>
-              </div>
-              <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
-                <div className='col-span-3'>
-                  <p className=''>Further Maths</p>
-                </div>
-                <div className='col-span-1'>14</div>
-                <div className='col-span-1'>12</div>
-                <div className='col-span-1'>60</div>
-                <div className='col-span-1'>84</div>
-                <div className='col-span-1 text-secondary-300'>4th</div>
-                <div className='col-span-1'>B</div>
-                <div className='col-span-1'>Good</div>
-              </div>
-              <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
-                <div className='col-span-3'>
-                  <p className=''>Government</p>
-                </div>
-                <div className='col-span-1'>14</div>
-                <div className='col-span-1'>12</div>
-                <div className='col-span-1'>60</div>
-                <div className='col-span-1'>84</div>
-                <div className='col-span-1 text-secondary-300'>4th</div>
-                <div className='col-span-1'>B</div>
-                <div className='col-span-1'>Good</div>
-              </div>
-              <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
-                <div className='col-span-3'>
-                  <p className=''>Social Studies</p>
-                </div>
-                <div className='col-span-1'>14</div>
-                <div className='col-span-1'>12</div>
-                <div className='col-span-1'>60</div>
-                <div className='col-span-1'>84</div>
-                <div className='col-span-1 text-secondary-300'>4th</div>
-                <div className='col-span-1'>B</div>
-                <div className='col-span-1'>Good</div>
-              </div>
+              </div> */}
+
+              <EmptyView label='No Result Recorded' useStandardHeight />
             </div>
           </div>
 

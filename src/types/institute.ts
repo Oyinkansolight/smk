@@ -569,3 +569,16 @@ export interface AssignStudentToParent {
   id: string;
   studentId: string;
 }
+
+// instituteId?: string,
+//   currentSessionId?: string,
+//   enabled?: boolean
+
+export interface InstituteClassArmsParams {
+  page?: number;
+  limit?: number;
+  query?: string;
+  enabled?: boolean;
+  instituteId?: string;
+  currentSessionId?: string;
+}
