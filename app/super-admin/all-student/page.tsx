@@ -49,6 +49,10 @@ const AllStudent = () => {
     setPagingData({ ...pagingData, page: 1, query: value });
   };
 
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  }
+
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
   };
@@ -266,6 +270,7 @@ const AllStudent = () => {
                 .map((item, idx: number) => (
                   <div
                     key={Math.random() * 100}
+                    onClick={() => handleCurrentPage(idx + 1)}
                     className={clsxm(
                       pagingData.page === idx + 1
                         ? 'bg-[#008146] text-white'
