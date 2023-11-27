@@ -315,6 +315,7 @@ const AllStudent = () => {
 
               {students.paging.totalPage > 1 && (
                 <div
+                  onClick={() => handleCurrentPage(students.paging.totalPage)}
                   className={clsxm(
                     pagingData.page === students.paging.totalPage
                       ? 'bg-[#008146] text-white'

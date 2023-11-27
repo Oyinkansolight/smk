@@ -326,6 +326,7 @@ const AllStaff = () => {
 
               {staff.paging.totalPage > 1 && (
                 <div
+                  onClick={() => handleCurrentPage(staff.paging.totalPage)}
                   className={clsxm(
                     pagingData.page === staff.paging.totalPage
                       ? 'bg-[#008146] text-white'
