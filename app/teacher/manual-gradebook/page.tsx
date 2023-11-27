@@ -61,10 +61,12 @@ export default function Page() {
                 <GradeSubjectCard
                   key={v.id}
                   className={colors[0]}
-                  subject={v.subject?.name ?? 'N/A'}
+                  subject={
+                    v ? `${v.subject?.name} ${v?.class?.class?.name}` : 'N/A'
+                  }
                   onClick={() => {
                     router.push(
-                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}`
+                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}&classArmName=${v?.class?.class?.name}`
                     );
                   }}
                 />
@@ -97,7 +99,7 @@ export default function Page() {
                   subject={v.name ?? 'N/A'}
                   onClick={() => {
                     router.push(
-                      `/teacher/manual-gradebook/subject?id=${v.id}&subjectName=${v.name}&classArmId=${classArmInfo.id}`
+                      `/teacher/manual-gradebook/subject?id=${v.id}&subjectName=${v.name}&classArmId=${classArmInfo.id}&classArmName=${v?.class?.class?.name}`
                     );
                   }}
                 />

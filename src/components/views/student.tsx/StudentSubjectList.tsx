@@ -202,7 +202,9 @@ export default function SubjectList({
                             setSubjectName(v?.subject?.name);
                           }}
                         >
-                          {v?.subject?.name ?? 'Subject Name'}
+                          {v?.subject
+                            ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                            : 'Subject Name'}
                         </div>
                       </div>
                     ))}
