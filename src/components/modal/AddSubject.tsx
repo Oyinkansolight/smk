@@ -38,7 +38,8 @@ function AddActivityName({
   const currentSessionId = institutionProfile?.currentSession?.[0]?.id;
   const params = {
     institutionId,
-    currentSessionId
+    currentSessionId,
+    limit: 100
   }
   const { data: allClasses } = useGetInstituteClassArms({ ...params });
 

@@ -21,6 +21,7 @@ const Education = ({ register, errors }: Iprops) => {
   const params = {
     institutionId,
     currentSessionId,
+    limit: 100
   };
 
   const { data: allClasses } = useGetInstituteClassArms({ ...params });
