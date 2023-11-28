@@ -15,6 +15,7 @@ type Iprops = {
 };
 const Contact = ({ handleParentId }: Iprops) => {
   const [open, setOpen] = useState(false);
+  const [selectedParent, setSelectedParent] = useState(['']);
   const [itemIndex, setItemIndex] = useState<null | number>(null);
 
   const [query, setQuery] = useState('');
@@ -42,15 +43,22 @@ const Contact = ({ handleParentId }: Iprops) => {
     setItemIndex(index);
   };
 
-  const getSelectedParent = () => {
-    if (!itemIndex) return [""];
 
-    console.log(`${parents?.data[itemIndex]?.lastName} ${parents?.data[itemIndex]?.firstName}`);
+  useEffect(() => {
+    const getSelectedParent = (index) => {
+      if (!index) return;
 
-    return [
-      `${parents?.data[itemIndex]?.lastName} ${parents?.data[itemIndex]?.firstName}`
-    ]
-  };
+      setSelectedParent([
+        `${parents?.data[index]?.lastName} ${parents?.data[index]?.firstName}`
+      ])
+    };
+
+    if (itemIndex) {
+      getSelectedParent(itemIndex);
+    }
+  }
+    , [itemIndex, parents?.data]);
+
 
   useEffect(() => {
     const searchRecords = () => {
@@ -89,7 +97,7 @@ const Contact = ({ handleParentId }: Iprops) => {
       />
 
       <div className='my-10'>
-        <Select onClick={() => setOpen(!open)} label="All Parents" options={getSelectedParent()} />
+        <Select onClick={() => setOpen(!open)} label="All Parents" options={selectedParent} formValue={selectedParent[0]} />
       </div>
     </section>
   );
