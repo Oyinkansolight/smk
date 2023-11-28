@@ -35,6 +35,10 @@ const Contact = ({ register, errors }: Iprops) => {
             register={register}
             validation={{
               required: 'Phone Number is required',
+              maxLength: {
+                value: 11,
+                message: 'Phone Number should not exceed 11 characters',
+              },
             }}
             helper={
               errors?.phoneNumber && {
@@ -173,6 +177,10 @@ const Contact = ({ register, errors }: Iprops) => {
             register={register}
             validation={{
               required: 'Phone number  of next of kin is required',
+              maxLength: {
+                value: 11,
+                message: 'Phone Number should not exceed 11 characters',
+              },
             }}
             helper={
               errors?.phoneOfNextOfKin && {

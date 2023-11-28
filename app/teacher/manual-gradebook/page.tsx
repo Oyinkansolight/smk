@@ -62,11 +62,13 @@ export default function Page() {
                   key={v.id}
                   className={colors[0]}
                   subject={
-                    v ? `${v.subject?.name} ${v?.class?.class?.name}` : 'N/A'
+                    v
+                      ? `${v.subject?.name} ${v?.class?.class?.name} ${v?.class?.arm}`
+                      : 'N/A'
                   }
                   onClick={() => {
                     router.push(
-                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}&classArmName=${v?.class?.class?.name}`
+                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}&classArmName=${v?.class?.class?.name} ${v?.class?.arm}`
                     );
                   }}
                 />
@@ -99,7 +101,7 @@ export default function Page() {
                   subject={v.name ?? 'N/A'}
                   onClick={() => {
                     router.push(
-                      `/teacher/manual-gradebook/subject?id=${v.id}&subjectName=${v.name}&classArmId=${classArmInfo.id}&classArmName=${v?.class?.class?.name}`
+                      `/teacher/manual-gradebook/subject?id=${v.id}&subjectName=${v.name}&classArmId=${classArmInfo.id}&classArmName=${v?.class?.class?.name} ${v?.class?.arm}`
                     );
                   }}
                 />

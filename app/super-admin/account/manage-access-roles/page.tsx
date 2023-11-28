@@ -1,13 +1,9 @@
 'use client';
 
-import Button from '@/components/buttons/Button';
-import PermissionsEditor from '@/components/input/PermissionsEditor';
-import AddNewRoleSuperAdminModal from '@/components/modals/add-new-role-super-admin-modal';
-import AccountSettingsSideBar from '@/components/views/account-settings/AccountSettingsSideBar';
-import Cookies from 'js-cookie';
+import SearchInput from '@/components/input/SearchInput';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { IoMdAdd } from 'react-icons/io';
+import { useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 
 const roles = [
@@ -15,23 +11,38 @@ const roles = [
     role: 'Super Administrator',
     description:
       'This role grant users the permissions to manage everything on the dashboard.',
-    children: [
+    permissions: [
       {
-        role: 'His Excellency',
-        description:
-          'This role is for His Excellency & HCE / Executive Chairman / Board Secretary.',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
       {
-        role: 'Honorable Commissioner of Education(HCE)',
-        description: '',
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
       },
       {
-        role: 'Executive Chairman',
-        description: '',
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
       },
       {
-        role: 'Board Secretary',
-        description: '',
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
+      },
+      {
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
+      },
+      {
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
+      },
+      {
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
+      },
+      {
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
       },
     ],
   },
@@ -39,23 +50,30 @@ const roles = [
     role: 'Head Quarter Staff (MOE)',
     description:
       'This role grant users the permissions to manage everything on the dashboard.',
-    children: [
+    permissions: [
       {
-        role: 'Director',
-        description:
-          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
       {
-        role: 'EMIS Head',
-        description: 'This role is for the Head Quarter Staff (MOE).',
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
       },
       {
-        role: `Chief Education Officers (CEO's)`,
-        description: 'This role is for the EMIS Head.',
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
       },
       {
-        role: 'Examination and Institution Support Services (ESSS)',
-        description: 'Examination and Institution Support Services (ESSS)',
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
+      },
+      {
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
+      },
+      {
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
       },
     ],
   },
@@ -63,28 +81,26 @@ const roles = [
     role: 'SUBEB Staff',
     description:
       'This role grant users the permissions to manage everything on the dashboard.',
-    children: [
+    permissions: [
       {
-        role: 'Director',
-        description:
-          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
       {
-        role: 'EMIS Head',
-        description: 'This role is for the EMIS Head.',
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
       },
       {
-        role: 'Education Secretary',
-        description: 'Education Secretary.',
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
       },
       {
-        role: `LGEA's`,
-        description: `This role is for the LGEA's.`,
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
       },
       {
-        role: `Institution Based Management Committee(SBMC)`,
-        description:
-          'This role is for the Institution Based Management Committee(SBMC).',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
     ],
   },
@@ -92,20 +108,38 @@ const roles = [
     role: 'SSEB Staff',
     description:
       'This role grant users the permissions to manage everything on the dashboard.',
-    children: [
+    permissions: [
       {
-        role: 'Director',
-        description:
-          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
       {
-        role: 'EMIS Head',
-        description: 'This role is for the EMIS Head.',
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
       },
       {
-        role: `Institution Based Management Board(SMB)`,
-        description:
-          'This role is for the Institution Based Management Board(SMB).',
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
+      },
+      {
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
+      },
+      {
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
+      },
+      {
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
+      },
+      {
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
+      },
+      {
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
       },
     ],
   },
@@ -113,44 +147,43 @@ const roles = [
     role: 'BTVET',
     description:
       'This role grant users the permissions to manage everything on the dashboard.',
-    children: [
+    permissions: [
       {
-        role: 'Director',
-        description:
-          'This role is for the Ministry of Education Staff such as, Directors, EMIS Heads, e.t.c',
+        label: 'CREATE_INSTITUTION',
+        description: 'You can create and add new institution as an admin',
       },
       {
-        role: 'EMIS Head',
-        description: 'This role is for the EMIS Head.',
+        label: 'VIEW_INSTITUTION',
+        description: 'You can view details of institution as an admin',
+      },
+      {
+        label: 'EDIT_INSTITUTION',
+        description: 'You can edit details of institution as an admin',
+      },
+      {
+        label: 'DELETE_INSTITUTION',
+        description: 'You can delete institution as an admin',
       },
     ],
   },
 ];
 
 export default function Page() {
-  const [selectedRole, setSelectedRole] = useState({ item: 0, child: 0 });
+  const [selectedRole, setSelectedRole] = useState(roles[0]);
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const AT = Cookies.get('adminType');
-
-    if (AT === 'NORMAL') {
-      setSelectedRole({ item: 4, child: 0 });
-    }
-  }, []);
 
   return (
     <div className='h-full px-12'>
       <div
         onClick={() => router.back()}
-        className='cursor-pointer flex items-center'
+        className='cursor-pointer flex items-center my-4'
       >
         <MdArrowBackIos className='text-[#42BBFF]' />
-        <div>Dashboard</div>
+        <div>Back</div>
       </div>
-      <div className='text-3xl font-bold py-8'>Manage Access Roles</div>
-      <div className='flex h-full'>
+      <div className='text-3xl font-bold py-8'>Manage Roles</div>
+      {/* <div className='flex h-full'>
         <div>
           <AccountSettingsSideBar
             items={roles.map((v) => ({
@@ -197,10 +230,66 @@ export default function Page() {
           <div className='text-xl uppercase'>Permissions</div>
           <div className='h-8' />
           <PermissionsEditor
-            key={`${roles[selectedRole.item].children[selectedRole.child].role
-              }`}
+            key={`${
+              roles[selectedRole.item].children[selectedRole.child].role
+            }`}
             isEditing={isEditing}
           />
+        </div>
+      </div> */}
+
+      <div className='grid grid-cols-12 gap-4'>
+        <div className='col-span-3 w-full'>
+          <div className='space-y-2 border-b mb-2 w-full'>
+            <h2 className='text-[#8898AA] font-semibold text-lg'>All Roles</h2>
+            <div className='flex justify-end text-[#016938]  text-xs'>
+              <Link href='/super-admin/account/add-custom-roles'>
+                + Add Custom Role
+              </Link>
+            </div>
+          </div>
+          <div className='mb-3'>
+            <SearchInput />
+          </div>
+          {roles.map((v, idx) => (
+            <div key={idx} className='border-b-2 py-2'>
+              <div
+                onClick={() => {
+                  setSelectedRole(v);
+                }}
+                className='text-base font-normal cursor-pointer text-[#333]'
+              >
+                {v.role}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className='col-span-9 bg-white w-full'>
+          <div className='flex justify-end p-2 w-full border-b'>
+            <button className='border border-[#016938] text-[#016938] rounded px-4 py-2'>
+              Manage
+            </button>
+          </div>
+          <div className='py-4'>
+            <div className='text-center'>
+              <h1 className='text-base font-medium'>{selectedRole.role}</h1>
+              <p className='text-[#929292]'>{selectedRole.description}</p>
+            </div>
+          </div>
+          <div className='rounded border'>
+            {selectedRole.permissions.map((items, idx) => (
+              <div key={idx}>
+                <div className='p-4 border-b'>
+                  <div className=''>
+                    <h1 className='text-base text-[#1D1B20] font-medium uppercase'>
+                      {items.label}
+                    </h1>
+                    <p className='text-[#7F7F7F]'>{items.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
