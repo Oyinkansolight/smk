@@ -26,6 +26,10 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllClasses = () => {
   const router = useRouter();
 
@@ -44,14 +48,14 @@ const AllClasses = () => {
     limit: 10,
     query,
     institutionId,
-    currentSessionId
+    currentSessionId,
   });
 
   const {
     data: allClasses,
     isLoading,
     isError,
-    refetch
+    refetch,
   } = useGetInstituteClassArms({ ...pagingData });
 
   const { data: staffs } = useGetTeachersListByInstitution({
@@ -66,7 +70,7 @@ const AllClasses = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -162,9 +166,6 @@ const AllClasses = () => {
       </div>
       <div className='flex justify-end'>
         <div className='flex w-[300px] space-x-2'>
-          <select name='' className='border-none bg-transparent outline-none'>
-            <option value=''>Filter</option>
-          </select>
           <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
         </div>
       </div>
@@ -307,7 +308,7 @@ const AllClasses = () => {
                 )}
               >
                 {pagingData.page > 3 &&
-                  pagingData.page < allClasses.paging.totalPage
+                pagingData.page < allClasses.paging.totalPage
                   ? pagingData.page
                   : 3}
               </div>

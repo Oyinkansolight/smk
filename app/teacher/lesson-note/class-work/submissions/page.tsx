@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
 import { ACTIVITY_TYPES } from '@/components/views/teacher/create-class-activity-view';
@@ -19,6 +20,7 @@ export default function Page() {
   });
   return (
     <div className='h-full layout'>
+      <BackButton />
       <div className='text-3xl pt-8 text-[#D4D5D7]'>
         {'Class Work > Submissions'}
       </div>

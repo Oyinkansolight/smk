@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import GenericLoader from '@/components/layout/Loader';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import { getURL } from '@/firebase/init';
@@ -26,6 +27,8 @@ export default function Page() {
 
   return (
     <div className='w-full layout'>
+      <BackButton />
+
       <div className='text-[#D4D5D7] py-8 text-lg lg:text-2xl'>
         <Link href='/teacher/lesson-note'>Lesson Tasks</Link>
 
