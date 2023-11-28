@@ -14,8 +14,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiChevronRight } from 'react-icons/bi';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -44,6 +46,19 @@ export default function Page() {
 
   return (
     <div className='h-full layout'>
+      <div
+        onClick={() => router.push("/teacher/lesson-note")}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        <Image
+          src='/svg/back.svg'
+          width={10}
+          height={10}
+          alt='back'
+          className='h-4 w-4'
+        />
+        <h3 className='text-[10px] font-medium'>Back</h3>
+      </div>
+
       <div className='font-bold text-3xl py-8 h3'>
         <div>Lesson Note</div>
       </div>
