@@ -179,72 +179,75 @@ const AllSubjects = () => {
         {isLoading ? (
           <div className='text-center'>Loading...</div>
         ) : (
-          (data?.data ?? []).map((item, idx) => (
-            <div
-              key={item.id ?? idx}
-              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-4'
-            >
+          data && data?.data.length > 0 ?
+            data?.data.map((item, idx) => (
               <div
-                className='col-span-3 text-[#525F7F] font-bold text-sm'
-                onClick={() => {
-                  router.push(`/super-admin/subject?id=${item.id ?? ''}`);
-                }}
+                key={item.id ?? idx}
+                className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-4'
               >
-                {item.name}
-              </div>
-              <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
-                {item?.classes?.length ?? '0'}{' '}
-              </div>
-              {/* <div className='col-span-3 text-center'>
-                {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
-              </div> */}
-              <div className='col-span-5 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
-                <button
+                <div
+                  className='col-span-3 text-[#525F7F] font-bold text-sm'
                   onClick={() => {
                     router.push(`/super-admin/subject?id=${item.id ?? ''}`);
                   }}
-                  className='hidden lg:block cursor-pointer text-primary text-sm leading-5'
                 >
-                  Click to manage
-                </button>
-                <div className='relative'>
-                  <CiMenuKebab
+                  {item.name}
+                </div>
+                <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
+                  {item?.classes?.length ?? '0'}{' '}
+                </div>
+                {/* <div className='col-span-3 text-center'>
+                {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
+              </div> */}
+                <div className='col-span-5 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
+                  <button
                     onClick={() => {
-                      setAction(idx + 1);
+                      router.push(`/super-admin/subject?id=${item.id ?? ''}`);
                     }}
-                    className='w-6 h-6 cursor-pointer'
-                  />
-
-                  {action == idx + 1 && (
-                    <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                      <AddSubjectModal>
-                        <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
-                          Edit
-                        </div>
-                      </AddSubjectModal>
-                      <div
-                        onClick={() => {
-                          setItemToDelete(item.id ?? '');
-                          toggleModal();
-                        }}
-                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                      >
-                        Delete
-                      </div>
-                    </div>
-                  )}
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
+                    className='hidden lg:block cursor-pointer text-primary text-sm leading-5'
+                  >
+                    Click to manage
+                  </button>
+                  <div className='relative'>
+                    <CiMenuKebab
                       onClick={() => {
-                        setAction(null);
+                        setAction(idx + 1);
                       }}
-                    ></div>
-                  )}
+                      className='w-6 h-6 cursor-pointer'
+                    />
+
+                    {action == idx + 1 && (
+                      <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                        <AddSubjectModal>
+                          <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                            Edit
+                          </div>
+                        </AddSubjectModal>
+                        <div
+                          onClick={() => {
+                            setItemToDelete(item.id ?? '');
+                            toggleModal();
+                          }}
+                          className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        >
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                    {action && (
+                      <div
+                        className='fixed inset-0 z-[1]'
+                        onClick={() => {
+                          setAction(null);
+                        }}
+                      ></div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            )) : (
+              <div className='text-center'>No record found</div>
+            )
         )}
 
         {/* //Pagination */}
