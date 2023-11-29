@@ -9,6 +9,7 @@ import DragDropDocument from '@/components/input/DragDropDocument';
 import TextArea from '@/components/input/TextArea';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
+import logger from '@/lib/logger';
 import { useGetProfile } from '@/server/auth';
 import {
   UploadFileParams,
@@ -116,6 +117,9 @@ export default function Page() {
             imageName={fileName ?? ''}
             setImageName={function (value: string): void {
               setFileName(value);
+            }}
+            setFileSize={function (value: number): void {
+              logger(value);
             }}
           />
           <Button className='my-10 w-full justify-center' type='submit'>

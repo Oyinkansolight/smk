@@ -92,7 +92,7 @@ export default function Page() {
   };
   const handleGenerateResult = async () => {
     delete genericPayload.limit;
-    delete genericPayload.institutionId;
+    // delete genericPayload.institutionId;
 
     try {
       setIsLoadingGenerateResult(true);
@@ -203,7 +203,9 @@ export default function Page() {
           </div>
           <div className='flex flex-col gap-4'>
             {StudentScoreSheet &&
-              StudentScoreSheet.map((student, i) => (
+              StudentScoreSheet.sort((a, b) =>
+                a.student.lastName.localeCompare(b.student.lastName)
+              ).map((student, i) => (
                 <StudentGradeListItem
                   key={student?.id ?? i}
                   id={i + 1}

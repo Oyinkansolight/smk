@@ -9,6 +9,27 @@ interface timetableArg {
   weekid?: number | string;
   day?: string;
 }
+export interface StudentResult {
+  subjectsGrades: SubjectsGrade[];
+  overallTotalScore: number;
+  classPosition: string;
+  studentId: string;
+}
+
+export interface SubjectsGrade {
+  id: string;
+  ca1_score: number;
+  ca2_score: number;
+  exams_score: number;
+  total: number;
+  grade: null;
+  remark: null;
+  subject: any;
+  position: null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: null;
+}
 
 export function useGetTodaysPeriod({
   classId,
@@ -36,6 +57,7 @@ export function useGetStudentReportCard(params?: {
   sessionId?: string;
   classArmId?: string;
 }) {
+  // government/students/report-card
   const query = useQuery({
     queryKey: `get_student_subject_position_${params?.studentId}`,
     queryFn: async () => {
@@ -46,13 +68,10 @@ export function useGetStudentReportCard(params?: {
         params?.termId
       ) {
         try {
-          const d = await request.get(
-            '/v1/government/test_exam_score/get-student-subject-position',
-            {
-              params,
-            }
-          );
-          return d.data.data.data;
+          const d = await request.get('/v1/government/students/report-card', {
+            params,
+          });
+          return d.data.data.data as StudentResult;
         } catch (error) {
           logger(error);
           throw error;

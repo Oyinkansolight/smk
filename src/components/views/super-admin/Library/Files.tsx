@@ -7,9 +7,11 @@ import UploadMaterial from '@/components/modal/UploadMaterial';
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
 import UpdateFolder from '@/components/modal/updateFolder';
+import CustomPDFReader from '@/components/pdfReader/Reader';
 import Table from '@/components/tables/TableComponent';
 import { getURL, updateDocumentMetadata } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
+import { handleFlutterPDFReader } from '@/lib/helper';
 import logger from '@/lib/logger';
 import {
   useAssignSubjectsToFile,
@@ -28,14 +30,12 @@ import { useForm } from 'react-hook-form';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
+import { useMediaQuery } from 'react-responsive';
 import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
 import FileContent from '~/svg/file.svg';
 import Folder from '~/svg/folder.svg';
 import VideoContent from '~/svg/media.svg';
-import { useDebounce } from 'usehooks-ts';
-import CustomPDFReader from '@/components/pdfReader/Reader';
-import { useMediaQuery } from 'react-responsive'
-import { handleFlutterPDFReader } from '@/lib/helper';
 
 type TableItemData = (UserFolder | UserFile) & {
   idx: number;
@@ -88,8 +88,8 @@ const columns: TableColumn<TableItemData>[] = [
         return (
           <div
             onClick={() => {
-              item.id && item.onFolderClick(item)
-              item.setQuery && item.setQuery("")
+              item.id && item.onFolderClick(item);
+              item.setQuery && item.setQuery('');
             }}
             className='col-span-4 cursor-pointer w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'
           >
@@ -164,7 +164,7 @@ const columns: TableColumn<TableItemData>[] = [
     name: 'Size',
     cell: (item) => {
       if ('fileUrl' in item) {
-        return <div>{item?.size ?? '-'}</div>;
+        return <div>{item?.size ?? '-'}Kb</div>;
       } else if ('folderName' in item) {
         return <div>{item?.size ?? '-'}</div>;
       }
@@ -311,8 +311,8 @@ const UploadDocument = ({
   });
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
-  })
+    query: '(min-width: 1224px)',
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
@@ -337,7 +337,6 @@ const UploadDocument = ({
   const debouncedSearchTerm = useDebounce(query, 1500);
 
   const pathname = usePathname();
-
 
   const toggleDeleteModal = () => {
     setIsModalDeleteOpen(!isModalDeleteOpen);
@@ -366,7 +365,7 @@ const UploadDocument = ({
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, "", query);
+  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, '', query);
 
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
@@ -400,12 +399,9 @@ const UploadDocument = ({
       const getFileURL = async () => {
         if (mediaType !== 'video') {
           const newMetadata = {
-            contentType: 'application/pdf'
+            contentType: 'application/pdf',
           };
-          await updateDocumentMetadata(
-            currentFile,
-            newMetadata
-          );
+          await updateDocumentMetadata(currentFile, newMetadata);
         }
 
         await getURL(currentFile).then((v) => setUrl(v));
@@ -420,12 +416,11 @@ const UploadDocument = ({
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm || debouncedSearchTerm === '') {
-        refetchFolderFiles()
+        refetchFolderFiles();
       }
     };
 
     refetchSearchRecords();
-
   }, [refetchFolderFiles, debouncedSearchTerm]);
 
   const handleUseAssignSubjectsToFile = useAssignSubjectsToFile();
@@ -457,8 +452,8 @@ const UploadDocument = ({
           subjectId:
             (
               getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+                | { label: string; value: number }[]
+                | undefined
             )?.map((s) => s.value ?? '0') ?? [],
         });
       } else {
@@ -467,14 +462,19 @@ const UploadDocument = ({
           subjectId:
             (
               getValues('subject') as
-              | { label: string; value: number }[]
-              | undefined
+                | { label: string; value: number }[]
+                | undefined
             )?.map((s) => s.value ?? '0') ?? [],
         });
       }
 
       if (response) {
-        const message = contentType === 'file' ? 'File' : contentType === 'video' ? 'Video' : 'Folder';
+        const message =
+          contentType === 'file'
+            ? 'File'
+            : contentType === 'video'
+            ? 'Video'
+            : 'Folder';
         toast.success(message + ' assigned successfully');
         setLoading(false);
         setIsAssign(!isAssign);
@@ -528,8 +528,9 @@ const UploadDocument = ({
           content={
             <DeleteModalContent
               title={`Delete ${contentType === 'file' ? 'File' : 'Folder'}`}
-              body={`Are you sure you want to delete this  ${contentType === 'file' ? 'file' : 'folder'
-                }?`}
+              body={`Are you sure you want to delete this  ${
+                contentType === 'file' ? 'file' : 'folder'
+              }?`}
               toggleModal={toggleDeleteModal}
               handleDelete={
                 contentType === 'file'
@@ -545,9 +546,12 @@ const UploadDocument = ({
           isOpen={isModalOpen}
           className='mt-10 lg:mt-6'
           toggleModal={toggleModal}
-          showModal={isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')}
+          showModal={
+            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')
+          }
           content={
-            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video') && isModalOpen ? (
+            isDesktopOrLaptop ||
+            (!isDesktopOrLaptop && mediaType === 'video' && isModalOpen) ? (
               <div className='flex items-stretch gap-10'>
                 <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                   <div className='flex justify-center'>
@@ -728,36 +732,36 @@ const UploadDocument = ({
                 )
                 ?.map(
                   (item, idx) =>
-                  ({
-                    ...item,
-                    action,
-                    isAssign,
-                    openModal,
-                    setQuery,
-                    setAction,
-                    setIsAssign,
-                    idx: item.id ? item.id : idx,
-                    setFileId,
-                    onFolderClick: (folder) => {
-                      const c = [...folderTrail];
-                      c.push(folder);
-                      setFolderTrail(c);
-                      refetchFolderFiles();
-                    },
-                    // setDeleteFolderId: async (folderId) => {
-                    //   handleFolderDeletion();
-                    // },
-                    // setDeleteFileId: async (fileId) => {
-                    //   handleFileDeletion();
-                    // },
-                    isSuperAdmin,
-                    setFolderId,
-                    setFolderName,
-                    isUpdateFolder,
-                    setIsUpdateFolder,
-                    setConentType,
-                    toggleDeleteModal,
-                  } as TableItemData)
+                    ({
+                      ...item,
+                      action,
+                      isAssign,
+                      openModal,
+                      setQuery,
+                      setAction,
+                      setIsAssign,
+                      idx: item.id ? item.id : idx,
+                      setFileId,
+                      onFolderClick: (folder) => {
+                        const c = [...folderTrail];
+                        c.push(folder);
+                        setFolderTrail(c);
+                        refetchFolderFiles();
+                      },
+                      // setDeleteFolderId: async (folderId) => {
+                      //   handleFolderDeletion();
+                      // },
+                      // setDeleteFileId: async (fileId) => {
+                      //   handleFileDeletion();
+                      // },
+                      isSuperAdmin,
+                      setFolderId,
+                      setFolderName,
+                      isUpdateFolder,
+                      setIsUpdateFolder,
+                      setConentType,
+                      toggleDeleteModal,
+                    } as TableItemData)
                 ) ?? []
             }
           />

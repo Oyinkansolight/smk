@@ -88,5 +88,5 @@ export interface SubjectList {
   limit?: number;
   page?: number;
   institutionType?: string | null;
-  name?: string | null;
+  query?: string | null;
 }

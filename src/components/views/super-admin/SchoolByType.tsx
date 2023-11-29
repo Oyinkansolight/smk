@@ -64,6 +64,10 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
     setPagingData({ ...pagingData, page: 1, query: value });
   };
 
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  }
+
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
   };
@@ -290,11 +294,12 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                 .map((item, idx: number) => (
                   <div
                     key={Math.random() * 100}
+                    onClick={() => handleCurrentPage(idx + 1)}
                     className={clsxm(
                       pagingData.page === idx + 1
                         ? 'bg-[#008146] text-white'
                         : 'bg-white text-gray-500',
-                      'grid h-7 w-7 place-content-center rounded-full border p-2'
+                      'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                     )}
                   >
                     {idx + 1}
@@ -334,11 +339,12 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
               {schools.paging.totalPage > 1 && (
                 <div
+                  onClick={() => handleCurrentPage(schools.paging.totalPage)}
                   className={clsxm(
                     pagingData.page === schools.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
                   {schools.paging.totalPage}

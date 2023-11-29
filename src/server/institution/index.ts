@@ -30,6 +30,15 @@ export interface CreateInstitutionParams {
   id?: string;
 }
 
+export interface StudentCountByType {
+  PRIMARY: number;
+  SECONDARY: number;
+  TERTIARY: number;
+  ECCDE: number;
+  TVET: number;
+  BTVET: number;
+}
+
 export interface CreateSubjectParams {
   name?: string;
   classId?: number[];
@@ -128,7 +137,7 @@ export function useGetSubjectList(params?: SubjectList) {
           `/v1/government/institutes/get-subject-list?${
             params?.limit ? `&limit=${params?.limit}` : ''
           }${params?.page ? `&page=${params?.page}` : ''}${
-            params?.name ? `&name=${params?.name}` : ''
+            params?.query ? `&query=${params?.query}` : ''
           }${
             params?.institutionType
               ? `&institutionType=${params?.institutionType}`
@@ -150,7 +159,7 @@ export function useGetSubjectList(params?: SubjectList) {
     params?.limit,
     params?.id,
     params?.page,
-    params?.name,
+    params?.query,
     params?.order,
     params?.institutionType,
     refetch,
@@ -196,6 +205,27 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
   useEffect(() => {
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
+  return query;
+}
+export function useGetStudentCountType(params: { userType: string }) {
+  const query = useQuery({
+    queryKey: 'get_student_list_by_type',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/dashboards/get-user-count-by-institution-type',
+          {
+            params,
+          }
+        );
+        return d.data as StudentCountByType;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
   return query;
 }
 

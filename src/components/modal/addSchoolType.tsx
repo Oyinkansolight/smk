@@ -1,6 +1,9 @@
 import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
+import { useCreateSchoolType } from '@/server/government/terms';
 import React, { useState } from 'react';
+import { ImSpinner } from 'react-icons/im';
+import { toast } from 'react-toastify';
 import Close from '~/svg/close.svg';
 
 interface propType {
@@ -8,9 +11,33 @@ interface propType {
 }
 
 function AddAdmin({ onClickHandler }: propType) {
-  const [role, setRole] = useState<string | number>('');
-  const [schoolEmail, setSchoolEmail] = useState<string | number>('');
-  const options = ['First', 'Second', 'Third'];
+  const [name, setName] = useState<number | string>('');
+  const [description, setDescription] = useState<number | string>('');
+  const [noOfTerm, setNoOfTerm] = useState<number | string>('');
+  const [loading, setLoading] = useState(false);
+
+  const handleCreateSchoolType = useCreateSchoolType();
+
+  async function addSchoolType() {
+    const payload = {
+      name,
+      description,
+      semester: noOfTerm,
+    };
+
+    setLoading(true);
+    const response = await handleCreateSchoolType.mutateAsync(payload);
+
+    if (response.status === 201) {
+      toast.success('SchoolType Added successfully');
+      onClickHandler();
+
+      setLoading(false);
+    } else {
+      toast.error('Error adding student');
+      setLoading(false);
+    }
+  }
 
   return (
     <div className='fixed inset-0 z-[999] grid place-content-center rounded-sm bg-black/30'>
@@ -30,10 +57,10 @@ function AddAdmin({ onClickHandler }: propType) {
           <div className='grid grid-cols-2 gap-6'>
             <div className='w-full'>
               <FormInput
-                type='email'
+                type='text'
                 label='Name*'
-                setFormValue={setSchoolEmail}
-                formValue={schoolEmail}
+                setFormValue={setName}
+                formValue={name}
                 placeholder='Details here'
               />
             </div>
@@ -41,9 +68,9 @@ function AddAdmin({ onClickHandler }: propType) {
             <div className='w-full'>
               <FormSelect
                 label='Select Terms/Semester*'
-                setFormValue={setRole}
-                formValue={role}
-                options={options}
+                setFormValue={setNoOfTerm}
+                formValue={noOfTerm}
+                options={[1, 2, 3, 4, 5]}
               />
             </div>
           </div>
@@ -51,8 +78,8 @@ function AddAdmin({ onClickHandler }: propType) {
             <FormInput
               type='text'
               label='Enter Description'
-              setFormValue={setSchoolEmail}
-              formValue={schoolEmail}
+              setFormValue={setDescription}
+              formValue={description}
               placeholder='Details here'
             />
           </div>
@@ -67,10 +94,10 @@ function AddAdmin({ onClickHandler }: propType) {
 
           <div className='flex justify-center'>
             <button
-              onClick={onClickHandler}
+              onClick={addSchoolType}
               className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
             >
-              Add School Type{' '}
+              {loading ? <ImSpinner /> : 'Add School Type'}
             </button>
           </div>
         </div>
