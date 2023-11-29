@@ -22,15 +22,15 @@ import { useDebounce } from 'usehooks-ts';
 const AllSubjects = () => {
   const router = useRouter();
 
-  const [name, setName] = useState('');
+  const [query, setQuery] = useState('');
   const [institutionType, setInstitutionType] = useState<string>('');
 
-  const debouncedSearchTerm = useDebounce(name, 1500);
+  const debouncedSearchTerm = useDebounce(query, 1500);
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
     institutionType,
-    name,
+    query,
   });
 
   const { data, error, isLoading, refetch } = useGetSubjectList({ ...pagingData });
@@ -47,7 +47,7 @@ const AllSubjects = () => {
   }
 
   const handleSearch = (value: string) => {
-    setName(value);
+    setQuery(value);
     setPagingData({ ...pagingData, page: 1, name: value });
   };
 

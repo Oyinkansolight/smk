@@ -128,7 +128,7 @@ export function useGetSubjectList(params?: SubjectList) {
           `/v1/government/institutes/get-subject-list?${
             params?.limit ? `&limit=${params?.limit}` : ''
           }${params?.page ? `&page=${params?.page}` : ''}${
-            params?.name ? `&name=${params?.name}` : ''
+            params?.query ? `&query=${params?.query}` : ''
           }${
             params?.institutionType
               ? `&institutionType=${params?.institutionType}`
@@ -150,7 +150,7 @@ export function useGetSubjectList(params?: SubjectList) {
     params?.limit,
     params?.id,
     params?.page,
-    params?.name,
+    params?.query,
     params?.order,
     params?.institutionType,
     refetch,
