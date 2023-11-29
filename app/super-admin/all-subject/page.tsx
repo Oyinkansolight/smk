@@ -246,7 +246,7 @@ const AllSubjects = () => {
                 </div>
               </div>
             )) : (
-              <div className='text-center'>No record found</div>
+              <div className='text-center py-4'>No record found</div>
             )
         )}
 
