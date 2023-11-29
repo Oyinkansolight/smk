@@ -44,6 +44,8 @@ const Page = () => {
     classArmId: user?.currentStudentInfo?.class?.id,
   });
 
+  console.log(data);
+
   return (
     <div className='flex gapx-4 gap-y-10'>
       {isEdit && (
@@ -81,13 +83,13 @@ const Page = () => {
         <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
           <Result
             Icon={Lightup}
-            upperLimit='N/A'
+            upperLimit={`${data ? data?.classPosition : 'N/A'}`}
             lowerLimit='N/A'
             subtitle='Position in class'
           />
           <Result
             Icon={Lightupyellow}
-            upperLimit='N/A'
+            upperLimit={`${data ? data?.overallTotalScore : 'N/A'}`}
             lowerLimit='N/A'
             subtitle='Total Exam Score'
           />
@@ -129,20 +131,40 @@ const Page = () => {
                 <div className='col-span-1'>Remark</div>
               </div>
 
-              {/* <div className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'>
-                <div className='col-span-3'>
-                  <p className=''>Geography</p>
+              {data && data.subjectsGrades.length > 0 ? (
+                <div>
+                  {data?.subjectsGrades.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'
+                    >
+                      <div className='col-span-3'>
+                        <p className=''>
+                          {item?.subject?.name ?? 'Subject_Name'}
+                        </p>
+                      </div>
+                      <div className='col-span-1'>
+                        {' '}
+                        {item?.ca1_score ?? 'N/A'}{' '}
+                      </div>
+                      <div className='col-span-1'>
+                        {item?.ca2_score ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>
+                        {item?.exams_score ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>{item?.total ?? 'N/A'} </div>
+                      <div className='col-span-1 text-secondary-300'>
+                        {item?.position ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>{item?.grade ?? 'N/A'} </div>
+                      <div className='col-span-1'>{item?.remark ?? 'N/A'}</div>
+                    </div>
+                  ))}
                 </div>
-                <div className='col-span-1'>14</div>
-                <div className='col-span-1'>12</div>
-                <div className='col-span-1'>60</div>
-                <div className='col-span-1'>84</div>
-                <div className='col-span-1 text-secondary-300'>4th</div>
-                <div className='col-span-1'>B</div>
-                <div className='col-span-1'>Good</div>
-              </div> */}
-
-              <EmptyView label='No Result Recorded' useStandardHeight />
+              ) : (
+                <EmptyView label='No Result Recorded' useStandardHeight />
+              )}
             </div>
           </div>
 

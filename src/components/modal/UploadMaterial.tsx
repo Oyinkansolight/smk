@@ -35,6 +35,7 @@ export default function UploadMaterial({
   const [data, setData] = useState<File>();
   const { data: profile } = useGetProfile();
   const [fileName, setFileName] = useState<string>();
+  const [fileSize, setFileSize] = useState<number>(0);
   const { handleSubmit, register } = useForm();
   const { mutateAsync: uploadFile } = useUploadFile();
   const { mutateAsync: uploadFolderFile } = useUploadFolderFile();
@@ -58,7 +59,7 @@ export default function UploadMaterial({
           folderId,
           userTypes: [],
           fileUrl: path,
-          size: 100,
+          size: Math.round(fileSize / 1024),
           filename: d.title,
           createdBy: profile?.userInfo?.email,
           fileType: videoFileType === 'video' ? videoFileType : pdfFileType,
@@ -66,7 +67,7 @@ export default function UploadMaterial({
       } else {
         fileUploadDetails = {
           userTypes: [],
-          size: 100,
+          size: Math.round(fileSize / 1024),
           fileUrl: path,
           filename: d.title,
           createdBy: profile?.userInfo?.email,
@@ -121,6 +122,9 @@ export default function UploadMaterial({
             imageName={fileName ?? ''}
             setImageName={function (value: string): void {
               setFileName(value);
+            }}
+            setFileSize={(value: number): void => {
+              setFileSize(value);
             }}
           />
           <Button className='my-10 w-full justify-center' type='submit'>

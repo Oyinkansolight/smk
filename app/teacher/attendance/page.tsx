@@ -51,36 +51,39 @@ export default function Page() {
           )}
           <div className='flex flex-col gap-4'>
             {attendance && attendance.length > 0 ? (
-              attendance.map((student, index) => {
-                const userName = student.lastName + ', ' + student.firstName;
-                const studentId = student.id;
-                return (
-                  <TeacherAttendanceListItem
-                    key={studentId}
-                    index={index}
-                    status={student?.attendanceToday?.status}
-                    name={userName}
-                    onTakeAttendance={async (status) => {
-                      try {
-                        if (!student?.attendanceToday?.status) {
-                          await takeAttendance({
-                            status,
-                            studentId: studentId as unknown as string,
-                          });
-                        } else {
-                          await updateAttendance({
-                            status,
-                            classArmAttendanceId: student?.attendanceToday?.id,
-                          });
+              attendance
+                .sort((a, b) => a.lastName.localeCompare(b.lastName))
+                .map((student, index) => {
+                  const userName = student.lastName + ', ' + student.firstName;
+                  const studentId = student.id;
+                  return (
+                    <TeacherAttendanceListItem
+                      key={studentId}
+                      index={index}
+                      status={student?.attendanceToday?.status}
+                      name={userName}
+                      onTakeAttendance={async (status) => {
+                        try {
+                          if (!student?.attendanceToday?.status) {
+                            await takeAttendance({
+                              status,
+                              studentId: studentId as unknown as string,
+                            });
+                          } else {
+                            await updateAttendance({
+                              status,
+                              classArmAttendanceId:
+                                student?.attendanceToday?.id,
+                            });
+                          }
+                          toast.success('Attendance Taken');
+                        } catch (error) {
+                          toast.error(getErrMsg(error));
                         }
-                        toast.success('Attendance Taken');
-                      } catch (error) {
-                        toast.error(getErrMsg(error));
-                      }
-                    }}
-                  />
-                );
-              })
+                      }}
+                    />
+                  );
+                })
             ) : (
               <EmptyView label='No student has been assigned to your class' />
             )}

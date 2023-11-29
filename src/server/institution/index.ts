@@ -30,6 +30,15 @@ export interface CreateInstitutionParams {
   id?: string;
 }
 
+export interface StudentCountByType {
+  PRIMARY: number;
+  SECONDARY: number;
+  TERTIARY: number;
+  ECCDE: number;
+  TVET: number;
+  BTVET: number;
+}
+
 export interface CreateSubjectParams {
   name?: string;
   classId?: number[];
@@ -196,6 +205,27 @@ export function useGetStudentsList(params?: Partial<PaginationParams>) {
   useEffect(() => {
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.id, params?.query, refetch]);
+  return query;
+}
+export function useGetStudentCountType(params: { userType: string }) {
+  const query = useQuery({
+    queryKey: 'get_student_list_by_type',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          '/v1/government/dashboards/get-user-count-by-institution-type',
+          {
+            params,
+          }
+        );
+        return d.data as StudentCountByType;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
   return query;
 }
 

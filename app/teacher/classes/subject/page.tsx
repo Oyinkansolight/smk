@@ -8,17 +8,17 @@ import EmptyView from '@/components/misc/EmptyView';
 import SmallTeacherSubjectListItem from '@/components/views/teacher/SmallTeacherSubjectListItem';
 import { getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
+import { useGetGovernmentSubjectById } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
-import {
-  useGetAcademicSessionsTermsWeek,
-  useGetSubjectById,
-} from '@/server/institution';
+import { useGetAcademicSessionsTermsWeek } from '@/server/institution';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const router = useRouter();
@@ -31,7 +31,8 @@ export default function Page() {
 
   const term = terms?.data[0]?.id;
   const [currentPage, setCurrentPage] = useState(1);
-  const { data: weeks, isLoading: isLoadingTermWeeks } = useGetAcademicSessionsTermsWeek(term);
+  const { data: weeks, isLoading: isLoadingTermWeeks } =
+    useGetAcademicSessionsTermsWeek(term);
   const [currentWeek, setCurrentWeek] = useState(0);
   const isGenericApp = Cookies.get('isGenericApp') === 'Y';
 
@@ -39,7 +40,7 @@ export default function Page() {
     //* Handle the current week index
     const getCurrentWeekIndex = () => {
       if (weeks) {
-        const parsedCurrentWeek = JSON.parse(currentWeekFromSession ?? "");
+        const parsedCurrentWeek = JSON.parse(currentWeekFromSession ?? '');
         if (parsedCurrentWeek) {
           weeks?.data.forEach((week, index) => {
             if (week?.id === parsedCurrentWeek?.id) {
@@ -48,7 +49,7 @@ export default function Page() {
           });
         }
       }
-    }
+    };
 
     getCurrentWeekIndex();
   }, [currentWeekFromSession, weeks]);
@@ -72,36 +73,37 @@ export default function Page() {
   const {
     data,
     isLoading: isLoadingPeriodSubjects,
-    isFetching: isFetchingPeriodSubjects
-  }
-    = useGetWeekPeriodsBySubject({
-      termId: term,
-      page: currentPage,
-      staffId: profile?.userInfo?.staff?.id,
-      sessionId: profile?.currentSession?.[0]?.id,
-      weekId: sortedWeeks[currentWeek]?.id,
-      subjectId: params?.get('id') ? params.get('id') : undefined,
-      classId: params?.get('classId') ? params.get('classId') : undefined,
-      // classId: parsedArms ? parsedArms[idx - 1]?.class?.id : '',
-    });
+    isFetching: isFetchingPeriodSubjects,
+  } = useGetWeekPeriodsBySubject({
+    termId: term,
+    page: currentPage,
+    staffId: profile?.userInfo?.staff?.id,
+    sessionId: profile?.currentSession?.[0]?.id,
+    weekId: sortedWeeks[currentWeek]?.id,
+    subjectId: params?.get('id') ? params.get('id') : undefined,
+    classId: params?.get('classId') ? params.get('classId') : undefined,
+    // classId: parsedArms ? parsedArms[idx - 1]?.class?.id : '',
+  });
 
+  const { data: subject, isLoading: subjectLoading } =
+    useGetGovernmentSubjectById(params?.get('id') as string);
 
-  const { data: subject, isLoading: subjectLoading } = useGetSubjectById(params?.get('id') as string);
-
-  const isLoadingData = isLoadingSessions || isLoadingTermWeeks || subjectLoading || isLoadingPeriodSubjects;
+  const isLoadingData =
+    isLoadingSessions ||
+    isLoadingTermWeeks ||
+    subjectLoading ||
+    isLoadingPeriodSubjects;
 
   if (!data || isLoadingData) {
-    return (
-      <GenericLoader />
-    )
+    return <GenericLoader />;
   }
-
 
   return (
     <div className='px-8 layout'>
       <div
-        onClick={() => router.push("/teacher/classes")}
-        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        onClick={() => router.push('/teacher/classes')}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'
+      >
         <Image
           src='/svg/back.svg'
           width={10}
@@ -144,10 +146,12 @@ export default function Page() {
       </div>
       <div className=''>
         <div className='font-bold py-8 text-4xl'>
-          {(subject ?? [])[0]?.name}{": "}{params?.get('armName')}
+          {(subject ?? [])[0]?.name}
+          {': '}
+          {params?.get('armName')}
         </div>
         <div className='flex flex-col gap-4'>
-          {(data && !isFetchingPeriodSubjects) && data.data ? (
+          {data && !isFetchingPeriodSubjects && data.data ? (
             data.data.length > 0 ? (
               data.data.map((period, i) => (
                 <SmallTeacherSubjectListItem
@@ -156,14 +160,18 @@ export default function Page() {
                   }
                   termId={term as unknown as string}
                   periodId={period.id as unknown as string}
-                  classId={params?.get('classArmId') ?? ""}
+                  classId={params?.get('classArmId') ?? ''}
                   onClick={() =>
                     router.push(
                       isGenericApp
                         ? i % 2 === 0
                           ? '/teacher/classes/subject-task-doc'
                           : '/teacher/classes/subject-task-video'
-                        : `/teacher/classes/subject-task?id=${period.id}&classArmId=${params?.get('classArmId')}&armName=${params?.get('armName')}`
+                        : `/teacher/classes/subject-task?id=${
+                            period.id
+                          }&classArmId=${params?.get(
+                            'classArmId'
+                          )}&armName=${params?.get('armName')}`
                     )
                   }
                   key={period?.id ?? i}
@@ -183,12 +191,11 @@ export default function Page() {
           )}
         </div>
       </div>
-      {data
-        && data.data
-        && data.data.length > 0
-        && (data?.paging?.totalPage > 0)
-        && !isFetchingPeriodSubjects
-        && (
+      {data &&
+        data.data &&
+        data.data.length > 0 &&
+        data?.paging?.totalPage > 0 &&
+        !isFetchingPeriodSubjects && (
           <PaginatedCounter
             currentPage={currentPage}
             onChange={setCurrentPage}
