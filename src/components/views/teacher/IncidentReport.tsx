@@ -5,6 +5,7 @@ import DragDropDocument from '@/components/input/DragDropDocument';
 import TextArea from '@/components/input/TextArea';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
+import logger from '@/lib/logger';
 import { useCreateReport } from '@/server/teacher';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -131,6 +132,9 @@ const IncidentReport = () => {
             imageName={fileName ?? ''}
             setImageData={(v) => setFileData(v)}
             setImageName={(v) => setFileName(v)}
+            setFileSize={function (value: number): void {
+              logger(value);
+            }}
           />
 
           <p className='text-sm text-gray-300'>
