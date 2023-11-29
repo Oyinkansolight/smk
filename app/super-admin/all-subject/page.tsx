@@ -48,7 +48,7 @@ const AllSubjects = () => {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPagingData({ ...pagingData, page: 1, name: value });
+    setPagingData({ ...pagingData, page: 1, query: value });
   };
 
   const handleFilter = (value: string) => {
