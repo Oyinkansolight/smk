@@ -24,7 +24,8 @@ const Education = ({ register, errors }: Iprops) => {
     limit: 100
   };
 
-  const { data: allClasses } = useGetInstituteClassArms({ ...params });
+  const { data: allClasses, isLoading: isLoadingClasses } = useGetInstituteClassArms({ ...params });
+
 
   // const { data: teachers } = useGetTeachersListByInstitution({
   //   instituteId: institutionId,
@@ -50,21 +51,24 @@ const Education = ({ register, errors }: Iprops) => {
 
       <div className='my-10 md:grid grid-cols-2 gap-6'>
         <div>
-          <FormSelect
-            label='Assign Class'
-            name='class'
-            options={allClasses?.data ?? []}
-            register={register}
-            validation={{
-              required: 'Class is required',
-            }}
-            helper={
-              errors?.class && {
-                message: errors?.class?.message,
-                type: 'danger',
+          {!isLoadingClasses ?
+            <FormSelect
+              label='Assign Class'
+              name='class'
+              options={allClasses?.data ?? []}
+              register={register}
+              validation={{
+                required: 'Class is required',
+              }}
+              helper={
+                errors?.class && {
+                  message: errors?.class?.message,
+                  type: 'danger',
+                }
               }
-            }
-          />
+            /> : (
+              <div>Loading class arms...</div>
+            )}
         </div>
         {/* <div>
           {teachers && (
