@@ -80,7 +80,7 @@ export default function AddStudent() {
         uploadedImage = await uploadDocument(uploadedImage, array, environment);
       }
 
-      const studentData = {
+      const studentData: any = {
         profileImg: uploadedImage,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -93,10 +93,13 @@ export default function AddStudent() {
         password: '12345',
         phoneNumber: data.phoneNumber,
         address: data.address,
-        parentId,
         classArmId: data.class,
         institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
       };
+
+      if (parentId) {
+        studentData.parentId = parentId;
+      }
 
       setpublishData(data);
 
