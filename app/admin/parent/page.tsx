@@ -1,30 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
+import PopOverSelect from '@/components/input/PopOverSelect';
 import TabBar from '@/components/layout/TabBar';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
-import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
-import ExamReportView from '@/components/views/single-school/ExamReportView';
-import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
-import StudentLibrary from '@/components/views/single-student/StudentLibrary';
-import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
-import StudentBioDetailsAlt from '@/components/views/student.tsx/StudentBioDetailsAlt';
-import { getURL } from '@/firebase/init';
-import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import { useGetStudentList } from '@/server/government/student';
-import { useGetClassArmInfo } from '@/server/institution/class';
-import Link from 'next/link';
+import {
+  useAssignStudentToParent,
+  useGetSingleParent,
+  useGetStudentsListByInstitution,
+} from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+import { ImSpinner2 } from 'react-icons/im';
+import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -39,6 +50,76 @@ import { toast } from 'react-toastify';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedParent, setSelectedParent] = useState(['']);
+  const [itemIndex, setItemIndex] = useState<string>();
+  const instituteId = getFromLocalStorage('institutionId');
+
+  const [query, setQuery] = useState('');
+  const debouncedSearchTerm = useDebounce(query, 1500);
+
+  const [pagingData, setPagingData] = useState<any>({
+    instituteId,
+    page: 1,
+    limit: 10,
+    query,
+  });
+
+  const {
+    data: students,
+    isLoading,
+    refetch,
+  } = useGetStudentsListByInstitution({ ...pagingData });
+  console.log(students);
+
+  const handleSearch = (value: string) => {
+    logger(value);
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
+
+  const handleItemIndex = (index) => {
+    setItemIndex(index);
+  };
+
+  const handleAssignStudent = useAssignStudentToParent();
+
+  async function assignStudentToParent() {
+    if (itemIndex) {
+      try {
+        setLoading(true);
+        const response = await handleAssignStudent.mutateAsync({
+          id: p?.get('id') ?? '',
+          studentId: students?.data[itemIndex].id,
+        });
+        if (response.status === 200) {
+          toast.success('Student Linked successfully');
+          setLoading(false);
+        }
+      } catch (error) {
+        toast.error('Error adding student');
+        getErrMsg(error);
+        setLoading(false);
+      }
+    } else {
+      toast.error('No Student Selected');
+    }
+  }
+
+  useEffect(() => {
+    const getSelectedParent = (index) => {
+      if (!index) return;
+
+      setSelectedParent([
+        `${students?.data[index]?.lastName} ${students?.data[index]?.firstName}`,
+      ]);
+    };
+
+    if (itemIndex) {
+      getSelectedParent(itemIndex);
+    }
+  }, [itemIndex, students?.data]);
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
@@ -47,11 +128,11 @@ const Page = () => {
   const router = useRouter();
   const p = useSearchParams();
 
-  const { data, error } = useGetStudentList({
-    id: p?.get('id'),
+  const { data, error } = useGetSingleParent({
+    id: p?.get('id') ?? '',
   });
 
-  const student = data;
+  const parent = data;
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -73,22 +154,7 @@ const Page = () => {
   const [url, setUrl] = useState<string | any>(
     'https://www.bu.edu/wll/files/2017/10/avatar.png'
   );
-  const [content, setContent] = useState([]);
-  const getFileURL = async () => {
-    setUrl(url);
-    await getURL(data?.profileImg ?? ' ').then((v) => setUrl(v));
-    logger(url);
-  };
-  useEffect(() => {
-    const getFileURL = async () => {
-      if (student?.profileImg) {
-        await getURL(student?.profileImg).then((imageUrl) => {
-          setUrl(imageUrl);
-        });
-      }
-    };
-    getFileURL();
-  }, [data]);
+
   useEffect(() => {
     if (error) {
       toast.error(getErrMsg(error));
@@ -111,11 +177,9 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
-          (student?.user ?? [])[0]?.lastName ?? ''
-        }`}
-        school={student?.institution?.instituteName ?? ''}
-        id={student?.id || ''}
+        name={`${parent?.firstName ?? 'Loading...'} ${parent?.lastName ?? ''}`}
+        school=''
+        id={parent?.id || ''}
         student
         showAcademicYear
         currentGridIdx={gridTabIdx}
@@ -148,13 +212,56 @@ const Page = () => {
 
           {tabIdx === 0 && <div>Dashboard</div>}
           {tabIdx === 1 && (
-            <div className='mb-6 flex justify-end space-x-4 items-end'>
-              <Link
-                href='/admin/parent/link-student'
-                className='w-max rounded border border-[#008146] px-6 py-3 text-center text-xs text-[#008146] '
-              >
-                Link Student
-              </Link>
+            <div>
+              <div className='mb-6 flex justify-end space-x-4 items-end'>
+                <button
+                  onClick={() => setOpen(!open)}
+                  className='w-max rounded border border-[#008146] px-6 py-3 text-center text-xs text-[#008146] '
+                >
+                  Link Student
+                </button>
+              </div>
+
+              <section className=''>
+                <h2 className='text-3xl font-bold'>Your Students </h2>
+
+                <PopOverSelect
+                  open={open}
+                  key1='lastName'
+                  key2='firstName'
+                  setOpen={setOpen}
+                  title='All Student'
+                  data={students?.data}
+                  handleSearch={handleSearch}
+                  description='Select student'
+                  setSelectedItem={(value) => {
+                    console.log(value);
+                  }}
+                  setSelectedIndex={handleItemIndex}
+                />
+
+                <div className='my-10'>
+                  {/* <Select
+                    onClick={() => setOpen(!open)}
+                    label='All Student'
+                    options={selectedParent}
+                    formValue={selectedParent[0]}
+                  /> */}
+                  {selectedParent}
+                  <button
+                    onClick={() => {
+                      assignStudentToParent();
+                    }}
+                    className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
+                  >
+                    {loading ? (
+                      <ImSpinner2 className='animate-spin' />
+                    ) : (
+                      'Link Student'
+                    )}
+                  </button>
+                </div>
+              </section>
             </div>
           )}
         </div>

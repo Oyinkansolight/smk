@@ -14,11 +14,13 @@ import StudentDashboardView from '@/components/views/single-teacher/StudentDashb
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import TimetableView from '@/components/views/teacher/TimetableView';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useGetTeacherTimetable } from '@/server/Schedule';
 import { useDeleteStaff } from '@/server/government/classes_and_subjects';
 import {
   useGetSubjectAssignedToTeacher,
@@ -30,6 +32,30 @@ import { useEffect, useMemo, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
   const router = useRouter();
@@ -49,6 +75,15 @@ const Page = () => {
   const { data, error } = useGetTeacherById({
     id: p?.get('id'),
   });
+
+  const { data: teacherTimeTable, isLoading: isTTLoading } =
+    useGetTeacherTimetable({
+      // sessionId: currentSessionId,
+      // termId: currentTermInfo?.id,
+      classId: data?.managedClassArm?.class?.id,
+      teacherId: p?.get('id') ?? '',
+    });
+
   const { data: SubjectsList } = useGetSubjectAssignedToTeacher(
     p?.get('id'),
     currentSessionId
@@ -82,7 +117,7 @@ const Page = () => {
     };
 
     getTotalSubjects();
-  }, [SubjectsList])
+  }, [SubjectsList]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -174,8 +209,9 @@ const Page = () => {
     }
   };
 
-  const teacherName = `${staff ? (staff?.user ?? {})?.firstName : 'Loading...'
-    } ${staff ? (staff?.user ?? {})?.lastName : ''}`;
+  const teacherName = `${
+    staff ? (staff?.user ?? {})?.firstName : 'Loading...'
+  } ${staff ? (staff?.user ?? {})?.lastName : ''}`;
 
   return (
     <div className='flex flex-col lg:flex-row'>
@@ -253,10 +289,17 @@ const Page = () => {
           )}
           {tabIdx === 1 && (
             <div>
-              <EmptyView
-                label='Timetable Not Available Yet'
-                useStandardHeight
-              />
+              {teacherTimeTable.length > 0 ? (
+                <TimetableView
+                  data={teacherTimeTable}
+                  isLoading={isTTLoading}
+                />
+              ) : (
+                <EmptyView
+                  label='Timetable Not Available Yet'
+                  useStandardHeight
+                />
+              )}
             </div>
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}

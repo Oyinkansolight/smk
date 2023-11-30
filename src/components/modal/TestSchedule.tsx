@@ -81,6 +81,7 @@ function AddActivityName({
   setType,
 }: propType) {
   const { data } = useGetSubjectList({ limit: 100 });
+  console.log(data);
 
   return (
     <div className='fixed inset-0 z-[999]  grid place-content-center rounded-sm bg-black/30'>
@@ -141,7 +142,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='schoolType'
-                        options={data}
+                        options={data?.data ?? []}
                         setFormValue={setSubjectId1}
                       />
                     )}
@@ -163,7 +164,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='schoolType'
-                        options={data}
+                        options={data?.data ?? []}
                         setFormValue={setSubjectId2}
                       />
                     )}
@@ -185,7 +186,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='schoolType'
-                        options={data}
+                        options={data?.data ?? []}
                         setFormValue={setSubjectId3}
                       />
                     )}
@@ -207,7 +208,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='schoolType'
-                        options={data}
+                        options={data?.data ?? []}
                         setFormValue={setSubjectId4}
                       />
                     )}
@@ -229,7 +230,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='schoolType'
-                        options={data}
+                        options={data?.data ?? []}
                         setFormValue={setSubjectId5}
                       />
                     )}

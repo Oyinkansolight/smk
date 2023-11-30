@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CircleButton from '@/components/buttons/CircleButton';
+import BackButton from '@/components/accordions/BackButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import { INSTITUTION_TYPES } from '@/constant/institution';
@@ -12,7 +12,6 @@ import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { HiUsers } from 'react-icons/hi';
 import { RiUserFill } from 'react-icons/ri';
-import { SlOptions } from 'react-icons/sl';
 
 interface StudentTeacherProfileCardProps {
   image?: string;
@@ -33,7 +32,7 @@ export default function SubjectProfileCard({
   setacademicyear,
   sessionterms,
   settermId,
-  handleSetCurrentTermName
+  handleSetCurrentTermName,
 }: StudentTeacherProfileCardProps) {
   const [currentGrid, setCurrentGrid] = useState(2);
   const currentSession = getFromLocalStorage('currentSession');
@@ -43,17 +42,33 @@ export default function SubjectProfileCard({
     currentUserInfo = JSON.parse(currentSession);
   }
 
-  const eccdeSession = currentUserInfo?.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.ECCDE.toLowerCase())
+  const eccdeSession = currentUserInfo?.find(
+    (item) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType
+        .toLowerCase()
+        .includes(INSTITUTION_TYPES.ECCDE.toLowerCase())
   );
-  const secondarySession = currentUserInfo?.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.SECONDARY.toLowerCase())
+  const secondarySession = currentUserInfo?.find(
+    (item) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType
+        .toLowerCase()
+        .includes(INSTITUTION_TYPES.SECONDARY.toLowerCase())
   );
-  const primarySession = currentUserInfo?.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.PRIMARY.toLowerCase())
+  const primarySession = currentUserInfo?.find(
+    (item) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType
+        .toLowerCase()
+        .includes(INSTITUTION_TYPES.PRIMARY.toLowerCase())
   );
-  const tertiarySession = currentUserInfo?.find((item) =>
-    typeof item.institutionType === 'string' && item.institutionType.toLowerCase().includes(INSTITUTION_TYPES.TERTIARY.toLowerCase())
+  const tertiarySession = currentUserInfo?.find(
+    (item) =>
+      typeof item.institutionType === 'string' &&
+      item.institutionType
+        .toLowerCase()
+        .includes(INSTITUTION_TYPES.TERTIARY.toLowerCase())
   );
 
   const handleToggleGrid = (index: number) => {
@@ -92,8 +107,7 @@ export default function SubjectProfileCard({
   return (
     <div className='hidden md:flex flex-col items-center px-10 pt-5'>
       <div className='flex w-full justify-between'>
-        <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
-        <CircleButton icon={<SlOptions className='h-4 w-4' />} />
+        <BackButton />
       </div>
       {image ? (
         <BigAvatar src={image} />
@@ -169,7 +183,9 @@ export default function SubjectProfileCard({
           className='bg-[#EFFFF6] text-base rounded-md w-full'
           onChange={(e) => {
             settermId && settermId(JSON.parse(e.target.value).id);
-            handleSetCurrentTermName(termNumberToName(JSON.parse(e.target.value).name) ?? 'Term');
+            handleSetCurrentTermName(
+              termNumberToName(JSON.parse(e.target.value).name) ?? 'Term'
+            );
           }}
         >
           {(sessionterms ?? []).map((v: any, id: number) => (

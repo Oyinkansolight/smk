@@ -7,7 +7,7 @@ export function useSendMessage() {
   const mutation = useMutation({
     mutationKey: 'create-message',
     mutationFn: (params: any) =>
-      request.post('/v1/government/communication/create_message/', params, {
+      request.post('/v1/government/message/create_message', params, {
         withCredentials: true,
       }),
   });

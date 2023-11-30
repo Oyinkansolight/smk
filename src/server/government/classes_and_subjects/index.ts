@@ -272,6 +272,8 @@ export function useGetLessonAttendance(params: {
 }
 
 export function useDeleteSubject() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'delete_subject',
     mutationFn: async (id?: string) =>
@@ -283,6 +285,9 @@ export function useDeleteSubject() {
           data: { id },
         })
       ).data,
+    onSettled: () => {
+      client.refetchQueries(`get_subject_list`);
+    },
   });
   return mutation;
 }

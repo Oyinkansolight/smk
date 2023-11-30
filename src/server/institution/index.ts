@@ -65,11 +65,8 @@ export function useDeleteInstitution() {
   const mutation = useMutation({
     mutationKey: 'delete_institution',
     mutationFn: async (id?: string) =>
-      (
-        await request.delete('/v1/government/institutes/delete-by-id', {
-          data: { id },
-        })
-      ).data,
+      (await request.delete(`/v1/government/institutes/delete-by-id?id=${id}`))
+        .data,
   });
   return mutation;
 }
@@ -284,6 +281,25 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
   useEffect(() => {
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
+export function useGetSingleParent(params: { id: string }) {
+  const query = useQuery({
+    queryKey: 'get_parents',
+    queryFn: async () => {
+      try {
+        const d = await request.get(`/v1/government/parent/${params.id}`);
+        return d.data as PaginatedData<Student> | any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.id, refetch]);
   return query;
 }
 
@@ -792,7 +808,7 @@ export function useGetSubjectAssignedToTeacher(
 
 export function useGetTeacherAttendanceLog() {
   const query = useQuery({
-    queryKey: 'get_teacher_subject_list',
+    queryKey: 'get_teacher_log_list',
     queryFn: async () => {
       try {
         const d = await request.get(`/v1/institutions/clock/list-clock-in`);

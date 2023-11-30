@@ -2,6 +2,7 @@
 
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
+import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
@@ -72,6 +73,25 @@ export default function Page() {
           <BiChevronRight className='h-6 w-6 text-blue-500' />
         </div>
       </div> */}
+      <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
+        <input onChange={(e) => logger(e.target.value)} className='rounded-full border p-3' placeholder='Search activity' />
+        <div className='flex-1' />
+        {/* <div className='flex items-center'>
+          Filter By
+          <BiChevronDown className='w-6 h-6' />
+        </div> */}
+
+        {/* {dir === 'DESC' && <div onClick={() => handleSort('ASC')} className='flex items-center'>
+          ASC
+          <BiSortUp className='h-6 w-6 cursor-pointer' />
+        </div>}
+
+        {dir === 'ASC' && <div onClick={() => handleSort('DESC')} className='flex items-center'>
+          DESC
+          <BiSortDown className='w-6 h-6 cursor-pointer' />
+        </div>} */}
+
+      </div>
       <div className='h-4' />
       <div className='flex flex-col gap-2'>
         {data?.data && data.data.length === 0 ? (
