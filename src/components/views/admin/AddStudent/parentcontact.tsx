@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import Select from '@/components/input/formSelect';
 import PopOverSelect from '@/components/input/PopOverSelect';
+import Select from '@/components/input/formSelect';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetParents } from '@/server/institution';
@@ -10,8 +10,12 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
-  handleParentId?: (id: string) => void
+  handleParentId?: (id: string) => void;
 };
 const Contact = ({ handleParentId }: Iprops) => {
   const [open, setOpen] = useState(false);
@@ -27,11 +31,7 @@ const Contact = ({ handleParentId }: Iprops) => {
     query,
   });
 
-  const {
-    error,
-    refetch,
-    data: parents,
-  } = useGetParents({ ...pagingData });
+  const { error, refetch, data: parents } = useGetParents({ ...pagingData });
 
   const handleSearch = (value: string) => {
     logger(value);
@@ -43,22 +43,19 @@ const Contact = ({ handleParentId }: Iprops) => {
     setItemIndex(index);
   };
 
-
   useEffect(() => {
     const getSelectedParent = (index) => {
       if (!index) return;
 
       setSelectedParent([
-        `${parents?.data[index]?.lastName} ${parents?.data[index]?.firstName}`
-      ])
+        `${parents?.data[index]?.lastName} ${parents?.data[index]?.firstName}`,
+      ]);
     };
 
     if (itemIndex) {
       getSelectedParent(itemIndex);
     }
-  }
-    , [itemIndex, parents?.data]);
-
+  }, [itemIndex, parents?.data]);
 
   useEffect(() => {
     const searchRecords = () => {
@@ -97,7 +94,12 @@ const Contact = ({ handleParentId }: Iprops) => {
       />
 
       <div className='my-10'>
-        <Select onClick={() => setOpen(!open)} label="All Parents" options={selectedParent} formValue={selectedParent[0]} />
+        <Select
+          onClick={() => setOpen(!open)}
+          label='All Parents'
+          options={selectedParent}
+          formValue={selectedParent[0]}
+        />
       </div>
     </section>
   );

@@ -1,12 +1,11 @@
+import BackButton from '@/components/accordions/BackButton';
 import { StudentTeacherBadge } from '@/components/badges';
-import CircleButton from '@/components/buttons/CircleButton';
 import GridTabBar from '@/components/layout/GridTabBar';
 import { BigAvatar } from '@/components/profile/BigAvatar';
 import { AiFillCloud } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
 import { HiUsers } from 'react-icons/hi';
 import { RiUserFill } from 'react-icons/ri';
-import { SlOptions } from 'react-icons/sl';
 import ReactSelect from 'react-select';
 
 interface StudentTeacherProfileCardProps {
@@ -88,12 +87,10 @@ export default function StudentTeacherProfileCard({
 
       <div className='flex lg:hidden flex-col items-center px-10 pt-5'>
         <div className='flex w-full justify-between'>
-          <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
-          <CircleButton icon={<SlOptions className='h-4 w-4' />} />
+          <BackButton />
         </div>
 
         <div className='flex flex-col sm:flex-row items-center gap-y-4 gap-x-10'>
-
           <div className='flex flex-col gap-[15px] mb-4 text-center'>
             <span className='mx-auto'>
               <BigAvatar src={image} />

@@ -16,7 +16,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface dataType {
   id?: string;
@@ -205,10 +205,9 @@ const TimeTable = ({
         if (itemToEdit) {
           toast.success('Timetable updated successfully');
           setisEditOpen(false);
-
         } else {
           toast.success('Timetable created successfully');
-          modalActivityHandler;
+          modalActivityHandler();
         }
         // location.reload()
         setloading(false);
@@ -417,42 +416,47 @@ const TimeTable = ({
 
                         <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
                           <div
-                            className={`${getEachDaySubject(item, 'monday').isEvent
+                            className={`${
+                              getEachDaySubject(item, 'monday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF2F0] text-[#FB6340]'
-                              }  px-3 py-5 truncate `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'monday').subjectName}
                           </div>
                           <div
-                            className={`${getEachDaySubject(item, 'tuesday').isEvent
+                            className={`${
+                              getEachDaySubject(item, 'tuesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FDE8FF] text-[#ED1CFF]'
-                              }  px-3 py-5 truncate `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'tuesday').subjectName}
                           </div>
                           <div
-                            className={`${getEachDaySubject(item, 'wednesday').isEvent
+                            className={`${
+                              getEachDaySubject(item, 'wednesday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFF3E2] text-[#FF9F1C]'
-                              }  px-3 py-5 truncate `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'wednesday').subjectName}
                           </div>
                           <div
-                            className={`${getEachDaySubject(item, 'thursday').isEvent
+                            className={`${
+                              getEachDaySubject(item, 'thursday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#F4FFE6] text-[#60AC00]'
-                              }  px-3 py-5 truncate `}
+                            }  px-3 py-5 truncate `}
                           >
                             {getEachDaySubject(item, 'thursday').subjectName}
                           </div>
                           <div
-                            className={`${getEachDaySubject(item, 'friday').isEvent
+                            className={`${
+                              getEachDaySubject(item, 'friday').isEvent
                                 ? 'bg-white text-black'
                                 : 'bg-[#FFFFEB] text-[#CDCD04]'
-                              }  px-3 py-5 truncate`}
+                            }  px-3 py-5 truncate`}
                           >
                             {getEachDaySubject(item, 'friday').subjectName}
                           </div>

@@ -26,6 +26,10 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllParents = () => {
   const { error: profileError } = useGetProfile();
 
@@ -189,9 +193,7 @@ const AllParents = () => {
         </div>
 
         <div className='mb-6 flex justify-end items-end relative'>
-          <button
-            className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
-          >
+          <button className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '>
             Add Parent
           </button>
         </div>
@@ -224,15 +226,15 @@ const AllParents = () => {
                 </div>
 
                 <div className='col-span-4 lg:col-span-2'>
-                  {/* <Link href={`/admin/student?id=${item.id}`}> */}
-                  {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
-                  {/* </Link> */}
+                  <Link href={`/admin/parent?id=${item.id}`}>
+                    {item?.user?.[0]?.lastName || item?.lastName || 'N/A'}{' '}
+                  </Link>
                 </div>
 
                 <div className='col-span-4 lg:col-span-2'>
-                  {/* <Link href={`/admin/student?id=${item.id}`}> */}
-                  {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
-                  {/* </Link> */}
+                  <Link href={`/admin/parent?id=${item.id}`}>
+                    {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
+                  </Link>             
                 </div>
 
                 <div className='hidden lg:block col-span-3'>
@@ -350,7 +352,7 @@ const AllParents = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < parents.paging.totalPage
+                  pagingData.page < parents.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

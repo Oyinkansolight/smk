@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Button from '@/components/buttons/Button';
-import {
-  useGetSubjectList,
-  useGetTeacherAttendanceLog,
-} from '@/server/institution';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+import { useGetTeacherAttendanceLog } from '@/server/institution';
 
 export default function TaskListView() {
   const { data: attendanceLog } = useGetTeacherAttendanceLog();
+  console.log(attendanceLog);
+
   return (
     <div className='flex flex-col space-y-6'>
       <div className='layout h-full'>

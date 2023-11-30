@@ -129,8 +129,8 @@ const Page = () => {
                 <div className='col-span-1'>Assessment 2</div>
                 <div className='col-span-1'>Examination</div>
                 <div className='col-span-1'>Total</div>
-                <div className='col-span-1'>Position</div>
                 <div className='col-span-1'>Grade</div>
+                <div className='col-span-1'>Position</div>
                 <div className='col-span-1'>Remark</div>
               </div>
 
@@ -157,10 +157,10 @@ const Page = () => {
                         {item?.exams_score ?? 'N/A'}
                       </div>
                       <div className='col-span-1'>{item?.total ?? 'N/A'} </div>
+                      <div className='col-span-1'>{item?.grade ?? 'N/A'} </div>
                       <div className='col-span-1 text-secondary-300'>
                         {item?.position ?? 'N/A'}
                       </div>
-                      <div className='col-span-1'>{item?.grade ?? 'N/A'} </div>
                       <div className='col-span-1'>{item?.remark ?? 'N/A'}</div>
                     </div>
                   ))}

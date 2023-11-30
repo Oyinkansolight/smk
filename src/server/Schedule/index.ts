@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface timetableArg {
@@ -55,7 +56,6 @@ export function useGetAcademicTimetable({
   classId,
   termId,
   type = 'DEFAULT',
-
 }: timetableArg) {
   const query = useQuery({
     queryKey: 'academic_timetable',
@@ -74,7 +74,7 @@ export function useGetTeacherTimetable({
   teacherId = '',
 }) {
   const query = useQuery({
-    queryKey: 'teacher_timetable',
+    queryKey: 'class_teacher_timetable',
     queryFn: () => {
       if (classId && teacherId) {
         try {
@@ -89,6 +89,10 @@ export function useGetTeacherTimetable({
       }
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [refetch, teacherId, classId]);
   return query;
 }
 

@@ -2,10 +2,11 @@ import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttenda
 import { getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetLessonAttendance } from '@/server/government/classes_and_subjects';
 import {
-  useGetLessonAttendance,
-} from '@/server/government/classes_and_subjects';
-import { useTakeAttendance, useUpdateSubjectAttendance } from '@/server/government/student';
+  useTakeAttendance,
+  useUpdateSubjectAttendance,
+} from '@/server/government/student';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useGetPeriodById } from '@/server/institution/period';
@@ -26,13 +27,14 @@ export default function TakeAttendanceView() {
     ? (JSON.parse(institutionString) as Institution)
     : undefined;
 
-
-  const { data: students, isLoading: studentsLoading } =
-    useGetClassArmStudents({
+  const { data: students, isLoading: studentsLoading } = useGetClassArmStudents(
+    {
       classArmId: classArmId,
-    });
+    }
+  );
 
-  const { data: attendance, refetch: refetchAttendanceRecord } = useGetLessonAttendance({ periodId: id });
+  const { data: attendance, refetch: refetchAttendanceRecord } =
+    useGetLessonAttendance({ periodId: id });
 
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
@@ -51,50 +53,51 @@ export default function TakeAttendanceView() {
       <div className='flex flex-col gap-4'>
         <div className='font-bold'>List of students</div>
         {studentsLoading || students ? (
-          students?.map((v, i) => {
-            const attendanceStatus = attendance?.find(
-              (stAtt) => stAtt.student.id === (v.id as unknown as string)
-            );
+          students
+            ?.sort((a, b) => a.lastName.localeCompare(b.lastName))
+            .map((v, i) => {
+              const attendanceStatus = attendance?.find(
+                (stAtt) => stAtt.student.id === (v.id as unknown as string)
+              );
 
-            return (
-              <TeacherAttendanceListItem
-                index={i}
-                key={v.id}
-                status={attendanceStatus?.status}
-                name={`${v?.firstName} ${v?.lastName}`}
-                onTakeAttendance={async (status) => {
-                  try {
-                    await takeAttendance({
-                      classArmId: classArmId,
-                      institutionId: institution?.id,
-                      periodId: id,
-                      sessionId: profile?.currentSession?.[0]?.id,
-                      status,
-                      studentId: v.id,
-                      termId: (terms?.data ?? [])[0].id,
-                    });
-                    toast.success('Attendance Taken');
-                    refetchAttendanceRecord();
-                  } catch (error) {
-                    toast.error(getErrMsg(error));
-                  }
-                }}
-                onUpdateAttendance={async (status) => {
-                  try {
-                    await updateAttendance({
-                      status,
-                      attendenceId: attendanceStatus?.id,
-                    });
-
-                    toast.success('Attendance Updated');
-                    refetchAttendanceRecord();
-                  } catch (error) {
-                    toast.error(getErrMsg(error));
-                  }
-                }}
-              />
-            )
-          })
+              return (
+                <TeacherAttendanceListItem
+                  index={i}
+                  key={v.id}
+                  status={attendanceStatus?.status}
+                  name={`${v?.firstName} ${v?.lastName}`}
+                  onTakeAttendance={async (status) => {
+                    try {
+                      await takeAttendance({
+                        classArmId: classArmId,
+                        institutionId: institution?.id,
+                        periodId: id,
+                        sessionId: profile?.currentSession?.[0]?.id,
+                        status,
+                        studentId: v.id,
+                        termId: (terms?.data ?? [])[0].id,
+                      });
+                      toast.success('Attendance Taken');
+                      refetchAttendanceRecord();
+                    } catch (error) {
+                      toast.error(getErrMsg(error));
+                    }
+                  }}
+                  onUpdateAttendance={async (status) => {
+                    try {
+                      await updateAttendance({
+                        status,
+                        attendenceId: attendanceStatus?.id,
+                      });
+                      toast.success('Attendance Updated');
+                      refetchAttendanceRecord();
+                    } catch (error) {
+                      toast.error(getErrMsg(error));
+                    }
+                  }}
+                />
+              );
+            })
         ) : (
           <div className='text-center'>
             No students have been added to this class arm
