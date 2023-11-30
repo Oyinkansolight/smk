@@ -7,6 +7,7 @@ import EditStudentProfile from '@/components/modal/EditStudentProfile';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { useGetStudentReportCard } from '@/server/student';
+import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
@@ -75,9 +76,11 @@ const Page = () => {
           </select>
         </div>
         <div className='flex justify-end p-2  bg-[#F9F9F9] rounded'>
-          <button className='bg-[#3361FF] text-white p-1 rounded'>
-            Download Report Card
-          </button>
+          <Link href='/student/view-report-card'>
+            <button className='bg-[#3361FF] text-white p-1 rounded'>
+              Download Report Card
+            </button>
+          </Link>
         </div>
         <h1 className='my-4 text-[#B1B1B1] font-bold text-lg'>Status</h1>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
