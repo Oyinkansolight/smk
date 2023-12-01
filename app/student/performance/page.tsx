@@ -76,7 +76,7 @@ const Page = () => {
           </select>
         </div>
         <div className='flex justify-end p-2  bg-[#F9F9F9] rounded'>
-          <Link href='/student/view-report-card'>
+          <Link href='/view-report-card'>
             <button className='bg-[#3361FF] text-white p-1 rounded'>
               Download Report Card
             </button>

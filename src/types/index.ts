@@ -90,3 +90,16 @@ export interface SubjectList {
   institutionType?: string | null;
   query?: string | null;
 }
+
+export interface AllPermissionsParams {
+  id?: any;
+  limit?: number;
+  page?: number;
+  query?: string | null;
+}
+
+export interface AddRoleParams {
+  name?: string;
+  description?: string;
+  permissions?: string[];
+}

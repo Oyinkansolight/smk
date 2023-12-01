@@ -40,7 +40,7 @@ export default function RootLayout({
         <div className='flex flex-1 flex-col overflow-y-hidden'>
           <Header handleToggle={handleToggle} />
 
-          <div className='flex flex-row overflow-y-auto overflow-hidden'>
+          <div className='flex flex-row overflow-y-auto overflow-hidden min-h-screen'>
             <Sidebar open={open} handleToggle={handleToggle} />
             <main className='hideScroll flex-1 overflow-y-auto text-xs'>
               <BasicCard className='flex w-full flex-col gap-8 !rounded-[4.5px] bg-white !px-[27px] !pb-[27px] !pt-[18px]'>
