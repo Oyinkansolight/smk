@@ -1,6 +1,7 @@
 const ROUTES = {
   ADMIN: '/admin',
   STUDENT: '/student',
+  PARENT: '/parent',
   TEACHER: '/teacher',
   USER_AUTH: '/auth/user',
   ADMIN_AUTH: '/auth/admin',

@@ -97,6 +97,9 @@ export default function StudentAuth() {
         } else if (response.data.data.data.type === USER_ROLES.STUDENT) {
           router.push(ROUTES.STUDENT);
           if (isChecked) setUserDashboard(ROUTES.STUDENT);
+        } else if (response.data.data.data.type === USER_ROLES.PARENT) {
+          router.push(ROUTES.PARENT);
+          if (isChecked) setUserDashboard(ROUTES.PARENT);
         } else if (
           response.data.data.data.type === USER_ROLES.GOVERNMENT_ADMIN ||
           response.data.data.data.type === 'DEFAULT'

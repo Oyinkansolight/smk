@@ -30,6 +30,8 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllParents = () => {
   const { error: profileError } = useGetProfile();
 
@@ -193,9 +195,12 @@ const AllParents = () => {
         </div>
 
         <div className='mb-6 flex justify-end items-end relative'>
-          <button className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '>
+          <Link
+            href='/admin/add-parent'
+            className='w-max flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
+          >
             Add Parent
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -234,7 +239,7 @@ const AllParents = () => {
                 <div className='col-span-4 lg:col-span-2'>
                   <Link href={`/admin/parent?id=${item.id}`}>
                     {item?.user?.[0]?.firstName || item?.firstName || 'N/A'}
-                  </Link>             
+                  </Link>
                 </div>
 
                 <div className='hidden lg:block col-span-3'>

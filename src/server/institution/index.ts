@@ -624,11 +624,22 @@ export function useGetSubjectById(id?: string) {
   }, [refetch, id]);
   return query;
 }
+
 export function useCreateStaff() {
   const mutation = useMutation({
     mutationKey: 'create-staff',
     mutationFn: (params: any) =>
       request.post('/v1/government/teachers/add-teaching-staff', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useCreateParent() {
+  const mutation = useMutation({
+    mutationKey: 'create-parent',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/parent', params, {
         withCredentials: true,
       }),
   });
