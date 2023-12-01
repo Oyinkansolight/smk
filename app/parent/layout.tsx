@@ -2,7 +2,7 @@
 'use client';
 
 import AdminHeader from '@/components/layout/AdminHeader';
-import AdminSidebar from '@/components/layout/AdminSidebar';
+import AdminSidebar from '@/components/layout/AdminSidebarParent';
 import ControlledModal from '@/components/modal/ControlledModal';
 import { MyGlobalContext } from '@/hooks/useGlobalState';
 import { usePathname } from 'next/navigation';
@@ -13,6 +13,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+
+/* eslint-disable @typescript-eslint/no-empty-function */
 
 export default function RootLayout({
   children,

@@ -19,6 +19,10 @@ import { useGetAcademicTimetable } from '@/server/Schedule';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcadamicCalendar = ({
   isClassTimeTable = true,
 }: {
@@ -64,8 +68,8 @@ const AcadamicCalendar = ({
   const timetableData = isClassTimeTable ? data : [];
   return (
     <section>
-      <div className='mt-8 p-2 rounded-md'>
-        <div className='flex w-full'>
+      <div className='mt-8 p-2 pb-16 rounded-md'>
+        <div className='flex  w-full'>
           <div className='w-[150px] font-medium rounded-l p-3  border bg-white text-gray-500'>
             Date
           </div>

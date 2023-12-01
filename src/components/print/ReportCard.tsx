@@ -1,35 +1,51 @@
+'use client';
+
 import React from 'react'
 import Image from 'next/image'
 import clsxm from '@/lib/clsxm'
 import { ImImage } from 'react-icons/im'
+import Button from '@/components/buttons/Button'
+import BackButton from '@/components/accordions/BackButton';
 
 const PrintedReportCard = () => {
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
-    <div className='bg-white flex flex-col w-full max-w-[750px] mx-auto h-full overflow-hidden px-[6px] py-10'>
-      <Header
-        term="First"
-        session="2022/2023"
-        name="ST. MARIA GORETTI GIRLS GRAMMAR SCHOOL"
-      />
-
-      <span className='mt-[3px] mb-1'>
-        <BioData />
-      </span>
-
-      <div className='grid grid-cols-2 grid-flow-col gap-[6px]'>
-        <div className='flex flex-col col-span-9 w-full min-w-[434px]'>
-          <Cognitive />
-          <CommentObservation />
-          <CognitiveKeys />
-        </div>
-
-        <div className='flex flex-col col-span-3 w-full gap-[6px]'>
-          <AffectiveDomain />
-          <PsychomotorDomain />
-          <Overview />
-        </div>
+    <div className='flex flex-col py-10 max-w-[750px] mx-auto gap-8'>
+      <div className='print:hidden flex items-center justify-between'>
+        <BackButton />
+        <Button onClick={handlePrint}>Print Report</Button>
       </div>
 
+      {/* PRINTED SECTION */}
+      <div className='bg-white flex flex-col w-full max-w-[750px] mx-auto h-full overflow-hidden px-[6px]'>
+        <Header
+          term="First"
+          session="2022/2023"
+          name="ST. MARIA GORETTI GIRLS GRAMMAR SCHOOL"
+        />
+
+        <span className='mt-[3px] mb-1'>
+          <BioData />
+        </span>
+
+        <div className='grid grid-cols-2 grid-flow-col gap-[6px]'>
+          <div className='flex flex-col col-span-9 w-full min-w-[434px]'>
+            <Cognitive />
+            <CommentObservation />
+            <CognitiveKeys />
+          </div>
+
+          <div className='flex flex-col col-span-3 w-full gap-[6px]'>
+            <AffectiveDomain />
+            <PsychomotorDomain />
+            <Overview />
+          </div>
+        </div>
+
+      </div>
     </div>
   )
 }

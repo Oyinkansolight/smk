@@ -32,10 +32,9 @@ export default function StudentTeacherProfileCard({
   return (
     <>
       <div className='hidden lg:flex flex-col items-center px-10 pt-5'>
-        {/* <div className='flex w-full justify-between'>
-          <CircleButton icon={<RiUserFill className='h-4 w-4' />} />
-          <CircleButton icon={<SlOptions className='h-4 w-4' />} />
-        </div> */}
+        <div className='flex w-full justify-between'>
+          <BackButton />
+        </div>
         <BigAvatar src={image} />
         <div className='h-10' />
         <div className='mb-1 text-xl font-bold'>{name}</div>

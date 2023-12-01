@@ -20,6 +20,8 @@ import { useMemo, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
@@ -114,7 +116,7 @@ export default function Page() {
         <h3 className='text-[10px] font-medium'>Back</h3>
       </div>
 
-      <div className='text-[#D4D5D7] py-8 text-2xl'>
+      <div className='text-gray-600 py-8 text-2xl'>
         {`Classes > ${(subject ?? [])[0]?.name}`}
       </div>
 

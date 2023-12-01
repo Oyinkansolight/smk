@@ -43,7 +43,7 @@ export function useGetTodaysPeriod({
     queryFn: () =>
       request
         .get(
-          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}&limit=20`
+          `/v1/institutions/institutes/get-today-periods?classId=${classId}&weekId=${weekid}&day=${day}&limit=1000`
         )
         .then((res) => res.data.data.data),
   });
@@ -97,6 +97,16 @@ export function useSubmitActivity() {
     mutationKey: 'submit-activity',
     mutationFn: (params: any) =>
       request.post('/v1/institutions/lessons/submit-class-activity', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useVerifyStudent() {
+  const mutation = useMutation({
+    mutationKey: 'verify-student',
+    mutationFn: (params: any) =>
+      request.post('/v1/government/students/verify-student', params, {
         withCredentials: true,
       }),
   });
