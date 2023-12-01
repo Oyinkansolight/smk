@@ -257,7 +257,7 @@ function EditableForm({
   return isEditing ? (
     <div className='grid grid-cols-2 gap-8'>
       <div>
-        <div className='font-semibold text-xs'>Select Percentage</div>
+        <div className='font-semibold text-xs'>Choose from grade list</div>
         <ReactSelect
           classNames={{ control: () => 'h-10' }}
           value={value.category}
@@ -268,7 +268,7 @@ function EditableForm({
         />
       </div>
       <div>
-        <div className='font-semibold text-xs'>Choose from grade list</div>
+        <div className='font-semibold text-xs'>Select Percentage</div>
         <input
           className='rounded border w-full h-10'
           value={value.percent}
