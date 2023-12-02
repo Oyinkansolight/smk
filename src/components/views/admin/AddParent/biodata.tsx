@@ -5,11 +5,35 @@
 
 import NextImage from '@/components/NextImage';
 import FormInput from '@/components/input/formInput';
-import FormSelect from '@/components/input/formSelect';
+import FormSelectOptional from '@/components/input/formSelectOptional';
+import { useGetLocalGovernments } from '@/server/onboard';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
-import { subtractYearsFromCurrentDate } from '@/lib/helper';
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable react-hooks/exhaustive-deps */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type Iprops = {
   register: any;
@@ -19,7 +43,6 @@ type Iprops = {
   setImageData: (v: any) => void;
 };
 
-const GenderOptions: string[] = ['MALE', 'FEMALE', 'Other'];
 const Biodata = ({
   register,
   errors,
@@ -27,7 +50,16 @@ const Biodata = ({
   setImgSrc,
   setImageData,
 }: Iprops) => {
+  const locals = useGetLocalGovernments();
+  const [towns, setTowns] = useState<any>([]);
+
+  useEffect(() => {
+    if (!locals.isLoading && locals.data && locals.data.length > 0) {
+      setTowns([locals.data]);
+    }
+  }, [locals.data, locals.isLoading]);
   const [isCapture, setIsCapture] = useState(false);
+
   const WebcamCapture = () => {
     const webcamRef: any = React.useRef(null);
 
@@ -121,27 +153,44 @@ const Biodata = ({
           {imgSrc && <Image width={600} height={600} src={imgSrc} alt='' />}
         </div>
       </div>
-      <div className='my-10 grid md:grid-cols-2 gap-6'>
-        <FormSelect
-          label='Staff type'
-          name='staffType'
-          options={[
-            'TEACHING',
-            'NON_TEACHING',
-          ]}
-          register={register}
-          validation={{
-            required: 'Staff type is required',
-          }}
-          helper={
-            errors?.staffType && {
-              message: errors?.staffType?.message,
-              type: 'danger',
-            }
-          }
-        />
-      </div>
 
+      <div className='my-10 grid md:grid-cols-2 gap-6'>
+        <div>
+          <FormInput
+            label='Email'
+            placeholder='Details here'
+            name='email'
+            register={register}
+            validation={{
+              required: 'Email is required',
+            }}
+            helper={
+              errors?.email && {
+                message: errors?.email?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+        <div>
+          <FormInput
+            label='Password '
+            placeholder='Details here'
+            name='password'
+            type='password'
+            register={register}
+            validation={{
+              required: 'Password is required',
+            }}
+            helper={
+              errors?.password && {
+                message: errors?.password?.message,
+                type: 'danger',
+              }
+            }
+          />
+        </div>
+      </div>
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
           <FormInput
@@ -178,19 +227,20 @@ const Biodata = ({
           />
         </div>
       </div>
+
       <div className='my-10 grid md:grid-cols-2 gap-6'>
         <div>
-          <FormSelect
-            label='Gender'
-            name='gender'
-            options={GenderOptions}
+          <FormSelectOptional
+            label='LGA'
+            name='lga'
+            options={Array.prototype.concat.apply([], towns)}
             register={register}
             validation={{
-              required: 'gender is required',
+              required: 'LGA is required',
             }}
             helper={
-              errors?.gender && {
-                message: errors?.gender?.message,
+              errors?.lga && {
+                message: errors?.lga?.message,
                 type: 'danger',
               }
             }
@@ -198,18 +248,16 @@ const Biodata = ({
         </div>
         <div>
           <FormInput
-            label='Date of birth'
-            type='date'
-            max={subtractYearsFromCurrentDate(18)}
+            label='Address'
             placeholder='Details here'
-            name='dob'
+            name='address'
             register={register}
             validation={{
-              required: 'Date of birth is required',
+              required: 'Address is required',
             }}
             helper={
-              errors?.dob && {
-                message: errors?.dob?.message,
+              errors?.address && {
+                message: errors?.address?.message,
                 type: 'danger',
               }
             }
