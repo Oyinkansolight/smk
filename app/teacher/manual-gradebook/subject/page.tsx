@@ -137,7 +137,7 @@ export default function Page() {
   return (
     <div className='h-full layout'>
       <BackButton />
-      <div className='text-[#D4D5D7] py-8 text-xl'>
+      <div className='text-gray-600 py-8 text-xl'>
         Grade Book {'>'} {params?.get('subjectName')} -{' '}
         {params?.get('classArmName')}
       </div>
@@ -204,7 +204,7 @@ export default function Page() {
           <div className='flex flex-col gap-4'>
             {StudentScoreSheet &&
               StudentScoreSheet.sort((a, b) =>
-                a.student.lastName.localeCompare(b.student.lastName)
+                a?.student?.lastName.localeCompare(b?.student?.lastName)
               ).map((student, i) => (
                 <StudentGradeListItem
                   key={student?.id ?? i}
@@ -256,7 +256,7 @@ function StudentGradeListItem({
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
-          <div>{item.student.lastName + ' ' + item.student.firstName}</div>
+          <div>{item?.student?.lastName + ' ' + item?.student?.firstName}</div>
         </div>
         {isModify && lineToModify === id ? (
           <div className=''>
