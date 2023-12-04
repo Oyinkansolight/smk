@@ -48,7 +48,7 @@ const Biodata = ({
         (v) =>
           typeof v.institutionType === 'string' &&
           v.institutionType.toLowerCase() ===
-            profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
+          profile?.userInfo?.esiAdmin?.instituteType.toLowerCase()
       ) ?? [];
     return response;
   }, [allClasses?.data, profile?.userInfo?.esiAdmin?.instituteType]);
@@ -59,13 +59,13 @@ const Biodata = ({
   }));
 
   const selectedTeacherIndex = (staffData ?? []).findIndex(
-    (item) => item.value == classArmInfo?.teacher.id
+    (item) => item.value == classArmInfo?.teacher?.id
   );
 
   if (
     isLoadingClasses ||
     isLoadingSubjects ||
-    (classArmInfo?.teacher.id && !staffData[selectedTeacherIndex])
+    (classArmInfo?.teacher?.id && !staffData[selectedTeacherIndex])
   ) {
     return (
       <div className='flex justify-center items-center'>

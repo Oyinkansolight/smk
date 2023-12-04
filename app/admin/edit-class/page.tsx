@@ -23,44 +23,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const EditClass = () => {
   const p = useSearchParams();
   const classArmId = p?.get('id');
@@ -103,7 +65,7 @@ const EditClass = () => {
     }));
 
     const selectedTeacherIndex = (staffData ?? []).findIndex(
-      (item) => item.value == classArmInfo?.teacher.id
+      (item) => item.value == classArmInfo?.teacher?.id
     );
     setValue('classArm', classArmInfo?.arm ?? '');
     setValue('classCapacity', classArmInfo?.capacity ?? '');
@@ -121,7 +83,7 @@ const EditClass = () => {
     classArmInfo?.capacity,
     classArmInfo?.class?.id,
     classArmInfo?.subjects,
-    classArmInfo?.teacher.id,
+    classArmInfo?.teacher?.id,
     setValue,
     staffs?.data,
   ]);
