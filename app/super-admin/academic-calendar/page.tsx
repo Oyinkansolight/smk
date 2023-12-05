@@ -18,6 +18,30 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcademicCalendar = () => {
   const handleCreateAcademicCalendar = useCreateAcademicCalendar();
   const { data, isLoading } = useGetAcademicSessions();
@@ -39,6 +63,38 @@ const AcademicCalendar = () => {
     setIsOpen(!isOpen);
   }
 
+  function validateData(data) {
+    if (!data.institutionType || !data.institutionType.trim()) {
+      toast.error('Institution type is required.');
+      return true;
+    }
+
+    if (!data.terms || data.terms.length === 0) {
+      toast.error('At least one term is required.');
+      return true;
+    }
+    for (const term of data.terms) {
+      if (!term.name || !term.name.trim()) {
+        toast.error('Term name is required for all terms.');
+        return true;
+      }
+
+      const startDate = new Date(term.startDate);
+      const endDate = new Date(term.endDate);
+
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        toast.error('Invalid date format for one or more terms.');
+        return true;
+      }
+
+      if (endDate < startDate) {
+        toast.error(
+          'End date must be greater than or equal to start date for all terms.'
+        );
+        return true;
+      }
+    }
+  }
   const SubmitHandler = async () => {
     const data = {
       institutionType,
@@ -60,21 +116,22 @@ const AcademicCalendar = () => {
         },
       ],
     };
+    if (!validateData(data)) {
+      try {
+        setloading(true);
+        const response = await handleCreateAcademicCalendar.mutateAsync(data);
 
-    try {
-      setloading(true);
-      const response = await handleCreateAcademicCalendar.mutateAsync(data);
+        if (response) {
+          toast.success('Academic calendar created successfully');
+          setloading(false);
+          setIsOpen(!isOpen);
 
-      if (response) {
-        toast.success('Academic calendar created successfully');
+          //2 Second - Open Success Modal
+        }
+      } catch (error) {
         setloading(false);
-        setIsOpen(!isOpen);
-
-        //2 Second - Open Success Modal
+        toast.error(getErrMsg(error));
       }
-    } catch (error) {
-      setloading(false);
-      toast.error(getErrMsg(error));
     }
   };
 
@@ -98,7 +155,9 @@ const AcademicCalendar = () => {
     const allFilteredSessions = data?.data.filter(
       (item: any) =>
         typeof item.institutionType === 'string' &&
-        item.institutionType.toLowerCase().includes(e.target.value.toLowerCase())
+        item.institutionType
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase())
     );
     setFilteredSessions(allFilteredSessions);
   };

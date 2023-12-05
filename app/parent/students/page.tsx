@@ -15,17 +15,14 @@ import clsxm from '@/lib/clsxm';
 // import TaskListView from '@/components/views/teacher/TaskListView';
 // import clsxm from '@/lib/clsxm';
 // import Staff from '~/svg/staff.svg';
-import { getFromLocalStorage } from '@/lib/helper';
-import {
-  useGetSubjectAssignedToTeacher,
-  useGetTeacherById,
-} from '@/server/institution';
+import { getFromSessionStorage } from '@/lib/helper';
+import { useGetProfile } from '@/server/auth';
+import { useGetSingleParent } from '@/server/institution';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import TeacherLibrary from 'app/teacher/library/page';
-import { useSearchParams } from 'next/navigation';
 // import router from 'next/router';
 import { useState } from 'react';
 
@@ -35,74 +32,50 @@ import { useState } from 'react';
 
 const SingleTeacherDashboard = () => {
   const router = useRouter();
+  const { data: profile } = useGetProfile();
 
   const [tabIdx, setTabIdx] = useState(0);
   const [gridIdx, setGridIdx] = useState(0);
-  const currentSessionId: string =
-    getFromLocalStorage('currentSessionId') ?? '';
+  const user = getFromSessionStorage('user') ?? '';
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
-  const p = useSearchParams();
+  const userProfile = JSON.parse(user);
   const {
-    data: staff,
+    data: parentDetail,
     // error: staffError,
     // isLoading: isStaffLoading,
-  } = useGetTeacherById({
-    id: p?.get('id'),
+  } = useGetSingleParent({
+    id: userProfile?.id,
   });
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${
-    (staff?.user ?? {})?.lastName
-  }`;
+  console.log(parentDetail);
 
-  const { data: studentSubjectsList, isLoading } =
-    useGetSubjectAssignedToTeacher(p?.get('id'), currentSessionId);
-
-  const menu = [
-    {
-      value: '0%',
-      label: 'Average',
-    },
-    {
-      value: 0,
-      label: 'Assigned Class',
-    },
-    {
-      value: !isLoading ? studentSubjectsList?.length : 0,
-      label: 'Subjects',
-    },
-    {
-      value: staff?.managedClassArm ?? 'N/A',
-      label: 'Class Teacher',
-    },
-  ];
-
-  const navigation_menu = [
-    {
-      icon: '/svg/calendar_new.svg',
-      title: 'Timetable',
-      link: '/super-admin/all-staff#',
-    },
-    {
-      icon: '/svg/subject.svg',
-      title: 'Subjects',
-      link: '/super-admin/all-staff#',
-    },
-    {
-      icon: '/svg/report.svg',
-      title: 'Exam Report',
-      link: '/super-admin/all-staff#',
-    },
-    {
-      icon: '/svg/attendance.svg',
-      title: 'Attendance',
-      link: '/super-admin/all-staff#',
-    },
-    {
-      icon: '/svg/library.svg',
-      title: 'Library',
-      link: '/super-admin/all-staff#',
-    },
-  ];
+  // const navigation_menu = [
+  //   {
+  //     icon: '/svg/calendar_new.svg',
+  //     title: 'Timetable',
+  //     link: '/super-admin/all-staff#',
+  //   },
+  //   {
+  //     icon: '/svg/subject.svg',
+  //     title: 'Subjects',
+  //     link: '/super-admin/all-staff#',
+  //   },
+  //   {
+  //     icon: '/svg/report.svg',
+  //     title: 'Exam Report',
+  //     link: '/super-admin/all-staff#',
+  //   },
+  //   {
+  //     icon: '/svg/attendance.svg',
+  //     title: 'Attendance',
+  //     link: '/super-admin/all-staff#',
+  //   },
+  //   {
+  //     icon: '/svg/library.svg',
+  //     title: 'Library',
+  //     link: '/super-admin/all-staff#',
+  //   },
+  // ];
 
   return (
     <div className=''>
@@ -152,7 +125,7 @@ const SingleTeacherDashboard = () => {
                   Date Added:
                 </span>
                 <span className='font-light text-[#000] text-base'>
-                  {moment(staff?.createdAt).format('LL')}
+                  {moment().format('LL')}
                 </span>
               </div>
             </div>
