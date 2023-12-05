@@ -3,7 +3,7 @@ import EmptyView from '@/components/misc/EmptyView';
 import { useGetSingleTeacherAttendanceLog } from '@/server/institution';
 import moment from 'moment';
 
-export default function TaskListView({ userId }: { userId: string }) {
+export default function TaskListView({ userId }: { userId?: string }) {
   const { data: attendanceLog } = useGetSingleTeacherAttendanceLog(
     userId ?? ''
   );

@@ -1,43 +1,20 @@
 'use client';
 
-import EmptyView from '@/components/misc/EmptyView';
-import { BasicSearch } from '@/components/search';
-import clsxm from '@/lib/clsxm';
-// import Button from '@/components/buttons/Button';
-// import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
-// import TabBar from '@/components/layout/TabBar';
-// import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
-// import ExamReportView from '@/components/views/single-school/ExamReportView';
-// import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
-// import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
-// import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
-// import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
-// import TaskListView from '@/components/views/teacher/TaskListView';
-// import clsxm from '@/lib/clsxm';
-// import Staff from '~/svg/staff.svg';
-import { getFromSessionStorage } from '@/lib/helper';
-import { useGetProfile } from '@/server/auth';
-import { useGetSingleParent } from '@/server/institution';
 import moment from 'moment';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
+import clsxm from '@/lib/clsxm';
+import logger from '@/lib/logger';
 import { useRouter } from 'next/navigation';
-// import TeacherLibrary from 'app/teacher/library/page';
-// import router from 'next/router';
-import { useState } from 'react';
+import { BasicSearch } from '@/components/search';
+import EmptyView from '@/components/misc/EmptyView';
+import { getFromSessionStorage } from '@/lib/helper';
+import { useGetSingleParent } from '@/server/institution';
 
-// import { BiListCheck } from 'react-icons/bi';
-// import { IoMdTrendingUp } from 'react-icons/io';
-// import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
-
-const SingleTeacherDashboard = () => {
+const Page = () => {
   const router = useRouter();
-  const { data: profile } = useGetProfile();
-
-  const [tabIdx, setTabIdx] = useState(0);
-  const [gridIdx, setGridIdx] = useState(0);
   const user = getFromSessionStorage('user') ?? '';
-  const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
+
   const userProfile = JSON.parse(user);
   const {
     data: parentDetail,
@@ -47,7 +24,7 @@ const SingleTeacherDashboard = () => {
     id: userProfile?.id,
   });
 
-  console.log(parentDetail);
+  logger(parentDetail);
 
   // const navigation_menu = [
   //   {
@@ -204,4 +181,4 @@ const SingleTeacherDashboard = () => {
   );
 };
 
-export default SingleTeacherDashboard;
+export default Page;
