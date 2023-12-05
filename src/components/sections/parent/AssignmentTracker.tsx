@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-const Periods = () => {
+const AssignmentTracker = () => {
   return (
     <div className='rounded-xl bg-white'>
       <div className='p-4 border-b'>
@@ -38,4 +38,4 @@ const Periods = () => {
   );
 };
 
-export default Periods;
+export default AssignmentTracker;

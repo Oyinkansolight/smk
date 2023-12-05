@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const AddClass = () => {
+const Page = () => {
   const { data: institutionProfile } = useGetProfile();
   const { data: currentSessionInfo } = useGetCurrentSession();
   const { data: staffs } = useGetTeachersListByInstitution({
@@ -187,4 +187,4 @@ const AddClass = () => {
   );
 };
 
-export default AddClass;
+export default Page;
