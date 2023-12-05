@@ -2,7 +2,7 @@
 
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 
-const Periods = () => {
+const Timetable = () => {
   return (
     <div className='rounded-xl bg-white'>
       <div className='p-4 border-b'>
@@ -17,4 +17,4 @@ const Periods = () => {
   );
 };
 
-export default Periods;
+export default Timetable;

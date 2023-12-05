@@ -11,7 +11,10 @@ import { isProd } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { stripWhiteSpace } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
-import { useAssignStudentToParent, useCreateStudent } from '@/server/institution';
+import {
+  useAssignStudentToParent,
+  useCreateStudent,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -40,12 +43,11 @@ export default function AddStudent() {
 
   const [publishData, setpublishData] = useState(null);
 
-  const [parentId, setParentId] = useState("");
+  const [parentId, setParentId] = useState('');
 
   const handleParentId = (id: string) => {
     setParentId(id);
-  }
-
+  };
 
   const handleCreateStudent = useCreateStudent();
   /**
@@ -66,9 +68,7 @@ export default function AddStudent() {
     if (stage === 2 && data.phoneNumber && data.address) {
       setStage(stage + 1);
     }
-    if (
-      stage === 3
-    ) {
+    if (stage === 3) {
       setStage(stage + 1);
     }
     if (stage === 4 && data.class) {
@@ -114,7 +114,9 @@ export default function AddStudent() {
             id: parentId,
             studentId: response.data.data.data.id,
           };
-          const parentLinkResponse = await assignStudentToParent.mutateAsync(parentData);
+          const parentLinkResponse = await assignStudentToParent.mutateAsync(
+            parentData
+          );
 
           if (!parentLinkResponse) {
             toast.error('Error linking parent to student');
@@ -131,8 +133,7 @@ export default function AddStudent() {
         setloading(false);
       }
     }
-  }
-
+  };
 
   // const nextHandler = (): void => {
   //   if (stage >= 1 && stage <= 4) {
@@ -177,7 +178,7 @@ export default function AddStudent() {
           textLink='Manage student'
         />
       )}
-      <Link href='/admin'>
+      <Link href='/admin/all-student'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -210,7 +211,13 @@ export default function AddStudent() {
               setImageData={(v) => setImageData(v)}
             />
           )}
-          {stage === 2 && <Contact register={register} errors={errors} getValues={getValues} />}
+          {stage === 2 && (
+            <Contact
+              register={register}
+              errors={errors}
+              getValues={getValues}
+            />
+          )}
           {stage === 3 && <ParentContact handleParentId={handleParentId} />}
           {stage === 4 && <Education register={register} errors={errors} />}
           {stage === 5 && <Publish publishData={publishData} />}

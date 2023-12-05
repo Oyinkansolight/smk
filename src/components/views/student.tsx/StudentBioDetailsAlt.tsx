@@ -2,7 +2,7 @@
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import { isProd } from '@/constant/env';
-import { getURL } from '@/firebase/init';
+import { getURL, uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useUpdateStudent } from '@/server/government/student';
 import { Student } from '@/types/institute';
@@ -30,10 +30,15 @@ export default function StudentBioDetailsAlt({
 
     const environment = isProd ? 'production' : 'staging';
     const array = await data?.image?.[0]?.arrayBuffer();
-    const uploadedImage = `profile_pictures/${data.firstName + data.lastName}`;
-    // if (array) {
-    //   uploadedImage = await uploadDocument(uploadedImage, array, environment);
-    // }
+    let uploadedImage;
+    if (array) {
+      const uploadResponse = await uploadDocument(uploadedImage, array, environment);
+      console.log(uploadResponse);
+
+      if (uploadResponse) {
+        uploadedImage = uploadResponse;
+      }
+    }
 
     // console.log(uploadedImage);
 
@@ -41,15 +46,26 @@ export default function StudentBioDetailsAlt({
     if (initStudent?.id) {
       setIsLoading(true);
       try {
-        await update.mutateAsync({
-          // profileImg: uploadedImage,
-          email: data.email,
-          id: initStudent?.id,
-          phoneNumber: data.studentPhone,
-          firstName: (data.fullName as string).split(' ')[0],
-          lastName: (data.fullName as string).split(' ')[1],
-          // address: data.address
-        });
+        if (uploadedImage) {
+          await update.mutateAsync({
+            profileImg: uploadedImage,
+            email: data.email,
+            id: initStudent?.id,
+            phoneNumber: data.studentPhone,
+            firstName: (data.fullName as string).split(' ')[0],
+            lastName: (data.fullName as string).split(' ')[1],
+            address: data.address
+          });
+        } else {
+          await update.mutateAsync({
+            email: data.email,
+            id: initStudent?.id,
+            phoneNumber: data.studentPhone,
+            firstName: (data.fullName as string).split(' ')[0],
+            lastName: (data.fullName as string).split(' ')[1],
+            address: data.address
+          });
+        }
       } catch (error) {
         toast.error(getErrMsg(error));
       } finally {

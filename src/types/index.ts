@@ -103,3 +103,49 @@ export interface AddRoleParams {
   description?: string;
   permissions?: string[];
 }
+
+export interface TeachersLog {
+  id: string;
+  clockInTime: Date;
+  clockOutTime: null;
+  status: boolean;
+  isClockedIn: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  user: User;
+  term: Term;
+  session: Session;
+}
+
+export interface Session {
+  id: string;
+  session: string;
+  institutionType: string;
+  NumberOfWeeks: number;
+  NumberOfTerms: number;
+  isCurrent: boolean;
+  startDate: Date;
+  endDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  middleName: null;
+  deviceToken: null;
+  batteryLevel: number;
+  phoneNumber: null;
+  email: string;
+  password: string;
+  address: string;
+  resetPasswordToken: null;
+  resetPasswordTokenExpires: null;
+  type: string;
+  loginCount: number;
+  suspended: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}

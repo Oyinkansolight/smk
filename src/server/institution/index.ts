@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
-import { PaginationParams, SubjectList } from '@/types';
+import { PaginationParams, SubjectList, TeachersLog } from '@/types';
 import { Week } from '@/types/classes-and-subjects';
 import {
   AssignStudentToParent,
@@ -60,13 +60,17 @@ export function useCreateInstitution() {
 
   return mutation;
 }
-
 export function useDeleteInstitution() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'delete_institution',
     mutationFn: async (id?: string) =>
       (await request.delete(`/v1/government/institutes/delete-by-id?id=${id}`))
         .data,
+    onSettled: () => {
+      client.refetchQueries('get_school_list');
+    },
   });
   return mutation;
 }
@@ -816,7 +820,25 @@ export function useGetSubjectAssignedToTeacher(
   });
   return query;
 }
+// ?userId=${userId}
+export function useGetSingleTeacherAttendanceLog(userId: string) {
+  const query = useQuery({
+    queryKey: 'get_teacher_log_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/institutions/clock/list-clock-in?userId=${userId}`
+        );
 
+        return d.data.data.data.data as TeachersLog[];
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  return query;
+}
 export function useGetTeacherAttendanceLog() {
   const query = useQuery({
     queryKey: 'get_teacher_log_list',
@@ -824,7 +846,7 @@ export function useGetTeacherAttendanceLog() {
       try {
         const d = await request.get(`/v1/institutions/clock/list-clock-in`);
 
-        return d.data.data.data.data as [];
+        return d.data.data.data.data as TeachersLog[];
       } catch (error) {
         logger(error);
         throw error;

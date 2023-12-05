@@ -33,7 +33,7 @@ function AddActivityName({
   loading,
 }: propType) {
   return (
-    <div className='fixed inset-0 z-[9999999999] py-10 grid place-content-center rounded-sm bg-black/30'>
+    <div className='fixed inset-0 z-[99] py-10 grid place-content-center rounded-sm bg-black/30'>
       <div className='flex md:w-[800px] w-[500px] h-full overflow-y-auto flex-col space-y-4 bg-white p-4 hideScroll'>
         <div className='flex justify-end'>
           <button onClick={onClickHandler}>

@@ -19,8 +19,6 @@ import {
 import TeacherLibrary from 'app/teacher/library/page';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { BiListCheck } from 'react-icons/bi';
-import { IoMdTrendingUp } from 'react-icons/io';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 const SingleTeacherDashboard = () => {
@@ -38,8 +36,9 @@ const SingleTeacherDashboard = () => {
     id: p?.get('id'),
   });
 
-  const teacherName = `${(staff?.user ?? {})?.firstName} ${(staff?.user ?? {})?.lastName
-    }`;
+  const teacherName = `${(staff?.user ?? {})?.firstName} ${
+    (staff?.user ?? {})?.lastName
+  }`;
 
   const { data: studentSubjectsList } = useGetSubjectAssignedToTeacher(
     p?.get('id'),
@@ -50,8 +49,9 @@ const SingleTeacherDashboard = () => {
     <div className='flex'>
       <StudentTeacherProfileCard
         image='/images/teacher_1.png'
-        name={`${(staff?.user ?? {})?.firstName || 'Loading...'} ${(staff?.user ?? {})?.lastName || ''
-          }`}
+        name={`${(staff?.user ?? {})?.firstName || 'Loading...'} ${
+          (staff?.user ?? {})?.lastName || ''
+        }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
         id={staff?.oracleNumber ?? staff?.staffId}
         student={false}
@@ -74,18 +74,18 @@ const SingleTeacherDashboard = () => {
                   icon: <RiDashboardFill className='h-5 w-5' />,
                   label: 'Dashboard',
                 },
-                {
-                  icon: <BiListCheck className='h-5 w-5' />,
-                  label: 'Task List',
-                },
+                // {
+                //   icon: <BiListCheck className='h-5 w-5' />,
+                //   label: 'Task List',
+                // },
                 {
                   icon: <RiCalendar2Fill className='h-5 w-5' />,
                   label: 'Timetable',
                 },
-                {
-                  icon: <IoMdTrendingUp className='h-5 w-5' />,
-                  label: 'Activity',
-                },
+                // {
+                //   icon: <IoMdTrendingUp className='h-5 w-5' />,
+                //   label: 'Activity',
+                // },
                 {
                   icon: <RiCalendar2Fill className='h-5 w-5' />,
                   label: 'Attendance Tracker',
@@ -103,7 +103,10 @@ const SingleTeacherDashboard = () => {
               managedClass={staff ? staff.managedClassArm : {}}
             />
           )}
-          {tabIdx === 1 && (
+
+          {tabIdx === 1 && <ExamTimetable isClassTimeTable={true} />}
+          {tabIdx === 2 && <TaskListView userId={p?.get('id') ?? ''} />}
+          {tabIdx === 4 && (
             <ExamReportView
               report={[
                 { name: 'Mathematics', score: 58, date: new Date() },
@@ -113,9 +116,7 @@ const SingleTeacherDashboard = () => {
               ]}
             />
           )}
-          {tabIdx === 2 && <ExamTimetable isClassTimeTable={true} />}
-          {tabIdx === 3 && <SchoolCalendarView />}
-          {tabIdx === 4 && <TaskListView />}
+          {tabIdx === 4 && <SchoolCalendarView />}
         </div>
       )}
       {gridIdx === 1 && (
@@ -191,14 +192,14 @@ const SingleTeacherDashboard = () => {
 
           {tabIdx === 0 && (
             <>
-              <div className='flex justify-end'>
+              {/* <div className='flex justify-end'>
                 <Button
                   variant='ghost'
                   className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
                 >
                   Download Report
                 </Button>
-              </div>
+              </div> */}
               <SubjectList
                 studentSubjectsList={studentSubjectsList}
                 managedClassArm={staff.managedClassArm}

@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import FormInput from '@/components/input/formInput';
 import FormTextArea from '@/components/input/formTextarea';
 import Library from '@/components/modal/Library';
@@ -7,22 +8,29 @@ import Stepper from '@/components/stepper';
 import { getErrMsg } from '@/server';
 import { useSendMessage } from '@/server/government/communication';
 import { useGetTeachersList } from '@/server/institution';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
+import { IoClose } from 'react-icons/io5';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 
+interface fileType {
+  files: { name: string; id: string }[];
+}
+
 const Page = () => {
+  const router = useRouter();
+
   const [stage, setStage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState<number | string>('');
   const [dropDown, setDropDown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [publishData, setPublishedData] = useState(null);
+  const [files, setFiles] = useState<{ name: string; id: string }[]>();
 
   const handleSendMessage = useSendMessage();
 
@@ -51,46 +59,15 @@ const Page = () => {
       filteredRecepients.push(item.value);
     });
     data.recepients = filteredRecepients;
-    console.log(data);
+    data.files = files?.map((v) => v.id);
 
-    // if (
-    //   stage === 1 &&
-    //   data.class &&
-    //   data.classArm &&
-    //   data.classTeacher &&
-    //   data.classCapacity &&
-    //   data.subjects
-    // ) {
-    //   setPublishedData(data);
-    //   setStage(stage + 1);
-    // }
-    ///////////////////////
-    //   {
-    //     "recepients": ["003cbcc0-8d15-45a0-8c23-e92873e3a53e"],
-    //     "title": "Test message",
-    //     "body": "Type in whatever you want to include as the message body here.",
-    //     "files":["https://www.file.url.png"]
-    // }
-    /////////////////////////
-
-    // if (stage === 2) {
-    //   const assignedSubjects = data.subjects.map((subject) => subject.value);
-
-    //   const classArmData = {
-    //     arm: data.classArm.toUpperCase(),
-    //     capacity: Number(data.classCapacity),
-    //     classId: data.class,
-    //     subjects: assignedSubjects,
-    //     teacherId: data.classTeacher.value,
-    //     sessionId: currentSessionInfo?.id,
-    //     institutionId: institutionProfile?.userInfo?.esiAdmin?.id,
-    //   };
     try {
       setLoading(true);
       const response = await handleSendMessage.mutateAsync(data);
 
       if (response) {
         toast.success('Message Sent successfully');
+        router.back();
         setLoading(false);
       }
     } catch (error) {
@@ -99,6 +76,11 @@ const Page = () => {
     }
     // }
   };
+
+  function handleFileRemove(id: string) {
+    const updatedFileArray = files?.filter((v) => v.id !== id);
+    setFiles(updatedFileArray);
+  }
 
   const onClickHandler = () => {
     setIsOpen(!isOpen);
@@ -118,26 +100,15 @@ const Page = () => {
       stage: 1,
       stageName: 'Message Details',
     },
-    {
-      stage: 2,
-      stageName: 'Publish',
-    },
+    // {
+    //   stage: 2,
+    //   stageName: 'Publish',
+    // },
   ];
 
   return (
     <section className='py-6'>
-      <Link href='/super-admin'>
-        <div className='flex items-center space-x-4'>
-          <Image
-            src='/svg/back.svg'
-            width={10}
-            height={10}
-            alt='back'
-            className='h-4 w-4'
-          />
-          <h3 className='text-[10px] font-medium'>Back</h3>
-        </div>
-      </Link>
+      <BackButton />
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>Send Message</h1>
 
@@ -217,18 +188,18 @@ const Page = () => {
                 </div>
               </div>
               <div className='table-add-student mt-7   pt-5 pb-10 bg-white'>
-                <div className='flex justify-between  border-b px-10'>
+                <div className='flex justify-between  border-b px-6'>
                   <h2 className='text-2xl font-bold'>Attachment </h2>
                   <div className='relative'>
-                    <button
+                    <div
                       onClick={() => {
                         setDropDown(!dropDown);
                       }}
-                      className='py-3 text-black  text-xs rounded-md px-4 flex space-x-3'
+                      className='cursor-pointer py-3 text-black  text-xs rounded-md px-4 flex space-x-3'
                     >
                       <span>Attach File</span>
                       <RiArrowDropDownLine size={20} />
-                    </button>
+                    </div>
                     {dropDown && (
                       <div
                         className='fixed inset-0 z-[9]'
@@ -238,7 +209,7 @@ const Page = () => {
                       />
                     )}
                     {dropDown && (
-                      <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-[#f7f7f7] w-[200px] h-max absolute top-12 transition-all duration-200 right-0 z-10'>
+                      <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-[#f7f7f7] w-[200px] h-max absolute top-10 transition-all duration-200 right-0 z-10'>
                         <label
                           htmlFor='upload_file'
                           className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
@@ -252,16 +223,36 @@ const Page = () => {
                           hidden
                         />
 
-                        <button
+                        <div
                           onClick={() => {
                             setIsOpen(!isOpen);
                           }}
-                          className='p-3 hover:bg-slate-100  text-left font-medium w-full'
+                          className='cursor-pointer p-3 hover:bg-slate-100  text-left font-medium w-full'
                         >
                           Upload from from Library
-                        </button>
+                        </div>
                       </div>
                     )}
+                  </div>
+                </div>
+                <div className='px-6 py-4'>
+                  <div className='flex space-x-2 items-center'>
+                    {files &&
+                      files.map((v, id) => (
+                        <div
+                          key={id}
+                          className='flex space-x-1 items-center rounded-md p-1 bg-gray-300'
+                        >
+                          <p>{v.name}</p>
+                          <button
+                            onClick={() => {
+                              handleFileRemove(v.id);
+                            }}
+                          >
+                            <IoClose className='w-6 h-6 ' />
+                          </button>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -285,7 +276,13 @@ const Page = () => {
           </div>
         </form>
       </div>
-      {isOpen && <Library onClickHandler={onClickHandler} />}
+      {isOpen && (
+        <Library
+          onClickHandler={onClickHandler}
+          setFiles={setFiles}
+          files={files}
+        />
+      )}
     </section>
   );
 };
