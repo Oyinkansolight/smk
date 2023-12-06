@@ -1,6 +1,9 @@
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
 import { ResponsivePie } from '@nivo/pie';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { BiChevronRight } from 'react-icons/bi';
 
 interface AttendanceRateProps {
   data: {
@@ -16,9 +19,12 @@ interface AttendanceRateProps {
     };
   };
   institute?: boolean;
+  showLink?: boolean;
 }
 
-const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
+const AttendanceRate = ({ data, institute, showLink = false }: AttendanceRateProps) => {
+  const routeDetails = usePathname();
+
   const studentDataKeys = Object.keys(data.student ?? {});
   const staffDataKeys = Object.keys(data.staff ?? {});
 
@@ -26,14 +32,14 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
     id: item.toLowerCase(),
     label: item[0] + item.slice(1).toLowerCase(),
     value: data.student[item],
-    color: idx === 0 ? '#E5002B' : idx === 1 ? '#EB973E' : '#2DCE89',
+    color: idx === 0 ? 'tomato' : idx === 1 ? 'goldenrod' : 'lightblue',
   }));
 
   const parsedStaffData = staffDataKeys.map((item, idx) => ({
     id: item.toLowerCase(),
     label: item[0] + item.slice(1).toLowerCase(),
     value: data.staff[item],
-    color: idx === 0 ? '#E5002B' : idx === 1 ? '#EB973E' : '#2DCE89',
+    color: idx === 0 ? 'tomato' : idx === 1 ? 'goldenrod' : 'lightblue',
   }));
 
   const totalStudentSum = studentDataKeys.reduce((acc, curr) => {
@@ -197,6 +203,18 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
           </div>
         }
       </div>
+
+      {showLink &&
+        <div className='flex justify-center mt-2'>
+          <Link
+            className='flex items-center text my-2 px-4 text-lg text-[#5754F7] font-medium gap-2 hover:text-[#5754F7]'
+            href={`${routeDetails}/attendance`}
+          >
+            <div>View All</div>
+            <BiChevronRight className='h-5 w-5' />
+          </Link>
+        </div>
+      }
     </span>
     // </ChartWrapper>
   )

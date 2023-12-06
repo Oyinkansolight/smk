@@ -82,6 +82,7 @@ export default function ClockInTime() {
             latitude: String(latitude),
             longitude: String(longitude),
             staff: profile?.userInfo?.staff?.id,
+            address: `Distance from school: ${d.toFixed(2)} Km`,
           });
         }
       }

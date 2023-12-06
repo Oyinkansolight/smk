@@ -68,7 +68,7 @@ export default function Page() {
                   }
                   onClick={() => {
                     router.push(
-                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}&classArmName=${v?.class?.class?.name} ${v?.class?.arm}`
+                      `/teacher/manual-gradebook/subject?id=${v?.subject?.id}&subjectName=${v?.subject?.name}&classArmId=${v?.class.id}&classArmName=${v?.class?.class?.name ?? ''} ${v?.class?.arm ?? ''}`
                     );
                   }}
                 />

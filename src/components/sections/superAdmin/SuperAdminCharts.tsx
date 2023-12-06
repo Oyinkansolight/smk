@@ -47,7 +47,7 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#DADEE6]'
               title='Attendance Tracker'
               description='Total number that were present'
-              content={<BarChart data={chartData?.attendanceTracker} />}
+              content={<BarChart data={chartData?.attendanceTracker} showLink />}
             />
 
             <GenericChart
@@ -55,7 +55,7 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#EDF5F2]'
               className='border-[#EDF5F2]'
               description='Total rate of attendance in the state'
-              content={<AttendanceRate data={chartData?.attendanceRate} />}
+              content={<AttendanceRate data={chartData?.attendanceRate} showLink />}
             />
 
             {/* <GenericChart
@@ -121,11 +121,19 @@ const SuperAdminCharts = ({
             />
 
             <GenericChart
-              title='Transfer Requests'
+              title='Staff Transfer Requests'
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
-              description='Recent staff/student transfer requests in the state'
-              content={<SuperTransferRequestsTable data={[...chartData.staffTransferRequests, ...chartData.studentTransferRequests]} />}
+              description='Recent staff transfer requests in the state'
+              content={<SuperTransferRequestsTable data={[...chartData.staffTransferRequests]} isStaff />}
+            />
+
+            <GenericChart
+              title='Student Transfer Requests'
+              titleClassName='bg-[#E8ECF2]'
+              className='border-[#E8ECF2]'
+              description='Recent student transfer requests in the state'
+              content={<SuperTransferRequestsTable data={[...chartData.studentTransferRequests]} />}
             />
           </div>
         </div>

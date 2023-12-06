@@ -87,6 +87,7 @@ export function useCreateAcademicCalendar() {
 export function useGetAdminCharts(params: Partial<ChartParams>) {
   const query = useQuery({
     queryKey: 'admin_charts',
+    refetchOnWindowFocus: false,
     queryFn: () =>
       request
         .get('/v1/government/dashboards/get-admin-stat-dashboard', {
