@@ -6,7 +6,7 @@ import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
-import { useClockIn, useClockOut } from '@/server/teacher';
+import { useClockIn, useSubmitStaffCoordinates } from '@/server/teacher';
 import moment, { Duration } from 'moment';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -16,7 +16,8 @@ const institutionData = getFromSessionStorage('institution');
 
 export default function ClockInTime() {
   const clockIn = useClockIn();
-  const clockOut = useClockOut();
+  const submitCoordinates = useSubmitStaffCoordinates()
+  // const clockOut = useClockOut();
   const { data: clockInfo } = useGetClockInfo();
   const { data: profile } = useGetProfile();
   const [inArea, setInArea] = useState(false);
@@ -74,9 +75,18 @@ export default function ClockInTime() {
       if (d < 200) {
         setInArea(true);
         setIsLoading(false);
+      } else {
+        //* This is done to track the coordinates of teachers that can't clock in due to distance
+        if (!clockInfo?.isClockedIn && profile?.userInfo?.staff?.id) {
+          submitCoordinates.mutateAsync({
+            latitude: String(latitude),
+            longitude: String(longitude),
+            staff: profile?.userInfo?.staff?.id,
+          });
+        }
       }
     }
-  }, [latitude, longitude, loading, error, lat, long]);
+  }, [latitude, longitude, loading, error, lat, long, clockInfo?.isClockedIn, profile?.userInfo?.staff?.id]);
 
   useEffect(() => {
     setTimeout(() => {
