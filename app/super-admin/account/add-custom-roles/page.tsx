@@ -111,6 +111,8 @@ const AddClass = () => {
       name: roleName,
       description: roleDesc,
       permissionIds,
+      type: 'role',
+      isOverride: false,
     };
 
     try {
