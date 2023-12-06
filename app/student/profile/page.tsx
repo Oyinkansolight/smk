@@ -87,25 +87,31 @@ const Page = () => {
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Full Name</h1>
               <p className='text-base font-medium'>
-                {user?.firstName ?? "N/A"} {user?.lastName ?? "N/A"}{' '}
+                {user?.firstName ?? 'N/A'} {user?.lastName ?? 'N/A'}{' '}
               </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Gender</h1>
-              <p className='text-base font-medium uppercase'>{user?.gender ?? "N/A"} </p>
+              <p className='text-base font-medium uppercase'>
+                {user?.gender ?? 'N/A'}{' '}
+              </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Year/Level</h1>
-              <p className='text-base font-medium'>{user?.class?.class?.name ?? "N/A"}</p>
+              <p className='text-base font-medium'>
+                {user?.class?.class?.name ?? 'N/A'}
+              </p>
             </div>
 
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Student ID Number</h1>
-              <p className='text-base font-medium'>{user?.studentId ?? "N/A"} </p>
+              <p className='text-base font-medium'>
+                {user?.studentId ?? 'N/A'}{' '}
+              </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Date of Birth</h1>
-              <p className='text-base font-medium'>{user?.dob ?? "N/A"} </p>
+              <p className='text-base font-medium'>{user?.dob ?? 'N/A'} </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Nationality</h1>
@@ -160,17 +166,22 @@ const Page = () => {
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Relationship</h1>
-              <p className='text-base font-medium'> {user?.parentStatus ?? "N/A"} </p>
+              <p className='text-base font-medium'>
+                {' '}
+                {user?.parentStatus ?? 'N/A'}{' '}
+              </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Occupation</h1>
-              <p className='text-base font-medium'>{user?.parentOccupation ?? "N/A"}</p>
+              <p className='text-base font-medium'>
+                {user?.parentOccupation ?? 'N/A'}
+              </p>
             </div>
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Email</h1>
               <p className='text-base font-medium'>
                 {' '}
-                {user?.parentDetails?.email ?? "N/A"}{' '}
+                {user?.parentDetails?.email ?? 'N/A'}{' '}
               </p>
             </div>
             <div>
@@ -180,12 +191,12 @@ const Page = () => {
             <div>
               <h1 className='text-gray-400 text-xs mb-3'>Phone Number</h1>
               <p className='text-base font-medium'>
-                {user?.parentDetails?.phoneNumber ?? "N/A"}
+                {user?.parentDetails?.phoneNumber ?? 'N/A'}
               </p>
             </div>
           </div>
 
-          <div className='py-2 border-b flex justify-between mt-5'>
+          {/* <div className='py-2 border-b flex justify-between mt-5'>
             <h1 className='text-xl'>Students Educational History</h1>
             <button
               onClick={() => setIsEdit(true)}
@@ -212,7 +223,7 @@ const Page = () => {
               <h1 className='text-gray-400 text-xs mb-3'>Gradation Year</h1>
               <p className='text-base font-medium'>2025</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@ const Page = () => {
     classArmId: user?.currentStudentInfo?.class?.id,
   });
 
-  console.log(data);
+  const reportCardURL = `/view-report-card?sessionId=${currentSessionId}&termId=${currentTermInfo?.id}&studentId=${user?.currentStudentInfo?.id}&classArmId=${user?.currentStudentInfo?.class?.id}`;
 
   return (
     <div className='flex gapx-4 gap-y-10'>
@@ -76,7 +76,7 @@ const Page = () => {
           </select>
         </div>
         <div className='flex justify-end p-2  bg-[#F9F9F9] rounded'>
-          <Link href='/view-report-card'>
+          <Link href={reportCardURL}>
             <button className='bg-[#3361FF] text-white p-1 rounded'>
               Download Report Card
             </button>
@@ -134,7 +134,7 @@ const Page = () => {
                 <div className='col-span-1'>Remark</div>
               </div>
 
-              {data && data.subjectsGrades.length > 0 ? (
+              {data && data?.subjectsGrades && data.subjectsGrades?.length > 0 ? (
                 <div>
                   {data?.subjectsGrades.map((item, idx) => (
                     <div

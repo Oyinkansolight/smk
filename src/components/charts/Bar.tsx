@@ -43,7 +43,7 @@ const BarChart = ({ data }) => {
         axisTop={null}
         axisRight={null}
         enableGridY={true}
-        borderRadius={16}
+        borderRadius={6}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,

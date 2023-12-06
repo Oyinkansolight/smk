@@ -44,7 +44,7 @@ const SuperGenderDistribution = ({ data }) => {
         axisTop={null}
         axisRight={null}
         enableGridY={true}
-        borderRadius={16}
+        borderRadius={6}
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,

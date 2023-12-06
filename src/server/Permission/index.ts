@@ -63,7 +63,7 @@ export function useCreateNewRole() {
     mutationKey: 'create_new_role',
     mutationFn: async (body: AddRoleParams) => {
       try {
-        const d = await request.post(`/v1/government/roles/add-role`, body);
+        const d = await request.post(`/v1/government/roles/create-role`, body);
         return d.data.data;
       } catch (error) {
         logger(error);

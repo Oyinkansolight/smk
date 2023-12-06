@@ -101,7 +101,7 @@ export interface AllPermissionsParams {
 export interface AddRoleParams {
   name?: string;
   description?: string;
-  permissions?: string[];
+  permissionIds?: string[];
 }
 
 export interface TeachersLog {
