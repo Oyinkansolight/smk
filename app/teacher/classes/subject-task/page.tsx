@@ -64,7 +64,7 @@ export default function Page() {
   const backButtonLink = `/teacher/classes/subject?id=${period?.subject?.id}&classArmId=${classArmId}&classId=${period?.class?.id}&armName=${classArmName}`;
 
   return (
-    <div className='layout'>
+    <div className='layout pl-0 lg:pl-20'>
       <div
         onClick={() => router.push(backButtonLink)}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
@@ -232,7 +232,7 @@ function SideBarItem({
             : type === 'CLASS_WORK'
               ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
               : type === 'LESSON_NOTE'
-                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
+                ? `/teacher/lesson-note/lesson-notes/view-lesson-note?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                 : type === 'QUIZ'
                   ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                   : '#'

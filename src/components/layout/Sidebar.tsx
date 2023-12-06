@@ -5,6 +5,7 @@ import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useClockOut } from '@/server/teacher';
+import Cookies from 'js-cookie';
 import moment from 'moment';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
@@ -19,6 +20,8 @@ interface TeacherSidebarProps {
 }
 
 const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
+  //* Added to view the non manual grade book - hidden for now until we are ready to use it and not the manual grade book
+  const isGrade = Cookies.get('isGrade') === 'Y';
   const routeDetails = usePathname();
   const router = useRouter();
 
@@ -109,13 +112,15 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
             }
           />
 
-          <SideBarButton
-            open={open}
-            icon={<FaRegIdCard className='#C3CAD9' />}
-            title='Grade Book'
-            href='/teacher/grades'
-            active={routeDetails && routeDetails.includes('grades') && true}
-          />
+          {isGrade &&
+            <SideBarButton
+              open={open}
+              icon={<FaRegIdCard className='#C3CAD9' />}
+              title='Grade Book'
+              href='/teacher/grades'
+              active={routeDetails && routeDetails.includes('grades') && true}
+            />
+          }
 
           <SideBarButton
             open={open}

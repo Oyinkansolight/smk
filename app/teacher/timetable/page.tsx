@@ -31,7 +31,7 @@ export default function Page() {
   });
 
   return (
-    <div className='layout flex justify-center'>
+    <div className='layout flex justify-center pl-0 lg:pl-20'>
       <div className='w-full max-w-5xl'>
         <div className='font-bold text-3xl my-14'>Timetable</div>
         <TextTabBar

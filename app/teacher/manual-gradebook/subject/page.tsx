@@ -157,11 +157,11 @@ export default function Page() {
   };
 
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <BackButton />
       <div className='text-gray-600 py-8 text-xl'>
-        Grade Book {'>'} {params?.get('subjectName')} -{' '}
-        {params?.get('classArmName')}
+        Grade Book {'>'} {params?.get('subjectName')} {params?.get('classArmName') && '-'}{' '}
+        {params?.get('classArmName') && params?.get('classArmName')}
       </div>
       <div className='flex justify-between'>
         <h2 className='font-bold text-2xl'>{params?.get('subjectName')}</h2>

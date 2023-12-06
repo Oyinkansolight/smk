@@ -40,7 +40,7 @@ export default function Page() {
   }, [error]);
 
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div className='text-[#D4D5D7] text-xl mt-6'>
         {'Test & Exam > Mathematics'}
       </div>

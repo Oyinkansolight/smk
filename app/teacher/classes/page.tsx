@@ -48,7 +48,7 @@ export default function Page() {
 
   return (
     <Suspense fallback={<Loader />}>
-      <div className='h-full layout'>
+      <div className='h-full layout pl-0 lg:pl-20'>
         <div className='text-[#D4D5D7] py-8 text-2xl'>Classes</div>
         <div className='bg-white h-screen px-10'>
           <div className='font-bold py-8 h3'>

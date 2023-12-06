@@ -9,7 +9,7 @@ import { BsArrowUp } from 'react-icons/bs';
 export default function Page() {
   const [idx, setIdx] = useState(0);
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div className='font-bold text-2xl'>Grade List</div>
       <TextTabBar
         tabs={[

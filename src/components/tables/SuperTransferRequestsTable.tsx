@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EmptyView from '@/components/misc/EmptyView';
+import clsxm from '@/lib/clsxm';
 import moment from 'moment';
 import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
@@ -44,7 +45,7 @@ const columns: TableColumn<(any)[number]>[] = [
   },
 ];
 
-export default function SuperTransferRequestsTable({ data }) {
+export default function SuperTransferRequestsTable({ data, isStaff }: { data: any; isStaff?: boolean }) {
   if (!data || data.length === 0) return (
     <EmptyView label='No transfer requests at the moment' />
   );
@@ -52,10 +53,13 @@ export default function SuperTransferRequestsTable({ data }) {
   return (
     <div>
       <Table columns={columns} data={data.slice(0, 5)} />
-      <div className='flex justify-end'>
+      <div className={clsxm(
+        'flex justify-end',
+        data.slice(0, 5).length < 3 && 'mt-10'
+      )}>
         <Link
           className='flex items-center text my-2 px-4 text-[#007AFF]'
-          href='/super-admin/all-transfer-request'
+          href={isStaff ? '/super-admin/all-transfer-request-staff' : '/super-admin/all-transfer-request'}
         >
           <div>View All</div>
           <BiChevronRight className='h-5 w-5' />

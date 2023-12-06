@@ -26,7 +26,7 @@ export default function Page() {
   }, [params]);
 
   return (
-    <div className='w-full layout'>
+    <div className='w-full layout pl-0 lg:pl-20'>
       <BackButton />
 
       <div className='text-[#D4D5D7] py-8 text-lg lg:text-2xl'>

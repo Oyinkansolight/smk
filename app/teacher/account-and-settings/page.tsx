@@ -7,7 +7,7 @@ export default function Page() {
   const { data } = useGetProfile();
 
   return (
-    <div className='layout flex flex-col gap-8 my-5'>
+    <div className='layout flex flex-col gap-8 my-5 pl-0 lg:pl-20'>
       <div className='text-2xl font-bold'>Account And Settings</div>
       <BigAvatar src='/images/teacher_1.png' />
       <div className='flex flex-col gap-4'>

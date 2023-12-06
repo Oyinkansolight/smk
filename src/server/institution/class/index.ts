@@ -28,6 +28,17 @@ export function useGetInstituteClassArms(params?: InstituteClassArmsParams) {
 
   const { enabled, institutionId, currentSessionId }: any = params;
 
+  const parsedParams: any = {
+    page: params?.page,
+    limit: params?.limit,
+    institutionId,
+    sessionId: currentSessionId,
+  };
+
+  if (params?.query) {
+    parsedParams.query = params?.query;
+  }
+
   const query = useQuery({
     enabled,
     queryKey: 'get_institute_class_arm',
@@ -36,13 +47,8 @@ export function useGetInstituteClassArms(params?: InstituteClassArmsParams) {
         const d = await request.get(
           `/v1/institutions/class-arm/get-institution-class-arm`,
           {
-            // `/v1/institutions/class-arm/get-institution-class-arm?institutionId=${instituteId}&sessionId=${currentSessionId}&limit=30`
             params: {
-              page: params?.page,
-              limit: params?.limit,
-              // query: params?.query,
-              institutionId,
-              sessionId: currentSessionId,
+              ...parsedParams,
             },
           }
         );

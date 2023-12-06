@@ -19,7 +19,7 @@ export default function Page() {
     type: params?.get('type') as (typeof ACTIVITY_TYPES)[number] | undefined,
   });
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <BackButton />
       <div className='text-3xl pt-8 text-[#D4D5D7]'>
         {'Class Work > Submissions'}

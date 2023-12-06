@@ -12,7 +12,7 @@ export default function Page() {
     'Sharon Orobosa',
   ];
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div className='text-black font-bold py-8 text-2xl'>Grade Book</div>
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
         <input className='rounded-full border p-3' placeholder='search' />

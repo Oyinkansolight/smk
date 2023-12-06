@@ -103,7 +103,7 @@ export default function Page() {
   }
 
   return (
-    <div className='px-8 layout'>
+    <div className='px-8 layout pl-0 lg:pl-20'>
       <div
         onClick={() => router.push('/teacher/classes')}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'

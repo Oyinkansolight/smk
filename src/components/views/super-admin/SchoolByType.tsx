@@ -29,6 +29,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
     page: 1,
     limit: 10,
     query,
+    include: 'false'
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
