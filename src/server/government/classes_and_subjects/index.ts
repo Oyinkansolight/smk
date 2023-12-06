@@ -159,6 +159,25 @@ export function useEditSubjectGradeBook() {
   });
   return mutation;
 }
+export function useDeleteSubjectGradeBook() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'create-gradebook',
+    mutationFn: (params: any) => {
+      const gradeBookId = params.id;
+      delete params.id;
+      return request.delete(
+        `/v1/institutions/manual_grade/${gradeBookId}`,
+        params
+      );
+    },
+    onSettled: () => {
+      client.refetchQueries(`create-gradebook-scoresheet`);
+    },
+  });
+  return mutation;
+}
 export function useGetSubjectGradeList(params: GetSubjectGradeBookParams) {
   const query = useQuery({
     queryKey: 'get_subject_grade_List',

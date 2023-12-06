@@ -7,7 +7,7 @@ import { ImImage } from 'react-icons/im'
 import Button from '@/components/buttons/Button'
 import BackButton from '@/components/accordions/BackButton';
 
-const PrintedReportCard = () => {
+const PrintedReportCard = ({ reportCard }: any) => {
   const handlePrint = () => {
     window.print()
   }

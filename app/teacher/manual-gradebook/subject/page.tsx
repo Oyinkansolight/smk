@@ -10,6 +10,7 @@ import {
   CreateGradeSettingsParams,
   useCreateResultFromGradeBook,
   useCreateSubjectGradeBook,
+  useDeleteSubjectGradeBook,
   useEditSubjectGradeBook,
   useGetSubjectScoreSheet,
 } from '@/server/government/classes_and_subjects';
@@ -44,6 +45,7 @@ export default function Page() {
   const handleCreateGradebook = useCreateSubjectGradeBook();
   const handleCreateResultFromGradebook = useCreateResultFromGradeBook();
   const handleEditGradebook = useEditSubjectGradeBook();
+  const handleDeleteGradebook = useDeleteSubjectGradeBook();
 
   // const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
   //   teacherId: profile?.userInfo?.staff?.id,
@@ -133,6 +135,26 @@ export default function Page() {
       toast.error(getErrMsg(error));
     }
   };
+  const handleGradeBookDelete = async (gradeBookId: string) => {
+    const payload = {
+      id: gradeBookId,
+    };
+
+    try {
+      setloading(true);
+      const response = await handleDeleteGradebook.mutateAsync(payload);
+
+      if (response) {
+        toast.success('Gradebook updated successfully');
+        setIsModify(false);
+
+        setloading(false);
+      }
+    } catch (error) {
+      setloading(false);
+      toast.error(getErrMsg(error));
+    }
+  };
 
   return (
     <div className='h-full layout'>
@@ -160,21 +182,19 @@ export default function Page() {
             </Button>
           )}
 
-          {StudentScoreSheet && StudentScoreSheet.length === 0 && (
-            <Button
-              onClickHandler={() => {
-                handleGenerateGradeBook();
-              }}
-              variant='secondary'
-              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
-            >
-              {isLoadingCreateGradebook ? (
-                <ImSpinner2 className='animate-spin' />
-              ) : (
-                'Generate Score Sheet'
-              )}
-            </Button>
-          )}
+          <Button
+            onClickHandler={() => {
+              handleGenerateGradeBook();
+            }}
+            variant='secondary'
+            className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+          >
+            {isLoadingCreateGradebook ? (
+              <ImSpinner2 className='animate-spin' />
+            ) : (
+              'Update Score Sheet'
+            )}
+          </Button>
         </div>
       </div>
       {/* <TextTabBar
@@ -190,7 +210,7 @@ export default function Page() {
       {isScoreSheetLoading ? (
         <div className='text-center'>Loading...</div>
       ) : StudentScoreSheet && StudentScoreSheet.length ? (
-        <div className='bg-white min-h-screen px-10 mt-3'>
+        <div className='bg-white min-h-screen px-10 mt-3 pb-24'>
           <div className='grid grid-cols-11 py-8 text-[#746D69] text-base'>
             <div />
             <div className='col-span-3 px-4'>Student</div>
@@ -215,6 +235,7 @@ export default function Page() {
                   setCa2_Score={setCa2_Score}
                   setExam={setExam}
                   handleGradeBookEdit={handleGradeBookEdit}
+                  handleGradeBookDelete={handleGradeBookDelete}
                   loading={loading}
                   setIsModify={setIsModify}
                 />
@@ -238,6 +259,7 @@ function StudentGradeListItem({
   handleGradeBookEdit,
   loading,
   setIsModify,
+  handleGradeBookDelete,
 }: {
   id: number;
   item: any;
@@ -247,16 +269,20 @@ function StudentGradeListItem({
   setCa2_Score: (v: number) => void;
   setExam: (v: number) => void;
   handleGradeBookEdit: (v: string) => void;
+  handleGradeBookDelete: (v: string) => void;
   loading: boolean;
 }) {
   const [lineToModify, setLineToModify] = useState<number | null>();
   return (
     <div>
-      <div className=' space-x-1 grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-6 bg-white'>
+      <div className=' space-x-1 grid text-black grid-cols-11 items-center text-base rounded-lg border p-4 py-4 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>
           <div className='rounded-full h-10 w-10 bg-gray-300 md:block hidden' />
-          <div>{item?.student?.lastName + ' ' + item?.student?.firstName}</div>
+          <div>
+            {item?.student ? item?.student?.lastName : 'N/A'}{' '}
+            {item?.student ? item?.student?.firstName : 'N/A'}
+          </div>
         </div>
         {isModify && lineToModify === id ? (
           <div className=''>
@@ -340,6 +366,17 @@ function StudentGradeListItem({
                     className='flex justify-center h-[46px] bg-[#e3241a] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
                   >
                     Cancel
+                  </Button>
+                )}
+                {lineToModify === id && (
+                  <Button
+                    onClickHandler={() => {
+                      handleGradeBookDelete(item.id);
+                    }}
+                    variant='secondary'
+                    className='flex justify-center h-[46px] bg-[#e3241a] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+                  >
+                    Remove
                   </Button>
                 )}
               </div>

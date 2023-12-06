@@ -57,28 +57,28 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
     <span className='flex flex-col gap-5'>
       <div className='flex flex-row gap-3'>
         <div className='flex flex-row gap-1'>
-          <div className='w-5 h-5 bg-[#5754F7] rounded-[3px]' />
+          <div className='w-5 h-5 bg-[#EFF3F7] rounded-[3px]' />
           <span className='text-sm font-medium'>Student</span>
         </div>
 
         <div className='flex flex-row gap-1'>
-          <div className='w-5 h-5 bg-[#35CFFF] rounded-[3px]' />
+          <div className='w-5 h-5 bg-[#c0c1c1] rounded-[3px]' />
           <span className='text-sm font-medium'>Teacher</span>
         </div>
       </div>
 
       <div className={clsxm(
         institute ? '' : '',
-        'flex gap-2 justify-between'
+        'flex flex-col gap-2 justify-between'
       )}>
         {
           <div className='flex flex-col items-center text-center'>
             <div className={clsxm(
               // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[230px]',
-              'h-[392px] lg:h-[262px] w-[320px] lg:w-[210px]'
+              'h-[392px] w-[320px]'
             )}>
               {totalStudentSum > 0 ?
-                <div className='flex justify-center items-center bg-[#5754F7] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] lg:max-h-[322px] w-full max-w-[335px] lg:max-w-[230px]'>
+                <div className='flex justify-center items-center bg-[#EFF3F7] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] w-full max-w-[335px]'>
                   <ResponsivePie
                     data={parsedStudentData}
                     margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
@@ -101,7 +101,7 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
                     legends={[
                       {
                         anchor: 'bottom-left',
-                        direction: 'column',
+                        direction: 'row',
                         justify: false,
                         translateX: 10,
                         translateY: 56,
@@ -138,10 +138,10 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
           <div className='flex flex-col items-center text-center'>
             <div className={clsxm(
               // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[220px]',
-              'h-[392px] lg:h-[262px] w-[320px] lg:w-[210px]'
+              'h-[392px] w-[320px]'
             )}>
               {totalStaffSum > 0 ?
-                <div className='flex justify-center items-center bg-[#35CFFF] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] lg:max-h-[322px] w-full max-w-[335px] lg:max-w-[230px]'>
+                <div className='flex justify-center items-center bg-[#c0c1c1] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] w-full max-w-[335px]'>
                   <ResponsivePie
                     data={parsedStaffData}
                     margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
@@ -164,7 +164,7 @@ const AttendanceRate = ({ data, institute }: AttendanceRateProps) => {
                     legends={[
                       {
                         anchor: 'bottom-left',
-                        direction: 'column',
+                        direction: 'row',
                         justify: false,
                         translateX: 10,
                         translateY: 56,

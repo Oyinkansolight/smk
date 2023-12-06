@@ -27,7 +27,7 @@ const SuperAdminCharts = ({
 
   if (isLoading || !chartData) {
     return (
-      <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
+      <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3'>
         <ChartSkeleton />
         <ChartSkeleton />
         <ChartSkeleton />
@@ -40,43 +40,8 @@ const SuperAdminCharts = ({
 
   return (
     <>
-      {/* <div className='flex flex-col gap-8 p-[30px]'>
-        <div className='flex justify-between'>
-          <div className='text-xl font-bold'>Data Generator</div>
-          <Link href='#' className='text-[#3361FF] '>
-            View Advanced Report
-          </Link>
-        </div>
-        <div className='text-[#6B7A99]'>
-          Select the variables that would feed the stat section below.
-        </div>
-        <div className='grid grid-cols-4 gap-4'>
-          <div>
-            <ReactSelect
-              value={{ value: 'all_classes', label: 'All Classes' }}
-              options={[{ value: 'all_classes', label: 'All Classes' }]}
-            />
-          </div>
-          <div>
-            <ReactSelect
-              value={{ value: 'all_classes', label: 'All Class Arm' }}
-              options={[{ value: 'all_classes', label: 'All Class Arm' }]}
-            />
-          </div>
-          <div>
-            <ReactSelect
-              value={{ value: 'all_classes', label: 'Ally' }}
-              options={[{ value: 'all_classes', label: 'Ally' }]}
-            />
-          </div>
-          <Button className='justify-center max-w-[160px]' variant={variant}>
-            Apply
-          </Button>
-        </div>
-      </div> */}
-
       <div className='flex flex-col'>
-        <div className='mt-7 grid grid-cols-1 gap-7 lg:grid-cols-2'>
+        <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3'>
           <div className='flex flex-col gap-y-7'>
             <GenericChart
               titleClassName='bg-[#DADEE6]'
@@ -105,20 +70,6 @@ const SuperAdminCharts = ({
               title='Enrolment Analysis'
               description='Total number of enrolment in the state'
               content={<EnrolmentAnalysis instituteIndex={null} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
-            />
-
-            <GenericChart
-              title='Low Batteries Notifications'
-              description='Total number of low batteries in the state'
-              content={<LowBatteriesTable data={chartData?.lowBatteryUsers} />}
-            />
-
-            <GenericChart
-              title='Admin Login Log'
-              titleClassName='bg-[#EDF5F2]'
-              className='border-[#EDF5F2]'
-              description='Recent admin login logs'
-              content={<LoginLogsTable data={chartData?.loginLogs} />}
             />
           </div>
 
@@ -151,6 +102,22 @@ const SuperAdminCharts = ({
               className='border-[#E6FFF7]'
               description='Recent events across institutions/state/country'
               content={<EventCalendarTable data={chartData.events} />}
+            />
+          </div>
+
+          <div className='flex flex-col gap-y-7'>
+            <GenericChart
+              title='Admin Login Log'
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Recent admin login logs'
+              content={<LoginLogsTable data={chartData?.loginLogs} />}
+            />
+
+            <GenericChart
+              title='Low Batteries Notifications'
+              description='Total number of low batteries in the state'
+              content={<LowBatteriesTable data={chartData?.lowBatteryUsers} />}
             />
 
             <GenericChart

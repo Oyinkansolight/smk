@@ -31,9 +31,7 @@ export function useGetSenderMessages() {
   const query = useQuery({
     queryKey: `get_sender_messages`,
     queryFn: async () => {
-      const d = await request.get(
-        '/v1/government/communication/get_sender_messages'
-      );
+      const d = await request.get('/v1/government/message/get_sender_messages');
       // console.log(d.data.data.data);
       return d.data.data.data.data as messages[];
     },
