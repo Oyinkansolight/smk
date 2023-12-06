@@ -25,6 +25,7 @@ import { useMemo, useState } from 'react';
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
+  const [weekIndex, setWeekIndex] = useState(0);
   const currentWeekFromSession = getFromSessionStorage('currentWeek');
   const { data: profile } = useGetProfile();
   const { data: terms, isLoading: isLoadingSessions } = useGetSessionTerms({
@@ -47,6 +48,7 @@ export default function Page() {
           weeks?.data.forEach((week, index) => {
             if (week?.id === parsedCurrentWeek?.id) {
               setCurrentWeek(index);
+              setWeekIndex(index);
             }
           });
         }
@@ -140,11 +142,17 @@ export default function Page() {
       )} */}
 
       <div className='flex justify-end'>
-        <WeekSelector
-          max={weeks?.data.length ? weeks?.data.length - 1 : 0}
-          index={currentWeek}
-          onChange={setCurrentWeek}
-        />
+        <div className='flex flex-col gap-1'>
+          <div className='font-semibold text-xl -ml-12'>
+            Current Week: {sortedWeeks[weekIndex]?.name}
+          </div>
+
+          <WeekSelector
+            max={weeks?.data.length ? weeks?.data.length - 1 : 0}
+            index={currentWeek}
+            onChange={setCurrentWeek}
+          />
+        </div>
       </div>
       <div className=''>
         <div className='font-bold py-8 text-4xl'>
@@ -169,11 +177,10 @@ export default function Page() {
                         ? i % 2 === 0
                           ? '/teacher/classes/subject-task-doc'
                           : '/teacher/classes/subject-task-video'
-                        : `/teacher/classes/subject-task?id=${
-                            period.id
-                          }&classArmId=${params?.get(
-                            'classArmId'
-                          )}&armName=${params?.get('armName')}`
+                        : `/teacher/classes/subject-task?id=${period.id
+                        }&classArmId=${params?.get(
+                          'classArmId'
+                        )}&armName=${params?.get('armName')}`
                     )
                   }
                   key={period?.id ?? i}

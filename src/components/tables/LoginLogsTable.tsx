@@ -20,10 +20,10 @@ const columns: TableColumn<LoginLogsTableProps>[] = [
     grow: 3,
     cell: (event) => (
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap overflow-hidden'>
-        <div className='h-6 w-6 rounded-full bg-gray-200' />
-        <div className='grid grid-cols-2 gap-4 md:gap-10'>
+        <div className='h-6 w-6 min-h-[24px] min-w-[24px] rounded-full bg-gray-200' />
+        <div className='grid grid-cols-2 gap-2 xl:gap-10'>
           <div className='max-w-[100px] sm:max-w-[200px] lg:max-w-[120px] overflow-hidden text-ellipsis'>{(event.user.lastName && event.user.firstName) ? `${event.user.lastName} ${event.user.firstName}` : 'Admin User'}</div>
-          <div className='bg-[#FFF3EF] text-center text-[8px] font-normal text-[#FF6633] py-1 px-2 rounded-full min-w-[80px] max-w-[80px] overflow-hidden text-ellipsis'>
+          <div className='bg-[#FFF3EF] text-center text-[6px] lg:text-[8px] font-normal text-[#FF6633] lg:py-1 px-2 rounded-full min-w-[40px] max-w-[80px] overflow-hidden text-ellipsis'>
             {event.user.type}
           </div>
         </div>

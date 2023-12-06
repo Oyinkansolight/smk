@@ -195,6 +195,14 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
                 </p>
               </div>
             </div>
+            <div className=' grid grid-cols-2 gap-6 w-full'>
+              <div className='flex space-x-2 items-center'>
+                <div className='h-2 w-2 bg-purple-500 rounded-full'></div>{' '}
+                <p className='text-white text-base font-light whitespace-nowrap flex items-center'>
+                  TVET - {isLoadingOverview ? <div className="h-2.5 bg-gray-50/50 rounded-full w-6" /> : data?.Total_TVET ?? 0}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <div className='grid sm:grid-cols-3  gap-4'>
