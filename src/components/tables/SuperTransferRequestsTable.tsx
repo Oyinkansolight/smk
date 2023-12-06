@@ -16,7 +16,7 @@ const columns: TableColumn<(any)[number]>[] = [
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] overflow-hidden text-ellipsis'>
-          {event?.currentInstitution?.instituteName ?? "N/A"}
+          {event?.currentInstitution?.instituteName ?? event?.transferFrom?.instituteName ?? "N/A"}
         </div>
       </div>
     ),
@@ -29,7 +29,7 @@ const columns: TableColumn<(any)[number]>[] = [
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] text-ellipsis overflow-hidden'>
-          {event?.newInstitution?.instituteName ?? "N/A"}
+          {event?.newInstitution?.instituteName ?? event?.transferTo?.instituteName ?? "N/A"}
         </div>
       </div>
     ),
