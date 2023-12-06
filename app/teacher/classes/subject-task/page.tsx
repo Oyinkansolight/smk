@@ -232,7 +232,7 @@ function SideBarItem({
             : type === 'CLASS_WORK'
               ? `/teacher/lesson-note/class-work/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
               : type === 'LESSON_NOTE'
-                ? `/teacher/lesson-note/lesson-notes/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
+                ? `/teacher/lesson-note/lesson-notes/view-lesson-note?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                 : type === 'QUIZ'
                   ? `/teacher/lesson-note/pop-quiz/submissions?subjectId=${period.subject.id}&type=${type}&classArmId=${classArmId}`
                   : '#'
