@@ -99,7 +99,9 @@ export interface AllPermissionsParams {
 }
 
 export interface AddRoleParams {
+  type?: string;
   name?: string;
+  isOverride?: boolean;
   description?: string;
   permissionIds?: string[];
 }
