@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
+import { StaffCoordinatesParams } from '@/types';
 import { TeacherNextClass } from '@/types/classes-and-subjects';
 import { IncidentReportType, Subject } from '@/types/institute';
 import { useEffect } from 'react';
@@ -137,4 +139,15 @@ export function useGetTeacherNextClass(params: GetTeacherNextClassParams) {
   ]);
 
   return query;
+}
+
+export function useSubmitStaffCoordinates() {
+  const mutation = useMutation({
+    mutationKey: 'submit_staff_coordinates',
+    mutationFn: (params: StaffCoordinatesParams) =>
+      request.post('/v1/institutions/staff_cordinates', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
 }

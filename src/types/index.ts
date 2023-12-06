@@ -152,3 +152,10 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface StaffCoordinatesParams {
+  staff?: string;
+  address?: string;
+  latitude?: string;
+  longitude?: string;
+}
