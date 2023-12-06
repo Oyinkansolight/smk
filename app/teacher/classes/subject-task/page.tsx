@@ -64,7 +64,7 @@ export default function Page() {
   const backButtonLink = `/teacher/classes/subject?id=${period?.subject?.id}&classArmId=${classArmId}&classId=${period?.class?.id}&armName=${classArmName}`;
 
   return (
-    <div className='layout'>
+    <div className='layout pl-0 lg:pl-20'>
       <div
         onClick={() => router.push(backButtonLink)}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>

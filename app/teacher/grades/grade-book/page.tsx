@@ -15,7 +15,7 @@ export default function Page() {
     'Sharon Orobosa',
   ];
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div
         onClick={() => router.back()}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>

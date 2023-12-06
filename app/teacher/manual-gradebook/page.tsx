@@ -40,7 +40,7 @@ export default function Page() {
   }, [refetch, profile]);
 
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div className='text-[#D4D5D7] py-8 text-xl'>Grade Book</div>
       <div className='pb-10 font-bold text-[32px]'>Gradebook</div>
 

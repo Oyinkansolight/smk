@@ -103,7 +103,7 @@ const AllNotification = () => {
   };
 
   return (
-    <section className='p-6 layout'>
+    <section className='p-6 layout pl-0 lg:pl-20'>
       {composeMessage && (
         <div className='fixed z-[99999] bg-[#000]/50 inset-0 grid place-content-center'>
           <div className='bg-white rounded-lg p-10'>

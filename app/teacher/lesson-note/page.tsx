@@ -14,7 +14,7 @@ const colors = ['bg-[#EFF7F6]', 'bg-[#F3EFF7]', 'bg-[#F7EFEF]', 'bg-[#F7F7EF]'];
 
 export default function Page() {
   return (
-    <div className='w-full layout mt-10'>
+    <div className='w-full layout mt-10 pl-0 lg:pl-20'>
       <div className='font-extrabold text-3xl mb-2 p-6'>Lesson Task</div>
       <div className='bg-white rounded-lg p-8'>
         <div className='font-extrabold text-lg my-4'>Choose a lesson task</div>

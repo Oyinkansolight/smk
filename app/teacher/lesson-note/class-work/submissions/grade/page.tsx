@@ -75,7 +75,7 @@ export default function Page() {
   }
 
   return (
-    <div className='h-full layout mt-10'>
+    <div className='h-full layout mt-10 pl-0 lg:pl-20'>
       <div className='text-3xl text-[#D4D5D7]'>
         {'Classwork > Submissions > Grade'}
       </div>

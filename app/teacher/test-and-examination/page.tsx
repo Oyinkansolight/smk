@@ -35,7 +35,7 @@ export default function Page() {
   // const { data: profile } = useGetProfile();
 
   return (
-    <div className='h-full layout'>
+    <div className='h-full layout pl-0 lg:pl-20'>
       <div className='text-[#D4D5D7] text-xl my-4'>Test & Exams</div>
       <div className='bg-white h-screen p-10'>
         <div className='text-xl font-bold leading-6 mb-10'>
@@ -56,28 +56,28 @@ export default function Page() {
 
           {data && data?.length > 0
             ? data.map((v, i) => (
-                <GradeSubjectCard
-                  onClick={() => {
-                    router.push(
-                      `/teacher/test-and-examination/subject?id=${v.id}`
-                    );
-                  }}
-                  key={v.id ?? i}
-                  subject={
-                    v?.subject
-                      ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
-                      : 'Subject Name'
-                  }
-                  className={colors[i % colors.length]}
-                />
-              ))
+              <GradeSubjectCard
+                onClick={() => {
+                  router.push(
+                    `/teacher/test-and-examination/subject?id=${v.id}`
+                  );
+                }}
+                key={v.id ?? i}
+                subject={
+                  v?.subject
+                    ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                    : 'Subject Name'
+                }
+                className={colors[i % colors.length]}
+              />
+            ))
             : data &&
-              data?.length === 0 && (
-                <EmptyView
-                  label='No test or exam has been created'
-                  useStandardHeight
-                />
-              )}
+            data?.length === 0 && (
+              <EmptyView
+                label='No test or exam has been created'
+                useStandardHeight
+              />
+            )}
         </div>
       </div>
     </div>

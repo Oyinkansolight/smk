@@ -12,7 +12,7 @@ export default function Page() {
   const router = useRouter();
   const [idx, setIdx] = useState(0);
   return (
-    <div className='h-full layout mt-6'>
+    <div className='h-full layout mt-6 pl-0 lg:pl-20'>
       <div
         onClick={() => router.push("/teacher/grades")}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>

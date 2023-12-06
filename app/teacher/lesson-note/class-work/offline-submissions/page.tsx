@@ -3,7 +3,7 @@ import BreadCrumbs from '@/components/navigation/BreadCrumbs';
 
 export default function Page() {
   return (
-    <div className='layout w-full flex flex-col gap-4'>
+    <div className='layout w-full flex flex-col gap-4 pl-0 lg:pl-20'>
       <BreadCrumbs
         items={[
           { label: 'Home Work' },

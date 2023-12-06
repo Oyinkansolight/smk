@@ -10,7 +10,7 @@ const TeacherLibrary = () => {
   const [tabIdx, setTabIdx] = useState(0);
 
   return (
-    <div className='w-full layout'>
+    <div className='w-full layout pl-0 lg:pl-20'>
       <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
         <div className='flex w-full items-center justify-between'>
           <TabBar
