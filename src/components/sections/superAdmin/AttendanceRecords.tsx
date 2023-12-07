@@ -9,7 +9,7 @@ import { useGetAdminCharts } from '@/server/dashboard';
 import { useGetSchools } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const AttendanceRecords = () => {
   const [open, setOpen] = useState(false);
@@ -55,39 +55,11 @@ const AttendanceRecords = () => {
 
   const handleSelectedInstitution = (value: string) => {
     refetchChart();
-
   }
 
-  useEffect(() => {
-    const getSelectedInstitute = (index) => {
-      if (!index) return;
-
-      setSelectedInstitution([
-        `${schools?.data[index]?.instituteName}`,
-      ]);
-    };
-
-    if (itemIndex) {
-      getSelectedInstitute(itemIndex);
-    }
-  }, [chartData?.data, itemIndex, schools?.data]);
-
-  // useEffect(() => {
-  //   if (itemIndex) {
-  //     refetchChart();
-  //   }
-  // }
-  //   , [itemIndex, refetchChart]);
-
-
-  // if (isLoading || !chartData) {
-  //   return (
-  //     <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
-  //       <ChartSkeleton />
-  //       <ChartSkeleton />
-  //     </div>
-  //   );
-  // }
+  const handleInstitutionName = (name: string) => {
+    setSelectedInstitution([name]);
+  }
 
   const isLoadingData = isLoading || !chartData || isLoadingSchools || !schools || isRefetchingCharts;
 
@@ -100,9 +72,13 @@ const AttendanceRecords = () => {
         data={schools?.data}
         title='All Institutions'
         handleSearch={handleSearch}
+        handlePrevPage={handlePrevPage}
+        handleNextPage={handleNextPage}
         description="Select Institution"
         setSelectedIndex={handleItemIndex}
+        totalPages={schools?.paging?.totalPage}
         setSelectedItem={handleSelectedInstitution}
+        setSelectedItemName={handleInstitutionName}
       />
 
       <Link href='/super-admin'>
