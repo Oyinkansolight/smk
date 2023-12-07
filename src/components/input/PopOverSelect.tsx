@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Button from "@/components/buttons/Button";
 import ControlledModal from "@/components/modal/ControlledModal";
 import { BasicSearch } from "@/components/search";
 import clsxm from "@/lib/clsxm";
@@ -14,12 +15,17 @@ interface PopOverSelectProps {
   title: string;
   handleSearch?: any;
   description?: string;
+  totalPages?: number | string;
   setOpen: (v: boolean) => void;
   setSelectedItem?: (v: string) => void;
   setSelectedIndex?: (v: number) => void;
+  handlePrevPage?: (page: number) => void;
+  handleNextPage?: (page: number) => void;
+  setSelectedItemName?: (v: string) => void;
 }
 
 const PopOverSelect = (props: PopOverSelectProps) => {
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<null | number>(null);
   const handleToggle = () => props.setOpen(!open);
 
@@ -43,7 +49,7 @@ const PopOverSelect = (props: PopOverSelectProps) => {
             Close
             <AiOutlineClose className='fill-current' />
           </div>
-          <div className='flex flex-col justify-center gap-8 h-[30vh]'>
+          <div className='flex flex-col justify-center gap-8 h-[70vh]'>
             <div className='flex flex-col gap-3 text-center'>
               <div className="h3 capitalize">{props.title}</div>
               {props.description && <div className="text-[#818181] text-lg">{props.description}</div>}
@@ -67,6 +73,7 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                       setSelected(index);
                       props.setSelectedIndex && props.setSelectedIndex(index);
                       props.setSelectedItem && props.setSelectedItem(item.id);
+                      props.setSelectedItemName && props.setSelectedItemName(`${item[props.key1]} ${props.key2 ? item[props?.key2] : ''}`);
                       setTimeout(() => {
                         handleToggle();
                       }, 100);
@@ -82,6 +89,30 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                   </div>
                 )
               })}
+
+              {props.data?.length === 0 && <div className="text-center text-lg text-[#818181]">No data found</div>}
+
+              <div className='flex justify-center items-center mt-3 gap-10'>
+                <Button
+                  disabled={page === 1}
+                  onClick={() => {
+                    props.handlePrevPage && props.handlePrevPage(page - 1);
+                    setPage(page - 1);
+                  }}
+                >
+                  Prev
+                </Button>
+                <div>{page}</div>
+                <Button
+                  disabled={props?.totalPages ? page === props?.totalPages : false}
+                  onClick={() => {
+                    props.handleNextPage && props.handleNextPage(page + 1);
+                    setPage(page + 1);
+                  }}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>
