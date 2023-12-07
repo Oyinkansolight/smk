@@ -470,7 +470,8 @@ export function useGetTeachersListByInstitution(props: Props) {
               limit ? `&limit=${limit}` : ''
             }${page ? `&page=${page}` : ''}${q ? `&query=${q}` : ''}`
           );
-          return d.data.data.data as PaginatedData<Staff>;
+          // return d.data.data.data as PaginatedData<Staff>;
+          return d.data.data.data as any;
         } catch (error) {
           logger(error);
           throw error;

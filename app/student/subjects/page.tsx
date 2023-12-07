@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import { getFromSessionStorage } from '@/lib/helper';
 import { useGetClassArmInfo } from '@/server/institution/class';
-import { useRouter } from 'next/navigation';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -13,14 +17,6 @@ import { useRouter } from 'next/navigation';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
-  const colors = [
-    'bg-[#EFF7F6]',
-    'bg-[#F3EFF7]',
-    'bg-[#F7EFEF]',
-    'bg-[#F7F7EF]',
-  ];
-
-  const router = useRouter();
   const userData = getFromSessionStorage('user');
   let user;
   if (userData) {
@@ -33,6 +29,7 @@ export default function Page() {
   return (
     <div className='layout h-full'>
       <div className='flex flex-col bg-white h-screen'>
+        <BackButton />
         <div className='flex flex-row items-center justify-between'>
           <div className='font-bold py-8 text-4xl'>
             <div className='flex flex-wrap gap-x-[52px] gap-y-10 justify-items-center w-full'>

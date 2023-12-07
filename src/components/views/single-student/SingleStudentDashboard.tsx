@@ -99,24 +99,18 @@ const SingleStudentDashboard = () => {
                 !isStudentLoading
                   ? student?.class?.class?.name || 'N/A'
                   : 'Loading...'
-              }  ${!isStudentLoading ? student?.class?.arm || "N/A" : ''}`}
+              }  ${!isStudentLoading ? student?.class?.arm || 'N/A' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={0}
             />
           )}
           {tabIdx === 1 && (
             <ExamReportView
-              report={
-                [
-                  // { name: 'Mathematics', score: 58, date: new Date() },
-                  // { name: 'Mathematics', score: 88, date: new Date() },
-                  // { name: 'Mathematics', score: 45, date: new Date() },
-                  // { name: 'Mathematics', score: 34, date: new Date() },
-                ]
-              }
+              studentId={student?.id}
+              classArmId={student?.class?.id}
             />
           )}
-          {tabIdx === 2 && <SchoolCalendarView />}
+          {tabIdx === 2 && <SchoolCalendarView studentId={student?.id ?? ''} />}
         </div>
       )}
       {gridTabIdx === 1 && (

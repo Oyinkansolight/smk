@@ -169,8 +169,8 @@ const AllStaffTransferRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.staff?.[0]?.lastName || item?.staff?.lastName || 'N/A'}{' '}
-                  {item?.staff?.[0]?.firstName || item?.staff?.firstName || 'N/A'}
+                  {item?.staff?.[0]?.lastName || item?.staff?.lastName || item?.staff?.user?.lastName || 'N/A'}{' '}
+                  {item?.staff?.[0]?.firstName || item?.staff?.firstName || item?.staff?.user?.firstName || 'N/A'}
                 </div>
 
                 <div className='col-span-3'>

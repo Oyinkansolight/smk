@@ -32,7 +32,11 @@ export default function StudentBioDetailsAlt({
     const array = await data?.image?.[0]?.arrayBuffer();
     let uploadedImage;
     if (array) {
-      const uploadResponse = await uploadDocument(uploadedImage, array, environment);
+      const uploadResponse = await uploadDocument(
+        uploadedImage,
+        array,
+        environment
+      );
       console.log(uploadResponse);
 
       if (uploadResponse) {
@@ -41,7 +45,6 @@ export default function StudentBioDetailsAlt({
     }
 
     // console.log(uploadedImage);
-
 
     if (initStudent?.id) {
       setIsLoading(true);
@@ -54,7 +57,7 @@ export default function StudentBioDetailsAlt({
             phoneNumber: data.studentPhone,
             firstName: (data.fullName as string).split(' ')[0],
             lastName: (data.fullName as string).split(' ')[1],
-            address: data.address
+            address: data.address,
           });
         } else {
           await update.mutateAsync({
@@ -63,7 +66,7 @@ export default function StudentBioDetailsAlt({
             phoneNumber: data.studentPhone,
             firstName: (data.fullName as string).split(' ')[0],
             lastName: (data.fullName as string).split(' ')[1],
-            address: data.address
+            address: data.address,
           });
         }
       } catch (error) {
@@ -88,7 +91,8 @@ export default function StudentBioDetailsAlt({
       setValue('parentOccupation', initStudent?.parentOccupation);
       setValue(
         'fullName',
-        `${(initStudent?.user ?? [])[0]?.firstName} ${(initStudent?.user ?? [])[0]?.lastName
+        `${(initStudent?.user ?? [])[0]?.firstName} ${
+          (initStudent?.user ?? [])[0]?.lastName
         }`
       );
       setValue('dateOfBirth', initStudent.dob);

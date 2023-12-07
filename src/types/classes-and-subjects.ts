@@ -182,3 +182,65 @@ export interface ClassArm {
   session?: Session;
   institution?: Institution;
 }
+
+export interface StudentResult {
+  agregates: Agregates;
+  subjectResults: SubjectResults;
+  domains: any[];
+}
+
+export interface Agregates {
+  studentPositionInClass: string;
+  totalStudents: number;
+  studentTotalExamScore: number;
+  classTotalExamScore: number;
+  studentAverageExamScore: number;
+}
+
+export interface SubjectResults {
+  subjectsGrades: SubjectsGrade[];
+  overallTotalScore: number;
+  classPosition: string;
+  studentId: string;
+}
+
+export interface SubjectsGrade {
+  id: string;
+  ca1_score: number;
+  ca2_score: number;
+  exams_score: number;
+  total: number;
+  grade: null | string;
+  remark: null | string;
+  position: null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: null;
+  subject: Subject;
+  classArm: ClassArm;
+  student: Student;
+  institution: Institution;
+  staff: null;
+  session: Session;
+  term: Term;
+}
+
+export interface Student {
+  id: string;
+  profileImg: null;
+  firstName: string;
+  lastName: string;
+  email: null;
+  lga: string;
+  readingProficiency: string;
+  address: string;
+  gender: string;
+  dob: string;
+  studentId: string;
+  instituteLat: null;
+  instituteLong: null;
+  createdAt: Date;
+  updatedAt: Date;
+  lessonNoteTimeLogs: any[];
+  classArmId: string;
+}

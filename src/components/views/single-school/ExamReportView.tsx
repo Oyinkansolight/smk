@@ -1,87 +1,230 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import BackButton from '@/components/buttons/BackButton';
+'use client';
+
+import Result from '@/components/cards/Result';
 import EmptyView from '@/components/misc/EmptyView';
-import ScoreStatus from '@/components/profile/ScoreStatus';
-import Table from '@/components/tables/TableComponent';
-import clsxm from '@/lib/clsxm';
-import { useState } from 'react';
-import { TableColumn } from 'react-data-table-component';
-import { BsArrowRightCircle } from 'react-icons/bs';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { useGetStudentReportCard } from '@/server/student';
+// import { useRouter } from 'next/navigation';
+import Lightupyellow from '~/svg/lightup-yellow.svg';
+import Lightup from '~/svg/lightup.svg';
+import Lightupblue from '~/svg/lightupblue.svg';
 
-const columns: TableColumn<any>[] = [
-  { name: 'Subject', cell: (row) => row.name },
-  {
-    name: 'Status',
-    cell: (row) => <ScoreStatus score={row.score} />,
-  },
-  { name: 'Average Score', cell: (row) => <div>{row.score} %</div> },
+const ExamReport = ({ studentId, classArmId }) => {
+  const userData = getFromSessionStorage('user');
+  const currentTerm = getFromSessionStorage('currentTerm') ?? '';
+  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
 
-  { name: 'Date', cell: (row) => (row.date as Date).toDateString() },
-];
+  let user;
+  let currentTermInfo;
 
-export default function ExamReportView({
-  report,
-}: {
-  report: { name: string; score: number; date: Date }[];
-}) {
-  const [show, setShow] = useState(false);
-  const ListItem = ({ title }: { title: string }) => {
-    return (
-      <div
-        onClick={() => setShow(true)}
-        className='flex cursor-pointer text-[#6B7A99] font-bold justify-between rounded border shadow-sm border-[#E3E3E3] items-center p-2 '
-      >
-        <div>{title}</div>
-        <BsArrowRightCircle
-          className={clsxm(
-            'h-[27px] w-[27px] text-[#C3CAD9] transition-transform duration-300'
-          )}
-        />
-      </div>
-    );
-  };
-  return show ? (
-    <div className='flex flex-col gap-[22px]'>
-      <div className='bg-white p-6 rounded border flex flex-col gap-5'>
-        <div className='flex items-start gap-3'>
-          <BackButton onClick={() => setShow(false)} />
-          <div className='flex-1' />
+  if (userData && currentTerm) {
+    user = JSON.parse(userData);
+    currentTermInfo = JSON.parse(currentTerm);
+  }
+  const { data } = useGetStudentReportCard({
+    studentId: studentId,
+    termId: currentTermInfo?.id ?? '',
+    sessionId: currentSessionId,
+    classArmId: classArmId,
+  });
+
+  console.log(data);
+
+  return (
+    <div className='flex gapx-4 gap-y-10'>
+      <div className='w-full px-4'>
+        <div className='flex justify-end py-4 border-b-2 mb-5  text-gray-500'>
+          <select
+            name=''
+            id=''
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded'
+          >
+            <option value=''> Session & Term</option>
+            <option value=''>2023/2024 First</option>
+            <option value=''>2023/2024 Secomd</option>
+            <option value=''>2023/2024 Third</option>
+          </select>
         </div>
-        <div className='rounded bg-[#F8FDFF] p-5 flex items-center justify-between'>
-          <div className='text-[#5A5A5A]'>
-            Class: <span className='font-bold text-black'>S S S Science 1</span>
+
+        <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
+          <Result
+            Icon={Lightup}
+            upperLimit={`${
+              data ? data?.agregates.studentPositionInClass : 'N/A'
+            }`}
+            lowerLimit={`${data ? data?.agregates.totalStudents : 'N/A'}`}
+            subtitle='Position in class'
+          />
+          <Result
+            Icon={Lightupyellow}
+            upperLimit={`${
+              data ? data?.agregates.studentTotalExamScore : 'N/A'
+            }`}
+            lowerLimit={`${data ? data?.agregates.classTotalExamScore : 'N/A'}`}
+            subtitle='Total Exam Score'
+          />
+          <Result
+            Icon={Lightupblue}
+            upperLimit={`${
+              data ? data?.agregates.studentAverageExamScore : 'N/A'
+            }`}
+            subtitle='Average Exam Score'
+          />
+          <Result
+            Icon={Lightup}
+            upperLimit={`${
+              data ? data?.agregates.studentTotalExamScore : 'N/A'
+            }`}
+            subtitle='Average Exam grade'
+          />
+
+          <Result
+            Icon={Lightupblue}
+            upperLimit='0%'
+            subtitle='Attendance Rate'
+          />
+        </div>
+
+        <div className='p-3  bg-[#F9F9F9] rounded '>
+          <h1 className='text-lg font-bold my-2'>Subjects Performance</h1>
+          <div className='bg-white rounded-lg p-3'>
+            <div className='w-full overflow-x-auto '>
+              <div className='min-w-[1000px] grid grid-cols-12 mb-4 text-gray-500 text-xs'>
+                <div className='col-span-3'>
+                  <p className=''>Subjects</p>
+                </div>
+                <div className='col-span-1 '>
+                  {' '}
+                  <div className=' '> Assessment 1</div>
+                </div>
+                <div className='col-span-1'>Assessment 2</div>
+                <div className='col-span-1'>Examination</div>
+                <div className='col-span-1'>Total</div>
+                <div className='col-span-1'>Grade</div>
+                <div className='col-span-1'>Position</div>
+                <div className='col-span-1'>Remark</div>
+              </div>
+
+              {data && data.subjectResults.subjectsGrades.length > 0 ? (
+                <div>
+                  {data?.subjectResults.subjectsGrades.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'
+                    >
+                      <div className='col-span-3'>
+                        <p className=''>
+                          {item?.subject?.name ?? 'Subject_Name'}
+                        </p>
+                      </div>
+                      <div className='col-span-1'>
+                        {' '}
+                        {item?.ca1_score ?? 'N/A'}{' '}
+                      </div>
+                      <div className='col-span-1'>
+                        {item?.ca2_score ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>
+                        {item?.exams_score ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>{item?.total ?? 'N/A'} </div>
+                      <div className='col-span-1'>{item?.grade ?? 'N/A'} </div>
+                      <div className='col-span-1 text-secondary-300'>
+                        {item?.position ?? 'N/A'}
+                      </div>
+                      <div className='col-span-1'>{item?.remark ?? 'N/A'}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyView label='No Result Recorded' useStandardHeight />
+              )}
+            </div>
           </div>
-          <div className='flex flex-col'>
-            <div className='text-xl font-bold'>0%</div>
-            <div>Student Average</div>
+
+          <h1 className='my-4 text-[#B1B1B1] font-bold text-lg'>Keys</h1>
+          <div className='bg-white rounded-lg p-3 flex space-x-5 items-center'>
+            <div className='text-[#B1B1B1] '>
+              Excellent: 80-100 <span className='text-gray-800'>(A+)</span>
+            </div>
+            <div className='text-[#B1B1B1] '>
+              Very Good: 70-79<span className='text-gray-800'>(A)</span>
+            </div>
+            <div className='text-[#B1B1B1] '>
+              Good: 60-69<span className='text-gray-800'>(B)</span>
+            </div>
+            <div className='text-[#B1B1B1] '>
+              Fair: 50-59<span className='text-gray-800'>(C)</span>
+            </div>
+            <div className='text-[#B1B1B1] '>
+              Poor: 40-49<span className='text-gray-800'>(D)</span>
+            </div>
+            <div className='text-[#B1B1B1] '>
+              Fail: 0-39<span className='text-gray-800'>(E)</span>
+            </div>
+          </div>
+
+          <h1 className='text-lg font-bold my-2'>Affective Domain</h1>
+          <div className='bg-white rounded-lg p-3'>
+            <div className='flex justify-between mt-5 mb-6 pr-6'>
+              <div className='text-black font-medium'>Behaviour</div>
+              <div className='text-black font-medium'>Rating</div>
+            </div>
+            <div className='grid grid-cols-12 gap-4 items-center'>
+              <div className='col-span-1'>Attentiveness</div>
+              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-1'>Honesty</div>
+              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-1'>Neatness</div>
+              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-1'>Politeness</div>
+              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-1'>Punctuality</div>
+              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+            </div>
+          </div>
+
+          <h1 className='text-lg font-bold my-2'>Psychomotor Domain</h1>
+          <div className='bg-white rounded-lg p-3'>
+            <div className='flex justify-between mt-5 mb-6 pr-6'>
+              <div className='text-black font-medium'>Skills</div>
+              <div className='text-black font-medium'>Rating</div>
+            </div>
+            <div className='grid grid-cols-12 gap-4 items-center'>
+              <div className='col-span-2'>Learning skills</div>
+              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-2'>Handwriting</div>
+              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-2'>Spoken english</div>
+              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-2'>Outdoor games</div>
+              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+
+              <div className='col-span-2'>Vocational skills</div>
+              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
+              <div className='col-span-1'>Excellent</div>
+            </div>
           </div>
         </div>
-        <Table
-          showFilter={false}
-          showSearch={false}
-          columns={columns}
-          data={report}
-        />
-      </div>
-    </div>
-  ) : (
-    <div className='bg-white rounded-md p-6 border'>
-      <div className='flex'>
-        <div className='text-[#6B7A99] text-xl font-bold'>Exam Report</div>
-      </div>
-      <div className='h-px bg-gray-200 my-4' />
-      <div className='flex flex-col gap-2'>
-        {/* {Array(6)
-          .fill(0)
-          .map((v, i) => (
-            <ListItem key={i} title={`Primary ${i + 1}`} />
-          ))}
-        <ListItem title='SSS 1 - Science Class' />
-        <ListItem title='SSS 1 - Social Science Class' />
-        <ListItem title='SSS 2 - Science Class' /> */}
-
-        <EmptyView label='No data' />
       </div>
     </div>
   );
-}
+};
+
+export default ExamReport;

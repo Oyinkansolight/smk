@@ -14,7 +14,7 @@ export default function SubjectList({
   teacher,
 }: {
   // subjectCount?: number
-  SchoolSubjectsList?: any[];
+  SchoolSubjectsList?: any;
   managedClassArm?: any;
   teacher?: string;
 }) {

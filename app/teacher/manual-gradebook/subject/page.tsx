@@ -13,6 +13,7 @@ import {
   useDeleteSubjectGradeBook,
   useEditSubjectGradeBook,
   useGetSubjectScoreSheet,
+  useResetSubjectGradeBook,
 } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { Institution } from '@/types/institute';
@@ -43,6 +44,7 @@ export default function Page() {
 
   const [institution] = useSessionStorage('institution', {} as Institution);
   const handleCreateGradebook = useCreateSubjectGradeBook();
+  const handleResetGradebook = useResetSubjectGradeBook();
   const handleCreateResultFromGradebook = useCreateResultFromGradeBook();
   const handleEditGradebook = useEditSubjectGradeBook();
   const handleDeleteGradebook = useDeleteSubjectGradeBook();
@@ -84,6 +86,24 @@ export default function Page() {
 
       if (response) {
         toast.success('Gradebook generated successfully');
+
+        setIsLoadingCreateGradebook(false);
+      }
+    } catch (error) {
+      setIsLoadingCreateGradebook(false);
+      toast.error(getErrMsg(error));
+    }
+  };
+
+  const handleResetGradeBook = async () => {
+    delete genericPayload.limit;
+
+    try {
+      setIsLoadingCreateGradebook(true);
+      const response = await handleResetGradebook.mutateAsync(genericPayload);
+
+      if (response) {
+        toast.success('Gradebook reset successfully');
 
         setIsLoadingCreateGradebook(false);
       }
@@ -177,6 +197,21 @@ export default function Page() {
               {isLoadingGenerateResult ? (
                 <ImSpinner2 className='animate-spin' />
               ) : (
+                'Reset Gradebook'
+              )}
+            </Button>
+          )}
+          {StudentScoreSheet && StudentScoreSheet.length > 0 && (
+            <Button
+              onClickHandler={() => {
+                handleGenerateResult();
+              }}
+              variant='secondary'
+              className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
+            >
+              {isLoadingGenerateResult ? (
+                <ImSpinner2 className='animate-spin' />
+              ) : (
                 'Generate Result'
               )}
             </Button>
@@ -238,6 +273,7 @@ export default function Page() {
                   handleGradeBookDelete={handleGradeBookDelete}
                   loading={loading}
                   setIsModify={setIsModify}
+                  handleResetGradeBook={handleResetGradeBook}
                 />
               ))}
           </div>
@@ -260,6 +296,7 @@ function StudentGradeListItem({
   loading,
   setIsModify,
   handleGradeBookDelete,
+  handleResetGradeBook,
 }: {
   id: number;
   item: any;
@@ -270,6 +307,7 @@ function StudentGradeListItem({
   setExam: (v: number) => void;
   handleGradeBookEdit: (v: string) => void;
   handleGradeBookDelete: (v: string) => void;
+  handleResetGradeBook: (v: string) => void;
   loading: boolean;
 }) {
   const [lineToModify, setLineToModify] = useState<number | null>();

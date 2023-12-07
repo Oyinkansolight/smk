@@ -19,9 +19,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { ImSpinner2 } from 'react-icons/im';
-import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -52,7 +57,7 @@ import { useDebounce } from 'usehooks-ts';
 const Page = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedParent, setSelectedParent] = useState(['']);
+  const [selectedStudent, setSelectedStudent] = useState(['']);
   const [itemIndex, setItemIndex] = useState<string>();
   const instituteId = getFromLocalStorage('institutionId');
 
@@ -108,16 +113,16 @@ const Page = () => {
   }
 
   useEffect(() => {
-    const getSelectedParent = (index) => {
+    const getSelectedStudent = (index) => {
       if (!index) return;
 
-      setSelectedParent([
+      setSelectedStudent([
         `${students?.data[index]?.lastName} ${students?.data[index]?.firstName}`,
       ]);
     };
 
     if (itemIndex) {
-      getSelectedParent(itemIndex);
+      getSelectedStudent(itemIndex);
     }
   }, [itemIndex, students?.data]);
   const [tabIdx, setTabIdx] = useState(0);
@@ -133,6 +138,7 @@ const Page = () => {
   });
 
   const parent = data;
+  console.log(data);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -196,10 +202,10 @@ const Page = () => {
               selected={tabIdx}
               onSelect={(i) => setTabIdx(i)}
               items={[
-                {
-                  icon: <RiDashboardFill className='h-5 w-5' />,
-                  label: 'Dashboard',
-                },
+                // {
+                //   icon: <RiDashboardFill className='h-5 w-5' />,
+                //   label: 'Dashboard',
+                // },
                 {
                   icon: <BiListCheck className='h-5 w-5' />,
                   label: 'Students',
@@ -210,8 +216,8 @@ const Page = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 0 && <div>Dashboard</div>}
-          {tabIdx === 1 && (
+          {tabIdx === 1 && <div>Dashboard</div>}
+          {tabIdx === 0 && (
             <div>
               <div className='mb-6 flex justify-end space-x-4 items-end'>
                 <button
@@ -244,15 +250,15 @@ const Page = () => {
                   {/* <Select
                     onClick={() => setOpen(!open)}
                     label='All Student'
-                    options={selectedParent}
-                    formValue={selectedParent[0]}
+                    options={selectedStudent}
+                    formValue={selectedStudent[0]}
                   /> */}
-                  {selectedParent}
+                  {selectedStudent}
                   <button
                     onClick={() => {
                       assignStudentToParent();
                     }}
-                    className='w-full rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
+                    className='w-max rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
                   >
                     {loading ? (
                       <ImSpinner2 className='animate-spin' />

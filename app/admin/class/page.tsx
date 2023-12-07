@@ -3,7 +3,6 @@
 import StudentTeacherProfileCard from '@/components/cards/Classprofile';
 import TabBar from '@/components/layout/TabBar';
 import StudentList from '@/components/views/admin/Class/studentList';
-import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
@@ -13,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+import { RiDashboardFill } from 'react-icons/ri';
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -63,10 +62,10 @@ const Page = () => {
                   icon: <AiFillFolder className='h-5 w-5' />,
                   label: 'Subject',
                 },
-                {
-                  icon: <RiCalendar2Fill className='h-5 w-5' />,
-                  label: 'Attendance Tracker',
-                },
+                // {
+                //   icon: <RiCalendar2Fill className='h-5 w-5' />,
+                //   label: 'Attendance Tracker',
+                // },
               ]}
             />
 
@@ -87,7 +86,7 @@ const Page = () => {
           {tabIdx === 2 && (
             <SubjectList studentSubjectsList={classArmInfo?.subjects} />
           )}
-          {tabIdx === 3 && <SingleStudentAttendanceTracker />}
+          {/* {tabIdx === 3 && <SingleStudentAttendanceTracker  studentId={""}/>} */}
         </div>
       )}
 

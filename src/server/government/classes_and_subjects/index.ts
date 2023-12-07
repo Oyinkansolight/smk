@@ -99,7 +99,22 @@ export function useCreateSubjectGradeBook() {
         withCredentials: true,
       }),
     onSettled: () => {
-      client.refetchQueries(`create-gradebook-scoresheet`);
+      client.refetchQueries(`get-gradebook-scoresheet`);
+    },
+  });
+  return mutation;
+}
+export function useResetSubjectGradeBook() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'reset-gradebook',
+    mutationFn: (params: CreateGradeSettingsParams) =>
+      request.post('/v1/institutions/manual_grade/reset', params, {
+        withCredentials: true,
+      }),
+    onSettled: () => {
+      client.refetchQueries(`get-gradebook-scoresheet`);
     },
   });
   return mutation;
@@ -116,7 +131,7 @@ export function useCreateResultFromGradeBook() {
 }
 export function useGetSubjectScoreSheet(params: CreateGradeSettingsParams) {
   const query = useQuery({
-    queryKey: 'create-gradebook-scoresheet',
+    queryKey: 'get-gradebook-scoresheet',
     queryFn: async () => {
       if (params.sessionId && params.termId) {
         const d = await request.get(
@@ -154,7 +169,7 @@ export function useEditSubjectGradeBook() {
       );
     },
     onSettled: () => {
-      client.refetchQueries(`create-gradebook-scoresheet`);
+      client.refetchQueries(`get-gradebook-scoresheet`);
     },
   });
   return mutation;
@@ -173,7 +188,7 @@ export function useDeleteSubjectGradeBook() {
       );
     },
     onSettled: () => {
-      client.refetchQueries(`create-gradebook-scoresheet`);
+      client.refetchQueries(`get-gradebook-scoresheet`);
     },
   });
   return mutation;
