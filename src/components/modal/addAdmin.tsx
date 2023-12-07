@@ -21,9 +21,11 @@ function AddAdmin({ onClickHandler }: propType) {
   const { register, getValues, control } = useForm();
   const { mutateAsync } = useInviteAdmin();
 
+  console.log(allRoles);
+
   useEffect(() => {
     if (!isLoading) {
-      const allPatterns = allRoles.data.roles.map((item: any) => {
+      const allPatterns = allRoles.data.map((item: any) => {
         return {
           value: item.id,
           label: item.name,

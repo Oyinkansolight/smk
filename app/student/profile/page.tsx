@@ -4,6 +4,7 @@ import NextImage from '@/components/NextImage';
 import EditRequest from '@/components/modal/EditRequest';
 import EditStudentProfile from '@/components/modal/EditStudentProfile';
 import { getFromSessionStorage } from '@/lib/helper';
+import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
@@ -66,14 +67,14 @@ const Page = () => {
         <div className='bg-[#F9F9F9] p-10 border rounded mt-5'>
           <div className='py-2 border-b flex justify-between'>
             <h1 className='text-xl'>Students Personal Details</h1>
-            {!isEdit && !editAction && (
-              <button
-                onClick={() => setIsEdit(true)}
-                className='font-light text-secondary text-base'
-              >
-                Request Edit
-              </button>
-            )}
+
+            <Link
+              href={`/student/profile/settings?id=${user?.id}`}
+              className='font-light text-secondary text-base'
+            >
+              Edit Details
+            </Link>
+
             {editAction && (
               <button
                 onClick={handleEditModal}
@@ -128,13 +129,13 @@ const Page = () => {
           </div>
           <div className='py-2 border-b flex justify-between mt-5'>
             <h1 className='text-xl'>Student’s Contact Details</h1>
-            <button
+            {/* <button
               onClick={() => setIsEdit(true)}
               className='font-light text-secondary text-base'
             >
               {' '}
               Request Edit
-            </button>
+            </button> */}
           </div>
           <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10'>
             <div>
@@ -148,13 +149,13 @@ const Page = () => {
           </div>
           <div className='py-2 border-b flex justify-between mt-5'>
             <h1 className='text-xl'>Parent Details</h1>
-            <button
+            {/* <button
               onClick={() => setIsEdit(true)}
               className='font-light text-secondary text-base'
             >
               {' '}
               Edit Now
-            </button>
+            </button> */}
           </div>
           <div className='mt-10 p-5 bg-white rounded-[10px] grid sm:grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10'>
             <div>

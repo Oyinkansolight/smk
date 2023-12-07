@@ -2,8 +2,6 @@
 
 import Result from '@/components/cards/Result';
 import EmptyView from '@/components/misc/EmptyView';
-import EditRequest from '@/components/modal/EditRequest';
-import EditStudentProfile from '@/components/modal/EditStudentProfile';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { useGetStudentReportCard } from '@/server/student';
@@ -49,17 +47,6 @@ const Page = () => {
 
   return (
     <div className='flex gapx-4 gap-y-10'>
-      {isEdit && (
-        <EditRequest
-          title='Edit Requested'
-          description='Click OK to continue'
-          action={handleModal}
-          actiontText='OK'
-          showHome={false}
-        />
-      )}
-
-      {editContent && <EditStudentProfile onClickHandler={handleEditModal} />}
       <div className='w-full px-4'>
         <h1 className='text-lg font-bold'>Grade Book</h1>
 
@@ -86,24 +73,32 @@ const Page = () => {
         <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
           <Result
             Icon={Lightup}
-            upperLimit={`${data ? data?.classPosition : 'N/A'}`}
-            lowerLimit='N/A'
+            upperLimit={`${
+              data ? data?.agregates.studentPositionInClass : 'N/A'
+            }`}
+            lowerLimit={`${data ? data?.agregates.totalStudents : 'N/A'}`}
             subtitle='Position in class'
           />
           <Result
             Icon={Lightupyellow}
-            upperLimit={`${data ? data?.overallTotalScore : 'N/A'}`}
-            lowerLimit='N/A'
+            upperLimit={`${
+              data ? data?.agregates.studentTotalExamScore : 'N/A'
+            }`}
+            lowerLimit={`${data ? data?.agregates.classTotalExamScore : 'N/A'}`}
             subtitle='Total Exam Score'
           />
           <Result
             Icon={Lightupblue}
-            upperLimit='0%'
+            upperLimit={`${
+              data ? data?.agregates.studentAverageExamScore : 'N/A'
+            }`}
             subtitle='Average Exam Score'
           />
           <Result
             Icon={Lightup}
-            upperLimit='N/A'
+            upperLimit={`${
+              data ? data?.agregates.studentTotalExamScore : 'N/A'
+            }`}
             subtitle='Average Exam grade'
           />
 
@@ -134,9 +129,9 @@ const Page = () => {
                 <div className='col-span-1'>Remark</div>
               </div>
 
-              {data && data?.subjectsGrades && data.subjectsGrades?.length > 0 ? (
+              {data && data.subjectResults.subjectsGrades.length > 0 ? (
                 <div>
-                  {data?.subjectsGrades.map((item, idx) => (
+                  {data?.subjectResults.subjectsGrades.map((item, idx) => (
                     <div
                       key={idx}
                       className='min-w-[1000px] grid grid-cols-12 mb-4 font-medium text-xs'

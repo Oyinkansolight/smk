@@ -9,14 +9,14 @@ import Table from '@/components/tables/TableComponent';
 import InstitutionBioDetails from '@/components/views/admin/InstitutionBioDetails';
 import StaffClassAttendanceReport from '@/components/views/admin/StaffClassAttendanceReport';
 import StudentClassAttendanceReport from '@/components/views/admin/StudentClassAttendanceReport';
-import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
-import ExamReportView from '@/components/views/single-school/ExamReportView';
 import SchoolDashboardView from '@/components/views/single-school/SchoolDashboardView';
+import SchoolSubject from '@/components/views/single-school/Subjects';
 import Files from '@/components/views/super-admin/Library/Files';
-import TaskListView from '@/components/views/teacher/TaskListView';
 import clsxm from '@/lib/clsxm';
 import {
-  useGetSchoolById, // useGetStudentsListByInstitution,
+  useGetSchoolById,
+  useGetStudentsListByInstitution,
+  useGetTeachersListByInstitution, // useGetStudentsListByInstitution,
   // useGetTeachersListByInstitution,
 } from '@/server/institution';
 import Cookies from 'js-cookie';
@@ -24,18 +24,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
-import { IoReorderThree } from 'react-icons/io5';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
-import Select from 'react-select';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<any>[] = [
-  { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
-  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
+  // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {
     name: 'Name',
     cell: (row) => (
@@ -44,6 +39,7 @@ const studentListColumns: TableColumn<any>[] = [
       </div>
     ),
   },
+  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
   {
     name: 'Class',
     cell: (row) => (
@@ -58,8 +54,7 @@ const studentListColumns: TableColumn<any>[] = [
   },
 ];
 const staffListColumns: TableColumn<any>[] = [
-  { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
-  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
+  // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {
     name: 'Name',
     cell: (row) => (
@@ -68,6 +63,7 @@ const staffListColumns: TableColumn<any>[] = [
       </div>
     ),
   },
+  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
   {
     name: 'Subject',
     cell: (row) => <div>{row.subjects > 0 ? row.subjects[0] : 'None'}</div>,
@@ -86,14 +82,14 @@ const SingleSchoolDashboard = () => {
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const params = useSearchParams();
-  const { data: school } = useGetSchoolById({ query: params?.get('id') });
-  // const instituteId = params?.get('id');
-  // const { data: getInstitutionStudents } =
-  //   useGetStudentsListByInstitution(instituteId);
-  // const { data: getInstitutionStaffs } = useGetTeachersListByInstitution({
-  //   instituteId,
-  // });
-  // console.log(getInstitutionStaffs?.data);
+  const { data: school } = useGetSchoolById({ id: params?.get('id') });
+  const instituteId = params?.get('id');
+  const { data: getInstitutionStudents } = useGetStudentsListByInstitution({
+    instituteId: instituteId ?? '',
+  });
+  const { data: getInstitutionStaffs } = useGetTeachersListByInstitution({
+    instituteId,
+  });
 
   return (
     <section>
@@ -126,17 +122,13 @@ const SingleSchoolDashboard = () => {
                     icon: <RiDashboardFill className='h-5 w-5' />,
                     label: 'Dashboard',
                   },
-                  {
-                    icon: <RiCalendar2Fill className='h-5 w-5' />,
-                    label: 'Timetable',
-                  },
+                  // {
+                  //   icon: <RiCalendar2Fill className='h-5 w-5' />,
+                  //   label: 'Timetable',
+                  // },
                   {
                     icon: <MdOutlineSort className='h-5 w-5' />,
                     label: 'Subject',
-                  },
-                  {
-                    icon: <IoReorderThree className='h-5 w-5' />,
-                    label: 'Exam Report',
                   },
                 ]}
               />
@@ -145,18 +137,8 @@ const SingleSchoolDashboard = () => {
             </div>
 
             {tabIdx === 0 && <SchoolDashboardView school={school} />}
-            {tabIdx === 1 && <SchoolCalendarView />}
-            {tabIdx === 2 && <TaskListView />}
-            {tabIdx === 3 && (
-              <ExamReportView
-                report={[
-                  { name: 'Mathematics', score: 58, date: new Date() },
-                  { name: 'Mathematics', score: 88, date: new Date() },
-                  { name: 'Mathematics', score: 45, date: new Date() },
-                  { name: 'Mathematics', score: 34, date: new Date() },
-                ]}
-              />
-            )}
+            {/* {tabIdx === 1 && <SchoolCalendarView studentId='idx' />} */}
+            {tabIdx === 1 && <SchoolSubject />}
           </div>
         )}
         {gridIdx === 1 && (
@@ -223,10 +205,10 @@ const SingleSchoolDashboard = () => {
                     icon: <RiDashboardFill className='h-5 w-5' />,
                     label: 'Students',
                   },
-                  {
-                    icon: <BiTrendingUp className='h-5 w-5' />,
-                    label: 'Attendance Report',
-                  },
+                  // {
+                  //   icon: <BiTrendingUp className='h-5 w-5' />,
+                  //   label: 'Attendance Report',
+                  // },
                 ]}
               />
 
@@ -236,12 +218,12 @@ const SingleSchoolDashboard = () => {
             {tabIdx === 0 && (
               <div className='flex flex-col gap-4'>
                 <div className='-mt-[10px] flex flex-row items-center justify-end'>
-                  <Button
+                  {/* <Button
                     variant='outline'
                     className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
                   >
                     Download Report
-                  </Button>
+                  </Button> */}
                 </div>
                 {/* <CountCard
                   text='72 %'
@@ -253,17 +235,17 @@ const SingleSchoolDashboard = () => {
                     <div className='text-[#6B7A99] text-xl font-bold'>
                       Student List
                     </div>
-                    <Select
+                    {/* <Select
                       value={{ value: 'all', label: 'All Class Arms' }}
                       options={[{ value: 'all', label: 'All Class Arms' }]}
-                    />
+                    /> */}
                   </div>
                   <Table
                     showFilter={false}
                     showSearch={false}
                     columns={studentListColumns}
-                    // data={getInstitutionStudents}
-                    data={[]}
+                    data={getInstitutionStudents?.data}
+                    // data={[]}
                   />
                 </div>
               </div>
@@ -271,12 +253,12 @@ const SingleSchoolDashboard = () => {
             {tabIdx === 1 && (
               <div className='flex flex-col'>
                 <div className='-mt-[10px] flex flex-row items-center justify-end'>
-                  <Button
+                  {/* <Button
                     variant='outline'
                     className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
                   >
                     Download Report
-                  </Button>
+                  </Button> */}
                 </div>
                 <StudentClassAttendanceReport />
               </div>
@@ -293,12 +275,12 @@ const SingleSchoolDashboard = () => {
                 items={[
                   {
                     icon: <RiDashboardFill className='h-5 w-5' />,
-                    label: 'Students',
+                    label: 'Staffs',
                   },
-                  {
-                    icon: <BiTrendingUp className='h-5 w-5' />,
-                    label: 'Attendance Report',
-                  },
+                  // {
+                  //   icon: <BiTrendingUp className='h-5 w-5' />,
+                  //   label: 'Attendance Report',
+                  // },
                 ]}
               />
 
@@ -308,12 +290,12 @@ const SingleSchoolDashboard = () => {
             {tabIdx === 0 && (
               <div className='flex flex-col gap-4'>
                 <div className='-mt-[10px] flex flex-row items-center justify-end'>
-                  <Button
+                  {/* <Button
                     variant='outline'
                     className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
                   >
                     Download Report
-                  </Button>
+                  </Button> */}
                 </div>
                 {/* <CountCard
                   text='0%'
@@ -325,17 +307,17 @@ const SingleSchoolDashboard = () => {
                     <div className='text-[#6B7A99] text-xl font-bold'>
                       Staff List
                     </div>
-                    <Select
+                    {/* <Select
                       value={{ value: 'all', label: 'Filter' }}
                       options={[{ value: 'all', label: 'Filter' }]}
-                    />
+                    /> */}
                   </div>
                   <Table
                     showFilter={false}
                     showSearch={false}
                     columns={staffListColumns}
-                    // data={getInstitutionStaffs?.data}
-                    data={[]}
+                    data={getInstitutionStaffs?.data}
+                    // data={[]}
                   />
                 </div>
               </div>
@@ -343,12 +325,12 @@ const SingleSchoolDashboard = () => {
             {tabIdx === 1 && (
               <div className='flex flex-col'>
                 <div className='-mt-[10px] flex flex-row items-center justify-end'>
-                  <Button
+                  {/* <Button
                     variant='outline'
                     className='text-xs bg-white hover:bg-primary hover:text-white active:bg-primary-400'
                   >
                     Download Report
-                  </Button>
+                  </Button> */}
                 </div>
                 <StaffClassAttendanceReport />
               </div>

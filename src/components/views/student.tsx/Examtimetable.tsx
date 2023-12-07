@@ -20,6 +20,12 @@ import { useEffect, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcadamicCalendar = ({
   isClassTimeTable = true,
   classId,
@@ -200,7 +206,7 @@ const AcadamicCalendar = ({
         ) : (
           <div className='text-center text-xs mt-5'>Loading...</div>
         )}
-        {!isLoading && timetableData.length === 0 && (
+        {!isLoading && !timetableData && (
           <EmptyView label='No Timetable for this class yet' />
           // <div className='text-center text-xs mt-5'>
           //   No Timetable for this class yet

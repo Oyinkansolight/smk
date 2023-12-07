@@ -4,7 +4,6 @@ import StudentTeacherProfileCard from '@/components/cards/Classprofile';
 import TabBar from '@/components/layout/TabBar';
 import StudentList from '@/components/views/admin/Class/studentList';
 import Subject from '@/components/views/admin/Class/subject';
-import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import { useGetClassArmInfo } from '@/server/institution/class';
@@ -13,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import { BiListCheck } from 'react-icons/bi';
-import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+import { RiDashboardFill } from 'react-icons/ri';
 
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -22,7 +21,6 @@ const Page = () => {
   const classArmId = p?.get('id');
 
   const { data: classArmInfo } = useGetClassArmInfo(classArmId);
-
 
   return (
     <div className='flex'>
@@ -64,10 +62,10 @@ const Page = () => {
                   icon: <AiFillFolder className='h-5 w-5' />,
                   label: 'Subject',
                 },
-                {
-                  icon: <RiCalendar2Fill className='h-5 w-5' />,
-                  label: 'Attendance Tracker',
-                },
+                // {
+                //   icon: <RiCalendar2Fill className='h-5 w-5' />,
+                //   label: 'Attendance Tracker',
+                // },
               ]}
             />
 
@@ -86,7 +84,7 @@ const Page = () => {
           )}
           {tabIdx === 1 && <StudentList classArmId={classArmId} />}
           {tabIdx === 2 && <Subject />}
-          {tabIdx === 3 && <SingleStudentAttendanceTracker />}
+          {/* {tabIdx === 3 && <SingleStudentAttendanceTracker />} */}
         </div>
       )}
 

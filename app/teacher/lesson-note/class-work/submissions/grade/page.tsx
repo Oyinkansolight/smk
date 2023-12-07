@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
 import SubjectiveViewer from '@/components/cards/SubjectiveViewer';
@@ -16,6 +17,10 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -53,7 +58,7 @@ export default function Page() {
 
   const handleGrading = async () => {
     const res = await submitAssessment({
-      submissionId: submissionId ?? "",
+      submissionId: submissionId ?? '',
       answers: scores,
       // scores,
       // addToGradeList
@@ -76,6 +81,7 @@ export default function Page() {
 
   return (
     <div className='h-full layout mt-10 pl-0 lg:pl-20'>
+      <BackButton />
       <div className='text-3xl text-[#D4D5D7]'>
         {'Classwork > Submissions > Grade'}
       </div>

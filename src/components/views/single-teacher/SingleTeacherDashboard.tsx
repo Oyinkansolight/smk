@@ -3,8 +3,6 @@
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
-import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
-import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
@@ -106,17 +104,6 @@ const SingleTeacherDashboard = () => {
 
           {tabIdx === 1 && <ExamTimetable isClassTimeTable={true} />}
           {tabIdx === 2 && <TaskListView userId={p?.get('id') ?? ''} />}
-          {tabIdx === 4 && (
-            <ExamReportView
-              report={[
-                { name: 'Mathematics', score: 58, date: new Date() },
-                { name: 'Mathematics', score: 88, date: new Date() },
-                { name: 'Mathematics', score: 45, date: new Date() },
-                { name: 'Mathematics', score: 34, date: new Date() },
-              ]}
-            />
-          )}
-          {tabIdx === 4 && <SchoolCalendarView />}
         </div>
       )}
       {gridIdx === 1 && (

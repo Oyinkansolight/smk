@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import logger from '@/lib/logger';
 import request from '@/server';
+import { StudentResult } from '@/types/classes-and-subjects';
 import { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -8,27 +9,6 @@ interface timetableArg {
   classId?: number | string;
   weekid?: number | string;
   day?: string;
-}
-export interface StudentResult {
-  subjectsGrades: SubjectsGrade[];
-  overallTotalScore: number;
-  classPosition: string;
-  studentId: string;
-}
-
-export interface SubjectsGrade {
-  id: string;
-  ca1_score: number;
-  ca2_score: number;
-  exams_score: number;
-  total: number;
-  grade: null;
-  remark: null;
-  subject: any;
-  position: null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: null;
 }
 
 export function useGetTodaysPeriod({

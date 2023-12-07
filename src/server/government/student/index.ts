@@ -40,8 +40,7 @@ export function useUpdateStudent() {
         })
       ).data.data.data,
     onSettled: (data) => {
-      // console.log('Student Id: ', data.student.id);
-      client.refetchQueries(`get_student_list_${data.student.id ?? ''}`);
+      client.refetchQueries(`get_student_list_${data.userId ?? ''}`);
     },
   });
   return mutation;
@@ -75,6 +74,21 @@ export function useGetStudentOngoingPeriod({ studentId, weekId }) {
           }
         )
         .then((res) => res.data.data.data),
+  });
+  return query;
+}
+export function useGetStudentAttendance(studentId: string) {
+  const query = useQuery({
+    queryKey: 'get_student_attendance',
+    queryFn: () =>
+      request
+        .get(
+          `/v1/institutions/institutes/get-attendance-by-student-id?studentId=${studentId}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => res.data.data),
   });
   return query;
 }

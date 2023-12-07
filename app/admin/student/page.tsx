@@ -25,6 +25,8 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -100,8 +102,9 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
-          }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
+          (student?.user ?? [])[0]?.lastName ?? ''
+        }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -142,19 +145,17 @@ const Page = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${student ? student?.class?.class.name || 'null' : 'Loading...'
-                }  ${student ? student?.class?.arm || '' : ''}`}
+              classArm={`${
+                student ? student?.class?.class.name || 'null' : 'Loading...'
+              }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={classArmData?.subjects.length ?? 0}
             />
           )}
           {tabIdx === 1 && (
             <ExamReportView
-              report={
-                [
-                  // { name: 'Mathematics', score: 58, date: new Date() },
-                ]
-              }
+              studentId={student?.id}
+              classArmId={classArmData?.id}
             />
           )}
           {tabIdx === 2 && <SingleStudentAttendanceTracker />}
