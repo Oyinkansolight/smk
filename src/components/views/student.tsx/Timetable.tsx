@@ -54,7 +54,7 @@ const AcadamicCalendar = ({
     let subjectName;
     let isEvent;
 
-    data.periods.forEach((element: any) => {
+    data && data?.periods && data?.periods?.forEach((element: any) => {
       if (element.day.toLowerCase() === day) {
         if (element.subject) {
           subjectName = element.subject.name;
@@ -109,47 +109,42 @@ const AcadamicCalendar = ({
 
                       <div className='w-full grid grid-cols-5 text-gray-200  border font-medium text-center'>
                         <div
-                          className={`${
-                            getEachDaySubject(item, 'monday').isEvent
+                          className={`${getEachDaySubject(item, 'monday').isEvent
                               ? 'bg-white text-black'
                               : 'bg-[#FFF2F0] text-[#FB6340]'
-                          }  px-3 py-5 `}
+                            }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'monday').subjectName}
                         </div>
                         <div
-                          className={`${
-                            getEachDaySubject(item, 'tuesday').isEvent
+                          className={`${getEachDaySubject(item, 'tuesday').isEvent
                               ? 'bg-white text-black'
                               : 'bg-[#FDE8FF] text-[#ED1CFF]'
-                          }  px-3 py-5 `}
+                            }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'tuesday').subjectName}
                         </div>
                         <div
-                          className={`${
-                            getEachDaySubject(item, 'wednesday').isEvent
+                          className={`${getEachDaySubject(item, 'wednesday').isEvent
                               ? 'bg-white text-black'
                               : 'bg-[#FFF3E2] text-[#FF9F1C]'
-                          }  px-3 py-5 `}
+                            }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'wednesday').subjectName}
                         </div>
                         <div
-                          className={`${
-                            getEachDaySubject(item, 'thursday').isEvent
+                          className={`${getEachDaySubject(item, 'thursday').isEvent
                               ? 'bg-white text-black'
                               : 'bg-[#F4FFE6] text-[#60AC00]'
-                          }  px-3 py-5 `}
+                            }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'thursday').subjectName}
                         </div>
                         <div
-                          className={`${
-                            getEachDaySubject(item, 'friday').isEvent
+                          className={`${getEachDaySubject(item, 'friday').isEvent
                               ? 'bg-white text-black'
                               : 'bg-[#FFFFEB] text-[#CDCD04]'
-                          }  px-3 py-5 `}
+                            }  px-3 py-5 `}
                         >
                           {getEachDaySubject(item, 'friday').subjectName}
                         </div>
