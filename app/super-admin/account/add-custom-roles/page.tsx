@@ -106,6 +106,11 @@ const AddClass = () => {
   }
 
   const onSubmit = async () => {
+    if (activatedPermissions.length === 0) {
+      toast.error('Please select at least one permission');
+      return;
+    }
+
     const permissionIds = activatedPermissions.map((v: any) => v.id);
     const payload: any = {
       name: roleName,
