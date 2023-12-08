@@ -1,6 +1,7 @@
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
+import { useGetRoles } from '@/server/Permission';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -173,6 +174,8 @@ export default function Page() {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
+  const { data: allRoles } = useGetRoles();
+
   return (
     <div className='h-full px-12'>
       <div
@@ -251,15 +254,15 @@ export default function Page() {
           <div className='mb-3'>
             <SearchInput />
           </div>
-          {roles.map((v, idx) => (
-            <div key={idx} className='border-b-2 py-2'>
+          {allRoles?.data?.map((role, idx) => (
+            <div key={role.id} className='border-b-2 py-2'>
               <div
                 onClick={() => {
-                  setSelectedRole(v);
+                  setSelectedRole(roles[idx]);
                 }}
-                className='text-base font-normal cursor-pointer text-[#333]'
+                className='text-base font-normal cursor-pointer text-[#333] capitalize'
               >
-                {v.role}
+                {role?.name}
               </div>
             </div>
           ))}

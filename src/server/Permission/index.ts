@@ -74,3 +74,20 @@ export function useCreateNewRole() {
 
   return mutation;
 }
+
+export function useGetRoles() {
+  const query = useQuery({
+    queryKey: 'get_roles',
+    queryFn: async () => {
+      try {
+        const d = await request.get(`/v1/government/roles/find-role`);
+        return d.data.data.data;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  return query;
+}
