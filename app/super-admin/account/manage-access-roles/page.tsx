@@ -258,7 +258,7 @@ export default function Page() {
             <div key={role.id} className='border-b-2 py-2'>
               <div
                 onClick={() => {
-                  setSelectedRole(roles[idx]);
+                  roles[idx] && setSelectedRole(roles[idx]);
                 }}
                 className='text-base font-normal cursor-pointer text-[#333] capitalize'
               >
