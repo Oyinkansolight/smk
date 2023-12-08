@@ -41,6 +41,7 @@ export interface Town {
 export interface InviteAdminParams {
   email?: string;
   role?: number;
+  sendEmail: boolean;
 }
 
 export interface PaginationParams {

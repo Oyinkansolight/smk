@@ -10,7 +10,6 @@ import {
   StudentsListByInstitution,
   Subject,
 } from '@/types/institute';
-import { Staff } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -754,6 +753,26 @@ export function useCreateBulkStaff() {
     mutationKey: 'create-student',
     mutationFn: (params: any) =>
       request.post('/v1/government/teachers/upload-staff', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useDeleteStaffRequest() {
+  const mutation = useMutation({
+    mutationKey: 'delete-staff-request',
+    mutationFn: (params: any) =>
+      request.delete(`/v1/institutions/staff/transfers/${params.id}`, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
+export function useDeleteStudentRequest() {
+  const mutation = useMutation({
+    mutationKey: 'delete-student-request',
+    mutationFn: (params: any) =>
+      request.delete(`/v1/institutions/student_transfer_request/${params.id}`, {
         withCredentials: true,
       }),
   });

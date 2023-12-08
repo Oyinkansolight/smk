@@ -142,24 +142,24 @@ export default function SubjectList({
                           onClick={() => {
                             setItemId(v.id);
                             toggleDeleteModal();
-                            setSubjectName(v?.subject?.name);
+                            setSubjectName(v?.name);
                           }}
                           className='absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block'
                         />
                         <div className='flex items-center justify-center h-28 w-28 font-black rounded-full border border-[#DADEE6] bg-[#E2EEFF33] text-[#DADEE6] text-5xl'>
-                          <div>{v?.subject?.name?.substring(0, 1)}</div>
+                          <div>{v?.name?.substring(0, 1)}</div>
                         </div>
                         <div
                           className='font-medium text-center text-sm cursor-pointer'
                           onClick={() => {
                             setCurrentView(1);
                             setSubjectId(v?.subject?.id);
-                            setClassId(v?.subject?.class?.class?.id);
-                            setSubjectName(v?.subject?.name);
+                            setClassId(v?.class?.class?.id);
+                            setSubjectName(v?.name);
                           }}
                         >
-                          {v?.subject
-                            ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                          {v
+                            ? `${v?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
                             : 'Subject Name'}
                         </div>
                       </div>
@@ -188,7 +188,7 @@ export default function SubjectList({
                           onClick={() => {
                             setItemId(v.id);
                             toggleDeleteModal();
-                            setSubjectName(v?.subject?.name);
+                            setSubjectName(v?.name);
                           }}
                           className='absolute top-2 right-2 text-red-500 w-6 h-6 cursor-pointer hidden group-hover:block'
                         />
@@ -203,7 +203,7 @@ export default function SubjectList({
                           }}
                         >
                           {v?.subject
-                            ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                            ? `${v?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
                             : 'Subject Name'}
                         </div>
                       </div>

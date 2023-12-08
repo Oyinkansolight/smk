@@ -45,28 +45,27 @@ export default function Page() {
 
   return (
     <div className='h-full layout pl-0 lg:pl-20'>
-      <div className='text-[#D4D5D7] py-8 text-xl'>Grade Book</div>
-      <div className='pb-10 font-bold text-[32px]'>Gradebook</div>
+      <div className='pb-10 font-bold text-[32px] mt-4'>My Student</div>
 
       <TextIconTabBar
         idx={idx}
         setIdx={setIdx}
         trailing={
           <div className='flex space-x-4 items-center w-[350px]'>
-            <Button
+            {/* <Button
               variant='secondary'
               onClick={() => router.push('/teacher/grades/grade-list')}
               className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
             >
               View Grade List
-            </Button>
+            </Button> */}
           </div>
         }
         items={[
-          {
-            icon: <BiBookContent className='h-[18px] w-[18px]' />,
-            label: 'Manage Subjects',
-          },
+          // {
+          //   icon: <BiBookContent className='h-[18px] w-[18px]' />,
+          //   label: 'Manage Subjects',
+          // },
           {
             icon: <FaUsers className='h-[18px] w-[18px]' />,
             label: 'Manage Class',
@@ -74,7 +73,7 @@ export default function Page() {
         ]}
       />
 
-      {idx === 0 && (
+      {/* {idx === 0 && (
         <div className='bg-white h-screen px-10'>
           <div className='font-bold py-8 text-xl'>
             <div>Choose a Subject</div>
@@ -100,8 +99,8 @@ export default function Page() {
             )}
           </div>
         </div>
-      )}
-      {idx === 1 && (
+      )} */}
+      {idx === 0 && (
         <div className='bg-white min-h-screen px-10'>
           <div className='grid grid-cols-8 py-8 text-[#746D69] text-base'>
             <div />
@@ -136,7 +135,7 @@ function StudentGradeListItem({
   student: ClassArmStudents;
 }) {
   return (
-    <Link href={`/teacher/grades/grade-book-student?studentid=${student.id}`}>
+    <Link href={`/teacher/student/grade-book-student?studentid=${student.id}`}>
       <div className=' space-x-1 grid text-black grid-cols-8 items-center text-base rounded-lg border p-4 py-6 bg-white'>
         <div>{id}.</div>
         <div className='col-span-3 gap-2  flex items-center text-black font-bold'>

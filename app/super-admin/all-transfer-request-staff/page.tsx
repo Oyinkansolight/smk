@@ -8,8 +8,10 @@ import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import { useGetStaffTransferRequests } from '@/server/institution';
+import {
+  useDeleteStaffRequest,
+  useGetStaffTransferRequests,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -18,6 +20,13 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStaffTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
@@ -26,7 +35,22 @@ const AllStaffTransferRequests = () => {
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
+  // const handleDeleteStaffRequest = useDeleteStaffRequest();
 
+  const { mutateAsync } = useDeleteStaffRequest();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        toggleModal();
+        setAction(null);
+        const res = await mutateAsync({ id: itemToDelete });
+        toast.success('Staff Request removed successfully');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
@@ -48,7 +72,7 @@ const AllStaffTransferRequests = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -64,27 +88,11 @@ const AllStaffTransferRequests = () => {
   };
 
   const handleJumpToEnd = () => {
-    if (staff)
-      setPagingData({ ...pagingData, page: staff?.paging?.totalPage });
+    if (staff) setPagingData({ ...pagingData, page: staff?.paging?.totalPage });
   };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const { mutateAsync } = useDeleteStudent();
-
-  const handleDelete = async () => {
-    if (itemToDelete) {
-      try {
-        toggleModal();
-        setAction(null);
-        const res = await mutateAsync(itemToDelete);
-        toast.success('Student removed successfully');
-      } catch (error) {
-        logger(error);
-      }
-    }
   };
 
   useEffect(() => {
@@ -110,8 +118,8 @@ const AllStaffTransferRequests = () => {
         toggleModal={toggleModal}
         content={
           <DeleteModalContent
-            title='Delete Student'
-            body='Are you sure you want to delete this student?'
+            title='Delete Staff Request'
+            body='Are you sure you want to delete this request?'
             toggleModal={toggleModal}
             handleDelete={handleDelete}
           />
@@ -169,8 +177,14 @@ const AllStaffTransferRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.staff?.[0]?.lastName || item?.staff?.lastName || item?.staff?.user?.lastName || 'N/A'}{' '}
-                  {item?.staff?.[0]?.firstName || item?.staff?.firstName || item?.staff?.user?.firstName || 'N/A'}
+                  {item?.staff?.[0]?.lastName ||
+                    item?.staff?.lastName ||
+                    item?.staff?.user?.lastName ||
+                    'N/A'}{' '}
+                  {item?.staff?.[0]?.firstName ||
+                    item?.staff?.firstName ||
+                    item?.staff?.user?.firstName ||
+                    'N/A'}
                 </div>
 
                 <div className='col-span-3'>
@@ -183,10 +197,7 @@ const AllStaffTransferRequests = () => {
                   {item?.newInstitution?.instituteName || 'N/A'}{' '}
                 </div>
 
-                <div className='col-span-1'>
-                  {' '}
-                  {item?.status || 'N/A'}{' '}
-                </div>
+                <div className='col-span-1'> {item?.status || 'N/A'} </div>
 
                 <div className='col-span-1 justify-end flex'>
                   <button
@@ -206,8 +217,8 @@ const AllStaffTransferRequests = () => {
                         </span>
                         <button
                           onClick={() => {
-                            // setItemToDelete(item.id);
-                            // toggleModal();
+                            setItemToDelete(item.id);
+                            toggleModal();
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
@@ -294,7 +305,7 @@ const AllStaffTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < staff.paging.totalPage
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

@@ -11,12 +11,19 @@ interface timetableArg {
   day?: string;
 }
 
-export function useGetTodaysPeriod({
-  classId,
+interface studentParam {
+  studentId?: string;
+  termId?: string;
+  sessionId?: string;
+  classArmId?: string;
+  behavior?: string;
+  rating?: number;
+  type?: string;
+  remark?: string;
+  teacherId?: string;
+}
 
-  weekid,
-  day,
-}: timetableArg) {
+export function useGetTodaysPeriod({ classId, weekid, day }: timetableArg) {
   const query = useQuery({
     refetchOnWindowFocus: false,
     queryKey: 'get_today_period',
@@ -30,13 +37,7 @@ export function useGetTodaysPeriod({
   return query;
 }
 
-// v1/government/test_exam_score/get-student-subject-position?sessionId=d43a694d-6aa2-4642-8a84-52242d78d2e3&termId=6bcab477-8f8f-4586-9740-783e5760c198&studentId=33a87767-3684-4540-b1d5-5d1ad7bd8808&classArmId=14a4ebbd-5280-4934-a6d2-e371b3cbe594
-export function useGetStudentReportCard(params?: {
-  studentId?: string;
-  termId?: string;
-  sessionId?: string;
-  classArmId?: string;
-}) {
+export function useGetStudentReportCard(params?: studentParam) {
   // government/students/report-card
   const query = useQuery({
     queryKey: `get_student_subject_position_${params?.studentId}`,
@@ -71,6 +72,16 @@ export function useGetStudentReportCard(params?: {
   ]);
 
   return query;
+}
+export function useUpdateStudentDomain() {
+  const mutation = useMutation({
+    mutationKey: 'update-student-domain',
+    mutationFn: (params: studentParam) =>
+      request.post('/v1/government/students/create-behavior-domain', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
 }
 export function useSubmitActivity() {
   const mutation = useMutation({

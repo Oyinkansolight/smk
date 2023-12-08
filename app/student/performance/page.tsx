@@ -12,19 +12,35 @@ import Lightupyellow from '~/svg/lightup-yellow.svg';
 import Lightup from '~/svg/lightup.svg';
 import Lightupblue from '~/svg/lightupblue.svg';
 
-const Page = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [editContent, seteditContent] = useState(false);
-  const [editAction, seteditAction] = useState(false);
-  logger(editAction);
-  function handleModal() {
-    setIsEdit(!isEdit);
-    seteditAction(true);
-  }
-  function handleEditModal() {
-    seteditContent(!editContent);
-  }
+const affective = [
+  'Attentiveness',
+  'Honesty',
+  'Neatness',
+  'Politeness',
+  'Punctuality',
+  'Confidence',
+  'Attitude',
+];
 
+const psychomotor = [
+  'Learning Skills',
+  'Handwriting',
+  'Spoken English',
+  'Reading Skills',
+  'Outdoor Games',
+  'Vocational Skills',
+];
+const Page = () => {
+  const getDomainValue = (value: string) => {
+    const result = data?.domains.find((v) => v.behavior === value);
+    console.log(result);
+    return result
+      ? {
+          label: result.remark,
+          value: result.rating,
+        }
+      : null;
+  };
   const userData = getFromSessionStorage('user');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
@@ -74,30 +90,38 @@ const Page = () => {
           <Result
             Icon={Lightup}
             upperLimit={`${
-              data ? data?.agregates.studentPositionInClass : 'N/A'
+              data ? data?.agregates?.studentPositionInClass || 'N/A' : 'N/A'
             }`}
-            lowerLimit={`${data ? data?.agregates.totalStudents : 'N/A'}`}
+            lowerLimit={`${
+              data ? data?.agregates?.totalStudents || 'N/A' : 'N/A'
+            }`}
             subtitle='Position in class'
           />
           <Result
             Icon={Lightupyellow}
             upperLimit={`${
-              data ? data?.agregates.studentTotalExamScore : 'N/A'
+              data ? data?.agregates?.studentTotalExamScore || 'N/A' : 'N/A'
             }`}
-            lowerLimit={`${data ? data?.agregates.classTotalExamScore : 'N/A'}`}
+            lowerLimit={`${
+              data ? data?.agregates?.classTotalExamScore || 'N/A' : 'N/A'
+            }`}
             subtitle='Total Exam Score'
           />
           <Result
             Icon={Lightupblue}
             upperLimit={`${
-              data ? data?.agregates.studentAverageExamScore : 'N/A'
+              data
+                ? data?.agregates?.studentAverageExamScore
+                  ? data?.agregates?.studentAverageExamScore.toFixed(2)
+                  : 'N/A'
+                : 'N/A'
             }`}
             subtitle='Average Exam Score'
           />
           <Result
             Icon={Lightup}
             upperLimit={`${
-              data ? data?.agregates.studentTotalExamScore : 'N/A'
+              data ? data?.agregates.studentTotalExamScore || 'N/A' : 'N/A'
             }`}
             subtitle='Average Exam grade'
           />
@@ -194,27 +218,15 @@ const Page = () => {
               <div className='text-black font-medium'>Behaviour</div>
               <div className='text-black font-medium'>Rating</div>
             </div>
-            <div className='grid grid-cols-12 gap-4 items-center'>
-              <div className='col-span-1'>Attentiveness</div>
-              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-1'>Honesty</div>
-              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-1'>Neatness</div>
-              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-1'>Politeness</div>
-              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-1'>Punctuality</div>
-              <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-            </div>
+            {affective.map((v, idx) => (
+              <div key={idx} className='grid grid-cols-12 gap-4 items-center'>
+                <div className='col-span-1'>{v}</div>
+                <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+                <div className='col-span-1'>
+                  {getDomainValue(v)?.label ?? 'N/A'}
+                </div>
+              </div>
+            ))}
           </div>
 
           <h1 className='text-lg font-bold my-2'>Psychomotor Domain</h1>
@@ -223,27 +235,16 @@ const Page = () => {
               <div className='text-black font-medium'>Skills</div>
               <div className='text-black font-medium'>Rating</div>
             </div>
-            <div className='grid grid-cols-12 gap-4 items-center'>
-              <div className='col-span-2'>Learning skills</div>
-              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
 
-              <div className='col-span-2'>Handwriting</div>
-              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-2'>Spoken english</div>
-              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-2'>Outdoor games</div>
-              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-
-              <div className='col-span-2'>Vocational skills</div>
-              <div className='col-span-9 h-[1px] bg-[#DEDEDE] w-full'></div>
-              <div className='col-span-1'>Excellent</div>
-            </div>
+            {psychomotor.map((v, idx) => (
+              <div key={idx} className='grid grid-cols-12 gap-4 items-center'>
+                <div className='col-span-1'>{v}</div>
+                <div className='col-span-10 h-[1px] bg-[#DEDEDE] w-full'></div>
+                <div className='col-span-1'>
+                  {getDomainValue(v)?.label ?? 'N/A'}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

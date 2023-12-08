@@ -4,7 +4,6 @@
 import Button from '@/components/buttons/Button';
 import { SchoolProfileCard } from '@/components/cards';
 import TabBar from '@/components/layout/TabBar';
-import OnlineStatus from '@/components/profile/OnlineStatus';
 import Table from '@/components/tables/TableComponent';
 import InstitutionBioDetails from '@/components/views/admin/InstitutionBioDetails';
 import StaffClassAttendanceReport from '@/components/views/admin/StaffClassAttendanceReport';
@@ -29,6 +28,18 @@ import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {
@@ -39,7 +50,6 @@ const studentListColumns: TableColumn<any>[] = [
       </div>
     ),
   },
-  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
   {
     name: 'Class',
     cell: (row) => (
@@ -47,10 +57,6 @@ const studentListColumns: TableColumn<any>[] = [
         {row.class.class.name} - {row.class.arm}
       </div>
     ),
-  },
-  {
-    name: 'Attendance Rate',
-    cell: () => <div className='text-gray-500 font-bold text-center'>{0}%</div>,
   },
 ];
 const staffListColumns: TableColumn<any>[] = [
@@ -63,14 +69,11 @@ const staffListColumns: TableColumn<any>[] = [
       </div>
     ),
   },
-  { name: 'Status', cell: () => <OnlineStatus status='online' /> },
   {
     name: 'Subject',
-    cell: (row) => <div>{row.subjects > 0 ? row.subjects[0] : 'None'}</div>,
-  },
-  {
-    name: 'Attendance Rate',
-    cell: () => <div className='text-gray-500 font-bold text-center'>{0}%</div>,
+    cell: (row) => (
+      <div>{row.subjects?.length > 0 ? row.subjects.length : 'None'}</div>
+    ),
   },
 ];
 

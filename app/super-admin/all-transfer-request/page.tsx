@@ -9,7 +9,10 @@ import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import { useGetStudentTransferRequests } from '@/server/institution';
+import {
+  useDeleteStudentRequest,
+  useGetStudentTransferRequests,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -18,6 +21,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStudentTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
@@ -48,7 +52,7 @@ const AllStudentTransferRequests = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -72,7 +76,7 @@ const AllStudentTransferRequests = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { mutateAsync } = useDeleteStudent();
+  const { mutateAsync } = useDeleteStudentRequest();
 
   const handleDelete = async () => {
     if (itemToDelete) {
@@ -80,7 +84,7 @@ const AllStudentTransferRequests = () => {
         toggleModal();
         setAction(null);
         const res = await mutateAsync(itemToDelete);
-        toast.success('Student removed successfully');
+        toast.success('Student request removed successfully');
       } catch (error) {
         logger(error);
       }
@@ -110,8 +114,8 @@ const AllStudentTransferRequests = () => {
         toggleModal={toggleModal}
         content={
           <DeleteModalContent
-            title='Delete Student'
-            body='Are you sure you want to delete this student?'
+            title='Delete Student Request'
+            body='Are you sure you want to delete this request?'
             toggleModal={toggleModal}
             handleDelete={handleDelete}
           />
@@ -131,7 +135,9 @@ const AllStudentTransferRequests = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>Student Transfer Requests</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>
+        Student Transfer Requests
+      </h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
@@ -169,8 +175,12 @@ const AllStudentTransferRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.student?.[0]?.lastName || item?.student?.lastName || 'N/A'}{' '}
-                  {item?.student?.[0]?.firstName || item?.student?.firstName || 'N/A'}
+                  {item?.student?.[0]?.lastName ||
+                    item?.student?.lastName ||
+                    'N/A'}{' '}
+                  {item?.student?.[0]?.firstName ||
+                    item?.student?.firstName ||
+                    'N/A'}
                 </div>
 
                 <div className='col-span-3'>
@@ -183,10 +193,7 @@ const AllStudentTransferRequests = () => {
                   {item?.transferTo?.instituteName || 'N/A'}{' '}
                 </div>
 
-                <div className='col-span-1'>
-                  {' '}
-                  {item?.status || 'N/A'}{' '}
-                </div>
+                <div className='col-span-1'> {item?.status || 'N/A'} </div>
 
                 <div className='col-span-1 justify-end flex'>
                   <button
@@ -206,8 +213,8 @@ const AllStudentTransferRequests = () => {
                         </span>
                         <button
                           onClick={() => {
-                            // setItemToDelete(item.id);
-                            // toggleModal();
+                            setItemToDelete(item.id);
+                            toggleModal();
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
@@ -294,7 +301,7 @@ const AllStudentTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < students.paging.totalPage
+                  pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
