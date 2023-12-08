@@ -1,6 +1,7 @@
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
+import LongTextSkeleton from '@/components/skeletons/LongText';
 import { useGetRoles } from '@/server/Permission';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -174,7 +175,7 @@ export default function Page() {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
-  const { data: allRoles } = useGetRoles();
+  const { data: allRoles, isLoading: isLoadingRoles } = useGetRoles();
 
   return (
     <div className='h-full px-12'>
@@ -254,7 +255,7 @@ export default function Page() {
           <div className='mb-3'>
             <SearchInput />
           </div>
-          {allRoles?.data?.map((role, idx) => (
+          {!isLoadingRoles && allRoles?.data?.map((role, idx) => (
             <div key={role.id} className='border-b-2 py-2'>
               <div
                 onClick={() => {
@@ -266,6 +267,21 @@ export default function Page() {
               </div>
             </div>
           ))}
+
+          {isLoadingRoles && (
+            <div className='flex flex-col gap-3'>
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+              <LongTextSkeleton />
+            </div>
+          )}
         </div>
         <div className='col-span-9 bg-white w-full'>
           <div className='flex justify-end p-2 w-full border-b'>
