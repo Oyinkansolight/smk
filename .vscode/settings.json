@@ -11,6 +11,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "nuxt.isNuxtApp": false,
   "cSpell.words": [
+    "agregates",
     "arrowdown",
     "arrowup",
     "bulkusers",

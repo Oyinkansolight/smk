@@ -27,6 +27,8 @@ import { useGetAcademicTimetable } from '@/server/Schedule';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AcadamicCalendar = ({
   isClassTimeTable = true,
 }: {
@@ -152,7 +154,7 @@ const AcadamicCalendar = ({
                     </div>
                   )}
 
-                  {timetableData.length === 0 && (
+                  {timetableData?.length === 0 && (
                     // <EmptyView label='No Timetable for this class yet' />
                     <div className='text-center text-xs mt-5'>
                       No Timetable for this class yet
@@ -165,7 +167,7 @@ const AcadamicCalendar = ({
         ) : (
           <div className='text-center text-xs mt-5'>Loading...</div>
         )}
-        {!isLoading && !timetableData && timetableData.length === 0 && (
+        {!isLoading && !timetableData && timetableData?.length === 0 && (
           <EmptyView label='No Timetable for this class yet' />
           // <div className='text-center text-xs mt-5'>
           //   No Timetable for this class yet

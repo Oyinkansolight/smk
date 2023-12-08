@@ -4,9 +4,11 @@ import logger from '@/lib/logger';
 import { useGetAdminRoles, useInviteAdmin } from '@/server/onboard';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner } from 'react-icons/im';
 import { FallingLines } from 'react-loader-spinner';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+import Toggle from 'react-toggle';
 import Close from '~/svg/close.svg';
 
 interface propType {
@@ -18,6 +20,8 @@ function AddAdmin({ onClickHandler }: propType) {
   // const [role, setRole] = useState<string | number>('');
   // const [schoolEmail, setSchoolEmail] = useState<string | number>('');
   const [options, setOptions] = useState([]);
+  const [sendEmail, setSendEmail] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { register, getValues, control } = useForm();
   const { mutateAsync } = useInviteAdmin();
 
@@ -38,19 +42,32 @@ function AddAdmin({ onClickHandler }: propType) {
     }
   }, [allRoles, isLoading]);
 
+  function handleSendEmail() {
+    setSendEmail(!sendEmail);
+  }
   const handleSubmit = async () => {
     const email: string = getValues('email');
     const assignedRole: number = getValues('assignedRole').value;
+    if (!email || !assignedRole) {
+      toast.error('All field are required');
+      return;
+    }
+    setLoading(true);
 
     const response = await mutateAsync({
       email,
       role: assignedRole,
+      sendEmail,
     });
 
     if (response.status === 201) {
       onClickHandler();
       toast.success('Admin invite sent successfully');
+      setLoading(false);
     } else {
+      console.log(response.data);
+      setLoading(false);
+
       toast.error('An error occurred');
     }
   };
@@ -92,14 +109,22 @@ function AddAdmin({ onClickHandler }: propType) {
                 placeholder='Details here'
               />
             </div>
+            <div className='w-full flex flex-col space-y-1'>
+              <label htmlFor='' className='text-xs font-bold'>
+                Send email to admin
+              </label>
+              <Toggle
+                defaultChecked={sendEmail}
+                icons={false}
+                style={{ width: '23px !important' }}
+                onChange={handleSendEmail}
+              />
+            </div>
 
-            <div className='w-full'>
-              {/* <FormSelect
-                label='Select Access Role'
-                setFormValue={setRole}
-                formValue={role}
-                options={options}
-              /> */}
+            <div className='w-full flex flex-col space-y-2'>
+              <label htmlFor='' className='text-xs font-bold'>
+                Select admin type
+              </label>
 
               <Controller
                 control={control}
@@ -126,7 +151,7 @@ function AddAdmin({ onClickHandler }: propType) {
                 onClick={handleSubmit}
                 className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
               >
-                Send Invite
+                {loading ? <ImSpinner /> : 'Send Invite'}
               </button>
             </div>
           </div>

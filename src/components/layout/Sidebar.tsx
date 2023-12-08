@@ -69,6 +69,15 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
             href='/teacher/classes'
             active={routeDetails && routeDetails.includes('classes') && true}
           />
+          {
+            <SideBarButton
+              open={open}
+              icon={<FaRegIdCard className='#C3CAD9' />}
+              title='My Student'
+              href='/teacher/student'
+              active={routeDetails && routeDetails.includes('student') && true}
+            />
+          }
 
           <SideBarButton
             open={open}
@@ -111,16 +120,6 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
               routeDetails && routeDetails.includes('lesson-note') && true
             }
           />
-
-          {isGrade &&
-            <SideBarButton
-              open={open}
-              icon={<FaRegIdCard className='#C3CAD9' />}
-              title='Grade Book'
-              href='/teacher/grades'
-              active={routeDetails && routeDetails.includes('grades') && true}
-            />
-          }
 
           <SideBarButton
             open={open}
@@ -191,13 +190,13 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
 
             <div className='h-4' />
 
-            {open &&
+            {open && (
               <Button
                 title='Logout'
                 className={clsxm(
                   'min-w-[170px]',
                   'bg-[#1A8FE3] font-bold text-white',
-                  'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg',
+                  'h-12 overflow-hidden border-0 shadow-none hover:bg-secondary-600 rounded-lg'
                 )}
                 onClick={handleLogout}
               >
@@ -218,7 +217,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
                   </div>
                 </div>
               </Button>
-            }
+            )}
 
             {/* {open && (
               <BasicModal
