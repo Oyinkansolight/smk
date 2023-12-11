@@ -57,6 +57,8 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -289,7 +291,7 @@ const Page = () => {
           )}
           {tabIdx === 1 && (
             <div>
-              {teacherTimeTable.length > 0 ? (
+              {teacherTimeTable?.length > 0 ? (
                 <TimetableView
                   data={teacherTimeTable}
                   isLoading={isTTLoading}

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
+import { CountCard } from '@/components/cards';
+import StudentTeacherProfileCard from '@/components/cards/ParentProfileCard';
 import PopOverSelect from '@/components/input/PopOverSelect';
 import TabBar from '@/components/layout/TabBar';
 import ControlledModal from '@/components/modal/ControlledModal';
@@ -17,8 +18,10 @@ import {
 } from '@/server/institution';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { TableColumn } from 'react-data-table-component';
 import { BiListCheck } from 'react-icons/bi';
 import { ImSpinner2 } from 'react-icons/im';
+import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
@@ -28,31 +31,25 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const studentListColumns: TableColumn<any>[] = [
+  // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
+  {
+    name: 'Name',
+    cell: (row) => (
+      <div>
+        {row.user[0].firstName} {row.user[0].lastName}
+      </div>
+    ),
+  },
+  {
+    name: 'Class',
+    cell: (row) => (
+      <div>
+        {row.class.class.name} - {row.class.arm}
+      </div>
+    ),
+  },
+];
 
 const Page = () => {
   const [open, setOpen] = useState(false);
@@ -202,10 +199,10 @@ const Page = () => {
               selected={tabIdx}
               onSelect={(i) => setTabIdx(i)}
               items={[
-                // {
-                //   icon: <RiDashboardFill className='h-5 w-5' />,
-                //   label: 'Dashboard',
-                // },
+                {
+                  icon: <RiDashboardFill className='h-5 w-5' />,
+                  label: 'Dashboard',
+                },
                 {
                   icon: <BiListCheck className='h-5 w-5' />,
                   label: 'Students',
@@ -216,8 +213,16 @@ const Page = () => {
             <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
           </div>
 
-          {tabIdx === 1 && <div>Dashboard</div>}
           {tabIdx === 0 && (
+            <div>
+              <CountCard
+                count={parent?.students?.length}
+                title='Student'
+                variant='basic'
+              />
+            </div>
+          )}
+          {tabIdx === 1 && (
             <div>
               <div className='mb-6 flex justify-end space-x-4 items-end'>
                 <button
@@ -245,6 +250,24 @@ const Page = () => {
                   }}
                   setSelectedIndex={handleItemIndex}
                 />
+                <div className='bg-white rounded-md p-6'>
+                  <div className='flex justify-between'>
+                    <div className='text-[#6B7A99] text-xl font-bold'>
+                      Student List
+                    </div>
+                    {/* <Select
+                      value={{ value: 'all', label: 'All Class Arms' }}
+                      options={[{ value: 'all', label: 'All Class Arms' }]}
+                    /> */}
+                  </div>
+                  {/* <Table
+                    showFilter={false}
+                    showSearch={false}
+                    columns={studentListColumns}
+                    data={parent?.students}
+                    // data={[]}
+                  /> */}
+                </div>
 
                 <div className='my-10'>
                   {/* <Select

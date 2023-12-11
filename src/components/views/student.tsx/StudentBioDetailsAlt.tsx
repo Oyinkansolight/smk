@@ -9,6 +9,7 @@ import { Student } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
 export default function StudentBioDetailsAlt({
@@ -107,7 +108,7 @@ export default function StudentBioDetailsAlt({
         {isEditing && (
           <div className='flex justify-end my-5'>
             <Button disabled={isLoading} type='submit' variant='secondary'>
-              Update Changes
+              {isLoading ? <ImSpinner /> : 'Update Changes'}
             </Button>
           </div>
         )}
