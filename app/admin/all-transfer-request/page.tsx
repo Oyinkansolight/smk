@@ -2,15 +2,16 @@
 'use client';
 
 // import AvrilImage from '~/svg/avril.svg';
-import ConfirmModalContent from '@/components/modal/ConfirmModalContent';
 import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import {
+  useDeleteStudentRequest,
   useGetStudentTransferRequests,
-  useUpdateStudentTransfer,
 } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -22,51 +23,10 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const AllStudentTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemToUpdate, setItemToUpdate] = useState<string>();
-  const [status, setStatus] = useState<string>();
+  const [itemToDelete, setItemToDelete] = useState<string>();
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -116,15 +76,15 @@ const AllStudentTransferRequests = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { mutateAsync } = useUpdateStudentTransfer();
+  const { mutateAsync } = useDeleteStudentRequest();
 
-  const handleUpdate = async () => {
-    if (itemToUpdate) {
+  const handleDelete = async () => {
+    if (itemToDelete) {
       try {
         toggleModal();
         setAction(null);
-        const res = await mutateAsync({ id: itemToUpdate, status });
-        toast.success('Student request updated successfully');
+        const res = await mutateAsync(itemToDelete);
+        toast.success('Student request removed successfully');
       } catch (error) {
         logger(error);
       }
@@ -153,15 +113,11 @@ const AllStudentTransferRequests = () => {
         isOpen={isModalOpen}
         toggleModal={toggleModal}
         content={
-          <ConfirmModalContent
-            title={`${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } Student Request`}
-            body={`Are you sure you want to ${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } this request?`}
+          <DeleteModalContent
+            title='Delete Student Request'
+            body='Are you sure you want to delete this request?'
             toggleModal={toggleModal}
-            handleAction={handleUpdate}
+            handleDelete={handleDelete}
           />
         }
         className='max-w-[777px] w-full h-[267px]'
@@ -249,25 +205,20 @@ const AllStudentTransferRequests = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                        <span
+                          // href={`/super-admin/student?id=${item.id}`}
+                          className='p-4 hover:bg-gray-200 w-full block'
+                        >
+                          Edit
+                        </span>
                         <button
                           onClick={() => {
-                            setItemToUpdate(item.id);
+                            setItemToDelete(item.id);
                             toggleModal();
-                            setStatus('DENIED');
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
-                          DENY
-                        </button>
-                        <button
-                          onClick={() => {
-                            setItemToUpdate(item.id);
-                            toggleModal();
-                            setStatus('GRANTED');
-                          }}
-                          className='p-4 hover:bg-gray-200 w-full'
-                        >
-                          APPROVE
+                          Delete
                         </button>
                       </div>
                     )}

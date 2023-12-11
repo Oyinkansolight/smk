@@ -1,17 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
-import Details from '@/components/views/super-admin/TransferStudent/Details';
-import Publish from '@/components/views/super-admin/TransferStudent/publish';
+import Details from '@/components/views/admin/TransferStudent/Details';
 import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
+import {
+  useCreateStudentTransfer,
+  useGetSchools,
+  useGetStudentsListByInstitution,
+  useGetTeachersListByInstitution,
+} from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
+import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 
-const TransferStudent = () => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const TransferStaff = () => {
   const {
     register,
 
@@ -21,49 +46,50 @@ const TransferStudent = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+  const [loading, setLoading] = useState(false);
   const [stage, setStage] = useState(1);
+
+  const [payload, setPayload] = useState({
+    studentId: '',
+    // reason: '',
+    transferToId: '',
+    status: 'PENDING',
+  });
+
+  const { data: institutionProfile } = useGetProfile();
+
+  const { data: student, isLoading } = useGetStudentsListByInstitution({
+    instituteId: institutionProfile?.userInfo?.esiAdmin?.id ?? '',
+    limit: 1000,
+  });
+
   const [isOpen, setisOpen] = useState(false);
   const [publishData] = useState(null);
 
-  // const handleCreateStaff = useCreateStaff();
+  const handleCreateStudentTransfer = useCreateStudentTransfer();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    logger(errors);
-    logger(data);
-    if (stage === 1 && data.studentId && data.studentName && data.reason) {
-      setStage(stage + 1);
-    }
+    // setPayload((prev) => {
+    //   return {
+    //     ...prev,
+    //     reason: data.reason,
+    //   };
+    // });
 
-    if (stage === 2) {
-      setisOpen(true);
+    if (payload.studentId && payload.transferToId) console.log(payload);
 
-      // try {
-      //   const response = await handleCreateStaff.mutateAsync(data);
+    try {
+      setLoading(true);
+      const response = await handleCreateStudentTransfer.mutateAsync(payload);
 
-      //   if (response) {
-      //     toast.success('Login successful');
-
-      //     //2 Second - Open Success Modal
-      //     setisOpen(true);
-      //   }
-      // } catch (error) {
-      //   toast.error(getErrMsg(error));
-      // }
-    }
-  };
-
-  // const nextHandler = (): void => {
-  //   // handleSubmit(onSubmit);
-  //   // console.log(getValues())
-  //   // console.log(formState)
-
-  //   // if (stage >= 1 && stage <= 4) {
-  //   //   setStage(stage + 1);
-  //   // }
-  // };
-  const prevHandler = (): void => {
-    if (stage >= 2) {
-      setStage(stage - 1);
+      if (response) {
+        toast.success('Student transfer booked successfully');
+        setisOpen(true);
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error(getErrMsg(error));
+      setLoading(false);
     }
   };
 
@@ -71,10 +97,6 @@ const TransferStudent = () => {
     {
       stage: 1,
       stageName: 'TransferBio Details',
-    },
-    {
-      stage: 2,
-      stageName: 'Account Summary',
     },
   ];
 
@@ -84,22 +106,11 @@ const TransferStudent = () => {
         <Success
           title='Student transfer request successful'
           description='Hurray!!!'
-          link='/super-admin/all-transfer-request'
-          textLink='Manage Student'
+          link='/admin/all-transfer-request'
+          textLink='Manage Student request'
         />
       )}
-      <Link href='/admin'>
-        <div className='flex items-center space-x-4'>
-          <Image
-            src='/svg/back.svg'
-            width={10}
-            height={10}
-            alt='back'
-            className='h-4 w-4'
-          />
-          <h3 className='text-[10px] font-medium'>Back</h3>
-        </div>
-      </Link>
+      <BackButton />
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>Transfer Student</h1>
 
@@ -111,29 +122,40 @@ const TransferStudent = () => {
       />
 
       <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
+        {isLoading && (
+          <div className='flex justify-center items-center h-[40vh]'>
+            <RotatingLines
+              width='100'
+              visible={true}
+              strokeWidth='5'
+              strokeColor='#4fa94d'
+              animationDuration='0.75'
+            />
+          </div>
+        )}
         <form onSubmit={handleSubmit(onSubmit)}>
-          {stage === 1 && <Details register={register} errors={errors} />}
+          {student?.data && (
+            <Details
+              register={register}
+              errors={errors}
+              students={student?.data}
+              setPayload={setPayload}
+              payload={payload}
+            />
+          )}
 
-          {stage === 2 && <Publish publishData={publishData} />}
           <div className='my-10 flex justify-end'>
             <div className='flex space-x-6'>
               <button
                 type='button'
-                onClick={prevHandler}
                 className='cursor-pointer w-full rounded px-2 py-3 text-xs text-primary md:px-6'
               >
                 Prev
               </button>
-              {stage < 2 && (
-                <button className='w-full rounded border bg-primary px-8 py-3 text-xs text-[#fff] '>
-                  Next
-                </button>
-              )}
-              {stage == 2 && (
-                <button className='w-full rounded border bg-primary px-8 py-3 text-xs text-[#fff] '>
-                  Continue
-                </button>
-              )}
+
+              <button className='w-full rounded border bg-primary px-8 py-3 text-xs text-[#fff] '>
+                {loading ? <ImSpinner2 /> : 'Continue'}
+              </button>
             </div>
           </div>
         </form>
@@ -142,4 +164,4 @@ const TransferStudent = () => {
   );
 };
 
-export default TransferStudent;
+export default TransferStaff;

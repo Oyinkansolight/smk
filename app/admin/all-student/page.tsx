@@ -30,6 +30,14 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStudent = () => {
   const { error: profileError } = useGetProfile();
 
@@ -231,7 +239,13 @@ const AllStudent = () => {
             bulkStudentUpload={bulkStudentUpload}
           />
         )}
-        <div className='mb-6 flex justify-end items-end relative'>
+        <div className='mb-6 flex justify-end items-end space-x-2 relative'>
+          <Link
+            href='/admin/transfer-student'
+            className='w-max flex items-center rounded border border-primary  px-6 py-3 text-center text-xs font-medium text-primary '
+          >
+            Student transfer
+          </Link>
           <button
             onClick={() => {
               setIsOpen(!isOpen);
@@ -440,7 +454,7 @@ const AllStudent = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < students.paging.totalPage
+                  pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

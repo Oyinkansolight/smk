@@ -19,14 +19,13 @@ export default function ControlledModal({
   className,
   closeIcon = true,
   toggleModal,
-  showModal = true
+  showModal = true,
 }: BasicModalProps) {
-
-  if (!showModal) return (<></>);
+  if (!showModal) return <></>;
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as='div' className='relative z-50' onClose={toggleModal}>
+      <Dialog as='div' className='relative z-[999]' onClose={toggleModal}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -57,12 +56,12 @@ export default function ControlledModal({
                 )}
               >
                 <div className='flex relative'>
-                  {closeIcon &&
+                  {closeIcon && (
                     <IoCloseCircle
                       onClick={toggleModal}
                       className='w-6 h-6 lg:w-10 lg:h-10 absolute right-0'
                     />
-                  }
+                  )}
 
                   <span className='mt-16 w-full'>{content}</span>
                 </div>

@@ -18,17 +18,20 @@ export default function Header({ handleToggle }: HeaderProps) {
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-[#F7F8FA]'>
-      <div className='mx-auto flex h-20 items-center justify-end px-4'>
-        {handleToggle && (
-          <div
-            onClick={handleToggle}
-            className={clsxm(
-              'flex w-12 justify-center cursor-pointer bg-secondary-50 bg-opacity-30 p-4 rounded-full my-12'
-            )}
-          >
-            <GiHamburgerMenu />
-          </div>
-        )}
+      <div className='mx-auto flex h-20 items-center justify-between px-4'>
+        <div>
+          {' '}
+          {handleToggle && (
+            <div
+              onClick={handleToggle}
+              className={clsxm(
+                'flex w-12 justify-center cursor-pointer bg-secondary-50 bg-opacity-30 p-4 rounded-full my-12'
+              )}
+            >
+              <GiHamburgerMenu />
+            </div>
+          )}
+        </div>
 
         {/* <div className='flex w-full flex-row gap-28 ml-20'>
           <BasicSearch />

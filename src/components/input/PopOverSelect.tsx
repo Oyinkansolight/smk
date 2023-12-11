@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Button from "@/components/buttons/Button";
-import ControlledModal from "@/components/modal/ControlledModal";
-import { BasicSearch } from "@/components/search";
-import clsxm from "@/lib/clsxm";
-import { useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
-import { FaCheckCircle } from "react-icons/fa";
+import Button from '@/components/buttons/Button';
+import ControlledModal from '@/components/modal/ControlledModal';
+import { BasicSearch } from '@/components/search';
+import clsxm from '@/lib/clsxm';
+import { useState } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
+import { FaCheckCircle } from 'react-icons/fa';
 
 interface PopOverSelectProps {
   data?: any[];
@@ -29,6 +29,15 @@ const PopOverSelect = (props: PopOverSelectProps) => {
   const [selected, setSelected] = useState<null | number>(null);
   const handleToggle = () => props.setOpen(!open);
 
+  function resolveProp(path: string, obj: any) {
+    if (path.includes('.')) {
+      return path.split('.').reduce(function (prev, curr) {
+        return prev ? prev[curr] : null;
+      }, obj || self);
+    } else {
+      return obj[path];
+    }
+  }
   // useEffect(() => {
   //   console.log("props.data", props.data);
 
@@ -51,11 +60,15 @@ const PopOverSelect = (props: PopOverSelectProps) => {
           </div>
           <div className='flex flex-col justify-center gap-8 h-[70vh]'>
             <div className='flex flex-col gap-3 text-center'>
-              <div className="h3 capitalize">{props.title}</div>
-              {props.description && <div className="text-[#818181] text-lg">{props.description}</div>}
+              <div className='h3 capitalize'>{props.title}</div>
+              {props.description && (
+                <div className='text-[#818181] text-lg'>
+                  {props.description}
+                </div>
+              )}
             </div>
 
-            <div className="min-w-[90%] mx-auto">
+            <div className='min-w-[90%] mx-auto'>
               <BasicSearch
                 placeholder='Search here...'
                 handleSearch={props.handleSearch && props.handleSearch}
@@ -64,7 +77,11 @@ const PopOverSelect = (props: PopOverSelectProps) => {
 
             <div className='flex flex-col gap-3'>
               {props.data?.map((item, index) => {
-                if (!item[props.key1] || props.key2 && !item[props.key2]) return null;
+                if (
+                  !resolveProp(props.key1, item) ||
+                  (props.key2 && !resolveProp(props.key2, item))
+                )
+                  return null;
 
                 return (
                   <div
@@ -73,7 +90,12 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                       setSelected(index);
                       props.setSelectedIndex && props.setSelectedIndex(index);
                       props.setSelectedItem && props.setSelectedItem(item.id);
-                      props.setSelectedItemName && props.setSelectedItemName(`${item[props.key1]} ${props.key2 ? item[props?.key2] : ''}`);
+                      props.setSelectedItemName &&
+                        props.setSelectedItemName(
+                          `${resolveProp(props.key1, item)} ${
+                            props.key2 ? resolveProp(props.key2, item) : ''
+                          }`
+                        );
                       setTimeout(() => {
                         handleToggle();
                       }, 100);
@@ -81,16 +103,25 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                     className={clsxm(
                       'flex justify-between items-center cursor-pointer',
                       index === selected && 'border border-[#007AFF]',
-                      "text-lg font-medium px-3 py-[3px] min-h-[30px] bg-gray-100 rounded-md whitespace-nowrap overflow-hidden text-ellipsis"
+                      'text-lg font-medium px-3 py-[3px] min-h-[30px] bg-gray-100 rounded-md whitespace-nowrap overflow-hidden text-ellipsis'
                     )}
                   >
-                    <div>{item[props.key1]} {props.key2 && item[props.key2]}</div>
-                    {index === selected && <FaCheckCircle className="fill-current text-[#007AFF] h-4 w-4" />}
+                    <div>
+                      {resolveProp(props.key1, item)}{' '}
+                      {props.key2 && resolveProp(props.key2, item)}
+                    </div>
+                    {index === selected && (
+                      <FaCheckCircle className='fill-current text-[#007AFF] h-4 w-4' />
+                    )}
                   </div>
-                )
+                );
               })}
 
-              {props.data?.length === 0 && <div className="text-center text-lg text-[#818181]">No data found</div>}
+              {props.data?.length === 0 && (
+                <div className='text-center text-lg text-[#818181]'>
+                  No data found
+                </div>
+              )}
 
               <div className='flex justify-center items-center mt-3 gap-10'>
                 <Button
@@ -104,7 +135,9 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                 </Button>
                 <div>{page}</div>
                 <Button
-                  disabled={props?.totalPages ? page === props?.totalPages : false}
+                  disabled={
+                    props?.totalPages ? page === props?.totalPages : false
+                  }
                   onClick={() => {
                     props.handleNextPage && props.handleNextPage(page + 1);
                     setPage(page + 1);
@@ -118,7 +151,7 @@ const PopOverSelect = (props: PopOverSelectProps) => {
         </div>
       }
     />
-  )
-}
+  );
+};
 
-export default PopOverSelect
+export default PopOverSelect;

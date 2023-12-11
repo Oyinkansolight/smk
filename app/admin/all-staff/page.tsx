@@ -23,6 +23,24 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
 
@@ -193,7 +211,14 @@ const AllStaff = () => {
             link='/pdfs/upload_teacher_template.csv'
           />
         )}
-        <div className='mb-6 flex justify-end items-end relative'>
+
+        <div className='mb-6 flex justify-end items-end space-x-2 relative'>
+          <Link
+            href='/admin/transfer-staff'
+            className='w-max flex items-center rounded border border-primary  px-6 py-3 text-center text-xs font-medium text-primary '
+          >
+            Staff transfer
+          </Link>
           <button
             onClick={() => {
               setIsOpen(!isOpen);
@@ -399,7 +424,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < staff.paging.totalPage
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

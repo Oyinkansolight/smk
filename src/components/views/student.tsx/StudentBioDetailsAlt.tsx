@@ -69,6 +69,7 @@ export default function StudentBioDetailsAlt({
             lastName: (data.fullName as string).split(' ')[1],
             address: data.address,
           });
+          toast.success('Update Successful');
         }
       } catch (error) {
         toast.error(getErrMsg(error));
@@ -80,7 +81,6 @@ export default function StudentBioDetailsAlt({
   };
 
   useEffect(() => {
-    console.log('Student Changed', initStudent);
     if (initStudent) {
       getURL(initStudent?.profileImg ?? '').then((v) => setUserImage(v));
 

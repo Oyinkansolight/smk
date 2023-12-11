@@ -38,6 +38,11 @@ export interface StudentCountByType {
   BTVET: number;
 }
 
+type payloadProp = {
+  staffId?: string;
+  reason?: string;
+  newInstitutionId?: string;
+};
 export interface CreateSubjectParams {
   name?: string;
   classId?: number[];
@@ -636,6 +641,72 @@ export function useCreateStaff() {
       request.post('/v1/government/teachers/add-teaching-staff', params, {
         withCredentials: true,
       }),
+  });
+  return mutation;
+}
+export function useCreateStaffTransfer() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'create-student-transfer',
+    mutationFn: (params: payloadProp) =>
+      request.post('/v1/institutions/staff/transfers', params, {
+        withCredentials: true,
+      }),
+    onSettled: (data) => {
+      client.refetchQueries('get_staff_transfer_requests');
+    },
+  });
+  return mutation;
+}
+export function useCreateStudentTransfer() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'create-student-transfer',
+    mutationFn: (params: any) =>
+      request.post('/v1/institutions/student_transfer_request', params, {
+        withCredentials: true,
+      }),
+    onSettled: (data) => {
+      client.refetchQueries('get_staff_transfer_requests');
+    },
+  });
+  return mutation;
+}
+export function useUpdateStudentTransfer() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'update-student-transfer',
+    mutationFn: (params: any) =>
+      request.patch(
+        `/v1/institutions/student_transfer_request/${params.id}`,
+        { status: params.status },
+        {
+          withCredentials: true,
+        }
+      ),
+    onSettled: (data) => {
+      client.refetchQueries('get_staff_transfer_requests');
+    },
+  });
+  return mutation;
+}
+export function useUpdateStaffTransfer() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'update-student-transfer',
+    mutationFn: (params: any) =>
+      request.patch(
+        `/v1/institutions/staff/transfers/action/${params.id}`,
+        { status: params.status },
+        {
+          withCredentials: true,
+        }
+      ),
+    onSettled: (data) => {
+      client.refetchQueries('get_staff_transfer_requests');
+    },
   });
   return mutation;
 }

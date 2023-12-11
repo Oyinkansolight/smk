@@ -38,7 +38,7 @@ export default function StudentTeacherProfileCard({
         <div className='h-3' />
 
         <div className='flex flex-col gap-[15px] mb-4'>
-          <div className='rounded-2xl bg-yellow-500 p-1 font-medium'>
+          <div className='rounded-2xl bg-yellow-500 py-1 px-3 font-medium'>
             Parent
           </div>
         </div>

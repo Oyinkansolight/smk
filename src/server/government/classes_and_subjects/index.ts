@@ -120,12 +120,17 @@ export function useResetSubjectGradeBook() {
   return mutation;
 }
 export function useCreateResultFromGradeBook() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'create-gradebook',
     mutationFn: (params: CreateGradeSettingsParams) =>
-      request.post('/v1/institutions/manual_grade', params, {
+      request.post('/v1/institutions/manual_grade/subject/position', params, {
         withCredentials: true,
       }),
+    onSettled: () => {
+      client.refetchQueries(`get-gradebook-scoresheet`);
+    },
   });
   return mutation;
 }

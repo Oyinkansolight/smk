@@ -5,8 +5,11 @@ import { CountCard } from '@/components/cards';
 import StudentTeacherProfileCard from '@/components/cards/ParentProfileCard';
 import PopOverSelect from '@/components/input/PopOverSelect';
 import TabBar from '@/components/layout/TabBar';
+import ConfirmModalContent from '@/components/modal/ConfirmModalContent';
 import ControlledModal from '@/components/modal/ControlledModal';
-import DeleteModalContent from '@/components/modal/DeleteModalContent';
+import Table from '@/components/tables/TableComponent';
+import ParentBioDetails from '@/components/views/single-parent/ParentBioDetail';
+import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
@@ -20,10 +23,31 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { TableColumn } from 'react-data-table-component';
 import { BiListCheck } from 'react-icons/bi';
-import { ImSpinner2 } from 'react-icons/im';
 import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -41,14 +65,14 @@ const studentListColumns: TableColumn<any>[] = [
       </div>
     ),
   },
-  {
-    name: 'Class',
-    cell: (row) => (
-      <div>
-        {row.class.class.name} - {row.class.arm}
-      </div>
-    ),
-  },
+  // {
+  //   name: 'Class',
+  //   cell: (row) => (
+  //     <div>
+  //       {row.class.class.name} - {row.class.arm}
+  //     </div>
+  //   ),
+  // },
 ];
 
 const Page = () => {
@@ -57,6 +81,7 @@ const Page = () => {
   const [selectedStudent, setSelectedStudent] = useState(['']);
   const [itemIndex, setItemIndex] = useState<string>();
   const instituteId = getFromLocalStorage('institutionId');
+  const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -98,6 +123,7 @@ const Page = () => {
         if (response.status === 200) {
           toast.success('Student Linked successfully');
           setLoading(false);
+          toggleModal();
         }
       } catch (error) {
         toast.error('Error adding student');
@@ -124,7 +150,6 @@ const Page = () => {
   }, [itemIndex, students?.data]);
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
-  const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
@@ -165,19 +190,6 @@ const Page = () => {
   }, [error]);
   return (
     <div className='flex flex-col lg:flex-row'>
-      <ControlledModal
-        isOpen={isModalOpen}
-        toggleModal={toggleModal}
-        content={
-          <DeleteModalContent
-            title='Delete Student'
-            body='Are you sure you want to delete this student?'
-            toggleModal={toggleModal}
-            handleDelete={handleDelete}
-          />
-        }
-        className='max-w-[777px] w-full h-[267px]'
-      />
       <StudentTeacherProfileCard
         image={url}
         name={`${parent?.firstName ?? 'Loading...'} ${parent?.lastName ?? ''}`}
@@ -234,8 +246,6 @@ const Page = () => {
               </div>
 
               <section className=''>
-                <h2 className='text-3xl font-bold'>Your Students </h2>
-
                 <PopOverSelect
                   open={open}
                   key1='lastName'
@@ -246,52 +256,88 @@ const Page = () => {
                   handleSearch={handleSearch}
                   description='Select student'
                   setSelectedItem={(value) => {
-                    console.log(value);
+                    toggleModal();
                   }}
                   setSelectedIndex={handleItemIndex}
                 />
+                <ControlledModal
+                  isOpen={isModalOpen}
+                  toggleModal={toggleModal}
+                  content={
+                    <ConfirmModalContent
+                      title='Link Student'
+                      body={`Are you sure you want to link ${selectedStudent} with ${
+                        parent?.firstName ?? 'N/A'
+                      } ${parent?.lastName ?? 'N/A'}`}
+                      toggleModal={toggleModal}
+                      handleAction={assignStudentToParent}
+                      loading={loading}
+                    />
+                  }
+                  className='max-w-[777px] w-full h-[267px]'
+                />
+
                 <div className='bg-white rounded-md p-6'>
                   <div className='flex justify-between'>
                     <div className='text-[#6B7A99] text-xl font-bold'>
                       Student List
                     </div>
-                    {/* <Select
-                      value={{ value: 'all', label: 'All Class Arms' }}
-                      options={[{ value: 'all', label: 'All Class Arms' }]}
-                    /> */}
                   </div>
-                  {/* <Table
+                  <Table
                     showFilter={false}
                     showSearch={false}
                     columns={studentListColumns}
                     data={parent?.students}
                     // data={[]}
-                  /> */}
-                </div>
-
-                <div className='my-10'>
-                  {/* <Select
-                    onClick={() => setOpen(!open)}
-                    label='All Student'
-                    options={selectedStudent}
-                    formValue={selectedStudent[0]}
-                  /> */}
-                  {selectedStudent}
-                  <button
-                    onClick={() => {
-                      assignStudentToParent();
-                    }}
-                    className='w-max rounded border bg-[#007AFF] px-8 py-3 text-xs text-[#fff] '
-                  >
-                    {loading ? (
-                      <ImSpinner2 className='animate-spin' />
-                    ) : (
-                      'Link Student'
-                    )}
-                  </button>
+                  />
                 </div>
               </section>
             </div>
+          )}
+        </div>
+      )}
+      {gridTabIdx === 1 && (
+        <div className='flex flex-1 flex-col gap-[31px] px-4 pt-6'>
+          <div className='flex w-full items-center justify-between'>
+            <TabBar
+              variant='primary'
+              selected={tabIdx}
+              onSelect={(i) => setTabIdx(i)}
+              items={[
+                {
+                  icon: <RiDashboardFill className='h-5 w-5' />,
+                  label: 'Account Details',
+                },
+              ]}
+            />
+
+            <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
+          </div>
+
+          {tabIdx === 0 && (
+            <>
+              <div
+                className={clsxm(
+                  'flex justify-end gap-5',
+                  isEditingBioDetails && 'opacity-50'
+                )}
+              >
+                {/* <Button
+                  disabled={isEditingBioDetails}
+                  onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}
+                  variant='secondary'
+                >
+                  Edit Account Details
+                </Button> */}
+              </div>
+              <div className='bg-white px-8 pb-20'>
+                <ParentBioDetails
+                  isEditing={isEditingBioDetails}
+                  setIsEditing={setIsEditingBioDetails}
+                  initParent={parent}
+                />
+              </div>
+            </>
           )}
         </div>
       )}
