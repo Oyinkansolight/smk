@@ -9,6 +9,7 @@ import { Student } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
 export default function StudentBioDetailsAlt({
@@ -68,6 +69,7 @@ export default function StudentBioDetailsAlt({
             lastName: (data.fullName as string).split(' ')[1],
             address: data.address,
           });
+          toast.success('Update Successful');
         }
       } catch (error) {
         toast.error(getErrMsg(error));
@@ -79,7 +81,6 @@ export default function StudentBioDetailsAlt({
   };
 
   useEffect(() => {
-    console.log('Student Changed', initStudent);
     if (initStudent) {
       getURL(initStudent?.profileImg ?? '').then((v) => setUserImage(v));
 
@@ -107,7 +108,7 @@ export default function StudentBioDetailsAlt({
         {isEditing && (
           <div className='flex justify-end my-5'>
             <Button disabled={isLoading} type='submit' variant='secondary'>
-              Update Changes
+              {isLoading ? <ImSpinner /> : 'Update Changes'}
             </Button>
           </div>
         )}

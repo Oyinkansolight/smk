@@ -16,7 +16,9 @@ import {
 } from '@/server/student';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
+import { ImSpinner2 } from 'react-icons/im';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
@@ -65,6 +67,8 @@ export default function Page() {
   const studentId = p?.get('studentid');
   const update = useUpdateStudent();
   const handleUpdateStudentDomain = useUpdateStudentDomain();
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { data: student } = useGetStudentById({ id: studentId });
   const { data: profile } = useGetProfile();
@@ -100,6 +104,8 @@ export default function Page() {
   ) => {
     console.log(value);
     try {
+      setLoading(true);
+
       const response = await handleUpdateStudentDomain.mutateAsync({
         behavior,
         rating: value,
@@ -111,7 +117,10 @@ export default function Page() {
         studentId: studentId ?? undefined,
       });
       response && toast.success('Student domain updated');
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+
       toast.error(getErrMsg(error));
     }
   };
@@ -318,7 +327,7 @@ export default function Page() {
       {!data ? (
         <GenericLoader />
       ) : (
-        <div className='p-8 flex flex-col gap-5 bg-white rounded-lg'>
+        <div className='px-8 pt-8 pb-40 flex flex-col gap-5 bg-white rounded-lg'>
           <AccordionAlt
             titleClassName='bg-[#EFF7F6]'
             title={<div> Reading Proficiency </div>}
@@ -395,13 +404,30 @@ export default function Page() {
             title={<div>Comments/Observation</div>}
             length={340}
           >
-            <div className='flex flex-col items-center gap-5 py-5'>
-              <textarea className='h-72 rounded-lg border w-full max-w-3xl' />
+            <div className='flex flex-col items-center gap-5 pb-10 pt-5'>
+              <textarea
+                className='h-64 rounded-lg border w-full max-w-3xl'
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+                defaultValue={getDomainValue('comment')?.label ?? ' '}
+              />
+              <div className='flex justify-end w-full mx-auto max-w-3xl'>
+                <Button
+                  variant='secondary'
+                  onClickHandler={() => {
+                    const e = {
+                      label: comment,
+                      value: 5,
+                    };
+                    updateStudentDomain(e, 'COMMENT', 'comment');
+                  }}
+                >
+                  {loading ? <ImSpinner2 /> : 'Submit'}
+                </Button>
+              </div>
             </div>
           </AccordionAlt>
-          <div className='flex justify-end w-full mx-auto max-w-3xl'>
-            <Button variant='secondary'>Submit</Button>
-          </div>
         </div>
       )}
     </div>

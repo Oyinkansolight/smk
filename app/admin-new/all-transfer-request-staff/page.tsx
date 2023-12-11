@@ -80,7 +80,7 @@ const AlltransferRequestStaff = () => {
 
       <div className='mb-6 flex justify-end '>
         <Link
-          href='/super-admin/transfer-staff'
+          href='/admin/transfer-staff'
           className='w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary '
         >
           Transfer Staff
@@ -110,7 +110,7 @@ const AlltransferRequestStaff = () => {
           >
             <div className='col-span-3 w-max text-center text-[#525F7F] flex space-x-2 items-center'>
               <AvrilImage alt='avril' className='h-8 w-8 rounded-full' />
-              <Link href='/super-admin/teacher'>
+              <Link href='/admin/teacher'>
                 <h2 className='text-sm font-medium'>{item.name}</h2>
               </Link>{' '}
             </div>

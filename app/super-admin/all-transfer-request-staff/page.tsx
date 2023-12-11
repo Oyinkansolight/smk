@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 // import AvrilImage from '~/svg/avril.svg';
+import ConfirmModalContent from '@/components/modal/ConfirmModalContent';
 import ControlledModal from '@/components/modal/ControlledModal';
-import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -11,6 +12,7 @@ import { getErrMsg } from '@/server';
 import {
   useDeleteStaffRequest,
   useGetStaffTransferRequests,
+  useUpdateStaffTransfer,
 } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,29 +30,15 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const AllStaffTransferRequests = () => {
+const AllStudentTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<string>();
+  const [itemToUpdate, setItemToUpdate] = useState<string>();
+  const [status, setStatus] = useState<string>();
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
-  // const handleDeleteStaffRequest = useDeleteStaffRequest();
 
-  const { mutateAsync } = useDeleteStaffRequest();
-
-  const handleDelete = async () => {
-    if (itemToDelete) {
-      try {
-        toggleModal();
-        setAction(null);
-        const res = await mutateAsync({ id: itemToDelete });
-        toast.success('Staff Request removed successfully');
-      } catch (error) {
-        logger(error);
-      }
-    }
-  };
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
@@ -95,6 +83,21 @@ const AllStaffTransferRequests = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const { mutateAsync } = useUpdateStaffTransfer();
+
+  const handleUpdate = async () => {
+    if (itemToUpdate) {
+      try {
+        toggleModal();
+        setAction(null);
+        const res = await mutateAsync({ id: itemToUpdate, status });
+        toast.success('Staff request updated successfully');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
+
   useEffect(() => {
     const refetchSearchRecords = () => {
       if (debouncedSearchTerm) {
@@ -117,27 +120,18 @@ const AllStaffTransferRequests = () => {
         isOpen={isModalOpen}
         toggleModal={toggleModal}
         content={
-          <DeleteModalContent
-            title='Delete Staff Request'
-            body='Are you sure you want to delete this request?'
+          <ConfirmModalContent
+            title={`${status === 'GRANTED' ? 'Accept' : 'Deny'} Staff Request`}
+            body={`Are you sure you want to ${
+              status === 'GRANTED' ? 'Accept' : 'Deny'
+            } this request?`}
             toggleModal={toggleModal}
-            handleDelete={handleDelete}
+            handleAction={handleUpdate}
           />
         }
         className='max-w-[777px] w-full h-[267px]'
       />
-      <Link href='/super-admin'>
-        <div className='flex items-center space-x-4'>
-          <Image
-            src='/svg/back.svg'
-            width={10}
-            height={10}
-            alt='back'
-            className='h-4 w-4'
-          />
-          <h3 className='text-[10px] font-medium'>Dashboard</h3>
-        </div>
-      </Link>
+      <BackButton />
 
       <h1 className='mt-5 mb-6 text-2xl font-bold'>Staff Transfer Requests</h1>
 
@@ -177,24 +171,22 @@ const AllStaffTransferRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.staff?.[0]?.lastName ||
-                    item?.staff?.lastName ||
-                    item?.staff?.user?.lastName ||
+                  {item?.student?.[0]?.lastName ||
+                    item?.student?.lastName ||
                     'N/A'}{' '}
-                  {item?.staff?.[0]?.firstName ||
-                    item?.staff?.firstName ||
-                    item?.staff?.user?.firstName ||
+                  {item?.student?.[0]?.firstName ||
+                    item?.student?.firstName ||
                     'N/A'}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.currentInstitution?.instituteName || 'N/A'}{' '}
+                  {item?.transferFrom?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.newInstitution?.instituteName || 'N/A'}{' '}
+                  {item?.transferTo?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-1'> {item?.status || 'N/A'} </div>
@@ -209,20 +201,25 @@ const AllStaffTransferRequests = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <span
-                          // href={`/super-admin/student?id=${item.id}`}
-                          className='p-4 hover:bg-gray-200 w-full block'
-                        >
-                          Edit
-                        </span>
                         <button
                           onClick={() => {
-                            setItemToDelete(item.id);
+                            setItemToUpdate(item.id);
                             toggleModal();
+                            setStatus('DENIED');
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
-                          Delete
+                          DENY
+                        </button>
+                        <button
+                          onClick={() => {
+                            setItemToUpdate(item.id);
+                            toggleModal();
+                            setStatus('GRANTED');
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
+                          APPROVE
                         </button>
                       </div>
                     )}
@@ -379,4 +376,4 @@ const AllStaffTransferRequests = () => {
   );
 };
 
-export default AllStaffTransferRequests;
+export default AllStudentTransferRequests;

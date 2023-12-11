@@ -7,9 +7,13 @@ import EmptyView from '@/components/misc/EmptyView';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useUpdateStudent } from '@/server/government/student';
-import { useGetStudentById, useGetStudentSubjectPosition } from '@/server/institution';
+import {
+  useGetStudentById,
+  useGetStudentSubjectPosition,
+} from '@/server/institution';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
@@ -47,14 +51,15 @@ export default function Page() {
   const studentId = p?.get('studentid');
   const update = useUpdateStudent();
 
-  const { data: student } = useGetStudentById({ id: studentId })
+  const [comment, setComment] = useState('');
+  const { data: student } = useGetStudentById({ id: studentId });
   const { data: profile } = useGetProfile();
   const { data: positionData } = useGetStudentSubjectPosition({
     sessionId: (profile?.currentSession ?? [])[0]?.id,
     termId: profile?.currentTerm?.id,
     classArmId: student?.class.id,
     studentId: studentId ?? undefined,
-  })
+  });
 
   // const { data: totalData } = useGetStudentTotalScoreAndTotalAttendance({
   //   sessionId: (profile?.currentSession ?? [])[0]?.id,
@@ -82,16 +87,25 @@ export default function Page() {
           <div className='h-20 rounded-full w-20 bg-slate-300' />
           <div className='text-lg font-bold'>
             <div>
-              Name: <span className='text-[#746D69]'>{student?.firstName} {student?.lastName}</span>
+              Name:{' '}
+              <span className='text-[#746D69]'>
+                {student?.firstName} {student?.lastName}
+              </span>
             </div>
             <div>
               Sex: <span className='text-[#746D69]'>{student?.gender}</span>
             </div>
             <div>
-              Age: <span className='text-[#746D69]'>{student?.dob ? moment().diff(moment(student.dob, "DD-MM-YYYY"), "years") : ''}</span>
+              Age:{' '}
+              <span className='text-[#746D69]'>
+                {student?.dob
+                  ? moment().diff(moment(student.dob, 'DD-MM-YYYY'), 'years')
+                  : ''}
+              </span>
             </div>
             <div>
-              Class: <span className='text-[#746D69]'>{student?.class.arm}</span>
+              Class:{' '}
+              <span className='text-[#746D69]'>{student?.class.arm}</span>
             </div>
           </div>
         </div>
@@ -134,32 +148,38 @@ export default function Page() {
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>
         <div className='bg-[#EFF7F6] p-6 overflow-y-auto w-full'>
-          {!positionData ? <GenericLoader /> : !positionData.cognitive?.length ? <EmptyView label='No cogintive domain data' useStandardHeight /> : <table className='min-w-[800px]'>
-            <tr className='text-[#746D69] text-lg'>
-              <th>Subjects</th>
-              <th>Assignment 1</th>
-              <th>Assignment 2</th>
-              <th>Examination</th>
-              <th>Total</th>
-              <th>Position</th>
-              <th>Grade</th>
-              <th>Remark</th>
-            </tr>
-            {Array(10)
-              .fill(0)
-              .map((v, i) => (
-                <tr className='text-center font-bold text-[#262626]' key={i}>
-                  <td className='h-10'>Geography</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>8th</td>
-                  <td>E</td>
-                  <td>Fail</td>
-                </tr>
-              ))}
-          </table>}
+          {!positionData ? (
+            <GenericLoader />
+          ) : !positionData.cognitive?.length ? (
+            <EmptyView label='No cogintive domain data' useStandardHeight />
+          ) : (
+            <table className='min-w-[800px]'>
+              <tr className='text-[#746D69] text-lg'>
+                <th>Subjects</th>
+                <th>Assignment 1</th>
+                <th>Assignment 2</th>
+                <th>Examination</th>
+                <th>Total</th>
+                <th>Position</th>
+                <th>Grade</th>
+                <th>Remark</th>
+              </tr>
+              {Array(10)
+                .fill(0)
+                .map((v, i) => (
+                  <tr className='text-center font-bold text-[#262626]' key={i}>
+                    <td className='h-10'>Geography</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>8th</td>
+                    <td>E</td>
+                    <td>Fail</td>
+                  </tr>
+                ))}
+            </table>
+          )}
         </div>
       </div>
       <div className='p-8 flex flex-col gap-5 bg-white rounded-lg'>
@@ -227,12 +247,19 @@ export default function Page() {
           length={340}
         >
           <div className='flex flex-col items-center gap-5 py-5'>
-            <textarea className='h-72 rounded-lg border w-full max-w-3xl' />
+            <textarea
+              className='h-72 rounded-lg border w-full max-w-3xl'
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+            />
+            <div className='flex justify-end w-full mx-auto max-w-3xl'>
+              <Button variant='secondary' onClickHandler={() => {}}>
+                Submit
+              </Button>
+            </div>
           </div>
         </AccordionAlt>
-        <div className='flex justify-end w-full mx-auto max-w-3xl'>
-          <Button variant='secondary'>Submit</Button>
-        </div>
       </div>
     </div>
   );

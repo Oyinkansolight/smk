@@ -114,7 +114,7 @@ export default function Page() {
   };
   const handleGenerateResult = async () => {
     delete genericPayload.limit;
-    // delete genericPayload.institutionId;
+    delete genericPayload.institutionId;
 
     try {
       setIsLoadingGenerateResult(true);
@@ -180,7 +180,8 @@ export default function Page() {
     <div className='h-full layout pl-0 lg:pl-20'>
       <BackButton />
       <div className='text-gray-600 py-8 text-xl'>
-        Grade Book {'>'} {params?.get('subjectName')} {params?.get('classArmName') && '-'}{' '}
+        Grade Book {'>'} {params?.get('subjectName')}{' '}
+        {params?.get('classArmName') && '-'}{' '}
         {params?.get('classArmName') && params?.get('classArmName')}
       </div>
       <div className='flex justify-between'>

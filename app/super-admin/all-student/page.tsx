@@ -23,6 +23,14 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStudent = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +59,7 @@ const AllStudent = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -144,6 +152,14 @@ const AllStudent = () => {
           <h1 className='font-semibold text-2xl'>
             {students?.paging.totalItems ?? 0}
           </h1>
+        </div>
+        <div className='mb-6 flex justify-end items-end space-x-2 relative'>
+          <Link
+            href='/super-admin/all-transfer-request'
+            className='w-max flex items-center rounded border border-primary  px-6 py-3 text-center text-xs font-medium text-primary '
+          >
+            Student transfer
+          </Link>
         </div>
       </div>
 
@@ -295,7 +311,7 @@ const AllStudent = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < students.paging.totalPage
+                  pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

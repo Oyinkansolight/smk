@@ -88,7 +88,7 @@ export default function SubjectList({
 
   return (
     <>
-      <ControlledModal
+      {/* <ControlledModal
         isOpen={showDeleteModal}
         toggleModal={toggleDeleteModal}
         content={
@@ -100,11 +100,11 @@ export default function SubjectList({
           />
         }
         className='max-w-[777px] w-full h-[267px]'
-      />
+      /> */}
 
-      <div>
+      <div className='!w-full'>
         {currentView === 0 && (
-          <div className='bg-white border-2 rounded-md'>
+          <div className='bg-white border-2  rounded-md'>
             <div className='mx-8 font-bold text-2xl text-[#6B7A99] my-4 border-b'>
               Subjects
             </div>
@@ -147,38 +147,17 @@ export default function SubjectList({
           </div>
         )}
         {currentView === 1 && (
-          <div className='bg-white border-2 rounded-md'>
+          <div className='bg-white border-2 rounded-md !w-full'>
             <div className='flex justify-start px-8'>
               <div
                 onClick={() => setCurrentView(0)}
-                className='flex items-center py-1 px-3 cursor-pointer rounded-md bg-[#EDEFF2] gap-2 my-5'
+                className='flex items-center py-1 px-3 cursor-pointer rounded-md text-sm bg-[#EDEFF2] gap-2 my-5'
               >
                 <BiChevronLeft className='text-[#E5A500] h-8 w-8' />
-                <div>Go Back</div>
+                <span>Go Back</span>
               </div>
             </div>
-            <div className='p-8'>
-              <div className='flex justify-between py-6 px-4 border-[#F5F6F7] bg-[#F8FDFF] border-2 rounded-md items-center'>
-                <div className='grid grid-cols-2 items-center'>
-                  <div>Class:</div>
-                  <div className='text-bold text-base text-[#5A5A5A]'>
-                    {managedClassArm?.arm ?? ''}
-                  </div>
-                  <div>Subject:</div>
-                  <div className='text-bold text-base text-[#5A5A5A]'>
-                    {subjectName}
-                  </div>
-                </div>
-                <div>
-                  <div className='text-end'>Class Teacher:</div>
-                  <div className='flex gap-4 items-center'>
-                    <div className='bg-gray-500 rounded-full h-10 w-10' />
-                    <div className='text-[#8898AA] font-medium text-base'>
-                      {teacher ?? ''}
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className='p-8 w-full'>
               <div className='h-12' />
               <div className='flex gap-4 flex-col'>
                 <div className='flex flex-col space-y-6'>
@@ -215,7 +194,7 @@ export default function SubjectList({
                 </div> */}
                           <div className=''>
                             <button
-                              className='border border-primary text-primary p-2 rounded-sm'
+                              className='border border-primary text-primary text-sm p-2 rounded-sm'
                               onClick={() => {
                                 fetchPeriods(v.id);
                               }}

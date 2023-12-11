@@ -57,6 +57,10 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -289,7 +293,7 @@ const Page = () => {
           )}
           {tabIdx === 1 && (
             <div>
-              {teacherTimeTable.length > 0 ? (
+              {teacherTimeTable?.length > 0 ? (
                 <TimetableView
                   data={teacherTimeTable}
                   isLoading={isTTLoading}
@@ -331,14 +335,14 @@ const Page = () => {
                   isEditingBioDetails && 'opacity-50'
                 )}
               >
-                <Button
+                {/* <Button
                   onClick={() => router.push('/admin/student/edit-history')}
                   disabled={isEditingBioDetails}
                   variant='ghost'
                   className='text-secondary bg-white hover:bg-secondary-100 border border-secondary-500'
                 >
                   View Edit History
-                </Button>
+                </Button> */}
                 <Button
                   disabled={isEditingBioDetails}
                   onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}

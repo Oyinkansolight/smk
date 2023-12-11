@@ -28,6 +28,14 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -72,7 +80,7 @@ const AllStaff = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -146,10 +154,14 @@ const AllStaff = () => {
         </div>
       </div>
 
-      {/* <div className='flex space-x-2 py-2 border-b'>
-        <button>All Staff</button>
-        <button>Transfer Requests</button>
-      </div> */}
+      <div className='mb-6 flex justify-end items-end space-x-2 relative'>
+        <Link
+          href='/super-admin/all-transfer-request-staff'
+          className='w-max flex items-center rounded border border-primary  px-6 py-3 text-center text-xs font-medium text-primary '
+        >
+          Staff transfer
+        </Link>
+      </div>
 
       <div className='flex flex-col gap-4'>
         <div className='flex justify-end'>
@@ -306,7 +318,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < staff.paging.totalPage
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

@@ -2,15 +2,15 @@
 'use client';
 
 // import AvrilImage from '~/svg/avril.svg';
-import ConfirmModalContent from '@/components/modal/ConfirmModalContent';
 import ControlledModal from '@/components/modal/ControlledModal';
+import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
-  useGetStudentTransferRequests,
-  useUpdateStudentTransfer,
+  useDeleteStaffRequest,
+  useGetStaffTransferRequests,
 } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,49 +28,29 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-const AllStudentTransferRequests = () => {
+const AllStaffTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemToUpdate, setItemToUpdate] = useState<string>();
-  const [status, setStatus] = useState<string>();
+  const [itemToDelete, setItemToDelete] = useState<string>();
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
+  // const handleDeleteStaffRequest = useDeleteStaffRequest();
 
+  const { mutateAsync } = useDeleteStaffRequest();
+
+  const handleDelete = async () => {
+    if (itemToDelete) {
+      try {
+        toggleModal();
+        setAction(null);
+        const res = await mutateAsync({ id: itemToDelete });
+        toast.success('Staff Request removed successfully');
+      } catch (error) {
+        logger(error);
+      }
+    }
+  };
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
@@ -79,11 +59,11 @@ const AllStudentTransferRequests = () => {
   });
 
   const {
-    data: students,
+    data: staff,
     error,
     isLoading,
     refetch,
-  } = useGetStudentTransferRequests({ ...pagingData });
+  } = useGetStaffTransferRequests({ ...pagingData });
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -108,27 +88,11 @@ const AllStudentTransferRequests = () => {
   };
 
   const handleJumpToEnd = () => {
-    if (students)
-      setPagingData({ ...pagingData, page: students?.paging?.totalPage });
+    if (staff) setPagingData({ ...pagingData, page: staff?.paging?.totalPage });
   };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const { mutateAsync } = useUpdateStudentTransfer();
-
-  const handleUpdate = async () => {
-    if (itemToUpdate) {
-      try {
-        toggleModal();
-        setAction(null);
-        const res = await mutateAsync({ id: itemToUpdate, status });
-        toast.success('Student request updated successfully');
-      } catch (error) {
-        logger(error);
-      }
-    }
   };
 
   useEffect(() => {
@@ -153,20 +117,16 @@ const AllStudentTransferRequests = () => {
         isOpen={isModalOpen}
         toggleModal={toggleModal}
         content={
-          <ConfirmModalContent
-            title={`${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } Student Request`}
-            body={`Are you sure you want to ${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } this request?`}
+          <DeleteModalContent
+            title='Delete Staff Request'
+            body='Are you sure you want to delete this request?'
             toggleModal={toggleModal}
-            handleAction={handleUpdate}
+            handleDelete={handleDelete}
           />
         }
         className='max-w-[777px] w-full h-[267px]'
       />
-      <Link href='/super-admin'>
+      <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -179,15 +139,13 @@ const AllStudentTransferRequests = () => {
         </div>
       </Link>
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>
-        Student Transfer Requests
-      </h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Staff Transfer Requests</h1>
 
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Requests</p>
           <h1 className='font-semibold text-2xl'>
-            {students?.paging?.totalItems ?? 0}
+            {staff?.paging?.totalItems ?? 0}
           </h1>
         </div>
       </div>
@@ -210,31 +168,33 @@ const AllStudentTransferRequests = () => {
           {isLoading && <div className='text-center'>Loading...</div>}
 
           {!isLoading &&
-            students &&
-            students?.data?.length > 0 &&
-            students?.data.map((item: any, idx: number) => (
+            staff &&
+            staff?.data?.length > 0 &&
+            staff?.data.map((item: any, idx: number) => (
               <div className='grid grid-cols-12 p-4 border-b' key={item.id}>
                 <div className='col-span-1'>
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.student?.[0]?.lastName ||
-                    item?.student?.lastName ||
+                  {item?.staff?.[0]?.lastName ||
+                    item?.staff?.lastName ||
+                    item?.staff?.user?.lastName ||
                     'N/A'}{' '}
-                  {item?.student?.[0]?.firstName ||
-                    item?.student?.firstName ||
+                  {item?.staff?.[0]?.firstName ||
+                    item?.staff?.firstName ||
+                    item?.staff?.user?.firstName ||
                     'N/A'}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.transferFrom?.instituteName || 'N/A'}{' '}
+                  {item?.currentInstitution?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.transferTo?.instituteName || 'N/A'}{' '}
+                  {item?.newInstitution?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-1'> {item?.status || 'N/A'} </div>
@@ -249,25 +209,20 @@ const AllStudentTransferRequests = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                        <span
+                          // href={`/super-admin/student?id=${item.id}`}
+                          className='p-4 hover:bg-gray-200 w-full block'
+                        >
+                          Edit
+                        </span>
                         <button
                           onClick={() => {
-                            setItemToUpdate(item.id);
+                            setItemToDelete(item.id);
                             toggleModal();
-                            setStatus('DENIED');
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
-                          DENY
-                        </button>
-                        <button
-                          onClick={() => {
-                            setItemToUpdate(item.id);
-                            toggleModal();
-                            setStatus('GRANTED');
-                          }}
-                          className='p-4 hover:bg-gray-200 w-full'
-                        >
-                          APPROVE
+                          Delete
                         </button>
                       </div>
                     )}
@@ -284,11 +239,11 @@ const AllStudentTransferRequests = () => {
               </div>
             ))}
 
-          {!isLoading && students?.data?.length === 0 && (
+          {!isLoading && staff?.data?.length === 0 && (
             <div className='text-red-500 py-4 text-center'>No record found</div>
           )}
 
-          {students && students?.data?.length > 0 && (
+          {staff && staff?.data?.length > 0 && (
             <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
               <button
                 onClick={handleJumpToStart}
@@ -319,7 +274,7 @@ const AllStudentTransferRequests = () => {
                 </svg>
               </button>
 
-              {Array(students.paging.totalPage)
+              {Array(staff.paging.totalPage)
                 .fill(0)
                 .slice(0, 2)
                 .map((item, idx: number) => (
@@ -337,26 +292,26 @@ const AllStudentTransferRequests = () => {
                   </div>
                 ))}
 
-              {students.paging.totalPage > 3 && (
+              {staff.paging.totalPage > 3 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
                     pagingData.page === 3 ||
                       (pagingData.page > 3 &&
-                        pagingData.page < students.paging.totalPage)
+                        pagingData.page < staff.paging.totalPage)
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2'
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < students.paging.totalPage
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
               )}
 
-              {students.paging.totalPage > 4 && (
+              {staff.paging.totalPage > 4 && (
                 <div
                   key={Math.random() * 100}
                   className={clsxm(
@@ -368,25 +323,25 @@ const AllStudentTransferRequests = () => {
                 </div>
               )}
 
-              {students.paging.totalPage > 1 && (
+              {staff.paging.totalPage > 1 && (
                 <div
-                  onClick={() => handleCurrentPage(students.paging.totalPage)}
+                  onClick={() => handleCurrentPage(staff.paging.totalPage)}
                   className={clsxm(
-                    pagingData.page === students.paging.totalPage
+                    pagingData.page === staff.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
                     'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
-                  {students.paging.totalPage}
+                  {staff.paging.totalPage}
                 </div>
               )}
 
               <button
                 onClick={handleNextPage}
                 disabled={
-                  (students && students?.data?.length < 10) ||
-                  pagingData.page === students.paging.totalPage
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
                 }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
@@ -409,8 +364,8 @@ const AllStudentTransferRequests = () => {
               <button
                 onClick={handleJumpToEnd}
                 disabled={
-                  (students && students?.data?.length < 10) ||
-                  pagingData.page === students.paging.totalPage
+                  (staff && staff?.data?.length < 10) ||
+                  pagingData.page === staff.paging.totalPage
                 }
                 className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
               >
@@ -424,4 +379,4 @@ const AllStudentTransferRequests = () => {
   );
 };
 
-export default AllStudentTransferRequests;
+export default AllStaffTransferRequests;

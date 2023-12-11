@@ -8,6 +8,7 @@ import { useGetLocalGovernments } from '@/server/onboard';
 import { Staff, TrainingDetails } from '@/types/institute';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner } from 'react-icons/im';
 import { RiImageAddFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
@@ -21,7 +22,7 @@ export default function TeacherBioDetails({
   initStaff?: Staff;
 }) {
   const { control, setValue, handleSubmit } = useForm();
-  const [, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [userLga, setUserLga] = useState('');
   const update = useUpdateStaff();
   const { data: localGovernments } = useGetLocalGovernments();
@@ -64,6 +65,7 @@ export default function TeacherBioDetails({
           });
         }
       }
+      console.log(data);
 
       const payload: Staff = {
         // profileImg: data.,
@@ -91,6 +93,8 @@ export default function TeacherBioDetails({
       if (data.phone) {
         payload.phoneNumber = data.phone;
       }
+
+      console.log(payload);
 
       try {
         const response = await update.mutateAsync(payload);
@@ -160,7 +164,7 @@ export default function TeacherBioDetails({
               Cancel
             </Button>
             <Button type='submit' variant='secondary'>
-              Update Changes
+              {loading ? <ImSpinner /> : 'Update Changes'}
             </Button>
           </div>
         )}

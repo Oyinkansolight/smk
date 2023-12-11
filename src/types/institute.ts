@@ -582,3 +582,17 @@ export interface InstituteClassArmsParams {
   instituteId?: string;
   currentSessionId?: string;
 }
+
+export interface Parent {
+  id?: string;
+  profileImg?: string;
+  firstName?: string;
+  email?: string;
+  lastName?: string;
+  lga?: string;
+  address?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: null;
+  students?: Student[];
+}
