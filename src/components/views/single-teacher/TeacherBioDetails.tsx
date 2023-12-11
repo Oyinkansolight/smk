@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { stripWhiteSpace } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateStaff } from '@/server/government/staff';
@@ -119,8 +120,7 @@ export default function TeacherBioDetails({
       setValue('gender', initStaff?.gender);
       setValue(
         'fullName',
-        `${(initStaff?.user ?? {})?.firstName} ${
-          (initStaff?.user ?? {})?.lastName
+        `${stripWhiteSpace((initStaff?.user ?? {})?.firstName ?? '')} ${stripWhiteSpace((initStaff?.user ?? {})?.lastName ?? '')
         }`
       );
       setValue('dateOfBirth', initStaff.dob);
@@ -341,7 +341,7 @@ export default function TeacherBioDetails({
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           {initStaff?.trainingDetails &&
-          initStaff.trainingDetails.length > 0 ? (
+            initStaff.trainingDetails.length > 0 ? (
             initStaff.trainingDetails?.map((training, index) => (
               <>
                 <Controller

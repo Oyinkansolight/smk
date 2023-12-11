@@ -112,7 +112,7 @@ const EditClass = () => {
         arm: data.classArm.toUpperCase(),
         capacity: Number(data.classCapacity),
         classId: data.class,
-        teacherId: data.classTeacher.value,
+        staffManager: data.classTeacher.value,
       };
 
       const subjectPayload = {
