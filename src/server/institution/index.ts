@@ -685,8 +685,8 @@ export function useUpdateStudentTransfer() {
           withCredentials: true,
         }
       ),
-    onSettled: (data) => {
-      client.refetchQueries('get_staff_transfer_requests');
+    onSettled: () => {
+      client.refetchQueries('get_student_transfer_requests');
     },
   });
   return mutation;
