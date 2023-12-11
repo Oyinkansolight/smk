@@ -126,7 +126,7 @@ const AllStaffTransferRequests = () => {
         }
         className='max-w-[777px] w-full h-[267px]'
       />
-      <Link href='/super-admin'>
+      <Link href='/admin'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
@@ -305,7 +305,7 @@ const AllStaffTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < staff.paging.totalPage
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
