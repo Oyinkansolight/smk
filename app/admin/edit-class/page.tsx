@@ -65,7 +65,7 @@ const EditClass = () => {
     }));
 
     const selectedTeacherIndex = (staffData ?? []).findIndex(
-      (item) => item.value == classArmInfo?.teacher?.id
+      (item) => item.value == classArmInfo?.staffManager?.id
     );
     setValue('classArm', classArmInfo?.arm ?? '');
     setValue('classCapacity', classArmInfo?.capacity ?? '');
