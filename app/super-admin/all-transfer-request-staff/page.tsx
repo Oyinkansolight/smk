@@ -10,12 +10,9 @@ import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
-  useDeleteStaffRequest,
   useGetStaffTransferRequests,
   useUpdateStaffTransfer,
 } from '@/server/institution';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -122,9 +119,8 @@ const AllStudentTransferRequests = () => {
         content={
           <ConfirmModalContent
             title={`${status === 'GRANTED' ? 'Accept' : 'Deny'} Staff Request`}
-            body={`Are you sure you want to ${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } this request?`}
+            body={`Are you sure you want to ${status === 'GRANTED' ? 'Accept' : 'Deny'
+              } this request?`}
             toggleModal={toggleModal}
             handleAction={handleUpdate}
           />
@@ -171,22 +167,24 @@ const AllStudentTransferRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  {item?.student?.[0]?.lastName ||
-                    item?.student?.lastName ||
+                  {item?.staff?.[0]?.lastName ||
+                    item?.staff?.lastName ||
+                    item?.staff?.user?.lastName ||
                     'N/A'}{' '}
-                  {item?.student?.[0]?.firstName ||
-                    item?.student?.firstName ||
+                  {item?.staff?.[0]?.firstName ||
+                    item?.staff?.firstName ||
+                    item?.staff?.user?.firstName ||
                     'N/A'}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.transferFrom?.instituteName || 'N/A'}{' '}
+                  {item?.currentInstitution?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-3'>
                   {' '}
-                  {item?.transferTo?.instituteName || 'N/A'}{' '}
+                  {item?.newInstitution?.instituteName || 'N/A'}{' '}
                 </div>
 
                 <div className='col-span-1'> {item?.status || 'N/A'} </div>
@@ -205,7 +203,7 @@ const AllStudentTransferRequests = () => {
                           onClick={() => {
                             setItemToUpdate(item.id);
                             toggleModal();
-                            setStatus('DENIED');
+                            setStatus('DECLINED');
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
@@ -215,7 +213,7 @@ const AllStudentTransferRequests = () => {
                           onClick={() => {
                             setItemToUpdate(item.id);
                             toggleModal();
-                            setStatus('GRANTED');
+                            setStatus('APPROVED');
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >
@@ -302,7 +300,7 @@ const AllStudentTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < staff.paging.totalPage
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
