@@ -85,6 +85,9 @@ const Page = () => {
       toast.error(getErrMsg(error));
     }
   }, [error]);
+
+  const studentId = p?.get('id') ?? '';
+
   return (
     <div className='flex flex-col lg:flex-row'>
       <ControlledModal
@@ -102,9 +105,8 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
-          (student?.user ?? [])[0]?.lastName ?? ''
-        }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
+          }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -145,9 +147,8 @@ const Page = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${
-                student ? student?.class?.class.name || 'null' : 'Loading...'
-              }  ${student ? student?.class?.arm || '' : ''}`}
+              classArm={`${student ? student?.class?.class.name || 'null' : 'Loading...'
+                }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={classArmData?.subjects.length ?? 0}
             />
@@ -158,7 +159,7 @@ const Page = () => {
               classArmId={classArmData?.id}
             />
           )}
-          {tabIdx === 2 && <SingleStudentAttendanceTracker />}
+          {tabIdx === 2 && <SingleStudentAttendanceTracker studentId={studentId} />}
         </div>
       )}
       {gridTabIdx === 1 && (
