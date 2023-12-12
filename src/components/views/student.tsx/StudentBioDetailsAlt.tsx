@@ -48,26 +48,40 @@ export default function StudentBioDetailsAlt({
 
     if (initStudent?.id) {
       setIsLoading(true);
+
+      const payload = {
+        id: initStudent?.id,
+      }
+
+      if (uploadedImage) {
+        payload['profileImg'] = uploadedImage
+      }
+
+      if (data.email) {
+        payload['email'] = data.email
+      }
+
+      if (data.studentPhone) {
+        payload['phoneNumber'] = data.studentPhone
+      }
+
+      if (data.fullName) {
+        payload['firstName'] = (data.fullName as string).split(' ')[0]
+        payload['lastName'] = (data.fullName as string).split(' ')[1] ?? (data.fullName as string).split(' ')[2]
+      }
+
+      if (data.address) {
+        payload['address'] = data.address
+      }
+
+
       try {
         if (uploadedImage) {
-          await update.mutateAsync({
-            profileImg: uploadedImage,
-            email: data.email,
-            id: initStudent?.id,
-            phoneNumber: data.studentPhone,
-            firstName: (data.fullName as string).split(' ')[0],
-            lastName: (data.fullName as string).split(' ')[1] ?? (data.fullName as string).split(' ')[2],
-            address: data.address,
-          });
+          payload['profileImg'] = uploadedImage
+
+          await update.mutateAsync(payload);
         } else {
-          await update.mutateAsync({
-            email: data.email,
-            id: initStudent?.id,
-            phoneNumber: data.studentPhone,
-            firstName: (data.fullName as string).split(' ')[0],
-            lastName: (data.fullName as string).split(' ')[1] ?? (data.fullName as string).split(' ')[2],
-            address: data.address,
-          });
+          await update.mutateAsync(payload);
           toast.success('Update Successful');
         }
       } catch (error) {
