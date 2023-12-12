@@ -103,8 +103,8 @@ export default function Page() {
           ) : (
             lessonNotes.data?.map((lessonNote, i) => (
               <Link
-                href={`/teacher/lesson-note/lesson-notes/view-lesson-note?lessonNoteId=${lessonNote.id}&uploadUrl=${lessonNote.uploadUrl}`}
-                key={i}
+                key={lessonNote.id}
+                href={`/teacher/lesson-note/lesson-notes/view-lesson-note?lessonNoteId=${lessonNote.id}`}
               >
                 <AssignmentListItem
                   title={`${lessonNote?.title}`}

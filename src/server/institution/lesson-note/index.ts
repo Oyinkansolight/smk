@@ -305,3 +305,26 @@ export function useGradeSubmission() {
   });
   return mutation;
 }
+
+export function useGetLessonNoteById(id: string) {
+  const query = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: 'get_lesson_note_by_id',
+    queryFn: async () =>
+      id
+        ? ((
+            await request.get(
+              `/v1/institutions/lessons/get-by-id?lessonNoteId=${id}`,
+              {
+                withCredentials: true,
+              }
+            )
+          ).data.data.data[0] as LessonNote1)
+        : undefined,
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [id, refetch]);
+  return query;
+}

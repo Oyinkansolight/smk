@@ -1,29 +1,32 @@
 'use client';
 
 import BackButton from '@/components/accordions/BackButton';
+import SubjectiveViewer from '@/components/cards/SubjectiveViewer';
 import GenericLoader from '@/components/layout/Loader';
 import CustomPDFReader from '@/components/pdfReader/Reader';
-import { getURL } from '@/firebase/init';
 import { handleFlutterPDFReader } from '@/lib/helper';
+import { useGetLessonNoteById } from '@/server/institution/lesson-note';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 
 export default function Page() {
   const params = useSearchParams();
-  const [fileDownloadURL, setFileDownloadURL] = useState<string>('');
+  const { data: lessonNote, isLoading } = useGetLessonNoteById(params?.get('lessonNoteId') ?? '');
 
   const isDesktopOrLaptop = useMediaQuery({
     query: "(min-width: 1224px)",
   });
 
-  useEffect(() => {
-    const run = async () => {
-      setFileDownloadURL(await getURL(params?.get('uploadUrl') ?? ''));
-    };
-    run();
-  }, [params]);
+  console.log(lessonNote);
+
+  if (isLoading) {
+    return (
+      <div className='flex flex-col justify-center items-center h-1/2'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <div className='w-full layout pl-0 lg:pl-20'>
@@ -44,8 +47,8 @@ export default function Page() {
       </div> */}
       <div className='flex-1 mb-8 rounded-lg bg-white min-h-[50rem] overflow-hidden overflow-x-scroll mt-10'>
         <div className='flex justify-center'>
-          {fileDownloadURL === '' ? <GenericLoader /> : (
-            isDesktopOrLaptop ? <CustomPDFReader url={fileDownloadURL} /> : handleFlutterPDFReader(fileDownloadURL)
+          {lessonNote?.uploadUrl ? isDesktopOrLaptop ? <CustomPDFReader url={lessonNote?.uploadUrl ?? ''} /> : handleFlutterPDFReader(lessonNote?.uploadUrl ?? '') : (
+            <SubjectiveViewer content={lessonNote?.instructionalTeachingActivity ?? ''} />
           )}
         </div>
       </div>
