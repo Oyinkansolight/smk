@@ -14,7 +14,7 @@ interface AddSubjectViewProps {
   closeModal: () => void;
 }
 
-export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
+export default function EditSubjectView({ closeModal }: AddSubjectViewProps) {
   const { data } = useGetInstituteTypes();
   const institutionTypes: string[] = [];
 
@@ -107,7 +107,7 @@ export default function AddSubjectView({ closeModal }: AddSubjectViewProps) {
       className='flex h-screen items-center justify-center'
     >
       <div className='flex max-h-screen w-full max-w-2xl flex-col items-center overflow-auto bg-white p-10'>
-        <div className='py-2 text-4xl font-bold'>Add New Subject</div>
+        <div className='py-2 text-4xl font-bold'>Edit Subject</div>
         <div className='mt-4'>Kindly enter the details below</div>
         <div className='h-8' />
 
