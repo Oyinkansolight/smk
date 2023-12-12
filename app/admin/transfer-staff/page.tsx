@@ -5,70 +5,18 @@ import BackButton from '@/components/accordions/BackButton';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/TransferStaff/Details';
-import Publish from '@/components/views/admin/TransferStaff/publish';
-import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
   useCreateStaffTransfer,
-  useGetSchools,
   useGetTeachersListByInstitution,
 } from '@/server/institution';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const TransferStaff = () => {
   const {
@@ -80,8 +28,19 @@ const TransferStaff = () => {
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
+  const { data: institutionProfile } = useGetProfile();
+
   const [loading, setLoading] = useState(false);
   const [stage, setStage] = useState(1);
+
+  const [query, setQuery] = useState('');
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    query,
+    instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
+  });
 
   const [payload, setPayload] = useState({
     staffId: '',
@@ -89,15 +48,25 @@ const TransferStaff = () => {
     newInstitutionId: '',
   });
 
-  const { data: institutionProfile } = useGetProfile();
 
-  const { data: staffs, isLoading } = useGetTeachersListByInstitution({
-    instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
-    limit: 1000,
-  });
+  const { data: staffs, isLoading } = useGetTeachersListByInstitution({ ...pagingData });
 
   const [isOpen, setisOpen] = useState(false);
   const [publishData] = useState(null);
+
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
+
+  const handleNextPage = () => {
+    setPagingData({ ...pagingData, page: pagingData.page + 1 });
+  };
+
+  const handlePrevPage = () => {
+    if (pagingData.page === 1) return;
+    setPagingData({ ...pagingData, page: pagingData.page - 1 });
+  };
 
   const handleCreateStaffTransfer = useCreateStaffTransfer();
 
@@ -172,9 +141,12 @@ const TransferStaff = () => {
             <Details
               register={register}
               errors={errors}
-              staffs={staffs?.data}
+              staffs={staffs}
               setPayload={setPayload}
               payload={payload}
+              handleStaffSearch={handleSearch}
+              handleStaffNextPage={handleNextPage}
+              handleStaffPrevPage={handlePrevPage}
             />
           )}
 

@@ -112,7 +112,7 @@ const AllStaffTransferRequests = () => {
   }, [error]);
 
   return (
-    <section className='py-6'>
+    <section className='py-6 layout'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
