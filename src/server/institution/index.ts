@@ -769,6 +769,26 @@ export function useCreateParent() {
   return mutation;
 }
 
+export function useUpdateParent() {
+  const mutation = useMutation({
+    mutationKey: 'update-parent',
+    mutationFn: (params: any) => {
+      const parsedParam = {};
+
+      if (params.firstName) parsedParam['firstName'] = params.firstName;
+      if (params.lastName) parsedParam['lastName'] = params.lastName;
+      if (params.profileImg) parsedParam['profileImg'] = params.profileImg;
+      if (params.address) parsedParam['address'] = params.address;
+      if (params.lga) parsedParam['lga'] = params.lga;
+
+      return request.patch(`/v1/government/parent/${params.id}`, parsedParam, {
+        withCredentials: true,
+      });
+    },
+  });
+  return mutation;
+}
+
 export function useUpdateStaffSubject() {
   const client = useQueryClient();
 
