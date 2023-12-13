@@ -115,7 +115,7 @@ const AllParents = () => {
         toggleModal();
         setAction(null);
         const res = await mutateAsync(itemToDelete);
-        toast.success('Student removed successfully');
+        toast.success('Parent removed successfully');
       } catch (error) {
         logger(error);
       }

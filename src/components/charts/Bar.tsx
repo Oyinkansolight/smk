@@ -3,6 +3,7 @@
 // yarn add @nivo/core @nivo/bar
 import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
+import moment from 'moment';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BiChevronRight } from 'react-icons/bi';
@@ -10,21 +11,29 @@ import { BiChevronRight } from 'react-icons/bi';
 const BarChart = ({ data, showLink = false }: { data: any, showLink?: boolean }) => {
   const routeDetails = usePathname();
 
-  const dataKeys = Object.keys(data ?? {});
+  const dateData = {};
+
+  if (data?.Monday) dateData['Monday'] = data?.Monday;
+  if (data?.Tuesday) dateData['Tuesday'] = data?.Tuesday;
+  if (data?.Wednesday) dateData['Wednesday'] = data?.Wednesday;
+  if (data?.Thursday) dateData['Thursday'] = data?.Thursday;
+  if (data?.Friday) dateData['Friday'] = data?.Friday;
+
+  const dataKeys = Object.keys(dateData ?? {});
   const parsedData = dataKeys.map((item) => ({
     day: item.slice(0, 3),
     staffColor: '#BF74FF',
     studentColor: '#FFB62B',
-    staff: data[item].staff,
-    student: data[item].student,
+    staff: dateData[item].staff,
+    student: dateData[item].student,
   }));
 
   const totalSum = dataKeys.reduce((acc, curr) => {
-    return acc + data[curr].student + data[curr].staff;
+    return acc + dateData[curr].student + dateData[curr].staff;
   }, 0);
 
   const isEmpty =
-    !data || !dataKeys?.length || !parsedData?.length || totalSum === 0;
+    !dateData || !dataKeys?.length || !parsedData?.length || totalSum === 0;
 
   if (isEmpty) {
     return <EmptyView label='No Data' />;
@@ -85,6 +94,13 @@ const BarChart = ({ data, showLink = false }: { data: any, showLink?: boolean })
           ]}
         />
       </div>
+
+      {data?.Range?.start && data?.Range?.end && (
+        <div className='flex flex-row items-center justify-center mx-auto gap-2'>
+          <span className='font-semibold'>Date Range:</span>
+          <span className='font-medium'>{moment(data?.Range?.start).format('ll')} - {moment(data?.Range?.end).format('ll')}</span>
+        </div>
+      )}
 
       {showLink &&
         <div className='flex justify-center mt-2'>

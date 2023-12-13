@@ -298,11 +298,7 @@ export function useDeleteParent() {
   const mutation = useMutation({
     mutationKey: 'delete_parent',
     mutationFn: async (id?: string) =>
-      (await request.delete(`/v1/government/parent`, {
-        params: {
-          id,
-        },
-      })).data,
+      (await request.delete(`/v1/government/parent/${id}`)).data,
     onSettled: () => {
       client.refetchQueries('get_parents');
     },
@@ -315,9 +311,7 @@ export function useGetSingleParent(params: { id: string }) {
     queryKey: 'get_parents',
     queryFn: async () => {
       try {
-        const d = await request.get(`/v1/government/parent`, {
-          params,
-        });
+        const d = await request.get(`/v1/government/parent/${params?.id}`);
         return d.data as PaginatedData<Student> | any;
       } catch (error) {
         logger(error);
@@ -733,7 +727,7 @@ export function useUpdateStaffTransfer() {
         `/v1/institutions/staff/transfers/action/${params.id}`,
         parsedParam,
         {
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
     },
