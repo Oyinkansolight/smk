@@ -65,16 +65,24 @@ const staffListColumns: TableColumn<any>[] = [
     name: 'Name',
     cell: (row) => (
       <div>
-        {row.user.firstName} {row.user.lastName}
+        {row?.user?.firstName} {row?.user?.lastName}
       </div>
     ),
   },
   {
     name: 'Subject',
     cell: (row) => (
-      <div>{row.subjects?.length > 0 ? row.subjects.length : 'None'}</div>
+      <div>{row?.subjects?.length > 0 ? row?.subjects?.length : 'None'}</div>
     ),
   },
+  {
+    name: 'Attendance Rate',
+    cell: (row) => (
+      <div>
+        {row?.attendanceRate ?? 0}%{' '}
+      </div>
+    ),
+  }
 ];
 
 const SingleSchoolDashboard = () => {
@@ -248,7 +256,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={studentListColumns}
                     data={getInstitutionStudents?.data}
-                    // data={[]}
+                  // data={[]}
                   />
                 </div>
               </div>
@@ -320,7 +328,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={staffListColumns}
                     data={getInstitutionStaffs?.data}
-                    // data={[]}
+                  // data={[]}
                   />
                 </div>
               </div>
