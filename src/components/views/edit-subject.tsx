@@ -143,7 +143,7 @@ export default function EditSubjectView({ closeModal, subject }: AddSubjectViewP
     const response = await mutateAsync(payload);
 
     if (response) {
-      toast.success('Subject added successfully');
+      toast.success('Subject updated successfully');
       closeModal();
     } else {
       toast.error('An error occurred');
