@@ -2,7 +2,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import clsxm from '@/lib/clsxm';
-import { useCreateSubject } from '@/server/institution';
+import { useCreateSubject, useUpdateSubject } from '@/server/institution';
 import { useGetAllClasses } from '@/server/institution/class';
 import { Label } from '@/types';
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ export default function EditSubjectView({ closeModal, subject }: AddSubjectViewP
     },
   });
 
-  const { mutateAsync } = useCreateSubject();
+  const { mutateAsync } = useUpdateSubject();
   const [classes1, setClasses] = useState(new Set());
   const [classes2, setClasses1] = useState(new Set());
   const [classes3, setClasses2] = useState(new Set());
@@ -130,11 +130,15 @@ export default function EditSubjectView({ closeModal, subject }: AddSubjectViewP
     if (classes4.size > 0) {
       institutionTypes.push('TERTIARY');
     }
-    const payload = {
-      classId: ids,
-      name: data.subject,
-      institutionTypes,
+
+    const payload: any = {
+      id: subject?.id,
     };
+
+    if (ids.length !== 0) payload['classId'] = ids;
+    if (data.subject) payload['name'] = data.subject;
+    if (institutionTypes.length !== 0)
+      payload['institutionTypes'] = institutionTypes;
 
     const response = await mutateAsync(payload);
 
@@ -410,7 +414,7 @@ export default function EditSubjectView({ closeModal, subject }: AddSubjectViewP
           subject in the subject settings
         </div>
         <Button type='submit' className='px-20 text-xs mt-8'>
-          Add Subject
+          Edit Subject
         </Button>
       </div>
     </form>

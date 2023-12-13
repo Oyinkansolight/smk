@@ -133,6 +133,26 @@ export function useCreateSubject() {
   return mutation;
 }
 
+export function useUpdateSubject() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_subject',
+    mutationFn: async (body: Partial<CreateSubjectParams>) => {
+      return (
+        await request.patch(
+          '/v1/government/classes-subjects/update-subject',
+          body
+        )
+      ).data.data as Subject;
+    },
+    onSettled: (data) => {
+      client.refetchQueries('get_subject_list');
+      client.refetchQueries(['get_subject_list_by_id', data?.id]);
+    },
+  });
+  return mutation;
+}
+
 export function useGetSubjectList(params?: SubjectList) {
   const query = useQuery({
     queryKey: 'get_subject_list',
