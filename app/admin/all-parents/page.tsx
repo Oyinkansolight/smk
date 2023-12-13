@@ -6,12 +6,10 @@ import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useDeleteStudent } from '@/server/government/classes_and_subjects';
-import { useCreateBulkStudent, useGetParents } from '@/server/institution';
+import { useCreateBulkStudent, useDeleteParent, useGetParents } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -20,24 +18,10 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllParents = () => {
   const { error: profileError } = useGetProfile();
 
-  const instituteId = getFromLocalStorage('institutionId');
-
-  const [isOpen, setIsOpen] = useState(false);
   const [isBulk, setIsBulk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [files, setFile] = useState<any>(null);
@@ -88,6 +72,10 @@ const AllParents = () => {
       setPagingData({ ...pagingData, page: parents?.paging?.totalPage });
   };
 
+  const handleCurrentPage = (page: number) => {
+    setPagingData({ ...pagingData, page });
+  };
+
   const handleCreateBulkStudent = useCreateBulkStudent();
   const bulkStudentUpload = async () => {
     const formData = new FormData();
@@ -119,7 +107,7 @@ const AllParents = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { mutateAsync } = useDeleteStudent();
+  const { mutateAsync } = useDeleteParent();
 
   const handleDelete = async () => {
     if (itemToDelete) {
@@ -163,10 +151,10 @@ const AllParents = () => {
         toggleModal={toggleModal}
         content={
           <DeleteModalContent
-            title='Delete Student'
-            body='Are you sure you want to delete this student?'
+            title='Delete Parent'
             toggleModal={toggleModal}
             handleDelete={handleDelete}
+            body='Are you sure you want to delete this parent?'
           />
         }
         className='max-w-[777px] w-full h-[267px]'
@@ -262,12 +250,12 @@ const AllParents = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <span
-                          // href={`/admin/student?id=${item.id}`}
+                        <Link
+                          href={`/admin/edit-parent?id=${item.id}`}
                           className='p-4 hover:bg-gray-200 w-full block'
                         >
                           Edit
-                        </span>
+                        </Link>
                         <button
                           onClick={() => {
                             setItemToDelete(item.id);
@@ -329,15 +317,16 @@ const AllParents = () => {
 
               {Array(parents.paging.totalPage)
                 .fill(0)
-                .slice(0, 2)
+                .slice(0, 1)
                 .map((item, idx: number) => (
                   <div
                     key={Math.random() * 100}
+                    onClick={() => handleCurrentPage(idx + 1)}
                     className={clsxm(
                       pagingData.page === idx + 1
                         ? 'bg-[#008146] text-white'
                         : 'bg-white text-gray-500',
-                      'grid h-7 w-7 place-content-center rounded-full border p-2'
+                      'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                     )}
                   >
                     {idx + 1}
@@ -357,7 +346,7 @@ const AllParents = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < parents.paging.totalPage
+                    pagingData.page < parents.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>
@@ -377,11 +366,12 @@ const AllParents = () => {
 
               {parents.paging.totalPage > 1 && (
                 <div
+                  onClick={() => handleCurrentPage(parents.paging.totalPage)}
                   className={clsxm(
                     pagingData.page === parents.paging.totalPage
                       ? 'bg-[#008146] text-white'
                       : 'bg-white text-gray-500',
-                    'grid h-7 w-7 place-content-center rounded-full border p-2'
+                    'grid h-7 w-7 place-content-center rounded-full border p-2 cursor-pointer'
                   )}
                 >
                   {parents.paging.totalPage}

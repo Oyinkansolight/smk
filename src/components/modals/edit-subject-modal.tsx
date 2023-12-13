@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import EditSubjectView from '@/components/views/edit-subject';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 
 export default function EditSubjectModal({
   children,
+  subject
 }: {
   children: JSX.Element;
+  subject: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -49,7 +52,7 @@ export default function EditSubjectModal({
                 leaveTo='opacity-0 scale-95'
               >
                 <Dialog.Panel className='w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-center align-middle shadow-xl transition-all'>
-                  <EditSubjectView closeModal={closeModal} />
+                  <EditSubjectView closeModal={closeModal} subject={subject} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

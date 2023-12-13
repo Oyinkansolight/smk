@@ -2,35 +2,53 @@
 'use client';
 
 import BackButton from '@/components/accordions/BackButton';
+import GenericLoader from '@/components/layout/Loader';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Biodata from '@/components/views/admin/AddParent/biodata';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
-import { useCreateParent } from '@/server/institution';
+import { useCreateParent, useGetSingleParent } from '@/server/institution';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-const AddParent = () => {
+const EditParent = () => {
+  const params = useSearchParams();
+  const parentId = params?.get('id');
+
+  const { data: parentDetail, isLoading: isLoadingParent } = useGetSingleParent({
+    id: parentId ?? '',
+  });
+
+  console.log(parentDetail);
+
+
   const {
     register,
-
     formState: { errors },
     handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
+    defaultValues: {
+      firstName: parentDetail?.data?.data[0]?.firstName,
+      lastName: parentDetail?.data?.data[0]?.lastName,
+      email: parentDetail?.data?.data[0]?.email,
+      address: parentDetail?.data?.data[0]?.address,
+      lga: parentDetail?.data?.data[0]?.lga,
+    },
   });
   const [stage, setStage] = useState(1);
-  const [isOpen, setisOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
   const [imageData, setImageData] = useState<File | undefined>();
 
-  const [, setpublishData] = useState(null);
+  const [, setPublishData] = useState(null);
 
   const handleCreateParent = useCreateParent();
 
@@ -53,7 +71,7 @@ const AddParent = () => {
       if (array) {
         uploadedImage = await uploadDocument(uploadedImage, array, environment);
       }
-      const staffData = {
+      const parentData = {
         profileImg: uploadedImage,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -63,18 +81,18 @@ const AddParent = () => {
         lga: data.lga,
       };
 
-      setpublishData(data);
+      setPublishData(data);
 
       try {
         setloading(true);
-        const response = await handleCreateParent.mutateAsync(staffData);
+        const response = await handleCreateParent.mutateAsync(parentData);
 
         if (response) {
           toast.success('Parent Added successfully');
           setloading(false);
 
           //2 Second - Open Success Modal
-          setisOpen(true);
+          setIsOpen(true);
         }
       } catch (error) {
         setloading(false);
@@ -97,6 +115,14 @@ const AddParent = () => {
       stageName: 'Parent Details',
     },
   ];
+
+  if (isLoadingParent) {
+    return (
+      <div className='flex items-center justify-center'>
+        <GenericLoader />
+      </div>
+    );
+  }
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
@@ -158,4 +184,4 @@ const AddParent = () => {
   );
 };
 
-export default AddParent;
+export default EditParent;

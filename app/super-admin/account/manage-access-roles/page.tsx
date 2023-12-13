@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import SearchInput from '@/components/input/SearchInput';
@@ -5,7 +6,7 @@ import LongTextSkeleton from '@/components/skeletons/LongText';
 import { useGetRoles } from '@/server/Permission';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 
 const roles = [
@@ -171,11 +172,16 @@ const roles = [
 ];
 
 export default function Page() {
-  const [selectedRole, setSelectedRole] = useState(roles[0]);
-  const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const [selectedRole, setSelectedRole] = useState<any>(null);
 
   const { data: allRoles, isLoading: isLoadingRoles } = useGetRoles();
+
+  useEffect(() => {
+    if (allRoles) {
+      setSelectedRole(allRoles?.data[0]);
+    }
+  }, [allRoles]);
 
   return (
     <div className='h-full px-12'>
@@ -259,7 +265,7 @@ export default function Page() {
             <div key={role.id} className='border-b-2 py-2'>
               <div
                 onClick={() => {
-                  roles[idx] && setSelectedRole(roles[idx]);
+                  setSelectedRole(role);
                 }}
                 className='text-base font-normal cursor-pointer text-[#333] capitalize'
               >
@@ -291,23 +297,22 @@ export default function Page() {
           </div>
           <div className='py-4'>
             <div className='text-center'>
-              <h1 className='text-base font-medium'>{selectedRole.role}</h1>
-              <p className='text-[#929292]'>{selectedRole.description}</p>
+              <h1 className='text-base font-medium capitalize'>{selectedRole?.name}</h1>
+              <p className='text-[#929292]'>{selectedRole?.description}</p>
             </div>
           </div>
           <div className='rounded border'>
-            {selectedRole.permissions.map((items, idx) => (
-              <div key={idx}>
-                <div className='p-4 border-b'>
-                  <div className=''>
-                    <h1 className='text-base text-[#1D1B20] font-medium uppercase'>
-                      {items.label}
-                    </h1>
-                    <p className='text-[#7F7F7F]'>{items.description}</p>
-                  </div>
+
+            <div>
+              <div className='p-4 border-b'>
+                <div className=''>
+                  <h1 className='text-base text-[#1D1B20] font-medium uppercase'>
+                    {selectedRole?.name}
+                  </h1>
+                  <p className='text-[#7F7F7F]'>{selectedRole?.description}</p>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>

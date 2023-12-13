@@ -291,12 +291,33 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
+
+export function useDeleteParent() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete_parent',
+    mutationFn: async (id?: string) =>
+      (await request.delete(`/v1/government/parent`, {
+        params: {
+          id,
+        },
+      })).data,
+    onSettled: () => {
+      client.refetchQueries('get_parents');
+    },
+  });
+  return mutation;
+}
+
 export function useGetSingleParent(params: { id: string }) {
   const query = useQuery({
     queryKey: 'get_parents',
     queryFn: async () => {
       try {
-        const d = await request.get(`/v1/government/parent/${params.id}`);
+        const d = await request.get(`/v1/government/parent`, {
+          params,
+        });
         return d.data as PaginatedData<Student> | any;
       } catch (error) {
         logger(error);
@@ -644,6 +665,7 @@ export function useCreateStaff() {
   });
   return mutation;
 }
+
 export function useCreateStaffTransfer() {
   const client = useQueryClient();
   const mutation = useMutation({
@@ -652,12 +674,13 @@ export function useCreateStaffTransfer() {
       request.post('/v1/institutions/staff/transfers', params, {
         withCredentials: true,
       }),
-    onSettled: (data) => {
+    onSettled: () => {
       client.refetchQueries('get_staff_transfer_requests');
     },
   });
   return mutation;
 }
+
 export function useCreateStudentTransfer() {
   const client = useQueryClient();
   const mutation = useMutation({
@@ -672,6 +695,7 @@ export function useCreateStudentTransfer() {
   });
   return mutation;
 }
+
 export function useUpdateStudentTransfer() {
   const client = useQueryClient();
 
@@ -691,25 +715,35 @@ export function useUpdateStudentTransfer() {
   });
   return mutation;
 }
+
 export function useUpdateStaffTransfer() {
   const client = useQueryClient();
 
   const mutation = useMutation({
     mutationKey: 'update-student-transfer',
-    mutationFn: (params: any) =>
-      request.patch(
+    mutationFn: (params: any) => {
+      const parsedParam = {};
+      if (params.status) parsedParam['status'] = params.status;
+      if (params.reason) parsedParam['reason'] = params.reason;
+      if (params.newInstitutionId)
+        parsedParam['newInstitutionId'] = params.newInstitutionId;
+      if (params.staffId) parsedParam['staffId'] = params.staffId;
+
+      return request.patch(
         `/v1/institutions/staff/transfers/action/${params.id}`,
-        { status: params.status },
+        parsedParam,
         {
-          withCredentials: true,
+          withCredentials: true, 
         }
-      ),
-    onSettled: (data) => {
+      );
+    },
+    onSettled: () => {
       client.refetchQueries('get_staff_transfer_requests');
     },
   });
   return mutation;
 }
+
 export function useCreateParent() {
   const mutation = useMutation({
     mutationKey: 'create-parent',

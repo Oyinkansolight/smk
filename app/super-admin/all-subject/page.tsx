@@ -219,7 +219,7 @@ const AllSubjects = () => {
 
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                        <EditSubjectModal>
+                        <EditSubjectModal subject={item}>
                           <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             Edit
                           </div>

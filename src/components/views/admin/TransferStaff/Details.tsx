@@ -17,18 +17,20 @@ type Iprops = {
   register: any;
   errors: any;
   staffs: any;
-  setPayload?: (v: any) => void;
   payload?: payloadProp;
+  staffId?: string;
+  newInstitutionId?: string;
+  setPayload?: (v: any) => void;
   handleStaffSearch?: (v: string) => void;
   handleStaffPrevPage?: (v: number) => void;
   handleStaffNextPage?: (v: number) => void;
 };
 
-const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSearch, handleStaffPrevPage, handleStaffNextPage }: Iprops) => {
+const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSearch, handleStaffPrevPage, handleStaffNextPage, staffId, newInstitutionId }: Iprops) => {
   const [open, setOpen] = useState(false);
   const [openStaffModal, setOpenStaffModal] = useState(false);
-  const [selectedSchool, setSelectedSchool] = useState(['']);
-  const [selectedStaff, setSelectedStaff] = useState(['']);
+  const [selectedSchool, setSelectedSchool] = useState([newInstitutionId ?? '']);
+  const [selectedStaff, setSelectedStaff] = useState([staffId ?? '']);
   const [currentSelection, setCurrentSelection] = useState('');
   const [itemIndex, setItemIndex] = useState<null | number>(null);
 
@@ -130,7 +132,6 @@ const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSea
         totalPages={schools?.paging?.totalPage}
         description="Select institution's Name"
         setSelectedItem={(value) => {
-          console.log(value);
           setPayload &&
             setPayload((prev: payloadProp) => {
               return {

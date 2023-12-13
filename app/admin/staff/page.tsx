@@ -33,34 +33,6 @@ import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -69,7 +41,7 @@ const Page = () => {
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isAddSubject, setisAddSubject] = useState(false);
+  const [isAddSubject, setIsAddSubject] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState('/images/teacher_1.png');
 
@@ -92,16 +64,16 @@ const Page = () => {
     p?.get('id'),
     currentSessionId
   );
-  const [assignedClassSubject, setassignedClassSubject] = useState<
+  const [assignedClassSubject, setAssignedClassSubject] = useState<
     { classArmId: string | null; subjectId: string | null }[]
   >([{ classArmId: null, subjectId: null }]);
 
   const onClickHandler = () => {
-    setisAddSubject(!isAddSubject);
+    setIsAddSubject(!isAddSubject);
   };
 
   const addSubjectClass = () => {
-    setassignedClassSubject([
+    setAssignedClassSubject([
       ...assignedClassSubject,
       { classArmId: null, subjectId: null },
     ]);
@@ -128,7 +100,7 @@ const Page = () => {
   };
   const removeRemoveSubjectClass = (id: number) => {
     const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
-    setassignedClassSubject(updatedItems);
+    setAssignedClassSubject(updatedItems);
     toast.success('Record deleted');
   };
   const handleSubjectClassChange = (name: string, value: any, id: number) => {
@@ -138,7 +110,7 @@ const Page = () => {
       }
       return item;
     });
-    setassignedClassSubject(updatedItems);
+    setAssignedClassSubject(updatedItems);
   };
   const handleUpdateStaff = useUpdateStaffSubject();
 
@@ -213,9 +185,8 @@ const Page = () => {
     }
   };
 
-  const teacherName = `${
-    staff ? (staff?.user ?? {})?.firstName : 'Loading...'
-  } ${staff ? (staff?.user ?? {})?.lastName : ''}`;
+  const teacherName = `${staff ? (staff?.user ?? {})?.firstName : 'Loading...'
+    } ${staff ? (staff?.user ?? {})?.lastName : ''}`;
 
   return (
     <div className='flex flex-col lg:flex-row'>
@@ -397,7 +368,7 @@ const Page = () => {
               <div className='flex justify-end'>
                 <Button
                   onClick={() => {
-                    setisAddSubject(!isAddSubject);
+                    setIsAddSubject(!isAddSubject);
                   }}
                   disabled={isEditingBioDetails}
                   variant='ghost'

@@ -2,7 +2,7 @@
 import Button from '@/components/buttons/Button';
 import { BaseInput } from '@/components/input';
 import clsxm from '@/lib/clsxm';
-import { useCreateSubject, useGetInstituteTypes } from '@/server/institution';
+import { useCreateSubject } from '@/server/institution';
 import { useGetAllClasses } from '@/server/institution/class';
 import { Label } from '@/types';
 import { useEffect, useState } from 'react';
@@ -12,13 +12,20 @@ import { toast } from 'react-toastify';
 
 interface AddSubjectViewProps {
   closeModal: () => void;
+  subject: any;
 }
 
-export default function EditSubjectView({ closeModal }: AddSubjectViewProps) {
-  const { data } = useGetInstituteTypes();
+export default function EditSubjectView({ closeModal, subject }: AddSubjectViewProps) {
+  // const [processing, setProcessing] = useState(true);
   const institutionTypes: string[] = [];
 
-  const { register, handleSubmit } = useForm({ mode: 'onChange' });
+  const { register, handleSubmit } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      subject: subject?.name,
+    },
+  });
+
   const { mutateAsync } = useCreateSubject();
   const [classes1, setClasses] = useState(new Set());
   const [classes2, setClasses1] = useState(new Set());
@@ -40,6 +47,7 @@ export default function EditSubjectView({ closeModal }: AddSubjectViewProps) {
     const m2: Label[] = [];
     const m3: Label[] = [];
     const m4: Label[] = [];
+
     if (classes) {
       for (let i = 0; i < classes.length; i++) {
         const cl = classes[i];
@@ -59,12 +67,49 @@ export default function EditSubjectView({ closeModal }: AddSubjectViewProps) {
           m4.push({ id: cl.id ?? i, value: cl.name ?? '[NULL]' });
         }
       }
+
       setD1(m1);
       setD2(m2);
       setD3(m3);
       setD4(m4);
     }
   }, [classes]);
+
+  useEffect(() => {
+    const s = new Set(classes1);
+    const s1 = new Set(classes2);
+    const s2 = new Set(classes3);
+    const s3 = new Set(classes4);
+
+    for (let i = 0; i < subject?.classes?.length; i++) {
+      const cl = subject?.classes[i]?.class;
+
+      if (cl.institutionType?.toLocaleLowerCase()?.includes?.('eccde')) {
+        s.add(cl.id);
+      } else if (
+        cl.institutionType?.toLocaleLowerCase()?.includes?.('primary')
+      ) {
+        s1.add(cl.id);
+      } else if (
+        cl.institutionType?.toLocaleLowerCase()?.includes?.('secondary')
+      ) {
+        s2.add(cl.id);
+      } else if (
+        cl.institutionType?.toLocaleLowerCase()?.includes?.('tertiary')
+      ) {
+        s3.add(cl.id);
+      }
+    }
+
+    setClasses(s);
+    setClasses1(s1);
+    setClasses2(s2);
+    setClasses3(s3);
+
+    // setTimeout(() => {
+    //   setProcessing(false);
+    // }, 5000);
+  }, [subject?.classes]);
 
   const onSubmit = async (data: any) => {
     const ids: any[] = [];
@@ -100,6 +145,14 @@ export default function EditSubjectView({ closeModal }: AddSubjectViewProps) {
       toast.error('An error occurred');
     }
   };
+
+  // if (processing) {
+  //   return (
+  //     <div className='flex mx-auto items-center justify-center'>
+  //       <GenericLoader />
+  //     </div>
+  //   )
+  // }
 
   return (
     <form

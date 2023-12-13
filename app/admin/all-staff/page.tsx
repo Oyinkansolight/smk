@@ -23,23 +23,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStaff = () => {
   const institutionId: string = getFromLocalStorage('institutionId') ?? '';
@@ -424,7 +407,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < staff.paging.totalPage
+                    pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

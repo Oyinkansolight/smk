@@ -199,43 +199,45 @@ const AllStaffTransferRequests = () => {
 
                 <div className='col-span-1'> {item?.status || 'N/A'} </div>
 
-                <div className='col-span-1 justify-end flex'>
-                  <button
-                    onClick={() => {
-                      setAction(idx + 1);
-                    }}
-                    className='relative'
-                  >
-                    <BsThreeDotsVertical />
-                    {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <span
-                          // href={`/super-admin/student?id=${item.id}`}
-                          className='p-4 hover:bg-gray-200 w-full block'
-                        >
-                          Edit
-                        </span>
-                        <button
-                          onClick={() => {
-                            setItemToDelete(item.id);
-                            toggleModal();
-                          }}
-                          className='p-4 hover:bg-gray-200 w-full'
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </button>
-                  {action && (
-                    <div
-                      className='fixed inset-0 z-[1]'
+                {item.status === 'PENDING' && (
+                  <div className='col-span-1 justify-end flex'>
+                    <button
                       onClick={() => {
-                        setAction(null);
+                        setAction(idx + 1);
                       }}
-                    ></div>
-                  )}
-                </div>
+                      className='relative'
+                    >
+                      <BsThreeDotsVertical />
+                      {action == idx + 1 && (
+                        <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
+                          <Link
+                            className='p-4 hover:bg-gray-200 w-full block'
+                            href={`/admin/edit-transfer-staff?staffId=${item?.staff?.id}&transferId=${item.id}&newInstitutionId=${item?.newInstitution?.id}&reason=${item?.reason ?? ''}`}
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => {
+                              setItemToDelete(item.id);
+                              toggleModal();
+                            }}
+                            className='p-4 hover:bg-gray-200 w-full'
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </button>
+                    {action && (
+                      <div
+                        className='fixed inset-0 z-[1]'
+                        onClick={() => {
+                          setAction(null);
+                        }}
+                      ></div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
 

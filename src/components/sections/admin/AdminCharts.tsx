@@ -149,11 +149,22 @@ const AdminCharts = ({
             {/* <GenericChart title='Time Table' content={<EmptyView label='No Data' /> ?? <TimeTable />} /> */}
 
             <GenericChart
-              title='Transfer Requests'
+              title='Staff Transfer Requests'
+              content={
+                <TransferRequestsTable
+                  staff
+                  data={[
+                    ...chartData.staffTransferRequests,
+                  ]}
+                />
+              }
+            />
+
+            <GenericChart
+              title='Student Transfer Requests'
               content={
                 <TransferRequestsTable
                   data={[
-                    ...chartData.staffTransferRequests,
                     ...chartData.studentTransferRequests,
                   ]}
                 />
