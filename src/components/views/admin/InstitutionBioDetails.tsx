@@ -2,7 +2,7 @@
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import { getErrMsg } from '@/server';
-import { useUpdateStudent } from '@/server/government/student';
+import { useUpdateInstitution } from '@/server/institution';
 import { Institution } from '@/types/institute';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -20,18 +20,41 @@ export default function InstitutionBioDetails({
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const update = useUpdateStudent();
+  const update = useUpdateInstitution();
   const onSubmit = async (data: any) => {
     if (initInstitution?.id) {
       setIsLoading(true);
       try {
-        await update.mutateAsync({
-          email: data.studentEmail,
-          id: initInstitution?.id,
-          phoneNumber: data.studentPhone,
-          firstName: (data.fullName as string).split(' ')[0],
-          lastName: (data.fullName as string).split(' ')[1],
-        });
+        const payload: any = {
+          id: initInstitution?.id
+        };
+
+        if (data.instituteEmail) {
+          payload.instituteEmail = data.instituteEmail;
+        }
+
+        if (data.instituteType) {
+          payload.instituteType = data.instituteType;
+        }
+
+        if (data.instituteAddress) {
+          payload.instituteAddress = data.instituteAddress;
+        }
+
+        if (data.instituteName) {
+          payload.instituteName = data.instituteName;
+        }
+
+        if (data.lga) {
+          payload.lga = data.lga;
+        }
+
+        if (data.town) {
+          payload.town = data.town;
+        }
+
+        await update.mutateAsync(payload);
+        toast.success('Institution Updated Successfully');
       } catch (error) {
         toast.error(getErrMsg(error));
       } finally {

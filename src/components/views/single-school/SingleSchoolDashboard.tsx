@@ -26,20 +26,6 @@ import { BiTrendingUp } from 'react-icons/bi';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {

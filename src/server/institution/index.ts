@@ -1065,3 +1065,38 @@ export function useGetStudentTransferRequests(
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
+
+export function useUpdateInstitution() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_institution',
+    mutationFn: async (params: any) => {
+      const parsedParams = {};
+
+      if (params.instituteEmail)
+        parsedParams['instituteEmail'] = params.instituteEmail;
+      if (params.instituteType)
+        parsedParams['instituteType'] = params.instituteType;
+      if (params.instituteAddress)
+        parsedParams['instituteAddress'] = params.instituteAddress;
+      if (params.lga) parsedParams['lga'] = params.lga;
+      if (params.town) parsedParams['town'] = params.town;
+      if (params.instituteName)
+        parsedParams['instituteName'] = params.instituteName;
+
+      return (
+        await request.patch(
+          `/v1/government/institutes/${params.id}`,
+          parsedParams,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data;
+    },
+    onSettled: (data) => {
+      client.refetchQueries(`get_institution_list_${data.userId ?? ''}`);
+    },
+  });
+  return mutation;
+}
