@@ -66,7 +66,7 @@ const AllNotification = () => {
           {dropDown && (
             <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-14 transition-all duration-200 right-0 z-10'>
               <Link
-                href='/super-admin/send-message'
+                href='/admin/send-message'
                 className='p-3 hover:bg-slate-100  text-left font-medium w-full'
               >
                 Send Message
@@ -146,9 +146,8 @@ const AllNotification = () => {
                   ReadMessage(item.id);
                 }
               }}
-              className={`${
-                !item.read && 'bg-[#EDF3FE]'
-              } mb-3 grid grid-cols-12 p-2 font-light items-center`}
+              className={`${!item.read && 'bg-[#EDF3FE]'
+                } mb-3 grid grid-cols-12 p-2 font-light items-center`}
             >
               <div className='col-span-1 flex justify-center'>
                 <input

@@ -7,7 +7,9 @@ import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/TransferStaff/Details';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetStaffs } from '@/server/government/staff';
 import {
+  useGetTeacherById,
   useGetTeachersListByInstitution,
   useUpdateStaffTransfer,
 } from '@/server/institution';
@@ -26,6 +28,10 @@ const EditTransferStaff = () => {
   const transferId = params?.get('transferId');
   const newInstitutionId = params?.get('newInstitutionId');
 
+  const { data: currentStaff } = useGetTeacherById({
+    id: staffId,
+  });
+
   const {
     register,
     formState: { errors },
@@ -38,6 +44,7 @@ const EditTransferStaff = () => {
     }
   });
   const { data: institutionProfile } = useGetProfile();
+
 
   const [loading, setLoading] = useState(false);
   const [stage] = useState(1);
@@ -151,6 +158,7 @@ const EditTransferStaff = () => {
               staffId={staffId ?? ''}
               register={register}
               setPayload={setPayload}
+              currentStaff={currentStaff}
               handleStaffSearch={handleSearch}
               handleStaffNextPage={handleNextPage}
               handleStaffPrevPage={handlePrevPage}

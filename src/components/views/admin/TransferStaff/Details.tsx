@@ -7,6 +7,7 @@ import Select from '@/components/input/formSelect';
 import logger from '@/lib/logger';
 import { useGetSchools } from '@/server/institution';
 import { useEffect, useState } from 'react';
+import { Staff } from '@/types/institute';
 
 type payloadProp = {
   staffId?: string;
@@ -19,6 +20,7 @@ type Iprops = {
   staffs: any;
   payload?: payloadProp;
   staffId?: string;
+  currentStaff?: Staff;
   newInstitutionId?: string;
   setPayload?: (v: any) => void;
   handleStaffSearch?: (v: string) => void;
@@ -26,11 +28,11 @@ type Iprops = {
   handleStaffNextPage?: (v: number) => void;
 };
 
-const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSearch, handleStaffPrevPage, handleStaffNextPage, staffId, newInstitutionId }: Iprops) => {
+const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSearch, handleStaffPrevPage, handleStaffNextPage, staffId, newInstitutionId, currentStaff }: Iprops) => {
   const [open, setOpen] = useState(false);
   const [openStaffModal, setOpenStaffModal] = useState(false);
-  const [selectedSchool, setSelectedSchool] = useState([newInstitutionId ?? '']);
-  const [selectedStaff, setSelectedStaff] = useState([staffId ?? '']);
+  const [selectedSchool, setSelectedSchool] = useState([currentStaff?.institution?.instituteName ?? '']);
+  const [selectedStaff, setSelectedStaff] = useState([`${currentStaff?.user?.lastName} ${currentStaff?.user?.firstName}` ?? '']);
   const [currentSelection, setCurrentSelection] = useState('');
   const [itemIndex, setItemIndex] = useState<null | number>(null);
 

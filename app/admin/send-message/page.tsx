@@ -17,16 +17,19 @@ const Page = () => {
   const onClickHandler = () => {
     setIsOpen(!isOpen);
   };
+
   const nextHandler = (): void => {
     if (stage >= 1 && stage <= 3) {
       setStage(stage + 1);
     }
   };
+
   const prevHandler = (): void => {
     if (stage >= 2) {
       setStage(stage - 1);
     }
   };
+
   const stepperData = [
     {
       stage: 1,
@@ -40,7 +43,7 @@ const Page = () => {
 
   return (
     <section className='md:px-[60px] px-5 py-6'>
-      <Link href='/super-admin'>
+      <Link href='/admin/all-communication'>
         <div className='flex items-center space-x-4'>
           <Image
             src='/svg/back.svg'
