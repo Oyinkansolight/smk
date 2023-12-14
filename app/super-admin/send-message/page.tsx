@@ -42,6 +42,7 @@ const Page = () => {
     control,
     formState: { errors },
     handleSubmit,
+    getValues,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
@@ -280,6 +281,12 @@ const Page = () => {
                           </button>
                         </div>
                       ))}
+
+                    {getValues('localFile') &&
+                      <div>
+                        Selected File: {getValues('localFile')?.[0]?.name}
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
