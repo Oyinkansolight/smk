@@ -28,13 +28,13 @@ function AddAdmin({ onClickHandler }: propType) {
     setLoading(true);
     const response = await handleCreateSchoolType.mutateAsync(payload);
 
-    if (response.status === 201) {
-      toast.success('SchoolType Added successfully');
+    if (response) {
+      toast.success('Institute type added successfully');
       onClickHandler();
 
       setLoading(false);
     } else {
-      toast.error('Error adding student');
+      toast.error('Error adding Institution');
       setLoading(false);
     }
   }
@@ -67,7 +67,7 @@ function AddAdmin({ onClickHandler }: propType) {
 
             <div className='w-full'>
               <FormSelect
-                label='Select Terms/Semester*'
+                label='Select Number of Terms/Semester*'
                 setFormValue={setNoOfTerm}
                 formValue={noOfTerm}
                 options={[1, 2, 3, 4, 5]}
