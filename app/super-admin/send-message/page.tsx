@@ -50,12 +50,10 @@ const Page = () => {
 
   const { data: staffs, isLoading } = useGetTeachersList();
   const staffData = (staffs?.data ?? []).map((v) => {
-    if (v.user) {
-      return ({
-        value: v.id,
-        label: v?.user && `${v?.user?.firstName} ${v?.user?.lastName}`,
-      })
-    }
+    return ({
+      value: v.id,
+      label: v?.user && `${v?.user?.firstName} ${v?.user?.lastName}`,
+    })
   });
   const onSubmit: SubmitHandler<any> = async (data) => {
     if (data.recepients.length == 0 || !data.body || !data.title) {
