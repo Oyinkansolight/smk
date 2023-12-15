@@ -120,7 +120,7 @@ const EditTransferStaff = () => {
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Staff transfer request successful'
+          title='Staff transfer request updated successfully'
           description='Hurray!!!'
           link='/admin/all-transfer-request-staff'
           textLink='Manage Staff'
