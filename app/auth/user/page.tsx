@@ -9,6 +9,7 @@ import PrimaryLink from '@/components/links/PrimaryLink';
 import { APP_LOGOS } from '@/constant/assets';
 import { USER_ROLES } from '@/constant/roles';
 import ROUTES from '@/constant/routes';
+import { useGlobalContext } from '@/hooks/useGlobalState';
 import {
   getStorageValueWithExpiry,
   setStorageValueWithExpiry,
@@ -26,6 +27,8 @@ import { toast } from 'react-toastify';
 export default function StudentAuth() {
   const queryString = useSearchParams();
   const actionName = queryString?.get('action');
+
+  const { setInstitutionData } = useGlobalContext();
 
   const isGenericApp = Cookies.get('isGenericApp');
   const [loading, setLoading] = React.useState(false);
@@ -91,6 +94,7 @@ export default function StudentAuth() {
               'institution',
               JSON.stringify(response.data.data.data.staff.institution)
             );
+            setInstitutionData(response.data.data.data.staff.institution);
           }
           router.push(ROUTES.TEACHER);
           if (isChecked) setUserDashboard(ROUTES.TEACHER);

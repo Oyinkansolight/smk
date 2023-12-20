@@ -58,12 +58,42 @@ const d = [
 ];
 
 const EnrolmentAnalysis = ({ data, instituteIndex }) => {
-  const secondaryLegendName = data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) ? 'SECONDARY ' + data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.SECONDARY?.[2]?.term?.endDate.slice(0, 4) : 'SECONDARY';
-  const primaryLegendName = data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) ? 'PRIMARY ' + data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.PRIMARY?.[2]?.term?.endDate.slice(0, 4) : 'PRIMARY';
-  const tertiaryLegendName = data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) ? 'TERTIARY ' + data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.TERTIARY?.[2]?.term?.endDate.slice(0, 4) : 'TERTIARY';
-  const eccdeLegendName = data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) ? 'ECCDE ' + data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) + '/' + data.ECCDE?.[2]?.term?.endDate.slice(0, 4) : 'ECCDE';
-  const btvetLegendName = data?.BTVET?.[0]?.term?.startDate.slice(0, 4) ? 'BTVET ' + data?.BTVET?.[0]?.term?.startDate.slice(0, 4) + '/' + data.BTVET?.[2]?.term?.endDate.slice(0, 4) : 'BTVET';
-  const tvetLegendName = data?.TVET?.[0]?.term?.startDate.slice(0, 4) ? 'TVET ' + data?.TVET?.[0]?.term?.startDate.slice(0, 4) + '/' + data.TVET?.[2]?.term?.endDate.slice(0, 4) : 'TVET';
+  const secondaryLegendName = data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'SECONDARY '
+    : // data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) +
+      // '/' +
+      // data.SECONDARY?.[2]?.term?.endDate.slice(0, 4)
+      'SECONDARY';
+  const primaryLegendName = data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'PRIMARY ' +
+      data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.PRIMARY?.[2]?.term?.endDate.slice(0, 4)
+    : 'PRIMARY';
+  const tertiaryLegendName = data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'TERTIARY ' +
+      data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.TERTIARY?.[2]?.term?.endDate.slice(0, 4)
+    : 'TERTIARY';
+  const eccdeLegendName = data?.ECCDE?.[0]?.term?.startDate.slice(0, 4)
+    ? 'ECCDE ' +
+      data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.ECCDE?.[2]?.term?.endDate.slice(0, 4)
+    : 'ECCDE';
+  const btvetLegendName = data?.BTVET?.[0]?.term?.startDate.slice(0, 4)
+    ? 'BTVET ' +
+      data?.BTVET?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.BTVET?.[2]?.term?.endDate.slice(0, 4)
+    : 'BTVET';
+  const tvetLegendName = data?.TVET?.[0]?.term?.startDate.slice(0, 4)
+    ? 'TVET ' +
+      data?.TVET?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.TVET?.[2]?.term?.endDate.slice(0, 4)
+    : 'TVET';
 
   const parsedData = [
     //* SECONDARY
@@ -184,9 +214,12 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
 
   return (
     <div className='h-96'>
-
       <ResponsiveLine
-        data={typeof (instituteIndex) === 'number' ? [parsedData[instituteIndex]] : parsedData}
+        data={
+          typeof instituteIndex === 'number'
+            ? [parsedData[instituteIndex]]
+            : parsedData
+        }
         margin={{ top: 130, right: 40, bottom: 70, left: 50 }}
         xScale={{ type: 'point' }}
         yScale={{
@@ -252,7 +285,7 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
         ]}
       />
     </div>
-  )
+  );
 };
 
 export default EnrolmentAnalysis;

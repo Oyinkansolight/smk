@@ -20,6 +20,8 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const SchoolByType = ({ name, title }: { name: string; title: string }) => {
   const { data: profile } = useGetProfile();
   const [query, setQuery] = useState('');
@@ -29,7 +31,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
     page: 1,
     limit: 10,
     query,
-    include: 'false'
+    include: 'false',
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +69,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -103,16 +105,18 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
     }
   }, [error]);
 
-
   const canAddSchool = () => {
     let response = false;
     if (profile) {
-      const addSchool = profile?.userInfo?.role?.[0]?.permissions?.filter((permission) => permission?.target === "institutes" && permission?.action === "create")
+      const addSchool = profile?.userInfo?.role?.[0]?.permissions?.filter(
+        (permission) =>
+          permission?.target === 'institutes' && permission?.action === 'create'
+      );
       response = addSchool?.length ? addSchool?.length > 0 : false;
     }
 
     return response;
-  }
+  };
 
   return (
     <section className='py-6'>
@@ -211,7 +215,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   {item?.staffCount ?? item?.staff?.length ?? 0}{' '}
                 </div>
 
-                <div className='col-span-5 lg:col-span-4'>
+                <div className='col-span-5 lg:col-span-4 uppercase'>
                   {' '}
                   {item?.instituteAddress ?? '-'}{' '}
                 </div>
@@ -226,7 +230,10 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl  bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <Link href={`/super-admin/school?id=${item.id}`} className='block p-4 hover:bg-gray-200 w-full'>
+                        <Link
+                          href={`/super-admin/school?id=${item.id}`}
+                          className='block p-4 hover:bg-gray-200 w-full'
+                        >
                           Edit
                         </Link>
                         <button
@@ -320,7 +327,7 @@ const SchoolByType = ({ name, title }: { name: string; title: string }) => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < schools.paging.totalPage
+                  pagingData.page < schools.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

@@ -76,7 +76,7 @@ export function useGetTeacherTimetable({
   const query = useQuery({
     queryKey: 'class_teacher_timetable',
     queryFn: () => {
-      if (classId && teacherId) {
+      if (teacherId) {
         try {
           return request
             .get(

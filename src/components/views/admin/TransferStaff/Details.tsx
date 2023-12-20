@@ -6,8 +6,24 @@ import FormInput from '@/components/input/formInput';
 import Select from '@/components/input/formSelect';
 import logger from '@/lib/logger';
 import { useGetSchools } from '@/server/institution';
-import { useEffect, useState } from 'react';
 import { Staff } from '@/types/institute';
+import { useEffect, useState } from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 type payloadProp = {
   staffId?: string;
@@ -28,11 +44,27 @@ type Iprops = {
   handleStaffNextPage?: (v: number) => void;
 };
 
-const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSearch, handleStaffPrevPage, handleStaffNextPage, staffId, newInstitutionId, currentStaff }: Iprops) => {
+const Biodata = ({
+  register,
+  errors,
+  staffs,
+  setPayload,
+  // payload,
+  handleStaffSearch,
+  handleStaffPrevPage,
+  handleStaffNextPage,
+  // staffId,
+  // newInstitutionId,
+  currentStaff,
+}: Iprops) => {
   const [open, setOpen] = useState(false);
   const [openStaffModal, setOpenStaffModal] = useState(false);
-  const [selectedSchool, setSelectedSchool] = useState([currentStaff?.institution?.instituteName ?? '']);
-  const [selectedStaff, setSelectedStaff] = useState([`${currentStaff?.user?.lastName} ${currentStaff?.user?.firstName}` ?? '']);
+  const [selectedSchool, setSelectedSchool] = useState([
+    currentStaff?.institution?.instituteName ?? '',
+  ]);
+  const [selectedStaff, setSelectedStaff] = useState([
+    `${currentStaff?.user?.lastName} ${currentStaff?.user?.firstName}` ?? '',
+  ]);
   const [currentSelection, setCurrentSelection] = useState('');
   const [itemIndex, setItemIndex] = useState<null | number>(null);
 
@@ -41,10 +73,11 @@ const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSea
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    query,
+    query: query,
+    include: false,
   });
 
-  const { data: schools, error, refetch } = useGetSchools({ ...pagingData });
+  const { data: schools } = useGetSchools({ ...pagingData });
   const handleSearch = (value: string) => {
     logger(value);
     setQuery(value);
@@ -81,7 +114,7 @@ const Biodata = ({ register, errors, staffs, setPayload, payload, handleStaffSea
     if (itemIndex) {
       getSelecteditem(itemIndex);
     }
-  }, [itemIndex, schools?.data, staffs?.data]);
+  }, [currentSelection, itemIndex, schools?.data, staffs?.data]);
 
   return (
     <section className=''>

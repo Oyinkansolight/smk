@@ -1,3 +1,4 @@
+import { useGlobalContext } from '@/hooks/useGlobalState';
 import clsxm from '@/lib/clsxm';
 import { getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -12,11 +13,11 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useGeoLocation } from 'use-geo-location';
 
-const institutionData = getFromSessionStorage('institution');
+const savedInstitutionData = getFromSessionStorage('institution');
 
 export default function ClockInTime() {
   const clockIn = useClockIn();
-  const submitCoordinates = useSubmitStaffCoordinates()
+  const submitCoordinates = useSubmitStaffCoordinates();
   // const clockOut = useClockOut();
   const { data: clockInfo } = useGetClockInfo();
   const { data: profile } = useGetProfile();
@@ -25,15 +26,19 @@ export default function ClockInTime() {
   const [isLoading, setIsLoading] = useState(false);
   const [isClockingIn, setIsClockingIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState<Duration | undefined>();
+  const { institutionData } = useGlobalContext();
+
   const { latitude, longitude, loading, error } = useGeoLocation();
   let institute;
 
-  if (institutionData) {
-    institute = JSON.parse(institutionData);
+  if (savedInstitutionData) {
+    institute = JSON.parse(savedInstitutionData);
   }
 
-  const lat = institute?.instituteLat ?? 6.5994752;
-  const long = institute?.instituteLong ?? 3.3488896;
+  const lat = institutionData?.instituteLat ?? 6.5994752;
+  const long = institutionData?.instituteLong ?? 3.3488896;
+
+  console.log(institutionData);
 
   const { data: terms } = useGetSessionTerms({
     sessionId: profile?.currentSession?.[0]?.id,
@@ -68,9 +73,13 @@ export default function ClockInTime() {
   useEffect(() => {
     setIsLoading(loading);
     logger({ latitude, longitude, loading, error });
+    console.log(latitude, longitude);
+    console.log(lat, long);
+
     if (latitude && longitude) {
       //conver lat and long to number before usage
       const d = calculateEarthDistanceTwo(latitude, +lat, longitude, +long);
+      logger(d.toFixed(2));
       setDistance(d.toFixed(2));
       if (d < 200) {
         setInArea(true);
@@ -87,7 +96,16 @@ export default function ClockInTime() {
         }
       }
     }
-  }, [latitude, longitude, loading, error, lat, long, clockInfo?.isClockedIn, profile?.userInfo?.staff?.id]);
+  }, [
+    latitude,
+    longitude,
+    loading,
+    error,
+    lat,
+    long,
+    clockInfo?.isClockedIn,
+    profile?.userInfo?.staff?.id,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -155,7 +173,7 @@ export default function ClockInTime() {
         onClick={handleClockIn}
         className='rounded-sm bg-[#007AFF] py-2 px-5 text-white'
       >
-        {isClockingIn ? "Loading..." : "Clock In"}
+        {isClockingIn ? 'Loading...' : 'Clock In'}
       </button>
     </div>
   );
