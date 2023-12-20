@@ -44,7 +44,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
       <aside
         className={clsxm(
           open ? 'w-[230px] items-center' : 'w-0 xl:w-20',
-          'absolute order-first flex h-screen transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0 z-[100]'
+          'absolute order-first flex h-screen transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0 z-[100] hideScroll'
         )}
       >
         <div className='flex flex-col items-center'>
@@ -69,15 +69,14 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
             href='/teacher/classes'
             active={routeDetails && routeDetails.includes('classes') && true}
           />
-          {
-            <SideBarButton
-              open={open}
-              icon={<FaRegIdCard className='#C3CAD9' />}
-              title='My Student'
-              href='/teacher/student'
-              active={routeDetails && routeDetails.includes('student') && true}
-            />
-          }
+
+          <SideBarButton
+            open={open}
+            icon={<FaRegIdCard className='#C3CAD9' />}
+            title='My Student'
+            href='/teacher/student'
+            active={routeDetails && routeDetails.includes('student') && true}
+          />
 
           <SideBarButton
             open={open}

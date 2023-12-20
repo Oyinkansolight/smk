@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext, useContext } from 'react';
 
@@ -8,6 +10,8 @@ export type GlobalContent = {
   setLoadingCount: (v: number) => void;
   maxLoadingCount: number;
   setMaxLoadingCount: (v: number) => void;
+  institutionData: any;
+  setInstitutionData: (v: any) => void;
 };
 export const MyGlobalContext = createContext<GlobalContent>({
   isDataLoading: false,
@@ -16,5 +20,7 @@ export const MyGlobalContext = createContext<GlobalContent>({
   setLoadingCount: () => {},
   maxLoadingCount: 0,
   setMaxLoadingCount: () => {},
+  institutionData: null,
+  setInstitutionData: () => {},
 });
 export const useGlobalContext = () => useContext(MyGlobalContext);

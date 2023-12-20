@@ -133,6 +133,26 @@ export function useCreateSubject() {
   return mutation;
 }
 
+export function useUpdateSubject() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_subject',
+    mutationFn: async (body: Partial<CreateSubjectParams>) => {
+      return (
+        await request.patch(
+          '/v1/government/classes-subjects/update-subject',
+          body
+        )
+      ).data.data as Subject;
+    },
+    onSettled: (data) => {
+      client.refetchQueries('get_subject_list');
+      client.refetchQueries(['get_subject_list_by_id', data?.id]);
+    },
+  });
+  return mutation;
+}
+
 export function useGetSubjectList(params?: SubjectList) {
   const query = useQuery({
     queryKey: 'get_subject_list',
@@ -291,12 +311,27 @@ export function useGetParents(params: Partial<StudentsListByInstitution>) {
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
+
+export function useDeleteParent() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'delete_parent',
+    mutationFn: async (id?: string) =>
+      (await request.delete(`/v1/government/parent/${id}`)).data,
+    onSettled: () => {
+      client.refetchQueries('get_parents');
+    },
+  });
+  return mutation;
+}
+
 export function useGetSingleParent(params: { id: string }) {
   const query = useQuery({
     queryKey: 'get_parents',
     queryFn: async () => {
       try {
-        const d = await request.get(`/v1/government/parent/${params.id}`);
+        const d = await request.get(`/v1/government/parent/${params?.id}`);
         return d.data as PaginatedData<Student> | any;
       } catch (error) {
         logger(error);
@@ -644,6 +679,7 @@ export function useCreateStaff() {
   });
   return mutation;
 }
+
 export function useCreateStaffTransfer() {
   const client = useQueryClient();
   const mutation = useMutation({
@@ -652,12 +688,13 @@ export function useCreateStaffTransfer() {
       request.post('/v1/institutions/staff/transfers', params, {
         withCredentials: true,
       }),
-    onSettled: (data) => {
+    onSettled: () => {
       client.refetchQueries('get_staff_transfer_requests');
     },
   });
   return mutation;
 }
+
 export function useCreateStudentTransfer() {
   const client = useQueryClient();
   const mutation = useMutation({
@@ -672,6 +709,7 @@ export function useCreateStudentTransfer() {
   });
   return mutation;
 }
+
 export function useUpdateStudentTransfer() {
   const client = useQueryClient();
 
@@ -685,31 +723,41 @@ export function useUpdateStudentTransfer() {
           withCredentials: true,
         }
       ),
-    onSettled: (data) => {
-      client.refetchQueries('get_staff_transfer_requests');
+    onSettled: () => {
+      client.refetchQueries('get_student_transfer_requests');
     },
   });
   return mutation;
 }
+
 export function useUpdateStaffTransfer() {
   const client = useQueryClient();
 
   const mutation = useMutation({
     mutationKey: 'update-student-transfer',
-    mutationFn: (params: any) =>
-      request.patch(
+    mutationFn: (params: any) => {
+      const parsedParam = {};
+      if (params.status) parsedParam['status'] = params.status;
+      if (params.reason) parsedParam['reason'] = params.reason;
+      if (params.newInstitutionId)
+        parsedParam['newInstitutionId'] = params.newInstitutionId;
+      if (params.staffId) parsedParam['staffId'] = params.staffId;
+
+      return request.patch(
         `/v1/institutions/staff/transfers/action/${params.id}`,
-        { status: params.status },
+        parsedParam,
         {
           withCredentials: true,
         }
-      ),
-    onSettled: (data) => {
+      );
+    },
+    onSettled: () => {
       client.refetchQueries('get_staff_transfer_requests');
     },
   });
   return mutation;
 }
+
 export function useCreateParent() {
   const mutation = useMutation({
     mutationKey: 'create-parent',
@@ -717,6 +765,26 @@ export function useCreateParent() {
       request.post('/v1/government/parent', params, {
         withCredentials: true,
       }),
+  });
+  return mutation;
+}
+
+export function useUpdateParent() {
+  const mutation = useMutation({
+    mutationKey: 'update-parent',
+    mutationFn: (params: any) => {
+      const parsedParam = {};
+
+      if (params.firstName) parsedParam['firstName'] = params.firstName;
+      if (params.lastName) parsedParam['lastName'] = params.lastName;
+      if (params.profileImg) parsedParam['profileImg'] = params.profileImg;
+      if (params.address) parsedParam['address'] = params.address;
+      if (params.lga) parsedParam['lga'] = params.lga;
+
+      return request.patch(`/v1/government/parent/${params.id}`, parsedParam, {
+        withCredentials: true,
+      });
+    },
   });
   return mutation;
 }
@@ -996,4 +1064,39 @@ export function useGetStudentTransferRequests(
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
+}
+
+export function useUpdateInstitution() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_institution',
+    mutationFn: async (params: any) => {
+      const parsedParams = {};
+
+      if (params.instituteEmail)
+        parsedParams['instituteEmail'] = params.instituteEmail;
+      if (params.instituteType)
+        parsedParams['instituteType'] = params.instituteType;
+      if (params.instituteAddress)
+        parsedParams['instituteAddress'] = params.instituteAddress;
+      if (params.lga) parsedParams['lga'] = params.lga;
+      if (params.town) parsedParams['town'] = params.town;
+      if (params.instituteName)
+        parsedParams['instituteName'] = params.instituteName;
+
+      return (
+        await request.patch(
+          `/v1/government/institutes/${params.id}`,
+          parsedParams,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data;
+    },
+    onSettled: (data) => {
+      client.refetchQueries(`get_institution_list_${data.userId ?? ''}`);
+    },
+  });
+  return mutation;
 }

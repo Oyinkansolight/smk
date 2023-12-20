@@ -4,6 +4,7 @@
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import AddSubjectModal from '@/components/modals/add-subject-modal';
+import EditSubjectModal from '@/components/modals/edit-subject-modal';
 import { BasicSearch } from '@/components/search';
 import { INSTITUTION_TYPES } from '@/constant/institution';
 import clsxm from '@/lib/clsxm';
@@ -218,11 +219,11 @@ const AllSubjects = () => {
 
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                        <AddSubjectModal>
+                        <EditSubjectModal subject={item}>
                           <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
                             Edit
                           </div>
-                        </AddSubjectModal>
+                        </EditSubjectModal>
                         <div
                           onClick={() => {
                             setItemToDelete(item.id ?? '');

@@ -91,3 +91,27 @@ export function useGetRoles() {
 
   return query;
 }
+
+export function useGetRoleById(id?: string) {
+  const query = useQuery({
+    queryKey: 'get_role_by_id',
+    queryFn: async () => {
+      if (!id) return;
+      try {
+        const d = await request.get(`/v1/government/roles/find-role?id=${id}`);
+        return d.data.data.data;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+
+  const { refetch } = query;
+
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [id, refetch]);
+
+  return query;
+}

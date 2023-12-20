@@ -8,7 +8,6 @@ import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useDeleteStudent } from '@/server/government/classes_and_subjects';
 import {
   useDeleteStudentRequest,
   useGetStudentTransferRequests,
@@ -108,7 +107,7 @@ const AllStudentTransferRequests = () => {
   }, [error]);
 
   return (
-    <section className='py-6'>
+    <section className='py-6 layout'>
       <ControlledModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}
@@ -301,7 +300,7 @@ const AllStudentTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < students.paging.totalPage
+                    pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

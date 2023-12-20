@@ -1,4 +1,4 @@
-import { ButtonVariant } from '@/components/buttons/Button';
+import Button, { ButtonVariant } from '@/components/buttons/Button';
 import GenericChart from '@/components/cards/GenericChart';
 import { BarChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
@@ -10,9 +10,12 @@ import LoginLogsTable from '@/components/tables/LoginLogsTable';
 import LowBatteriesTable from '@/components/tables/LowBatteriesTable';
 import RecentlyAddedInstitutions from '@/components/tables/RecentlyAddedInstitutions';
 import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequestsTable';
+import request from '@/server';
 import { useGetAdminCharts } from '@/server/dashboard';
 import { EnrollmentAnalysis } from '@/types';
 import React from 'react';
+import { FiDownload } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 const SuperAdminCharts = ({
   variant,
@@ -37,6 +40,24 @@ const SuperAdminCharts = ({
       </div>
     );
   }
+  function HandleDownload() {
+    toast.success('Downloading...');
+    request
+      .get('/v1/government/dashboards/generate-csv-data')
+      .then((response) => {
+        const link = document.createElement('a');
+        console.log(response);
+
+        link.href = response.data.url;
+        link.setAttribute('download', 'filename.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   return (
     <>
@@ -44,10 +65,27 @@ const SuperAdminCharts = ({
         <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3'>
           <div className='flex flex-col gap-y-7'>
             <GenericChart
+              title='Enrolment Analysis'
+              icon={
+                <Button onClickHandler={HandleDownload}>
+                  <FiDownload />
+                </Button>
+              }
+              description='Total number of enrolment in the state for 2023/2024'
+              content={
+                <EnrolmentAnalysis
+                  instituteIndex={null}
+                  data={chartData?.enrollmentAnalysis as EnrollmentAnalysis}
+                />
+              }
+            />
+            <GenericChart
               titleClassName='bg-[#DADEE6]'
               title='Attendance Tracker'
               description='Total number that were present'
-              content={<BarChart data={chartData?.attendanceTracker} showLink />}
+              content={
+                <BarChart data={chartData?.attendanceTracker} showLink />
+              }
             />
 
             <GenericChart
@@ -55,7 +93,9 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#EDF5F2]'
               className='border-[#EDF5F2]'
               description='Total rate of attendance in the state'
-              content={<AttendanceRate data={chartData?.attendanceRate} showLink />}
+              content={
+                <AttendanceRate data={chartData?.attendanceRate} showLink />
+              }
             />
 
             {/* <GenericChart
@@ -65,12 +105,6 @@ const SuperAdminCharts = ({
               contentClassName='bg-[#EBF5F6]'
               content={<GenderDistribution data={chartData?.genderDistribution} />}
             /> */}
-
-            <GenericChart
-              title='Enrolment Analysis'
-              description='Total number of enrolment in the state'
-              content={<EnrolmentAnalysis instituteIndex={null} data={chartData?.enrollmentAnalysis as EnrollmentAnalysis} />}
-            />
           </div>
 
           <div className='flex flex-col gap-y-7'>
@@ -125,7 +159,12 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
               description='Recent staff transfer requests in the state'
-              content={<SuperTransferRequestsTable data={[...chartData.staffTransferRequests]} isStaff />}
+              content={
+                <SuperTransferRequestsTable
+                  data={[...chartData.staffTransferRequests]}
+                  isStaff
+                />
+              }
             />
 
             <GenericChart
@@ -133,7 +172,11 @@ const SuperAdminCharts = ({
               titleClassName='bg-[#E8ECF2]'
               className='border-[#E8ECF2]'
               description='Recent student transfer requests in the state'
-              content={<SuperTransferRequestsTable data={[...chartData.studentTransferRequests]} />}
+              content={
+                <SuperTransferRequestsTable
+                  data={[...chartData.studentTransferRequests]}
+                />
+              }
             />
           </div>
         </div>

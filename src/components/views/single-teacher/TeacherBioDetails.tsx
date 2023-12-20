@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { stripWhiteSpace } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateStaff } from '@/server/government/staff';
@@ -65,36 +66,86 @@ export default function TeacherBioDetails({
           });
         }
       }
-      console.log(data);
 
-      const payload: Staff = {
-        // profileImg: data.,
-        lga: data.lga,
-        email: data.email,
+      const payload: Partial<Staff> = {
+        // lga: data.lga,
+        // email: data.email,
         id: initStaff?.id,
-        dob: data.dateOfBirth,
-        address: data.address,
-        nextOfKin: data.nextOfKin,
-        gender: data.gender.toUpperCase(),
-        phoneOfNextOfKin: data.phoneNextOfKin,
-        addressOfNextOfKin: data.addressNextOfKin,
-        firstName: (data.fullName as string).split(' ')[0],
-        lastName: (data.fullName as string).split(' ')[1],
-        relationshipToNextOfKin: data.relationshipNextOfKin,
-        employmentDetails: {
+        // dob: data.dateOfBirth,
+        // address: data.address,
+        // nextOfKin: data.nextOfKin,
+        // gender: data.gender.toUpperCase(),
+        // phoneOfNextOfKin: data.phoneNextOfKin,
+        // addressOfNextOfKin: data.addressNextOfKin,
+        // firstName: (data.fullName as string).split(' ')[0],
+        // lastName: (data.fullName as string).split(' ')[1],
+        // relationshipToNextOfKin: data.relationshipNextOfKin,
+        // employmentDetails: {
+        //   datePosted: data.datePosted,
+        //   retirementDate: data.retirementDate,
+        //   highestQualification: data.highestQualification,
+        //   DateOfFirstAppointment: data.dateOfAppointment,
+        // },
+        // trainingDetails,
+      };
+
+      if (data.lga) {
+        payload.lga = data.lga;
+      }
+
+      if (data.email) {
+        payload.email = data.email;
+      }
+
+      if (data.dateOfBirth) {
+        payload.dob = data.dateOfBirth;
+      }
+
+      if (data.address) {
+        payload.address = data.address;
+      }
+
+      if (data.nextOfKin) {
+        payload.nextOfKin = data.nextOfKin;
+      }
+
+      if (data.gender) {
+        payload.gender = data.gender.toUpperCase();
+      }
+
+      if (data.phoneNextOfKin) {
+        payload.phoneOfNextOfKin = data.phoneNextOfKin;
+      }
+
+      if (data.addressNextOfKin) {
+        payload.addressOfNextOfKin = data.addressNextOfKin;
+      }
+
+      if (data.fullName) {
+        payload.firstName = (data.fullName as string).split(' ')[0];
+        payload.lastName = (data.fullName as string).split(' ')[1];
+      }
+
+      if (data.relationshipNextOfKin) {
+        payload.relationshipToNextOfKin = data.relationshipNextOfKin;
+      }
+
+      if (data.datePosted) {
+        payload.employmentDetails = {
           datePosted: data.datePosted,
           retirementDate: data.retirementDate,
           highestQualification: data.highestQualification,
           DateOfFirstAppointment: data.dateOfAppointment,
-        },
-        trainingDetails,
-      };
+        };
+      }
+
+      if (trainingDetails.length > 0) {
+        payload.trainingDetails = trainingDetails;
+      }
 
       if (data.phone) {
         payload.phoneNumber = data.phone;
       }
-
-      console.log(payload);
 
       try {
         const response = await update.mutateAsync(payload);
@@ -119,8 +170,7 @@ export default function TeacherBioDetails({
       setValue('gender', initStaff?.gender);
       setValue(
         'fullName',
-        `${(initStaff?.user ?? {})?.firstName} ${
-          (initStaff?.user ?? {})?.lastName
+        `${stripWhiteSpace((initStaff?.user ?? {})?.firstName ?? '')} ${stripWhiteSpace((initStaff?.user ?? {})?.lastName ?? '')
         }`
       );
       setValue('dateOfBirth', initStaff.dob);
@@ -341,7 +391,7 @@ export default function TeacherBioDetails({
         </div>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           {initStaff?.trainingDetails &&
-          initStaff.trainingDetails.length > 0 ? (
+            initStaff.trainingDetails.length > 0 ? (
             initStaff.trainingDetails?.map((training, index) => (
               <>
                 <Controller

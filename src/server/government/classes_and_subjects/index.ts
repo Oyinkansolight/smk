@@ -89,6 +89,7 @@ export function useGetSubjectGradeBook(params: GetSubjectGradeBookParams) {
   ]);
   return query;
 }
+
 export function useCreateSubjectGradeBook() {
   const client = useQueryClient();
 
@@ -104,6 +105,7 @@ export function useCreateSubjectGradeBook() {
   });
   return mutation;
 }
+
 export function useResetSubjectGradeBook() {
   const client = useQueryClient();
 
@@ -119,6 +121,7 @@ export function useResetSubjectGradeBook() {
   });
   return mutation;
 }
+
 export function useCreateResultFromGradeBook() {
   const client = useQueryClient();
 
@@ -134,6 +137,7 @@ export function useCreateResultFromGradeBook() {
   });
   return mutation;
 }
+
 export function useGetSubjectScoreSheet(params: CreateGradeSettingsParams) {
   const query = useQuery({
     queryKey: 'get-gradebook-scoresheet',
@@ -160,6 +164,7 @@ export function useGetSubjectScoreSheet(params: CreateGradeSettingsParams) {
   ]);
   return query;
 }
+
 export function useEditSubjectGradeBook() {
   const client = useQueryClient();
 
@@ -179,6 +184,7 @@ export function useEditSubjectGradeBook() {
   });
   return mutation;
 }
+
 export function useDeleteSubjectGradeBook() {
   const client = useQueryClient();
 
@@ -198,6 +204,7 @@ export function useDeleteSubjectGradeBook() {
   });
   return mutation;
 }
+
 export function useGetSubjectGradeList(params: GetSubjectGradeBookParams) {
   const query = useQuery({
     queryKey: 'get_subject_grade_List',
@@ -330,6 +337,7 @@ export function useDeleteSubject() {
   });
   return mutation;
 }
+
 export function useDeleteStaff() {
   const client = useQueryClient();
 
@@ -344,6 +352,7 @@ export function useDeleteStaff() {
   });
   return mutation;
 }
+
 export function useDeleteStudent() {
   const client = useQueryClient();
 
@@ -359,6 +368,7 @@ export function useDeleteStudent() {
   });
   return mutation;
 }
+
 export function useDeleteClass() {
   const client = useQueryClient();
 

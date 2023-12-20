@@ -72,7 +72,7 @@ export default function DragDropGeneric({
               width={48}
             />
             <div>
-              Drag and drop an image or,{' '}
+              Drag and drop a document or,{' '}
               <label
                 className='inline text-[#008146] cursor-pointer'
                 htmlFor='file-upload-input_drag_drop_generic'

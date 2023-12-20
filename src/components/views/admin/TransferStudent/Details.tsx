@@ -60,8 +60,9 @@ const Biodata = ({ register, errors, students, setPayload }: Iprops) => {
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 100,
-    query,
-  });
+    query: query,
+    include: false,
+  })
 
   const { data: schools, error, refetch } = useGetSchools({ ...pagingData });
   const handleSearch = (value: string) => {

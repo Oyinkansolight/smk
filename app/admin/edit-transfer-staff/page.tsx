@@ -7,10 +7,13 @@ import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/TransferStaff/Details';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetStaffs } from '@/server/government/staff';
 import {
-  useCreateStaffTransfer,
+  useGetTeacherById,
   useGetTeachersListByInstitution,
+  useUpdateStaffTransfer,
 } from '@/server/institution';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
@@ -18,20 +21,33 @@ import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
 
-const TransferStaff = () => {
+const EditTransferStaff = () => {
+  const params = useSearchParams();
+  const reason = params?.get('reason');
+  const staffId = params?.get('staffId');
+  const transferId = params?.get('transferId');
+  const newInstitutionId = params?.get('newInstitutionId');
+
+  const { data: currentStaff } = useGetTeacherById({
+    id: staffId,
+  });
+
   const {
     register,
-
     formState: { errors },
     handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
+    defaultValues: {
+      reason,
+    }
   });
   const { data: institutionProfile } = useGetProfile();
 
+
   const [loading, setLoading] = useState(false);
-  const [stage, setStage] = useState(1);
+  const [stage] = useState(1);
 
   const [query, setQuery] = useState('');
 
@@ -43,16 +59,15 @@ const TransferStaff = () => {
   });
 
   const [payload, setPayload] = useState({
-    staffId: '',
-    reason: '',
-    newInstitutionId: '',
+    staffId: staffId ?? '',
+    reason: reason ?? '',
+    newInstitutionId: newInstitutionId ?? '',
   });
 
 
   const { data: staffs, isLoading } = useGetTeachersListByInstitution({ ...pagingData });
 
-  const [isOpen, setisOpen] = useState(false);
-  const [publishData] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -68,23 +83,24 @@ const TransferStaff = () => {
     setPagingData({ ...pagingData, page: pagingData.page - 1 });
   };
 
-  const handleCreateStaffTransfer = useCreateStaffTransfer();
+  const handleUpdateStaffTransfer = useUpdateStaffTransfer();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
     const parsedPayload = {
       ...payload,
-      ...data
+      ...data,
+      id: transferId,
     }
 
     if (parsedPayload.staffId && parsedPayload.newInstitutionId && parsedPayload.reason)
 
       try {
         setLoading(true);
-        const response = await handleCreateStaffTransfer.mutateAsync(parsedPayload);
+        const response = await handleUpdateStaffTransfer.mutateAsync(parsedPayload);
 
         if (response) {
-          toast.success('Staff transfer booked successfully');
-          setisOpen(true);
+          toast.success('Staff transfer updated successfully');
+          setIsOpen(true);
           setLoading(false);
         }
       } catch (error) {
@@ -104,7 +120,7 @@ const TransferStaff = () => {
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Staff transfer request successful'
+          title='Staff transfer request updated successfully'
           description='Hurray!!!'
           link='/admin/all-transfer-request-staff'
           textLink='Manage Staff'
@@ -112,7 +128,7 @@ const TransferStaff = () => {
       )}
       <BackButton />
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>Transfer Staff</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Edit Transfer Staff</h1>
 
       <Stepper
         variant='#008146'
@@ -136,14 +152,17 @@ const TransferStaff = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {staffs?.data && (
             <Details
-              register={register}
               errors={errors}
               staffs={staffs}
-              setPayload={setPayload}
               payload={payload}
+              staffId={staffId ?? ''}
+              register={register}
+              setPayload={setPayload}
+              currentStaff={currentStaff}
               handleStaffSearch={handleSearch}
               handleStaffNextPage={handleNextPage}
               handleStaffPrevPage={handlePrevPage}
+              newInstitutionId={newInstitutionId ?? ''}
             />
           )}
 
@@ -167,4 +186,4 @@ const TransferStaff = () => {
   );
 };
 
-export default TransferStaff;
+export default EditTransferStaff;

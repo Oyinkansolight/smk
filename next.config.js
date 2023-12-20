@@ -13,10 +13,16 @@ const nextConfig = {
       transform: 'react-icons/{{member}}',
     },
   },
+  productionBrowserSourceMaps: false, // Disable source maps in development
+  optimizeFonts: false, // Disable font optimization
+  minify: false, // Disable minification
 
+  fastRefresh: true,
   reactStrictMode: true,
   swcMinify: true,
-  //  experimental: { appDir: true },
+  concurrentFeatures: true,
+
+  // experimental: { appDir: true },
 
   async redirects() {
     return [

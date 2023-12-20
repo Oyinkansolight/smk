@@ -3,6 +3,7 @@ import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import { isProd } from '@/constant/env';
 import { getURL, uploadDocument } from '@/firebase/init';
+import { stripWhiteSpace } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useUpdateStudent } from '@/server/government/student';
 import { Student } from '@/types/institute';
@@ -27,7 +28,6 @@ export default function StudentBioDetailsAlt({
 
   const update = useUpdateStudent();
   const onSubmit = async (data: any) => {
-    console.log(data);
 
     const environment = isProd ? 'production' : 'staging';
     const array = await data?.image?.[0]?.arrayBuffer();
@@ -38,7 +38,6 @@ export default function StudentBioDetailsAlt({
         array,
         environment
       );
-      console.log(uploadResponse);
 
       if (uploadResponse) {
         uploadedImage = uploadResponse;
@@ -49,26 +48,40 @@ export default function StudentBioDetailsAlt({
 
     if (initStudent?.id) {
       setIsLoading(true);
+
+      const payload = {
+        id: initStudent?.id,
+      }
+
+      if (uploadedImage) {
+        payload['profileImg'] = uploadedImage
+      }
+
+      if (data.email) {
+        payload['email'] = data.email
+      }
+
+      if (data.studentPhone) {
+        payload['phoneNumber'] = data.studentPhone
+      }
+
+      if (data.fullName) {
+        payload['firstName'] = (data.fullName as string).split(' ')[0]
+        payload['lastName'] = (data.fullName as string).split(' ')[1] ?? (data.fullName as string).split(' ')[2]
+      }
+
+      if (data.address) {
+        payload['address'] = data.address
+      }
+
+
       try {
         if (uploadedImage) {
-          await update.mutateAsync({
-            profileImg: uploadedImage,
-            email: data.email,
-            id: initStudent?.id,
-            phoneNumber: data.studentPhone,
-            firstName: (data.fullName as string).split(' ')[0],
-            lastName: (data.fullName as string).split(' ')[1],
-            address: data.address,
-          });
+          payload['profileImg'] = uploadedImage
+
+          await update.mutateAsync(payload);
         } else {
-          await update.mutateAsync({
-            email: data.email,
-            id: initStudent?.id,
-            phoneNumber: data.studentPhone,
-            firstName: (data.fullName as string).split(' ')[0],
-            lastName: (data.fullName as string).split(' ')[1],
-            address: data.address,
-          });
+          await update.mutateAsync(payload);
           toast.success('Update Successful');
         }
       } catch (error) {
@@ -92,9 +105,7 @@ export default function StudentBioDetailsAlt({
       setValue('parentOccupation', initStudent?.parentOccupation);
       setValue(
         'fullName',
-        `${(initStudent?.user ?? [])[0]?.firstName} ${
-          (initStudent?.user ?? [])[0]?.lastName
-        }`
+        `${stripWhiteSpace((initStudent?.user ?? [])[0]?.firstName)} ${stripWhiteSpace((initStudent?.user ?? [])[0]?.lastName)}`
       );
       setValue('dateOfBirth', initStudent.dob);
       setValue('address', (initStudent?.user ?? [])[0]?.address);

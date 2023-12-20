@@ -27,6 +27,12 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -105,8 +111,9 @@ const Page = () => {
       />
       <StudentTeacherProfileCard
         image={url}
-        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${(student?.user ?? [])[0]?.lastName ?? ''
-          }`}
+        name={`${(student?.user ?? [])[0]?.firstName ?? 'Loading...'} ${
+          (student?.user ?? [])[0]?.lastName ?? ''
+        }`}
         school={student?.institution?.instituteName ?? ''}
         id={student?.id || ''}
         student
@@ -147,8 +154,9 @@ const Page = () => {
           {tabIdx === 0 && (
             <StudentDashboardView
               schoolType='Secondary'
-              classArm={`${student ? student?.class?.class.name || 'null' : 'Loading...'
-                }  ${student ? student?.class?.arm || '' : ''}`}
+              classArm={`${
+                student ? student?.class?.class.name || 'null' : 'Loading...'
+              }  ${student ? student?.class?.arm || '' : ''}`}
               studentAve={student?.readingProficiency}
               totalSubject={classArmData?.subjects.length ?? 0}
             />
@@ -159,7 +167,9 @@ const Page = () => {
               classArmId={classArmData?.id}
             />
           )}
-          {tabIdx === 2 && <SingleStudentAttendanceTracker studentId={studentId} />}
+          {tabIdx === 2 && (
+            <SingleStudentAttendanceTracker studentId={student?.id} />
+          )}
         </div>
       )}
       {gridTabIdx === 1 && (

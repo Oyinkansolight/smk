@@ -63,14 +63,14 @@ export function useCreateSchoolType() {
     mutationKey: 'update_user',
     mutationFn: async (params: schoolType) =>
       (
-        await request.patch(
+        await request.post(
           '/v1/government/institutes/add-institute-type',
           params,
           {
             withCredentials: true,
           }
         )
-      ).data.data.data,
+      ).data.data,
     // onSettled: (data) => {
 
     //   client.refetchQueries(`get_staff_list_${data?.id ?? ''}`);

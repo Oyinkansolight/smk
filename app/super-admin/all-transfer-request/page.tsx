@@ -20,47 +20,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllStudentTransferRequests = () => {
   const [action, setAction] = useState<number | null>(null);
@@ -154,12 +113,10 @@ const AllStudentTransferRequests = () => {
         toggleModal={toggleModal}
         content={
           <ConfirmModalContent
-            title={`${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } Student Request`}
-            body={`Are you sure you want to ${
-              status === 'GRANTED' ? 'Accept' : 'Deny'
-            } this request?`}
+            title={`${status === 'GRANTED' ? 'Accept' : 'Deny'
+              } Student Request`}
+            body={`Are you sure you want to ${status === 'GRANTED' ? 'Accept' : 'Deny'
+              } this request?`}
             toggleModal={toggleModal}
             handleAction={handleUpdate}
           />
@@ -350,7 +307,7 @@ const AllStudentTransferRequests = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                  pagingData.page < students.paging.totalPage
+                    pagingData.page < students.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

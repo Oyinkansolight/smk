@@ -1,5 +1,7 @@
 'use client';
 
+import { MyGlobalContext } from '@/hooks/useGlobalState';
+import { getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import request from '@/server';
 // Import the styles provided by the react-pdf-viewer packages
@@ -8,7 +10,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useBattery } from '@uidotdev/usehooks';
 import Cookies from 'js-cookie';
 import { isNumber } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-circular-progressbar/dist/styles.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ToastContainer } from 'react-toastify';
@@ -31,6 +33,14 @@ export default function RootLayout({
     level: batteryLevel,
     charging,
   } = useBattery();
+  const savedInstitutionData = getFromSessionStorage('institution');
+
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [loadingCount, setLoadingCount] = useState(0);
+  const [maxLoadingCount, setMaxLoadingCount] = useState(0);
+  const [institutionData, setInstitutionData] = useState<any | string>(() =>
+    JSON.parse(savedInstitutionData ? savedInstitutionData : '{}')
+  );
 
   // const { data: isValidDevice } = useGetValidIMEI();
   // console.log(isValidDevice);
@@ -63,9 +73,23 @@ export default function RootLayout({
     return (
       <html>
         <head />
+
         <body>
           <QueryClientProvider client={queryClient}>
-            {children}
+            <MyGlobalContext.Provider
+              value={{
+                isDataLoading,
+                setIsDataLoading,
+                loadingCount,
+                setLoadingCount,
+                maxLoadingCount,
+                setMaxLoadingCount,
+                institutionData,
+                setInstitutionData,
+              }}
+            >
+              {children}
+            </MyGlobalContext.Provider>
           </QueryClientProvider>
           <ToastContainer />
         </body>

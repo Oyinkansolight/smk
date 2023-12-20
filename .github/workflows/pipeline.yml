@@ -1,15 +1,23 @@
-name: Deploy to Elastic Beanstalk
+name: Deploy to Amazon Elastic Container
 
 on:
   push:
     branches:
-      - Staging
+      - staging
+      - production
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
     env:
-      VERSION_TAG: v1
+      STAGING_ECR_REPOSITORY: es-ems-fe-staging           # set this to your Amazon ECR repository name
+      PRODUCTION_ECR_REPOSITORY: es-ems-fe-production
+      STAGING_ECS_SERVICE: es-ems-fe-staging
+      PRODUCTION_ECS_SERVICE: es-ems-fe-prd	  # set this to your Amazon ECS service name
+      STAGING_ECS_CLUSTER: es-ems-staging                # set this to your Amazon ECS cluster name
+      PRODUCTION_ECS_CLUSTER: es-ems-prod
+      ECR_REGISTRY: 204476358176.dkr.ecr.eu-west-2.amazonaws.com
 
     steps:
       - name: Checkout code
@@ -20,47 +28,46 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Clear dependencies and cache
-        run: |
-          echo Clearing dependencies and cache.......
-          rm -rf node_modules
-          rm package-lock.json
-          rm -rf dist
-
-      - name: Install dependencies
-        run: |
-          echo Installing dependencies.......
-          npm install
-
-      - name: Lint fix
-        run: npm run lint:fix
-
-      - name: Lint
-        run: npm run lint:strict
-
-      - name: Test frontend application
-        run: |
-          echo Testing application.......
-          npm run test
-
-      - name: Build frontend application
-        run: |
-          echo Building application.......
-          npm run build
-
-      - name: Generate deployment package
-        run: zip -r deploy-ems-fe.zip . -x \*node_modules\* -x \*.next\*
-
-      - name: Deploy to Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v16
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
         with:
-          aws_access_key: ${{secrets.AWS_EB_ACCESS_KEY_ID}}
-          aws_secret_key: ${{secrets.AWS_EB_SECRET_ACCESS_KEY}}
-          application_name: es-ems-fe-staging
-          environment_name: ES-EMS-FE-Staging-env
-          region: ${{secrets.AWS_EB_REGION}}
-          version_label: 'v1.1.${{ github.run_number }}'
-          deployment_package: deploy-ems-fe.zip
+          aws-access-key-id: ${{ secrets.AWS_EB_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_EB_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_EB_REGION }}
 
-      - name: Deployed!!!!
-        run: echo App deployed to ELB Instance
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+      - name: Build, tag, and push image to Amazon ECR for staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$STAGING_ECR_REPOSITORY .
+          docker push $ECR_REGISTRY/$STAGING_ECR_REPOSITORY
+          echo "image=$ECR_REGISTRY/$STAGING_ECR_REPOSITORY" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push image to Amazon ECR for production
+        if: github.ref == 'refs/heads/production'
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$PRODUCTION_ECR_REPOSITORY .
+          docker push $ECR_REGISTRY/$PRODUCTION_ECR_REPOSITORY
+          echo "image=$ECR_REGISTRY/$PRODUCTION_ECR_REPOSITORY" >> $GITHUB_OUTPUT
+
+      - name: Deploy image to staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          aws ecs update-service --cluster ${{ env.STAGING_ECS_CLUSTER }} --service ${{ env.STAGING_ECS_SERVICE }} --force-new-deployment
+      
+      - name: Deploy image to production
+        if: github.ref == 'refs/heads/production'
+        run: |
+          aws ecs update-service --cluster ${{ env.PRODUCTION_ECS_CLUSTER }} --service ${{ env.PRODUCTION_ECS_SERVICE }} --force-new-deployment

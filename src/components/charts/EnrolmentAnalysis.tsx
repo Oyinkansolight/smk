@@ -1,69 +1,42 @@
 import { ResponsiveLine } from '@nivo/line';
 
-const d = [
-  {
-    id: '2020/2021',
-    color: 'hsl(176, 100%, 40%)',
-    data: [
-      {
-        x: '1st Term',
-        y: 19000,
-      },
-      {
-        x: '2nd Term',
-        y: 12000,
-      },
-      {
-        x: '3rd Term',
-        y: 14000,
-      },
-    ],
-  },
-  {
-    id: '2021/2022',
-    color: 'hsla(15, 100%, 60%, 1)',
-    data: [
-      {
-        x: '1st Term',
-        y: 20000,
-      },
-      {
-        x: '2nd Term',
-        y: 15000,
-      },
-      {
-        x: '3rd Term',
-        y: 20500,
-      },
-    ],
-  },
-  {
-    id: '2022/2023',
-    color: 'hsla(226, 100%, 60%, 1)',
-    data: [
-      {
-        x: '1st Term',
-        y: 35000,
-      },
-      {
-        x: '2nd Term',
-        y: 35200,
-      },
-      {
-        x: '3rd Term',
-        y: 30000,
-      },
-    ],
-  },
-];
-
 const EnrolmentAnalysis = ({ data, instituteIndex }) => {
-  const secondaryLegendName = data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) ? 'SECONDARY ' + data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.SECONDARY?.[2]?.term?.endDate.slice(0, 4) : 'SECONDARY';
-  const primaryLegendName = data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) ? 'PRIMARY ' + data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.PRIMARY?.[2]?.term?.endDate.slice(0, 4) : 'PRIMARY';
-  const tertiaryLegendName = data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) ? 'TERTIARY ' + data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) + '/' + data.TERTIARY?.[2]?.term?.endDate.slice(0, 4) : 'TERTIARY';
-  const eccdeLegendName = data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) ? 'ECCDE ' + data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) + '/' + data.ECCDE?.[2]?.term?.endDate.slice(0, 4) : 'ECCDE';
-  const btvetLegendName = data?.BTVET?.[0]?.term?.startDate.slice(0, 4) ? 'BTVET ' + data?.BTVET?.[0]?.term?.startDate.slice(0, 4) + '/' + data.BTVET?.[2]?.term?.endDate.slice(0, 4) : 'BTVET';
-  const tvetLegendName = data?.TVET?.[0]?.term?.startDate.slice(0, 4) ? 'TVET ' + data?.TVET?.[0]?.term?.startDate.slice(0, 4) + '/' + data.TVET?.[2]?.term?.endDate.slice(0, 4) : 'TVET';
+  const secondaryLegendName = data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'SECONDARY '
+    : // data?.SECONDARY?.[0]?.term?.startDate.slice(0, 4) +
+      // '/' +
+      // data.SECONDARY?.[2]?.term?.endDate.slice(0, 4)
+      'SECONDARY';
+  const primaryLegendName = data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'PRIMARY ' +
+      data?.PRIMARY?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.PRIMARY?.[2]?.term?.endDate.slice(0, 4)
+    : 'PRIMARY';
+  const tertiaryLegendName = data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4)
+    ? 'TERTIARY ' +
+      data?.TERTIARY?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.TERTIARY?.[2]?.term?.endDate.slice(0, 4)
+    : 'TERTIARY';
+  const eccdeLegendName = data?.ECCDE?.[0]?.term?.startDate.slice(0, 4)
+    ? 'ECCDE ' +
+      data?.ECCDE?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.ECCDE?.[2]?.term?.endDate.slice(0, 4)
+    : 'ECCDE';
+  const btvetLegendName = data?.BTVET?.[0]?.term?.startDate.slice(0, 4)
+    ? 'BTVET ' +
+      data?.BTVET?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.BTVET?.[2]?.term?.endDate.slice(0, 4)
+    : 'BTVET';
+  const tvetLegendName = data?.TVET?.[0]?.term?.startDate.slice(0, 4)
+    ? 'TVET ' +
+      data?.TVET?.[0]?.term?.startDate.slice(0, 4) +
+      '/' +
+      data.TVET?.[2]?.term?.endDate.slice(0, 4)
+    : 'TVET';
 
   const parsedData = [
     //* SECONDARY
@@ -184,9 +157,12 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
 
   return (
     <div className='h-96'>
-
       <ResponsiveLine
-        data={typeof (instituteIndex) === 'number' ? [parsedData[instituteIndex]] : parsedData}
+        data={
+          typeof instituteIndex === 'number'
+            ? [parsedData[instituteIndex]]
+            : parsedData
+        }
         margin={{ top: 130, right: 40, bottom: 70, left: 50 }}
         xScale={{ type: 'point' }}
         yScale={{
@@ -252,7 +228,7 @@ const EnrolmentAnalysis = ({ data, instituteIndex }) => {
         ]}
       />
     </div>
-  )
+  );
 };
 
 export default EnrolmentAnalysis;

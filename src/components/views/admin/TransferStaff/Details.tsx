@@ -4,45 +4,10 @@
 import PopOverSelect from '@/components/input/PopOverSelect';
 import FormInput from '@/components/input/formInput';
 import Select from '@/components/input/formSelect';
-import FormSelectInstitution from '@/components/input/formSelectInstitution';
-import FormSelectTeachers from '@/components/input/formSelectteachers';
 import logger from '@/lib/logger';
 import { useGetSchools } from '@/server/institution';
+import { Staff } from '@/types/institute';
 import { useEffect, useState } from 'react';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -69,15 +34,37 @@ type Iprops = {
   register: any;
   errors: any;
   staffs: any;
-  setPayload?: (v: any) => void;
   payload?: payloadProp;
+  staffId?: string;
+  currentStaff?: Staff;
+  newInstitutionId?: string;
+  setPayload?: (v: any) => void;
+  handleStaffSearch?: (v: string) => void;
+  handleStaffPrevPage?: (v: number) => void;
+  handleStaffNextPage?: (v: number) => void;
 };
 
-const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
+const Biodata = ({
+  register,
+  errors,
+  staffs,
+  setPayload,
+  // payload,
+  handleStaffSearch,
+  handleStaffPrevPage,
+  handleStaffNextPage,
+  // staffId,
+  // newInstitutionId,
+  currentStaff,
+}: Iprops) => {
   const [open, setOpen] = useState(false);
   const [openStaffModal, setOpenStaffModal] = useState(false);
-  const [selectedSchool, setSelectedSchool] = useState(['']);
-  const [selectedStaff, setSelectedStaff] = useState(['']);
+  const [selectedSchool, setSelectedSchool] = useState([
+    currentStaff?.institution?.instituteName ?? '',
+  ]);
+  const [selectedStaff, setSelectedStaff] = useState([
+    `${currentStaff?.user?.lastName} ${currentStaff?.user?.firstName}` ?? '',
+  ]);
   const [currentSelection, setCurrentSelection] = useState('');
   const [itemIndex, setItemIndex] = useState<null | number>(null);
 
@@ -85,11 +72,12 @@ const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
 
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
-    limit: 100,
-    query,
+    limit: 10,
+    query: query,
+    include: false,
   });
 
-  const { data: schools, error, refetch } = useGetSchools({ ...pagingData });
+  const { data: schools } = useGetSchools({ ...pagingData });
   const handleSearch = (value: string) => {
     logger(value);
     setQuery(value);
@@ -100,13 +88,22 @@ const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
     setItemIndex(index);
   };
 
+  const handleNextPage = () => {
+    setPagingData({ ...pagingData, page: pagingData.page + 1 });
+  };
+
+  const handlePrevPage = () => {
+    if (pagingData.page === 1) return;
+    setPagingData({ ...pagingData, page: pagingData.page - 1 });
+  };
+
   useEffect(() => {
     const getSelecteditem = (index) => {
       if (!index) return;
 
       if (currentSelection === 'staff') {
         setSelectedStaff([
-          `${staffs[index]?.user?.lastName} ${staffs[index]?.user?.firstName}`,
+          `${staffs?.data[index]?.user?.lastName} ${staffs?.data[index]?.user?.firstName}`,
         ]);
       }
       if (currentSelection === 'institution') {
@@ -117,7 +114,7 @@ const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
     if (itemIndex) {
       getSelecteditem(itemIndex);
     }
-  }, [itemIndex, schools?.data, staffs?.data]);
+  }, [currentSelection, itemIndex, schools?.data, staffs?.data]);
 
   return (
     <section className=''>
@@ -130,11 +127,13 @@ const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
         key2='user.lastName'
         setOpen={setOpenStaffModal}
         title='All Staffs'
-        data={staffs}
-        handleSearch={handleSearch}
+        data={staffs?.data}
+        handleSearch={handleStaffSearch}
         description="Select Staff's Name"
+        handlePrevPage={handleStaffPrevPage}
+        handleNextPage={handleStaffNextPage}
+        totalPages={staffs?.paging?.totalPage}
         setSelectedItem={(value) => {
-          console.log(value);
           setPayload &&
             setPayload((prev: payloadProp) => {
               return {
@@ -163,9 +162,11 @@ const Biodata = ({ register, errors, staffs, setPayload, payload }: Iprops) => {
         title='All schools'
         data={schools?.data}
         handleSearch={handleSearch}
+        handlePrevPage={handlePrevPage}
+        handleNextPage={handleNextPage}
+        totalPages={schools?.paging?.totalPage}
         description="Select institution's Name"
         setSelectedItem={(value) => {
-          console.log(value);
           setPayload &&
             setPayload((prev: payloadProp) => {
               return {

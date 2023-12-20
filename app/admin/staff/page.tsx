@@ -9,11 +9,11 @@ import EmptyView from '@/components/misc/EmptyView';
 import AddSubject from '@/components/modal/AddSubject';
 import ControlledModal from '@/components/modal/ControlledModal';
 import DeleteModalContent from '@/components/modal/DeleteModalContent';
-import SingleStudentAttendanceTracker from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
+import TeacherAttendance from '@/components/views/teacher/TaskListView';
 import TimetableView from '@/components/views/teacher/TimetableView';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
@@ -35,32 +35,6 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -69,7 +43,7 @@ const Page = () => {
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isAddSubject, setisAddSubject] = useState(false);
+  const [isAddSubject, setIsAddSubject] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState('/images/teacher_1.png');
 
@@ -92,16 +66,16 @@ const Page = () => {
     p?.get('id'),
     currentSessionId
   );
-  const [assignedClassSubject, setassignedClassSubject] = useState<
+  const [assignedClassSubject, setAssignedClassSubject] = useState<
     { classArmId: string | null; subjectId: string | null }[]
   >([{ classArmId: null, subjectId: null }]);
 
   const onClickHandler = () => {
-    setisAddSubject(!isAddSubject);
+    setIsAddSubject(!isAddSubject);
   };
 
   const addSubjectClass = () => {
-    setassignedClassSubject([
+    setAssignedClassSubject([
       ...assignedClassSubject,
       { classArmId: null, subjectId: null },
     ]);
@@ -128,7 +102,7 @@ const Page = () => {
   };
   const removeRemoveSubjectClass = (id: number) => {
     const updatedItems = assignedClassSubject.filter((_, i) => i !== id);
-    setassignedClassSubject(updatedItems);
+    setAssignedClassSubject(updatedItems);
     toast.success('Record deleted');
   };
   const handleSubjectClassChange = (name: string, value: any, id: number) => {
@@ -138,7 +112,7 @@ const Page = () => {
       }
       return item;
     });
-    setassignedClassSubject(updatedItems);
+    setAssignedClassSubject(updatedItems);
   };
   const handleUpdateStaff = useUpdateStaffSubject();
 
@@ -306,7 +280,7 @@ const Page = () => {
               )}
             </div>
           )}
-          {tabIdx === 2 && <SingleStudentAttendanceTracker />}
+          {tabIdx === 2 && <TeacherAttendance userId={p?.get('id') ?? ''} />}
         </div>
       )}
       {gridTabIdx === 1 && (
@@ -397,7 +371,7 @@ const Page = () => {
               <div className='flex justify-end'>
                 <Button
                   onClick={() => {
-                    setisAddSubject(!isAddSubject);
+                    setIsAddSubject(!isAddSubject);
                   }}
                   disabled={isEditingBioDetails}
                   variant='ghost'

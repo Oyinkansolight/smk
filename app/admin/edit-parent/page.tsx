@@ -2,48 +2,58 @@
 'use client';
 
 import BackButton from '@/components/accordions/BackButton';
+import GenericLoader from '@/components/layout/Loader';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
-import Biodata from '@/components/views/admin/AddParent/biodata';
+import EditParentBioData from '@/components/views/admin/AddParent/edit-biodata';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
-import { useCreateParent } from '@/server/institution';
+import { useGetSingleParent, useUpdateParent } from '@/server/institution';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner } from 'react-icons/im';
 import { toast } from 'react-toastify';
 
-const AddParent = () => {
+const EditParent = () => {
+  const params = useSearchParams();
+  const parentId = params?.get('id');
+
+  const { data: parentDetail, isLoading: isLoadingParent } = useGetSingleParent({
+    id: parentId ?? '',
+  });
+
+
   const {
     register,
-
     formState: { errors },
     handleSubmit,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
+    defaultValues: {
+      firstName: parentDetail?.firstName,
+      lastName: parentDetail?.lastName,
+      address: parentDetail?.address,
+      lga: parentDetail?.lga,
+    },
   });
   const [stage, setStage] = useState(1);
-  const [isOpen, setisOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setloading] = useState(false);
   const [imgSrc, setImgSrc] = useState(null);
   const [imageData, setImageData] = useState<File | undefined>();
 
-  const [, setpublishData] = useState(null);
+  const [, setPublishData] = useState(null);
 
-  const handleCreateParent = useCreateParent();
+  const handleUpdateParent = useUpdateParent();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    // console.log(errors);
-    console.log(data);
-
     if (
       stage === 1 &&
       data.firstName &&
       data.lastName &&
-      data.password &&
-      data.email &&
       data.address &&
       data.lga
     ) {
@@ -53,28 +63,42 @@ const AddParent = () => {
       if (array) {
         uploadedImage = await uploadDocument(uploadedImage, array, environment);
       }
-      const staffData = {
-        profileImg: uploadedImage,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        password: data.password,
-        email: data.email,
-        address: data.address,
-        lga: data.lga,
+      const parentData = {
+        id: parentId,
       };
 
-      setpublishData(data);
+      if (uploadedImage) {
+        parentData['profileImg'] = uploadedImage;
+      }
+
+      if (data.firstName) {
+        parentData['firstName'] = data.firstName;
+      }
+
+      if (data.lastName) {
+        parentData['lastName'] = data.lastName;
+      }
+
+      if (data.address) {
+        parentData['address'] = data.address;
+      }
+
+      if (data.lga) {
+        parentData['lga'] = data.lga;
+      }
+
+      setPublishData(data);
 
       try {
         setloading(true);
-        const response = await handleCreateParent.mutateAsync(staffData);
+        const response = await handleUpdateParent.mutateAsync(parentData);
 
         if (response) {
-          toast.success('Parent Added successfully');
+          toast.success('Parent updated successfully');
           setloading(false);
 
           //2 Second - Open Success Modal
-          setisOpen(true);
+          setIsOpen(true);
         }
       } catch (error) {
         setloading(false);
@@ -98,12 +122,20 @@ const AddParent = () => {
     },
   ];
 
+  if (isLoadingParent) {
+    return (
+      <div className='flex items-center justify-center'>
+        <GenericLoader />
+      </div>
+    );
+  }
+
   return (
     <section className='md:px-[60px] px-5 py-6'>
       {isOpen && (
         <Success
-          title='Parent created successfully'
-          description='Student Parent created successfully'
+          title='Parent updated successfully'
+          description='Student Parent updated successfully'
           link='/admin/all-parents'
           textLink='Manage Parent'
           homeLink='/admin'
@@ -111,7 +143,7 @@ const AddParent = () => {
       )}
       <BackButton />
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>Add Parent</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Edit Parent</h1>
 
       <Stepper
         variant='#007AFF'
@@ -123,11 +155,12 @@ const AddParent = () => {
       <div className='table-add-student mt-7 lg:px-20 px-4 py-10 pb-4 bg-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && (
-            <Biodata
+            <EditParentBioData
               register={register}
               errors={errors}
               imgSrc={imgSrc}
               setImgSrc={setImgSrc}
+              parentDetail={parentDetail}
               setImageData={(v) => setImageData(v)}
             />
           )}
@@ -158,4 +191,4 @@ const AddParent = () => {
   );
 };
 
-export default AddParent;
+export default EditParent;

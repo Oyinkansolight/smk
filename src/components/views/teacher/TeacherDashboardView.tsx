@@ -78,7 +78,7 @@ export default function TeacherDashboardView() {
             )}
 
             {nextClassData && nextClassData?.length > 0 && nextClassData.slice(0, 5).map((nextClass) => {
-              if (!nextClass) return null;
+              // if (!nextClass) return null;
 
               return (
                 <NextClassCard

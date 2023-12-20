@@ -14,7 +14,7 @@ const columns: TableColumn<(any)[number]>[] = [
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] overflow-hidden text-ellipsis'>
-          {event?.currentInstitution?.instituteName ?? "N/A"}
+          {event?.currentInstitution?.instituteName ?? event?.transferFrom?.instituteName ?? "N/A"}
         </div>
       </div>
     ),
@@ -27,7 +27,7 @@ const columns: TableColumn<(any)[number]>[] = [
       <div className='text-sm flex items-center gap-2 font-medium whitespace-nowrap'>
         <div className='hidden lg:block h-6 w-6 rounded-full bg-gray-200' />
         <div className='max-w-[125px] text-ellipsis overflow-hidden'>
-          {event?.newInstitution?.instituteName ?? "N/A"}
+          {event?.newInstitution?.instituteName ?? event?.transferTo?.instituteName ?? "N/A"}
         </div>
       </div>
     ),
@@ -43,7 +43,12 @@ const columns: TableColumn<(any)[number]>[] = [
   },
 ];
 
-export default function TransferRequestsTable({ data }) {
+interface TransferRequestsTableProps {
+  data: any;
+  staff?: boolean;
+}
+
+export default function TransferRequestsTable({ data, staff }: TransferRequestsTableProps) {
   if (!data || data.length === 0) return (
     <EmptyView label='No transfer requests at the moment' />
   );
@@ -54,7 +59,7 @@ export default function TransferRequestsTable({ data }) {
       <div className='flex justify-end'>
         <Link
           className='flex items-center text my-2 px-4 text-[#007AFF]'
-          href='/admin/transfer-staff'
+          href={staff ? '/admin/all-transfer-request-staff' : '/admin/all-transfer-request'}
         >
           <div>View All</div>
           <BiChevronRight className='h-5 w-5' />

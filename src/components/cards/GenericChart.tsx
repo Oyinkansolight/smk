@@ -5,6 +5,7 @@ import React from 'react';
 
 interface GenericChartProps {
   title: string;
+  icon?: any;
   content: any;
   className?: string;
   description?: string;
@@ -14,6 +15,7 @@ interface GenericChartProps {
 
 const GenericChart = ({
   title,
+  icon,
   content,
   className,
   description,
@@ -34,8 +36,11 @@ const GenericChart = ({
           )}
         >
           <div className={clsxm('flex flex-row items-center justify-between')}>
-            <div className='flex flex-col gap-2'>
-              <div className='text-3xl font-bold'>{title}</div>
+            <div className='flex flex-col gap-2 w-full'>
+              <div className='flex justify-between items-center w-full'>
+                <div className='text-3xl font-bold'>{title}</div>
+                <div>{icon}</div>
+              </div>
 
               {description && <p className='text-[#545454]'>{description}</p>}
             </div>

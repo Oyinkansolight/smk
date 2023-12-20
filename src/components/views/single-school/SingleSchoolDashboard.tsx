@@ -26,20 +26,6 @@ import { BiTrendingUp } from 'react-icons/bi';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {
@@ -65,16 +51,24 @@ const staffListColumns: TableColumn<any>[] = [
     name: 'Name',
     cell: (row) => (
       <div>
-        {row.user.firstName} {row.user.lastName}
+        {row?.user?.firstName} {row?.user?.lastName}
       </div>
     ),
   },
   {
     name: 'Subject',
     cell: (row) => (
-      <div>{row.subjects?.length > 0 ? row.subjects.length : 'None'}</div>
+      <div>{row?.subjects?.length > 0 ? row?.subjects?.length : 'None'}</div>
     ),
   },
+  {
+    name: 'Attendance Rate',
+    cell: (row) => (
+      <div>
+        {row?.attendanceRate ?? 0}%{' '}
+      </div>
+    ),
+  }
 ];
 
 const SingleSchoolDashboard = () => {
@@ -248,7 +242,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={studentListColumns}
                     data={getInstitutionStudents?.data}
-                    // data={[]}
+                  // data={[]}
                   />
                 </div>
               </div>
@@ -320,7 +314,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={staffListColumns}
                     data={getInstitutionStaffs?.data}
-                    // data={[]}
+                  // data={[]}
                   />
                 </div>
               </div>

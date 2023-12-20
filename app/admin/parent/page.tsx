@@ -27,33 +27,6 @@ import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
@@ -160,7 +133,6 @@ const Page = () => {
   });
 
   const parent = data;
-  console.log(data);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -188,6 +160,7 @@ const Page = () => {
       toast.error(getErrMsg(error));
     }
   }, [error]);
+
   return (
     <div className='flex flex-col lg:flex-row'>
       <StudentTeacherProfileCard
@@ -266,9 +239,8 @@ const Page = () => {
                   content={
                     <ConfirmModalContent
                       title='Link Student'
-                      body={`Are you sure you want to link ${selectedStudent} with ${
-                        parent?.firstName ?? 'N/A'
-                      } ${parent?.lastName ?? 'N/A'}`}
+                      body={`Are you sure you want to link ${selectedStudent} with ${parent?.firstName ?? 'N/A'
+                        } ${parent?.lastName ?? 'N/A'}`}
                       toggleModal={toggleModal}
                       handleAction={assignStudentToParent}
                       loading={loading}
@@ -288,7 +260,7 @@ const Page = () => {
                     showSearch={false}
                     columns={studentListColumns}
                     data={parent?.students}
-                    // data={[]}
+                  // data={[]}
                   />
                 </div>
               </section>

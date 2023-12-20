@@ -38,7 +38,7 @@ const InstituteSidebar = ({
     <aside
       className={clsxm(
         open ? 'w-[280px] ' : 'w-20 ',
-        'absolute z-[999]  order-first flex h-screen   transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0'
+        'absolute z-[999]  order-first flex h-screen transition-all duration-300 flex-col  overflow-y-auto border-r-2 bg-white py-12 rtl:border-l rtl:border-r-0 hideScroll'
       )}
     >
       <nav className='flex flex-1 flex-col space-y-6 pl-4 pr-2'>
@@ -156,9 +156,8 @@ const InstituteSidebar = ({
           )}
         >
           <div
-            className={` ${
-              open ? ' justify-between px-2' : 'justify-center'
-            } flex w-full items-center gap-[14.25px] `}
+            className={` ${open ? ' justify-between px-2' : 'justify-center'
+              } flex w-full items-center gap-[14.25px] `}
           >
             <div className='flex items-center justify-center space-x-2'>
               <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
@@ -247,9 +246,8 @@ export const SideBarButton = ({
     )}
   >
     <div
-      className={` ${
-        open ? ' justify-between px-2' : 'justify-center'
-      } flex w-full items-center gap-[14.25px] `}
+      className={` ${open ? ' justify-between px-2' : 'justify-center'
+        } flex w-full items-center gap-[14.25px] `}
     >
       <div className='flex items-center justify-center space-x-2'>
         {icon}

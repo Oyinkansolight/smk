@@ -60,7 +60,7 @@ const AllClasses = () => {
 
   const { data: staffs } = useGetTeachersListByInstitution({
     instituteId: institutionId,
-    limit: 50,
+    limit: 100,
   });
 
   const handleSearch = (value: string) => {
@@ -194,7 +194,7 @@ const AllClasses = () => {
                   </div>
                   <div className='col-span-3'> {item.capacity} </div>
                   <div className='col-span-4'>
-                    {getTeacher(item?.teacher?.id)}
+                    {getTeacher(item?.teacher?.id ?? item?.staffManager?.id)}
                   </div>
                   <div className='col-span-2'>
                     <div
@@ -308,7 +308,7 @@ const AllClasses = () => {
                 )}
               >
                 {pagingData.page > 3 &&
-                pagingData.page < allClasses.paging.totalPage
+                  pagingData.page < allClasses.paging.totalPage
                   ? pagingData.page
                   : 3}
               </div>

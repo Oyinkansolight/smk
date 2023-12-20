@@ -5,6 +5,8 @@ import FormInput from '@/components/input/formInput';
 import FormTextArea from '@/components/input/formTextarea';
 import Library from '@/components/modal/Library';
 import Stepper from '@/components/stepper';
+import { isLocal } from '@/constant/env';
+import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useSendMessage } from '@/server/government/communication';
 import { useGetTeachersList } from '@/server/institution';
@@ -16,6 +18,7 @@ import { IoClose } from 'react-icons/io5';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
+import { uuid } from 'uuidv4';
 
 interface fileType {
   files: { name: string; id: string }[];
@@ -39,16 +42,19 @@ const Page = () => {
     control,
     formState: { errors },
     handleSubmit,
+    getValues,
   } = useForm({
     reValidateMode: 'onChange',
     mode: 'onChange',
   });
 
   const { data: staffs, isLoading } = useGetTeachersList();
-  const staffData = (staffs?.data ?? []).map((v) => ({
-    label: v?.user ? `${v?.user?.firstName} ${v?.user?.lastName}` : ' ',
-    value: v.id,
-  }));
+  const staffData = (staffs?.data ?? []).map((v) => {
+    return ({
+      value: v.id,
+      label: v?.user && `${v?.user?.firstName} ${v?.user?.lastName}`,
+    })
+  });
   const onSubmit: SubmitHandler<any> = async (data) => {
     if (data.recepients.length == 0 || !data.body || !data.title) {
       toast.error('All fields must be completed');
@@ -61,9 +67,30 @@ const Page = () => {
     data.recepients = filteredRecepients;
     data.files = files?.map((v) => v.id);
 
+    const environment = isLocal ? 'staging' : 'production';
+
+    if (data.localFile) {
+      toast.info('Uploading file...');
+
+      const path = await uploadDocument(
+        `messages/message_${uuid()}`,
+        await data.localFile[0].arrayBuffer(),
+        environment
+      );
+
+      data.files = [path];
+    };
+
+    const payload = {
+      body: data.body,
+      title: data.title,
+      files: data.files,
+      recepients: data.recepients,
+    };
+
     try {
       setLoading(true);
-      const response = await handleSendMessage.mutateAsync(data);
+      const response = await handleSendMessage.mutateAsync(payload);
 
       if (response) {
         toast.success('Message Sent successfully');
@@ -217,10 +244,10 @@ const Page = () => {
                           Upload from your computer
                         </label>
                         <input
-                          type='file'
-                          name='upload_folder'
-                          id='upload_file'
                           hidden
+                          type='file'
+                          id='upload_file'
+                          {...(register('localFile'))}
                         />
 
                         <div
@@ -253,6 +280,12 @@ const Page = () => {
                           </button>
                         </div>
                       ))}
+
+                    {getValues('localFile') &&
+                      <div>
+                        Selected File: {getValues('localFile')?.[0]?.name}
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
