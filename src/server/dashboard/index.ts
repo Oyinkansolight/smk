@@ -28,6 +28,18 @@ export function useGetInstitutionDashboardOverview() {
   });
   return query;
 }
+export function useGetEnrollmentAnalysisCSV() {
+  const query = useQuery({
+    queryKey: 'get_enrollment_analysis',
+    queryFn: () =>
+      request
+        .get('/v1/government/dashboards/generate-csv-data', {
+          withCredentials: true,
+        })
+        .then((v) => v.data.data.data as any),
+  });
+  return query;
+}
 
 export function useGetStaffDashboardOverview() {
   const query = useQuery({
