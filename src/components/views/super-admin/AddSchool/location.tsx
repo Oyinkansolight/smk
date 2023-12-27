@@ -25,11 +25,6 @@ const Biodata = ({
 }: LocationBioProps) => {
   const { data } = useGetLocalGovernments();
 
-  function capitalize(str: string) {
-    const result = str.charAt(0).toUpperCase() + str.slice(1);
-    return result;
-  }
-
   //create local government array in edo state nigeria
 
   return (
@@ -64,9 +59,7 @@ const Biodata = ({
                 setLga(l);
               }
             }}
-            options={
-              data?.map((v) => capitalize(v.label ?? '') ?? 'NULL') ?? []
-            }
+            options={data?.map((v) => v.label ?? 'NULL') ?? []}
           />
         </div>
 

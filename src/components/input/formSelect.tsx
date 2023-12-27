@@ -29,6 +29,11 @@ type propType = {
   onClick?: () => void;
 };
 
+function capitalize(str: string) {
+  const result = str.charAt(0).toUpperCase() + str.slice(1);
+  return result;
+}
+
 const Select = ({
   label,
   formValue,
@@ -65,7 +70,7 @@ const Select = ({
 
             {options.map((item, id) => (
               <option key={id} value={item} selected={formValue === item}>
-                {item}
+                {capitalize(item)}
               </option>
             ))}
           </select>
