@@ -69,7 +69,7 @@ export function useGetAcademicTimetable({
   return query;
 }
 export function useGetTeacherTimetable({
-  classId,
+  classId = '',
   type = 'DEFAULT',
   teacherId = '',
 }) {

@@ -45,7 +45,7 @@ export default function Page() {
   }
 
   return (
-    <div className='h-full layout pl-0 lg:pl-20'>
+    <div className='h-full layout pl-0 lg:pl-20 pb-20'>
       <div
         onClick={() => router.push("/teacher/lesson-note")}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>

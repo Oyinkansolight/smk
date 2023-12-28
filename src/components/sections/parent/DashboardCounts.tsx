@@ -1,16 +1,15 @@
-import Overview from '@/components/cards/overview';
 import { useGetDashboardOverview } from '@/server/dashboard';
 import { useGetSubjectList } from '@/server/institution';
 import Cookies from 'js-cookie';
-import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Studentcount from '~/svg/studentcount.svg';
 
 interface DashboardCountsProps {
   handleSetOpen: (value: boolean) => void;
+  profile: any;
 }
 
-const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
+const DashboardCounts = ({ handleSetOpen, profile }: DashboardCountsProps) => {
   const [adminType, setAdminType] = useState<string | undefined>();
 
   const { data, isLoading: isLoadingOverview } = useGetDashboardOverview();
@@ -21,10 +20,13 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
     const AT = Cookies.get('adminType');
     setAdminType(AT);
   }, []);
+  const parentName = `${profile?.userInfo?.parent?.firstName ?? ''} ${
+    profile?.userInfo?.parent?.lastName ?? ''
+  }`;
 
   return (
     <div className='flex flex-col  w-full'>
-      <h1 className='text-4xl'>Welcome, James</h1>
+      <h1 className='text-4xl'>Welcome, {parentName}</h1>
       <h2 className='text-[#8C8C8C] text-base font-normal'>
         Monitor you children's performance and activities here{' '}
       </h2>
@@ -42,11 +44,12 @@ const DashboardCounts = ({ handleSetOpen }: DashboardCountsProps) => {
               <p className='text-sm text-[#8E8E8E]'>Total Students</p>
             </div>
             <div>
-              <h1 className='text-white'>4</h1>
+              <h1 className='text-white'>
+                {profile?.userInfo?.parent?.students?.length ?? 0}
+              </h1>
             </div>
           </div>
         </div>
-       
       </div>
     </div>
   );

@@ -28,6 +28,10 @@ import { IoChevronBack } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export interface answers {
   questionId?: string;
   answerOption?: number;
@@ -58,13 +62,12 @@ const Page = () => {
   }
 
   const { data, isLoading } = useGetPeriodById(periodId ? periodId : '');
-  const { data: activities } =
-    useGetPeriodActivity({
-      sessionId: currentSessionId,
-      typeOfActivity: activityType,
-      periodId,
-      termId: currentTermInfo?.id,
-    });
+  const { data: activities } = useGetPeriodActivity({
+    sessionId: currentSessionId,
+    typeOfActivity: activityType,
+    periodId,
+    termId: currentTermInfo?.id,
+  });
 
   const editor = useCustomEditor();
 
@@ -86,11 +89,13 @@ const Page = () => {
   };
 
   async function handleSubmitTask(type: string, qId?: string) {
-    if (type !== "MULTIPLE_CHOICE") {
-      const answers: any = [{
-        questionId: qId,
-        answerText: editor?.getHTML(),
-      }];
+    if (type !== 'MULTIPLE_CHOICE') {
+      const answers: any = [
+        {
+          questionId: qId,
+          answerText: editor?.getHTML(),
+        },
+      ];
 
       submissionData.answers = answers;
     }
@@ -200,8 +205,8 @@ const Page = () => {
                   <div>
                     <div className='border border-[#D5D7D8] rounded-md p-3 bg-[#FAFAFA]'>
                       <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-5'>
-                        {activities && activities?.data.length > 0 ? (
-                          activities?.data.map((item, i) => (
+                        {activities && activities?.data?.items.length > 0 ? (
+                          activities?.data.items.map((item, i) => (
                             <div
                               key={i}
                               className='cursor-pointer rounded-xl bg-white border p-3 flex space-x-4'
@@ -298,7 +303,10 @@ const Page = () => {
                         ))}
                         <button
                           onClick={() => {
-                            handleSubmitTask(activity?.format, activity?.questionsV2?.[0]?.id);
+                            handleSubmitTask(
+                              activity?.format,
+                              activity?.questionsV2?.[0]?.id
+                            );
                           }}
                           className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
                         >

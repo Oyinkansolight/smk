@@ -2,6 +2,7 @@
 import { isLocal } from '@/constant/env';
 import { getFromSessionStorage } from '@/lib/helper';
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import { toast } from 'react-toastify';
 
 export const TOKEN_KEY = 'TOKEN_KEY';
 
@@ -18,6 +19,13 @@ const request = axios.create({
 
 export function getErrMsg(error: any) {
   if (error.code === 'ERR_NETWORK') return 'Network Error';
+  if (error.response?.data?.message === 'Unauthorized') {
+    toast.error('Token  expired, login required');
+    if (typeof window !== 'undefined') {
+      window.open('/auth/user', '_self');
+    }
+    return;
+  }
   return error.response?.data?.message ?? 'NO DATA';
 }
 
