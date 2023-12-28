@@ -589,13 +589,14 @@ export function useGetSchools(params: Partial<PaginationParams>) {
   return query;
 }
 
-export function useGetInstituteTypes() {
+export function useGetInstituteTypes(params?: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_school_list_types',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institute-type'
+          '/v1/government/institutes/get-institute-type',
+          { params: params?.page || params?.limit ? params : {} }
         );
         return d.data.data.data as any;
       } catch (error) {
@@ -604,6 +605,11 @@ export function useGetInstituteTypes() {
       }
     },
   });
+
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, refetch]);
 
   return query;
 }

@@ -30,7 +30,7 @@ type propType = {
 };
 
 function capitalize(str: string) {
-  const result = str.charAt(0).toUpperCase() + str.slice(1);
+  const result = String(str)?.charAt(0)?.toUpperCase() + String(str)?.slice(1);
   return result;
 }
 
