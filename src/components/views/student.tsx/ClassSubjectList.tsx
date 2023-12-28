@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EmptyView from '@/components/misc/EmptyView';
-import ControlledModal from '@/components/modal/ControlledModal';
-import DeleteControlledModal from '@/components/modal/DeleteModalContent';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
@@ -19,11 +17,13 @@ export default function SubjectList({
   studentSubjectsList,
   managedClassArm,
   teacher,
+  classId,
 }: {
   // subjectCount?: number
   studentSubjectsList?: any[];
   managedClassArm?: any;
   teacher?: string;
+  classId?: string;
 }) {
   const [itemId, setItemId] = useState('');
   const [currentView, setCurrentView] = useState(0);
@@ -34,7 +34,6 @@ export default function SubjectList({
   const [periods, setPeriods] = useState<any[]>([]);
   const [, setWeekId] = useState<string | number>(0);
   const [subjectId, setSubjectId] = useState<string | number>(0);
-  const [classId, setClassId] = useState<string | number>(0);
 
   const [loading, setLoading] = useState(false);
   const removeSubject = useRemoveStaffSubject();
