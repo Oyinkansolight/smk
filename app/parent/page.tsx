@@ -8,45 +8,81 @@ import Timetable from '@/components/sections/parent/Timetable';
 import Periods from '@/components/sections/parent/TodaysPeriod';
 import Stat from '@/components/views/single-teacher/Stat';
 import { useGlobalContext } from '@/hooks/useGlobalState';
+import { getFromSessionStorage } from '@/lib/helper';
+import request from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
-import { Institution } from '@/types/classes-and-subjects';
+import { IParentDashboard } from '@/types/parent';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useState } from 'react';
-import { useSessionStorage } from 'usehooks-ts';
+import { useEffect, useState } from 'react';
+import { ImSpinner2 } from 'react-icons/im';
+import { toast } from 'react-toastify';
 
 const SuperAdminCharts = dynamic(
   () => import('@/components/sections/parent/SuperAdminCharts')
 );
 
-const Page = () => {
+const ParentPage = () => {
   const { setIsDataLoading } = useGlobalContext();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const { data: profile } = useGetProfile();
-  const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
-  const term = terms?.data[0]?.id;
+  const [dashboardData, setDashboardData] = useState<IParentDashboard>();
+  const [studentId, setStudentId] = useState<string>();
+  // const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
+  //   sessionId: profile?.currentSession?.[0]?.id,
+  // });
+  // const [institution] = useSessionStorage('institution', {} as Institution);
+  const week: any = getFromSessionStorage('currentWeek');
 
-  const [institution] = useSessionStorage('institution', {} as Institution);
+  const { data: profile } = useGetProfile();
+  const weekId = JSON.parse(week)?.id;
+  const parentId = profile?.userInfo?.parent?.id;
+
+  // Use useEffect to call useGetParentDashboardOverview when useGetProfile resolves
+  useEffect(() => {
+    setStudentId(profile?.userInfo?.parent?.students[0]?.id);
+    // Ensure that profile is available before calling useGetParentDashboardOverview
+
+    // Call useGetParentDashboardOverview with the necessary parameters
+
+    if (studentId && weekId && parentId) {
+      setIsLoading(true);
+      request
+        .get(
+          `/v1/government/parent/admin/dashboard?studentId=${studentId}&weekId=${weekId}&parentId=${parentId}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((v) => {
+          setDashboardData(v.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          toast.error(err?.response?.data?.message);
+          setIsLoading(false);
+        });
+    }
+  }, [profile, weekId, parentId, studentId]); // Dependency array to watch for changes in profile, weekId, and parentId
+
+  console.log(dashboardData);
 
   const handleSetOpen = (value: boolean) => setIsOpen(value);
 
   const menu = [
     {
-      value: '0%',
+      value: `${dashboardData?.attendanceRate ?? 0}%`,
       label: 'Average Attendance',
     },
     {
-      value: 10,
+      value: 0,
       label: 'Total  Subjects',
     },
 
     {
-      value: 'SSS 1 Science 1 EMPIRE',
+      value: `${dashboardData?.student?.class?.class?.name} ${dashboardData?.student?.class?.arm}`,
       label: 'Class Arm',
     },
   ];
@@ -125,9 +161,12 @@ const Page = () => {
                   />
                 </div>
                 <div className=''>
-                  <h2 className='text-xl'>Allyson Stairs</h2>
+                  <h2 className='text-xl'>
+                    {dashboardData?.student?.firstName ?? ''}{' '}
+                    {dashboardData?.student?.lastName ?? ''}
+                  </h2>
                   <div className='bg-[#008F28] flex items-center text-xs px-4 h-5 font-normal text-white max-w-max rounded-full capitalize'>
-                    SECONDARY
+                    {dashboardData?.student?.institution?.instituteType}
                   </div>
                 </div>
               </div>
@@ -136,9 +175,10 @@ const Page = () => {
                   onClick={() => {
                     setIsOpenDropdown(true);
                   }}
-                  className='bg-[#5754F7] w-max rounded-full flex space-x-2 justify-between p-2 text-white text-xs'
+                  className='bg-[#5754F7] w-max rounded-full flex space-x-2 justify-between items-center p-2 text-white text-xs'
                 >
                   <span>Switch Student</span>
+                  {isLoading && <ImSpinner2 />}
                   <span>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -159,7 +199,14 @@ const Page = () => {
                 {isOpenDropdown && (
                   <div className='shadow-lg rounded-md bg-white w-[200px] divide-y-2 truncate h-max absolute top-8 right-0 z-10'>
                     {profile?.userInfo?.parent?.students.map((item, key) => (
-                      <div key={key} className='w-full p-2 text-sm'>
+                      <div
+                        onClick={() => {
+                          setStudentId(item.id);
+                          isOpenDropdown && setIsOpenDropdown(false);
+                        }}
+                        key={key}
+                        className='w-full p-2 text-sm cursor-pointer'
+                      >
                         {item.firstName} {item.lastName}
                       </div>
                     ))}
@@ -178,11 +225,16 @@ const Page = () => {
 
             <div className='grid md:grid-cols-2 gap-2 my-6'>
               <div className=' bg-[#f0ffff] rounded-lg space-y-2 px-2 py-3'>
-                <h2 className='text-xl'> Scaling Heights Institution </h2>
+                <h2 className='text-xl'>
+                  {dashboardData?.student?.institution?.instituteName}
+                </h2>
                 <p className='text-xs text-gray-400'>Name of Institution</p>
               </div>
               <div className='bg-[#e9fde2] rounded-lg space-y-2 px-2 py-3'>
-                <h2 className='text-xl'> #123456</h2>
+                <h2 className='text-xl'>
+                  {' '}
+                  {dashboardData?.student?.studentId}
+                </h2>
                 <p className='text-xs text-gray-400'>student ID</p>
               </div>
             </div>
@@ -190,10 +242,15 @@ const Page = () => {
             <Stat menu={menu} />
           </div>
 
-          <Periods />
-          <AssignmentTracker />
-          <SuperAdminCharts setIsDataLoading={setIsDataLoading} />
-          <Timetable />
+          <div className='space-y-3 mt-3'>
+            {/* {console.log(dashboardData?.todayPeriods)} */}
+            <Periods period={dashboardData?.todayPeriods} />
+            <AssignmentTracker assignments={dashboardData?.assignments} />
+            <SuperAdminCharts setIsDataLoading={setIsDataLoading} />
+            <Timetable
+              classId={dashboardData?.student?.class?.class?.id ?? ''}
+            />
+          </div>
         </div>
       ) : (
         <EmptyView
@@ -205,4 +262,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ParentPage;

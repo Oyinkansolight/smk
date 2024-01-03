@@ -151,7 +151,7 @@ export default function TimetableView({ data, isLoading }) {
         ) : (
           <div className='text-center text-xs mt-5'>Loading...</div>
         )}
-        {!isLoading && (data ?? []).length === 0 && (
+        {(data ?? []).length === 0 && (
           <EmptyView
             label='No Timetable for this class yet'
             useStandardHeight

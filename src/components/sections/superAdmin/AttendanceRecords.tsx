@@ -2,18 +2,25 @@
 import GenericChart from '@/components/cards/GenericChart';
 import { BarChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
-import Select from '@/components/input/formSelect';
 import PopOverSelect from '@/components/input/PopOverSelect';
+import Select from '@/components/input/formSelect';
 import ChartSkeleton from '@/components/skeletons/Chart';
-import { useGetAdminCharts } from '@/server/dashboard';
+import request from '@/server';
 import { useGetSchools } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AttendanceRecords = () => {
   const [open, setOpen] = useState(false);
-  const [selectedInstitution, setSelectedInstitution] = useState(['All Institutions']);
+  const [chartData, setChartData] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedInstitution, setSelectedInstitution] = useState([
+    'All Institutions',
+  ]);
+  const [selectedInstitutionId, setSelectedInstitutionId] = useState('');
   const [itemIndex, setItemIndex] = useState<number>(0);
 
   const [query, setQuery] = useState('');
@@ -21,7 +28,7 @@ const AttendanceRecords = () => {
     page: 1,
     limit: 10,
     query,
-    include: 'false'
+    include: 'false',
   });
 
   const {
@@ -30,10 +37,6 @@ const AttendanceRecords = () => {
     refetch,
     isLoading: isLoadingSchools,
   } = useGetSchools({ ...pagingData });
-
-  const { data: chartData, isLoading, refetch: refetchChart, isRefetching: isRefetchingCharts } = useGetAdminCharts({
-    institutionId: schools?.data[itemIndex]?.id,
-  });
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -52,16 +55,34 @@ const AttendanceRecords = () => {
     if (pagingData.page === 1) return;
     setPagingData({ ...pagingData, page: pagingData.page - 1 });
   };
+  const fetchAttendance = (institutionId: string) => {
+    if (institutionId) {
+      setIsLoading(true);
+      request
+        .get(
+          `/v1/government/dashboards/get-admin-stat-dashboard?institutionId=${institutionId}`
+        )
+        .then((v) => {
+          setIsLoading(false);
 
+          setChartData(v.data.data);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          toast.error(err.response.data.message);
+        });
+    }
+  };
   const handleSelectedInstitution = (value: string) => {
-    refetchChart();
-  }
+    fetchAttendance(value);
+    // setSelectedInstitutionId(value);
+  };
 
   const handleInstitutionName = (name: string) => {
     setSelectedInstitution([name]);
-  }
+  };
 
-  const isLoadingData = isLoading || !chartData || isLoadingSchools || !schools || isRefetchingCharts;
+  const isLoadingData = isLoading || !chartData || isLoadingSchools || !schools;
 
   return (
     <>
@@ -74,7 +95,7 @@ const AttendanceRecords = () => {
         handleSearch={handleSearch}
         handlePrevPage={handlePrevPage}
         handleNextPage={handleNextPage}
-        description="Select Institution"
+        description='Select Institution'
         setSelectedIndex={handleItemIndex}
         totalPages={schools?.paging?.totalPage}
         setSelectedItem={handleSelectedInstitution}
@@ -97,7 +118,9 @@ const AttendanceRecords = () => {
       <div className='flex flex-col gap-6'>
         <div className='flex flex-col gap-2 mx-auto text-center justify-center'>
           <div className='h2'>Attendance Records</div>
-          <div className='p text-gray-400'>Weekly Breakdown of Attendance Records</div>
+          <div className='p text-gray-400'>
+            Weekly Breakdown of Attendance Records
+          </div>
         </div>
 
         <div>
@@ -107,38 +130,35 @@ const AttendanceRecords = () => {
             options={selectedInstitution}
             formValue={selectedInstitution[0]}
           />
-
         </div>
 
-        {!isLoadingData ?
-          (
-            <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
-              <div className='flex flex-col gap-y-7'>
-                <GenericChart
-                  title='Attendance Report'
-                  titleClassName='bg-[#EDF5F2]'
-                  className='border-[#EDF5F2]'
-                  description='Total rate of attendance in the state'
-                  content={<AttendanceRate data={chartData?.attendanceRate} />}
-                />
-              </div>
+        {!isLoadingData ? (
+          <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
+            <div className='flex flex-col gap-y-7'>
+              <GenericChart
+                title='Attendance Report'
+                titleClassName='bg-[#EDF5F2]'
+                className='border-[#EDF5F2]'
+                description='Total rate of attendance in the state'
+                content={<AttendanceRate data={chartData?.attendanceRate} />}
+              />
+            </div>
 
-              <div className='flex flex-col gap-y-7'>
-                <GenericChart
-                  titleClassName='bg-[#DADEE6]'
-                  title='Attendance Tracker'
-                  description='Total number that were present'
-                  content={<BarChart data={chartData?.attendanceTracker} />}
-                />
-              </div>
+            <div className='flex flex-col gap-y-7'>
+              <GenericChart
+                titleClassName='bg-[#DADEE6]'
+                title='Attendance Tracker'
+                description='Total number that were present'
+                content={<BarChart data={chartData?.attendanceTracker} />}
+              />
             </div>
-          ) : (
-            <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
-              <ChartSkeleton />
-              <ChartSkeleton />
-            </div>
-          )
-        }
+          </div>
+        ) : (
+          <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
+            <ChartSkeleton />
+            <ChartSkeleton />
+          </div>
+        )}
       </div>
     </>
   );

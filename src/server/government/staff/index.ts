@@ -98,3 +98,20 @@ export function useUpdateUser() {
   });
   return mutation;
 }
+export function useUpdateParent() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_parent',
+    mutationFn: async (params: UpdateStaffParams) => {
+      const parentId = params.id;
+      delete params.id;
+      return await request.patch(`/v1/government/parent/${parentId}`, params, {
+        withCredentials: true,
+      });
+    },
+    onSettled: (data) => {
+      client.refetchQueries(`get_parents`);
+    },
+  });
+  return mutation;
+}

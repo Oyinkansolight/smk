@@ -50,10 +50,10 @@ const Page = () => {
 
   const { data: staffs, isLoading } = useGetTeachersList();
   const staffData = (staffs?.data ?? []).map((v) => {
-    return ({
+    return {
       value: v.id,
       label: v?.user && `${v?.user?.firstName} ${v?.user?.lastName}`,
-    })
+    };
   });
   const onSubmit: SubmitHandler<any> = async (data) => {
     if (data.recepients.length == 0 || !data.body || !data.title) {
@@ -69,8 +69,9 @@ const Page = () => {
 
     const environment = isLocal ? 'staging' : 'production';
 
-    if (data.localFile) {
+    if (data.localFile.length > 0) {
       toast.info('Uploading file...');
+      console.log(data.localFile);
 
       const path = await uploadDocument(
         `messages/message_${uuid()}`,
@@ -79,7 +80,7 @@ const Page = () => {
       );
 
       data.files = [path];
-    };
+    }
 
     const payload = {
       body: data.body,
@@ -247,7 +248,7 @@ const Page = () => {
                           hidden
                           type='file'
                           id='upload_file'
-                          {...(register('localFile'))}
+                          {...register('localFile.length > 0')}
                         />
 
                         <div
@@ -281,11 +282,12 @@ const Page = () => {
                         </div>
                       ))}
 
-                    {getValues('localFile') &&
+                    {getValues('localFile.length > 0') && (
                       <div>
-                        Selected File: {getValues('localFile')?.[0]?.name}
+                        Selected File:{' '}
+                        {getValues('localFile.length > 0')?.[0]?.name}
                       </div>
-                    }
+                    )}
                   </div>
                 </div>
               </div>

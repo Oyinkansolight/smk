@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import Button from '@/components/buttons/Button';
 import { CountCard } from '@/components/cards';
 import StudentTeacherProfileCard from '@/components/cards/ParentProfileCard';
 import PopOverSelect from '@/components/input/PopOverSelect';
@@ -27,6 +28,11 @@ import { RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
@@ -34,18 +40,18 @@ const studentListColumns: TableColumn<any>[] = [
     name: 'Name',
     cell: (row) => (
       <div>
-        {row.user[0].firstName} {row.user[0].lastName}
+        {row.user[0]?.firstName} {row.user[0]?.lastName}
       </div>
     ),
   },
-  // {
-  //   name: 'Class',
-  //   cell: (row) => (
-  //     <div>
-  //       {row.class.class.name} - {row.class.arm}
-  //     </div>
-  //   ),
-  // },
+  {
+    name: 'Class',
+    cell: (row) => (
+      <div>
+        {row?.class?.class?.name} - {row?.class?.arm}
+      </div>
+    ),
+  },
 ];
 
 const Page = () => {
@@ -239,8 +245,9 @@ const Page = () => {
                   content={
                     <ConfirmModalContent
                       title='Link Student'
-                      body={`Are you sure you want to link ${selectedStudent} with ${parent?.firstName ?? 'N/A'
-                        } ${parent?.lastName ?? 'N/A'}`}
+                      body={`Are you sure you want to link ${selectedStudent} with ${
+                        parent?.firstName ?? 'N/A'
+                      } ${parent?.lastName ?? 'N/A'}`}
                       toggleModal={toggleModal}
                       handleAction={assignStudentToParent}
                       loading={loading}
@@ -260,7 +267,7 @@ const Page = () => {
                     showSearch={false}
                     columns={studentListColumns}
                     data={parent?.students}
-                  // data={[]}
+                    // data={[]}
                   />
                 </div>
               </section>
@@ -294,13 +301,13 @@ const Page = () => {
                   isEditingBioDetails && 'opacity-50'
                 )}
               >
-                {/* <Button
+                <Button
                   disabled={isEditingBioDetails}
                   onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}
                   variant='secondary'
                 >
                   Edit Account Details
-                </Button> */}
+                </Button>
               </div>
               <div className='bg-white px-8 pb-20'>
                 <ParentBioDetails

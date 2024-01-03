@@ -24,6 +24,24 @@ import { IoChevronBack } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const { data: allSession } = useGetAcademicSessions();
   const { data: allSubject } = useGetSubjectList({ limit: 1000 });
@@ -49,29 +67,30 @@ const Page = () => {
   }
 
   function handleFetchAssignment(subjectId: string) {
-    const params = {
-      subjectId,
-      name: 'Mathematics',
-      typeOfActivity: 'ASSIGNMENT',
-      classArmId: user?.currentStudentInfo?.class.id ?? '',
-    };
+    // const params = {
+    //   query: subjectId.toLocaleLowerCase(),
+    //   typeOfActivity: 'ASSIGNMENT',
+    //   classArmId: user?.currentStudentInfo?.class.id ?? '',
+    // };
     setLoading(true);
     request
-      .get(`v1/institutions/lessons/get-class-activty`, {
-        params,
-      })
+      .get(
+        `v1/institutions/lessons/get-class-activty?typeOfActivity=ASSIGNMENT&classArmId=${
+          user?.currentStudentInfo?.class.id ?? ''
+        }&query=${subjectId}`
+      )
       .then((res) => {
         setLoading(false);
 
         setMyPendingAssignment(
-          res.data.data.data.data.filter(
+          res.data.data.data.data.items.filter(
             (item) =>
               item.typeOfActivity === 'ASSIGNMENT' &&
               item.status.toLowerCase() === 'pending'
           )
         );
         setMyCompletedAssignment(
-          res.data.data.data.data.filter(
+          res.data.data.data.data.items.filter(
             (item) =>
               item.typeOfActivity === 'ASSIGNMENT' &&
               item.status.toLowerCase() === 'completed'
@@ -158,7 +177,7 @@ const Page = () => {
             >
               <option value=''>Subject</option>
               {(allSubject?.data ?? []).map((v: any, i: number) => (
-                <option key={i} value={v.id}>
+                <option key={i} value={v.name}>
                   {v.name}
                 </option>
               ))}
