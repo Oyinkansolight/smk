@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import TaskAccordion from '@/components/accordions/TaskAccordion';
+import Button from '@/components/buttons/Button';
 // import Button from '@/components/buttons/Button';
 import { CurriculumCard } from '@/components/cards';
 import { RotatingLines } from 'react-loader-spinner';
@@ -73,14 +74,14 @@ export default function TestExamListView({
       <div className='flex flex-row items-center justify-between'>
         <div className='text-[#6B7A99] font-bold text-xl'>{academicyear}</div>
 
-        {/* <div className='flex flex-col lg:flex-row items-center justify-center space-x-2 space-y-4'>
+        <div className='flex flex-col lg:flex-row items-center justify-center space-x-2 space-y-4'>
           <Button
             variant='outline'
             className='flex flex-row items-center space-x-2 bg-white w-[168px] whitespace-nowrap'
           >
             Download Report
           </Button>
-        </div> */}
+        </div>
 
       </div>
       <div className='flex justify-center'>
