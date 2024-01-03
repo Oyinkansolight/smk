@@ -28,6 +28,25 @@ export function useGetInstitutionDashboardOverview() {
   });
   return query;
 }
+export function useGetParentDashboardOverview(
+  studentId: string | undefined,
+  weekId: string | undefined,
+  parentId: string | undefined
+) {
+  const query = useQuery({
+    queryKey: 'institute_dashboard_overview',
+    queryFn: () =>
+      request
+        .get(
+          `/v1/government/parent/admin/dashboard?studentId=${studentId}&weekId=${weekId}&parentId=${parentId}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((v) => v.data as any),
+  });
+  return query;
+}
 export function useGetEnrollmentAnalysisCSV() {
   const query = useQuery({
     queryKey: 'get_enrollment_analysis',
