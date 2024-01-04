@@ -64,7 +64,7 @@ const DragDropDocument = ({
             id='upload'
             hidden
             max={6 * 1024 * 1024}
-            accept='application/pdf, video/*, vid'
+            accept='application/pdf, video/*, vid, image/*'
             onChange={(e) => {
               if (e.target.files) {
                 handleImage(e.target.files[0]);
@@ -85,7 +85,8 @@ const DragDropDocument = ({
             </div>
           ) : (
             <div className='text-gray-400 flex items-center space-x-2 truncate font-semibold'>
-              <Upload alt='avril' className='h-4 w-4 mr-1' /> Drag and drop a file, or
+              <Upload alt='avril' className='h-4 w-4 mr-1' /> Drag and drop a
+              file, or
               <label
                 className='text-[#008146] ß cursor-pointer'
                 htmlFor='upload'
