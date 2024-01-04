@@ -1,7 +1,7 @@
 'use client';
 
 import TabBar from '@/components/layout/TabBar';
-import { BasicSearch } from '@/components/search';
+import ReportRecords from '@/components/sections/superAdmin/ReportRecords';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
   useGetSenderMessages,
@@ -95,21 +95,21 @@ const AllNotification = () => {
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,
-                label: 'Notifications',
+                label: 'Reports',
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,
-                label: 'Reports',
+                label: 'Notifications',
               },
             ]}
           />
         </div>
 
         <div className='flex items-center space-x-4'>
-          <div>Filter</div>
+          {/* <div>Filter</div>
           <div className='w-[200px]'>
             <BasicSearch handleSearch={handleSearch} />
-          </div>
+          </div> */}
         </div>
       </div>
       {isReply && (
@@ -134,59 +134,66 @@ const AllNotification = () => {
           </div>
         </div>
       )}
-      <div className='grid grid-cols-2 border-y'>
-        <div className='border-r'>
-          {(data ?? []).map((item, i) => (
-            <div
-              key={i}
-              onClick={() => {
-                setActive(!active);
-                setCurrentMessage(item);
-                if (!item.read) {
-                  ReadMessage(item.id);
-                }
-              }}
-              className={`${
-                !item.read && 'bg-[#EDF3FE]'
-              } mb-3 grid grid-cols-12 p-2 font-light items-center`}
-            >
-              <div className='col-span-1 flex justify-center'>
-                <input
-                  type='checkbox'
-                  className='rounded-md bg-gray-300'
-                  name=''
-                  id=''
-                />
-              </div>
+      {tabIdx === 0 && (
+        <div className='grid grid-cols-2 border-y'>
+          <div className='border-r'>
+            {(data ?? []).map((item, i) => (
               <div
-                className={`col-span-7 
-                  } flex flex-col space-y-2`}
+                key={i}
+                onClick={() => {
+                  setActive(!active);
+                  setCurrentMessage(item);
+                  if (!item.read) {
+                    ReadMessage(item.id);
+                  }
+                }}
+                className={`${
+                  !item.read && 'bg-[#EDF3FE]'
+                } mb-3 grid grid-cols-12 p-2 font-light items-center`}
               >
-                <h1 className='font-bold text-base'>{item.messageTitle} </h1>
-                <p className='text-[#848689]'>
-                  {item.messageBody.substring(0, 50)}
-                </p>
-              </div>
-              <div className='col-span-4 flex items-end flex-col space-y-3'>
-                <div>{moment(item.createdAt).format('ll')}</div>
-                {/* <div className='text-gray-300 text-[10px]  capitalize'>
+                <div className='col-span-1 flex justify-center'>
+                  <input
+                    type='checkbox'
+                    className='rounded-md bg-gray-300'
+                    name=''
+                    id=''
+                  />
+                </div>
+                <div
+                  className={`col-span-7 
+                  } flex flex-col space-y-2`}
+                >
+                  <h1 className='font-bold text-base'>{item.messageTitle} </h1>
+                  <p className='text-[#848689]'>
+                    {item.messageBody.substring(0, 50)}
+                  </p>
+                </div>
+                <div className='col-span-4 flex items-end flex-col space-y-3'>
+                  <div>{moment(item.createdAt).format('ll')}</div>
+                  {/* <div className='text-gray-300 text-[10px]  capitalize'>
                   {item.type}
                 </div> */}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>
-          {!active ? (
-            <div className='py-20 text-center'>
-              <h1 className='text-base'>No messages selected</h1>
-            </div>
-          ) : (
-            <MessageBody message={currentMessage} reply={handleReply} />
-          )}
+          <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>
+            {!active ? (
+              <div className='py-20 text-center'>
+                <h1 className='text-base'>No messages selected</h1>
+              </div>
+            ) : (
+              <MessageBody message={currentMessage} reply={handleReply} />
+            )}
+          </div>
         </div>
-      </div>
+      )}
+      {tabIdx === 1 && (
+        <div className=''>
+          <ReportRecords />
+        </div>
+      )}
     </section>
   );
 };
