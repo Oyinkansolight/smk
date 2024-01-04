@@ -118,6 +118,9 @@ function RenderGradeCategoryActions({
   profile: UserProfile;
   institutionType: string;
 }) {
+  console.log(profile);
+  console.log(institutionType);
+
   const currentInstitutionSession = profile?.currentSession?.find(
     (v) => v.institutionType === institutionType
   );
@@ -125,6 +128,7 @@ function RenderGradeCategoryActions({
   const { data: term } = useGetCurrentSessionTerm({
     sessionId: currentInstitutionSession?.id ?? '',
   });
+
   const { data } = useGetCategoryByInstitutionType({
     institutionType,
     sessionId: currentInstitutionSession?.id ?? '',

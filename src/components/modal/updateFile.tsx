@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FormInput from '@/components/input/formInput';
 import logger from '@/lib/logger';
-import { useUpdateFolder } from '@/server/library';
+import { useUpdateFile } from '@/server/library';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import Close from '~/svg/close.svg';
 
 interface propType {
   onClickHandler: () => void;
-  folderName: string;
-  folderId: string;
+  fileName: string;
+  fileId: string;
 }
 
-function UpdateFolder({ onClickHandler, folderName, folderId }: propType) {
-  const [name, setName] = useState<any>(folderName);
-  const { mutateAsync, isLoading } = useUpdateFolder();
+function UpdateFile({ onClickHandler, fileName, fileId }: propType) {
+  const [name, setName] = useState<any>(fileName);
+  const { mutateAsync, isLoading } = useUpdateFile();
 
-  async function updateFolder() {
+  async function updateFileFn() {
     try {
-      const response = await mutateAsync({ id: folderId, folderName: name });
+      const response = await mutateAsync({ id: fileId, filename: name });
       if (response) {
-        toast.success('Folder updated successfully');
+        toast.success('File updated successfully');
         onClickHandler();
       }
     } catch (error) {
       logger(error);
       if (error) {
-        toast.error('Folder update failed');
+        toast.error('File update failed');
       }
     }
   }
@@ -40,25 +40,25 @@ function UpdateFolder({ onClickHandler, folderName, folderId }: propType) {
         </div>
 
         <div className='mt-4  px-5 pb-10'>
-          <h1 className='text-center text-4xl font-bold mb-2'>Rename Folder</h1>
+          <h1 className='text-center text-4xl font-bold mb-2'>Rename File</h1>
 
           <p className='text-center mb-2 mt-6'>
-            Kindly update the folder name below:
+            Kindly update the file name below:
           </p>
 
           <div className='w-full'>
             <FormInput
               type='text'
-              label='Folder Name*'
+              label='File Name*'
               setFormValue={setName}
               formValue={name}
-              placeholder='e.g Primary School Folder'
+              placeholder='e.g Primary School File'
             />
           </div>
 
           <div className='flex justify-center mt-32'>
             <button
-              onClick={updateFolder}
+              onClick={updateFileFn}
               className='w-max rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '
             >
               {isLoading ? 'Processing' : 'Proceed'}
@@ -70,4 +70,4 @@ function UpdateFolder({ onClickHandler, folderName, folderId }: propType) {
   );
 }
 
-export default UpdateFolder;
+export default UpdateFile;

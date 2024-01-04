@@ -1,41 +1,17 @@
 'use client';
 
 import AddSchoolType from '@/components/modal/addSchoolType';
+import { useGetInstituteTypes } from '@/server/institution';
 import { useState } from 'react';
+import { RotatingLines } from 'react-loader-spinner';
 
 const Schooltype = () => {
-  const data = [
-    {
-      names: 'ECCDE',
-      classes: 2,
-      term: 3,
-    },
-    {
-      names: 'ECCDE',
-      classes: 2,
-      term: 3,
-    },
-    {
-      names: 'ECCDE',
-      classes: 2,
-      term: 3,
-    },
-    {
-      names: 'ECCDE',
-      classes: 2,
-      term: 3,
-    },
-    {
-      names: 'ECCDE',
-      classes: 2,
-      term: 3,
-    },
-  ];
   const [isOpen, setisOpen] = useState(false);
 
   function handleModal() {
     setisOpen(!isOpen);
   }
+  const { data, isLoading } = useGetInstituteTypes();
   return (
     <div>
       <div className='flex justify-end items-center space-x-4 my-5'>
@@ -55,16 +31,29 @@ const Schooltype = () => {
 
         <div className='grid grid-cols-12 p-4 border-b text-[#55597D] font-medium'>
           <div className='col-span-3'>Name</div>
-          <div className='col-span-3'>Classes</div>
+          {/* <div className='col-span-3'>Classes</div> */}
           <div className='col-span-6'>Term/Semester</div>
         </div>
-        {data.map((item, idx) => (
-          <div className='grid grid-cols-12 p-4 border-b' key={idx}>
-            <div className='col-span-3'> {item.names} </div>
-            <div className='col-span-3'> {item.classes} </div>
-            <div className='col-span-6'> {item.term} </div>
+        {data &&
+          data?.items?.length > 0 &&
+          data?.items.map((item, idx) => (
+            <div className='grid grid-cols-12 p-4 border-b' key={idx}>
+              <div className='col-span-3'> {item?.name ?? 'N/A'} </div>
+              {/* <div className='col-span-3'> {item.classes} </div> */}
+              <div className='col-span-6'> {item?.semester ?? 'N/A'} </div>
+            </div>
+          ))}
+        {isLoading && (
+          <div className='flex justify-center items-center h-[40vh]'>
+            <RotatingLines
+              width='100'
+              visible={true}
+              strokeWidth='5'
+              strokeColor='#4fa94d'
+              animationDuration='0.75'
+            />
           </div>
-        ))}
+        )}
 
         <div className=' min-w-[800px] my-4 flex items-center justify-end space-x-3 pr-10'>
           <div className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'>

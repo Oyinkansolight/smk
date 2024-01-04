@@ -337,7 +337,8 @@ export function useAssignFolderToSubject() {
 
 interface UpdateFolderParams {
   id: string;
-  folderName: string;
+  folderName?: string;
+  filename?: string;
 }
 
 export function useUpdateFolder() {
@@ -347,6 +348,20 @@ export function useUpdateFolder() {
     mutationKey: 'update-folder',
     mutationFn: async (params: UpdateFolderParams) => {
       return await request.put('/v1/government/library/update-folder', params);
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_folder_files_root`);
+    },
+  });
+  return mutation;
+}
+export function useUpdateFile() {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'update-file',
+    mutationFn: async (params: UpdateFolderParams) => {
+      return await request.put('/v1/government/library/update-file', params);
     },
     onSettled: () => {
       client.refetchQueries(`get_folder_files_root`);
