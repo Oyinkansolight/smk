@@ -2,6 +2,7 @@
 
 import TabBar from '@/components/layout/TabBar';
 import ReportRecords from '@/components/sections/superAdmin/ReportRecords';
+import SurveyBuilder from '@/components/sections/superAdmin/SurveyBuilder';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
   useGetSenderMessages,
@@ -99,6 +100,10 @@ const AllNotification = () => {
               },
               {
                 icon: <BiListCheck className='h-5 w-5' />,
+                label: 'Survey',
+              },
+              {
+                icon: <BiListCheck className='h-5 w-5' />,
                 label: 'Notifications',
               },
             ]}
@@ -192,6 +197,11 @@ const AllNotification = () => {
       {tabIdx === 1 && (
         <div className=''>
           <ReportRecords />
+        </div>
+      )}
+      {tabIdx === 2 && (
+        <div className=''>
+          <SurveyBuilder />
         </div>
       )}
     </section>

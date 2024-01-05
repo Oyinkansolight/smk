@@ -6,12 +6,27 @@ import ClassTimeTable from '@/components/views/super-admin/ManageClass/TaskListV
 import ClassCalendarContent from '@/components/views/super-admin/SingleSchoolCalendar/ClassCalendarContent';
 import ExamTimeTable from '@/components/views/super-admin/SingleSchoolCalendar/ExamTimetable';
 import Info from '@/components/views/super-admin/SingleSchoolCalendar/info';
+import logger from '@/lib/logger';
 import request from '@/server';
 import { useGetClassesList } from '@/server/institution';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -40,23 +55,26 @@ const Index = () => {
   const [sessionname, setsessionname] = useState<string | null>('');
   const [schoolType, setschoolType] = useState<string | null>('');
   const [sessionterms, setsessionterms] = useState([]);
-  const [currentTermId, setCurrentTermId] = useState(0);
+  const [currentTermId, setCurrentTermId] = useState<string>('0');
 
-  function handleCurrentTerm(id: number) {
+  function handleCurrentTerm(id: string) {
     setCurrentTermId(id);
   }
-  function Fetchterms(currrentsession: string | null) {
-    request
-      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
-      .then((v) => {
-        const data = v.data.data.data;
-        setsessionterms(data.data || []);
-        handleCurrentTerm(data.data[0].id);
-      });
-  }
+
   const { data: allclasses } = useGetClassesList();
 
   useEffect(() => {
+    logger(currentTermId);
+
+    function Fetchterms(currrentsession: string | null) {
+      request
+        .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+        .then((v) => {
+          const data = v.data.data.data;
+          setsessionterms(data.data || []);
+          handleCurrentTerm(data.data[0].id);
+        });
+    }
     // Create a URLSearchParams object with the query string
     // Extract the values of session and term parameters
     const currrentsession = queryString && queryString.get('session');
@@ -67,18 +85,7 @@ const Index = () => {
     setschoolType(st);
     setsession(currrentsession);
     setsessionname(sn);
-
-    // // let termname;
-    // if (currrentterm === '1') {
-    //   settermname('First Term');
-    // } else if (currrentterm === '2') {
-    //   settermname('Second Term');
-    // } else {
-    //   settermname('Third Term');
-    // }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTermId]);
+  }, [currentTermId, queryString]);
   return (
     <div className='flex'>
       <Info
