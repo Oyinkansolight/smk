@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Time from '~/svg/time.svg';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface dataType {
   sessionId: string | null;
@@ -41,7 +42,7 @@ interface propType {
   sessionId: string | null;
   classList: any;
   sessionterms?: any;
-  currentTermId?: number;
+  currentTermId?: string;
 }
 const AcademicCalendar = ({
   schoolType,

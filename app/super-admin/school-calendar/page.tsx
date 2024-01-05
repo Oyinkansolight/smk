@@ -33,6 +33,30 @@ import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Index = () => {
   const queryString = useSearchParams();
   const [tabIdx, setTabIdx] = useState(0);
@@ -40,27 +64,31 @@ const Index = () => {
   const [sessionname, setsessionname] = useState<string | null>('');
   const [schoolType, setschoolType] = useState<string | null>('');
   const [sessionterms, setsessionterms] = useState([]);
-  const [currentTermId, setCurrentTermId] = useState(0);
+  const [currentTermId, setCurrentTermId] = useState<string>('0');
+  const [reloadCount, setReloadCount] = useState(0);
 
-  function handleCurrentTerm(id: number) {
+  function handleCurrentTerm(id: string) {
     setCurrentTermId(id);
   }
-  function Fetchterms(currrentsession: string | null) {
-    request
-      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
-      .then((v) => {
-        const data = v.data.data.data;
-        setsessionterms(data.data || []);
-        handleCurrentTerm(data.data[0].id);
-      });
-  }
+
   const { data: allclasses } = useGetClassesList();
 
   useEffect(() => {
+    function Fetchterms(currrentsession: string | null) {
+      request
+        .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+        .then((v) => {
+          const data = v.data.data.data;
+          setsessionterms(data.data || []);
+          setReloadCount(reloadCount + 1);
+          handleCurrentTerm(data.data[1].id);
+        });
+    }
     // Create a URLSearchParams object with the query string
     // Extract the values of session and term parameters
     const currrentsession = queryString && queryString.get('session');
-    Fetchterms(currrentsession);
+
+    reloadCount === 0 && Fetchterms(currrentsession);
     const sn = queryString && queryString.get('name');
     const st = queryString && queryString.get('schooltype');
 
@@ -76,9 +104,7 @@ const Index = () => {
     // } else {
     //   settermname('Third Term');
     // }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTermId]);
+  }, [currentTermId, queryString, reloadCount]);
   return (
     <div className='flex'>
       <Info

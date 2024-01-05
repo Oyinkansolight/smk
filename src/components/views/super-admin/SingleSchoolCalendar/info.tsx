@@ -11,7 +11,7 @@ export default function StudentTeacherProfileCard({
   session?: string | null;
   schoolType?: string | null;
   sessionterms?: any;
-  setCurrentTermId?: (v: number) => void;
+  setCurrentTermId?: (v: string) => void;
 }) {
   const termNumberToName = (num: string) => {
     if (num) {
@@ -39,9 +39,11 @@ export default function StudentTeacherProfileCard({
         <select
           name=''
           id=''
-          onChange={(e) =>
-            setCurrentTermId && setCurrentTermId(Number(e.target.value))
-          }
+          onChange={(e) => {
+            if (setCurrentTermId) {
+              setCurrentTermId(e.target.value);
+            }
+          }}
           className='p-2 bg-[#FFF6E7] font-bold  border text-sm rounded w-full'
         >
           {sessionterms.map((v: any, i: number) => (

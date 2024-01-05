@@ -453,7 +453,7 @@ const UploadDocument = ({
     setIsUpdateFolder(!isUpdateFolder);
   }
   function handleIsUpdateFileModal() {
-    setIsUpdateFolder(!isUpdateFile);
+    setIsUpdateFile(!isUpdateFile);
   }
 
   // const [content, setContent] = useState<UserFile[] | undefined>([]);
