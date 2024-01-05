@@ -1,11 +1,13 @@
 'use client';
 
+import Button from '@/components/buttons/Button';
 import TabBar from '@/components/layout/TabBar';
+import AddSubjectModal from '@/components/modals/create-survey';
 import ReportRecords from '@/components/sections/superAdmin/ReportRecords';
-import SurveyBuilder from '@/components/sections/superAdmin/SurveyBuilder';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
   useGetSenderMessages,
+  useGetSurveys,
   useReadMessage,
 } from '@/server/government/communication';
 import { messages } from '@/types/comms';
@@ -17,8 +19,9 @@ import { RiArrowDropDownLine, RiDashboardFill } from 'react-icons/ri';
 
 const AllNotification = () => {
   const { data, isLoading } = useGetSenderMessages();
+  const { data: surveys, isLoading: surveysLoading } = useGetSurveys();
 
-  console.log(data);
+  console.log(surveys);
 
   const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
@@ -26,6 +29,7 @@ const AllNotification = () => {
   const [active, setActive] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [currentMessage, setCurrentMessage] = useState<messages>();
+  const [isSurveyActive, setIsSurveyActive] = useState(false);
 
   function handleReply() {
     setIsReply(!isReply);
@@ -201,7 +205,14 @@ const AllNotification = () => {
       )}
       {tabIdx === 2 && (
         <div className=''>
-          <SurveyBuilder />
+          <div className='flex justify-end'>
+            <AddSubjectModal>
+              <Button variant='primary'>Create New Survey</Button>
+            </AddSubjectModal>
+          </div>
+
+          {!surveys ||
+            (surveys?.length === 0 && <h4>No Survey Created Yet</h4>)}
         </div>
       )}
     </section>
