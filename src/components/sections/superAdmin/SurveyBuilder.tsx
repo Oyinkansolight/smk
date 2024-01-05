@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import SurveyQuestionBuilder from './SurveyQuestionBuilder';
 
-const SurveyBuilder = () => {
+const SurveyBuilder = ({ closeModal }: { closeModal?: () => void }) => {
   const [query, setQuery] = useState('');
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
@@ -27,7 +27,7 @@ const SurveyBuilder = () => {
     setQuestionBlock([
       ...questionBlock,
       {
-        isRequired: false,
+        isRequired: true,
         question: '',
         description: '',
         label: '',
@@ -55,6 +55,7 @@ const SurveyBuilder = () => {
         return {
           ...item,
           [label]: labelValue,
+          ['question']: labelValue,
           [description]: descriptionValue,
         }; // Update the label property
       }
@@ -99,7 +100,7 @@ const SurveyBuilder = () => {
 
   return (
     <>
-      <div className='flex flex-col gap-6 max-w-[700px] mx-auto'>
+      <div className='flex flex-col gap-6 bg-gray-100 p-2 rounded'>
         <div className='mt-2 flex flex-col gap-2 mx-auto text-center justify-center'>
           <div className='h2'>Survey Builder</div>
         </div>

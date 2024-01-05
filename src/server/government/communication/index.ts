@@ -38,6 +38,17 @@ export function useGetSenderMessages() {
   });
   return query;
 }
+export function useGetSurveys() {
+  const query = useQuery({
+    queryKey: `get_survey`,
+    queryFn: async () => {
+      const d = await request.get('/v1/survey');
+      // console.log(d.data.data.data);
+      return d.data.data.data as any;
+    },
+  });
+  return query;
+}
 export function useGetStaffs() {
   const query = useQuery({
     queryKey: `get_staffs`,

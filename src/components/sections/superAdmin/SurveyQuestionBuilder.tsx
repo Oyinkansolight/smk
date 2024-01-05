@@ -65,6 +65,26 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   addQuestionBlock: () => void;
   removeQuestionBlock: (id: number) => void;
@@ -109,10 +129,11 @@ const Education = ({
     setOptions(updatedItems);
     toast.success('Record deleted');
   };
-  const handleOptionChange = (name: string, value: any, id: number) => {
+  const handleOptionChange = (value: any, id: number) => {
     const updatedItems = options.map((item, i) => {
       if (i === id) {
-        return (item = value); // Update the name property
+        item = value; // Update the item property
+        return item;
       }
       return item;
     });
@@ -209,6 +230,9 @@ const Education = ({
             )}
             {settings === 'selection' && (
               <div className='space-y-3'>
+                <label htmlFor='' className='text-xs font-bold'>
+                  Choose a type of selection option{' '}
+                </label>
                 <div className='border rounded bg-transparent px-2 py-1'>
                   <select
                     name='selection'
@@ -218,9 +242,6 @@ const Education = ({
                       setSelectionType(e.target.value);
                     }}
                   >
-                    <option value=''>
-                      --Choose a type of selection option--
-                    </option>
                     <option value='dropdown'>
                       Single Selection(single answer)
                     </option>
@@ -237,7 +258,7 @@ const Education = ({
                         className='w-full border-none outline-none'
                         placeholder='Enter your option'
                         onChange={(e) => {
-                          console.log(e);
+                          handleOptionChange(e.target.value, idx);
                         }}
                       />
                       <button className='bg-gray-500 font-bold  rounded-full h-6 w-6 grid place-content-center  p-2'>
@@ -251,22 +272,24 @@ const Education = ({
                 ))}
 
                 <div className='flex justify-between items-center'>
-                  <Button
-                    variant='primary'
-                    onClickHandler={() => {
-                      handleQuestionBlockChangeSelection(
-                        'type',
-                        selectionType,
-                        options,
-                        i
-                      );
-                      if (options.length > 0) {
-                        toast.success('Option(s) Saved');
-                      }
-                    }}
-                  >
-                    <BiSave /> Save
-                  </Button>
+                  {options.length > 0 && (
+                    <Button
+                      variant='primary'
+                      onClickHandler={() => {
+                        handleQuestionBlockChangeSelection(
+                          'type',
+                          selectionType,
+                          options,
+                          i
+                        );
+                        if (options.length > 0) {
+                          toast.success('Option(s) Saved');
+                        }
+                      }}
+                    >
+                      <BiSave /> Save
+                    </Button>
+                  )}
                   <Button variant='secondary' onClickHandler={addOption}>
                     {options.length === 0 ? 'Add option' : '+ Add Another'}
                   </Button>
