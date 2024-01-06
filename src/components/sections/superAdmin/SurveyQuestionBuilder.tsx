@@ -85,6 +85,66 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type Iprops = {
   addQuestionBlock: () => void;
   removeQuestionBlock: (id: number) => void;
@@ -102,11 +162,18 @@ type Iprops = {
   ) => void;
   handleQuestionBlockChangeSelection: (
     type: string,
-    typeValue: any,
+    typeValue: string,
     options: string[] | null,
     id: number
   ) => void;
-  questionBlock: any[];
+  questionBlock: {
+    isRequired: boolean;
+    question: string;
+    description: string;
+    label: string;
+    type: string;
+    options: string[] | any;
+  }[];
 };
 
 const Education = ({
@@ -142,7 +209,7 @@ const Education = ({
   return (
     <section className=''>
       {questionBlock.map((v: any, i: number) => (
-        <div key={i} className='my-10 relative  items-center rounded-md'>
+        <div key={i} className='my-10 relative  rounded-md'>
           <div className='flex  items-center'>
             <button
               className={`${
@@ -185,14 +252,15 @@ const Education = ({
             {settings === 'basic' && (
               <div>
                 <div className='w-full'>
-                  <label htmlFor='' className='text-xs font-bold'>
+                  <h2 className='text-xs font-bold text-left'>
                     Title or label
-                  </label>
+                  </h2>
                   <div className='mt-1 w-full border p-2 rounded'>
                     <input
                       type='text'
                       className='w-full border-none outline-none'
                       placeholder='Enter details here'
+                      value={questionBlock[i].label}
                       onChange={(e) => {
                         handleQuestionBlockChangeBasic(
                           'label',
@@ -206,14 +274,13 @@ const Education = ({
                   </div>
                 </div>
                 <div className='mt-4'>
-                  <label htmlFor='' className='text-xs font-bold'>
-                    Description
-                  </label>
+                  <h2 className='text-xs font-bold text-left'>Description</h2>
                   <div className='mt-1 w-full border p-2 rounded'>
                     <input
                       type='text'
                       className='w-full border-none outline-none'
                       placeholder='Enter details here'
+                      value={questionBlock[i].description}
                       onChange={(e) => {
                         handleQuestionBlockChangeBasic(
                           'label',
@@ -230,9 +297,9 @@ const Education = ({
             )}
             {settings === 'selection' && (
               <div className='space-y-3'>
-                <label htmlFor='' className='text-xs font-bold'>
+                <h1 className='text-xs font-bold text-left'>
                   Choose a type of selection option{' '}
-                </label>
+                </h1>
                 <div className='border rounded bg-transparent px-2 py-1'>
                   <select
                     name='selection'
@@ -242,10 +309,10 @@ const Education = ({
                       setSelectionType(e.target.value);
                     }}
                   >
-                    <option value='dropdown'>
+                    <option value='DROPDOWN'>
                       Single Selection(single answer)
                     </option>
-                    <option value='checkbox'>
+                    <option value='CHECKBOX'>
                       Multiple Selection(multiple answers)
                     </option>
                   </select>
@@ -257,6 +324,7 @@ const Education = ({
                         type='text'
                         className='w-full border-none outline-none'
                         placeholder='Enter your option'
+                        // value={questionBlock[i]?.options[idx] ?? ''}
                         onChange={(e) => {
                           handleOptionChange(e.target.value, idx);
                         }}
@@ -298,9 +366,9 @@ const Education = ({
             )}
             {settings === 'validation' && (
               <div>
-                <label htmlFor='' className='text-xs font-bold'>
+                <h1 className='text-xs font-bold text-left'>
                   Is this question is a required field to be answered?
-                </label>
+                </h1>
                 <div className='border rounded bg-transparent py-1 px-2 mt-2'>
                   <select
                     name='selection'
@@ -340,7 +408,7 @@ const Education = ({
             addQuestionBlock();
             console.log(questionBlock);
           }}
-          className='mt-4 bg-blue-500 rounded-full h-10 w-10 grid place-content-center  p-2'
+          className=' bg-blue-500 rounded-full h-10 w-10 grid place-content-center  p-2'
         >
           <BsPlus size={28} className='text-white font-bold' />
         </button>
