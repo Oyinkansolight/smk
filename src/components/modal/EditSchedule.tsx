@@ -227,7 +227,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='activity'
-                        options={data}
+                        options={data?.data}
                         setFormValue={setSubjectId1}
                         formValue={subjectId1}
                       />
@@ -251,7 +251,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='activity'
-                        options={data}
+                        options={data?.data}
                         setFormValue={setSubjectId2}
                         formValue={subjectId2}
                       />
@@ -275,7 +275,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='activity'
-                        options={data}
+                        options={data?.data}
                         setFormValue={setSubjectId3}
                         formValue={subjectId3}
                       />
@@ -299,7 +299,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='activity'
-                        options={data}
+                        options={data?.data}
                         setFormValue={setSubjectId4}
                         formValue={subjectId4}
                       />
@@ -323,7 +323,7 @@ function AddActivityName({
                       <FormSelectSubject
                         label='Select Subject'
                         name='activity'
-                        options={data}
+                        options={data?.data}
                         setFormValue={setSubjectId5}
                         formValue={subjectId5}
                       />
