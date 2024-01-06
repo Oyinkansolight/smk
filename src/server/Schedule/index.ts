@@ -132,7 +132,9 @@ export function useDeleteAcademicTimeTable() {
   const mutation = useMutation({
     mutationKey: 'delete-academic-timetable',
     mutationFn: (params: any) =>
-      request.delete(`/v1/government/events/delete-event?eventId=${params.id}`),
+      request.delete(
+        `/v1/government/time-table/delete-time-table?id=${params.id}`
+      ),
     onSettled: () => {
       client.refetchQueries('academic_timetable');
     },
