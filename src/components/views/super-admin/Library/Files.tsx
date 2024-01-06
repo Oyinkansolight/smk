@@ -81,6 +81,10 @@ const columns: TableColumn<TableItemData>[] = [
             <h2
               onClick={() => {
                 item?.fileUrl && item.openModal(item.fileUrl, item.fileType);
+
+                item.fileType === 'video' &&
+                  item.fileUrl &&
+                  handleFlutterPDFReader(item.fileUrl);
               }}
               className='text-sm font-medium cursor-pointer'
             >
@@ -587,7 +591,8 @@ const UploadDocument = ({
                 </div>
               </div>
             ) : (
-              isModalOpen && url && handleFlutterPDFReader(url)
+              <div></div>
+              // isModalOpen && url && handleFlutterPDFReader(url)
             )
           }
         />
