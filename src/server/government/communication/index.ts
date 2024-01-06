@@ -38,7 +38,43 @@ export function useGetSenderMessages() {
   });
   return query;
 }
+export function useGetSurveys() {
+  const query = useQuery({
+    queryKey: `get_survey`,
+    queryFn: async () => {
+      const d = await request.get('/v1/survey');
+      // console.log(d.data.data.data);
+      return d.data.data.data as any;
+    },
+  });
+  return query;
+}
+export function useGetSingleSurvey(id: string) {
+  const query = useQuery({
+    queryKey: `get_single_survey`,
+    queryFn: async () => {
+      if (id) {
+        const d = await request.get('/v1/survey/' + id);
+        // console.log(d.data.data.data);
+        return d.data.data.data as any;
+      }
+    },
+  });
+  return query;
+}
+export function useCreateSurvey() {
+  const mutation = useMutation({
+    mutationKey: 'create-survey',
+    mutationFn: (params: any) =>
+      request.post('/v1/survey', params, {
+        withCredentials: true,
+      }),
+  });
+  return mutation;
+}
 export function useGetStaffs() {
+  const client = useQueryClient();
+
   const query = useQuery({
     queryKey: `get_staffs`,
     queryFn: async () => {
@@ -48,6 +84,9 @@ export function useGetStaffs() {
       // console.log(d.data.data.data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return d.data.data.data.data as any;
+    },
+    onSettled: () => {
+      client.refetchQueries(`get_survey`);
     },
   });
   return query;

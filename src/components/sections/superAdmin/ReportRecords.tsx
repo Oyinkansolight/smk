@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import GenericChart from '@/components/cards/GenericChart';
-import { BarChart } from '@/components/charts';
-import AttendanceRate from '@/components/charts/AttendanceRate';
 import PopOverSelect from '@/components/input/PopOverSelect';
 import Select from '@/components/input/formSelect';
-import ChartSkeleton from '@/components/skeletons/Chart';
 import request from '@/server';
 import { useGetSchools } from '@/server/institution';
-import Image from 'next/image';
-import Link from 'next/link';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -60,12 +54,13 @@ const AttendanceRecords = () => {
       setIsLoading(true);
       request
         .get(
-          `/v1/government/dashboards/get-admin-stat-dashboard?institutionId=${institutionId}`
+          `/v1/government/report/get-institution-report?institutionId=${institutionId}`
         )
         .then((v) => {
           setIsLoading(false);
 
-          setChartData(v.data.data);
+          console.log(v.data.data);
+          // setChartData(v.data.data);
         })
         .catch((err) => {
           setIsLoading(false);
@@ -102,25 +97,9 @@ const AttendanceRecords = () => {
         setSelectedItemName={handleInstitutionName}
       />
 
-      <Link href='/super-admin'>
-        <div className='flex items-center space-x-4'>
-          <Image
-            src='/svg/back.svg'
-            width={10}
-            height={10}
-            alt='back'
-            className='h-4 w-4'
-          />
-          <h3 className='text-[10px] font-medium'>Dashboard</h3>
-        </div>
-      </Link>
-
       <div className='flex flex-col gap-6'>
-        <div className='flex flex-col gap-2 mx-auto text-center justify-center'>
-          <div className='h2'>Attendance Records</div>
-          <div className='p text-gray-400'>
-            Weekly Breakdown of Attendance Records
-          </div>
+        <div className='mt-2 flex flex-col gap-2 mx-auto text-center justify-center'>
+          <div className='h2'>Report Records</div>
         </div>
 
         <div>
@@ -132,7 +111,7 @@ const AttendanceRecords = () => {
           />
         </div>
 
-        {!isLoadingData ? (
+        {/* {!isLoadingData ? (
           <div className='mt-7 grid grid-cols-1 gap-7 md:grid-cols-2'>
             <div className='flex flex-col gap-y-7'>
               <GenericChart
@@ -158,7 +137,7 @@ const AttendanceRecords = () => {
             <ChartSkeleton />
             <ChartSkeleton />
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

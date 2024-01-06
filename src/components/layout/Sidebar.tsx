@@ -137,6 +137,13 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
             href='/teacher/messages'
             active={routeDetails && routeDetails.includes('messages') && true}
           />
+          <SideBarButton
+            open={open}
+            icon={<BiBookContent className='#C3CAD9' />}
+            title='Report'
+            href='/teacher/report'
+            active={routeDetails && routeDetails.includes('report') && true}
+          />
 
           <SideBarButton
             open={open}

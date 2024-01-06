@@ -1,34 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import NextImage from '@/components/NextImage';
 import { BasicCard } from '@/components/cards';
+import GenericLoader from '@/components/layout/Loader';
+import EmptyView from '@/components/misc/EmptyView';
 import AcademicCalendar from '@/components/views/teacher/AcademicCalendar';
 import SmallTeacherCard from '@/components/views/teacher/SmallTeacherCard';
+import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetStaffDashboardOverview } from '@/server/dashboard';
-import { BiUser } from 'react-icons/bi';
-import EmptyView from '@/components/misc/EmptyView';
-import NextImage from '@/components/NextImage';
-import clsxm from '@/lib/clsxm';
-import { useState } from 'react';
-import { useGetTeacherNextClass, GetTeacherNextClassParams } from '@/server/teacher';
-import moment from 'moment';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import {
+  GetTeacherNextClassParams,
+  useGetTeacherNextClass,
+} from '@/server/teacher';
 import { TeacherNextClass } from '@/types/classes-and-subjects';
-import GenericLoader from '@/components/layout/Loader';
+import moment from 'moment';
+import Link from 'next/link';
+import { useState } from 'react';
+import { BiUser } from 'react-icons/bi';
 
 export default function TeacherDashboardView() {
-  const sessionId: string = getFromLocalStorage('currentSessionId') ?? "";
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
   const term: any = getFromSessionStorage('currentTerm');
   const week: any = getFromSessionStorage('currentWeek');
 
   const { data: profileData } = useGetProfile();
   const { data: overviewData } = useGetStaffDashboardOverview();
-  const { data: nextClassData, isLoading: isLoadingNextClass } = useGetTeacherNextClass({
-    day: moment().format('dddd') as GetTeacherNextClassParams['day'],
-    sessionId,
-    teacherId: profileData?.userInfo?.staff?.id,
-    termId: JSON.parse(term)?.id,
-    weekId: JSON.parse(week)?.id,
-  });
+  const { data: nextClassData, isLoading: isLoadingNextClass } =
+    useGetTeacherNextClass({
+      day: moment().format('dddd') as GetTeacherNextClassParams['day'],
+      sessionId,
+      teacherId: profileData?.userInfo?.staff?.id,
+      termId: JSON.parse(term)?.id,
+      weekId: JSON.parse(week)?.id,
+    });
   // const { data: sessionCalendarData } = useGetSessionCalendar(1);
 
   const isWithinTime = (startTime: string, endTime: string) => {
@@ -37,7 +42,7 @@ export default function TeacherDashboardView() {
       moment(startTime, 'HH:mm'),
       moment(endTime, 'HH:mm')
     );
-  }
+  };
 
   return (
     <div className='flex flex-col layout'>
@@ -73,27 +78,33 @@ export default function TeacherDashboardView() {
         <div className='grid grid-rows-2 gap-6 w-full'>
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
             <div className='h4'>Next Class</div>
-            {isLoadingNextClass && (
-              <GenericLoader />
+            {isLoadingNextClass && <GenericLoader />}
+
+            {nextClassData &&
+              nextClassData?.length > 0 &&
+              nextClassData.slice(0, 5).map((nextClass) => {
+                // if (!nextClass) return null;
+
+                return (
+                  <NextClassCard
+                    key={nextClass?.id}
+                    nextClass={nextClass}
+                    isActive={isWithinTime(
+                      nextClass?.startTime ?? '',
+                      nextClass?.endTime ?? ''
+                    )}
+                  />
+                );
+              })}
+
+            {!nextClassData ||
+              (nextClassData?.length === 0 && <EmptyView label='No Data' />)}
+
+            {nextClassData && nextClassData?.length > 0 && (
+              <Link href='/teacher/timetable' className='font-bold text-right'>
+                See all
+              </Link>
             )}
-
-            {nextClassData && nextClassData?.length > 0 && nextClassData.slice(0, 5).map((nextClass) => {
-              // if (!nextClass) return null;
-
-              return (
-                <NextClassCard
-                  key={nextClass?.id}
-                  nextClass={nextClass}
-                  isActive={isWithinTime(nextClass?.startTime ?? "", nextClass?.endTime ?? "")}
-                />
-              )
-            })}
-
-            {(!nextClassData || nextClassData?.length === 0 &&
-              <EmptyView label='No Data' />
-            )}
-
-            {nextClassData && nextClassData?.length > 0 && <div className='font-bold text-right'>See all</div>}
           </BasicCard>
 
           <BasicCard className='flex flex-col gap-4 min-w-[476px] !rounded-2xl'>
@@ -161,8 +172,12 @@ const NextClassCard = ({ isActive = false, nextClass }: NextClassCardProps) => {
           </div>
 
           <div className='flex flex-col gap-1'>
-            <div className='text-xs font-bold leading-[14px]'>{nextClass?.subject?.name}</div>
-            <div className='text-xs font-bold leading-[14px]'>{nextClass?.class?.name}</div>
+            <div className='text-xs font-bold leading-[14px]'>
+              {nextClass?.subject?.name}
+            </div>
+            <div className='text-xs font-bold leading-[14px]'>
+              {nextClass?.class?.name}
+            </div>
             <div className='text-xs font-bold leading-[14px]'>
               {nextClass?.startTime} - {nextClass?.endTime}
             </div>

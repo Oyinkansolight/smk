@@ -3,13 +3,15 @@
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
-import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
 import TaskListView from '@/components/views/teacher/TaskListView';
+import TimetableView from '@/components/views/teacher/TimetableView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
+import { useGetTeacherTimetable } from '@/server/Schedule';
 import {
   useGetSubjectAssignedToTeacher,
   useGetTeacherById,
@@ -42,6 +44,13 @@ const SingleTeacherDashboard = () => {
     p?.get('id'),
     currentSessionId
   );
+  const { data: teacherTimeTable, isLoading: isTTLoading } =
+    useGetTeacherTimetable({
+      // sessionId: currentSessionId,
+      // termId: currentTermInfo?.id,
+      classId: staff?.managedClassArm?.class?.id,
+      teacherId: p?.get('id') ?? '',
+    });
 
   return (
     <div className='flex'>
@@ -102,7 +111,21 @@ const SingleTeacherDashboard = () => {
             />
           )}
 
-          {tabIdx === 1 && <ExamTimetable isClassTimeTable={true} />}
+          {tabIdx === 1 && (
+            <div>
+              {teacherTimeTable?.length > 0 ? (
+                <TimetableView
+                  data={teacherTimeTable}
+                  isLoading={isTTLoading}
+                />
+              ) : (
+                <EmptyView
+                  label='Timetable Not Available Yet'
+                  useStandardHeight
+                />
+              )}
+            </div>
+          )}
           {tabIdx === 2 && <TaskListView userId={p?.get('id') ?? ''} />}
         </div>
       )}

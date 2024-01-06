@@ -7,7 +7,7 @@ import { BsArrowRight } from 'react-icons/bs';
 
 interface timetableArg {
   classId: string;
-  termId: number;
+  termId: string;
 }
 interface propType {
   schoolType: string | null;
@@ -15,7 +15,7 @@ interface propType {
   sessionId: string | null;
   classList: any;
   sessionterms?: any;
-  currentTermId: number;
+  currentTermId: string;
 }
 export default function TaskListView({
   schoolType,
@@ -35,7 +35,6 @@ export default function TaskListView({
     setclassId(classId);
     settermId(termId);
   }
-
 
   const getClassesByInstitution = classList.filter(
     (item: any) =>

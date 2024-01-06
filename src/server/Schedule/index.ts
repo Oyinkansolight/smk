@@ -69,7 +69,7 @@ export function useGetAcademicTimetable({
   return query;
 }
 export function useGetTeacherTimetable({
-  classId,
+  classId = '',
   type = 'DEFAULT',
   teacherId = '',
 }) {
@@ -80,7 +80,7 @@ export function useGetTeacherTimetable({
         try {
           return request
             .get(
-              `/v1/government/time-table/teacher-time-table?classId=${classId}&type=${type}&teacherId=${teacherId}&limit=10000`
+              `/v1/government/time-table/teacher-time-table?type=${type}&teacherId=${teacherId}&limit=10000`
             )
             .then((res) => res.data.data.data);
         } catch (error) {

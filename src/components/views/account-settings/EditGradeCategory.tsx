@@ -36,6 +36,10 @@ export default function EditGradeCategory({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
+    if (!sessionId || !termId) {
+      toast.error('No current session for the chosen institute type');
+      return;
+    }
     try {
       await createCategory({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +65,7 @@ export default function EditGradeCategory({
   const handleRemoveCategoryByIndex = (index: number) => {
     const newItems = [...items];
     newItems.splice(index, 1);
+
     setItems(newItems);
   };
 

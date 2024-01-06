@@ -3,9 +3,9 @@ import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useUpdateStaff } from '@/server/government/staff';
+import { useUpdateParent } from '@/server/government/staff';
 import { useGetLocalGovernments } from '@/server/onboard';
-import { Parent, TrainingDetails } from '@/types/institute';
+import { Parent } from '@/types/institute';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImSpinner } from 'react-icons/im';
@@ -24,7 +24,7 @@ export default function ParentBioDetails({
   const { control, setValue, handleSubmit } = useForm();
   const [loading, setIsLoading] = useState(false);
   const [userLga, setUserLga] = useState('');
-  const update = useUpdateStaff();
+  const update = useUpdateParent();
   const { data: localGovernments } = useGetLocalGovernments();
 
   useEffect(() => {
@@ -64,12 +64,10 @@ export default function ParentBioDetails({
       const payload: Parent = {
         // profileImg: data.,
         lga: data.lga,
-        email: data.email,
         id: initParent?.id,
         address: data.address,
         firstName: (data.fullName as string).split(' ')[0],
         lastName: (data.fullName as string).split(' ')[1],
-        profileImg: '',
       };
 
       console.log(payload);
@@ -78,7 +76,7 @@ export default function ParentBioDetails({
         const response = await update.mutateAsync(payload);
 
         if (response) {
-          toast.success('Staff Updated successful');
+          toast.success('Parent Updated successful');
         }
       } catch (error) {
         logger(error);

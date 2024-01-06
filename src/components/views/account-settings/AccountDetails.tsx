@@ -70,14 +70,14 @@ const Page = ({ profile }: { profile?: any }) => {
           isEditingBioDetails && 'opacity-50'
         )}
       >
-        <Button
+        {/* <Button
           onClick={() => router.push('/admin/student/edit-history')}
           disabled={isEditingBioDetails}
           variant='ghost'
           className='text-primary bg-white hover:bg-primary-100 border border-primary-500'
         >
           View Edit History
-        </Button>
+        </Button> */}
         <Button
           disabled={isEditingBioDetails}
           onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}

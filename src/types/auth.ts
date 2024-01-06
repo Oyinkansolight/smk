@@ -40,6 +40,40 @@ export interface CurrentSession {
   updatedAt?: Date;
 }
 
+export interface Parent {
+  id: string;
+  profileImg: string;
+  firstName: string;
+  email: string;
+  lastName: string;
+  lga: string;
+  address: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: null;
+  students: Student[];
+}
+
+export interface Student {
+  id: string;
+  profileImg: null | string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  lga: null | string;
+  readingProficiency: string;
+  address: string;
+  gender: string;
+  dob: string;
+  studentId: string;
+  instituteLat: null;
+  instituteLong: null;
+  createdAt: Date;
+  updatedAt: Date;
+  lessonNoteTimeLogs: any[];
+  classArmId: string;
+}
+
 export interface UserInfo {
   id?: string;
   firstName?: string;
@@ -52,6 +86,7 @@ export interface UserInfo {
   resetPasswordToken?: null;
   resetPasswordTokenExpires?: null;
   type?: string;
+  parent?: Parent;
   loginCount?: number;
   suspended?: boolean;
   createdAt?: Date;

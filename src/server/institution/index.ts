@@ -43,6 +43,25 @@ type payloadProp = {
   reason?: string;
   newInstitutionId?: string;
 };
+export interface ISchoolType {
+  items: Item[];
+  meta: Meta;
+}
+
+export interface Item {
+  id: string;
+  name: null | string;
+  semester: number;
+}
+
+export interface Meta {
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export interface CreateSubjectParams {
   name?: string;
   classId?: number[];
@@ -597,7 +616,7 @@ export function useGetInstituteTypes() {
         const d = await request.get(
           '/v1/government/institutes/get-institute-type'
         );
-        return d.data.data.data as any;
+        return d.data.data.data as ISchoolType;
       } catch (error) {
         logger(error);
         throw error;

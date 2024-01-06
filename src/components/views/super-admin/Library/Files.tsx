@@ -6,6 +6,7 @@ import DeleteModalContent from '@/components/modal/DeleteModalContent';
 import UploadMaterial from '@/components/modal/UploadMaterial';
 import AssignSubject from '@/components/modal/assignSubject';
 import CreateFolder from '@/components/modal/createFolder';
+import UpdateFile from '@/components/modal/updateFile';
 import UpdateFolder from '@/components/modal/updateFolder';
 import CustomPDFReader from '@/components/pdfReader/Reader';
 import Table from '@/components/tables/TableComponent';
@@ -44,13 +45,16 @@ type TableItemData = (UserFolder | UserFile) & {
   isAssign: boolean;
   action: number | null;
   isUpdateFolder: boolean;
+  isUpdateFile: boolean;
   setFileId: (value: string) => void;
+  setFileName: (value: string) => void;
   setFolderId: (value: string) => void;
   openModal: (fileUrl: string, fileType?: string) => void;
   setIsAssign: (value: boolean) => void;
   setFolderName: (value: string) => void;
   setAction: (value: number | null) => void;
   setIsUpdateFolder: (value: boolean) => void;
+  setIsUpdateFile: (value: boolean) => void;
   onFolderClick: (folderId: UserFolder) => void;
   // setDeleteFolderId: (folderId: string) => void;
   // setDeleteFileId: (fileId: string) => void;
@@ -199,7 +203,14 @@ const columns: TableColumn<TableItemData>[] = [
                     >
                       Assign to a Subject
                     </button>
-                    <button className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'>
+                    <button
+                      onClick={() => {
+                        item.setIsUpdateFile(!item.isUpdateFile);
+                        item.setFileName(item?.filename ?? '');
+                        item.setFileId(item?.id ?? '');
+                      }}
+                      className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
+                    >
                       Rename
                     </button>
                     <button
@@ -317,9 +328,11 @@ const UploadDocument = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
   const [isUpdateFolder, setIsUpdateFolder] = useState(false);
+  const [isUpdateFile, setIsUpdateFile] = useState(false);
   const [isAssign, setIsAssign] = useState(false);
   const [action, setAction] = useState<number | null>(null);
   const [fileId, setFileId] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [folderName, setFolderName] = useState('');
   const [folderId, setFolderId] = useState('');
@@ -378,7 +391,7 @@ const UploadDocument = ({
     if (fileId) {
       refetchFile();
     }
-    if (pathname?.includes('super')) {
+    if (pathname?.includes('admin')) {
       setIsSuperAdmin(true);
     }
   }, [fileId, pathname, refetchFile, reset]);
@@ -438,6 +451,9 @@ const UploadDocument = ({
 
   function handleIsUpdateFolderModal() {
     setIsUpdateFolder(!isUpdateFolder);
+  }
+  function handleIsUpdateFileModal() {
+    setIsUpdateFile(!isUpdateFile);
   }
 
   // const [content, setContent] = useState<UserFile[] | undefined>([]);
@@ -613,6 +629,13 @@ const UploadDocument = ({
               onClickHandler={handleIsUpdateFolderModal}
             />
           )}
+          {isUpdateFile && (
+            <UpdateFile
+              fileId={fileId}
+              fileName={fileName}
+              onClickHandler={handleIsUpdateFileModal}
+            />
+          )}
 
           <div className='mb-6 flex  items-end relative'>
             {folderTrail.length > 0 && (
@@ -742,6 +765,7 @@ const UploadDocument = ({
                       setIsAssign,
                       idx: item.id ? item.id : idx,
                       setFileId,
+                      setFileName,
                       onFolderClick: (folder) => {
                         const c = [...folderTrail];
                         c.push(folder);
@@ -759,6 +783,8 @@ const UploadDocument = ({
                       setFolderName,
                       isUpdateFolder,
                       setIsUpdateFolder,
+                      isUpdateFile,
+                      setIsUpdateFile,
                       setConentType,
                       toggleDeleteModal,
                     } as TableItemData)

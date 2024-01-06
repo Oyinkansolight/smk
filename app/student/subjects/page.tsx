@@ -18,6 +18,8 @@ import { useGetClassArmInfo } from '@/server/institution/class';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const userData = getFromSessionStorage('user');
   let user;
@@ -35,7 +37,10 @@ export default function Page() {
         <div className='flex flex-row items-center justify-between w-full'>
           <div className='font-bold py-8 w-full'>
             <div className='flex flex-wrap gap-x-[52px] gap-y-10 justify-items-center w-full'>
-              <SubjectList studentSubjectsList={classArmInfo?.subjects} />
+              <SubjectList
+                studentSubjectsList={classArmInfo?.subjects}
+                classId={user?.currentStudentInfo?.class?.class?.id}
+              />
             </div>
           </div>
         </div>
