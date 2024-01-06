@@ -56,7 +56,7 @@ export function useGetSingleSurvey(id: string) {
       if (id) {
         const d = await request.get('/v1/survey/' + id);
         // console.log(d.data.data.data);
-        return d.data.data.data as any;
+        return d.data as any;
       }
     },
   });

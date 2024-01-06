@@ -49,7 +49,11 @@ const AllNotification = () => {
     useReadMessage({ id: messageId });
   };
 
-  const { data: currentSurvey, refetch } = useGetSingleSurvey(activeSurvey);
+  const {
+    data: currentSurvey,
+    refetch,
+    isLoading: singleSurveyLoading,
+  } = useGetSingleSurvey(activeSurvey);
 
   useEffect(() => {
     refetch();
@@ -270,7 +274,7 @@ const AllNotification = () => {
                                 className={`col-span-7 
                   } flex flex-col space-y-2`}
                               >
-                                <h1 className='font-bold text-base'>
+                                <h1 className='font-bold text-base cursor-pointer'>
                                   {item?.surveyName}{' '}
                                 </h1>
                               </div>
@@ -286,11 +290,52 @@ const AllNotification = () => {
               )}
             </div>
             <div className='border-l'>
-              <div className='py-20 flex justify-center items-center bg-white/80'>
+              <div className=' bg-white/80'>
                 {!currentSurvey ? (
-                  <h4>No survey selected yet</h4>
+                  <div className='py-20 flex justify-center items-center'>
+                    <h4>No survey selected yet</h4>
+                  </div>
                 ) : (
-                  <div>{currentSurvey}</div>
+                  <div>
+                    <div className='grid grid-cols-12 gap-6 p-4'>
+                      <div className='col-span-3 font-medium'>
+                        Date Created:
+                      </div>
+                      <div className='col-span-9'>
+                        {moment(currentSurvey?.createdAt).format('llll')}
+                      </div>
+                      <div className='col-span-3 font-medium'>
+                        Date Updated:
+                      </div>
+                      <div className='col-span-9'>
+                        {moment(currentSurvey?.updatedAt).format('llll')}
+                      </div>
+                      <div className='col-span-3 font-medium'>Survey Name:</div>
+                      <div className='col-span-9'>
+                        {currentSurvey?.surveyName ?? ''}
+                      </div>
+                      <div className='col-span-3 font-medium'>
+                        Participant(s):
+                      </div>
+                      <div className='col-span-9'>
+                        {currentSurvey?.submissionsCount ?? 0}
+                      </div>
+                      <div className='col-span-3 font-medium'>Inst. Type:</div>
+                      <div className='col-span-9'>All</div>
+                    </div>
+
+                    {singleSurveyLoading && (
+                      <div className='flex justify-center items-center'>
+                        <RotatingLines
+                          width='100'
+                          visible={true}
+                          strokeWidth='5'
+                          strokeColor='#4fa94d'
+                          animationDuration='0.75'
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
