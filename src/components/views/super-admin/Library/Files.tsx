@@ -79,12 +79,11 @@ const columns: TableColumn<TableItemData>[] = [
               )}
             </div>
             <h2
-              onClick={() => {
+              onClick={async () => {
+                console.log('testpdf');
                 item?.fileUrl && item.openModal(item.fileUrl, item.fileType);
-
-                item.fileType === 'video' &&
-                  item.fileUrl &&
-                  handleFlutterPDFReader(item.fileUrl);
+                const fetchFileUrl = await getURL(item.fileUrl ?? '');
+                item.fileUrl && handleFlutterPDFReader(fetchFileUrl);
               }}
               className='text-sm font-medium cursor-pointer'
             >
