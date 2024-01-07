@@ -71,6 +71,24 @@ const AdminSidebar = ({ open, handleToggle }: AdminSidebarProps) => {
             handleToggle();
           }}
         />
+        <SideBarButtonTwo
+          active={routeDetails && routeDetails.includes('survey') && true}
+          title='Survey'
+          onClick={() => {
+            router.push('/super-admin/survey');
+            handleToggle();
+          }}
+        />
+        <SideBarButtonTwo
+          active={
+            routeDetails && routeDetails.includes('teacher' || 'staff') && true
+          }
+          title='Staff'
+          onClick={() => {
+            router.push('/super-admin/all-staff');
+            handleToggle();
+          }}
+        />
 
         <SideBarButtonTwo
           active={routeDetails && routeDetails.includes('subject') && true}

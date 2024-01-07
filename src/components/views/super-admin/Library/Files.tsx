@@ -13,7 +13,6 @@ import Table from '@/components/tables/TableComponent';
 import { getURL, updateDocumentMetadata } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { handleFlutterPDFReader } from '@/lib/helper';
-import logger from '@/lib/logger';
 import {
   useAssignSubjectsToFile,
   useAssignSubjectsToFolder,
@@ -31,7 +30,6 @@ import { useForm } from 'react-hook-form';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
-import { useMediaQuery } from 'react-responsive';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 import FileContent from '~/svg/file.svg';
@@ -58,7 +56,7 @@ type TableItemData = (UserFolder | UserFile) & {
   onFolderClick: (folderId: UserFolder) => void;
   // setDeleteFolderId: (folderId: string) => void;
   // setDeleteFileId: (fileId: string) => void;
-  setConentType: (fileId: string) => void;
+  setContentType: (fileId: string) => void;
   toggleDeleteModal: () => void;
   setQuery: (value: string) => void;
 };
@@ -70,7 +68,7 @@ const columns: TableColumn<TableItemData>[] = [
     cell: (item) => {
       if ('fileUrl' in item) {
         return (
-          <div className='col-span-4 w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'>
+          <div className='col-span-4 w-max text-left text-[#525F7F] pl-2 flex space-x-2 items-center'>
             <div>
               {item.fileType === 'video' ? (
                 <VideoContent className='h-6 w-6' />
@@ -79,11 +77,8 @@ const columns: TableColumn<TableItemData>[] = [
               )}
             </div>
             <h2
-              onClick={async () => {
-                console.log('testpdf');
+              onClick={() => {
                 item?.fileUrl && item.openModal(item.fileUrl, item.fileType);
-                const fetchFileUrl = await getURL(item.fileUrl ?? '');
-                item.fileUrl && handleFlutterPDFReader(fetchFileUrl);
               }}
               className='text-sm font-medium cursor-pointer'
             >
@@ -98,7 +93,7 @@ const columns: TableColumn<TableItemData>[] = [
               item.id && item.onFolderClick(item);
               item.setQuery && item.setQuery('');
             }}
-            className='col-span-4 cursor-pointer w-max text-center text-[#525F7F] pl-2 flex space-x-2 items-center'
+            className='col-span-4 cursor-pointer w-max text-left text-[#525F7F] pl-2 flex space-x-2 items-center'
           >
             <div>
               <Folder className='h-6 w-6' />
@@ -200,7 +195,7 @@ const columns: TableColumn<TableItemData>[] = [
                       onClick={() => {
                         item.setIsAssign(!item.isAssign);
                         item.setFileId(item?.id ?? '');
-                        item.setConentType('file');
+                        item.setContentType('file');
                       }}
                       className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                     >
@@ -220,7 +215,7 @@ const columns: TableColumn<TableItemData>[] = [
                       onClick={() => {
                         // item.setDeleteFileId(item?.id ?? '');
                         item.setFileId(item?.id ?? '');
-                        item.setConentType('file');
+                        item.setContentType('file');
                         item.toggleDeleteModal();
                       }}
                       className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
@@ -259,7 +254,7 @@ const columns: TableColumn<TableItemData>[] = [
                       onClick={() => {
                         item.setIsAssign(!item.isAssign);
                         item.setFolderId(item?.id ?? '');
-                        item.setConentType('folder');
+                        item.setContentType('folder');
                       }}
                       className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
                     >
@@ -278,7 +273,7 @@ const columns: TableColumn<TableItemData>[] = [
                     <button
                       onClick={() => {
                         item.setFolderId(item?.id ?? '');
-                        item.setConentType('folder');
+                        item.setContentType('folder');
                         item.toggleDeleteModal();
                       }}
                       className='p-4 text-black hover:bg-gray-200  text-left font-medium w-full'
@@ -324,9 +319,12 @@ const UploadDocument = ({
     mode: 'onChange',
   });
 
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)',
-  });
+  // const isDesktopOrLaptop = useMediaQuery({
+  //   query: '(min-width: 1224px)',
+  // });
+  const isWebViewEnvironment =
+    navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
+    navigator.userAgent.includes('ReactNative'); // Check for React Native apps
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
@@ -343,7 +341,7 @@ const UploadDocument = ({
   const [currentFile, setCurrentFile] = useState('');
   const [mediaType, setMediaType] = useState('');
   const [url, setUrl] = useState('');
-  const [contentType, setConentType] = useState('');
+  const [contentType, setContentType] = useState('');
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
@@ -363,7 +361,6 @@ const UploadDocument = ({
   };
 
   const openModal = (fileUrl: string, fileType?: string) => {
-    logger(fileUrl);
     setCurrentFile(fileUrl);
     setMediaType(fileType ?? '');
     toggleModal();
@@ -410,7 +407,6 @@ const UploadDocument = ({
   }, [fileObject, setValue]);
 
   useEffect(() => {
-    logger(currentFile);
     if (isModalOpen) {
       const getFileURL = async () => {
         if (mediaType !== 'video') {
@@ -421,13 +417,12 @@ const UploadDocument = ({
         }
 
         await getURL(currentFile).then((v) => setUrl(v));
-        logger(url);
       };
       getFileURL();
     } else {
       setCurrentFile('');
     }
-  }, [currentFile, isModalOpen, url]);
+  }, [currentFile, isModalOpen, mediaType, url]);
 
   useEffect(() => {
     const refetchSearchRecords = () => {
@@ -566,11 +561,12 @@ const UploadDocument = ({
           className='mt-10 lg:mt-6'
           toggleModal={toggleModal}
           showModal={
-            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')
+            !isWebViewEnvironment ||
+            (isWebViewEnvironment && mediaType === 'video')
           }
           content={
-            isDesktopOrLaptop ||
-            (!isDesktopOrLaptop && mediaType === 'video' && isModalOpen) ? (
+            !isWebViewEnvironment ||
+            (isWebViewEnvironment && mediaType === 'video' && isModalOpen) ? (
               <div className='flex items-stretch gap-10'>
                 <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                   <div className='flex justify-center'>
@@ -584,14 +580,14 @@ const UploadDocument = ({
                         ></video>
                       ) : (
                         // <SyncFusionPDFReader url={url} />
+
                         <CustomPDFReader url={url} />
                       ))}
                   </div>
                 </div>
               </div>
             ) : (
-              <div></div>
-              // isModalOpen && url && handleFlutterPDFReader(url)
+              isModalOpen && url && handleFlutterPDFReader(url)
             )
           }
         />
@@ -609,7 +605,7 @@ const UploadDocument = ({
           }
         />
 
-        <section className='transition-all ease-in-out delay-1000 w-full max-w-[40rem] lg:max-w-full'>
+        <section className='transition-all ease-in-out delay-3000 w-full max-w-[40rem] lg:max-w-full'>
           {isCreateFolder && (
             <CreateFolder
               onClickHandler={handleIsCreateFolderModal}
@@ -645,6 +641,7 @@ const UploadDocument = ({
             {folderTrail.length > 0 && (
               <div
                 onClick={() => {
+                  console.log(folderTrail);
                   const c = [...folderTrail];
                   c.pop();
                   setFolderTrail(c);
@@ -789,7 +786,7 @@ const UploadDocument = ({
                       setIsUpdateFolder,
                       isUpdateFile,
                       setIsUpdateFile,
-                      setConentType,
+                      setContentType,
                       toggleDeleteModal,
                     } as TableItemData)
                 ) ?? []

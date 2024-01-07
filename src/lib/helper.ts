@@ -259,7 +259,7 @@ export const renderHTML = (rawHTML: string) =>
 
 export const handleFlutterPDFReader = (url: string) => {
   if (window) {
-    console.log('handleFlutterPDFReader', url);
+    // console.log('handleFlutterPDFReader', url);
     (window as any).flutter_inappwebview?.callHandler('open-pdf', url);
   }
 

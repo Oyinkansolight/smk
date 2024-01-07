@@ -44,7 +44,7 @@ export function useGetSurveys() {
     queryFn: async () => {
       const d = await request.get('/v1/survey');
       // console.log(d.data.data.data);
-      return d.data.data.data as any;
+      return d.data as any;
     },
   });
   return query;
@@ -57,6 +57,20 @@ export function useGetSingleSurvey(id: string) {
         const d = await request.get('/v1/survey/' + id);
         // console.log(d.data.data.data);
         return d.data as any;
+      }
+    },
+  });
+  return query;
+}
+export function useGetSingleSurveyQuestion(id: string) {
+  const query = useQuery({
+    queryKey: `get_single_survey_question`,
+    queryFn: async () => {
+      if (id) {
+        const d = await request.get(
+          '/v1/survey_question?limit=1000&surveyId=' + id
+        );
+        return d.data?.data?.data as any;
       }
     },
   });
