@@ -33,6 +33,10 @@ const SurveyQuestion = () => {
   return (
     <section className='-ml-2 py-6'>
       <div className='py-4 px-4 border-b flex justify-between items-center'>
+        <h1>
+          Directorate of Educational Quality and Accountability-School
+          Resumption Monitoring Checklist for Evaluators
+        </h1>
         <h1 className='text-2xl font-bold'>Fill A Survey</h1>
       </div>
 
@@ -50,7 +54,9 @@ const SurveyQuestion = () => {
         <div className='space-y-4 max-w-[700px]'>
           {SurveyQuestions.map((item: any, idx: number) => (
             <div key={idx}>
-              <h2 className='text-lg font-medium mb-3'> {item?.name}</h2>
+              <div className='bg-green-500 text-white p-2 rounded-md mb-3'>
+                <h2 className='text-lg font-medium '> {item?.name}</h2>
+              </div>
               {item.questions.map((q, qid) => (
                 <div key={qid} className='rounded bg-white p-2 mb-3'>
                   <div className='flex space-x-2 items-start text-lg '>
