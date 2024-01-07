@@ -269,3 +269,32 @@ export const handleFlutterPDFReader = (url: string) => {
 export const stripWhiteSpace = (value: string) => {
   return value.replace(/\s/g, '');
 };
+
+export const timeTablePeriodSorter = (periodsList): any => {
+  const daysOrder = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  periodsList.sort((a, b) => {
+    const dayA = daysOrder.indexOf(a.day);
+    const dayB = daysOrder.indexOf(b.day);
+
+    if (dayA !== dayB) {
+      return dayA - dayB; // Ascending order
+    }
+
+    const timeA =
+      parseInt(a.startTime.split(':')[0], 10) * 60 +
+      parseInt(a.startTime.split(':')[1], 10);
+    const timeB =
+      parseInt(b.startTime.split(':')[0], 10) * 60 +
+      parseInt(b.startTime.split(':')[1], 10);
+
+    return timeA - timeB; // Ascending order
+  });
+};

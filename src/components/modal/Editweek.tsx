@@ -50,18 +50,34 @@ function EditWeek({
       return newArray; // Return the updated array
     });
   };
-  const dayOrder = {
-    Sunday: 0,
-    Monday: 1,
-    Tuesday: 2,
-    Wednesday: 3,
-    Thursday: 4,
-    Friday: 5,
-    Saturday: 6,
-  };
+  const daysOrder = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
 
   if (periodsList) {
-    periodsList.sort((a, b) => dayOrder[a.day] - dayOrder[b.day]);
+    periodsList.sort((a, b) => {
+      const dayA = daysOrder.indexOf(a.day);
+      const dayB = daysOrder.indexOf(b.day);
+
+      if (dayA !== dayB) {
+        return dayA - dayB; // Ascending order
+      }
+
+      const timeA =
+        parseInt(a.startTime.split(':')[0], 10) * 60 +
+        parseInt(a.startTime.split(':')[1], 10);
+      const timeB =
+        parseInt(b.startTime.split(':')[0], 10) * 60 +
+        parseInt(b.startTime.split(':')[1], 10);
+
+      return timeA - timeB; // Ascending order
+    });
   }
 
   const handleToggleDocumentViewer = (idx?: number) => {

@@ -21,7 +21,11 @@ interface propType {
   classId: string;
 }
 
-export default function AllCurriculumView({ termId, sessionId, classId }: propType) {
+export default function AllCurriculumView({
+  termId,
+  sessionId,
+  classId,
+}: propType) {
   const params = useSearchParams();
   const [periods, setperiods] = useState<any[]>([]);
   const [periodsList, setperiodsList] = useState<any[]>([]);
@@ -99,6 +103,36 @@ export default function AllCurriculumView({ termId, sessionId, classId }: propTy
         logger(err);
         setLoading(false);
       });
+  }
+
+  const daysOrder = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
+  if (periods) {
+    periods.sort((a, b) => {
+      const dayA = daysOrder.indexOf(a.day);
+      const dayB = daysOrder.indexOf(b.day);
+
+      if (dayA !== dayB) {
+        return dayA - dayB; // Ascending order
+      }
+
+      const timeA =
+        parseInt(a.startTime.split(':')[0], 10) * 60 +
+        parseInt(a.startTime.split(':')[1], 10);
+      const timeB =
+        parseInt(b.startTime.split(':')[0], 10) * 60 +
+        parseInt(b.startTime.split(':')[1], 10);
+
+      return timeA - timeB; // Ascending order
+    });
   }
 
   const { data } = useGetAcademicSessionsTermsWeek(termId);
