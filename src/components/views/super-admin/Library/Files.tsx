@@ -322,9 +322,13 @@ const UploadDocument = ({
   // const isDesktopOrLaptop = useMediaQuery({
   //   query: '(min-width: 1224px)',
   // });
-  const isWebViewEnvironment =
-    (window as any).navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
-    (window as any).navigator.userAgent.includes('ReactNative'); // Check for React Native apps
+  let isWebViewEnvironment;
+  if (window) {
+    isWebViewEnvironment =
+      window.navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
+      window.navigator.userAgent.includes('ReactNative'); // Check for React Native apps
+  }
+  ß;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
