@@ -328,7 +328,6 @@ const UploadDocument = ({
       window.navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
       window.navigator.userAgent.includes('ReactNative'); // Check for React Native apps
   }
-  ß;
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
