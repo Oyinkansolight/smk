@@ -30,6 +30,7 @@ import { useForm } from 'react-hook-form';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdArrowBackIos } from 'react-icons/md';
 import { RotatingLines } from 'react-loader-spinner';
+import { useMediaQuery } from 'react-responsive';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 import FileContent from '~/svg/file.svg';
@@ -319,15 +320,15 @@ const UploadDocument = ({
     mode: 'onChange',
   });
 
-  // const isDesktopOrLaptop = useMediaQuery({
-  //   query: '(min-width: 1224px)',
-  // });
-  let isWebViewEnvironment;
-  if (window) {
-    isWebViewEnvironment =
-      window.navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
-      window.navigator.userAgent.includes('ReactNative'); // Check for React Native apps
-  }
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)',
+  });
+  // let isWebViewEnvironment;
+  // if (window) {
+  //   isWebViewEnvironment =
+  //     window.navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
+  //     window.navigator.userAgent.includes('ReactNative'); // Check for React Native apps
+  // }
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);
@@ -564,12 +565,11 @@ const UploadDocument = ({
           className='mt-10 lg:mt-6'
           toggleModal={toggleModal}
           showModal={
-            !isWebViewEnvironment ||
-            (isWebViewEnvironment && mediaType === 'video')
+            isDesktopOrLaptop || (!isDesktopOrLaptop && mediaType === 'video')
           }
           content={
-            !isWebViewEnvironment ||
-            (isWebViewEnvironment && mediaType === 'video' && isModalOpen) ? (
+            isDesktopOrLaptop ||
+            (!isDesktopOrLaptop && mediaType === 'video' && isModalOpen) ? (
               <div className='flex items-stretch gap-10'>
                 <div className='flex-1 rounded-lg bg-white min-h-[50rem] overflow-hidden'>
                   <div className='flex justify-center'>
