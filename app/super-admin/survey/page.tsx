@@ -47,7 +47,7 @@ const SurveyQuestion = () => {
           />
         </div>
       ) : (
-        <div className='space-y-4'>
+        <div className='space-y-4 max-w-[700px]'>
           {SurveyQuestions.map((item: any, idx: number) => (
             <div key={idx}>
               <h2 className='text-lg font-medium mb-3'> {item?.name}</h2>
