@@ -32,12 +32,11 @@ const SurveyQuestion = () => {
 
   return (
     <section className='-ml-2 py-6'>
-      <div className='py-4 px-4 border-b flex justify-between items-center'>
-        <h1>
+      <div className='py-4 px-4'>
+        <h1 className='text-center text-xl'>
           Directorate of Educational Quality and Accountability-School
           Resumption Monitoring Checklist for Evaluators
         </h1>
-        <h1 className='text-2xl font-bold'>Fill A Survey</h1>
       </div>
 
       {surveysLoading ? (
@@ -51,11 +50,11 @@ const SurveyQuestion = () => {
           />
         </div>
       ) : (
-        <div className='space-y-4 max-w-[700px]'>
+        <div className='space-y-4 max-w-[700px] mx-auto'>
           {SurveyQuestions.map((item: any, idx: number) => (
             <div key={idx}>
               <div className='bg-green-500 text-white p-2 rounded-md mb-3'>
-                <h2 className='text-lg font-medium '> {item?.name}</h2>
+                <h2 className='text-lg font-medium uppercase'> {item?.name}</h2>
               </div>
               {item.questions.map((q, qid) => (
                 <div key={qid} className='rounded bg-white p-2 mb-3'>
@@ -105,6 +104,15 @@ const SurveyQuestion = () => {
                           />
                         </div>
                       )}
+                      {q.type == 'IMAGE' && (
+                        <div className='border-b border-dashed w-full'>
+                          <input
+                            type='file'
+                            className='w-full border-none outline-none text-sm !ring-0'
+                            placeholder='Enter details here'
+                          />
+                        </div>
+                      )}
                       {q.type == 'NUMERIC' && (
                         <div className='border-b border-dashed w-full'>
                           <input
@@ -127,7 +135,7 @@ const SurveyQuestion = () => {
                                 placeholder='Enter details here'
                               />
                               <label htmlFor='' className='text-sm'>
-                                {op}{' '}
+                                {op}
                               </label>
                             </div>
                           ))}
