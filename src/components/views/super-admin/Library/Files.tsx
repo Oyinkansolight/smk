@@ -323,8 +323,8 @@ const UploadDocument = ({
   //   query: '(min-width: 1224px)',
   // });
   const isWebViewEnvironment =
-    navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
-    navigator.userAgent.includes('ReactNative'); // Check for React Native apps
+    (window as any).navigator.userAgent.includes('WebView') || // Check for the string 'WebView'
+    (window as any).navigator.userAgent.includes('ReactNative'); // Check for React Native apps
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateFolder, setIsCreateFolder] = useState(false);

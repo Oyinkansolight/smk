@@ -17,6 +17,7 @@ const SurveyBuilder = ({ closeModal }: { closeModal?: () => void }) => {
     query,
     include: 'false',
   });
+
   const [questionBlock, setQuestionBlock] = useState<
     {
       isRequired: boolean;

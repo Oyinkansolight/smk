@@ -1,15 +1,28 @@
 'use client';
 
-import { useGetSingleSurveyQuestion } from '@/server/government/communication';
+import Button from '@/components/buttons/Button';
+import SuccessModal from '@/components/modal/Success';
+import {
+  useCreateSurveySubmission,
+  useGetSingleSurveyQuestion,
+} from '@/server/government/communication';
 import { useEffect, useState } from 'react';
+import { ImSpinner } from 'react-icons/im';
 import { RotatingLines } from 'react-loader-spinner';
+import { toast } from 'react-toastify';
+import { useGeoLocation } from 'use-geo-location';
 
 const SurveyQuestion = () => {
   const [SurveyQuestions, setSurveyQuestions] = useState<any>([]);
+  const surveyId = '8478579e-5085-497a-be63-e9852c96b6c8';
   const { data: surveys, isLoading: surveysLoading } =
-    useGetSingleSurveyQuestion('e24dbfe2-4cdc-4e66-a2f2-f78720d3594a');
+    useGetSingleSurveyQuestion(surveyId);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(surveys);
+  const { latitude, longitude } = useGeoLocation();
+  const [surveyAnswers, setSurveyAnswers] = useState<any>([]);
+
   useEffect(() => {
     if (surveys && !surveysLoading) {
       const groupedArray = surveys.reduce((acc, obj) => {
@@ -23,15 +36,72 @@ const SurveyQuestion = () => {
 
       const resultArray = Object.values(groupedArray);
 
-      console.log(resultArray.reverse());
+      console.log(resultArray);
       setSurveyQuestions(resultArray);
     }
   }, [surveys, surveysLoading]);
 
-  // const [allnotification, setallnotification] = useState();
+  const handleSurveyAnswer = (qId: string, qAns, answerType) => {
+    // const previousAnswer = [...surveyAnswers];
+    let isExist = false;
+
+    surveyAnswers.map((v) => {
+      if (v.questionId === qId) isExist = true;
+    });
+    if (!isExist) {
+      const newAnswer = {
+        questionId: qId,
+        [answerType]: qAns,
+      };
+      setSurveyAnswers([...surveyAnswers, newAnswer]);
+    } else {
+      const updatedAnswers = surveyAnswers.filter((v) => v.questionId !== qId);
+      const newAnswer = {
+        questionId: qId,
+        [answerType]: qAns,
+      };
+      setSurveyAnswers([...updatedAnswers, newAnswer]);
+    }
+  };
+
+  const handleCheckBoxAnswer = (qId, option) => {
+    console.log(option);
+  };
+
+  const { mutateAsync } = useCreateSurveySubmission();
+  const handleCreateSurveySubmission = async () => {
+    if (surveyAnswers.length === 0) {
+      toast.error('Form not field yet');
+      return;
+    }
+    const payload = {
+      surveyId,
+      answers: surveyAnswers,
+    };
+    setLoading(true);
+    try {
+      const response = await mutateAsync(payload);
+      if (response) {
+        toast.success('Survey Submitted Successfully');
+        setLoading(false);
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className='-ml-2 py-6'>
+      {isModalOpen && (
+        <SuccessModal
+          title='Survey Submitted Successfully'
+          description='Survey Record Submitted Successfully'
+          link='/super-admin'
+          textLink='Return Home'
+          homeLink='/super-admin'
+        />
+      )}
       <div className='py-4 px-4'>
         <h1 className='text-center text-xl'>
           Directorate of Educational Quality and Accountability-School
@@ -77,6 +147,13 @@ const SurveyQuestion = () => {
                           name=''
                           id=''
                           className='outline-none border-none w-full bg-transparent !ring-0 text-sm'
+                          onChange={(e) => {
+                            handleSurveyAnswer(
+                              q.id,
+                              e.target.value,
+                              'radioAnswer'
+                            );
+                          }}
                         >
                           <option value=''>--Choose Option--</option>
                           {q.options.map((op, OpId) => (
@@ -92,6 +169,13 @@ const SurveyQuestion = () => {
                             type='text'
                             className='w-full  outline-none border-none text-sm !ring-0'
                             placeholder='Enter details here'
+                            onChange={(e) => {
+                              handleSurveyAnswer(
+                                q.id,
+                                e.target.value,
+                                'textAnswer'
+                              );
+                            }}
                           />
                         </div>
                       )}
@@ -101,6 +185,13 @@ const SurveyQuestion = () => {
                             type='date'
                             className='w-full border-none outline-none text-sm !ring-0'
                             placeholder='Enter details here'
+                            onChange={(e) => {
+                              handleSurveyAnswer(
+                                q.id,
+                                e.target.value,
+                                'dateAnswer'
+                              );
+                            }}
                           />
                         </div>
                       )}
@@ -110,6 +201,13 @@ const SurveyQuestion = () => {
                             type='file'
                             className='w-full border-none outline-none text-sm !ring-0'
                             placeholder='Enter details here'
+                            onChange={(e) => {
+                              handleSurveyAnswer(
+                                q.id,
+                                e.target.value,
+                                'radioAnswer'
+                              );
+                            }}
                           />
                         </div>
                       )}
@@ -119,6 +217,13 @@ const SurveyQuestion = () => {
                             type='number'
                             className='w-full  outline-none border-none text-sm !ring-0'
                             placeholder='Enter details here'
+                            onChange={(e) => {
+                              handleSurveyAnswer(
+                                q.id,
+                                e.target.value,
+                                'textAnswer'
+                              );
+                            }}
                           />
                         </div>
                       )}
@@ -141,12 +246,49 @@ const SurveyQuestion = () => {
                           ))}
                         </div>
                       )}
+                      {q.type == 'GEOLOCATION' && (
+                        <div>
+                          <div className='flex space-x-2 items-center py-2'>
+                            <div>Lat: {latitude}</div>
+                            <div>Long: {longitude}</div>
+                            <Button
+                              variant='secondary'
+                              onClickHandler={() => {
+                                toast.success('Geolocation Saved');
+                                handleSurveyAnswer(
+                                  q.id,
+                                  {
+                                    latitude,
+                                    longitude,
+                                  },
+                                  'geolocationAnswer'
+                                );
+                              }}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           ))}
+
+          <div className='w-full flex justify-end'>
+            <Button
+              variant='secondary'
+              onClickHandler={() => {
+                console.log(surveyAnswers);
+                handleCreateSurveySubmission();
+              }}
+              className='w-[200px] flex justify-center'
+            >
+              {loading ? <ImSpinner /> : 'Submit'}
+            </Button>
+          </div>
         </div>
       )}
     </section>
