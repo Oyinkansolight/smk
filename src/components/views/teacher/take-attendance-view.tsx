@@ -1,5 +1,5 @@
 import TeacherAttendanceListItem from '@/components/views/teacher/TeacherAttendanceListItem';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetLessonAttendance } from '@/server/government/classes_and_subjects';
@@ -7,7 +7,6 @@ import {
   useTakeAttendance,
   useUpdateSubjectAttendance,
 } from '@/server/government/student';
-import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useGetPeriodById } from '@/server/institution/period';
 import { Institution } from '@/types/institute';
@@ -15,6 +14,8 @@ import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 export default function TakeAttendanceView() {
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+  const term: any = getFromSessionStorage('currentTerm');
   const params = useSearchParams();
   const id = params?.get('id');
   const classArmId = params?.get('classArmId');
@@ -35,10 +36,6 @@ export default function TakeAttendanceView() {
 
   const { data: attendance, refetch: refetchAttendanceRecord } =
     useGetLessonAttendance({ periodId: id });
-
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
 
   return (
     <div className='flex flex-col gap-10'>
@@ -72,10 +69,10 @@ export default function TakeAttendanceView() {
                         classArmId: classArmId,
                         institutionId: institution?.id,
                         periodId: id,
-                        sessionId: profile?.currentSession?.[0]?.id,
+                        sessionId,
                         status,
                         studentId: v.id,
-                        termId: (terms?.data ?? [])[0].id,
+                        termId: JSON.parse(term)?.id,
                       });
                       toast.success('Attendance Taken');
                       refetchAttendanceRecord();

@@ -25,30 +25,11 @@ import { useMemo, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
   const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+  const term: any = getFromSessionStorage('currentTerm');
 
   const [weekIndex, setWeekIndex] = useState(0);
   const currentWeekFromSession = getFromSessionStorage('currentWeek');
@@ -57,12 +38,8 @@ export default function Page() {
   //   sessionId,
   // });
 
-  const term: any = getFromSessionStorage('currentTerm');
-
   // const term = terms?.data[1]?.id;
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(JSON.parse(term)?.id);
-  console.log(sessionId);
 
   const { data: weeks, isLoading: isLoadingTermWeeks } =
     useGetAcademicSessionsTermsWeek(JSON.parse(term)?.id);

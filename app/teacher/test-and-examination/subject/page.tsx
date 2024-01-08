@@ -2,10 +2,10 @@
 
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { useGetSubjectTestExam } from '@/server/test-and-exam';
 import Image from 'next/image';
@@ -19,18 +19,21 @@ export default function Page() {
   const params = useSearchParams();
   const [idx, setIdx] = useState(0);
   const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
+  // const { data: terms } = useGetSessionTerms({
+  //   sessionId: profile?.currentSession?.[0]?.id,
+  // });
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+  const term = getFromSessionStorage('currentTerm') as unknown as string;
+
   const { data, error } = useGetSubjectTestExam({
     sessionId: profile?.currentSession?.[0]?.id,
-    termId: (terms?.data ?? [])[0].id,
+    termId: JSON.parse(term)?.id,
     subjectId: params?.get('id'),
   });
 
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
+    sessionId,
   });
 
   useEffect(() => {
@@ -74,7 +77,11 @@ export default function Page() {
         </div>
       </div> */}
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
-        <input onChange={(e) => logger(e.target.value)} className='rounded-full border p-3' placeholder='Search activity' />
+        <input
+          onChange={(e) => logger(e.target.value)}
+          className='rounded-full border p-3'
+          placeholder='Search activity'
+        />
         <div className='flex-1' />
         {/* <div className='flex items-center'>
           Filter By
@@ -90,7 +97,6 @@ export default function Page() {
           DESC
           <BiSortDown className='w-6 h-6 cursor-pointer' />
         </div>} */}
-
       </div>
       <div className='h-4' />
       <div className='flex flex-col gap-2'>

@@ -1,11 +1,10 @@
 import { useGlobalContext } from '@/hooks/useGlobalState';
 import clsxm from '@/lib/clsxm';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import logger from '@/lib/logger';
 import { calculateEarthDistanceTwo } from '@/misc/functions/calculateEarthDistance';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
-import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetClockInfo } from '@/server/institution/clock-in-clock-out';
 import { useClockIn, useSubmitStaffCoordinates } from '@/server/teacher';
 import moment, { Duration } from 'moment';
@@ -27,6 +26,8 @@ export default function ClockInTime() {
   const [isClockingIn, setIsClockingIn] = useState(false);
   const [clockedInTime, setClockedInTime] = useState<Duration | undefined>();
   const { institutionData } = useGlobalContext();
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+  const term: any = getFromSessionStorage('currentTerm');
 
   const { latitude, longitude, loading, error } = useGeoLocation();
   let institute;
@@ -38,18 +39,14 @@ export default function ClockInTime() {
   const lat = institutionData?.instituteLat ?? 6.5994752;
   const long = institutionData?.instituteLong ?? 3.3488896;
 
-  console.log(institutionData);
 
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
 
   const handleClockIn = async () => {
     setIsClockingIn(true);
     try {
       const res = await clockIn.mutateAsync({
-        sessionId: profile?.currentSession?.[0]?.id ?? 0,
-        termId: (terms?.data ?? [])[0].id,
+        sessionId,
+        termId: JSON.parse(term)?.id,
       });
       toast.success(res.data.data.message);
       setIsClockingIn(false);

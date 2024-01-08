@@ -1,7 +1,7 @@
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useTakeAttendance } from '@/server/government/student';
-import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
 import { Institution } from '@/types/institute';
 import { toast } from 'react-toastify';
@@ -19,9 +19,9 @@ export default function ViewAttendanceListItem({
   const { mutateAsync } = useTakeAttendance();
   const [institution] = useSessionStorage('institution', {} as Institution);
   const { data: profile } = useGetProfile();
-  const { data: terms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+  const term: any = getFromSessionStorage('currentTerm');
+
   const { data: arms } = useGetTeacherClassArms({
     teacherId: profile?.userInfo?.staff?.id,
     sessionId: profile?.currentSession?.[0]?.id,
@@ -39,7 +39,7 @@ export default function ViewAttendanceListItem({
         institutionId: institution.id,
         classArmId: arm?.id,
         sessionId: profile?.currentSession?.[0]?.id,
-        termId: (terms?.data ?? [])[0].id,
+        termId: JSON.parse(term)?.id,
       });
 
       toast.success(`Student "${name}" marked as ${status.toLowerCase()}`);

@@ -9,7 +9,10 @@ import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetStaffDashboardOverview } from '@/server/dashboard';
-import { useGetTeacherNextClass } from '@/server/teacher';
+import {
+  GetTeacherNextClassParams,
+  useGetTeacherNextClass,
+} from '@/server/teacher';
 import { TeacherNextClass } from '@/types/classes-and-subjects';
 import moment from 'moment';
 import Link from 'next/link';
@@ -25,8 +28,7 @@ export default function TeacherDashboardView() {
   const { data: overviewData } = useGetStaffDashboardOverview();
   const { data: nextClassData, isLoading: isLoadingNextClass } =
     useGetTeacherNextClass({
-      // day: moment().format('dddd') as GetTeacherNextClassParams['day'],
-      day: 'Monday',
+      day: moment().format('dddd') as GetTeacherNextClassParams['day'],
       sessionId,
       teacherId: profileData?.userInfo?.staff?.id,
       termId: JSON.parse(term)?.id,
