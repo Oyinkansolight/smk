@@ -36,13 +36,13 @@ export default function RootLayout({
 
   return (
     <>
-      <div className='flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
-        <div className='flex flex-1 flex-col overflow-y-hidden'>
+      <div className='overflow-y-hidden flex h-screen min-h-screen flex-row bg-[#F7F8FA] relative'>
+        <div className='flex flex-1 flex-col '>
           <Header handleToggle={handleToggle} />
 
           <div className='flex flex-row overflow-y-auto overflow-hidden min-h-screen'>
             <Sidebar open={open} handleToggle={handleToggle} />
-            <main className='hideScroll flex-1 overflow-y-auto text-xs'>
+            <main className='hideScroll flex-1 overflow-y-auto text-xs pb-24'>
               <BasicCard className='flex w-full flex-col gap-8 !rounded-[4.5px] bg-white !px-[27px] !pb-[27px] !pt-[18px]'>
                 <div className='flex w-full justify-end'>
                   <ClockInTime />

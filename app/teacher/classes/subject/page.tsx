@@ -6,10 +6,9 @@ import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import EmptyView from '@/components/misc/EmptyView';
 import SmallTeacherSubjectListItem from '@/components/views/teacher/SmallTeacherSubjectListItem';
-import { getFromSessionStorage } from '@/lib/helper';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetGovernmentSubjectById } from '@/server/government/classes_and_subjects';
-import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetAcademicSessionsTermsWeek } from '@/server/institution';
 import { useGetWeekPeriodsBySubject } from '@/server/institution/period';
 import { Week } from '@/types/classes-and-subjects';
@@ -22,20 +21,51 @@ import { useMemo, useState } from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const router = useRouter();
   const params = useSearchParams();
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+
   const [weekIndex, setWeekIndex] = useState(0);
   const currentWeekFromSession = getFromSessionStorage('currentWeek');
   const { data: profile } = useGetProfile();
-  const { data: terms, isLoading: isLoadingSessions } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
-  });
+  // const { data: terms, isLoading: isLoadingSessions } = useGetSessionTerms({
+  //   sessionId,
+  // });
 
-  const term = terms?.data[0]?.id;
+  const term: any = getFromSessionStorage('currentTerm');
+
+  // const term = terms?.data[1]?.id;
   const [currentPage, setCurrentPage] = useState(1);
+  console.log(JSON.parse(term)?.id);
+  console.log(sessionId);
+
   const { data: weeks, isLoading: isLoadingTermWeeks } =
-    useGetAcademicSessionsTermsWeek(term);
+    useGetAcademicSessionsTermsWeek(JSON.parse(term)?.id);
   const [currentWeek, setCurrentWeek] = useState(0);
   const isGenericApp = Cookies.get('isGenericApp') === 'Y';
 
@@ -79,10 +109,10 @@ export default function Page() {
     isLoading: isLoadingPeriodSubjects,
     isFetching: isFetchingPeriodSubjects,
   } = useGetWeekPeriodsBySubject({
-    termId: term,
+    termId: JSON.parse(term)?.id,
     page: currentPage,
     staffId: profile?.userInfo?.staff?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
+    sessionId,
     weekId: sortedWeeks[currentWeek]?.id,
     subjectId: params?.get('id') ? params.get('id') : undefined,
     classId: params?.get('classId') ? params.get('classId') : undefined,
@@ -93,10 +123,7 @@ export default function Page() {
     useGetGovernmentSubjectById(params?.get('id') as string);
 
   const isLoadingData =
-    isLoadingSessions ||
-    isLoadingTermWeeks ||
-    subjectLoading ||
-    isLoadingPeriodSubjects;
+    isLoadingTermWeeks || subjectLoading || isLoadingPeriodSubjects;
 
   if (!data || isLoadingData) {
     return <GenericLoader />;
@@ -168,7 +195,7 @@ export default function Page() {
                   sessionId={
                     profile?.currentSession?.[0]?.id as unknown as string
                   }
-                  termId={term as unknown as string}
+                  termId={JSON.parse(term)?.id as unknown as string}
                   periodId={period.id as unknown as string}
                   classId={params?.get('classArmId') ?? ''}
                   onClick={() =>
@@ -177,10 +204,11 @@ export default function Page() {
                         ? i % 2 === 0
                           ? '/teacher/classes/subject-task-doc'
                           : '/teacher/classes/subject-task-video'
-                        : `/teacher/classes/subject-task?id=${period.id
-                        }&classArmId=${params?.get(
-                          'classArmId'
-                        )}&armName=${params?.get('armName')}`
+                        : `/teacher/classes/subject-task?id=${
+                            period.id
+                          }&classArmId=${params?.get(
+                            'classArmId'
+                          )}&armName=${params?.get('armName')}`
                     )
                   }
                   key={period?.id ?? i}

@@ -53,7 +53,7 @@ const Sidebar = ({ open, handleToggle }: TeacherSidebarProps) => {
         <OnlineStatus status='online' /> */}
         </div>
 
-        <nav className='flex flex-1 flex-col space-y-2  pl-4'>
+        <nav className='flex flex-1 flex-col space-y-2 pb-12  pl-4'>
           <SideBarButton
             open={open}
             icon={<BiIdCard />}
