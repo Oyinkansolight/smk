@@ -20,6 +20,8 @@ import { CiMenuKebab } from 'react-icons/ci';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllSubjects = () => {
   const router = useRouter();
 
@@ -34,7 +36,9 @@ const AllSubjects = () => {
     query,
   });
 
-  const { data, error, isLoading, refetch } = useGetSubjectList({ ...pagingData });
+  const { data, error, isLoading, refetch } = useGetSubjectList({
+    ...pagingData,
+  });
   const [action, setAction] = useState<number | null>(null);
   const [itemToDelete, setItemToDelete] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +49,7 @@ const AllSubjects = () => {
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
-  }
+  };
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -59,7 +63,7 @@ const AllSubjects = () => {
       return;
     }
     setPagingData({ ...pagingData, page: 1, institutionType: value });
-  }
+  };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -75,8 +79,7 @@ const AllSubjects = () => {
   };
 
   const handleJumpToEnd = () => {
-    if (data)
-      setPagingData({ ...pagingData, page: data?.paging?.totalPage });
+    if (data) setPagingData({ ...pagingData, page: data?.paging?.totalPage });
   };
 
   useEffect(() => {
@@ -130,7 +133,9 @@ const AllSubjects = () => {
       <div className='mb-6 flex justify-between items-end'>
         <div className='bg-[#FFF6EC] p-3 rounded-2xl w-[200px]'>
           <p className='text-[#615F5F]'>Total Subjects</p>
-          <h1 className='font-semibold text-2xl'>{data?.paging?.totalItems ?? 0}</h1>
+          <h1 className='font-semibold text-2xl'>
+            {data?.paging?.totalItems ?? 0}
+          </h1>
         </div>
         <AddSubjectModal>
           <div className='cursor-pointer w-max rounded border border-primary px-6 py-3 text-center text-xs text-primary font-semibold bg-white'>
@@ -146,8 +151,8 @@ const AllSubjects = () => {
             className='border-none bg-white outline-none text-xs leading-5 text-[#1C1C1C] rounded-lg'
           >
             <option value=''>Filter</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+            <option value='asc'>Ascending</option>
+            <option value='desc'>Descending</option>
             <option value={INSTITUTION_TYPES.ECCDE}>ECCDE</option>
             <option value={INSTITUTION_TYPES.PRIMARY}>Primary</option>
             <option value={INSTITUTION_TYPES.SECONDARY}>Secondary</option>
@@ -179,76 +184,75 @@ const AllSubjects = () => {
         </div>
         {isLoading ? (
           <div className='text-center'>Loading...</div>
-        ) : (
-          data && data?.data.length > 0 ?
-            data?.data.map((item, idx) => (
+        ) : data && data?.data.length > 0 ? (
+          data?.data.map((item, idx) => (
+            <div
+              key={item.id ?? idx}
+              className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-4'
+            >
               <div
-                key={item.id ?? idx}
-                className='grid cursor-pointer grid-cols-12 gap-4 border-b items-center text-[#8898AA] p-3 px-4'
+                className='col-span-3 text-[#525F7F] font-bold text-sm'
+                onClick={() => {
+                  router.push(`/super-admin/subject?id=${item.id ?? ''}`);
+                }}
               >
-                <div
-                  className='col-span-3 text-[#525F7F] font-bold text-sm'
+                {item.name}
+              </div>
+              <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
+                {item?.classesCount ?? '0'}{' '}
+              </div>
+              {/* <div className='col-span-3 text-center'>
+                {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
+              </div> */}
+              <div className='col-span-5 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
+                <button
                   onClick={() => {
                     router.push(`/super-admin/subject?id=${item.id ?? ''}`);
                   }}
+                  className='hidden lg:block cursor-pointer text-primary text-sm leading-5'
                 >
-                  {item.name}
-                </div>
-                <div className='col-span-4 text-[#8898AA] text-sm leading-5'>
-                  {item?.classes?.length ?? '0'}{' '}
-                </div>
-                {/* <div className='col-span-3 text-center'>
-                {item.classes?.map((cls) => cls.name).join(', ') ?? '-'}
-              </div> */}
-                <div className='col-span-5 flex flex-row items-center whitespace-nowrap gap-10 justify-end'>
-                  <button
+                  Click to manage
+                </button>
+                <div className='relative'>
+                  <CiMenuKebab
                     onClick={() => {
-                      router.push(`/super-admin/subject?id=${item.id ?? ''}`);
+                      setAction(idx + 1);
                     }}
-                    className='hidden lg:block cursor-pointer text-primary text-sm leading-5'
-                  >
-                    Click to manage
-                  </button>
-                  <div className='relative'>
-                    <CiMenuKebab
-                      onClick={() => {
-                        setAction(idx + 1);
-                      }}
-                      className='w-6 h-6 cursor-pointer'
-                    />
+                    className='w-6 h-6 cursor-pointer'
+                  />
 
-                    {action == idx + 1 && (
-                      <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
-                        <EditSubjectModal subject={item}>
-                          <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
-                            Edit
-                          </div>
-                        </EditSubjectModal>
-                        <div
-                          onClick={() => {
-                            setItemToDelete(item.id ?? '');
-                            toggleModal();
-                          }}
-                          className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
-                        >
-                          Delete
+                  {action == idx + 1 && (
+                    <div className='shadow-lg rounded-xl bg-white w-[180px] h-max absolute top-0 -left-[180px] z-10'>
+                      <EditSubjectModal subject={item}>
+                        <div className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                          Edit
                         </div>
-                      </div>
-                    )}
-                    {action && (
+                      </EditSubjectModal>
                       <div
-                        className='fixed inset-0 z-[1]'
                         onClick={() => {
-                          setAction(null);
+                          setItemToDelete(item.id ?? '');
+                          toggleModal();
                         }}
-                      ></div>
-                    )}
-                  </div>
+                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      >
+                        Delete
+                      </div>
+                    </div>
+                  )}
+                  {action && (
+                    <div
+                      className='fixed inset-0 z-[1]'
+                      onClick={() => {
+                        setAction(null);
+                      }}
+                    ></div>
+                  )}
                 </div>
               </div>
-            )) : (
-              <div className='text-center py-4'>No record found</div>
-            )
+            </div>
+          ))
+        ) : (
+          <div className='text-center py-4'>No record found</div>
         )}
 
         {/* //Pagination */}
@@ -313,8 +317,7 @@ const AllSubjects = () => {
                   'grid h-7 w-7 place-content-center rounded-full border p-2'
                 )}
               >
-                {pagingData.page > 3 &&
-                  pagingData.page < data.paging.totalPage
+                {pagingData.page > 3 && pagingData.page < data.paging.totalPage
                   ? pagingData.page
                   : 3}
               </div>
