@@ -1,4 +1,3 @@
-import { timeConverter } from '@/lib/helper';
 import moment from 'moment';
 import Link from 'next/link';
 import Table, { TableColumn } from 'react-data-table-component';
@@ -60,7 +59,7 @@ export default function RecentAddedStudent({ data }) {
       <div className='flex justify-end'>
         <Link
           className='flex items-center text my-2 px-4 text-[#007AFF]'
-          href='#'
+          href='/admin/all-student'
         >
           <div>View All</div>
           <BiChevronRight className='h-5 w-5' />

@@ -10,6 +10,7 @@ import Publish from '@/components/views/admin/AddStudent/publish';
 import { isProd } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import { stripWhiteSpace } from '@/lib/helper';
+import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
   useAssignStudentToParent,
@@ -104,33 +105,38 @@ export default function AddStudent() {
       setpublishData(data);
 
       setloading(true);
-      const response = await handleCreateStudent.mutateAsync(studentData);
+      try {
+        const response = await handleCreateStudent.mutateAsync(studentData);
 
-      if (response.status === 201) {
-        toast.success('Student Added successfully');
+        if (response.status === 201) {
+          toast.success('Student Added successfully');
+          if (parentId) {
+            const parentData = {
+              id: parentId,
+              studentId: response.data.data.data.id,
+            };
+            const parentLinkResponse = await assignStudentToParent.mutateAsync(
+              parentData
+            );
 
-        if (parentId) {
-          const parentData = {
-            id: parentId,
-            studentId: response.data.data.data.id,
-          };
-          const parentLinkResponse = await assignStudentToParent.mutateAsync(
-            parentData
-          );
-
-          if (!parentLinkResponse) {
-            toast.error('Error linking parent to student');
-            setloading(false);
+            if (!parentLinkResponse) {
+              toast.error('Error linking parent to student');
+              setloading(false);
+            }
           }
+
+          setloading(false);
+
+          //2 Second - Open Success Modal
+          setisOpen(true);
+        } else {
+          toast.error(response.data?.message);
+          setloading(false);
         }
-
+      } catch (error) {
         setloading(false);
-
-        //2 Second - Open Success Modal
-        setisOpen(true);
-      } else {
-        toast.error('Error adding student');
-        setloading(false);
+        getErrMsg(error);
+        console.log(error);
       }
     }
   };

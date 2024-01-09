@@ -616,7 +616,7 @@ export function useGetInstituteTypes() {
         const d = await request.get(
           '/v1/government/institutes/get-institute-type'
         );
-        return d.data.data.data as ISchoolType;
+        return d.data.data.data;
       } catch (error) {
         logger(error);
         throw error;

@@ -26,6 +26,8 @@ export function getErrMsg(error: any) {
     }
     return;
   }
+  toast.error(error.response?.data?.message ?? 'NO DATA');
+
   return error.response?.data?.message ?? 'NO DATA';
 }
 

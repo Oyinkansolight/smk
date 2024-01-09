@@ -42,7 +42,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/views/super-admin/Account/Schooltype.jsx",
+    "src/components/views/super-admin/Account/Schooltype.tsx",
     "app/super-admin/test.js",
     "app/super-admin/schedule/page.js",
     "src/components/views/single-school/test.js"
