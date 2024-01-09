@@ -1,5 +1,5 @@
 import logger from '@/lib/logger';
-import request from '@/server';
+import request, { getErrMsg } from '@/server';
 import { GradeCategory, GradeRubricInterface } from '@/types/institute';
 import { PaginatedData } from '@/types/pagination';
 import { useEffect } from 'react';
@@ -58,6 +58,7 @@ export function useGetGradeRubricByInstitutionType(
 
           return reversedData as GradeRubricInterface[];
         } catch (error) {
+          getErrMsg(error);
           logger(error);
           throw error;
         }

@@ -12,17 +12,16 @@ import {
 } from '@/server/institution/grade';
 import { Session } from '@/types/classes-and-subjects';
 import { GradeRubricInterface } from '@/types/institute';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import ReactSelect from 'react-select';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
-import GenericLoader from '@/components/layout/Loader';
 
 interface ManageGradeRubricProps {
   closeModal?: () => void;
   allSessions?: Session[];
-};
+}
 
 const initialRubric = [
   { label: '', maxRange: 0, minRange: 0, remark: '' },
@@ -31,30 +30,42 @@ const initialRubric = [
   { label: '', maxRange: 0, minRange: 0, remark: '' },
 ];
 
-export default function ManageGradeRubric({ closeModal, allSessions }: ManageGradeRubricProps) {
+export default function ManageGradeRubric({
+  closeModal,
+  allSessions,
+}: ManageGradeRubricProps) {
   const [loading, setLoading] = useState(false);
-  const [currentInstitution, setCurrentInstitution] = useState(INSTITUTION_TYPES.SECONDARY);
-  const currentSessionId = allSessions?.find((v) => v.isCurrent && v.institutionType === currentInstitution)?.id;
+  const [currentInstitution, setCurrentInstitution] = useState(
+    INSTITUTION_TYPES.SECONDARY
+  );
+  const currentSessionId = allSessions?.find(
+    (v) => v.isCurrent && v.institutionType === currentInstitution
+  )?.id;
   const { data: term } = useGetCurrentSessionTerm({
     sessionId: currentSessionId,
   });
 
   const toggleLoading = () => {
-    setLoading(!loading);
+    // setLoading(!loading);
   };
 
   const params = {
     institutionType: currentInstitution,
     sessionId: currentSessionId,
     termId: term?.id,
-  }
-  const { data, refetch, isError, isLoading: isLoadingRubric } = useGetGradeRubricByInstitutionType(params);
+  };
+  const {
+    data,
+    refetch,
+    isError,
+    isLoading: isLoadingRubric,
+  } = useGetGradeRubricByInstitutionType(params);
 
   // const reversedData: GradeRubricInterface[] = [];
 
-
-  const [rubrics, setRubrics] = useState<GradeRubricInterface[] |
-    (CreateRubricParams['rubrics'][number] & { label: string })[]
+  const [rubrics, setRubrics] = useState<
+    | GradeRubricInterface[]
+    | (CreateRubricParams['rubrics'][number] & { label: string })[]
   >(data && data.length > 0 ? data : initialRubric);
   const [currentStage, setCurrentStage] = useState(0);
   const { mutateAsync: createRubric, isLoading } = useCreateRubric();
@@ -88,31 +99,35 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
     { value: INSTITUTION_TYPES.TERTIARY, label: INSTITUTION_TYPES.TERTIARY },
   ];
 
-  const handleInstitutionChange = async (value: { value: string; label: string }) => {
+  const handleInstitutionChange = async (value: {
+    value: string;
+    label: string;
+  }) => {
     toggleLoading();
     setCurrentInstitution(value.value);
     setRubrics(initialRubric);
     // reversedData = [];
     refetch();
 
-    setTimeout(() => {
-      // console.log(isLoadingRubric);
+    // console.log(isLoadingRubric);
+    // console.log(isError);
+
+    if (!isLoadingRubric || !isError) {
+      // console.log(data);
       // console.log(isError);
 
-      if (!isLoadingRubric || !isError) {
-        // console.log(data);
-        // console.log(isError);
-
-
-        if (data && data?.length > 0) {
-          setRubrics(data);
-        }
-
-        toggleLoading();
+      if (data && data?.length > 0) {
+        setRubrics(data);
       }
-    }, 2000);
 
+      toggleLoading();
+    }
   };
+  useEffect(() => {
+    if (isLoadingRubric) {
+      setLoading(isLoadingRubric);
+    }
+  }, [isLoadingRubric]);
 
   return (
     <div>
@@ -138,19 +153,21 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
         </div>
       </div>
 
-      {currentStage === 0 &&
+      {currentStage === 0 && (
         <div className='flex flex-row items-center gap-2 mb-6'>
           <div>Institution type:</div>
           <Select
-            name="institution"
+            name='institution'
             className='text-primary'
             options={allInstitutions}
-            onChange={(value) => handleInstitutionChange(value as { value: string; label: string })}
+            onChange={(value) =>
+              handleInstitutionChange(value as { value: string; label: string })
+            }
             //Defaults to secondary institution
             defaultValue={allInstitutions[2]}
           />
         </div>
-      }
+      )}
 
       {currentStage === 0 && !loading ? (
         <div>
@@ -209,8 +226,9 @@ export default function ManageGradeRubric({ closeModal, allSessions }: ManageGra
             </Button>
           </div>
         </div>
-      ) : loading && (
-        <GenericLoader />
+      ) : (
+        // loading && <GenericLoader />
+        loading && <></>
       )}
 
       {currentStage === 1 && (
