@@ -608,15 +608,16 @@ export function useGetSchools(params: Partial<PaginationParams>) {
   return query;
 }
 
-export function useGetInstituteTypes() {
+export function useGetInstituteTypes(params: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: 'get_school_list_types',
     queryFn: async () => {
       try {
         const d = await request.get(
-          '/v1/government/institutes/get-institute-type'
+          '/v1/government/institutes/get-institute-type',
+          { params }
         );
-        return d.data.data.data;
+        return d.data.data;
       } catch (error) {
         logger(error);
         throw error;

@@ -9,38 +9,33 @@ import { RotatingLines } from 'react-loader-spinner';
 
 const Schooltype = () => {
   const [isOpen, setisOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [institutionType, setInstitutionType] = useState<string>('');
 
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
-    institutionType,
-    query,
   });
 
   function handleModal() {
     setisOpen(!isOpen);
   }
-  const { data, isLoading } = useGetInstituteTypes();
+  const { data, isLoading } = useGetInstituteTypes({ ...pagingData });
 
   const handleCurrentPage = (page: number) => {
     setPagingData({ ...pagingData, page });
   };
 
-  const handleSearch = (value: string) => {
-    setQuery(value);
-    setPagingData({ ...pagingData, page: 1, query: value });
-  };
+  // const handleSearch = (value: string) => {
+  //   setQuery(value);
+  //   setPagingData({ ...pagingData, page: 1, query: value });
+  // };
 
-  const handleFilter = (value: string) => {
-    setInstitutionType(value);
-    if (value === 'asc' || value === 'desc') {
-      setPagingData({ ...pagingData, page: 1, order: value });
-      return;
-    }
-    setPagingData({ ...pagingData, page: 1, institutionType: value });
-  };
+  // const handleFilter = (value: string) => {
+  //   if (value === 'asc' || value === 'desc') {
+  //     setPagingData({ ...pagingData, page: 1, order: value });
+  //     return;
+  //   }
+  //   setPagingData({ ...pagingData, page: 1, institutionType: value });
+  // };
 
   const handleNextPage = () => {
     setPagingData({ ...pagingData, page: pagingData.page + 1 });
@@ -81,8 +76,8 @@ const Schooltype = () => {
           <div className='col-span-6'>Term/Semester</div>
         </div>
         {data &&
-          data?.items?.length > 0 &&
-          data?.items.map((item, idx) => (
+          data?.data?.items?.length > 0 &&
+          data?.data?.items.map((item, idx) => (
             <div className='grid grid-cols-12 p-4 border-b' key={idx}>
               <div className='col-span-3'> {item?.name ?? 'N/A'} </div>
               {/* <div className='col-span-3'> {item.classes} </div> */}
@@ -145,7 +140,7 @@ const Schooltype = () => {
           </div>
         </div> */}
         {/* //Pagination */}
-        {data && data?.items?.length > 0 && (
+        {data && data?.data?.items?.length > 0 && (
           <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
             <button
               onClick={handleJumpToStart}
@@ -241,7 +236,7 @@ const Schooltype = () => {
             <button
               onClick={handleNextPage}
               disabled={
-                (data && data?.items?.length < 10) ||
+                (data && data?.data?.items?.length < 10) ||
                 pagingData.page === data.paging.totalPage
               }
               className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300'
@@ -265,7 +260,7 @@ const Schooltype = () => {
             <button
               onClick={handleJumpToEnd}
               disabled={
-                (data && data?.items?.length < 10) ||
+                (data && data?.data?.items?.length < 10) ||
                 pagingData.page === data.paging.totalPage
               }
               className='grid h-7 w-7 place-content-center rounded-full border p-2 text-gray-300 cursor-pointer'
