@@ -1,3 +1,4 @@
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { useGetProfile } from '@/server/auth';
 import Image from 'next/image';
@@ -15,6 +16,20 @@ interface AdminHeaderProps {
 export default function AdminHeader({ handleToggle }: AdminHeaderProps) {
   const { data } = useGetProfile();
   const [isOpen, setIsOpen] = useState(false);
+  const [url, setUrl] = useState(
+    'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
+  );
+  React.useEffect(() => {
+    const getFileURL = async (path) => {
+      let result = '';
+      await getURL(path).then((v) => {
+        result = v;
+        setUrl(v);
+      });
+      return result;
+    };
+    getFileURL(data?.userInfo?.profileImg);
+  }, [data?.userInfo?.profileImg]);
 
   return (
     <header className='sticky top-0 z-50 border-b-2 bg-white'>
@@ -84,12 +99,8 @@ export default function AdminHeader({ handleToggle }: AdminHeaderProps) {
               width={64}
               height={64}
               alt='Profile Picture'
-              src={
-                (data?.userInfo?.firstName ?? '') ===
-                  ('Godwin Nogheghase Obaseki' as string)
-                  ? '/images/governor.png'
-                  : '/images/avatar.png'
-              }
+              className='rounded-full'
+              src={url}
             />
           </div>
 

@@ -81,8 +81,12 @@ export interface UserInfo {
   deviceToken?: null;
   batteryLevel?: null;
   phoneNumber?: null;
+  gender: string;
+  profileImg: null | string;
   email?: string;
   address?: string;
+  lga?: string;
+  middleName?: string;
   resetPasswordToken?: null;
   resetPasswordTokenExpires?: null;
   type?: string;

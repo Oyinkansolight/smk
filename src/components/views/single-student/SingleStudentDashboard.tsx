@@ -22,7 +22,7 @@ const SingleStudentDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
   const [url, setUrl] = useState(
-    'https://www.bu.edu/wll/files/2017/10/avatar.png'
+    'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
   );
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const p = useSearchParams();

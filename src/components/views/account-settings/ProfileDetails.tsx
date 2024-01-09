@@ -1,15 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from '@/components/buttons/Button';
 import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
+import { BigAvatar } from '@/components/profile/BigAvatar';
+import { isLocal } from '@/constant/env';
+import { getURL, uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
-import { useUpdateUser } from '@/server/government/staff';
-import { useGetLocalGovernments } from '@/server/onboard';
-import { Staff } from '@/types/institute';
+import {
+  useUpdateUser,
+  useUpdateUserPassword,
+} from '@/server/government/staff';
+import { UserInfo } from '@/types/auth';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import { RiImageAddFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import { uuid } from 'uuidv4';
 
 export default function TeacherBioDetails({
   isEditing,
@@ -18,45 +25,44 @@ export default function TeacherBioDetails({
 }: {
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
-  initProfile?: Staff;
+  initProfile?: UserInfo;
 }) {
-  const { control, setValue, handleSubmit } = useForm();
-  const [, setIsLoading] = useState(false);
-  const [userLga, setUserLga] = useState('');
+  const { control, setValue, handleSubmit, getValues, register } = useForm();
+  const [loading, setIsLoading] = useState(false);
+
   const update = useUpdateUser();
-  const { data: localGovernments } = useGetLocalGovernments();
+  const updatePassword = useUpdateUserPassword();
 
+  const environment = isLocal ? 'staging' : 'production';
+  const [url, setUrl] = useState(
+    'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
+  );
   useEffect(() => {
-    async function getLga() {
-      const foundLga: any = await localGovernments?.filter(
-        (local) => local.id === initProfile?.lga
-      )[0].name;
-
-      if (foundLga) {
-        setUserLga(foundLga);
-        return;
-      }
-
-      if (initProfile?.lga && initProfile?.lga?.length < 20) {
-        setUserLga(initProfile?.lga);
-        return;
-      }
-
-      if (
-        !initProfile?.lga ||
-        (initProfile?.lga && initProfile?.lga?.length > 20)
-      ) {
-        setUserLga('None');
-        return;
-      }
-    }
-
-    getLga();
-  }, [localGovernments, initProfile?.lga, userLga]);
+    const getFileURL = async (path) => {
+      let result = '';
+      await getURL(path).then((v) => {
+        result = v;
+        setUrl(v);
+      });
+      return result;
+    };
+    getFileURL(initProfile?.profileImg);
+  }, [initProfile?.profileImg]);
 
   const onSubmit = async (data: any) => {
     if (initProfile?.id) {
       setIsLoading(true);
+
+      if (data.profileImg.length > 0) {
+        toast.info('Uploading file...');
+
+        const path = await uploadDocument(
+          `profile/profile${uuid()}`,
+          await data.profileImg[0].arrayBuffer(),
+          environment
+        );
+        data.profileImg = path;
+      }
 
       const payload = {
         // profileImg: data.,
@@ -79,7 +85,7 @@ export default function TeacherBioDetails({
         //   DateOfFirstAppointment: data.dateOfAppointment,
         // },
         // trainingDetails,
-
+        profileImg: data.profileImg,
         userId: initProfile?.id,
         firstName: data.firstName as string,
         lastName: data.lastName as string,
@@ -87,12 +93,27 @@ export default function TeacherBioDetails({
         address: data.address,
         phoneNumber: data.phone,
       };
+      for (const key in payload) {
+        if (!payload[key]) delete payload[key]; //remove empty object
+      }
+      if (typeof data.profileImg !== 'string') delete payload['profileImg'];
 
+      if (data.currentPassword && data.newPassword) {
+        try {
+          await updatePassword.mutateAsync({
+            currentPassword: data.currentPassword,
+            newPassword: data.newPassword,
+          });
+          toast.success('User Password Updated successfully');
+        } catch (error) {
+          toast.error(getErrMsg(error));
+          setIsLoading(false);
+          return;
+        }
+      }
       try {
         // const response = await update.mutateAsync(payload);
         await update.mutateAsync(payload);
-
-        console.log('Successfull Update');
 
         toast.success('User Updated successfully');
         setIsEditing(false);
@@ -113,18 +134,8 @@ export default function TeacherBioDetails({
       setValue('firstName', initProfile?.firstName);
       setValue('lastName', initProfile?.lastName);
       setValue('middleName', initProfile?.middleName);
-      // setValue(
-      //   'fullName',
-      //   `${(initProfile ?? {})?.firstName} ${(initProfile ?? {})?.lastName}`
-      // );
-      setValue('dateOfBirth', initProfile.dob);
+
       setValue('address', (initProfile ?? {})?.address);
-      setValue('school', initProfile?.institution?.instituteName);
-      setValue('lga', userLga);
-      setValue('nextOfKin', initProfile?.nextOfKin);
-      setValue('relationshipNextOfKin', initProfile?.relationshipToNextOfKin);
-      setValue('addressNextOfKin', initProfile?.addressOfNextOfKin);
-      setValue('phoneNextOfKin', initProfile?.phoneOfNextOfKin);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -143,7 +154,7 @@ export default function TeacherBioDetails({
               Cancel
             </Button>
             <Button type='submit' variant='secondary'>
-              Update Changes
+              {loading ? <ImSpinner2 /> : 'Update Changes'}
             </Button>
           </div>
         )}
@@ -156,10 +167,24 @@ export default function TeacherBioDetails({
               htmlFor='image-upload'
               className='border p-4 cursor-pointer flex flex-col items-center gap-4'
             >
-              <RiImageAddFill className='h-20 w-20 text-blue-800 ' />
+              {initProfile?.profileImg ? (
+                <BigAvatar src={url} />
+              ) : (
+                <RiImageAddFill className='h-20 w-20 text-blue-800 ' />
+              )}
               <div className='font-bold'>Click to capture image</div>
             </label>
-            <input id='image-upload' type='file' className='hidden' />
+            <input
+              id='image-upload'
+              {...register('profileImg')}
+              type='file'
+              className='hidden'
+            />
+          </div>
+        )}
+        {getValues('profileImg') && (
+          <div className='text-sm font-medium mb-2 capitalize'>
+            {getValues('profileImg')?.[0]?.name}
           </div>
         )}
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
@@ -265,78 +290,35 @@ export default function TeacherBioDetails({
               />
             )}
           />
-          {/* <Controller
+        </div>
+        <div className='font-bold text-2xl text-[#6B7A99] my-8'>
+          Login Details
+        </div>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+          <Controller
             control={control}
-            name='address'
+            name='currentPassword'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Address'
-                placeholder='Enter Address'
+                label='Current Password'
+                placeholder='Enter Current Password'
                 {...field.field}
               />
             )}
           />
           <Controller
             control={control}
-            name='lga'
+            name='newPassword'
             render={(field) => (
               <EditableFormItemAlt
                 isEditing={isEditing}
-                label='Local Government Area'
-                placeholder='Enter Local Government Area'
+                label='New Password'
+                placeholder='Enter New Password'
                 {...field.field}
               />
             )}
           />
-          <Controller
-            control={control}
-            name='nextOfKin'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Name of Next of Kin'
-                placeholder='Enter Name of Next of Kin'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='relationshipNextOfKin'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Relationship Of Next Of Kin'
-                placeholder='Enter Relationship Of Next Of Kin'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='addressNextOfKin'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Address Of Next Of Kin'
-                placeholder='Enter Local Address Of Next Of Kin'
-                {...field.field}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name='phoneNextOfKin'
-            render={(field) => (
-              <EditableFormItemAlt
-                isEditing={isEditing}
-                label='Local Phone Number Of Next Of Kin'
-                placeholder='Enter Local Phone Number Of Next Of Kin'
-                {...field.field}
-              />
-            )}
-          /> */}
         </div>
       </div>
     </form>

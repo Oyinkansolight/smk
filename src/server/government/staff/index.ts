@@ -98,6 +98,25 @@ export function useUpdateUser() {
   });
   return mutation;
 }
+export function useUpdateUserPassword() {
+  const client = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: 'update_user_password',
+    mutationFn: async (params: {
+      currentPassword: string;
+      newPassword: string;
+    }) =>
+      (
+        await request.post('/v1/authentication/change-password', params, {
+          withCredentials: true,
+        })
+      ).data.data.data,
+    onSettled: (data) => {
+      client.refetchQueries(`get_profile`);
+    },
+  });
+  return mutation;
+}
 export function useUpdateParent() {
   const client = useQueryClient();
   const mutation = useMutation({
@@ -109,7 +128,7 @@ export function useUpdateParent() {
         withCredentials: true,
       });
     },
-    onSettled: (data) => {
+    onSettled: () => {
       client.refetchQueries(`get_parents`);
     },
   });

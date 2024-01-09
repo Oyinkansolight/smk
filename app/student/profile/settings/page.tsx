@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 const SingleStudentDashboard = () => {
   const [url, setUrl] = useState(
-    'https://www.bu.edu/wll/files/2017/10/avatar.png'
+    'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
   );
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(true);
   const p = useSearchParams();

@@ -1,66 +1,32 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
+import { BigAvatar } from '@/components/profile/BigAvatar';
+import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import Avatar from '~/svg/governor.svg';
+import { useEffect, useState } from 'react';
+import { RiImageAddFill } from 'react-icons/ri';
 
 import ProfileDetails from './ProfileDetails';
 
 const Page = ({ profile }: { profile?: any }) => {
   const router = useRouter();
-  // const currentSessionId: string =
-  //   getFromLocalStorage('currentSessionId') ?? '';
-
+  const [url, setUrl] = useState(
+    'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
+  );
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
-  // const [loading, setLoading] = useState(false);
-  // const [isAddSubject, setisAddSubject] = useState(false);
-  // const p = useSearchParams();
-  // const { data, error } = useGetTeacherById({
-  //   id: 'c23066f0-544f-4d4b-bb0a-02064f57f708',
-  // });
-
-  // const onClickHandler = () => {
-  //   setisAddSubject(!isAddSubject);
-  // };
-
-  // const handleUpdateStaff = useUpdateStaffSubject();
-
-  // const SubmitHandler = async () => {
-  //   const payload = {
-  //     teacherId: p?.get('id'),
-  //     sessionId: currentSessionId,
-  //     subjectAndClasses: [],
-  //   };
-
-  //   if (payload.subjectAndClasses.length === 0) {
-  //     toast.error('Please add at least one subject');
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const response = await handleUpdateStaff.mutateAsync(payload);
-
-  //     if (response) {
-  //       toast.success('Teacher subject updated successfully');
-  //       onClickHandler();
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     toast.error(getErrMsg(error));
-  //   }
-  // };
-
-  // const staff = data;
-
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(getErrMsg(error));
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    const getFileURL = async (path) => {
+      let result = '';
+      await getURL(path).then((v) => {
+        result = v;
+        setUrl(v);
+      });
+      return result;
+    };
+    getFileURL(profile?.profileImg);
+  }, [profile?.profileImg]);
 
   return (
     <section>
@@ -96,19 +62,23 @@ const Page = ({ profile }: { profile?: any }) => {
           <div className='col-span-3'>
             <div className='bg-[#F6F9FC] px-2 rounded-md'>
               <div className='content py-4'>
-                <div className='flex space-x-3 items-center p-4'>
-                  <Avatar className='h-full w-full' />
+                <div className='flex justify-center items-center p-4'>
+                  {profile?.profileImg ? (
+                    <BigAvatar src={url} />
+                  ) : (
+                    <RiImageAddFill className='h-20 w-20 text-blue-800 ' />
+                  )}
                 </div>
               </div>
             </div>
-            <Button
+            {/* <Button
               onClick={() => router.push('/admin/student/edit-history')}
               disabled={isEditingBioDetails}
               variant='ghost'
               className='text-primary w-full  mt-4 flex justify-center bg-white hover:bg-primary-100 border border-primary-500'
             >
               Change Password
-            </Button>
+            </Button> */}
           </div>
           <div className='col-span-9'>
             <div>
