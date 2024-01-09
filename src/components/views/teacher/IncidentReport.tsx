@@ -6,6 +6,7 @@ import TextArea from '@/components/input/TextArea';
 import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
+import { getErrMsg } from '@/server';
 import { useCreateReport } from '@/server/teacher';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,7 +31,7 @@ const priorityOptions = [
   { value: 'immediate', label: 'Immediate Resolution' },
 ];
 
-const IncidentReport = () => {
+const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
   const { mutateAsync } = useCreateReport();
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string>();
@@ -60,16 +61,18 @@ const IncidentReport = () => {
         priorityLevel: data.priorityLevel.value,
       };
 
-      const response = await mutateAsync(parsedData);
+      try {
+        const response = await mutateAsync(parsedData);
 
-      if (response.status === 201) {
-        toast.success('Report created successfully');
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
+        if (response.status === 201) {
+          toast.success('Report created successfully');
+          closeModal && closeModal();
+        }
+      } catch (error) {
+        getErrMsg(error);
       }
     } else {
-      toast.error('Something went wrong. Please try again.');
+      toast.error('All fields are required');
     }
   };
 
@@ -94,7 +97,7 @@ const IncidentReport = () => {
             />
           </div>
 
-          <div className='grid grid-cols-1 space-y-2'>
+          <div className='grid grid-cols-1 space-y-2 !text-left'>
             <label className='text-xs font-bold tracking-wide'>Issue</label>
             <Controller
               name='issues'
@@ -105,7 +108,7 @@ const IncidentReport = () => {
             />
           </div>
 
-          <div className='grid grid-cols-1 space-y-2'>
+          <div className='grid grid-cols-1 space-y-2 !text-left'>
             <label className='text-xs font-bold tracking-wide'>
               Priority Level
             </label>
@@ -127,18 +130,20 @@ const IncidentReport = () => {
             />
           </div>
 
-          <DragDropDocument
-            label='Attach Document/Image'
-            imageName={fileName ?? ''}
-            setImageData={(v) => setFileData(v)}
-            setImageName={(v) => setFileName(v)}
-            setFileSize={function (value: number): void {
-              logger(value);
-            }}
-          />
+          <div className='!text-left'>
+            <DragDropDocument
+              label='Attach Document/Image'
+              imageName={fileName ?? ''}
+              setImageData={(v) => setFileData(v)}
+              setImageName={(v) => setFileName(v)}
+              setFileSize={function (value: number): void {
+                logger(value);
+              }}
+            />
+          </div>
 
-          <p className='text-sm text-gray-300'>
-            <span>File type: doc,pdf,types of images</span>
+          <p className='text-sm !text-left text-gray-300'>
+            <span>File type: images</span>
           </p>
           <div>
             <Button type='submit' className='w-full justify-center'>

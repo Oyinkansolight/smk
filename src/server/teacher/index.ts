@@ -35,6 +35,16 @@ export function useCreateReport() {
   });
   return mutation;
 }
+export function useGetMyReports() {
+  const query = useQuery({
+    queryKey: 'get_my_report',
+    queryFn: async () => {
+      const d = await request.get(`/v1/government/report/get-my-reports`);
+      return d.data.data as any;
+    },
+  });
+  return query;
+}
 
 export function useClockIn() {
   const client = useQueryClient();
@@ -71,10 +81,9 @@ export function useGetTeachersSubjectList(params: unknown) {
   const query = useQuery({
     queryKey: 'get_subject_list_teacher',
     queryFn: async () => {
-      const d = await request.get(
-        `/v1/government/classes-subjects/teacher-subjects`,
-        { params }
-      );
+      const d = await request.get(`/v1/government/report/get-my-reports`, {
+        params,
+      });
       return d.data.data.data as Subject[];
     },
   });
