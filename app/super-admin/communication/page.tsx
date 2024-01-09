@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
+import GenericLoader from '@/components/layout/Loader';
 import TabBar from '@/components/layout/TabBar';
 import AddSurvey from '@/components/modals/create-survey';
 import ReportRecords from '@/components/sections/superAdmin/ReportRecords';
@@ -17,13 +18,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiArrowDropDownLine, RiDashboardFill } from 'react-icons/ri';
-import { RotatingLines } from 'react-loader-spinner';
 
 const AllNotification = () => {
   const { data, isLoading } = useGetSenderMessages();
   const { data: surveys, isLoading: surveysLoading } = useGetSurveys();
-
-  console.log(surveys);
 
   const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
@@ -151,55 +149,58 @@ const AllNotification = () => {
                 <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
                   Send Broadcast
                 </button>
-                <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
-                  Send Report
-                </button>
               </div>
             )}
           </div>
           <div className='grid grid-cols-2 border-y'>
             <div className='border-r'>
-              {(data ?? []).map((item, i) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    setActive(!active);
-                    setCurrentMessage(item);
-                    if (!item.read) {
-                      ReadMessage(item.id);
-                    }
-                  }}
-                  className={`${
-                    !item.read && 'bg-[#EDF3FE]'
-                  } mb-3 grid grid-cols-12 p-2 font-light items-center`}
-                >
-                  <div className='col-span-1 flex justify-center'>
-                    <input
-                      type='checkbox'
-                      className='rounded-md bg-gray-300'
-                      name=''
-                      id=''
-                    />
-                  </div>
+              {data && !isLoading ? (
+                (data ?? []).map((item, i) => (
                   <div
-                    className={`col-span-7 
-                  } flex flex-col space-y-2`}
+                    key={i}
+                    onClick={() => {
+                      setActive(!active);
+                      setCurrentMessage(item);
+                      if (!item.read) {
+                        ReadMessage(item.id);
+                      }
+                    }}
+                    className={`${
+                      !item.read && 'bg-[#EDF3FE]'
+                    } mb-3 grid grid-cols-12 p-2 font-light items-center`}
                   >
-                    <h1 className='font-bold text-base'>
-                      {item.messageTitle}{' '}
-                    </h1>
-                    <p className='text-[#848689]'>
-                      {item.messageBody.substring(0, 50)}
-                    </p>
-                  </div>
-                  <div className='col-span-4 flex items-end flex-col space-y-3'>
-                    <div>{moment(item.createdAt).format('ll')}</div>
-                    {/* <div className='text-gray-300 text-[10px]  capitalize'>
+                    <div className='col-span-1 flex justify-center'>
+                      <input
+                        type='checkbox'
+                        className='rounded-md bg-gray-300'
+                        name=''
+                        id=''
+                      />
+                    </div>
+                    <div
+                      className={`col-span-7 
+                  } flex flex-col space-y-2`}
+                    >
+                      <h1 className='font-bold text-base'>
+                        {item.messageTitle}{' '}
+                      </h1>
+                      <p className='text-[#848689]'>
+                        {item.messageBody.substring(0, 50)}
+                      </p>
+                    </div>
+                    <div className='col-span-4 flex items-end flex-col space-y-3'>
+                      <div>{moment(item.createdAt).format('ll')}</div>
+                      {/* <div className='text-gray-300 text-[10px]  capitalize'>
                   {item.type}
                 </div> */}
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className='flex justify-center items-center'>
+                  <GenericLoader />
                 </div>
-              ))}
+              )}
             </div>
 
             <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>
@@ -230,13 +231,7 @@ const AllNotification = () => {
             <div>
               {surveysLoading ? (
                 <div className='flex justify-center items-center'>
-                  <RotatingLines
-                    width='100'
-                    visible={true}
-                    strokeWidth='5'
-                    strokeColor='#4fa94d'
-                    animationDuration='0.75'
-                  />
+                  <GenericLoader />
                 </div>
               ) : (
                 <div>
@@ -326,13 +321,7 @@ const AllNotification = () => {
 
                     {singleSurveyLoading && (
                       <div className='flex justify-center items-center'>
-                        <RotatingLines
-                          width='100'
-                          visible={true}
-                          strokeWidth='5'
-                          strokeColor='#4fa94d'
-                          animationDuration='0.75'
-                        />
+                        <GenericLoader />
                       </div>
                     )}
                   </div>

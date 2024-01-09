@@ -3,12 +3,24 @@ export interface messages {
   messageTitle: string;
   read: boolean;
   messageBody: string;
-  files: null;
+  files: IFile[];
   createdAt: Date;
   updatedAt: Date;
   recepients: any[];
   sender: Sender;
   replies: any[];
+}
+
+export interface IFile {
+  id: string;
+  fileUrl: string;
+  filename: string;
+  fileType: string;
+  size: number;
+  userTypes: any[];
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Sender {

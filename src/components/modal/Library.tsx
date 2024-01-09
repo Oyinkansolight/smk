@@ -18,7 +18,7 @@ interface propType {
 
 //Change to trigger build
 
-function AddSingleSchool({ onClickHandler, setFiles, files }: propType) {
+function AddFile({ onClickHandler, setFiles, files }: propType) {
   const [currentPeriodIndex, setCurrentPeriodIndex] = useState(0);
   // const [files, setFiles] = useState<Record<number, string>>({});
   const [folderTrail, setFolderTrail] = useState<UserFolder[]>([]);
@@ -168,4 +168,4 @@ function AddSingleSchool({ onClickHandler, setFiles, files }: propType) {
   );
 }
 
-export default AddSingleSchool;
+export default AddFile;

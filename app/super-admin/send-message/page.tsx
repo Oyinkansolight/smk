@@ -20,10 +20,6 @@ import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import { uuid } from 'uuidv4';
 
-interface fileType {
-  files: { name: string; id: string }[];
-}
-
 const Page = () => {
   const router = useRouter();
 
@@ -65,21 +61,31 @@ const Page = () => {
       filteredRecepients.push(item.value);
     });
     data.recepients = filteredRecepients;
-    data.files = files?.map((v) => v.id);
+    data.files = files?.map((v) => {
+      return { type: 'LIBRARY', file: v.id };
+    });
 
     const environment = isLocal ? 'staging' : 'production';
 
+    console.log(data.localFile[0]);
+    console.log(data.localFile.length);
+
     if (data.localFile.length > 0) {
       toast.info('Uploading file...');
-      console.log(data.localFile);
 
       const path = await uploadDocument(
         `messages/message_${uuid()}`,
         await data.localFile[0].arrayBuffer(),
         environment
       );
-
-      data.files = [path];
+      // LIBRARY = 'LIBRARY',
+      // FIREBASE_PATH = 'FIREBASE_PATH',
+      data.files = [
+        {
+          type: 'FIREBASE_PATH',
+          file: path,
+        },
+      ];
     }
 
     const payload = {
@@ -248,7 +254,7 @@ const Page = () => {
                           hidden
                           type='file'
                           id='upload_file'
-                          {...register('localFile.length > 0')}
+                          {...register('localFile')}
                         />
 
                         <div
@@ -282,10 +288,9 @@ const Page = () => {
                         </div>
                       ))}
 
-                    {getValues('localFile.length > 0') && (
+                    {getValues('localFile') && (
                       <div>
-                        Selected File:{' '}
-                        {getValues('localFile.length > 0')?.[0]?.name}
+                        Selected File: {getValues('localFile')?.[0]?.name}
                       </div>
                     )}
                   </div>
