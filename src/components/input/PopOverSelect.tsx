@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Button from '@/components/buttons/Button';
 import ControlledModal from '@/components/modal/ControlledModal';
 import { BasicSearch } from '@/components/search';
 import clsxm from '@/lib/clsxm';
@@ -123,7 +122,7 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                 </div>
               )}
 
-              <div className='flex justify-center items-center mt-3 gap-10'>
+              {/* <div className='flex justify-center items-center mt-3 gap-10'>
                 <Button
                   disabled={page === 1}
                   onClick={() => {
@@ -145,7 +144,7 @@ const PopOverSelect = (props: PopOverSelectProps) => {
                 >
                   Next
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
