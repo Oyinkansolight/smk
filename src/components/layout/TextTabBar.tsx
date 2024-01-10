@@ -14,7 +14,7 @@ export default function TextTabBar({
   onChange: (idx: number) => void;
 }) {
   return (
-    <div className='flex gap-1 justify-start p-5 rounded-xl bg-white my-4 overflow-hidden overflow-x-scroll hideScroll'>
+    <div className='flex flex-wrap gap-1 justify-start p-5 rounded-xl bg-white my-4 hideScroll'>
       {tabs.map((v, i) => (
         <div
           onClick={() => {

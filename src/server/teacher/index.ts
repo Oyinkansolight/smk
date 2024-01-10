@@ -26,12 +26,17 @@ interface AttendanceParams {
 }
 
 export function useCreateReport() {
+  const client = useQueryClient();
+
   const mutation = useMutation({
     mutationKey: 'create_report',
     mutationFn: (params: IncidentReportType) =>
       request.post('/v1/government/report/create-report', params, {
         withCredentials: true,
       }),
+    onSettled: async () => {
+      await client.refetchQueries('get_my_report');
+    },
   });
   return mutation;
 }

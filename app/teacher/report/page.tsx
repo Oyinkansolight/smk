@@ -2,6 +2,7 @@
 
 import Button from '@/components/buttons/Button';
 import AddNewReport from '@/components/modals/create_new_report';
+import DownloadFile from '@/lib/helper';
 import { useGetMyReports } from '@/server/teacher';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
@@ -119,6 +120,17 @@ export default function Page() {
                     </div>
                     <div className='col-span-9 uppercase'>
                       {activeReport?.priorityLevel}
+                    </div>
+                    <div className='col-span-3 font-medium'>Attachments:</div>
+                    <div className='col-span-9 uppercase'>
+                      <button
+                        onClick={() => {
+                          DownloadFile(activeReport.reportAttachment);
+                        }}
+                        className='text-blue-400 text-sm'
+                      >
+                        View Attachment
+                      </button>
                     </div>
                   </div>
                 </div>

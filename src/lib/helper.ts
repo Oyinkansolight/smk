@@ -1,3 +1,5 @@
+import { getURL } from '@/firebase/init';
+import { getErrMsg } from '@/server';
 import moment from 'moment';
 import React from 'react';
 
@@ -298,3 +300,29 @@ export const timeTablePeriodSorter = (periodsList): any => {
     return timeA - timeB; // Ascending order
   });
 };
+
+export default async function DownloadFile(fileUrl: string) {
+  try {
+    await getURL(fileUrl ?? ' ').then(async (downloadUrl) => {
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+
+      // Create a blob URL and anchor element
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+
+      link.href = blobUrl;
+      link.download = 'es-ems-file';
+      // link.setAttribute('download', 'es-ems-file');
+      // link.setAttribute('target', '_blank');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      // Revoke the blob URL to free up resources
+      window.URL.revokeObjectURL(blobUrl);
+    });
+  } catch (error) {
+    getErrMsg(error);
+  }
+}

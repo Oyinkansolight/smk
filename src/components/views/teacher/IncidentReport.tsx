@@ -10,6 +10,7 @@ import { getErrMsg } from '@/server';
 import { useCreateReport } from '@/server/teacher';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { ImSpinner2 } from 'react-icons/im';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 
@@ -33,6 +34,7 @@ const priorityOptions = [
 
 const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
   const { mutateAsync } = useCreateReport();
+  const [loading, setLoading] = useState(false);
   const [fileData, setFileData] = useState<File>();
   const [fileName, setFileName] = useState<string>();
   const { register, control, handleSubmit } = useForm({
@@ -53,6 +55,7 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
         environment
       );
 
+      setLoading(true);
       const parsedData = {
         ...data,
         reportAttachment: path,
@@ -67,9 +70,11 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
         if (response.status === 201) {
           toast.success('Report created successfully');
           closeModal && closeModal();
+          setLoading(false);
         }
       } catch (error) {
         getErrMsg(error);
+        setLoading(false);
       }
     } else {
       toast.error('All fields are required');
@@ -147,7 +152,7 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
           </p>
           <div>
             <Button type='submit' className='w-full justify-center'>
-              Upload
+              {loading ? <ImSpinner2 /> : 'Upload Report'}
             </Button>
           </div>
         </form>

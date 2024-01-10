@@ -10,15 +10,46 @@ import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetSessionTerms } from '@/server/government/terms';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
-import { GetClassActivity, useGetClassActivity } from '@/server/institution/lesson-note';
+import {
+  GetClassActivity,
+  useGetClassActivity,
+} from '@/server/institution/lesson-note';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { BiChevronRight, BiSortDown, BiSortUp } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
-import { useRouter } from 'next/navigation';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function Page() {
   const router = useRouter();
@@ -29,7 +60,7 @@ export default function Page() {
   const debouncedSearchTerm = useDebounce(query, 1500);
   const [pagingData, setPagingData] = useState<any>({
     query,
-    dir
+    dir,
   });
 
   const { data: profile } = useGetProfile();
@@ -49,14 +80,18 @@ export default function Page() {
     termId: term as unknown as string,
     sessionId: profile?.currentSession?.[0]?.id,
     dir: pagingData.dir,
-  }
+  };
 
   if (pagingData.query) {
     activityObject['query'] = pagingData.query;
   }
 
-  const { data: activities, isLoading: isLoadingActivity, refetch, error }
-    = useGetClassActivity(activityObject);
+  const {
+    data: activities,
+    isLoading: isLoadingActivity,
+    refetch,
+    error,
+  } = useGetClassActivity(activityObject);
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -66,11 +101,11 @@ export default function Page() {
   const handleSort = (value: string) => {
     setDir(value);
     setPagingData({ ...pagingData, dir: value });
-  }
+  };
 
   const stripHtml = (content: string) => {
     //Checks if content has html tags with regex
-    const regex = /(<([^>]+)>)/ig;
+    const regex = /(<([^>]+)>)/gi;
     if (regex.test(content)) {
       const tmp = document.createElement('DIV');
       tmp.innerHTML = content;
@@ -79,7 +114,7 @@ export default function Page() {
 
     //if content does not have <p> tag return content
     return content;
-  }
+  };
 
   useEffect(() => {
     const refetchSearchRecords = () => {
@@ -106,10 +141,11 @@ export default function Page() {
   }
 
   return (
-    <div className='h-full layout pl-0 lg:pl-20 pb-20'>
+    <div className='h-full layout pl-0 md:pl-20 pb-24'>
       <div
-        onClick={() => router.push("/teacher/lesson-note")}
-        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'>
+        onClick={() => router.push('/teacher/lesson-note')}
+        className='flex items-center space-x-4 pt-4 cursor-pointer w-10'
+      >
         <Image
           src='/svg/back.svg'
           width={10}
@@ -134,28 +170,34 @@ export default function Page() {
         callback={() => setCurrentPage(1)}
       />
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
-        <input onChange={(e) => handleSearch(e.target.value)} className='rounded-full border p-3' placeholder='Search activity' />
+        <input
+          onChange={(e) => handleSearch(e.target.value)}
+          className='rounded-full border p-3'
+          placeholder='Search activity'
+        />
         <div className='flex-1' />
         {/* <div className='flex items-center'>
           Filter By
           <BiChevronDown className='w-6 h-6' />
         </div> */}
 
-        {dir === 'DESC' && <div onClick={() => handleSort('ASC')} className='flex items-center'>
-          ASC
-          <BiSortUp className='h-6 w-6 cursor-pointer' />
-        </div>}
+        {dir === 'DESC' && (
+          <div onClick={() => handleSort('ASC')} className='flex items-center'>
+            ASC
+            <BiSortUp className='h-6 w-6 cursor-pointer' />
+          </div>
+        )}
 
-        {dir === 'ASC' && <div onClick={() => handleSort('DESC')} className='flex items-center'>
-          DESC
-          <BiSortDown className='w-6 h-6 cursor-pointer' />
-        </div>}
-
+        {dir === 'ASC' && (
+          <div onClick={() => handleSort('DESC')} className='flex items-center'>
+            DESC
+            <BiSortDown className='w-6 h-6 cursor-pointer' />
+          </div>
+        )}
       </div>
       <div className='h-4' />
 
-      {activities?.data &&
-        activities?.data.length > 0 &&
+      {activities?.data && activities?.data.length > 0 && (
         <div className='grid p-4 text-[#746D69] font-bold md:text-base text-sm grid-cols-5 md:grid-cols-6'>
           <div className='col-span-2'>Title</div>
           <div>Subject</div>
@@ -163,7 +205,7 @@ export default function Page() {
           <div>Date Assigned</div>
           <div>Date Due</div>
         </div>
-      }
+      )}
 
       <div className='flex flex-col gap-2'>
         {activities?.data &&
@@ -176,41 +218,52 @@ export default function Page() {
             activities?.data?.map((activity, i) => {
               const activityPath = () => {
                 if (activity.mode.toUpperCase() === 'ONLINE') {
-                  return `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }&format=${activity.format}`
+                  return `/teacher/lesson-note/assignment/submissions?subjectId=${
+                    activity.subject.id
+                  }&classArmId=${(arms ?? [])[idx].id}&type=${
+                    activity.typeOfActivity
+                  }&format=${activity.format}`;
                 }
 
                 if (activity.mode.toUpperCase() === 'OFFLINE') {
-                  return `/teacher/lesson-note/assignment/offline-submissions?subjectId=${activity.subject.id
-                    }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                    }&format=${activity.format}`
+                  return `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
+                    activity.subject.id
+                  }&classArmId=${(arms ?? [])[idx].id}&type=${
+                    activity.typeOfActivity
+                  }&format=${activity.format}`;
                 }
 
-                return `/teacher/lesson-note/assignment/submissions?subjectId=${activity.subject.id
-                  }&classArmId=${(arms ?? [])[idx].id}&type=${activity.typeOfActivity
-                  }&format=${activity.format}`
-              }
+                return `/teacher/lesson-note/assignment/submissions?subjectId=${
+                  activity.subject.id
+                }&classArmId=${(arms ?? [])[idx].id}&type=${
+                  activity.typeOfActivity
+                }&format=${activity.format}`;
+              };
 
               const activityTitle = activity?.questionsV2?.[0]?.question;
 
               return (
-                <Link
-                  key={activity.id ?? i}
-                  href={activityPath()}
-                >
+                <Link key={activity.id ?? i} href={activityPath()}>
                   <LessonTaskListItem
-                    isOfflineSubmission={activity.mode.toUpperCase() === 'OFFLINE'}
+                    isOfflineSubmission={
+                      activity.mode.toUpperCase() === 'OFFLINE'
+                    }
                     title={
                       activity.typeOfActivity
-                        ? `${stripHtml(activityTitle?.slice(0, 25) ?? activity.typeOfActivity)} ${activityTitle && '...'} -  ${activity.format}`.replace('_', ' ')
+                        ? `${stripHtml(
+                            activityTitle?.slice(0, 25) ??
+                              activity.typeOfActivity
+                          )} ${activityTitle && '...'} -  ${
+                            activity.format
+                          }`.replace('_', ' ')
                         : '[NULL]'
                     }
                     subject={activity.subject.name ?? '[NULL]'}
                     classString={
                       (arms ?? [])[idx].arm
-                        ? `${(arms ?? [])[idx].class?.name} ${(arms ?? [])[idx].arm
-                        }`
+                        ? `${(arms ?? [])[idx].class?.name} ${
+                            (arms ?? [])[idx].arm
+                          }`
                         : '[NULL]'
                     }
                     dueDate={activity.dueDate}
@@ -218,19 +271,86 @@ export default function Page() {
                     key={i}
                   />
                 </Link>
-              )
+              );
+            })
+          ))}
+      </div>
+      <div className='flex flex-col gap-2'>
+        {activities?.data &&
+          (activities?.data.length === 0 ? (
+            <EmptyView
+              useStandardHeight
+              label='No assignments created for this class.'
+            />
+          ) : (
+            activities?.data?.map((activity, i) => {
+              const activityPath = () => {
+                if (activity.mode.toUpperCase() === 'ONLINE') {
+                  return `/teacher/lesson-note/assignment/submissions?subjectId=${
+                    activity.subject.id
+                  }&classArmId=${(arms ?? [])[idx].id}&type=${
+                    activity.typeOfActivity
+                  }&format=${activity.format}`;
+                }
+
+                if (activity.mode.toUpperCase() === 'OFFLINE') {
+                  return `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
+                    activity.subject.id
+                  }&classArmId=${(arms ?? [])[idx].id}&type=${
+                    activity.typeOfActivity
+                  }&format=${activity.format}`;
+                }
+
+                return `/teacher/lesson-note/assignment/submissions?subjectId=${
+                  activity.subject.id
+                }&classArmId=${(arms ?? [])[idx].id}&type=${
+                  activity.typeOfActivity
+                }&format=${activity.format}`;
+              };
+
+              const activityTitle = activity?.questionsV2?.[0]?.question;
+
+              return (
+                <Link key={activity.id ?? i} href={activityPath()}>
+                  <LessonTaskListItem
+                    isOfflineSubmission={
+                      activity.mode.toUpperCase() === 'OFFLINE'
+                    }
+                    title={
+                      activity.typeOfActivity
+                        ? `${stripHtml(
+                            activityTitle?.slice(0, 25) ??
+                              activity.typeOfActivity
+                          )} ${activityTitle && '...'} -  ${
+                            activity.format
+                          }`.replace('_', ' ')
+                        : '[NULL]'
+                    }
+                    subject={activity.subject.name ?? '[NULL]'}
+                    classString={
+                      (arms ?? [])[idx].arm
+                        ? `${(arms ?? [])[idx].class?.name} ${
+                            (arms ?? [])[idx].arm
+                          }`
+                        : '[NULL]'
+                    }
+                    dueDate={activity.dueDate}
+                    dateCreated={activity.createdAt}
+                    key={i}
+                  />
+                </Link>
+              );
             })
           ))}
       </div>
 
-      {activities?.data &&
-        activities?.data.length > 0 &&
+      {activities?.data && activities?.data.length > 0 && (
         <PaginatedCounter
           currentPage={currentPage}
           onChange={setCurrentPage}
           pageCount={activities?.paging?.totalPage ?? 1}
         />
-      }
+      )}
     </div>
   );
 }

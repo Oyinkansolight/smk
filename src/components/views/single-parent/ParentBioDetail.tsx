@@ -4,7 +4,6 @@ import EditableFormItemAlt from '@/components/cards/EditableFormItemAlt';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useUpdateParent } from '@/server/government/staff';
-import { useGetLocalGovernments } from '@/server/onboard';
 import { Parent } from '@/types/institute';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -23,37 +22,7 @@ export default function ParentBioDetails({
 }) {
   const { control, setValue, handleSubmit } = useForm();
   const [loading, setIsLoading] = useState(false);
-  const [userLga, setUserLga] = useState('');
   const update = useUpdateParent();
-  const { data: localGovernments } = useGetLocalGovernments();
-
-  useEffect(() => {
-    async function getLga() {
-      const foundLga: any = await localGovernments?.filter(
-        (local) => local.id === initParent?.lga
-      )[0].name;
-
-      if (foundLga) {
-        setUserLga(foundLga);
-        return;
-      }
-
-      if (initParent?.lga && initParent?.lga?.length < 20) {
-        setUserLga(initParent?.lga);
-        return;
-      }
-
-      if (
-        !initParent?.lga ||
-        (initParent?.lga && initParent?.lga?.length > 20)
-      ) {
-        setUserLga('None');
-        return;
-      }
-    }
-
-    getLga();
-  }, [localGovernments, initParent?.lga, userLga]);
 
   const onSubmit = async (data: any) => {
     if (initParent?.id) {
@@ -69,8 +38,9 @@ export default function ParentBioDetails({
         firstName: (data.fullName as string).split(' ')[0],
         lastName: (data.fullName as string).split(' ')[1],
       };
-
-      console.log(payload);
+      for (const key in payload) {
+        if (!payload[key]) delete payload[key]; //remove empty object
+      }
 
       try {
         const response = await update.mutateAsync(payload);
@@ -93,9 +63,8 @@ export default function ParentBioDetails({
       setValue('email', initParent?.email);
       setValue('fullName', `${initParent?.firstName} ${initParent?.lastName}`);
       setValue('address', initParent?.address);
-      setValue('lga', userLga);
     }
-  }, [initParent, setValue, userLga]);
+  }, [initParent, setValue]);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>

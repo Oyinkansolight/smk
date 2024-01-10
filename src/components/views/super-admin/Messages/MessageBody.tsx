@@ -1,8 +1,6 @@
-import { getURL } from '@/firebase/init';
-import { getErrMsg } from '@/server';
+import DownloadFile from '@/lib/helper';
 import { messages } from '@/types/comms';
 import moment from 'moment';
-import { useState } from 'react';
 import { BsFillReplyFill } from 'react-icons/bs';
 import { RiShareForwardFill } from 'react-icons/ri';
 
@@ -11,34 +9,10 @@ type propType = {
   message?: messages | undefined;
 };
 export default function MessageBody({ reply, message }: propType) {
-  const [url, setUrl] = useState<string[]>([]);
-  const handleAttachMent = async () => {
-    try {
-      message?.files.map(async (file) => {
-        await getURL(file.fileUrl ?? ' ').then(async (downloadUrl) => {
-          setUrl([...url, downloadUrl]);
-          const response = await fetch(downloadUrl);
-          const blob = await response.blob();
-
-          // Create a blob URL and anchor element
-          const blobUrl = window.URL.createObjectURL(blob);
-
-          const link = document.createElement('a');
-
-          link.href = blobUrl;
-          link.download = 'es-ems-file';
-          // link.setAttribute('download', 'es-ems-file');
-          // link.setAttribute('target', '_blank');
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          // Revoke the blob URL to free up resources
-          window.URL.revokeObjectURL(blobUrl);
-        });
-      });
-    } catch (error) {
-      getErrMsg(error);
-    }
+  const HandleAttachMent = async () => {
+    message?.files.map(async (file) => {
+      DownloadFile(file.fileUrl);
+    });
   };
   return (
     <div className='grid grid-cols-12 gap-6 px-4 bg-transparent'>
@@ -87,7 +61,7 @@ export default function MessageBody({ reply, message }: propType) {
           {message && message.files.length > 0 && (
             <button
               onClick={() => {
-                handleAttachMent();
+                HandleAttachMent();
               }}
               className='text-blue-400 text-sm'
             >
