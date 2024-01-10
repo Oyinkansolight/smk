@@ -28,8 +28,6 @@ export default function ParentBioDetails({
     if (initParent?.id) {
       setIsLoading(true);
 
-      console.log(data);
-
       const payload: Parent = {
         // profileImg: data.,
         lga: data.lga,
