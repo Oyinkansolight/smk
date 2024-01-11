@@ -26,9 +26,9 @@ export default function Page() {
   const term = getFromSessionStorage('currentTerm') as unknown as string;
 
   const { data, error } = useGetSubjectTestExam({
-    sessionId: profile?.currentSession?.[0]?.id,
     termId: JSON.parse(term)?.id,
     subjectId: params?.get('id'),
+    sessionId,
   });
 
   const { data: arms } = useGetTeacherClassArms({
@@ -45,10 +45,10 @@ export default function Page() {
   return (
     <div className='h-full layout pl-0 lg:pl-20'>
       <div className='text-[#D4D5D7] text-xl mt-6'>
-        {'Test & Exam > Mathematics'}
+        {`Test & Exam > ${params?.get('name')}`}
       </div>
       <div className='font-bold py-8 h2'>
-        <div>Mathematics</div>
+        <div>{params?.get('name')}</div>
       </div>
       {arms && arms.length > 0 && (
         <TextTabBar

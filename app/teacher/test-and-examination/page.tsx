@@ -56,28 +56,30 @@ export default function Page() {
 
           {data && data?.length > 0
             ? data.map((v, i) => (
-              <GradeSubjectCard
-                onClick={() => {
-                  router.push(
-                    `/teacher/test-and-examination/subject?id=${v.id}`
-                  );
-                }}
-                key={v.id ?? i}
-                subject={
-                  v?.subject
-                    ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
-                    : 'Subject Name'
-                }
-                className={colors[i % colors.length]}
-              />
-            ))
+                <GradeSubjectCard
+                  onClick={() => {
+                    router.push(
+                      `/teacher/test-and-examination/subject?id=${
+                        v.id
+                      }&name=${`${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `}`
+                    );
+                  }}
+                  key={v.id ?? i}
+                  subject={
+                    v?.subject
+                      ? `${v?.subject?.name} - ${v?.class?.class?.name}  ${v?.class?.arm}  `
+                      : 'Subject Name'
+                  }
+                  className={colors[i % colors.length]}
+                />
+              ))
             : data &&
-            data?.length === 0 && (
-              <EmptyView
-                label='No test or exam has been created'
-                useStandardHeight
-              />
-            )}
+              data?.length === 0 && (
+                <EmptyView
+                  label='No test or exam has been created'
+                  useStandardHeight
+                />
+              )}
         </div>
       </div>
     </div>
