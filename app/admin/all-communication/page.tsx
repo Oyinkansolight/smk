@@ -27,7 +27,6 @@ const AllNotification = () => {
   const [isReply, setIsReply] = useState(false);
   const [currentMessage, setCurrentMessage] = useState<messages>();
   // const [currentSurvey, setCurrentSurvey] = useState(null);
-  const [activeSurvey, setActiveSurvey] = useState('');
 
   function handleReply() {
     setIsReply(!isReply);
