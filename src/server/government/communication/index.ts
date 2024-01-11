@@ -38,6 +38,19 @@ export function useGetSenderMessages() {
   });
   return query;
 }
+export function useGetReports() {
+  const query = useQuery({
+    queryKey: `get_report`,
+    queryFn: async () => {
+      const d = await request.get(
+        '/v1/government/report/get-institution-report'
+      );
+      // console.log(d.data.data.data);
+      return d.data?.data as any;
+    },
+  });
+  return query;
+}
 export function useGetSurveys() {
   const query = useQuery({
     queryKey: `get_survey`,

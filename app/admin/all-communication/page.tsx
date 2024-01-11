@@ -200,7 +200,7 @@ const AllNotification = () => {
           </div>
         </div>
       )}
-      {tabIdx === 0 && (
+      {tabIdx === 1 && (
         <div className=''>
           <ReportRecords />
         </div>
