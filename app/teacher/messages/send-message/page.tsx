@@ -67,7 +67,7 @@ const Page = () => {
 
     const environment = isLocal ? 'staging' : 'production';
 
-    if (data.localFile.length > 0) {
+    if (data.localFile && data.localFile.length > 0) {
       toast.info('Uploading file...');
 
       const path = await uploadDocument(

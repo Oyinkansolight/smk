@@ -96,7 +96,7 @@ const AllMessages = () => {
           )}
           {data && !isLoading && data.length === 0 && (
             <div className='py-20 text-center'>
-              <h1 className='text-base'>No messages Yes</h1>
+              <h1 className='text-base'>No messages yet</h1>
             </div>
           )}
         </div>
