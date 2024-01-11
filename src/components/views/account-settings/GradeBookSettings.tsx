@@ -36,26 +36,26 @@ interface GradeBookSettingsProps {
 export default function GradeBookSettings({ profile }: GradeBookSettingsProps) {
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [data, setData] = useState([
-    {
-      type: INSTITUTION_TYPES.ECCDE,
-      categories: [],
-      profile,
-    },
-    {
-      type: INSTITUTION_TYPES.PRIMARY,
-      categories: [],
-      profile,
-    },
+    // {
+    //   type: INSTITUTION_TYPES.ECCDE,
+    //   categories: [],
+    //   profile,
+    // },
+    // {
+    //   type: INSTITUTION_TYPES.PRIMARY,
+    //   categories: [],
+    //   profile,
+    // },
     {
       type: INSTITUTION_TYPES.SECONDARY,
       categories: [],
       profile,
     },
-    {
-      type: INSTITUTION_TYPES.TERTIARY,
-      categories: [],
-      profile,
-    },
+    // {
+    //   type: INSTITUTION_TYPES.TERTIARY,
+    //   categories: [],
+    //   profile,
+    // },
   ]);
 
   const allSessions = profile?.currentSession;

@@ -1,9 +1,6 @@
 'use client';
 
-import Button from '@/components/buttons/Button';
 import TextIconTabBar from '@/components/layout/TextIconTabBar';
-import EmptyView from '@/components/misc/EmptyView';
-import GradeSubjectCard from '@/components/views/teacher/GradeSubjectCard';
 import { useGetProfile } from '@/server/auth';
 import { useGetSubjectsAssignedToTeacher } from '@/server/government/classes_and_subjects';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
@@ -11,7 +8,6 @@ import { ClassArmStudents } from '@/types/institute';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { BiBookContent } from 'react-icons/bi';
 import { FaUsers } from 'react-icons/fa';
 
 export default function Page() {
@@ -113,13 +109,15 @@ export default function Page() {
           </div>
           <div className='flex flex-col gap-4'>
             {allStudents &&
-              allStudents.map((student, i) => (
-                <StudentGradeListItem
-                  key={student?.id ?? i}
-                  id={i + 1}
-                  student={student}
-                />
-              ))}
+              allStudents
+                .sort((a, b) => a.lastName.localeCompare(b.lastName))
+                .map((student, i) => (
+                  <StudentGradeListItem
+                    key={student?.id ?? i}
+                    id={i + 1}
+                    student={student}
+                  />
+                ))}
           </div>
         </div>
       )}

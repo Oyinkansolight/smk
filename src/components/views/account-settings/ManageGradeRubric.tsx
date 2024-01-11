@@ -93,10 +93,10 @@ export default function ManageGradeRubric({
   ]);
 
   const allInstitutions = [
-    { value: INSTITUTION_TYPES.ECCDE, label: INSTITUTION_TYPES.ECCDE },
-    { value: INSTITUTION_TYPES.PRIMARY, label: INSTITUTION_TYPES.PRIMARY },
+    // { value: INSTITUTION_TYPES.ECCDE, label: INSTITUTION_TYPES.ECCDE },
+    // { value: INSTITUTION_TYPES.PRIMARY, label: INSTITUTION_TYPES.PRIMARY },
+    // { value: INSTITUTION_TYPES.TERTIARY, label: INSTITUTION_TYPES.TERTIARY },
     { value: INSTITUTION_TYPES.SECONDARY, label: INSTITUTION_TYPES.SECONDARY },
-    { value: INSTITUTION_TYPES.TERTIARY, label: INSTITUTION_TYPES.TERTIARY },
   ];
 
   const handleInstitutionChange = async (value: {

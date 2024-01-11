@@ -51,6 +51,10 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const router = useRouter();
   const [idx, setIdx] = useState(0);
@@ -141,7 +145,7 @@ export default function Page() {
   }
 
   return (
-    <div className='h-full layout pl-0 md:pl-20 pb-24'>
+    <div className='h-full layout pl-0 md:pl-20 pb-44'>
       <div
         onClick={() => router.push('/teacher/lesson-note')}
         className='flex items-center space-x-4 pt-4 cursor-pointer w-10'
@@ -207,74 +211,6 @@ export default function Page() {
         </div>
       )}
 
-      <div className='flex flex-col gap-2'>
-        {activities?.data &&
-          (activities?.data.length === 0 ? (
-            <EmptyView
-              useStandardHeight
-              label='No assignments created for this class.'
-            />
-          ) : (
-            activities?.data?.map((activity, i) => {
-              const activityPath = () => {
-                if (activity.mode.toUpperCase() === 'ONLINE') {
-                  return `/teacher/lesson-note/assignment/submissions?subjectId=${
-                    activity.subject.id
-                  }&classArmId=${(arms ?? [])[idx].id}&type=${
-                    activity.typeOfActivity
-                  }&format=${activity.format}`;
-                }
-
-                if (activity.mode.toUpperCase() === 'OFFLINE') {
-                  return `/teacher/lesson-note/assignment/offline-submissions?subjectId=${
-                    activity.subject.id
-                  }&classArmId=${(arms ?? [])[idx].id}&type=${
-                    activity.typeOfActivity
-                  }&format=${activity.format}`;
-                }
-
-                return `/teacher/lesson-note/assignment/submissions?subjectId=${
-                  activity.subject.id
-                }&classArmId=${(arms ?? [])[idx].id}&type=${
-                  activity.typeOfActivity
-                }&format=${activity.format}`;
-              };
-
-              const activityTitle = activity?.questionsV2?.[0]?.question;
-
-              return (
-                <Link key={activity.id ?? i} href={activityPath()}>
-                  <LessonTaskListItem
-                    isOfflineSubmission={
-                      activity.mode.toUpperCase() === 'OFFLINE'
-                    }
-                    title={
-                      activity.typeOfActivity
-                        ? `${stripHtml(
-                            activityTitle?.slice(0, 25) ??
-                              activity.typeOfActivity
-                          )} ${activityTitle && '...'} -  ${
-                            activity.format
-                          }`.replace('_', ' ')
-                        : '[NULL]'
-                    }
-                    subject={activity.subject.name ?? '[NULL]'}
-                    classString={
-                      (arms ?? [])[idx].arm
-                        ? `${(arms ?? [])[idx].class?.name} ${
-                            (arms ?? [])[idx].arm
-                          }`
-                        : '[NULL]'
-                    }
-                    dueDate={activity.dueDate}
-                    dateCreated={activity.createdAt}
-                    key={i}
-                  />
-                </Link>
-              );
-            })
-          ))}
-      </div>
       <div className='flex flex-col gap-2'>
         {activities?.data &&
           (activities?.data.length === 0 ? (
