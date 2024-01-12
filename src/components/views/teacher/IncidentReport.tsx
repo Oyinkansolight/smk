@@ -46,38 +46,41 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
     toast.info('Uploading file...');
     const institution = sessionStorage.getItem('institution') ?? '';
     const institutionId = JSON.parse(institution).id;
-
+    let path = '';
     if (fileName && fileData?.arrayBuffer && institutionId) {
       const environment = isLocal ? 'staging' : 'production';
-      const path = await uploadDocument(
+      path = await uploadDocument(
         fileName ?? '',
         await fileData?.arrayBuffer(),
         environment
       );
+    }
 
-      setLoading(true);
-      const parsedData = {
-        ...data,
-        reportAttachment: path,
-        issues: [data.issues.value],
-        institutionId: institutionId,
-        priorityLevel: data.priorityLevel.value,
-      };
+    setLoading(true);
+    const parsedData = {
+      ...data,
+      reportAttachment: path,
+      issues: [data.issues.value],
+      institutionId: institutionId,
+      priorityLevel: data.priorityLevel.value,
+    };
+    for (const key in parsedData) {
+      if (!parsedData[key] && parsedData[key] !== 'reportAttachment') {
+        toast.error(`${parsedData[key]} is required`);
+        return;
+      }
+    }
+    try {
+      const response = await mutateAsync(parsedData);
 
-      try {
-        const response = await mutateAsync(parsedData);
-
-        if (response.status === 201) {
-          toast.success('Report created successfully');
-          closeModal && closeModal();
-          setLoading(false);
-        }
-      } catch (error) {
-        getErrMsg(error);
+      if (response.status === 201) {
+        toast.success('Report created successfully');
+        closeModal && closeModal();
         setLoading(false);
       }
-    } else {
-      toast.error('All fields are required');
+    } catch (error) {
+      getErrMsg(error);
+      setLoading(false);
     }
   };
 

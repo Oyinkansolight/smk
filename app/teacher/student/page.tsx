@@ -1,6 +1,9 @@
 'use client';
 
+import SearchInput from '@/components/input/SearchInput';
+import GenericLoader from '@/components/layout/Loader';
 import TextIconTabBar from '@/components/layout/TextIconTabBar';
+import EmptyView from '@/components/misc/EmptyView';
 import { useGetProfile } from '@/server/auth';
 import { useGetSubjectsAssignedToTeacher } from '@/server/government/classes_and_subjects';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
@@ -21,9 +24,13 @@ export default function Page() {
   const router = useRouter();
 
   const [idx, setIdx] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredStudents, setFilteredStudents] = useState<ClassArmStudents[]>(
+    []
+  );
 
   const { data: profile } = useGetProfile();
-  const { data: allStudents } = useGetClassArmStudents({
+  const { data: allStudents, isLoading } = useGetClassArmStudents({
     classArmId: profile?.userInfo?.staff?.managedClassArm?.id,
   });
 
@@ -31,6 +38,18 @@ export default function Page() {
     profile?.userInfo?.staff?.id,
     profile?.currentSession?.[0]?.id
   );
+
+  useEffect(() => {
+    if (allStudents) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      const filteredStudentsList = allStudents.filter(
+        (item) =>
+          item.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredStudents(filteredStudentsList);
+    }
+  }, [allStudents, searchQuery]);
 
   useEffect(() => {
     if (profile?.userInfo?.staff?.id) {
@@ -98,18 +117,18 @@ export default function Page() {
       )} */}
       {idx === 0 && (
         <div className='bg-white min-h-screen px-10'>
-          <div className='grid grid-cols-8 py-8 text-[#746D69] text-base'>
-            <div />
-            <div className='col-span-3 px-4'>Student</div>
-            {/* <div>CA1</div>
-            <div>CA2</div>
-            <div>Exam</div> */}
-            {/*   <div>Attendance</div>
-            <div>Standing</div> */}
+          <div className='flex justify-end py-8 text-[#746D69] text-base'>
+            <SearchInput
+              className='border rounded-full'
+              placeholder='Search here'
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+            />
           </div>
           <div className='flex flex-col gap-4'>
-            {allStudents &&
-              allStudents
+            {filteredStudents &&
+              filteredStudents
                 .sort((a, b) => a.lastName.localeCompare(b.lastName))
                 .map((student, i) => (
                   <StudentGradeListItem
@@ -118,6 +137,10 @@ export default function Page() {
                     student={student}
                   />
                 ))}
+            {filteredStudents.length == 0 && !isLoading && (
+              <EmptyView label='No record found' />
+            )}
+            {isLoading && <GenericLoader />}
           </div>
         </div>
       )}
