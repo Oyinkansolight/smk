@@ -64,9 +64,7 @@ const Biodata = ({
                 setLga(l);
               }
             }}
-            options={
-              data?.map((v) => capitalize(v.label ?? '') ?? 'NULL') ?? []
-            }
+            options={data?.map((v) => v.label ?? '' ?? 'NULL') ?? []}
           />
         </div>
 

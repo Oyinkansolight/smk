@@ -130,9 +130,9 @@ const AllNotification = () => {
                 >
                   Send Message
                 </Link>
-                <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
+                {/* <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
                   Send Broadcast
-                </button>
+                </button> */}
               </div>
             )}
           </div>

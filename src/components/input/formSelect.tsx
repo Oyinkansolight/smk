@@ -39,9 +39,8 @@ const Select = ({
   name,
   helper,
   required,
-  onClick
+  onClick,
 }: propType) => {
-
   return (
     <div className=''>
       <div>
@@ -55,7 +54,7 @@ const Select = ({
             id=''
             required={required}
             onClick={onClick && onClick}
-            className='w-full border-none outline-none bg-transparent  text-gray-400'
+            className='w-full border-none outline-none bg-transparent capitalize  text-gray-400'
             {...(register ? register(name as string, validation) : {})}
             onChange={(e) => {
               setFormValue && setFormValue(e.target.value);
