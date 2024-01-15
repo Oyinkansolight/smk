@@ -14,10 +14,12 @@ import React, { useState } from 'react';
 // import { BasicSearch } from '@/components/search';
 
 const AllMessages = () => {
+  const { mutateAsync } = useReadMessage();
+
   const [active, setActive] = useState(false);
   const { data, isLoading } = useGetSenderMessages();
   const ReadMessage = (messageId: string) => {
-    useReadMessage({ id: messageId });
+    mutateAsync({ id: messageId });
   };
   const [isReply, setIsReply] = useState(false);
 

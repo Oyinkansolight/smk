@@ -123,14 +123,18 @@ export default function Page() {
                     </div>
                     <div className='col-span-3 font-medium'>Attachments:</div>
                     <div className='col-span-9 uppercase'>
-                      <button
-                        onClick={() => {
-                          DownloadFile(activeReport.reportAttachment);
-                        }}
-                        className='text-blue-400 text-sm'
-                      >
-                        View Attachment
-                      </button>
+                      {activeReport.reportAttachment ? (
+                        <button
+                          onClick={() => {
+                            DownloadFile(activeReport.reportAttachment);
+                          }}
+                          className='text-blue-400 text-sm'
+                        >
+                          View Attachment
+                        </button>
+                      ) : (
+                        'None'
+                      )}
                     </div>
                   </div>
                 </div>

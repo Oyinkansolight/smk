@@ -22,6 +22,7 @@ import { RiArrowDropDownLine, RiDashboardFill } from 'react-icons/ri';
 const AllNotification = () => {
   const { data, isLoading } = useGetSenderMessages();
   const { data: surveys, isLoading: surveysLoading } = useGetSurveys();
+  const { mutateAsync } = useReadMessage();
 
   const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
@@ -44,7 +45,7 @@ const AllNotification = () => {
   };
 
   const ReadMessage = (messageId: string) => {
-    useReadMessage({ id: messageId });
+    mutateAsync({ id: messageId });
   };
 
   const {

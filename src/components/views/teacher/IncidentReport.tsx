@@ -43,11 +43,11 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
   });
 
   const onSubmit = async (data: any) => {
-    toast.info('Uploading file...');
     const institution = sessionStorage.getItem('institution') ?? '';
     const institutionId = JSON.parse(institution).id;
     let path = '';
     if (fileName && fileData?.arrayBuffer && institutionId) {
+      toast.info('Uploading file...');
       const environment = isLocal ? 'staging' : 'production';
       path = await uploadDocument(
         fileName ?? '',
@@ -56,7 +56,6 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
       );
     }
 
-    setLoading(true);
     const parsedData = {
       ...data,
       reportAttachment: path,
@@ -64,12 +63,19 @@ const IncidentReport = ({ closeModal }: { closeModal?: () => void }) => {
       institutionId: institutionId,
       priorityLevel: data.priorityLevel.value,
     };
+    console.log(parsedData);
+
     for (const key in parsedData) {
-      if (!parsedData[key] && parsedData[key] !== 'reportAttachment') {
+      if (!parsedData['reportAttachment']) {
+        delete parsedData['reportAttachment'];
+      }
+      if (!parsedData[key]) {
         toast.error(`${parsedData[key]} is required`);
         return;
       }
     }
+    setLoading(true);
+
     try {
       const response = await mutateAsync(parsedData);
 
