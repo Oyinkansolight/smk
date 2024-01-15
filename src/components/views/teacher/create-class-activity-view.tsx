@@ -1,10 +1,12 @@
 'use client';
 
 import Button from '@/components/buttons/Button';
+import { BaseInput } from '@/components/input';
 import MultiChoiceQuestion from '@/components/input/MultiChoiceQuestion';
 import CustomRichTextEditor from '@/components/input/TextEditor/CustomRichTextEditor';
 import InputReactForm from '@/components/input/formReactInput';
 import TextTabBar from '@/components/layout/TextTabBar';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import useCustomEditor from '@/hooks/useEditor';
 import clsxm from '@/lib/clsxm';
@@ -19,6 +21,7 @@ import {
   useCreateLessonNote,
 } from '@/server/institution/lesson-note';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
@@ -26,13 +29,9 @@ import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
 import { useSessionStorage } from 'usehooks-ts';
-
 import BookSVG from '~/svg/book.svg';
 import ComputerUploadSVG from '~/svg/computer_upload.svg';
 import TakePictureSVG from '~/svg/take_picture.svg';
-import { isLocal } from '@/constant/env';
-import { useSearchParams } from 'next/navigation';
-import { BaseInput } from '@/components/input';
 
 export const ACTIVITY_TYPES = [
   'ASSIGNMENT',
@@ -57,7 +56,9 @@ interface CreateClassActivityViewProps {
   closeModal: () => void;
 }
 
-export default function CreateClassActivityView({ closeModal }: CreateClassActivityViewProps) {
+export default function CreateClassActivityView({
+  closeModal,
+}: CreateClassActivityViewProps) {
   const params = useSearchParams();
   const classArmId = params?.get('classArmId');
   const editor = useCustomEditor();
@@ -80,7 +81,6 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
     {} as CreateClassActivityParams
   );
 
-
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
   };
@@ -91,7 +91,10 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    if (type !== activityTypes[3]?.value && data?.format?.value === activityFormats[0].key) {
+    if (
+      type !== activityTypes[3]?.value &&
+      data?.format?.value === activityFormats[0].key
+    ) {
       questions.forEach((v) => {
         if (!v.question) {
           toast.error('Please fill all questions');
@@ -117,7 +120,10 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
       });
     }
 
-    if (type !== activityTypes[3].value && data.format.value === activityFormats[1].key) {
+    if (
+      type !== activityTypes[3].value &&
+      data.format.value === activityFormats[1].key
+    ) {
       if (editor?.getHTML() === '' || editor?.getHTML() === '<p></p>') {
         toast.error('Please fill all questions');
         return;
@@ -126,7 +132,10 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
 
     let questionsV2;
 
-    if (type !== activityTypes[3].value && data.format.value === activityFormats[0].key) {
+    if (
+      type !== activityTypes[3].value &&
+      data.format.value === activityFormats[0].key
+    ) {
       questionsV2 = questions.map((v) => ({
         question: v.question,
         options: v.options,
@@ -134,7 +143,10 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
       }));
     }
 
-    if (type !== activityTypes[3].value && data.format.value === activityFormats[1].key) {
+    if (
+      type !== activityTypes[3].value &&
+      data.format.value === activityFormats[1].key
+    ) {
       questionsV2 = [
         {
           question: editor?.getHTML() ?? '',
@@ -173,10 +185,13 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
           teacherId: profile?.userInfo?.staff?.id,
           title: data?.lessonTitle,
           classArmId: classArmId,
-          instructionalTeachingActivity: editor?.getHTML() !== '<p></p>' ? editor?.getHTML() : '',
+          instructionalTeachingActivity:
+            editor?.getHTML() !== '<p></p>' ? editor?.getHTML() : '',
         };
 
         if (!path) delete payload.uploadUrl;
+        if (!payload?.instructionalTeachingActivity)
+          delete payload.instructionalTeachingActivity;
 
         const res = await createLessonNote(payload);
         toast.success(res.data.data.message);
@@ -290,28 +305,28 @@ export default function CreateClassActivityView({ closeModal }: CreateClassActiv
           )}
           {(type === activityTypes[1].value ||
             type === activityTypes[2].value) && (
-              <div>
-                <div className='font-bold text-xs pb-1'>Time Limit</div>
-                <Controller
-                  name='timeLimit'
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <ReactSelect
-                        {...field}
-                        required
-                        options={['15 Mins', '30 Mins', '45 Mins', '1 Hour'].map(
-                          (v) => ({
-                            value: v,
-                            label: v,
-                          })
-                        )}
-                      />
-                    );
-                  }}
-                />
-              </div>
-            )}
+            <div>
+              <div className='font-bold text-xs pb-1'>Time Limit</div>
+              <Controller
+                name='timeLimit'
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <ReactSelect
+                      {...field}
+                      required
+                      options={['15 Mins', '30 Mins', '45 Mins', '1 Hour'].map(
+                        (v) => ({
+                          value: v,
+                          label: v,
+                        })
+                      )}
+                    />
+                  );
+                }}
+              />
+            </div>
+          )}
         </div>
         {type !== activityTypes[3].value && (
           <div className='flex flex-row items-center gap-8 text-xs font-semibold'>
