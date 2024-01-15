@@ -21,46 +21,6 @@ import { useMediaQuery } from 'react-responsive';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const Page = () => {
   const router = useRouter();
   const queryString = useSearchParams();
@@ -246,7 +206,7 @@ const Page = () => {
 function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
   const [url, setUrl] = useState<string | any>('');
   const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1224px)",
+    query: '(min-width: 1224px)',
   });
 
   let path;
@@ -256,8 +216,11 @@ function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
   }
   return (
     <div>
-      {isDesktopOrLaptop ?
-        <CustomPDFReader url={url} /> : handleFlutterPDFReader(url)}
+      {isDesktopOrLaptop ? (
+        <CustomPDFReader url={url} />
+      ) : (
+        handleFlutterPDFReader(url)
+      )}
     </div>
   );
 }

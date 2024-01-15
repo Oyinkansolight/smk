@@ -7,7 +7,7 @@ import { useGetReports } from '@/server/government/communication';
 import { useGetSchools } from '@/server/institution';
 import moment from 'moment';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 
@@ -33,9 +33,8 @@ const ReportRecords = () => {
     include: 'false',
   });
   const { data: Reports, isLoading: reportLoading } = useGetReports();
-  if (pathname?.includes('super-admin')) {
-    setIsSuperAdmin(true);
-  }
+  console.log(Reports);
+
   const {
     data: schools,
     error,
@@ -90,6 +89,11 @@ const ReportRecords = () => {
 
   const isLoadingData = isLoading || !chartData || isLoadingSchools || !schools;
 
+  useEffect(() => {
+    if (pathname?.includes('super-admin')) {
+      setIsSuperAdmin(true);
+    }
+  }, [pathname]);
   return (
     <>
       <PopOverSelect
@@ -141,7 +145,7 @@ const ReportRecords = () => {
                 {!Reports ||
                   (Reports?.length === 0 ? (
                     <div className='py-20 flex justify-center items-center'>
-                      <h4>No survey created yet</h4>
+                      <h4>No Report created yet</h4>
                     </div>
                   ) : (
                     <div>
@@ -201,6 +205,13 @@ const ReportRecords = () => {
                       {moment(activeReport?.createdAt).format('llll')}
                     </div>
 
+                    <div className='col-span-3 font-medium'>
+                      {' '}
+                      Institute Name Name:
+                    </div>
+                    <div className='col-span-9'>
+                      {activeReport?.institution.instituteName ?? ''}
+                    </div>
                     <div className='col-span-3 font-medium'> Report Name:</div>
                     <div className='col-span-9'>
                       {activeReport?.description ?? ''}

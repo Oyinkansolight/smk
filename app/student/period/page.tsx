@@ -80,7 +80,9 @@ const Page = () => {
                     <div>
                       <h1 className='font-bold text-base'>
                         {' '}
-                        {item?.subject?.name}{' '}
+                        {item?.subject
+                          ? item?.subject?.name
+                          : item.eventName}{' '}
                       </h1>
                       <p className='text-[#808080] text-[10px] '>
                         {time24Converter(item.startTime)} -{' '}
