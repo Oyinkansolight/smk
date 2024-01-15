@@ -29,6 +29,7 @@ const AllNotification = () => {
   function handleReply() {
     setIsReply(!isReply);
   }
+  const { mutateAsync } = useReadMessage();
 
   const handleSearch = (value: string) => {
     // const result = data.filter((data) =>
@@ -38,7 +39,7 @@ const AllNotification = () => {
   };
 
   const ReadMessage = (messageId: string) => {
-    useReadMessage({ id: messageId });
+    mutateAsync({ id: messageId });
   };
 
   return (
