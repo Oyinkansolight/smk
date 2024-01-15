@@ -4,6 +4,7 @@ import GenericLoader from '@/components/layout/Loader';
 import TabBar from '@/components/layout/TabBar';
 import ReportRecords from '@/components/sections/superAdmin/ReportRecords';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
+import request from '@/server';
 import {
   useGetSenderMessages,
   useGetSurveys,
@@ -12,36 +13,48 @@ import {
 import { messages } from '@/types/comms';
 import moment from 'moment';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
-import { RiArrowDropDownLine, RiDashboardFill } from 'react-icons/ri';
+import { RiDashboardFill } from 'react-icons/ri';
 
 const AllNotification = () => {
-  const { data, isLoading } = useGetSenderMessages();
+  const {
+    data,
+    isLoading,
+    refetch: refetchAllMessage,
+  } = useGetSenderMessages();
+
   const { data: surveys, isLoading: surveysLoading } = useGetSurveys();
 
+  const [allMessage, setAllMessage] = useState<messages[]>([]);
   const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
+  const [filter, setFilter] = useState('');
   const [dropDown, setDropDown] = useState(false);
   const [active, setActive] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [currentMessage, setCurrentMessage] = useState<messages>();
   // const [currentSurvey, setCurrentSurvey] = useState(null);
 
+  const { mutateAsync } = useReadMessage();
   function handleReply() {
     setIsReply(!isReply);
   }
 
-  const handleSearch = (value: string) => {
-    // const result = data.filter((data) =>
-    //   data.title.toLowerCase().includes(value.toLowerCase())
-    // );
-    // setallnotification(result);
+  const handleFilter = async () => {
+    const d = await request.get('/v1/government/message/get_unread_messages');
+    setAllMessage(d.data.data.data.data);
   };
 
   const ReadMessage = (messageId: string) => {
-    useReadMessage({ id: messageId });
+    mutateAsync({ id: messageId });
   };
+
+  useEffect(() => {
+    if (data) {
+      setAllMessage(data);
+    }
+  }, [filter, data]);
 
   return (
     <section className='-ml-2 py-6'>
@@ -104,37 +117,32 @@ const AllNotification = () => {
       )}
       {tabIdx === 0 && (
         <div>
-          <div className='relative p-2'>
-            <button
-              onClick={() => {
-                setDropDown(true);
-              }}
-              className='bg-primary py-3 text-white rounded-md px-4 flex space-x-3 ml-auto'
+          <div className='w-full py-4 flex items-center justify-between px-4'>
+            <div>
+              <select
+                name=''
+                id=''
+                className='border-none outline-none w-[100px] rounded-lg bg-gray-300'
+                onChange={(e) => {
+                  if (e.target.value === 'Unread') {
+                    handleFilter();
+                  } else {
+                    refetchAllMessage();
+                  }
+                  setFilter(e.target.value);
+                }}
+              >
+                <option value='All'>All</option>
+                <option value='Read'>Read</option>
+                <option value='Unread'>Unread</option>
+              </select>
+            </div>
+            <Link
+              href='/super-admin/send-message'
+              className='bg-primary py-3 text-white rounded-md px-4 flex space-x-3 '
             >
               <span>Send Messages</span>
-              <RiArrowDropDownLine size={20} />
-            </button>
-            {dropDown && (
-              <div
-                className='fixed inset-0 z-[9]'
-                onClick={() => {
-                  setDropDown(!dropDown);
-                }}
-              />
-            )}
-            {dropDown && (
-              <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-14 transition-all duration-200 right-0 z-10'>
-                <Link
-                  href='/super-admin/send-message'
-                  className='p-3 hover:bg-slate-100  text-left font-medium w-full'
-                >
-                  Send Message
-                </Link>
-                {/* <button className='p-3 hover:bg-slate-100  text-left font-medium w-full'>
-                  Send Broadcast
-                </button> */}
-              </div>
-            )}
+            </Link>
           </div>
           <div className='grid grid-cols-2 border-y'>
             <div className='border-r'>
@@ -145,6 +153,8 @@ const AllNotification = () => {
                     onClick={() => {
                       setActive(!active);
                       setCurrentMessage(item);
+                      console.log(item);
+
                       if (!item.read) {
                         ReadMessage(item.id);
                       }

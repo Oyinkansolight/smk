@@ -13,18 +13,18 @@ export function useSendMessage() {
   });
   return mutation;
 }
-export function useReadMessage(params) {
-  const query = useQuery({
-    queryKey: 'read-message',
-    queryFn: () =>
-      request.post(
-        `/v1/government/communication/mark_as_read?messageId=${params.id}`,
+export function useReadMessage() {
+  const mutation = useMutation({
+    mutationKey: 'read-message',
+    mutationFn: (params: { id: string }) =>
+      request.put(
+        `/v1/government/message/mark_as_read?messageId=${params.id}`,
         {
           withCredentials: true,
         }
       ),
   });
-  return query;
+  return mutation;
 }
 
 export function useGetSenderMessages() {
@@ -32,6 +32,17 @@ export function useGetSenderMessages() {
     queryKey: `get_sender_messages`,
     queryFn: async () => {
       const d = await request.get('/v1/government/message/get_sender_messages');
+      // console.log(d.data.data.data);
+      return d.data.data.data.data as messages[];
+    },
+  });
+  return query;
+}
+export function useGetSenderUnreadMessages() {
+  const query = useQuery({
+    queryKey: `get_unread_messages`,
+    queryFn: async () => {
+      const d = await request.get('/v1/government/message/get_unread_messages');
       // console.log(d.data.data.data);
       return d.data.data.data.data as messages[];
     },
