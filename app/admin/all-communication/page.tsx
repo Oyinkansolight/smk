@@ -122,7 +122,7 @@ const AllNotification = () => {
               <select
                 name=''
                 id=''
-                className='border-none outline-none w-[100px] rounded-lg bg-gray-300'
+                className='border-none outline-none w-[120px] rounded-lg bg-gray-300'
                 onChange={(e) => {
                   if (e.target.value === 'Unread') {
                     handleFilter();
