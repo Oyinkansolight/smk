@@ -138,7 +138,7 @@ const AllNotification = () => {
               </select>
             </div>
             <Link
-              href='/super-admin/send-message'
+              href='/admin/send-message'
               className='bg-primary py-3 text-white rounded-md px-4 flex space-x-3 '
             >
               <span>Send Messages</span>
