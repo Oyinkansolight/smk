@@ -3,7 +3,6 @@
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
-import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import { useGetTeacherClassArms } from '@/server/institution/class-arm';
@@ -77,11 +76,11 @@ export default function Page() {
         </div>
       </div> */}
       <div className='flex gap-4 items-center text-[#746D69] bg-white p-4 rounded-md'>
-        <input
+        {/* <input
           onChange={(e) => logger(e.target.value)}
           className='rounded-full border p-3'
           placeholder='Search activity'
-        />
+        /> */}
         <div className='flex-1' />
         {/* <div className='flex items-center'>
           Filter By
