@@ -91,9 +91,9 @@ export function useGetStudentDashboardOverview() {
   return query;
 }
 
-export function useGetAcademicSessions(params: Partial<PaginationParams>) {
-  if (!params.query) {
-    delete params.query;
+export function useGetAcademicSessions(params?: Partial<PaginationParams>) {
+  if (!params?.query) {
+    delete params?.query;
   }
   const query = useQuery({
     queryKey: 'academic_sessions',

@@ -23,6 +23,11 @@ import { ImSpinner2 } from 'react-icons/im';
 import { IoChevronBack } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
+import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -43,7 +48,21 @@ import { toast } from 'react-toastify';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Page = () => {
-  const { data: allSession } = useGetAcademicSessions();
+  const [query, setQuery] = useState('');
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    query,
+  });
+  const debouncedSearchTerm = useDebounce(query, 1500);
+  const { data, refetch, isLoading } = useGetAcademicSessions({
+    ...pagingData,
+  });
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
+  const { data: allSession } = useGetAcademicSessions({ ...pagingData });
   const { data: allSubject } = useGetSubjectList({ limit: 1000 });
   // const [subjectId, setSubjectId] = useState('');
   const [myPendingAssignment, setMyPendingAssignment] = useState<any>([]);

@@ -17,10 +17,31 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AcademicCalendar = () => {
+  const [query, setQuery] = useState('');
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    query,
+  });
+  const debouncedSearchTerm = useDebounce(query, 1500);
+
   const handleCreateAcademicCalendar = useCreateAcademicCalendar();
-  const { data, isLoading } = useGetAcademicSessions();
+  const { data, isLoading } = useGetAcademicSessions({
+    ...pagingData,
+  });
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
 
   const [isOpen, setIsOpen] = useState(false);
   const [institutionType, setinstitutionType] = useState<string | number>('');
@@ -98,7 +119,9 @@ const AcademicCalendar = () => {
     const allFilteredSessions = data?.data.filter(
       (item: any) =>
         typeof item.institutionType === 'string' &&
-        item.institutionType.toLowerCase().includes(e.target.value.toLowerCase())
+        item.institutionType
+          .toLowerCase()
+          .includes(e.target.value.toLowerCase())
     );
     setFilteredSessions(allFilteredSessions);
   };
