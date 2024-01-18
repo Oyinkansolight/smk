@@ -28,14 +28,14 @@ export default function SmallTeacherSubjectCard({
       )}
     >
       <div className='flex w-full justify-end'>
-        <div
+        {/* <div
           className={clsxm(
             'py-2 px-4 mx-4 rounded-md my-2 bg-[#6A2B56] font-bold text-white',
             !isNext && 'opacity-0'
           )}
         >
           Next Class
-        </div>
+        </div> */}
       </div>
       <div className='relative rounded-full border h-20 w-20'>
         <Image

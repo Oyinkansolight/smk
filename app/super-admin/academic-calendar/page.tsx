@@ -4,7 +4,6 @@
 import AddSession from '@/components/modal/AddSession';
 import { BasicSearch } from '@/components/search';
 import { INSTITUTION_TYPES } from '@/constant/institution';
-import logger from '@/lib/logger';
 // import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
@@ -17,6 +16,15 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Toggle from 'react-toggle';
+import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -24,7 +32,16 @@ import Toggle from 'react-toggle';
 
 const AcademicCalendar = () => {
   const handleCreateAcademicCalendar = useCreateAcademicCalendar();
-  const { data, isLoading } = useGetAcademicSessions();
+  const [query, setQuery] = useState('');
+
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    query,
+  });
+  const debouncedSearchTerm = useDebounce(query, 1500);
+  const { data, refetch, isLoading } = useGetAcademicSessions({
+    ...pagingData,
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [institutionType, setinstitutionType] = useState<string | number>('');
@@ -37,7 +54,10 @@ const AcademicCalendar = () => {
   const [filterCurrent, setFilterCurrent] = useState(false);
   const [filteredInstitutions, setFilteredInstitutions] = useState(false);
   const [filteredSessions, setFilteredSessions] = useState([]);
-
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setPagingData({ ...pagingData, page: 1, query: value });
+  };
   const [loading, setloading] = useState(false);
   function handleModal() {
     setIsOpen(!isOpen);
@@ -143,6 +163,16 @@ const AcademicCalendar = () => {
   };
 
   useEffect(() => {
+    const refetchSearchRecords = () => {
+      if (debouncedSearchTerm) {
+        refetch();
+      }
+    };
+
+    refetchSearchRecords();
+  }, [refetch, debouncedSearchTerm]);
+
+  useEffect(() => {
     if (filterCurrent) {
       const allCurrentSessions = data?.data.filter(
         (item: any) => item.isCurrent
@@ -223,12 +253,7 @@ const AcademicCalendar = () => {
             <option value={INSTITUTION_TYPES.TERTIARY}>Tertiary</option>
           </select>
 
-          <BasicSearch
-            placeholder='Search session'
-            handleSearch={() => {
-              logger('Test');
-            }}
-          />
+          <BasicSearch placeholder='Search...' handleSearch={handleSearch} />
         </div>
       </div>
 

@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import request from '@/server';
-import { BatteryLevel, ChartParams, DashboardOverview } from '@/types';
+import {
+  BatteryLevel,
+  ChartParams,
+  DashboardOverview,
+  PaginationParams,
+} from '@/types';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useGetDashboardOverview() {
@@ -86,12 +91,16 @@ export function useGetStudentDashboardOverview() {
   return query;
 }
 
-export function useGetAcademicSessions() {
+export function useGetAcademicSessions(params: Partial<PaginationParams>) {
+  if (!params.query) {
+    delete params.query;
+  }
   const query = useQuery({
     queryKey: 'academic_sessions',
     queryFn: () =>
       request
         .get('/v1/government/session/all?limit=20', {
+          params,
           withCredentials: true,
         })
         .then((v) => v.data.data.data as any),
