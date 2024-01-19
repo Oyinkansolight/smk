@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
@@ -43,6 +44,7 @@ export default function Page() {
 
   return (
     <div className='h-full layout pl-0 lg:pl-20'>
+      <BackButton />
       <div className='text-[#D4D5D7] text-xl mt-6'>
         {`Test & Exam > ${params?.get('name')}`}
       </div>

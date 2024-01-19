@@ -26,6 +26,8 @@ import { BiTrendingUp } from 'react-icons/bi';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const studentListColumns: TableColumn<any>[] = [
   // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
   {
@@ -63,12 +65,8 @@ const staffListColumns: TableColumn<any>[] = [
   },
   {
     name: 'Attendance Rate',
-    cell: (row) => (
-      <div>
-        {row?.attendanceRate ?? 0}%{' '}
-      </div>
-    ),
-  }
+    cell: (row) => <div>{row?.attendanceRate ?? 0}% </div>,
+  },
 ];
 
 const SingleSchoolDashboard = () => {
@@ -164,14 +162,14 @@ const SingleSchoolDashboard = () => {
                     isEditingBioDetails && 'opacity-50'
                   )}
                 >
-                  <Button
+                  {/* <Button
                     onClick={() => router.push('/admin/student/edit-history')}
                     disabled={isEditingBioDetails}
                     variant='ghost'
                     className='text-primary bg-white hover:bg-primary-100 border border-primary-500'
                   >
                     View Edit History
-                  </Button>
+                  </Button> */}
                   <Button
                     disabled={isEditingBioDetails}
                     onClick={() => setIsEditingBioDetails(!isEditingBioDetails)}
@@ -242,7 +240,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={studentListColumns}
                     data={getInstitutionStudents?.data}
-                  // data={[]}
+                    // data={[]}
                   />
                 </div>
               </div>
@@ -314,7 +312,7 @@ const SingleSchoolDashboard = () => {
                     showSearch={false}
                     columns={staffListColumns}
                     data={getInstitutionStaffs?.data}
-                  // data={[]}
+                    // data={[]}
                   />
                 </div>
               </div>
