@@ -3,6 +3,7 @@
 import GenericLoader from '@/components/layout/Loader';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
+  useGetReceiverMessages,
   useGetSenderMessages,
   useReadMessage,
 } from '@/server/government/communication';
@@ -22,8 +23,10 @@ const AllMessages = () => {
     mutateAsync({ id: messageId });
   };
   const [isReply, setIsReply] = useState(false);
-
+  const { data: incomingMessage, isLoading: isLoadingIncomingMessage } =
+    useGetReceiverMessages();
   const [currentMessage, setCurrentMessage] = useState<messages>();
+  console.log(incomingMessage);
 
   function handleReply() {
     setIsReply(!isReply);

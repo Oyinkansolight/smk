@@ -38,6 +38,19 @@ export function useGetSenderMessages() {
   });
   return query;
 }
+export function useGetReceiverMessages() {
+  const query = useQuery({
+    queryKey: `get_receiver_messages`,
+    queryFn: async () => {
+      const d = await request.get(
+        '/v1/government/message/get_receiver_messages'
+      );
+      // console.log(d.data.data.data);
+      return d.data.data.data.data as any;
+    },
+  });
+  return query;
+}
 export function useGetSenderUnreadMessages() {
   const query = useQuery({
     queryKey: `get_unread_messages`,
