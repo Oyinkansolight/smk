@@ -9,6 +9,7 @@ export interface messages {
   recepients: any[];
   sender: Sender;
   replies: any[];
+  type: 'SIMPLE' | 'BROADCAST';
 }
 
 export interface IFile {

@@ -9,6 +9,7 @@ import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import { useGetStaffDashboardOverview } from '@/server/dashboard';
+import { useGetSenderUnreadMessages } from '@/server/government/communication';
 import {
   GetTeacherNextClassParams,
   useGetTeacherNextClass,
@@ -24,6 +25,8 @@ export default function TeacherDashboardView() {
   const term: any = getFromSessionStorage('currentTerm');
   const week: any = getFromSessionStorage('currentWeek');
 
+  const { data: userUnreadMessage, isLoading: userUnreadMessageLoading } =
+    useGetSenderUnreadMessages();
   const { data: profileData } = useGetProfile();
   const { data: overviewData } = useGetStaffDashboardOverview();
   const { data: nextClassData, isLoading: isLoadingNextClass } =
@@ -35,6 +38,8 @@ export default function TeacherDashboardView() {
       weekId: JSON.parse(week)?.id,
     });
   // const { data: sessionCalendarData } = useGetSessionCalendar(1);
+
+  console.log(userUnreadMessage);
 
   const isWithinTime = (startTime: string, endTime: string) => {
     const currentTime = moment().format('HH:mm');
@@ -112,10 +117,21 @@ export default function TeacherDashboardView() {
               <div className='h4'>Unread Messages</div>
               <div className='absolute w-[6px] h-[6px] bg-[#E5002B] rounded-full top-0 ml-40' />
             </div>
-            <EmptyView label='No Data' />
-            {/* <MessageCard />
-            <MessageCard />
-            <div className='font-bold text-right'>See all</div> */}
+            {userUnreadMessage && userUnreadMessageLoading && <GenericLoader />}
+            {userUnreadMessage &&
+              userUnreadMessage.length > 0 &&
+              userUnreadMessage
+                .slice(0, 2)
+                .map((msg, key) => <MessageCard msg={msg} key={key} />)}
+
+            {userUnreadMessage && userUnreadMessage?.length > 2 && (
+              <Link href='/teacher/messages' className='font-bold text-right'>
+                See all
+              </Link>
+            )}
+            {userUnreadMessage && userUnreadMessage?.length === 0 && (
+              <EmptyView label='No Data' useStandardHeight />
+            )}
           </BasicCard>
         </div>
 
@@ -244,7 +260,14 @@ const AssignmentsCard = ({ isActive = false, today = false }) => {
   );
 };
 
-const MessageCard = () => {
+const MessageCard = ({
+  msg,
+}: {
+  msg: {
+    messageTitle: string;
+    messageBody: string;
+  };
+}) => {
   return (
     <BasicCard
       className={clsxm('!rounded-[5px] h-24 !px-4 !py-6 !bg-[#EFF7F6]')}
@@ -252,10 +275,11 @@ const MessageCard = () => {
       <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col gap-2'>
           <div className='text-[10px] leading-[12px] font-bold'>
-            Tola Ogunjimi
+            <div> Tola Ogunjimi</div>
           </div>
+          <div>{msg.messageTitle}</div>
           <div className='text-[10px] leading-[12px]'>
-            I am writing to inform you that my assignment will...
+            {msg.messageBody.substring(0, 50)}...
           </div>
         </div>
 
