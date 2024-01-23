@@ -1,5 +1,6 @@
 'use client';
 
+import BackButton from '@/components/accordions/BackButton';
 import FormInput from '@/components/input/formInput';
 import FormTextArea from '@/components/input/formTextarea';
 import Library from '@/components/modal/Library';
@@ -8,6 +9,7 @@ import { uploadDocument } from '@/firebase/init';
 import { getErrMsg } from '@/server';
 import { useSendMessage } from '@/server/government/communication';
 import { useGetTeachersList } from '@/server/institution';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
@@ -17,20 +19,15 @@ import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import { uuid } from 'uuidv4';
 
-const Page = ({ closeModal }: { closeModal?: () => void }) => {
-  const UserTypes = [
-    { label: 'STUDENT', value: 'STUDENT' },
-    { label: 'PARENT', value: 'PARENT' },
-    { label: 'GOVERNMENT_ADMIN', value: 'GOVERNMENT_ADMIN' },
-    { label: 'STAFF', value: 'STAFF' },
-    { label: 'INSTITUTE_ADMIN', value: 'INSTITUTE_ADMIN' },
-    { label: 'DEFAULT', value: 'DEFAULT' },
-  ];
+const Page = () => {
+  const router = useRouter();
+
   const [stage, setStage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState<number | string>('');
   const [dropDown, setDropDown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [publishData, setPublishedData] = useState(null);
   const [files, setFiles] = useState<{ name: string; id: string }[]>();
 
   const handleSendMessage = useSendMessage();
@@ -88,18 +85,11 @@ const Page = ({ closeModal }: { closeModal?: () => void }) => {
     }
 
     const payload = {
-      type: 'BROADCAST',
       body: data.body,
       title: data.title,
       files: data.files,
-      broadcastRecepients: data.recepients.map((types: string) => {
-        return {
-          userType: types,
-          recepients: [],
-        };
-      }),
+      recepients: data.recepients,
     };
-    console.log(payload);
 
     try {
       setLoading(true);
@@ -107,7 +97,7 @@ const Page = ({ closeModal }: { closeModal?: () => void }) => {
 
       if (response) {
         toast.success('Message Sent successfully');
-        closeModal && closeModal();
+        router.back();
         setLoading(false);
       }
     } catch (error) {
@@ -127,30 +117,44 @@ const Page = ({ closeModal }: { closeModal?: () => void }) => {
   };
 
   return (
-    <section className='py-6'>
+    <section className='py-6  px-4'>
+      <BackButton />
+
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           {stage === 1 && (
             <div>
-              <div className='table-add-student  lg:px-10 px-4  pb-4 bg-white'>
-                <div className='text-left mt-5'>
+              <div className='table-add-student mt-7  px-4 py-10 pb-4 bg-white'>
+                <h2 className='text-2xl font-bold'>Message Details</h2>
+                <p>Kindly enter the details of the school below:</p>
+
+                <div className='md:w-1/2 w-3/4 mt-5'>
                   <div className='mb-3 w-full'>
-                    <Controller
-                      control={control}
-                      name='recepients'
-                      render={({ field }) => (
-                        <div>
-                          <div className='font-bold'>Select Audience</div>
-                          <ReactSelect
-                            isMulti
-                            required
-                            {...field}
-                            options={UserTypes || []}
-                            className='h-auto mt-2 select'
-                          />
-                        </div>
-                      )}
-                    />
+                    {/* <FormInput
+                      label='Enter Recipient Name*'
+                      setFormValue={setSearch}
+                      register={register}
+                      formValue={search}
+                      placeholder='Jane Doe'
+                    /> */}
+                    {!isLoading && (
+                      <Controller
+                        control={control}
+                        name='recepients'
+                        render={({ field }) => (
+                          <div>
+                            <div className='font-bold'>Select Recipient</div>
+                            <ReactSelect
+                              isMulti
+                              required
+                              {...field}
+                              options={staffData || []}
+                              className='h-auto mt-2 select'
+                            />
+                          </div>
+                        )}
+                      />
+                    )}
                   </div>
                   <div className='mb-3 w-full'>
                     <FormInput
@@ -167,7 +171,7 @@ const Page = ({ closeModal }: { closeModal?: () => void }) => {
                     />
                   </div>
                 </div>
-                <div className='text-left mt-1'>
+                <div className='md:w-1/2 w-3/4 mt-1'>
                   <FormTextArea
                     label='Enter Message Body'
                     name='body'
@@ -272,7 +276,7 @@ const Page = ({ closeModal }: { closeModal?: () => void }) => {
                 Send Later
               </button> */}
 
-              <button className='w-full rounded border bg-[#008146] px-8 py-3 text-xs text-[#fff] '>
+              <button className='w-full rounded border bg-secondary px-8 py-3 text-xs text-[#fff] '>
                 {loading ? <ImSpinner2 /> : 'Send'}
               </button>
             </div>

@@ -59,12 +59,16 @@ export default function NewStudentSidebar() {
       label: 'Grade Book',
     },
     {
+      img: '/images/sidebar-icons/comms-student.png',
+      url: '/student/communication',
+      label: 'Communication',
+    },
+    {
       img: '/images/sidebar-icons/Dashboard-4.png',
       url: '/student/profile',
       label: 'Settings',
     },
   ];
-
 
   const handleLogout = async () => {
     // eslint-disable-next-line no-alert
