@@ -52,8 +52,8 @@ const AllStaff = () => {
       try {
         toggleModal();
         setAction(null);
-        const res = await mutateAsync(itemToDelete);
-        toast.success('Student removed successfully');
+      await mutateAsync(itemToDelete);
+        toast.success('Staff removed successfully');
       } catch (error) {
         logger(error);
       }

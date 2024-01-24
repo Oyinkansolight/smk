@@ -126,7 +126,7 @@ const AllNotification = () => {
           <div className='grid grid-cols-2 border-y'>
             <div className='border-r'>
               {data && !isLoading ? (
-                (data ?? [])
+                (data.data ?? [])
                   .filter((item) => item.type === 'SIMPLE')
                   .map((item, i) => (
                     <div
@@ -200,7 +200,7 @@ const AllNotification = () => {
               ) : (
                 <div className='border-r'>
                   {data && !isLoading ? (
-                    (data ?? [])
+                    (data.data ?? [])
                       .filter((item) => item.type === 'BROADCAST')
                       .map((item, i) => (
                         <div

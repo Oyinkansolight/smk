@@ -1,4 +1,5 @@
 import request from '@/server';
+import { PaginationParams } from '@/types';
 import { messages } from '@/types/comms';
 import { TrainingDetails } from '@/types/institute';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -27,26 +28,30 @@ export function useReadMessage() {
   return mutation;
 }
 
-export function useGetSenderMessages() {
+export function useGetSenderMessages(params?: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: `get_sender_messages`,
     queryFn: async () => {
-      const d = await request.get('/v1/government/message/get_sender_messages');
+      const d = await request.get(
+        '/v1/government/message/get_sender_messages',
+        { params }
+      );
       // console.log(d.data.data.data);
-      return d.data.data.data.data as messages[];
+      return d.data.data.data as any;
     },
   });
   return query;
 }
-export function useGetReceiverMessages() {
+export function useGetReceiverMessages(params?: Partial<PaginationParams>) {
   const query = useQuery({
     queryKey: `get_receiver_messages`,
     queryFn: async () => {
       const d = await request.get(
-        '/v1/government/message/get_receiver_messages'
+        '/v1/government/message/get_receiver_messages',
+        { params }
       );
       // console.log(d.data.data.data);
-      return d.data.data.data.data as any;
+      return d.data.data.data as any;
     },
   });
   return query;
