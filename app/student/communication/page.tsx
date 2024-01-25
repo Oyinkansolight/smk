@@ -6,25 +6,39 @@ import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
   useGetReceiverMessages,
   useGetSenderMessages,
-  useGetSingleSurvey,
-  useGetSurveys,
   useReadMessage,
 } from '@/server/government/communication';
 import { messages } from '@/types/comms';
 import moment from 'moment';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiDashboardFill } from 'react-icons/ri';
 
 const AllNotification = () => {
-  const { data, isLoading } = useGetSenderMessages();
-  const { data: incomingMessage, isLoading: isLoadingIncomingMessage } =
-    useGetReceiverMessages();
-  const { data: surveys, isLoading: surveysLoading } = useGetSurveys();
-  const { mutateAsync } = useReadMessage();
+  const [filter, setFilter] = useState('Sent');
 
-  console.log(incomingMessage);
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    type: 'SIMPLE',
+  });
+  const {
+    data: sentMessage,
+    isLoading: isLoadingSenderMessage,
+    refetch: refetchSenderAllMessage,
+  } = useGetSenderMessages({
+    ...pagingData,
+  });
+  const {
+    data: incomingMessage,
+    isLoading: isLoadingIncomingMessage,
+    refetch: refetchReceiverAllMessage,
+  } = useGetReceiverMessages({
+    ...pagingData,
+  });
+
+  const { mutateAsync } = useReadMessage();
 
   const [allnotification, setallnotification] = useState();
   const [tabIdx, setTabIdx] = useState(0);
@@ -32,7 +46,6 @@ const AllNotification = () => {
   const [active, setActive] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [currentMessage, setCurrentMessage] = useState<messages>();
-  // const [currentSurvey, setCurrentSurvey] = useState(null);
   const [activeSurvey, setActiveSurvey] = useState('');
 
   function handleReply() {
@@ -50,15 +63,15 @@ const AllNotification = () => {
     mutateAsync({ id: messageId });
   };
 
-  const {
-    data: currentSurvey,
-    refetch,
-    isLoading: singleSurveyLoading,
-  } = useGetSingleSurvey(activeSurvey);
+  // useEffect(() => {
+  //   if (tabIdx === 0) {
+  //     setPagingData({ ...pagingData, type: 'SIMPLE' });
+  //   }
+  //   if (tabIdx === 1) {
+  //     setPagingData({ ...pagingData, type: 'BROADCAST' });
+  //   }
+  // }, [pagingData, tabIdx]);
 
-  useEffect(() => {
-    refetch();
-  }, [activeSurvey, refetch]);
   return (
     <section className='-ml-2 py-6'>
       <div className='py-4 px-4 border-b flex justify-between items-center'>
@@ -70,7 +83,15 @@ const AllNotification = () => {
           <TabBar
             variant='secondary'
             selected={tabIdx}
-            onSelect={(i) => setTabIdx(i)}
+            onSelect={(i) => {
+              if (i === 0) {
+                setPagingData({ ...pagingData, type: 'SIMPLE' });
+              }
+              if (i === 1) {
+                setPagingData({ ...pagingData, type: 'BROADCAST' });
+              }
+              setTabIdx(i);
+            }}
             items={[
               {
                 icon: <RiDashboardFill className='h-5 w-5' />,
@@ -115,7 +136,20 @@ const AllNotification = () => {
       )}
       {tabIdx === 0 && (
         <div>
-          <div className='relative p-2'>
+          <div className='relative flex justify-between items-center p-2'>
+            <div>
+              <select
+                name=''
+                id=''
+                className='border-none outline-none w-[120px] rounded-lg bg-gray-300'
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                }}
+              >
+                <option value='Sent'>Sent</option>
+                <option value='Inbox'>Inbox</option>
+              </select>
+            </div>
             <Link
               href='/student/send-message'
               className='bg-secondary py-3 text-white rounded-md px-4 flex space-x-3 ml-auto w-max'
@@ -125,8 +159,15 @@ const AllNotification = () => {
           </div>
           <div className='grid grid-cols-2 border-y'>
             <div className='border-r'>
-              {data && !isLoading ? (
-                (data.data ?? [])
+              {(filter === 'Sent'
+                ? sentMessage
+                : incomingMessage && !isLoadingSenderMessage) ||
+              !isLoadingIncomingMessage ? (
+                (
+                  (filter === 'Sent'
+                    ? sentMessage.data
+                    : incomingMessage.data) ?? []
+                )
                   .filter((item) => item.type === 'SIMPLE')
                   .map((item, i) => (
                     <div
@@ -176,7 +217,7 @@ const AllNotification = () => {
               )}
             </div>
 
-            <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>
+            <div className='flex justify-center text-sm h-full bg-[#F7F7F7]  rounded-lg'>
               {!active ? (
                 <div className='py-20 text-center'>
                   <h1 className='text-base'>No messages selected</h1>
@@ -199,50 +240,48 @@ const AllNotification = () => {
                 </div>
               ) : (
                 <div className='border-r'>
-                  {data && !isLoading ? (
-                    (data.data ?? [])
-                      .filter((item) => item.type === 'BROADCAST')
-                      .map((item, i) => (
+                  {incomingMessage && !isLoadingSenderMessage ? (
+                    (incomingMessage.data ?? []).map((item, i) => (
+                      <div
+                        key={i}
+                        onClick={() => {
+                          setActive(!active);
+                          setCurrentMessage(item);
+                          if (!item.read) {
+                            ReadMessage(item.id);
+                          }
+                        }}
+                        className={`${
+                          !item.read && 'bg-[#EDF3FE]'
+                        } mb-3 grid grid-cols-12 p-2 font-light items-center`}
+                      >
+                        <div className='col-span-1 flex justify-center'>
+                          <input
+                            type='checkbox'
+                            className='rounded-md bg-gray-300'
+                            name=''
+                            id=''
+                          />
+                        </div>
                         <div
-                          key={i}
-                          onClick={() => {
-                            setActive(!active);
-                            setCurrentMessage(item);
-                            if (!item.read) {
-                              ReadMessage(item.id);
-                            }
-                          }}
-                          className={`${
-                            !item.read && 'bg-[#EDF3FE]'
-                          } mb-3 grid grid-cols-12 p-2 font-light items-center`}
-                        >
-                          <div className='col-span-1 flex justify-center'>
-                            <input
-                              type='checkbox'
-                              className='rounded-md bg-gray-300'
-                              name=''
-                              id=''
-                            />
-                          </div>
-                          <div
-                            className={`col-span-7 
+                          className={`col-span-7 
                   } flex flex-col space-y-2`}
-                          >
-                            <h1 className='font-bold text-base'>
-                              {item.messageTitle}{' '}
-                            </h1>
-                            <p className='text-[#848689]'>
-                              {item.messageBody.substring(0, 50)}
-                            </p>
-                          </div>
-                          <div className='col-span-4 flex items-end flex-col space-y-3'>
-                            <div>{moment(item.createdAt).format('ll')}</div>
-                            {/* <div className='text-gray-300 text-[10px]  capitalize'>
+                        >
+                          <h1 className='font-bold text-base'>
+                            {item.messageTitle}{' '}
+                          </h1>
+                          <p className='text-[#848689]'>
+                            {item.messageBody.substring(0, 50)}
+                          </p>
+                        </div>
+                        <div className='col-span-4 flex items-end flex-col space-y-3'>
+                          <div>{moment(item.createdAt).format('ll')}</div>
+                          {/* <div className='text-gray-300 text-[10px]  capitalize'>
                   {item.type}
                 </div> */}
-                          </div>
                         </div>
-                      ))
+                      </div>
+                    ))
                   ) : (
                     <div className='flex justify-center items-center'>
                       <GenericLoader />
@@ -253,7 +292,7 @@ const AllNotification = () => {
             </div>
             <div className=''>
               <div className=' bg-white/80'>
-                <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>
+                <div className='flex justify-center text-sm h-full bg-[#F7F7F7]  rounded-lg'>
                   {!active ? (
                     <div className='py-20 text-center'>
                       <h1 className='text-base'>No messages selected</h1>

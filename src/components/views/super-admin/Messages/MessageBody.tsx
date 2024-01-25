@@ -58,7 +58,7 @@ export default function MessageBody({ reply, message }: propType) {
 
           <p>{message?.messageBody}</p>
 
-          {message && message.files.length > 0 && (
+          {message && message?.files?.length > 0 && (
             <button
               onClick={() => {
                 HandleAttachMent();
@@ -69,20 +69,22 @@ export default function MessageBody({ reply, message }: propType) {
             </button>
           )}
 
-          <div className='flex space-x-4 mt-8'>
-            <button
-              onClick={reply}
-              className='border-2 border-gray-500 p-3 flex space-x-3 rounded-lg items-center '
-            >
-              {' '}
-              <BsFillReplyFill size={22} /> <p>Reply</p>
-            </button>
-            <button className='border-2 border-gray-500 p-3 flex space-x-3 rounded-lg items-center '>
-              {' '}
-              <RiShareForwardFill size={20} />
-              <p>Forward</p>
-            </button>
-          </div>
+          {message && message?.type === 'SIMPLE' && (
+            <div className='flex space-x-4 mt-8'>
+              <button
+                onClick={reply}
+                className='border-2 border-gray-500 p-3 flex space-x-3 rounded-lg items-center '
+              >
+                {' '}
+                <BsFillReplyFill size={22} /> <p>Reply</p>
+              </button>
+              <button className='border-2 border-gray-500 p-3 flex space-x-3 rounded-lg items-center '>
+                {' '}
+                <RiShareForwardFill size={20} />
+                <p>Forward</p>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

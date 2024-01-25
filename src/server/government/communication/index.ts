@@ -2,6 +2,7 @@ import request from '@/server';
 import { PaginationParams } from '@/types';
 import { messages } from '@/types/comms';
 import { TrainingDetails } from '@/types/institute';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useSendMessage() {
@@ -40,6 +41,11 @@ export function useGetSenderMessages(params?: Partial<PaginationParams>) {
       return d.data.data.data as any;
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.limit, params?.page, params?.type, refetch]);
+  return query;
   return query;
 }
 export function useGetReceiverMessages(params?: Partial<PaginationParams>) {
@@ -54,6 +60,10 @@ export function useGetReceiverMessages(params?: Partial<PaginationParams>) {
       return d.data.data.data as any;
     },
   });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch();
+  }, [params?.limit, params?.page, params?.type, refetch]);
   return query;
 }
 export function useGetSenderUnreadMessages() {
