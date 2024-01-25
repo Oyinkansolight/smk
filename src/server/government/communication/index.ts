@@ -6,13 +6,19 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 export function useSendMessage() {
+  const client = useQueryClient();
   const mutation = useMutation({
     mutationKey: 'create-message',
     mutationFn: (params: any) =>
       request.post('/v1/government/message/create_message', params, {
         withCredentials: true,
       }),
+    onSettled: () => {
+      client.refetchQueries(`get_sender_messages`);
+      client.refetchQueries(`get_receiver_messages`);
+    },
   });
+
   return mutation;
 }
 export function useReadMessage() {
@@ -45,7 +51,6 @@ export function useGetSenderMessages(params?: Partial<PaginationParams>) {
   useEffect(() => {
     refetch();
   }, [params?.limit, params?.page, params?.type, refetch]);
-  return query;
   return query;
 }
 export function useGetReceiverMessages(params?: Partial<PaginationParams>) {

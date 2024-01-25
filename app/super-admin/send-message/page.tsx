@@ -90,6 +90,7 @@ const Page = () => {
       title: data.title,
       files: data.files,
       recepients: data.recepients,
+      type: 'SIMPLE',
     };
 
     try {
