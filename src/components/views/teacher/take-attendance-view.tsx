@@ -62,7 +62,7 @@ export default function TakeAttendanceView() {
                   index={i}
                   key={v.id}
                   status={attendanceStatus?.status}
-                  name={`${v?.firstName} ${v?.lastName}`}
+                  name={`${v?.lastName} ${v?.firstName} `}
                   onTakeAttendance={async (status) => {
                     try {
                       await takeAttendance({
