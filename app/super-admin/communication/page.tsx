@@ -225,8 +225,8 @@ const AllNotification = () => {
               !isLoadingIncomingMessage ? (
                 (
                   (filter === 'Sent'
-                    ? sentMessage.data
-                    : incomingMessage.data) ?? []
+                    ? sentMessage?.data
+                    : incomingMessage?.data) ?? []
                 ).map((item, i) => (
                   <div
                     key={i}

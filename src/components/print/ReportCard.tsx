@@ -3,6 +3,7 @@
 import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import clsxm from '@/lib/clsxm';
+import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import Image from 'next/image';
 import React from 'react';
 import { ImImage } from 'react-icons/im';
@@ -11,7 +12,19 @@ const PrintedReportCard = ({ reportCard }: any) => {
   const handlePrint = () => {
     window.print();
   };
+  const userData = getFromSessionStorage('user');
+  const term = getFromSessionStorage('currentTerm');
+  const session = getFromLocalStorage('currentSession');
+  let user;
+  let termInfo;
+  let sessionInfo;
 
+  if (userData) {
+    user = JSON.parse(userData);
+    termInfo = JSON.parse(term ?? '{}');
+    sessionInfo = JSON.parse(session ?? '{}');
+    console.log(sessionInfo);
+  }
   return (
     <div className='flex flex-col py-10 max-w-[750px] mx-auto gap-8'>
       <div className='print:hidden flex items-center justify-between'>
@@ -22,13 +35,22 @@ const PrintedReportCard = ({ reportCard }: any) => {
       {/* PRINTED SECTION */}
       <div className='bg-white flex flex-col w-full max-w-[750px] mx-auto h-full overflow-hidden px-[6px]'>
         <Header
-          term='First'
-          session='2022/2023'
-          name='ST. MARIA GORETTI GIRLS GRAMMAR SCHOOL'
+          term={
+            termInfo?.name === 1
+              ? 'First'
+              : termInfo?.name === 2
+              ? 'Second'
+              : 'Third'
+          }
+          session={sessionInfo[0]?.session ?? 'N/A'}
+          name={user?.currentStudentInfo?.institution?.instituteName ?? 'N/A'}
+          address={
+            user?.currentStudentInfo?.institution?.instituteAddress ?? 'N/A'
+          }
         />
 
         <span className='mt-[3px] mb-1'>
-          <BioData />
+          <BioData user={user} />
         </span>
 
         <div className='grid grid-cols-2 grid-flow-col gap-[6px]'>
@@ -53,6 +75,7 @@ interface HeaderProps {
   term: string;
   logo?: string;
   name?: string;
+  address?: string;
   session: string;
   passport?: string;
 }
@@ -94,7 +117,7 @@ const Header = (props: HeaderProps) => {
       <div className='grid grid-rows-4 items-center text-center justify-center max-h-[85px]'>
         <span className='font-extrabold text-4 leading-4'>{props.name}</span>
 
-        <span className='font-bold text-[10px]'>Benin City, Edo State</span>
+        <span className='font-bold text-[10px]'>{props.address}</span>
 
         <span className='font-bold text-[10px] mt-[6px]'>
           INFO@EDOSECONDARY-EDU.ORG
@@ -141,10 +164,23 @@ const BioData = (props) => {
       <tr>
         <th>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='Name' value='Ojomoh Aisosa' />
-            <RowItem title='Sex' value='Female' />
-            <RowItem title='Class' value='SS 1 FERRET' capitalizeValue />
-            <RowItem title='Reg No' value='20221D65MG' capitalizeValue />
+            <RowItem title='Name' value={props.user?.name ?? 'N/A'} />
+            <RowItem
+              title='Sex'
+              value={props.user?.currentStudentInfo?.gender ?? 'N/A'}
+            />
+            <RowItem
+              title='Class'
+              value={
+                props.user?.currentStudentInfo?.class?.class?.name ?? 'N/A'
+              }
+              capitalizeValue
+            />
+            <RowItem
+              title='Reg No'
+              value={props.user?.currentStudentInfo?.studentId ?? 'N/A'}
+              capitalizeValue
+            />
           </div>
         </th>
 

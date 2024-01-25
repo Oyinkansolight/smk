@@ -14,7 +14,7 @@ export default function NewStudentAvatar() {
     <div className='flex min-w-max text-xs rounded-full gap-2 items-center border bg-[#FFF6E7] py-1 px-1 pr-8'>
       <Avatar className='h-10 w-10' />
       <div className='font-bold flex flex-col'>
-        <div className='text-[#615E83]'>{user?.name ?? ''} </div>
+        <div className='text-[#615E83]'>{user?.name ?? 'N/A'} </div>
         <div className='text-[#E87F1E]'>
           {user?.currentStudentInfo?.class?.class?.name}
         </div>
