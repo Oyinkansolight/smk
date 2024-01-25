@@ -1,14 +1,72 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
+import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { Agregates, SubjectResults } from '@/types/classes-and-subjects';
+import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
 import { ImImage } from 'react-icons/im';
 
-const PrintedReportCard = ({ reportCard }: any) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const affective = [
+  'Attentiveness',
+  'Honesty',
+  'Neatness',
+  'Politeness',
+  'Punctuality',
+  'Confidence',
+  'Attitude',
+];
+
+const psychomotor = [
+  'Learning Skills',
+  'Handwriting',
+  'Spoken English',
+  'Reading Skills',
+  'Outdoor Games',
+  'Vocational Skills',
+];
+const PrintedReportCard = ({
+  domains,
+  subjectResults,
+  agregates,
+}: {
+  domains: any[] | undefined;
+  subjectResults: SubjectResults | undefined;
+  agregates: Agregates | undefined;
+}) => {
   const handlePrint = () => {
     window.print();
   };
@@ -23,8 +81,8 @@ const PrintedReportCard = ({ reportCard }: any) => {
     user = JSON.parse(userData);
     termInfo = JSON.parse(term ?? '{}');
     sessionInfo = JSON.parse(session ?? '{}');
-    console.log(sessionInfo);
   }
+
   return (
     <div className='flex flex-col py-10 max-w-[750px] mx-auto gap-8'>
       <div className='print:hidden flex items-center justify-between'>
@@ -50,20 +108,20 @@ const PrintedReportCard = ({ reportCard }: any) => {
         />
 
         <span className='mt-[3px] mb-1'>
-          <BioData user={user} />
+          <BioData user={user} agregates={agregates} />
         </span>
 
         <div className='grid grid-cols-2 grid-flow-col gap-[6px]'>
           <div className='flex flex-col col-span-9 w-full min-w-[434px]'>
-            <Cognitive />
-            <CommentObservation />
-            <CognitiveKeys />
+            <Cognitive subjectResults={subjectResults} />
+            <CommentObservation domains={domains} />
+            <CognitiveKeys termInfo={termInfo} />
           </div>
 
           <div className='flex flex-col col-span-3 w-full gap-[6px]'>
-            <AffectiveDomain />
-            <PsychomotorDomain />
-            <Overview />
+            <AffectiveDomain domains={domains} />
+            <PsychomotorDomain domains={domains} />
+            <Overview subjectResults={subjectResults} agregates={agregates} />
           </div>
         </div>
       </div>
@@ -82,7 +140,7 @@ interface HeaderProps {
 
 interface RowItemProps {
   title: string;
-  value: string;
+  value: string | number;
   capitalizeValue?: boolean;
 }
 
@@ -115,9 +173,11 @@ const Header = (props: HeaderProps) => {
       </div>
 
       <div className='grid grid-rows-4 items-center text-center justify-center max-h-[85px]'>
-        <span className='font-extrabold text-4 leading-4'>{props.name}</span>
+        <span className='font-extrabold text-4 leading-4'>
+          {props?.name ?? 'N/A'}
+        </span>
 
-        <span className='font-bold text-[10px]'>{props.address}</span>
+        <span className='font-bold text-[10px]'>{props?.address ?? 'N/A'}</span>
 
         <span className='font-bold text-[10px] mt-[6px]'>
           INFO@EDOSECONDARY-EDU.ORG
@@ -126,7 +186,8 @@ const Header = (props: HeaderProps) => {
         <span className='font-bold text-[10px]'>EDOSECONDARY-EDU.ORG</span>
 
         <span className='font-medium text-[13px] mt-[6px]'>
-          {props.term} Term Report Sheet for {props.session} Session
+          {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}{' '}
+          Session
         </span>
       </div>
 
@@ -158,27 +219,31 @@ const RowItem = ({ title, value, capitalizeValue }: RowItemProps) => (
   </div>
 );
 
-const BioData = (props) => {
+const BioData = ({
+  user,
+  agregates,
+}: {
+  user: any;
+  agregates: Agregates | undefined;
+}) => {
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <tr>
         <th>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='Name' value={props.user?.name ?? 'N/A'} />
+            <RowItem title='Name' value={user?.name ?? 'N/A'} />
             <RowItem
               title='Sex'
-              value={props.user?.currentStudentInfo?.gender ?? 'N/A'}
+              value={user?.currentStudentInfo?.gender ?? 'N/A'}
             />
             <RowItem
               title='Class'
-              value={
-                props.user?.currentStudentInfo?.class?.class?.name ?? 'N/A'
-              }
+              value={user?.currentStudentInfo?.class?.class?.name ?? 'N/A'}
               capitalizeValue
             />
             <RowItem
               title='Reg No'
-              value={props.user?.currentStudentInfo?.studentId ?? 'N/A'}
+              value={user?.currentStudentInfo?.studentId ?? 'N/A'}
               capitalizeValue
             />
           </div>
@@ -186,19 +251,38 @@ const BioData = (props) => {
 
         <th className='border-x-2 border-black'>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='CLASS POPULATION' value='59' />
-            <RowItem title='MARKS OBTAINABLE' value='900' />
-            <RowItem title='MARKS OBTAINED' value='504' />
-            <RowItem title='STUDENT AVERAGE' value='63.000%' />
+            <RowItem
+              title='CLASS POPULATION'
+              value={agregates?.totalStudents ?? 'N/A'}
+            />
+            <RowItem
+              title='MARKS OBTAINABLE'
+              value={agregates?.classTotalExamScore ?? 'N/A'}
+            />
+            <RowItem
+              title='MARKS OBTAINED'
+              value={agregates?.studentTotalExamScore ?? 'N/A'}
+            />
+            <RowItem
+              title='STUDENT AVERAGE'
+              value={`${
+                agregates?.classTotalExamScore &&
+                agregates?.studentTotalExamScore
+                  ? (agregates.classTotalExamScore /
+                      agregates.studentTotalExamScore) *
+                    100
+                  : 'N/A'
+              }%`}
+            />
           </div>
         </th>
 
         <th>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='NO OF TIMES SCHOOL OPENED' value='53' />
-            <RowItem title='NO OF TIMES PRESENT' value='50' />
-            <RowItem title='NO OF TIMES ABSENT' value='3' />
-            <RowItem title='ATTENDANCE AVERAGE' value='94.12%' />
+            <RowItem title='NO OF TIMES SCHOOL OPENED' value='N/A' />
+            <RowItem title='NO OF TIMES PRESENT' value='N/A' />
+            <RowItem title='NO OF TIMES ABSENT' value='N/A' />
+            <RowItem title='ATTENDANCE AVERAGE' value='N/A' />
           </div>
         </th>
       </tr>
@@ -206,7 +290,7 @@ const BioData = (props) => {
   );
 };
 
-const Cognitive = () => {
+const Cognitive = ({ subjectResults }: any) => {
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <thead>
@@ -314,7 +398,7 @@ const Cognitive = () => {
           </td>
 
           <td
-            rowSpan={2}
+            rowSpan={1}
             className='relative text-[10px] font-extrabold border-b-2 border-black p-1 w-[55px]'
           >
             <div className='absolute bottom-[7px] flex justify-start w-full whitespace-nowrap'>
@@ -325,9 +409,8 @@ const Cognitive = () => {
       </tbody>
 
       <tbody className='text-[10px] font-black leading-3 text-[#3222EF]'>
-        {Array(9)
-          .fill(0)
-          .map((_, i) => (
+        {subjectResults && subjectResults.subjectsGrades.length > 0 ? (
+          subjectResults.map((result, i) => (
             <tr key={i}>
               <td
                 className={clsxm(
@@ -335,7 +418,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1 font-semibold text-black'
                 )}
               >
-                Subject Name
+                {result?.subject?.name ?? 'Subject Name'}
               </td>
               <td
                 className={clsxm(
@@ -343,7 +426,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                10
+                {result?.ca1_score ?? 'N/A'}{' '}
               </td>
               <td
                 className={clsxm(
@@ -351,7 +434,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                15
+                {result?.ca2_score ?? 'N/A'}{' '}
               </td>
               <td
                 className={clsxm(
@@ -359,7 +442,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                65
+                {result?.exams_score ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -367,7 +450,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                90
+                {result?.total ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -375,7 +458,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                90
+                N/A
               </td>
               <td
                 className={clsxm(
@@ -383,7 +466,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                30
+                N/A
               </td>
               <td
                 className={clsxm(
@@ -391,7 +474,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                1st
+                {result?.grade ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -399,7 +482,7 @@ const Cognitive = () => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                A
+                {result?.remark ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -410,20 +493,29 @@ const Cognitive = () => {
                 Excellent
               </td>
             </tr>
-          ))}
+          ))
+        ) : (
+          <tr className=' w-full'>
+            <div className=' ml-20 w-full'>
+              <EmptyView label='No Result Recorded Yet' useStandardHeight />
+            </div>
+          </tr>
+        )}
       </tbody>
     </div>
   );
 };
 
-const CommentObservation = () => {
-  const SingleComment = ({ title, value }) => (
-    <div className='text-[8px] inline leading-[10px]'>
-      <span className='font-bold uppercase'>{title}: </span>
-      <span>{value}</span>
-    </div>
-  );
-
+const CommentObservation = ({ user, domains }: any) => {
+  const getDomainValue = (value: string) => {
+    const result = domains && domains.find((v) => v.behavior === value);
+    return result
+      ? {
+          label: result.remark,
+          value: result.rating,
+        }
+      : null;
+  };
   return (
     <div className='table rounded-[2px] border-2 border-black w-full mt-[5px]'>
       <thead>
@@ -440,75 +532,14 @@ const CommentObservation = () => {
       </thead>
 
       <div className='flex flex-col gap-1 p-1'>
-        <div className='uppercase text-[9px] font-bold leading-[10px]'>
-          ojomoh aisosa
-        </div>
-
-        <SingleComment
-          title='ATTENTIVE'
-          value='OJOMOH AISOSA exhibits a positive outlook and attentiveness in the class room and committed to doing her best.'
-        />
-
-        <SingleComment
-          title='HONESTY'
-          value='She is open, honest and can always be trusted with tasks assigned to her.'
-        />
-
-        <SingleComment
-          title='NEATNESS'
-          value='She always has upto 70% neat book work which  shows respect and high regard for her own work.'
-        />
-
-        <SingleComment
-          title='Politeness'
-          value='She is always very well  behaved during class time.'
-        />
-
-        <SingleComment
-          title='punctuality'
-          value='She sometimes arrives on time for school and prepared for class each day.'
-        />
-
-        <SingleComment
-          title='confidence'
-          value='Work o building more confidence and enthusiasm.'
-        />
-
-        <SingleComment
-          title='attitude'
-          value='She comes to class everyday ready and willing to learn.'
-        />
-
-        <SingleComment
-          title='listening skills'
-          value='OJOMOH AISOSA listens attentively and is always ready to respond with relevant and engaging questions.'
-        />
-
-        <SingleComment
-          title='hand writing'
-          value='She shows excellent understanding of note taking, spelling, grammar and punctuation.'
-        />
-
-        <SingleComment
-          title='spoken english'
-          value='She has a great deal of confidence when speaking in English Language.'
-        />
-
-        <SingleComment
-          title='reading skills'
-          value='She has ability to read with little or no assistance.'
-        />
-
-        <SingleComment
-          title='homework'
-          value='She puts in reasonable effort to complete her homework at times.'
-        />
+        <div className='uppercase text-[9px] font-bold leading-[10px]'></div>
+        {getDomainValue('comment')?.label ?? 'N/A'}
       </div>
     </div>
   );
 };
 
-const CognitiveKeys = () => {
+const CognitiveKeys = ({ termInfo }) => {
   return (
     <div className='flex flex-row mt-[6px] gap-4'>
       <div className='table rounded-[2px] border-2 border-black w-full min-w-[215px]'>
@@ -550,7 +581,7 @@ const CognitiveKeys = () => {
       <div className='flex flex-col gap-[13px] rounded-[2px] border-2 border-black w-full p-[9px] uppercase font-bold text-[8px] leading-[10px] h-[98px]'>
         <div className='flex flex-row justify-between items-center'>
           <div>principal:</div>
-          <div>stella abu-osagie</div>
+          <div>Principal Name</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
@@ -567,12 +598,12 @@ const CognitiveKeys = () => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>this term ends:</div>
-          <div>31/03/2023</div>
+          <div>{moment(termInfo.endDate).format('ll')}</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>24/04/2023</div>
+          <div>{moment(termInfo.nextTermStart).format('ll')}</div>
         </div>
       </div>
     </div>
@@ -580,67 +611,105 @@ const CognitiveKeys = () => {
 };
 
 //*Sub-component of AffectiveDomain and PsychomotorDomain
-const SingleDomain = ({ title, value, noBottomBorder = false }) => (
-  <tr>
-    <td
-      className={clsxm(
-        noBottomBorder ? '' : 'border-b-2',
-        'border-r-2 border-black p-1 font-semibold text-black'
-      )}
-    >
-      {title}
-    </td>
-    <td
-      className={clsxm(
-        noBottomBorder ? '' : 'border-b-2',
-        'border-r-2 border-black p-1'
-      )}
-    >
-      {Number(value) === 5 && (
-        <Image alt='Logo' width={11} height={11} src='/images/check_mark.png' />
-      )}
-    </td>
-    <td
-      className={clsxm(
-        noBottomBorder ? '' : 'border-b-2',
-        'border-r-2 border-black p-1'
-      )}
-    >
-      {Number(value) === 4 && (
-        <Image alt='Logo' width={11} height={11} src='/images/check_mark.png' />
-      )}
-    </td>
-    <td
-      className={clsxm(
-        noBottomBorder ? '' : 'border-b-2',
-        'border-r-2 border-black p-1'
-      )}
-    >
-      {Number(value) === 3 && (
-        <Image alt='Logo' width={11} height={11} src='/images/check_mark.png' />
-      )}
-    </td>
-    <td
-      className={clsxm(
-        noBottomBorder ? '' : 'border-b-2',
-        'border-r-2 border-black p-1'
-      )}
-    >
-      {Number(value) === 2 && (
-        <Image alt='Logo' width={11} height={11} src='/images/check_mark.png' />
-      )}
-    </td>
-    <td
-      className={clsxm(noBottomBorder ? '' : 'border-b-2', 'border-black p-1')}
-    >
-      {Number(value) === 1 && (
-        <Image alt='Logo' width={11} height={11} src='/images/check_mark.png' />
-      )}
-    </td>
-  </tr>
-);
-
-const AffectiveDomain = () => {
+const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
+  const getDomainValue = (value: string) => {
+    const result = domains && domains.find((v) => v.behavior === value);
+    return result
+      ? {
+          label: result.remark,
+          value: result.rating,
+        }
+      : null;
+  };
+  return (
+    <tr>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-r-2 border-black p-1 font-semibold text-black'
+        )}
+      >
+        {title}
+      </td>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-r-2 border-black p-1'
+        )}
+      >
+        {getDomainValue(title)?.label === 5 && (
+          <Image
+            alt='Logo'
+            width={11}
+            height={11}
+            src='/images/check_mark.png'
+          />
+        )}
+      </td>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-r-2 border-black p-1'
+        )}
+      >
+        {getDomainValue(title)?.label === 4 && (
+          <Image
+            alt='Logo'
+            width={11}
+            height={11}
+            src='/images/check_mark.png'
+          />
+        )}
+      </td>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-r-2 border-black p-1'
+        )}
+      >
+        {getDomainValue(title)?.label === 3 && (
+          <Image
+            alt='Logo'
+            width={11}
+            height={11}
+            src='/images/check_mark.png'
+          />
+        )}
+      </td>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-r-2 border-black p-1'
+        )}
+      >
+        {getDomainValue(title)?.label === 2 && (
+          <Image
+            alt='Logo'
+            width={11}
+            height={11}
+            src='/images/check_mark.png'
+          />
+        )}
+      </td>
+      <td
+        className={clsxm(
+          noBottomBorder ? '' : 'border-b-2',
+          'border-black p-1'
+        )}
+      >
+        {getDomainValue(title)?.label === 1 && (
+          <Image
+            alt='Logo'
+            width={11}
+            height={11}
+            src='/images/check_mark.png'
+          />
+        )}
+      </td>
+    </tr>
+  );
+};
+const AffectiveDomain = ({ domains }: any) => {
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <thead>
@@ -685,19 +754,21 @@ const AffectiveDomain = () => {
       </tbody>
 
       <tbody className='text-[10px] font-black leading-3 text-[#3222EF]'>
-        <SingleDomain title='attentiveness' value='5' />
-        <SingleDomain title='honesty' value='5' />
-        <SingleDomain title='neatness' value='4' />
-        <SingleDomain title='politeness' value='5' />
-        <SingleDomain title='punctuality' value='4' />
-        <SingleDomain title='confidence' value='3' />
-        <SingleDomain title='attitude' value='5' noBottomBorder />
+        {affective.map((item, key) => (
+          <SingleDomain
+            domains={domains}
+            key={key}
+            title={item}
+            value='5'
+            noBottomBorder={affective.length - 1 === key}
+          />
+        ))}
       </tbody>
     </div>
   );
 };
 
-const PsychomotorDomain = () => {
+const PsychomotorDomain = ({ domains }: any) => {
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <thead>
@@ -742,21 +813,29 @@ const PsychomotorDomain = () => {
       </tbody>
 
       <tbody className='text-[10px] font-black leading-3 text-[#3222EF]'>
-        <SingleDomain title='listening skills' value='5' />
-        <SingleDomain title='hand writing' value='5' />
-        <SingleDomain title='spoken english' value='4' />
-        <SingleDomain title='reading skills' value='5' />
-        <SingleDomain title='homework' value='4' />
-        <SingleDomain title='outdoor games' value='3' />
-        <SingleDomain title='vocational skills' value='3' noBottomBorder />
+        {psychomotor.map((item, key) => (
+          <SingleDomain
+            domains={domains}
+            key={key}
+            title={item}
+            value='5'
+            noBottomBorder={psychomotor.length - 1 === key}
+          />
+        ))}
       </tbody>
     </div>
   );
 };
 
-const Overview = () => {
+const Overview = ({
+  subjectResults,
+  agregates,
+}: {
+  subjectResults: SubjectResults | undefined;
+  agregates: Agregates | undefined;
+}) => {
   const SingleItem = ({ title, value }) => (
-    <div className='flex flex-col p-[6px]'>
+    <div className='flex flex-col gap-1 p-[6px]'>
       <div className='text-[7px] uppercase font-bold leading-[9px]'>
         {title}
       </div>
@@ -768,9 +847,21 @@ const Overview = () => {
 
   return (
     <div className='rounded-[2px] border-2 border-black w-full p-[5px] divide-black divide-y-2 gap-[6px]'>
-      <SingleItem title='total score:' value='504/900' />
-      <SingleItem title='position in class:' value='1/45' />
-      <SingleItem title='passes/failed:' value='8/0' />
+      <SingleItem
+        title='total score:'
+        value={`${
+          agregates &&
+          agregates.classTotalExamScore &&
+          agregates.studentTotalExamScore
+            ? agregates.classTotalExamScore / agregates.studentTotalExamScore
+            : 'N/A'
+        }`}
+      />
+      <SingleItem
+        title='position in class:'
+        value={`${subjectResults && (subjectResults?.classPosition ?? 'N/A')}`}
+      />
+      <SingleItem title='passes/failed:' value='N/A/N/A' />
     </div>
   );
 };

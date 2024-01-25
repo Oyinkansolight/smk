@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react'
-import { useSearchParams } from 'next/navigation';
+import PrintedReportCard from '@/components/print/ReportCard';
 import { useGetStudentReportCard } from '@/server/student';
-import PrintedReportCard from '@/components/print/ReportCard'
-
+import { useSearchParams } from 'next/navigation';
+import React from 'react';
 
 const ViewReportCard = () => {
   const params = useSearchParams();
@@ -17,12 +16,16 @@ const ViewReportCard = () => {
     termId,
     studentId,
     sessionId,
-    classArmId
+    classArmId,
   });
 
   return (
-    <PrintedReportCard data={reportCard} />
-  )
-}
+    <PrintedReportCard
+      domains={reportCard?.domains}
+      subjectResults={reportCard?.subjectResults}
+      agregates={reportCard?.agregates}
+    />
+  );
+};
 
-export default ViewReportCard
+export default ViewReportCard;

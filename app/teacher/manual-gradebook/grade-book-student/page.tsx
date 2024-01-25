@@ -254,7 +254,12 @@ export default function Page() {
               }}
             />
             <div className='flex justify-end w-full mx-auto max-w-3xl'>
-              <Button variant='secondary' onClickHandler={() => {}}>
+              <Button
+                variant='secondary'
+                onClickHandler={() => {
+                  true;
+                }}
+              >
                 Submit
               </Button>
             </div>

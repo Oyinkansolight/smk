@@ -3,11 +3,9 @@
 import Result from '@/components/cards/Result';
 import EmptyView from '@/components/misc/EmptyView';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
-import logger from '@/lib/logger';
 import { useGetStudentReportCard } from '@/server/student';
 import Link from 'next/link';
 // import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
 import Lightup from '~/svg/lightup.svg';
 import Lightupblue from '~/svg/lightupblue.svg';
@@ -31,16 +29,6 @@ const psychomotor = [
   'Vocational Skills',
 ];
 const Page = () => {
-  const getDomainValue = (value: string) => {
-    const result = data?.domains.find((v) => v.behavior === value);
-    console.log(result);
-    return result
-      ? {
-          label: result.remark,
-          value: result.rating,
-        }
-      : null;
-  };
   const userData = getFromSessionStorage('user');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
@@ -58,6 +46,15 @@ const Page = () => {
     sessionId: currentSessionId,
     classArmId: user?.currentStudentInfo?.class?.id,
   });
+  const getDomainValue = (value: string) => {
+    const result = data?.domains.find((v) => v.behavior === value);
+    return result
+      ? {
+          label: result.remark,
+          value: result.rating,
+        }
+      : null;
+  };
 
   const reportCardURL = `/view-report-card?sessionId=${currentSessionId}&termId=${currentTermInfo?.id}&studentId=${user?.currentStudentInfo?.id}&classArmId=${user?.currentStudentInfo?.class?.id}`;
 
