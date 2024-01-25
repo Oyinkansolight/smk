@@ -266,6 +266,11 @@ const MessageCard = ({
   msg: {
     messageTitle: string;
     messageBody: string;
+    sender: {
+      firstName: string;
+      lastName: string;
+    };
+    createdAt: Date;
   };
 }) => {
   return (
@@ -274,16 +279,18 @@ const MessageCard = ({
     >
       <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-col gap-2'>
-          <div className='text-[10px] leading-[12px] font-bold'>
-            <div> Tola Ogunjimi</div>
+          <div className='text-sm leading-[12px] font-bold'>
+            <div> {`${msg?.sender.firstName}  ${msg?.sender.lastName}`} </div>
           </div>
-          <div>{msg.messageTitle}</div>
+          <Link href='/teacher/messages' className='font-medium text-xs'>
+            {msg?.messageTitle}
+          </Link>
           <div className='text-[10px] leading-[12px]'>
             {msg.messageBody.substring(0, 50)}...
           </div>
         </div>
 
-        <div>3 hrs ago</div>
+        <div>{moment(msg.createdAt).add(1, 'h').startOf('hour').fromNow()}</div>
       </div>
     </BasicCard>
   );

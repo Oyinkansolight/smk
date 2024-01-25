@@ -1,6 +1,7 @@
 'use client';
 
 import GenericLoader from '@/components/layout/Loader';
+import Paginator from '@/components/navigation/Paginator';
 import MessageBody from '@/components/views/super-admin/Messages/MessageBody';
 import {
   useGetReceiverMessages,
@@ -16,15 +17,33 @@ import React, { useState } from 'react';
 
 const AllMessages = () => {
   const { mutateAsync } = useReadMessage();
+  const [filter, setFilter] = useState('Sent');
 
   const [active, setActive] = useState(false);
-  const { data, isLoading } = useGetSenderMessages();
+
   const ReadMessage = (messageId: string) => {
     mutateAsync({ id: messageId });
   };
   const [isReply, setIsReply] = useState(false);
-  const { data: incomingMessage, isLoading: isLoadingIncomingMessage } =
-    useGetReceiverMessages();
+  const [pagingData, setPagingData] = useState<any>({
+    page: 1,
+    limit: 10,
+    type: 'SIMPLE',
+  });
+  const {
+    data: sentMessage,
+    isLoading: isLoadingSenderMessage,
+    refetch: refetchSenderAllMessage,
+  } = useGetSenderMessages({
+    ...pagingData,
+  });
+  const {
+    data: incomingMessage,
+    isLoading: isLoadingIncomingMessage,
+    refetch: refetchReceiverAllMessage,
+  } = useGetReceiverMessages({
+    ...pagingData,
+  });
   const [currentMessage, setCurrentMessage] = useState<messages>();
   console.log(incomingMessage);
 
@@ -37,7 +56,31 @@ const AllMessages = () => {
         <h1 className='text-2xl font-bold'>Messages</h1>
       </div>
 
-      <div className='py-4 bg-white rounded-2xl mt-6   flex justify-end grid-cols-2 items-center px-4'>
+      <div className='py-4 bg-white rounded-2xl mt-6   flex justify-between grid-cols-2 items-center px-4'>
+        <div>
+          <select
+            name=''
+            id=''
+            className='border-none outline-none w-[120px] rounded-lg bg-gray-300'
+            onChange={(e) => {
+              const { value } = e.target;
+              if (value === 'Sent') {
+                setFilter(value);
+                refetchSenderAllMessage();
+                // setPagingData({ ...pagingData, type: 'SIMPLE' });
+                // refetchSenderAllMessage({ ...pagingData, type: 'SIMPLE' });
+              } else {
+                setFilter(value);
+                refetchReceiverAllMessage;
+                // setPagingData({ ...pagingData, type: 'BROADCAST' });
+                // refetchSenderAllMessage({ ...pagingData, type: 'BROADCAST' });
+              }
+            }}
+          >
+            <option value='Sent'>Sent</option>
+            <option value='Inbox'>Inbox</option>
+          </select>
+        </div>
         <Link
           href='/teacher/messages/send-message'
           className='bg-secondary-400 py-4 text-white rounded-md md:px-10'
@@ -54,8 +97,14 @@ const AllMessages = () => {
 
       <div className='grid grid-cols-2 border-y'>
         <div className='border-r'>
-          {data && !isLoading ? (
-            (data ?? []).map((item, i) => (
+          {(filter === 'Sent'
+            ? sentMessage
+            : incomingMessage && !isLoadingSenderMessage) ||
+          !isLoadingIncomingMessage ? (
+            (filter === 'Sent'
+              ? sentMessage.data
+              : incomingMessage?.data ?? []
+            ).map((item, i) => (
               <div
                 key={i}
                 onClick={() => {
@@ -99,11 +148,21 @@ const AllMessages = () => {
               <GenericLoader />
             </div>
           )}
-          {data && !isLoading && data.length === 0 && (
-            <div className='py-20 text-center'>
-              <h1 className='text-base'>No messages yet</h1>
-            </div>
-          )}
+          {filter === 'Sent'
+            ? sentMessage?.data.length == 0
+            : incomingMessage?.data.length === 0 &&
+              (filter === 'Sent'
+                ? !isLoadingSenderMessage
+                : !isLoadingIncomingMessage) && (
+                <div className='py-20 text-center'>
+                  <h1 className='text-base'>No messages yet</h1>
+                </div>
+              )}
+          <Paginator
+            setPagingData={setPagingData}
+            pagingData={pagingData}
+            data={filter === 'Sent' ? sentMessage : incomingMessage}
+          />
         </div>
 
         <div className='flex justify-center text-sm  bg-[#F7F7F7]  rounded-lg'>

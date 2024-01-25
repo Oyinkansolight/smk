@@ -47,7 +47,7 @@ const Page = () => {
   const { data: staffs, isLoading } = useGetTeachersList();
   const staffData = (staffs?.data ?? []).map((v) => {
     return {
-      value: v.id,
+      value: v?.user ? v.user.id : '',
       label: v?.user && `${v?.user?.firstName} ${v?.user?.lastName}`,
     };
   });

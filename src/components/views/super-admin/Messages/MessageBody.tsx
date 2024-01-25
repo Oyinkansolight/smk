@@ -47,7 +47,7 @@ export default function MessageBody({ reply, message }: propType) {
           <div className='text-gray-400'>
             {moment(message?.createdAt).subtract(1, 'hours').format('LT')}{' '}
             {moment(message?.createdAt)
-              .subtract(1, 'hours')
+              .add(1, 'hours')
               .startOf('hour')
               .fromNow()}
           </div>
