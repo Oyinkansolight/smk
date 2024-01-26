@@ -35,6 +35,10 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -280,7 +284,7 @@ const Page = () => {
               )}
             </div>
           )}
-          {tabIdx === 2 && <TeacherAttendance userId={p?.get('id') ?? ''} />}
+          {tabIdx === 2 && <TeacherAttendance userId={staff?.user?.id ?? ''} />}
         </div>
       )}
       {gridTabIdx === 1 && (
