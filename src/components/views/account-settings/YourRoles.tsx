@@ -85,7 +85,7 @@ export default function YourRoles() {
                     ))}
                   {data && data.userInfo?.role?.length === 0 && (
                     <div className='bg-gray-200 rounded p-2 flex items-center justify-center'>
-                      No Role Available for this suer
+                      No role available for this user
                     </div>
                   )}
                 </div>
