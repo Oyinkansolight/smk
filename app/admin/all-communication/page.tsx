@@ -147,7 +147,7 @@ const AllNotification = () => {
           <div className='grid grid-cols-2 border-y'>
             <div className='border-r'>
               {data && !isLoading ? (
-                (data ?? []).map((item, i) => (
+                (data?.data ?? []).map((item, i) => (
                   <div
                     key={i}
                     onClick={() => {
