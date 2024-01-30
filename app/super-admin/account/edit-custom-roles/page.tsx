@@ -7,12 +7,29 @@ import SearchInput from '@/components/input/SearchInput';
 import Input from '@/components/input/formInput';
 import LongTextSkeleton from '@/components/skeletons/LongText';
 import Stepper from '@/components/stepper';
-import { useCreateNewRole, useGetPermissionList } from '@/server/Permission';
+import {
+  useCreateNewRole,
+  useGetPermissionList,
+  useGetRoleById,
+} from '@/server/Permission';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -24,6 +41,8 @@ const stepperData = [
 ];
 
 const AddClass = () => {
+  const p = useSearchParams();
+  const roleId = p?.get('id');
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [permissions, setPermissions] = useState<any>([]);
@@ -35,6 +54,8 @@ const AddClass = () => {
     // query,
   });
   const [activatedPermissions, setActivatedPermissions] = useState<any>([]);
+  const { data: getASingleRole } = useGetRoleById(roleId ?? '', true);
+  console.log(getASingleRole);
 
   const createRole = useCreateNewRole();
   const { data: allPermission, isLoading: isLoadingPermissions } =
@@ -55,6 +76,13 @@ const AddClass = () => {
     if (pagingData.page === 1) return;
     setPagingData({ ...pagingData, page: pagingData.page - 1 });
   };
+
+  useEffect(() => {
+    if (getASingleRole) {
+      setRoleName(getASingleRole.data[0].name);
+      setRoleDesc(getASingleRole.data[0].description);
+    }
+  }, [getASingleRole]);
 
   const {
     register,
@@ -164,7 +192,7 @@ const AddClass = () => {
     <section className='md:px-[60px] px-5 py-6'>
       <BackButton />
 
-      <h1 className='mt-5 mb-6 text-2xl font-bold'>Add Role</h1>
+      <h1 className='mt-5 mb-6 text-2xl font-bold'>Manage Role</h1>
 
       <Stepper
         variant='#007AFF'
@@ -183,7 +211,7 @@ const AddClass = () => {
             label='Role Name'
             placeholder='Enter Details Here'
             name='roleName'
-            formValue=''
+            formValue={roleName ?? ''}
             setFormValue={setRoleName}
             register={register}
             helper={
@@ -197,7 +225,7 @@ const AddClass = () => {
             label='Role Description'
             placeholder='Enter Details Here'
             name='roleDesc'
-            formValue=''
+            formValue={roleDesc ?? ''}
             setFormValue={setRoleDesc}
             register={register}
             helper={

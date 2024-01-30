@@ -92,13 +92,17 @@ export function useGetRoles() {
   return query;
 }
 
-export function useGetRoleById(id?: string) {
+export function useGetRoleById(id?: string, permissions?: boolean) {
   const query = useQuery({
     queryKey: 'get_role_by_id',
     queryFn: async () => {
       if (!id) return;
       try {
-        const d = await request.get(`/v1/government/roles/find-role?id=${id}`);
+        const d = await request.get(
+          `/v1/government/roles/find-role?id=${id}${
+            permissions ? `&permissions=${permissions}` : ''
+          }`
+        );
         return d.data.data.data;
       } catch (error) {
         logger(error);

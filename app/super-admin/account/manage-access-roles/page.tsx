@@ -9,6 +9,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MdArrowBackIos } from 'react-icons/md';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const roles = [
   {
     role: 'Super Administrator',
@@ -249,7 +259,7 @@ export default function Page() {
       </div> */}
 
       <div className='grid grid-cols-12 gap-4'>
-        <div className='col-span-3 w-full'>
+        <div className='col-span-3 w-full max-h-screen overflow-y-auto'>
           <div className='space-y-2 border-b mb-2 w-full'>
             <h2 className='text-[#8898AA] font-semibold text-lg'>All Roles</h2>
             <div className='flex justify-end text-[#016938]  text-xs'>
@@ -261,18 +271,19 @@ export default function Page() {
           <div className='mb-3'>
             <SearchInput />
           </div>
-          {!isLoadingRoles && allRoles?.data?.map((role, idx) => (
-            <div key={role.id} className='border-b-2 py-2'>
-              <div
-                onClick={() => {
-                  setSelectedRole(role);
-                }}
-                className='text-base font-normal cursor-pointer text-[#333] capitalize'
-              >
-                {role?.name}
+          {!isLoadingRoles &&
+            allRoles?.data?.map((role, idx) => (
+              <div key={role.id} className='border-b-2 py-2'>
+                <div
+                  onClick={() => {
+                    setSelectedRole(role);
+                  }}
+                  className='text-base font-normal cursor-pointer text-[#333] capitalize'
+                >
+                  {role?.name}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {isLoadingRoles && (
             <div className='flex flex-col gap-3'>
@@ -291,18 +302,24 @@ export default function Page() {
         </div>
         <div className='col-span-9 bg-white w-full'>
           <div className='flex justify-end p-2 w-full border-b'>
-            <button className='border border-[#016938] text-[#016938] rounded px-4 py-2'>
+            <Link
+              className='border border-[#016938] text-[#016938] rounded px-4 py-2'
+              href={`/super-admin/account/edit-custom-roles?id=${
+                selectedRole?.id ?? ''
+              }`}
+            >
               Manage
-            </button>
+            </Link>
           </div>
           <div className='py-4'>
             <div className='text-center'>
-              <h1 className='text-base font-medium capitalize'>{selectedRole?.name}</h1>
+              <h1 className='text-base font-medium capitalize'>
+                {selectedRole?.name}
+              </h1>
               <p className='text-[#929292]'>{selectedRole?.description}</p>
             </div>
           </div>
           <div className='rounded border'>
-
             <div>
               <div className='p-4 border-b'>
                 <div className=''>
