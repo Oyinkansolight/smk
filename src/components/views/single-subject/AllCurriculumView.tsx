@@ -4,6 +4,7 @@ import { CircularCounter } from '@/components/counter';
 import EditWeek from '@/components/modal/Editweek';
 import AddWeekModal from '@/components/modals/add-week-modal';
 import clsxm from '@/lib/clsxm';
+import { timeTablePeriodSorter } from '@/lib/helper';
 import logger from '@/lib/logger';
 import request from '@/server';
 import { getErrMsg } from '@/server';
@@ -105,36 +106,6 @@ export default function AllCurriculumView({
       });
   }
 
-  const daysOrder = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-
-  if (periods) {
-    periods.sort((a, b) => {
-      const dayA = daysOrder.indexOf(a.day);
-      const dayB = daysOrder.indexOf(b.day);
-
-      if (dayA !== dayB) {
-        return dayA - dayB; // Ascending order
-      }
-
-      const timeA =
-        parseInt(a.startTime.split(':')[0], 10) * 60 +
-        parseInt(a.startTime.split(':')[1], 10);
-      const timeB =
-        parseInt(b.startTime.split(':')[0], 10) * 60 +
-        parseInt(b.startTime.split(':')[1], 10);
-
-      return timeA - timeB; // Ascending order
-    });
-  }
-
   const { data } = useGetAcademicSessionsTermsWeek(termId);
 
   // const router = useRouter();
@@ -223,7 +194,7 @@ export default function AllCurriculumView({
                 </div>
                 {showcontent && currentIndex === i && (
                   <div className='w-full border duration-200 transition-all flex flex-col divide-y-2 !text-xs mt-[33px]'>
-                    {periods.map((v: any, j: number) => {
+                    {timeTablePeriodSorter(periods).map((v: any, j: number) => {
                       return (
                         <div
                           key={v.id ?? j}
