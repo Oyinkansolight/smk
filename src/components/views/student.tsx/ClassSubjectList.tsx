@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import {
+  getFromLocalStorage,
+  getFromSessionStorage,
+  timeTablePeriodSorter,
+} from '@/lib/helper';
 import logger from '@/lib/logger';
 import request from '@/server';
 import {
@@ -56,7 +60,7 @@ export default function SubjectList({
       toast.success('Subject un-assigned successfully');
       toggleDeleteModal();
     } else {
-      toast.error('An error occured');
+      toast.error('An error occurred');
     }
   };
 
@@ -198,36 +202,38 @@ export default function SubjectList({
                                 fetchPeriods(v.id);
                               }}
                             >
-                              View Curricullum
+                              View Curriculum
                             </button>
                           </div>
                         </div>
                         {showContent && currentIndex === i && (
                           <div className='w-full border duration-200 transition-all flex flex-col divide-y-2 !text-xs mt-[33px]'>
-                            {periods.map((v: any, j: number) => {
-                              return (
-                                <div
-                                  key={v.id ?? j}
-                                  className={clsxm(
-                                    'grid grid-cols-3 py-[22px] px-5'
-                                  )}
-                                >
-                                  <div>Period {j + 1}</div>
-                                  <div>
-                                    <span className='text-[#8898AA] mr-1'>
-                                      Topic/Sub-Theme:
-                                    </span>
-                                    {v.theme}
+                            {timeTablePeriodSorter(periods)?.map(
+                              (v: any, j: number) => {
+                                return (
+                                  <div
+                                    key={v.id ?? j}
+                                    className={clsxm(
+                                      'grid grid-cols-3 py-[22px] px-5'
+                                    )}
+                                  >
+                                    <div>Period {j + 1}</div>
+                                    <div>
+                                      <span className='text-[#8898AA] mr-1'>
+                                        Theme:
+                                      </span>
+                                      {v.theme}
+                                    </div>
+                                    <div>
+                                      <span className='text-[#8898AA] mr-1'>
+                                        Topic
+                                      </span>
+                                      {v.title}
+                                    </div>
                                   </div>
-                                  <div>
-                                    <span className='text-[#8898AA] mr-1'>
-                                      Title
-                                    </span>
-                                    {v.title}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                                );
+                              }
+                            )}
                             {loading && (
                               <div className='text-center tetx-xs'>
                                 Loading..

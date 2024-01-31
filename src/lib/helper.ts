@@ -282,23 +282,27 @@ export const timeTablePeriodSorter = (periodsList): any => {
     'Friday',
     'Saturday',
   ];
-  periodsList.sort((a, b) => {
-    const dayA = daysOrder.indexOf(a.day);
-    const dayB = daysOrder.indexOf(b.day);
+  console.log(periodsList);
 
-    if (dayA !== dayB) {
-      return dayA - dayB; // Ascending order
-    }
+  periodsList &&
+    periodsList.sort((a, b) => {
+      const dayA = daysOrder.indexOf(a.day);
+      const dayB = daysOrder.indexOf(b.day);
 
-    const timeA =
-      parseInt(a.startTime.split(':')[0], 10) * 60 +
-      parseInt(a.startTime.split(':')[1], 10);
-    const timeB =
-      parseInt(b.startTime.split(':')[0], 10) * 60 +
-      parseInt(b.startTime.split(':')[1], 10);
+      if (dayA !== dayB) {
+        return dayA - dayB; // Ascending order
+      }
 
-    return timeA - timeB; // Ascending order
-  });
+      const timeA =
+        parseInt(a.startTime.split(':')[0], 10) * 60 +
+        parseInt(a.startTime.split(':')[1], 10);
+      const timeB =
+        parseInt(b.startTime.split(':')[0], 10) * 60 +
+        parseInt(b.startTime.split(':')[1], 10);
+
+      return timeA - timeB; // Ascending order
+    });
+  return periodsList;
 };
 
 export default async function DownloadFile(fileUrl: string) {

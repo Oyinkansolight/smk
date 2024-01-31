@@ -231,13 +231,11 @@ export default function AllCurriculumView({
                         >
                           <div>Period {j + 1}</div>
                           <div>
-                            <span className='text-[#8898AA] mr-1'>
-                              Topic/Sub-Theme:
-                            </span>
+                            <span className='text-[#8898AA] mr-1'>Theme:</span>
                             {v.theme}
                           </div>
                           <div>
-                            <span className='text-[#8898AA] mr-1'>Title</span>
+                            <span className='text-[#8898AA] mr-1'>Topic</span>
                             {v.title}
                           </div>
                         </div>
