@@ -45,10 +45,11 @@ export default function Page() {
             </Link>
           </div>
           <div className='h-4' />
-          <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
+          <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-6'>
             <div className='col-span-2'>Name</div>
             <div>Date Submitted</div>
             <div>Due Date</div>
+            <div>Score</div>
             <div></div>
           </div>
           <div className='flex flex-col gap-2'>
@@ -62,8 +63,12 @@ export default function Page() {
                       'subjectId'
                     )}&classArmId=${params?.get(
                       'classArmId'
-                    )}&type=${params?.get('type')}&submissionId=${submission.id}&format=${submission.activity.format}
-                    &studentId=${submission.student.id}&activityId=${submission.activity.id}`}
+                    )}&type=${params?.get('type')}&submissionId=${
+                      submission.id
+                    }&format=${submission.activity.format}
+                    &studentId=${submission.student.id}&activityId=${
+                      submission.activity.id
+                    }`}
                     key={submission.id}
                   >
                     <AssignmentListItem
@@ -73,6 +78,7 @@ export default function Page() {
                       dateSubmitted={moment(submission.createdAt).format(
                         'MMMM DD'
                       )}
+                      score={submission?.score ?? 0}
                     />
                   </Link>
                 ))
@@ -93,16 +99,19 @@ export default function Page() {
 function AssignmentListItem({
   id,
   title,
+  score,
   dateSubmitted,
 }: {
   id: number;
+  score: number;
+
   title: string;
   dateSubmitted?: string;
 }) {
   return (
     <div
       className={clsxm(
-        'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
+        'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]'
       )}
     >
       <div className='flex items-center col-span-2 gap-8'>
@@ -112,6 +121,7 @@ function AssignmentListItem({
       </div>
       <div>{dateSubmitted ? dateSubmitted : '-'}</div>
       <div>-</div>
+      <div>{score}</div>
       <div className='flex justify-end '>
         <Button
           disabled={!dateSubmitted}

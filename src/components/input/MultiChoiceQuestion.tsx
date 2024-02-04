@@ -75,22 +75,18 @@ export default function MultiChoiceQuestion({
                   .map((v, idx) => ({ label: v, value: idx }))}
               />
             </div>
-            {/* <div className='flex items-center justify-between pt-4'>
+            <div className='flex items-center justify-between pt-4'>
               <div className='font-bold text-[#746D69]'>Set a score</div>
               <Input
-          
-                placeholder={`2`}
+                placeholder='2'
                 label=''
-                formValue={(value.options ?? [])[i]}
+                formValue=''
+                inputClassName='min-w-[19rem]'
                 setFormValue={(v) => {
-                  const newOpt: string[] = [
-                    ...(value.options ?? ['', '', '', '']),
-                  ];
-                  newOpt[i] = v as string;
-                  onChange({ ...value, options: newOpt });
+                  onChange({ ...value, score: v as number });
                 }}
               />
-            </div> */}
+            </div>
           </div>
         )}
       </div>

@@ -47,7 +47,7 @@ export default function Page() {
             </Link>
           </div>
           <div className='h-4' />
-          <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-5'>
+          <div className='grid p-4 text-[#746D69] font-bold text-sm md:text-base grid-cols-6'>
             <div className='col-span-2'>Name</div>
             <div>Date Submitted</div>
             <div>Due Date</div>
@@ -61,6 +61,7 @@ export default function Page() {
                 dueDate={submission.activity.dueDate}
                 key={i}
                 id={i + 1}
+                score={submission?.score ?? 0}
               />
             ))}
           </div>
@@ -81,8 +82,10 @@ function AssignmentListItem({
   title,
   dateSubmitted,
   dueDate,
+  score,
 }: {
   id: number;
+  score: number;
   title: string;
   dateSubmitted?: string;
   dueDate?: Date;
@@ -91,7 +94,7 @@ function AssignmentListItem({
     <Link href='/teacher/lesson-note/pop-quiz/submissions/grade'>
       <div
         className={clsxm(
-          'border rounded bg-white p-4 grid grid-cols-5 items-center font-bold text-[#746D69]'
+          'border rounded bg-white p-4 grid grid-cols-6 items-center font-bold text-[#746D69]'
         )}
       >
         <div className='flex items-center col-span-2 gap-8'>
@@ -101,6 +104,7 @@ function AssignmentListItem({
         </div>
         <div>{dateSubmitted ? dateSubmitted : '-'}</div>
         <div>{moment(dueDate).format('MMMM DD')}</div>
+        <div>{score}</div>
         <div className='flex justify-end '>
           <Button
             disabled={!dateSubmitted}

@@ -91,6 +91,7 @@ export interface CreateClassActivityParams {
 export interface Question {
   question?: string;
   options?: string[];
+  score?: number;
   correctOption?: number;
 }
 
@@ -187,7 +188,8 @@ export function useGetClassActivity(params: GetClassActivity) {
       params.typeOfActivity
         ? ((
             await request.get(
-              `/v1/institutions/lessons/get-class-class-activty`,
+              // `/v1/institutions/lessons/get-class-class-activty`,
+              `/v1/institutions/lessons/get-teacher-class-activty`,
               {
                 params,
               }

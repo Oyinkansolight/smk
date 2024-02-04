@@ -64,6 +64,11 @@ export default function NewStudentSidebar() {
       label: 'Communication',
     },
     {
+      img: '/images/book_stack_2.png',
+      url: '/student/library',
+      label: 'Library',
+    },
+    {
       img: '/images/sidebar-icons/Dashboard-4.png',
       url: '/student/profile',
       label: 'Settings',
