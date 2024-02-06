@@ -77,6 +77,7 @@ export default function CreateClassActivityView({
   const [questions, setQuestions] = useState<Question[]>([{}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { data: profile } = useGetProfile();
 
   const [createActivityParams] = useSessionStorage(
@@ -171,6 +172,7 @@ export default function CreateClassActivityView({
         data['lesson-note-file-upload'] &&
         data['lesson-note-file-upload'][0]
       ) {
+        setIsLoading(true);
         const environment = isLocal ? 'staging' : 'production';
         const f = data['lesson-note-file-upload'][0] as File;
         path = await uploadDocument(
@@ -204,6 +206,8 @@ export default function CreateClassActivityView({
 
         const res = await createLessonNote(payload);
         toast.success(res.data.data.message);
+        setIsLoading(false);
+
         closeModal();
       } else if (
         type === activityTypes[1].value ||
@@ -605,7 +609,7 @@ export default function CreateClassActivityView({
             className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
             type='submit'
           >
-            Submit
+            {isLoading ? 'Submitting...' : 'Submit '}
           </Button>
         </div>
       </div>

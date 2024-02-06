@@ -15,7 +15,50 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+import ReactPlayer from 'react-player';
 import { useMediaQuery } from 'react-responsive';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -172,8 +215,20 @@ const Page = () => {
                     >
                       <div className='flex flex-wrap mt-4 gap-[27px] px-6'>
                         {v?.uploadUrl ? (
-                          <LessonNoteGenerator noteUrl={v.uploadUrl} />
+                          <div>
+                            {v?.fileType === 'pdf' ? (
+                              //Displays Uploaded PDF lessonNote
+                              <LessonNoteGenerator noteUrl={v.uploadUrl} />
+                            ) : (
+                              //Displays additional Media(picture, uploadVid and VideoUrl) Material
+                              <LessonMediaGenerator
+                                noteUrl={v.uploadUrl}
+                                type={v?.fileType}
+                              />
+                            )}
+                          </div>
                         ) : (
+                          //Displays handwritten lessonNote
                           <div
                             className='font-bold text-xl'
                             dangerouslySetInnerHTML={{
@@ -220,6 +275,89 @@ function LessonNoteGenerator({ noteUrl }: { noteUrl: string }) {
         <CustomPDFReader url={url} />
       ) : (
         handleFlutterPDFReader(url)
+      )}
+    </div>
+  );
+}
+function LessonMediaGenerator({
+  noteUrl,
+  type,
+}: {
+  noteUrl: string;
+  type: string;
+}) {
+  const [url, setUrl] = useState<string | any>('');
+
+  useEffect(() => {
+    //for video or picture filetype, there's need to get them from firebase first then,
+    // plug the url in appropriate to html element.
+    let path = '';
+    if ((noteUrl && type === 'video') || type === 'picture') {
+      path = noteUrl;
+      getURL(path).then((v) => setUrl(v));
+    } else {
+      setUrl(noteUrl);
+    }
+  });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  const handleLoad = (event) => {
+    setDimensions({
+      width: event.naturalWidth,
+      height: event.naturalHeight,
+    });
+  };
+
+  return (
+    <div>
+      {url ? (
+        <div>
+          {type !== 'picture' ? (
+            <div
+              style={{ position: 'relative', width: '100%', height: 'auto' }}
+            >
+              <ReactPlayer
+                url={url}
+                width='80vw'
+                height='80vh'
+                controls
+                config={{
+                  youtube: {
+                    playerVars: {
+                      modestbranding: 1, // Attempt to hide branding
+                      rel: 0, // Hide related videos
+                      showinfo: 0, // Hide video info
+                      iv_load_policy: 3, // Hide annotations
+                    },
+                  },
+                }}
+              />
+            </div>
+          ) : (
+            <div
+              style={{ position: 'relative', width: '100%', height: 'auto' }}
+            >
+              <Image
+                src={url}
+                alt={url}
+                layout='responsive'
+                width={dimensions.width}
+                height={dimensions.height}
+                onLoadingComplete={handleLoad}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className='flex justify-center py-20'>
+          <RotatingLines
+            width='100'
+            visible={true}
+            strokeWidth='5'
+            strokeColor='#3361FF'
+            animationDuration='0.75'
+          />
+        </div>
       )}
     </div>
   );
