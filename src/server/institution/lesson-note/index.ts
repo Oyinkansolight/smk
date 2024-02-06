@@ -139,6 +139,7 @@ export interface CreateLessonNoteParams {
 }
 
 export type CreateLessonNoteTypes = {
+  fileType?: string;
   title?: string;
   instructionalTeachingActivity?: string;
   uploadUrl?: string;
