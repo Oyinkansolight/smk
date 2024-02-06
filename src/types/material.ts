@@ -22,6 +22,7 @@ export interface UserFile {
   subject?: Subject[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   institutions?: any[];
+  children?: any[];
 }
 
 export interface UserFolder {
@@ -32,4 +33,5 @@ export interface UserFolder {
   createdBy?: UserInfo;
   size?: string;
   subject?: Subject[];
+  children?: any[];
 }
