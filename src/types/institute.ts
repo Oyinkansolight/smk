@@ -562,7 +562,7 @@ export interface StudentsListByInstitution {
   page?: number;
   limit?: number;
   query?: string;
-  instituteId: string;
+  instituteId?: string;
 }
 
 export interface AssignStudentToParent {

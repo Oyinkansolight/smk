@@ -304,6 +304,31 @@ export function useGetStudentsListByInstitution(
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
 }
+export function useGetStudentsUpdateList(params: StudentsListByInstitution) {
+  const query = useQuery({
+    queryKey: 'get_student_update_list',
+    queryFn: async () => {
+      try {
+        const d = await request.get(
+          `/v1/update_user_request?${
+            params.limit ? `&limit=${params.limit}` : ''
+          }${params.page ? `&page=${params.page}` : ''}${
+            params.query ? `&query=${params.query}` : ''
+          }`
+        );
+        return d.data.data as PaginatedData<Student> | any;
+      } catch (error) {
+        logger(error);
+        throw error;
+      }
+    },
+  });
+  const { refetch } = query;
+  useEffect(() => {
+    refetch({ cancelRefetch: true });
+  }, [params?.limit, params?.page, params?.query, refetch]);
+  return query;
+}
 
 export function useGetParents(params: Partial<StudentsListByInstitution>) {
   const query = useQuery({
