@@ -91,6 +91,7 @@ export interface CreateClassActivityParams {
 export interface Question {
   question?: string;
   options?: string[];
+  score?: number;
   correctOption?: number;
 }
 
@@ -138,6 +139,7 @@ export interface CreateLessonNoteParams {
 }
 
 export type CreateLessonNoteTypes = {
+  fileType?: string;
   title?: string;
   instructionalTeachingActivity?: string;
   uploadUrl?: string;
@@ -187,7 +189,8 @@ export function useGetClassActivity(params: GetClassActivity) {
       params.typeOfActivity
         ? ((
             await request.get(
-              `/v1/institutions/lessons/get-class-class-activty`,
+              // `/v1/institutions/lessons/get-class-class-activty`,
+              `/v1/institutions/lessons/get-teacher-class-activty`,
               {
                 params,
               }

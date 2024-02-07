@@ -10,8 +10,7 @@
 @import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 @import '../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
 @import '../../node_modules/@syncfusion/ej2-pdfviewer/styles/material.css';
-
-:root {
+@import 'react-tooltip/dist/react-tooltip.css': root {
   /* #region  /**=========== Primary Color =========== */
   /* !STARTERCONF Customize these variable, copy and paste from /styles/colors.css for list of colors */
   --tw-color-primary-50: 58 255 165;
@@ -117,6 +116,9 @@
   .min-h-main {
     @apply min-h-[calc(100vh-56px)];
   }
+}
+.dBvRNk {
+  padding-bottom: 0 !important;
 }
 
 .react-pdf__Page__canvas {

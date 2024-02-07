@@ -143,8 +143,11 @@ export function useGetFolderFiles(folderId?: number) {
 export function useGetFolderAndFiles(
   folderId?: string,
   subjectId?: string,
-  search?: string
+  search?: string,
+  userType?: any
 ) {
+  console.log(userType);
+
   let currentParams;
 
   if (subjectId) {
@@ -155,6 +158,9 @@ export function useGetFolderAndFiles(
 
   if (search) {
     currentParams = { ...currentParams, search };
+  }
+  if ((userType?.length ?? 0) > 0) {
+    currentParams = { ...currentParams, userType: userType[0] };
   }
 
   const query = useQuery({

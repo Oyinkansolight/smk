@@ -19,27 +19,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { BiChevronRight, BiSortDown, BiSortUp } from 'react-icons/bi';
+import { BiSortDown, BiSortUp } from 'react-icons/bi';
+import { FaEllipsisV } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -247,7 +230,7 @@ export default function Page() {
               const activityTitle = activity?.questionsV2?.[0]?.question;
 
               return (
-                <Link key={activity.id ?? i} href={activityPath()}>
+                <div key={activity.id ?? i}>
                   <LessonTaskListItem
                     isOfflineSubmission={
                       activity.mode.toUpperCase() === 'OFFLINE'
@@ -272,9 +255,11 @@ export default function Page() {
                     }
                     dueDate={activity.dueDate}
                     dateCreated={activity.createdAt}
+                    href={activityPath()}
                     key={i}
+                    idx={i}
                   />
-                </Link>
+                </div>
               );
             })
           ))}
@@ -298,14 +283,20 @@ function LessonTaskListItem({
   classString,
   dueDate,
   dateCreated,
+  href,
+  idx,
 }: {
   isOfflineSubmission?: boolean;
+  href: string;
   title: string;
   subject: string;
   classString: string;
   dueDate: Date;
   dateCreated: Date;
+  idx: number;
 }) {
+  const [action, setAction] = useState<number | null>(null);
+
   return (
     <div
       className={clsxm(
@@ -336,7 +327,45 @@ function LessonTaskListItem({
         <div className={clsxm(moment() >= moment(dueDate) && 'text-red-500')}>
           {moment(dueDate).format('MMMM DD')}
         </div>
-        <BiChevronRight className='h-10 w-10' />
+        <button
+          onClick={() => {
+            setAction(idx + 1);
+          }}
+          className='relative'
+        >
+          <FaEllipsisV className='h-6 w-6' />
+          {action == idx + 1 && (
+            <div className='shadow-lg rounded-xl bg-white w-[140px] text-left h-max absolute top-0 -left-[150px] z-10'>
+              <Link href={href} className='p-4 hover:bg-gray-200 w-full block'>
+                View Submission
+              </Link>
+              <button
+                onClick={() => {
+                  console.log('Loif');
+                }}
+                className='p-4 hover:bg-gray-200 w-full'
+              >
+                Edit/View
+              </button>
+              <button
+                onClick={() => {
+                  console.log('Delete');
+                }}
+                className='p-4 hover:bg-gray-200 text-red-500 w-full'
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </button>
+        {action && (
+          <div
+            className='fixed inset-0 z-[1]'
+            onClick={() => {
+              setAction(null);
+            }}
+          ></div>
+        )}
       </div>
     </div>
   );

@@ -20,7 +20,6 @@ import {
   useCreateClassActivity,
   useCreateLessonNote,
 } from '@/server/institution/lesson-note';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -62,24 +61,31 @@ export default function CreateClassActivityView({
   const params = useSearchParams();
   const classArmId = params?.get('classArmId');
   const editor = useCustomEditor();
-  const { register, watch, handleSubmit, getValues, control } = useForm({
-    mode: 'all',
-    reValidateMode: 'onChange',
-  });
+  const { register, watch, handleSubmit, getValues, setValue, control } =
+    useForm({
+      mode: 'all',
+      reValidateMode: 'onChange',
+    });
   const format = watch('format')?.label;
   const type = watch('typeOfActivity')?.label;
   const [subjectiveType, setSubjectiveType] = useState(0);
+  const [fileType, setFileType] = useState<
+    'pdf' | 'video' | 'picture' | 'video_url'
+  >('picture');
   const create = useCreateClassActivity();
   const { mutateAsync: createLessonNote } = useCreateLessonNote();
   const [questions, setQuestions] = useState<Question[]>([{}]);
   const [addToGradeList, setAddToGradeList] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { data: profile } = useGetProfile();
 
   const [createActivityParams] = useSessionStorage(
     'create_activity_params',
     {} as CreateClassActivityParams
   );
+
+  console.log(getValues('lesson-note-file-upload'));
 
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
@@ -166,6 +172,7 @@ export default function CreateClassActivityView({
         data['lesson-note-file-upload'] &&
         data['lesson-note-file-upload'][0]
       ) {
+        setIsLoading(true);
         const environment = isLocal ? 'staging' : 'production';
         const f = data['lesson-note-file-upload'][0] as File;
         path = await uploadDocument(
@@ -174,10 +181,12 @@ export default function CreateClassActivityView({
           environment
         );
       }
+      console.log(type);
 
       if (type === activityTypes[3].value) {
         const payload: CreateLessonNoteTypes = {
-          uploadUrl: path ?? '',
+          uploadUrl: path ? path : getValues('videoUrl') ?? '',
+          fileType,
           sessionId: createActivityParams?.sessionId,
           termId: createActivityParams?.termId,
           periodId: createActivityParams?.periodId,
@@ -189,12 +198,16 @@ export default function CreateClassActivityView({
             editor?.getHTML() !== '<p></p>' ? editor?.getHTML() : '',
         };
 
-        if (!path) delete payload.uploadUrl;
+        if (!path && getValues('videoUrl') === '') delete payload.uploadUrl;
+        if (!payload.uploadUrl) delete payload.fileType;
         if (!payload?.instructionalTeachingActivity)
           delete payload.instructionalTeachingActivity;
+        console.log(payload);
 
         const res = await createLessonNote(payload);
         toast.success(res.data.data.message);
+        setIsLoading(false);
+
         closeModal();
       } else if (
         type === activityTypes[1].value ||
@@ -216,17 +229,17 @@ export default function CreateClassActivityView({
         toast.success(res.data.data.message);
         closeModal();
       } else {
-        const res = await create.mutateAsync({
-          ...data,
-          ...createActivityParams,
-          timeLimit: data?.timeLimit?.value,
-          typeOfActivity: data?.typeOfActivity?.value,
-          mode: isOnline ? 'ONLINE' : 'OFFLINE',
-          format: form,
-          questionsV2,
-          addToGradeList,
-        });
-        toast.success(res.data.data.message);
+        // const res = await create.mutateAsync({
+        //   ...data,
+        //   ...createActivityParams,
+        //   timeLimit: data?.timeLimit?.value,
+        //   typeOfActivity: data?.typeOfActivity?.value,
+        //   mode: isOnline ? 'ONLINE' : 'OFFLINE',
+        //   format: form,
+        //   questionsV2,
+        //   addToGradeList,
+        // });
+        // toast.success(res.data.data.message);
         closeModal();
       }
     } catch (error) {
@@ -432,7 +445,13 @@ export default function CreateClassActivityView({
                   />
                   <div>Input Lesson Note </div>
                 </div>,
-                <div className='flex items-center gap-2' key={1}>
+                <div
+                  className='flex items-center gap-2'
+                  key={1}
+                  onClick={() => {
+                    setFileType('pdf');
+                  }}
+                >
                   <ComputerUploadSVG
                     className={clsxm(
                       subjectiveType === 1
@@ -441,7 +460,7 @@ export default function CreateClassActivityView({
                     )}
                     style={{}}
                   />
-                  <div>Upload From Computer </div>
+                  <div>Upload PDF From Computer </div>
                 </div>,
                 <div className='flex items-center gap-2' key={2}>
                   <TakePictureSVG
@@ -449,7 +468,7 @@ export default function CreateClassActivityView({
                       subjectiveType === 2 ? 'fill-[#1A8FE3]' : 'fill-[#D4D5D7]'
                     )}
                   />
-                  <div>Take a Picture to Upload</div>
+                  <div> Upload Media </div>
                 </div>,
               ]}
               onChange={setSubjectiveType}
@@ -458,7 +477,7 @@ export default function CreateClassActivityView({
             />
             {subjectiveType === 0 && <CustomRichTextEditor editor={editor} />}
             {subjectiveType === 1 && (
-              <div className='border rounded-2xl h-80 flex flex-col items-center justify-center'>
+              <div className='border rounded-2xl h-40 flex flex-col items-center justify-center'>
                 {(getValues('lesson-note-file-upload') ?? [])[0]?.name ? (
                   <div>
                     {(getValues('lesson-note-file-upload') as FileList)[0].name}{' '}
@@ -476,6 +495,7 @@ export default function CreateClassActivityView({
                       type='file'
                       id='lesson-note-file-upload'
                       className='hidden'
+                      accept='pdf'
                       {...register('lesson-note-file-upload')}
                     />
                     <div>Or drag a file here.</div>
@@ -484,20 +504,101 @@ export default function CreateClassActivityView({
               </div>
             )}
             {subjectiveType === 2 && (
-              <div className='border rounded-2xl h-80 flex gap-2 flex-col items-center justify-center'>
-                <Image
-                  src='/images/webcam.png'
-                  alt='webcam'
-                  height={50}
-                  width={50}
-                />
-                <Button
-                  variant='secondary'
-                  className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
-                  type='button'
-                >
-                  Take Photo
-                </Button>
+              <div className='border rounded-2xl h-40 '>
+                <div className='grid grid-cols-3  border-b divide-x'>
+                  <div
+                    onClick={() => {
+                      setFileType('picture');
+                    }}
+                    className={clsxm(
+                      fileType === 'picture'
+                        ? 'bg-[#222] text-[#fff] rounded-tl-md'
+                        : 'text-black',
+                      'flex items-center p-2 justify-center'
+                    )}
+                  >
+                    <div>Picture File</div>
+                  </div>
+                  <div
+                    className={clsxm(
+                      fileType === 'video'
+                        ? 'bg-[#222] text-[#fff]'
+                        : 'text-black',
+                      'flex items-center p-2 justify-center'
+                    )}
+                    onClick={() => {
+                      setFileType('video');
+                    }}
+                  >
+                    <div>Video File </div>
+                  </div>
+                  <div
+                    className={clsxm(
+                      fileType === 'video_url'
+                        ? 'bg-[#222] text-[#fff] rounded-tr-md'
+                        : 'text-black',
+                      'flex items-center p-2 justify-center'
+                    )}
+                    onClick={() => {
+                      setFileType('video_url');
+                    }}
+                  >
+                    <div> Video Url </div>
+                  </div>
+                </div>
+                {fileType !== 'video_url' ? (
+                  <div className='flex flex-col justify-center items-center py-4'>
+                    {(getValues('lesson-note-file-upload') ?? [])[0]?.name ? (
+                      <div>
+                        <div className='flex items-center space-x-3'>
+                          <div>
+                            {getValues('lesson-note-file-upload') &&
+                              (
+                                getValues('lesson-note-file-upload') as FileList
+                              )[0].name}
+                          </div>
+                          <button
+                            type='button'
+                            className='text-red-500'
+                            onClick={() => {
+                              setValue('lesson-note-file-upload', null);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <label
+                          className='flex justify-center w-full max-w-[160px] items-center text-white rounded-lg h-10 bg-[#1A8FE3]'
+                          htmlFor='lesson-note-file-upload'
+                        >
+                          <div>Browse</div>
+                        </label>
+                        <input
+                          type='file'
+                          id='lesson-note-file-upload'
+                          className='hidden'
+                          accept={
+                            fileType === 'picture' ? 'image/*' : 'video/*'
+                          }
+                          {...register('lesson-note-file-upload')}
+                        />
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className='flex justify-center items-center p-6'>
+                    <BaseInput
+                      required
+                      name='videoUrl'
+                      label='Video URL'
+                      register={register}
+                      placeholder='http://youtube.com/v=tr13dcsfg'
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -508,7 +609,7 @@ export default function CreateClassActivityView({
             className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
             type='submit'
           >
-            Submit
+            {isLoading ? 'Submitting...' : 'Submit '}
           </Button>
         </div>
       </div>

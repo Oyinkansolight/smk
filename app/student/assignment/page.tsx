@@ -2,14 +2,10 @@
 'use client';
 
 import NextImage from '@/components/NextImage';
-import AssignmentQuestionView from '@/components/cards/AssignmentQuestionView';
-import TaskTimer from '@/components/counter/TaskTimer';
+import AssignmentQuestionPracticeView from '@/components/cards/AssignmentQuestionPracticeView';
+import AssignmentQuestionReviewView from '@/components/cards/AssignmentQuestionReveiwView';
 import useCustomEditor from '@/hooks/useEditor';
-import {
-  extractMinutesFromString,
-  getDueDate,
-  getFromSessionStorage,
-} from '@/lib/helper';
+import { getDueDate, getFromSessionStorage } from '@/lib/helper';
 import request, { getErrMsg } from '@/server';
 import { useGetAcademicSessions } from '@/server/dashboard';
 import { useGetSubjectList } from '@/server/institution';
@@ -18,12 +14,91 @@ import moment from 'moment';
 import { useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { BsPlay } from 'react-icons/bs';
-import { ImSpinner2 } from 'react-icons/im';
-import { IoChevronBack } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -108,13 +183,23 @@ const Page = () => {
               item.status.toLowerCase() === 'pending'
           )
         );
-        setMyCompletedAssignment(
-          res.data.data.data.data.items.filter(
-            (item) =>
-              item.typeOfActivity === 'ASSIGNMENT' &&
-              item.status.toLowerCase() === 'completed'
-          )
-        );
+      })
+      .catch((err) => {
+        setLoading(false);
+        getErrMsg(err);
+      });
+    request
+      .get(
+        `v1/institutions/lessons/get-submittted-class-activties-by-subject?type=ASSIGNMENT&classArmId=${
+          user?.currentStudentInfo?.class.id ?? ''
+        }&subjectId=${subjectId}&studentId=${
+          user?.currentStudentInfo?.id ?? ''
+        }`
+      )
+      .then((res) => {
+        setLoading(false);
+
+        setMyCompletedAssignment(res.data.data.data);
       })
       .catch((err) => {
         setLoading(false);
@@ -126,10 +211,10 @@ const Page = () => {
 
   const submissionData = {
     activityId: activity?.id,
-    classArmId: activity?.classes.id,
+    classArmId: activity?.classes?.id,
     answers,
-    studentId: user?.currentStudentInfo.id ?? '',
-    subjectId: activity?.subject.id,
+    studentId: user?.currentStudentInfo?.id ?? '',
+    subjectId: activity?.subject?.id,
   };
 
   async function handleSubmitTask() {
@@ -146,7 +231,7 @@ const Page = () => {
       const response = await handleSubmitActivity.mutateAsync(submissionData);
 
       if (response) {
-        toast.success(`Activity Submitted successfully`);
+        toast.success(`Activity submitted successfully`);
         setLoadingSubmission(false);
       }
     } catch (error) {
@@ -196,7 +281,7 @@ const Page = () => {
             >
               <option value=''>Subject</option>
               {(allSubject?.data ?? []).map((v: any, i: number) => (
-                <option key={i} value={v.name}>
+                <option key={i} value={v.id}>
                   {v.name}
                 </option>
               ))}
@@ -265,14 +350,14 @@ const Page = () => {
 
           <div className='mt-5 border border-[#D5D7D8] rounded-md p-3 bg-[#FAFAFA]'>
             <h1 className='text-xl font-medium mb-3'>Completed Assignments</h1>
-            <div className='grid sm:grid-cols-2 md:grid-cols-3 gap-5'>
+            <div className='grid sm:grid-cols-2 gap-5'>
               {myCompletedAssignment.map((item, i) => (
                 <div
                   key={i}
                   className='cursor-pointer rounded-xl bg-white border p-3 flex space-x-4'
                   onClick={() => {
                     setActivity(item);
-                    setCurrentView(1);
+                    setCurrentView(2);
                   }}
                 >
                   <NextImage
@@ -283,12 +368,19 @@ const Page = () => {
                   />
                   <div className='flex-1 flex flex-col'>
                     <p className='text-xs text-blue-500'>
-                      {item?.subject?.name} - {item.classes.arm}
+                      {item?.period?.theme}
+                    </p>
+                    <p className='text-xs tex-[#615E83]'>
+                      {item?.period?.title}
                     </p>
                     <p className='text-xs text-[#615E83]'>
-                      Format: {item?.format}
+                      Format: {item?.activity?.format}
                     </p>
-                    <div className='mt-4 text-[10px] flex justify-between items-center'>
+                    <div className='mt-4 text-[10px]'>
+                      <div>
+                        <span>Score:</span>
+                        {item?.score}
+                      </div>
                       <div>
                         <span>Due Date:</span>
                         {moment(item?.duedate).format('ll')}
@@ -310,70 +402,26 @@ const Page = () => {
         </div>
       )}
       {currentView === 1 && (
-        <div>
-          <div className='my-4 px-4 flex justify-between items-center'>
-            <button
-              className='bg-gray-200 rounded-md text-lg font-medium px-3 py-2 flex items-center space-x-2'
-              onClick={() => {
-                setCurrentView(0);
-              }}
-            >
-              <IoChevronBack size={20} />
-              <span>Back</span>
-            </button>
-            {!startActivity && (
-              <button
-                className='bg-green-500 rounded-md text-lg text-white font-medium px-3 py-2 flex items-center space-x-2'
-                onClick={() => {
-                  setStartActivity(!startActivity);
-                }}
-              >
-                <BsPlay size={20} />
-                <span>Start</span>
-              </button>
-            )}
-            {startActivity && (
-              <TaskTimer
-                timeLimit={
-                  Number(
-                    extractMinutesFromString(activity?.timeLimit ?? '30 Mins')
-                  ) * 60000
-                }
-              />
-            )}
-            {/* MULTIPLE_CHOICE */}
-          </div>
-          {startActivity && (
-            <div>
-              {activity?.questionsV2?.map((item, idx) => (
-                <div key={idx}>
-                  <AssignmentQuestionView
-                    question={item.question}
-                    options={item.options}
-                    correctOption={item.correctOption}
-                    answers={answers}
-                    setAnswers={setAnswers}
-                    qId={item.id}
-                    format={activity.format}
-                    editor={editor}
-                  />
-                </div>
-              ))}
-              <button
-                onClick={() => {
-                  handleSubmitTask();
-                }}
-                className='my-5 w-max mx-auto flex items-center rounded border border-secondary px-6 py-3 text-center text-xs font-medium text-secondary '
-              >
-                {loadingSubmission ? (
-                  <ImSpinner2 className='animate-spin' />
-                ) : (
-                  ' Submit Activity'
-                )}
-              </button>
-            </div>
-          )}
-        </div>
+        <AssignmentQuestionPracticeView
+          setCurrentView={setCurrentView}
+          activity={activity}
+          startActivity={startActivity}
+          setStartActivity={setStartActivity}
+          answers={answers}
+          setAnswers={setAnswers}
+          editor={editor}
+          handleSubmitTask={handleSubmitTask}
+          loadingSubmission={loadingSubmission}
+        />
+      )}
+      {currentView === 2 && (
+        <AssignmentQuestionReviewView
+          setCurrentView={setCurrentView}
+          activity={activity}
+          answers={answers}
+          setAnswers={setAnswers}
+          editor={editor}
+        />
       )}
     </div>
   );

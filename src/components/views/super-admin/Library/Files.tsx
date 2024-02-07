@@ -110,18 +110,52 @@ const columns: TableColumn<TableItemData>[] = [
     cell: (item) => {
       if ('fileUrl' in item) {
         return (
-          <div className='col-span-2'>
-            {(item?.subject?.length ?? 0) > 0
-              ? (item?.subject ?? []).map((v) => v.name).join(', ')
-              : '-'}{' '}
+          <div className='col-span-2 py-1'>
+            {(item?.subject?.length ?? 0) > 0 ? (
+              <div>
+                {(item?.subject?.length ?? 0) > 3 ? (
+                  <div>
+                    {(item?.subject ?? [])
+                      .splice(0, 3)
+                      .map((v) => v.name)
+                      .join(', ')}{' '}
+                    <span className='bg-[#999] text-white py-[2px] px-1 rounded-full flex whitespace-nowrap justify-center max-w-min'>
+                      {' '}
+                      + {(item?.children?.length ?? 0) - 3} others
+                    </span>
+                  </div>
+                ) : (
+                  (item?.subject ?? []).map((v) => v.name).join(', ')
+                )}
+              </div>
+            ) : (
+              '-'
+            )}{' '}
           </div>
         );
       } else if ('folderName' in item) {
         return (
-          <div className='col-span-2'>
-            {(item?.subject?.length ?? 0) > 0
-              ? (item?.subject ?? []).map((v) => v.name).join(', ')
-              : '-'}{' '}
+          <div className='col-span-2 py-1'>
+            {(item?.subject?.length ?? 0) > 0 ? (
+              <div>
+                {(item?.subject?.length ?? 0) > 3 ? (
+                  <div>
+                    {(item?.subject ?? [])
+                      .splice(0, 3)
+                      .map((v) => v.name)
+                      .join(', ')}{' '}
+                    <span className='bg-[#999] text-white py-[2px] px-1 rounded-full flex whitespace-nowrap justify-center max-w-min'>
+                      {' '}
+                      + {(item?.children?.length ?? 0) - 3} others
+                    </span>
+                  </div>
+                ) : (
+                  (item?.subject ?? []).map((v) => v.name).join(', ')
+                )}
+              </div>
+            ) : (
+              '-'
+            )}{' '}
           </div>
         );
       }
@@ -303,9 +337,11 @@ const columns: TableColumn<TableItemData>[] = [
 const UploadDocument = ({
   variant,
   canUpload = true,
+  userType = [],
 }: {
   variant?: string;
   canUpload?: boolean;
+  userType?: string[];
 }) => {
   const {
     getValues,
@@ -382,7 +418,12 @@ const UploadDocument = ({
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, '', query);
+  } = useGetFolderAndFiles(
+    folderTrail[folderTrail.length - 1]?.id,
+    '',
+    query,
+    userType
+  );
 
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 
@@ -656,53 +697,57 @@ const UploadDocument = ({
             )}
 
             <div className='flex-1' />
-            {canUpload && (
+            {isSuperAdmin && (
               <div>
-                <button
-                  onClick={() => {
-                    setIsOpen(!isOpen);
-                  }}
-                  className={clsxm(
-                    variant === 'secondary' && '!border-blue-500 text-blue-500',
-                    variant === 'primary' && 'border-[#016938] text-[#016938]',
-                    'w-max flex items-center rounded border px-6 py-3 text-center text-xs font-semibold bg-white'
-                  )}
-                >
-                  Add Document
-                  <span className='ml-4'>
-                    <svg
-                      width='10'
-                      height='7'
-                      viewBox='0 0 10 7'
-                      fill='none'
-                      xmlns='http://www.w3.org/2000/svg'
-                    >
-                      <path
-                        d='M0.635629 1.10707C0.799992 0.93941 1.05719 0.924168 1.23843 1.06134L1.29036 1.10707L5.00003 4.8913L8.7097 1.10707C8.87407 0.93941 9.13127 0.924168 9.31251 1.06134L9.36443 1.10707C9.52879 1.27473 9.54374 1.53708 9.40926 1.72196L9.36443 1.77493L5.32739 5.89293C5.16303 6.06059 4.90583 6.07583 4.72459 5.93866L4.67267 5.89293L0.635629 1.77493C0.454831 1.5905 0.454831 1.29149 0.635629 1.10707Z'
-                        fill='#016938'
-                      />
-                    </svg>
-                  </span>
-                </button>
-                {isOpen && (
-                  <div
-                    className='fixed inset-0 z-[9]'
-                    onClick={() => {
-                      setIsOpen(!isOpen);
-                    }}
-                  />
-                )}
-                {isOpen && (
-                  <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-12 right-0 z-10'>
+                {canUpload && (
+                  <div>
                     <button
                       onClick={() => {
-                        setIsCreateFolder(!isCreateFolder);
+                        setIsOpen(!isOpen);
                       }}
-                      className='p-3 hover:bg-slate-100  text-left font-medium w-full'
+                      className={clsxm(
+                        variant === 'secondary' &&
+                          '!border-blue-500 text-blue-500',
+                        variant === 'primary' &&
+                          'border-[#016938] text-[#016938]',
+                        'w-max flex items-center rounded border px-6 py-3 text-center text-xs font-semibold bg-white'
+                      )}
                     >
-                      Create Folder
+                      Add Document
+                      <span className='ml-4'>
+                        <svg
+                          width='10'
+                          height='7'
+                          viewBox='0 0 10 7'
+                          fill='none'
+                          xmlns='http://www.w3.org/2000/svg'
+                        >
+                          <path
+                            d='M0.635629 1.10707C0.799992 0.93941 1.05719 0.924168 1.23843 1.06134L1.29036 1.10707L5.00003 4.8913L8.7097 1.10707C8.87407 0.93941 9.13127 0.924168 9.31251 1.06134L9.36443 1.10707C9.52879 1.27473 9.54374 1.53708 9.40926 1.72196L9.36443 1.77493L5.32739 5.89293C5.16303 6.06059 4.90583 6.07583 4.72459 5.93866L4.67267 5.89293L0.635629 1.77493C0.454831 1.5905 0.454831 1.29149 0.635629 1.10707Z'
+                            fill='#016938'
+                          />
+                        </svg>
+                      </span>
                     </button>
-                    {/* <input
+                    {isOpen && (
+                      <div
+                        className='fixed inset-0 z-[9]'
+                        onClick={() => {
+                          setIsOpen(!isOpen);
+                        }}
+                      />
+                    )}
+                    {isOpen && (
+                      <div className='shadow-lg rounded-xl flex  flex-col  text-left bg-white w-[160px] h-max absolute top-12 right-0 z-10'>
+                        <button
+                          onClick={() => {
+                            setIsCreateFolder(!isCreateFolder);
+                          }}
+                          className='p-3 hover:bg-slate-100  text-left font-medium w-full'
+                        >
+                          Create Folder
+                        </button>
+                        {/* <input
                 type='file'
                 onChange={(e) => {
                   addNewFile(e);
@@ -711,7 +756,7 @@ const UploadDocument = ({
                 id='upload_file'
                 hidden
               /> */}
-                    {/* <Link
+                        {/* <Link
                       href={`/super-admin/add-material${folderTrail.length > 0
                         ? `?folderId=${folderTrail[folderTrail.length - 1].id
                         }&folderName=${folderTrail[folderTrail.length - 1].folderName
@@ -719,18 +764,20 @@ const UploadDocument = ({
                         : ''
                         }`}
                     > */}
-                    <label
-                      onClick={toggleUploadModal}
-                      htmlFor='upload_file'
-                      className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
-                    >
-                      Upload File{' '}
-                      {folderTrail.length > 0 &&
-                        `To ${folderTrail[folderTrail.length - 1].folderName}`}
-                    </label>
-                    {/* </Link> */}
+                        <label
+                          onClick={toggleUploadModal}
+                          htmlFor='upload_file'
+                          className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
+                        >
+                          Upload File{' '}
+                          {folderTrail.length > 0 &&
+                            `To ${
+                              folderTrail[folderTrail.length - 1].folderName
+                            }`}
+                        </label>
+                        {/* </Link> */}
 
-                    {/* <input
+                        {/* <input
                       type='file'
                       name='upload_folder'
                       id='upload_folder'
@@ -743,6 +790,8 @@ const UploadDocument = ({
                     >
                       Upload Folder
                     </label> */}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
