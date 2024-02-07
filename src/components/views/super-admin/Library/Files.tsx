@@ -337,9 +337,11 @@ const columns: TableColumn<TableItemData>[] = [
 const UploadDocument = ({
   variant,
   canUpload = true,
+  userType = [],
 }: {
   variant?: string;
   canUpload?: boolean;
+  userType?: string[];
 }) => {
   const {
     getValues,
@@ -416,7 +418,12 @@ const UploadDocument = ({
     data: folderContent,
     refetch: refetchFolderFiles,
     isLoading: isLoadingFolderFiles,
-  } = useGetFolderAndFiles(folderTrail[folderTrail.length - 1]?.id, '', query);
+  } = useGetFolderAndFiles(
+    folderTrail[folderTrail.length - 1]?.id,
+    '',
+    query,
+    userType
+  );
 
   const { data: fileObject, refetch: refetchFile } = useGetFileById(fileId);
 

@@ -8,6 +8,8 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const TeacherLibrary = () => {
   const [tabIdx, setTabIdx] = useState(0);
 
@@ -30,7 +32,7 @@ const TeacherLibrary = () => {
           <div className='h-full flex-1 border-b-[2px] border-[#EDEFF2]' />
         </div>
 
-        {tabIdx === 0 && <Files variant='primary' />}
+        {tabIdx === 0 && <Files variant='primary' userType={['STUDENT']} />}
       </div>
     </div>
   );
