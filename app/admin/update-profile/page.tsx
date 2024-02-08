@@ -4,22 +4,25 @@
 'use client';
 
 import BackButton from '@/components/accordions/BackButton';
+import ConfirmModalContent from '@/components/modal/ConfirmModalContent';
 // import AvrilImage from '~/svg/avril.svg';
 import ControlledModal from '@/components/modal/ControlledModal';
-import DeleteModalContent from '@/components/modal/DeleteModalContent';
+import GeneralModal from '@/components/modals/general-modal';
 import Paginator from '@/components/navigation/Paginator';
 import { BasicSearch } from '@/components/search';
+import ProfileChanges from '@/components/views/admin/Profile/profilechages';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import {
-  useDeleteStudentRequest,
   useGetStudentsUpdateList,
+  useUpdateProfileRequest,
 } from '@/server/institution';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
+import { useSessionStorage } from 'usehooks-ts';
 
 /* eslint-disable unused-imports/no-unused-vars */
 
@@ -74,18 +77,22 @@ import { useDebounce } from 'usehooks-ts';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable unused-imports/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable unused-imports/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const AllProfileUpdateRequests = () => {
+  const [, setProfileChanges] = useSessionStorage(
+    'profile_update_changes',
+    {} as any
+  );
   const [action, setAction] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<string>();
+  const [userType, setUserType] = useState('');
+  const [itemToUpdate, setItemToUpdate] = useState<{
+    userId: string;
+    status: string;
+    id: string;
+  }>();
 
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -103,7 +110,6 @@ const AllProfileUpdateRequests = () => {
     isLoading,
     refetch,
   } = useGetStudentsUpdateList({ ...pagingData });
-  console.log(updateList);
 
   const handleSearch = (value: string) => {
     setQuery(value);
@@ -114,15 +120,15 @@ const AllProfileUpdateRequests = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { mutateAsync } = useDeleteStudentRequest();
+  const { mutateAsync } = useUpdateProfileRequest(userType);
 
-  const handleDelete = async () => {
-    if (itemToDelete) {
+  const handleUpdate = async () => {
+    if (itemToUpdate) {
       try {
         toggleModal();
         setAction(null);
-        const res = await mutateAsync(itemToDelete);
-        toast.success('Student request removed successfully');
+        const res = await mutateAsync(itemToUpdate);
+        toast.success('Update profile successfully');
       } catch (error) {
         logger(error);
       }
@@ -151,11 +157,11 @@ const AllProfileUpdateRequests = () => {
         isOpen={isModalOpen}
         toggleModal={toggleModal}
         content={
-          <DeleteModalContent
-            title='Delete Student Request'
-            body='Are you sure you want to delete this request?'
+          <ConfirmModalContent
+            title='Update Profile '
+            body='Are you sure you want to update this request?'
             toggleModal={toggleModal}
-            handleDelete={handleDelete}
+            handleAction={handleUpdate}
           />
         }
         className='max-w-[777px] w-full h-[267px]'
@@ -199,11 +205,17 @@ const AllProfileUpdateRequests = () => {
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-3'>{item?.userType ?? 'N/A'}</div>
+                <div className='col-span-3 uppercase'>
+                  {item?.user?.type ?? 'N/A'}
+                </div>
 
                 <div className='col-span-3'>
                   <Link
-                    href={`/admin/student?id=${item?.userId}`}
+                    href={`/admin/${
+                      item?.user?.type.toLowerCase() === 'student'
+                        ? 'student'
+                        : 'staff'
+                    }?id=${item?.userId}`}
                     className='text-blue-500'
                   >
                     View Profile
@@ -211,7 +223,16 @@ const AllProfileUpdateRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  <button className='text-blue-500'>View Changes</button>
+                  <GeneralModal body={<ProfileChanges />}>
+                    <button
+                      className='text-blue-500'
+                      onClick={() => {
+                        setProfileChanges(item?.dto);
+                      }}
+                    >
+                      View Changes
+                    </button>
+                  </GeneralModal>
                 </div>
 
                 <div className='col-span-1'> {item?.status || 'N/A'} </div>
@@ -226,16 +247,37 @@ const AllProfileUpdateRequests = () => {
                     <BsThreeDotsVertical />
                     {action == idx + 1 && (
                       <div className='shadow-lg rounded-xl bg-white w-[140px] h-max absolute top-0 -left-[150px] z-10'>
-                        <span
-                          // href={`/super-admin/student?id=${item.id}`}
-                          className='p-4 hover:bg-gray-200 w-full block'
-                        >
-                          DENY
-                        </span>
                         <button
                           onClick={() => {
-                            setItemToDelete(item.id);
+                            setItemToUpdate({
+                              userId: item.userId,
+                              status: 'DECLINED',
+                              id: item.id,
+                            });
                             toggleModal();
+                            setUserType(
+                              item?.user?.type.toLowerCase() === 'student'
+                                ? 'student'
+                                : 'staff'
+                            );
+                          }}
+                          className='p-4 hover:bg-gray-200 w-full'
+                        >
+                          DENY
+                        </button>
+                        <button
+                          onClick={() => {
+                            setItemToUpdate({
+                              userId: item.userId,
+                              status: 'APPROVED',
+                              id: item.id,
+                            });
+                            toggleModal();
+                            setUserType(
+                              item?.user?.type.toLowerCase() === 'student'
+                                ? 'student'
+                                : 'staff'
+                            );
                           }}
                           className='p-4 hover:bg-gray-200 w-full'
                         >

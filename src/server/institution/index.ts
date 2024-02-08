@@ -306,7 +306,7 @@ export function useGetStudentsListByInstitution(
 }
 export function useGetStudentsUpdateList(params: StudentsListByInstitution) {
   const query = useQuery({
-    queryKey: 'get_student_update_list',
+    queryKey: 'get_request_update_list',
     queryFn: async () => {
       try {
         const d = await request.get(
@@ -328,6 +328,30 @@ export function useGetStudentsUpdateList(params: StudentsListByInstitution) {
     refetch({ cancelRefetch: true });
   }, [params?.limit, params?.page, params?.query, refetch]);
   return query;
+}
+export function useUpdateProfileRequest(userType: string) {
+  const client = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: 'update-profile',
+    mutationFn: (params: any) => {
+      return request.patch(
+        `${
+          userType === 'staff'
+            ? '/v1/government/teachers/review-update-staff'
+            : '/v1/government/students/review-update-student'
+        }`,
+        params,
+        {
+          withCredentials: true,
+        }
+      );
+    },
+    onSettled: () => {
+      client.refetchQueries('get_request_update_list');
+    },
+  });
+  return mutation;
 }
 
 export function useGetParents(params: Partial<StudentsListByInstitution>) {

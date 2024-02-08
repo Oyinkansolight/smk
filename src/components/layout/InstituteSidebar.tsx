@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { BiExit, BiUserVoice } from 'react-icons/bi';
 import { BsMessenger } from 'react-icons/bs';
+import { FaUserEdit } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { toast } from 'react-toastify';
 import Company from '~/svg/company.svg';
@@ -118,11 +119,23 @@ const InstituteSidebar = ({
             setOpen(false);
           }}
           open={open}
-          icon={<BsMessenger className='#C3CAD9' />}
+          icon={<BsMessenger className='text-[#C3CAD9]' />}
           title='Communication'
           href='/admin/all-communication'
           active={
             routeDetails && routeDetails.includes('all-communication') && true
+          }
+        />
+        <SideBarButton
+          onClick={() => {
+            setOpen(false);
+          }}
+          open={open}
+          icon={<FaUserEdit className='text-[#C3CAD9]' />}
+          title='Profile Request'
+          href='/admin/update-profile'
+          active={
+            routeDetails && routeDetails.includes('update-profile') && true
           }
         />
         <SideBarButton
@@ -156,8 +169,9 @@ const InstituteSidebar = ({
           )}
         >
           <div
-            className={` ${open ? ' justify-between px-2' : 'justify-center'
-              } flex w-full items-center gap-[14.25px] `}
+            className={` ${
+              open ? ' justify-between px-2' : 'justify-center'
+            } flex w-full items-center gap-[14.25px] `}
           >
             <div className='flex items-center justify-center space-x-2'>
               <BiExit className={clsxm('fill-red-500 w-6 h-6')} />
@@ -246,8 +260,9 @@ export const SideBarButton = ({
     )}
   >
     <div
-      className={` ${open ? ' justify-between px-2' : 'justify-center'
-        } flex w-full items-center gap-[14.25px] `}
+      className={` ${
+        open ? ' justify-between px-2' : 'justify-center'
+      } flex w-full items-center gap-[14.25px] `}
     >
       <div className='flex items-center justify-center space-x-2'>
         {icon}
