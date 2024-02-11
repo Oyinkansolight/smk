@@ -21,12 +21,12 @@ export default function ProfileChanges({ closeModal }: AddSubjectViewProps) {
                 <h5 className='font-semibold text-gray-500 my-4 capitalize'>
                   {key}
                 </h5>
-                {renderObject(value)}
+                {renderObject(value ?? {})}
               </div>
             ) : (
               <p>
                 <span className='font-medium capitalize'>{key}:</span>{' '}
-                <span>{value as string}</span>
+                <span>{value as unknown as string}</span>
               </p>
             )}
           </li>

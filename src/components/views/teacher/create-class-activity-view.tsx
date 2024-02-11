@@ -505,7 +505,7 @@ export default function CreateClassActivityView({
             )}
             {subjectiveType === 2 && (
               <div className='border rounded-2xl h-40 '>
-                <div className='grid grid-cols-3  border-b divide-x'>
+                <div className='grid grid-cols-3  border-b divide-x cursor-pointer'>
                   <div
                     onClick={() => {
                       setFileType('picture');

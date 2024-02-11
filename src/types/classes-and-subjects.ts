@@ -187,6 +187,13 @@ export interface StudentResult {
   agregates: Agregates;
   subjectResults: SubjectResults;
   domains: any[];
+  attendanceReport: {
+    PRESENT: number;
+    ABSENT: number;
+    LATE: number;
+    totalClassOpened: number;
+    average: number;
+  };
 }
 
 export interface Agregates {
@@ -195,6 +202,8 @@ export interface Agregates {
   studentTotalExamScore: number;
   classTotalExamScore: number;
   studentAverageExamScore: number;
+  noOfSubjectsPassed: number;
+  noOfSubjectsFailed: number;
 }
 
 export interface SubjectResults {

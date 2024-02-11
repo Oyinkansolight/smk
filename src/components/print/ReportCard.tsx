@@ -6,11 +6,29 @@ import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
-import { Agregates, SubjectResults } from '@/types/classes-and-subjects';
+import {
+  Agregates,
+  StudentResult,
+  SubjectResults,
+} from '@/types/classes-and-subjects';
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
 import { ImImage } from 'react-icons/im';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -62,10 +80,12 @@ const PrintedReportCard = ({
   domains,
   subjectResults,
   agregates,
+  attendanceReport,
 }: {
   domains: any[] | undefined;
   subjectResults: SubjectResults | undefined;
   agregates: Agregates | undefined;
+  attendanceReport: StudentResult['attendanceReport'] | undefined;
 }) => {
   const handlePrint = () => {
     window.print();
@@ -108,7 +128,11 @@ const PrintedReportCard = ({
         />
 
         <span className='mt-[3px] mb-1'>
-          <BioData user={user} agregates={agregates} />
+          <BioData
+            user={user}
+            agregates={agregates}
+            attendanceReport={attendanceReport}
+          />
         </span>
 
         <div className='grid grid-cols-2 grid-flow-col gap-[6px]'>
@@ -222,9 +246,11 @@ const RowItem = ({ title, value, capitalizeValue }: RowItemProps) => (
 const BioData = ({
   user,
   agregates,
+  attendanceReport,
 }: {
   user: any;
   agregates: Agregates | undefined;
+  attendanceReport: StudentResult['attendanceReport'] | undefined;
 }) => {
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
@@ -279,10 +305,22 @@ const BioData = ({
 
         <th>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='NO OF TIMES SCHOOL OPENED' value='N/A' />
-            <RowItem title='NO OF TIMES PRESENT' value='N/A' />
-            <RowItem title='NO OF TIMES ABSENT' value='N/A' />
-            <RowItem title='ATTENDANCE AVERAGE' value='N/A' />
+            <RowItem
+              title='NO OF TIMES SCHOOL OPENED'
+              value={attendanceReport?.totalClassOpened ?? 'N/A'}
+            />
+            <RowItem
+              title='NO OF TIMES PRESENT'
+              value={attendanceReport?.PRESENT ?? 'N/A'}
+            />
+            <RowItem
+              title='NO OF TIMES ABSENT'
+              value={attendanceReport?.ABSENT ?? 'N/A'}
+            />
+            <RowItem
+              title='ATTENDANCE AVERAGE'
+              value={`${attendanceReport?.average}%` ?? 'N/A'}
+            />
           </div>
         </th>
       </tr>
@@ -861,7 +899,12 @@ const Overview = ({
         title='position in class:'
         value={`${subjectResults && (subjectResults?.classPosition ?? 'N/A')}`}
       />
-      <SingleItem title='passes/failed:' value='N/A/N/A' />
+      <SingleItem
+        title='passes/failed:'
+        value={`${agregates?.noOfSubjectsPassed ?? 'N/A'}/${
+          agregates?.noOfSubjectsFailed ?? 'N/A'
+        }`}
+      />
     </div>
   );
 };

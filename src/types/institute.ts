@@ -39,6 +39,7 @@ export interface Student {
   height?: string;
   weight?: string;
   profileImg?: string;
+  uniqueId?: string;
   parentName?: string;
   readingProficiency?: string;
   parentOccupation?: string;
@@ -117,6 +118,7 @@ export interface Staff {
   address?: string;
   lastName?: string;
   firstName?: string;
+  uniqueId?: string;
   middleName?: string;
   nextOfKin?: string;
   staffType?: string;

@@ -3,6 +3,10 @@ import GenericChart from '@/components/cards/GenericChart';
 import { BarChart } from '@/components/charts';
 import AttendanceRate from '@/components/charts/AttendanceRate';
 import EnrolmentAnalysis from '@/components/charts/EnrolmentAnalysis';
+import LessonTaskCreated from '@/components/charts/LessonTaskCreated';
+import LessonTaskRateAssignment from '@/components/charts/LessonTaskRateAssignment';
+import LessonTaskRateClasswork from '@/components/charts/LessonTaskRateClasswork';
+import LessonTaskRateQuiz from '@/components/charts/LessonTaskRateQuiz';
 import SuperGenderDistribution from '@/components/charts/SuperGenderDistribution';
 import ChartSkeleton from '@/components/skeletons/Chart';
 import EventCalendarTable from '@/components/tables/EventCalendarTable';
@@ -97,6 +101,26 @@ const SuperAdminCharts = ({
                 <AttendanceRate data={chartData?.attendanceRate} showLink />
               }
             />
+            <GenericChart
+              title='Lesson Task Created'
+              className='border-[#E6FFF7]'
+              titleClassName='bg-[#E6FFF7]'
+              description='Total number of weekly task available in the state.'
+              content={
+                <LessonTaskCreated data={chartData?.lessonTaskCreated} />
+              }
+            />
+            <GenericChart
+              title='Assignment Submission Rate'
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Total Number of Weekly Assignment Submission Rate'
+              content={
+                <LessonTaskRateAssignment
+                  data={chartData?.lessonTaskSubmissions}
+                />
+              }
+            />
 
             {/* <GenericChart
               title='Gender Distribution'
@@ -137,6 +161,17 @@ const SuperAdminCharts = ({
               description='Recent events across institutions/state/country'
               content={<EventCalendarTable data={chartData.events} />}
             />
+            <GenericChart
+              title='Classwork Submission Rate'
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Total Number of Weekly Classwork Submission Rate'
+              content={
+                <LessonTaskRateClasswork
+                  data={chartData?.lessonTaskSubmissions}
+                />
+              }
+            />
           </div>
 
           <div className='flex flex-col gap-y-7'>
@@ -176,6 +211,15 @@ const SuperAdminCharts = ({
                 <SuperTransferRequestsTable
                   data={[...chartData.studentTransferRequests]}
                 />
+              }
+            />
+            <GenericChart
+              title='Quiz Submission Rate'
+              titleClassName='bg-[#EDF5F2]'
+              className='border-[#EDF5F2]'
+              description='Total Number of Weekly Quiz Submission Rate'
+              content={
+                <LessonTaskRateQuiz data={chartData?.lessonTaskSubmissions} />
               }
             />
           </div>

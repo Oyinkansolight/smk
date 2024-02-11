@@ -24,6 +24,7 @@ const ViewReportCard = () => {
       domains={reportCard?.domains}
       subjectResults={reportCard?.subjectResults}
       agregates={reportCard?.agregates}
+      attendanceReport={reportCard?.attendanceReport}
     />
   );
 };

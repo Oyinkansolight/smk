@@ -335,7 +335,7 @@ export function useUpdateProfileRequest(userType: string) {
   const mutation = useMutation({
     mutationKey: 'update-profile',
     mutationFn: (params: any) => {
-      return request.patch(
+      return request.post(
         `${
           userType === 'staff'
             ? '/v1/government/teachers/review-update-staff'

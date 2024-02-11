@@ -17,12 +17,35 @@ import {
   useGetStudentsUpdateList,
   useUpdateProfileRequest,
 } from '@/server/institution';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 import { useSessionStorage } from 'usehooks-ts';
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable unused-imports/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable unused-imports/no-unused-vars */
 
@@ -89,8 +112,7 @@ const AllProfileUpdateRequests = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userType, setUserType] = useState('');
   const [itemToUpdate, setItemToUpdate] = useState<{
-    userId: string;
-    status: string;
+    status: 'PENDING' | 'GRANTED' | 'DENIED';
     id: string;
   }>();
 
@@ -210,16 +232,16 @@ const AllProfileUpdateRequests = () => {
                 </div>
 
                 <div className='col-span-3'>
-                  <Link
-                    href={`/admin/${
-                      item?.user?.type.toLowerCase() === 'student'
-                        ? 'student'
-                        : 'staff'
-                    }?id=${item?.userId}`}
-                    className='text-blue-500'
-                  >
-                    View Profile
-                  </Link>
+                  <GeneralModal body={<ProfileChanges />}>
+                    <button
+                      className='text-blue-500'
+                      onClick={() => {
+                        setProfileChanges(item?.user);
+                      }}
+                    >
+                      View Profile
+                    </button>
+                  </GeneralModal>
                 </div>
 
                 <div className='col-span-3'>
@@ -250,8 +272,7 @@ const AllProfileUpdateRequests = () => {
                         <button
                           onClick={() => {
                             setItemToUpdate({
-                              userId: item.userId,
-                              status: 'DECLINED',
+                              status: 'DENIED',
                               id: item.id,
                             });
                             toggleModal();
@@ -268,8 +289,7 @@ const AllProfileUpdateRequests = () => {
                         <button
                           onClick={() => {
                             setItemToUpdate({
-                              userId: item.userId,
-                              status: 'APPROVED',
+                              status: 'GRANTED',
                               id: item.id,
                             });
                             toggleModal();
