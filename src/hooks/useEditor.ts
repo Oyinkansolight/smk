@@ -7,7 +7,7 @@ import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
-const useCustomEditor = () => {
+const useCustomEditor = (initialContent = '') => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -18,7 +18,7 @@ const useCustomEditor = () => {
       Highlight,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
-    content: '',
+    content: initialContent,
   });
 
   return editor;

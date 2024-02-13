@@ -36,8 +36,6 @@ const LessonTaskCreated = ({ data }) => {
         margin={{ top: 0, right: 30, bottom: 60, left: 60 }}
         valueScale={{ type: 'linear' }}
         colors={(p) => {
-          console.log(p.id);
-          console.log(p.data);
           return p.data[`${p.id}Color` as string];
         }}
         layout='vertical'

@@ -80,7 +80,7 @@ export default function MultiChoiceQuestion({
               <Input
                 placeholder='2'
                 label=''
-                formValue=''
+                formValue={value?.score ?? ''}
                 inputClassName='min-w-[19rem]'
                 setFormValue={(v) => {
                   onChange({ ...value, score: v as number });
