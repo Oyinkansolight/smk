@@ -5,7 +5,7 @@ import { PaginationParams } from '@/types';
 import { Class } from '@/types/classes-and-subjects';
 import { InstituteClass, InstituteClassArmsParams } from '@/types/institute';
 import { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 export function useGetInstituteClass(
   // subjectId: string,
@@ -123,3 +123,26 @@ export function useGetAllClasses() {
   });
   return query;
 }
+export function usePromoteStudent() {
+  const mutation = useMutation({
+    mutationKey: 'promote_student',
+    mutationFn: async (params: {
+      fromClassArmId: string;
+      only: string[];
+      except?: string[];
+      toClassArmId: string;
+    }) =>
+      (
+        await request.patch(
+          `/v1/government/students/promote-students`,
+          params,
+          {
+            withCredentials: true,
+          }
+        )
+      ).data.data.data,
+  });
+  return mutation;
+}
+
+// v1/government/students/promote-students
