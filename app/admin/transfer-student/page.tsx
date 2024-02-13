@@ -5,22 +5,19 @@ import BackButton from '@/components/accordions/BackButton';
 import Success from '@/components/modal/Success';
 import Stepper from '@/components/stepper';
 import Details from '@/components/views/admin/TransferStudent/Details';
-import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
 import {
   useCreateStudentTransfer,
-  useGetSchools,
   useGetStudentsListByInstitution,
-  useGetTeachersListByInstitution,
 } from '@/server/institution';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { RotatingLines } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

@@ -5,6 +5,8 @@ import GenericLoader from '@/components/layout/Loader';
 import PaginatedCounter from '@/components/layout/PaginatedCounter';
 import TextTabBar from '@/components/layout/TextTabBar';
 import EmptyView from '@/components/misc/EmptyView';
+import GeneralModal from '@/components/modals/general-modal';
+import EditClassActivity from '@/components/views/teacher/edit-class-activity-view';
 import clsxm from '@/lib/clsxm';
 import { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
@@ -14,6 +16,7 @@ import {
   GetClassActivity,
   useGetClassActivity,
 } from '@/server/institution/lesson-note';
+import { IEditClassActivity } from '@/types/teacher';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -38,8 +41,33 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default function Page() {
   const router = useRouter();
+  const [itemToView, setItemToView] = useState<IEditClassActivity>();
   const [idx, setIdx] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState('');
@@ -258,6 +286,8 @@ export default function Page() {
                     href={activityPath()}
                     key={i}
                     idx={i}
+                    activity={activity}
+                    setItemToView={setItemToView}
                   />
                 </div>
               );
@@ -285,6 +315,8 @@ function LessonTaskListItem({
   dateCreated,
   href,
   idx,
+  activity,
+  setItemToView,
 }: {
   isOfflineSubmission?: boolean;
   href: string;
@@ -294,6 +326,8 @@ function LessonTaskListItem({
   dueDate: Date;
   dateCreated: Date;
   idx: number;
+  activity: any;
+  setItemToView: (v: IEditClassActivity) => void;
 }) {
   const [action, setAction] = useState<number | null>(null);
 
@@ -330,28 +364,28 @@ function LessonTaskListItem({
         <button
           onClick={() => {
             setAction(idx + 1);
+            setItemToView(activity);
           }}
           className='relative'
         >
           <FaEllipsisV className='h-6 w-6' />
           {action == idx + 1 && (
-            <div className='shadow-lg rounded-xl bg-white w-[140px] text-left h-max absolute top-0 -left-[150px] z-10'>
+            <div className='shadow-lg rounded-xl bg-white w-[140px] flex flex-col h-max absolute top-0 -left-[150px] z-10'>
               <Link href={href} className='p-4 hover:bg-gray-200 w-full block'>
                 View Submission
               </Link>
-              <button
-                onClick={() => {
-                  console.log('Loif');
-                }}
-                className='p-4 hover:bg-gray-200 w-full'
-              >
-                Edit/View
-              </button>
+
+              <GeneralModal body={<EditClassActivity activity={activity} />}>
+                <button className='p-4 hover:bg-gray-200 w-full text-left'>
+                  Edit/View
+                </button>
+              </GeneralModal>
+
               <button
                 onClick={() => {
                   console.log('Delete');
                 }}
-                className='p-4 hover:bg-gray-200 text-red-500 w-full'
+                className='p-4 hover:bg-gray-200 text-red-500 w-full text-left'
               >
                 Delete
               </button>

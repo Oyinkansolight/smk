@@ -3,19 +3,18 @@
 import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
 
-const SuperGenderDistribution = ({ data }) => {
+const LessonTaskCreated = ({ data }) => {
+  const colorScheme = ['#5754F7', '#35CFFF', '#E5A500'];
   const dataKeys = Object.keys(data ?? {});
-  const parsedData = dataKeys.map((item) => ({
-    staffColor: '#5754F7',
-    studentColor: '#35CFFF',
-    staff: data[item].staff,
-    student: data[item].student,
-    gender: item[0].toUpperCase(),
+  const parsedData = dataKeys.map((item, idx) => ({
+    [`${item.toLowerCase()}Color`]: colorScheme[idx],
+    [`${item.toLowerCase()}`]: data[item], // classwork or quiz or assignment
+    lesson_task: item[0].toUpperCase(),
   }));
   // #E5A500
 
   const totalSum = dataKeys.reduce((acc, curr) => {
-    return acc + data[curr].student + data[curr].staff;
+    return acc + data[curr];
   }, 0);
 
   const isEmpty =
@@ -28,16 +27,15 @@ const SuperGenderDistribution = ({ data }) => {
   return (
     <div className='h-80'>
       <ResponsiveBar
-        padding={0.3}
-        indexBy='gender'
+        padding={0.2}
+        indexBy='lesson_task'
         innerPadding={5}
         data={parsedData}
         groupMode='grouped'
-        keys={['student', 'staff']}
+        keys={['assignment', 'quiz', 'class_work']}
         margin={{ top: 0, right: 30, bottom: 60, left: 60 }}
         valueScale={{ type: 'linear' }}
         colors={(p) => {
-          // console.log(p.data[`${p.id}Color`]);
           return p.data[`${p.id}Color` as string];
         }}
         layout='vertical'
@@ -84,4 +82,4 @@ const SuperGenderDistribution = ({ data }) => {
   );
 };
 
-export default SuperGenderDistribution;
+export default LessonTaskCreated;

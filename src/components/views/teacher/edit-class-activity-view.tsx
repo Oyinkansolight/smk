@@ -20,8 +20,10 @@ import {
   useCreateClassActivity,
   useCreateLessonNote,
 } from '@/server/institution/lesson-note';
+import { IEditClassActivity } from '@/types/teacher';
+import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { MdDelete } from 'react-icons/md';
 import ReactSelect from 'react-select';
@@ -40,34 +42,40 @@ export const ACTIVITY_TYPES = [
 ] as const;
 
 export const activityTypes = [
-  { key: 'ASSIGNMENT', value: 'Assignment' },
-  { key: 'CLASS_WORK', value: 'Class Work' },
-  { key: 'QUIZ', value: 'Pop Quiz' },
-  { key: 'LESSON_NOTE', value: 'Lesson Note' },
+  { label: 'ASSIGNMENT', value: 'Assignment' },
+  { label: 'CLASS_WORK', value: 'Class Work' },
+  { label: 'QUIZ', value: 'Pop Quiz' },
+  { label: 'LESSON_NOTE', value: 'Lesson Note' },
 ];
 
 const activityFormats = [
-  { key: 'MULTIPLE_CHOICE', value: 'Multiple Choice' },
-  { key: 'SUBJECTIVE', value: 'Subjective' },
+  { label: 'MULTIPLE_CHOICE', value: 'Multiple Choice' },
+  { label: 'SUBJECTIVE', value: 'Subjective' },
 ];
 
 interface CreateClassActivityViewProps {
-  closeModal: () => void;
+  closeModal?: () => void;
+  activity: IEditClassActivity;
 }
 
-export default function CreateClassActivityView({
+export default function EditClassActivity({
   closeModal,
+  activity,
 }: CreateClassActivityViewProps) {
   const params = useSearchParams();
   const classArmId = params?.get('classArmId');
-  const editor = useCustomEditor();
+  const editor = useCustomEditor(
+    activity?.format === activityFormats[1].label
+      ? activity?.questionsV2[0].question
+      : ''
+  );
   const { register, watch, handleSubmit, getValues, setValue, control } =
     useForm({
       mode: 'all',
       reValidateMode: 'onChange',
     });
-  const format = watch('format')?.label;
-  const type = watch('typeOfActivity')?.label;
+  const format = watch('format')?.value;
+  const type = watch('typeOfActivity')?.value;
   const [subjectiveType, setSubjectiveType] = useState(0);
   const [fileType, setFileType] = useState<
     'pdf' | 'video' | 'picture' | 'video_url'
@@ -85,8 +93,6 @@ export default function CreateClassActivityView({
     {} as CreateClassActivityParams
   );
 
-  console.log(getValues('lesson-note-file-upload'));
-
   const handleAddToGradeList = () => {
     setAddToGradeList(!addToGradeList);
   };
@@ -95,11 +101,60 @@ export default function CreateClassActivityView({
     setIsOnline(!isOnline);
   };
 
+  useEffect(() => {
+    setValue(
+      'typeOfActivity',
+      activityTypes.find((item) => {
+        if (activity?.typeOfActivity === item.label) {
+          return item;
+        }
+      })
+    );
+    setValue(
+      'format',
+      activityFormats.find((item) => {
+        if (activity?.format === item.label) {
+          return item;
+        }
+      })
+    );
+    setValue('dueDate', moment(activity?.dueDate).format('YYYY-MM-DD'));
+
+    const uploadedQuestion: any[] = [];
+
+    (activity?.questionsV2 ?? []).map((v) => {
+      uploadedQuestion.push({
+        question: v.question,
+        options: v.options,
+        correctOption: v?.correctOption ?? v?.options?.[0],
+        score: v.score,
+      });
+    });
+    setQuestions(uploadedQuestion);
+
+    if (
+      activity?.typeOfActivity === activityTypes[1].label ||
+      activity?.typeOfActivity === activityTypes[2].label
+    ) {
+      setValue(
+        'timeLimit',
+        ['15 Mins', '30 Mins', '45 Mins', '1 Hour'].find((item) => {
+          if (activity?.timeLimit === item) {
+            return {
+              value: item,
+              label: item,
+            };
+          }
+        })
+      );
+    }
+  }, []);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     if (
       type !== activityTypes[3]?.value &&
-      data?.format?.value === activityFormats[0].key
+      data?.format?.value === activityFormats[0].value
     ) {
       questions.forEach((v) => {
         if (!v.question) {
@@ -128,7 +183,7 @@ export default function CreateClassActivityView({
 
     if (
       type !== activityTypes[3].value &&
-      data.format.value === activityFormats[1].key
+      data.format.value === activityFormats[1].value
     ) {
       if (editor?.getHTML() === '' || editor?.getHTML() === '<p></p>') {
         toast.error('Please fill all questions');
@@ -140,7 +195,7 @@ export default function CreateClassActivityView({
 
     if (
       type !== activityTypes[3].value &&
-      data.format.value === activityFormats[0].key
+      data.format.value === activityFormats[0].value
     ) {
       questionsV2 = questions.map((v) => ({
         question: v.question,
@@ -151,7 +206,7 @@ export default function CreateClassActivityView({
 
     if (
       type !== activityTypes[3].value &&
-      data.format.value === activityFormats[1].key
+      data.format.value === activityFormats[1].value
     ) {
       questionsV2 = [
         {
@@ -181,7 +236,6 @@ export default function CreateClassActivityView({
           environment
         );
       }
-      console.log(type);
 
       if (type === activityTypes[3].value) {
         const payload: CreateLessonNoteTypes = {
@@ -208,7 +262,7 @@ export default function CreateClassActivityView({
         toast.success(res.data.data.message);
         setIsLoading(false);
 
-        closeModal();
+        closeModal && closeModal();
       } else if (
         type === activityTypes[1].value ||
         type === activityTypes[2].value
@@ -227,7 +281,7 @@ export default function CreateClassActivityView({
           addToGradeList,
         });
         toast.success(res.data.data.message);
-        closeModal();
+        closeModal && closeModal();
       } else {
         const res = await create.mutateAsync({
           ...data,
@@ -240,7 +294,7 @@ export default function CreateClassActivityView({
           addToGradeList,
         });
         toast.success(res.data.data.message);
-        closeModal();
+        closeModal && closeModal();
       }
     } catch (error) {
       toast.error(getErrMsg(error));
@@ -250,7 +304,7 @@ export default function CreateClassActivityView({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='flex flex-col gap-4'>
-        <div className='text-2xl font-bold my-4'>Add Lesson Task</div>
+        <div className='text-2xl font-bold my-4'>Edit Lesson Task</div>
         <div className='grid grid-cols-2 gap-2'>
           <div>
             <div className='font-bold text-xs pb-1'>Type of Activity</div>
@@ -262,9 +316,17 @@ export default function CreateClassActivityView({
                   <ReactSelect
                     {...field}
                     options={activityTypes.map((v) => ({
-                      value: v.key,
+                      value: v.label,
                       label: v.value,
                     }))}
+                    defaultValue={activityTypes.map((item) => {
+                      if (activity?.typeOfActivity === item.label) {
+                        return {
+                          value: item.value,
+                          label: item.label,
+                        };
+                      }
+                    })}
                   />
                 );
               }}
@@ -295,9 +357,17 @@ export default function CreateClassActivityView({
                       {...field}
                       required
                       options={activityFormats.map((v) => ({
-                        value: v.key,
+                        value: v.label,
                         label: v.value,
                       }))}
+                      defaultValue={activityFormats.map((item) => {
+                        if (activity?.format === item.label) {
+                          return {
+                            value: item.value,
+                            label: item.label,
+                          };
+                        }
+                      })}
                     />
                   );
                 }}
@@ -604,13 +674,13 @@ export default function CreateClassActivityView({
           </div>
         )}
         <div className='flex flex-row justify-end'>
-          <Button
+          {/* <Button
             variant='secondary'
             className='flex justify-center w-full max-w-[160px] h-10 bg-[#1A8FE3]'
             type='submit'
           >
             {isLoading ? 'Submitting...' : 'Submit '}
-          </Button>
+          </Button> */}
         </div>
       </div>
     </form>

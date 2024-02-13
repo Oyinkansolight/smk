@@ -35,6 +35,8 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const [tabIdx, setTabIdx] = useState(0);
   const [gridTabIdx, setGridTabIdx] = useState(0);
@@ -117,7 +119,7 @@ const Page = () => {
           (student?.user ?? [])[0]?.lastName ?? ''
         }`}
         school={student?.institution?.instituteName ?? ''}
-        id={student?.id || ''}
+        id={student?.uniqueId || ''}
         student
         showAcademicYear
         currentGridIdx={gridTabIdx}

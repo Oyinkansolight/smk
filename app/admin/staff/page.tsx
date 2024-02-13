@@ -39,6 +39,8 @@ import { toast } from 'react-toastify';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const Page = () => {
   const router = useRouter();
   const currentSessionId: string =
@@ -214,7 +216,7 @@ const Page = () => {
         image={url}
         name={teacherName}
         school={staff?.institution?.instituteName ?? ''}
-        id={staff?.oracleNumber ?? staff?.staffId}
+        id={staff?.oracleNumber ?? staff?.uniqueId}
         student={false}
         showAcademicYear
         currentGridIdx={gridTabIdx}
