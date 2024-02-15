@@ -1051,7 +1051,7 @@ export function useGetSubjectAssignedToTeacher(
 // ?userId=${userId}
 export function useGetSingleTeacherAttendanceLog(params) {
   const query = useQuery({
-    queryKey: ['get_Single_teacher_log_list', params.page],
+    queryKey: ['get_Single_teacher_log_list', params.page, params.userId],
     queryFn: async () => {
       try {
         const d = await request.get(`/v1/institutions/clock/list-clock-in`, {

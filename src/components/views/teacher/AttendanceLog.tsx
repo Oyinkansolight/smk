@@ -21,8 +21,8 @@ export default function AttendanceLog({ userId }: { userId?: string }) {
       <div className='layout h-full'>
         <div className='flex flex-col bg-white max-h-fit'>
           <div className='w-full'>
-            <div className='font-bold py-8 px-4 md:text-3xl text-xl'>
-              Attendance History
+            <div className='py-8 px-4 '>
+              <h2 className='md:text-2xl text-xl'> Attendance History</h2>
               <div className='h-px bg-gray-500 mt-[22px] mb-4 flex flex-wrap ' />
               {attendanceLog && attendanceLog?.data?.length > 0 && (
                 <div>
