@@ -1049,16 +1049,16 @@ export function useGetSubjectAssignedToTeacher(
   return query;
 }
 // ?userId=${userId}
-export function useGetSingleTeacherAttendanceLog(userId: string) {
+export function useGetSingleTeacherAttendanceLog(params) {
   const query = useQuery({
-    queryKey: 'get_teacher_log_list',
+    queryKey: ['get_Single_teacher_log_list', params.page, params.userId],
     queryFn: async () => {
       try {
-        const d = await request.get(
-          `/v1/institutions/clock/list-clock-in?userId=${userId}`
-        );
+        const d = await request.get(`/v1/institutions/clock/list-clock-in`, {
+          params,
+        });
 
-        return d.data.data.data.data as TeachersLog[];
+        return d.data.data.data;
       } catch (error) {
         logger(error);
         throw error;

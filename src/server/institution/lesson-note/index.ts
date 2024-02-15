@@ -181,36 +181,34 @@ export interface GetClassActivity {
 
 export function useGetClassActivity(params: GetClassActivity) {
   const query = useQuery({
-    queryKey: 'get_class_activity',
-    queryFn: async () =>
+    queryKey: [
+      'get_class_activity',
+      params.classArmId,
+      params.sessionId,
+      params.termId,
+      params.typeOfActivity,
+      params.page,
+      params.dir,
+      params.query,
+    ],
+    enabled: !!(
       params.classArmId &&
       params.sessionId &&
       params.termId &&
       params.typeOfActivity
-        ? ((
-            await request.get(
-              // `/v1/institutions/lessons/get-class-class-activty`,
-              `/v1/institutions/lessons/get-teacher-class-activty`,
-              {
-                params,
-              }
-            )
-          ).data.data.data as PaginatedData<ClassActivity1>)
-        : undefined,
+    ),
+    queryFn: async () =>
+      (
+        await request.get(
+          // `/v1/institutions/lessons/get-class-class-activty`,
+          `/v1/institutions/lessons/get-teacher-class-activty`,
+          {
+            params,
+          }
+        )
+      ).data.data.data as PaginatedData<ClassActivity1>,
   });
-  const { refetch } = query;
-  useEffect(() => {
-    refetch({ cancelRefetch: true });
-  }, [
-    params.classArmId,
-    params.sessionId,
-    params.termId,
-    params.typeOfActivity,
-    params.page,
-    params.dir,
-    params.query,
-    refetch,
-  ]);
+
   return query;
 }
 

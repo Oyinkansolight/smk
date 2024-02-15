@@ -1,6 +1,5 @@
 'use client';
 
-import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/Classprofile';
 import TabBar from '@/components/layout/TabBar';
 import StudentList from '@/components/views/admin/Class/studentList';
@@ -8,10 +7,7 @@ import StudentLibrary from '@/components/views/single-student/StudentLibrary';
 import SubjectList from '@/components/views/student.tsx/ClassSubjectList';
 import ExamTimetable from '@/components/views/student.tsx/Examtimetable';
 import { getFromLocalStorage } from '@/lib/helper';
-import {
-  useGetClassArmInfo,
-  useGetInstituteClassArms,
-} from '@/server/institution/class';
+import { useGetClassArmInfo } from '@/server/institution/class';
 import { useGetClassArmStudents } from '@/server/institution/class-arm';
 // import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useSearchParams } from 'next/navigation';
@@ -33,21 +29,6 @@ const Page = () => {
   const { data: getInstitutionStudents } = useGetClassArmStudents({
     classArmId: classArmId,
   });
-
-  const [pagingData, setPagingData] = useState<any>({
-    page: 1,
-    limit: 100,
-
-    institutionId,
-    currentSessionId,
-  });
-
-  const {
-    data: allClasses,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetInstituteClassArms({ ...pagingData });
 
   return (
     <div className='flex md:flex-row flex-col'>
@@ -112,41 +93,7 @@ const Page = () => {
           {tabIdx === 2 && (
             <SubjectList studentSubjectsList={classArmInfo?.subjects} />
           )}
-          {tabIdx === 3 && (
-            <div>
-              <p className='mb-4'>Class to transfer student to:</p>
-              <div className='md:w-1/2 w-full'>
-                {allClasses && allClasses?.data.length > 0 ? (
-                  <select
-                    name='promote'
-                    id='promote'
-                    className='rounded-md w-full outline-none border-none focus:ring-0'
-                  >
-                    {allClasses?.data?.map((item: any, key: number) => (
-                      <option value={item.id} key={key}>
-                        {`${item.class.name} ${item.arm}`}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <div className='py-10 text-center'>No Class Arm Found</div>
-                )}
-              </div>
-              <p className='my-4'>Student List</p>
-              <div className='w-full max-h-[600px] overflow-y-auto'>
-                {getInstitutionStudents?.map((student, key) => (
-                  <div className='flex space-x-2 items-center' key={key}>
-                    <input type='checkbox' name='' id='' />
-                    <p>{`${student.firstName} ${student.lastName}`}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className='flex justify-center w-1/2 mt-5'>
-                <Button variant='secondary'> Promote Selected Children</Button>
-              </div>
-            </div>
-          )}
+          {tabIdx === 3 && <StudentList PromotionTab classArmId={classArmId} />}
         </div>
       )}
 
