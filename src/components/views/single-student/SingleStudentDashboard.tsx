@@ -3,7 +3,7 @@
 import Button from '@/components/buttons/Button';
 import StudentTeacherProfileCard from '@/components/cards/StudentTeacher';
 import TabBar from '@/components/layout/TabBar';
-import SchoolCalendarView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
+import StudentAttendanceView from '@/components/views/admin/student/SingleStudentAttendanceTracker';
 import ExamReportView from '@/components/views/single-school/ExamReportView';
 import StudentDashboardView from '@/components/views/single-student/StudentDashboardView';
 import StudentLibrary from '@/components/views/single-student/StudentLibrary';
@@ -58,7 +58,7 @@ const SingleStudentDashboard = () => {
           (student?.user ?? [])[0]?.lastName
         }`}
         school={student?.institution?.instituteName ?? 'Loading...'}
-        id={student?.studentId ?? ''}
+        id={student?.uniqueId ?? ''}
         student
         currentGridIdx={gridTabIdx}
         setGridIdx={(value) => {
@@ -110,7 +110,9 @@ const SingleStudentDashboard = () => {
               classArmId={student?.class?.id}
             />
           )}
-          {tabIdx === 2 && <SchoolCalendarView studentId={student?.id ?? ''} />}
+          {tabIdx === 2 && (
+            <StudentAttendanceView studentId={student?.id ?? ''} />
+          )}
         </div>
       )}
       {gridTabIdx === 1 && (

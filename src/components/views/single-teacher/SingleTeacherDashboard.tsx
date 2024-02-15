@@ -7,7 +7,7 @@ import EmptyView from '@/components/misc/EmptyView';
 import StudentDashboardView from '@/components/views/single-teacher/StudentDashboardView';
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
-import TaskListView from '@/components/views/teacher/TaskListView';
+import TeachersAttendanceView from '@/components/views/teacher/AttendanceLog';
 import TimetableView from '@/components/views/teacher/TimetableView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage } from '@/lib/helper';
@@ -60,7 +60,7 @@ const SingleTeacherDashboard = () => {
           (staff?.user ?? {})?.lastName || ''
         }`}
         school={staff?.institution?.instituteName ?? '[NULL]'}
-        id={staff?.oracleNumber ?? staff?.staffId}
+        id={staff?.uniqueId ?? staff?.staffId}
         student={false}
         currentGridIdx={gridIdx}
         setGridIdx={(value) => {
@@ -126,7 +126,9 @@ const SingleTeacherDashboard = () => {
               )}
             </div>
           )}
-          {tabIdx === 2 && <TaskListView userId={p?.get('id') ?? ''} />}
+          {tabIdx === 2 && (
+            <TeachersAttendanceView userId={staff?.user?.id ?? ''} />
+          )}
         </div>
       )}
       {gridIdx === 1 && (

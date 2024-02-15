@@ -18,6 +18,14 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { useDebounce } from 'usehooks-ts';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllStaff = () => {
   const [query, setQuery] = useState('');
   const debouncedSearchTerm = useDebounce(query, 1500);
@@ -52,7 +60,7 @@ const AllStaff = () => {
       try {
         toggleModal();
         setAction(null);
-      await mutateAsync(itemToDelete);
+        await mutateAsync(itemToDelete);
         toast.success('Staff removed successfully');
       } catch (error) {
         logger(error);
@@ -170,9 +178,9 @@ const AllStaff = () => {
                   {(pagingData.page - 1) * 10 + (idx + 1)}
                 </div>
 
-                <div className='col-span-2'>{item?.oracleNumber ?? '-'}</div>
+                <div className='col-span-2'>{item?.uniqueId ?? '-'}</div>
 
-                <div className='col-span-4'>
+                <div className='col-span-4 hover:text-secondary'>
                   <Link href={`/super-admin/teacher?id=${item.id}`}>
                     {item?.user?.lastName || 'N/A'}{' '}
                     {item?.user?.firstName || 'N/A'}
@@ -300,7 +308,7 @@ const AllStaff = () => {
                   )}
                 >
                   {pagingData.page > 3 &&
-                    pagingData.page < staff.paging.totalPage
+                  pagingData.page < staff.paging.totalPage
                     ? pagingData.page
                     : 3}
                 </div>

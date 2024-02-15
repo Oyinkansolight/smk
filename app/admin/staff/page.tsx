@@ -13,7 +13,7 @@ import StudentDashboardView from '@/components/views/single-teacher/StudentDashb
 import TeacherBioDetails from '@/components/views/single-teacher/TeacherBioDetails';
 import TeacherLibrary from '@/components/views/single-teacher/TeacherLibrary';
 import SubjectList from '@/components/views/student.tsx/StudentSubjectList';
-import TeacherAttendance from '@/components/views/teacher/TaskListView';
+import TeacherAttendance from '@/components/views/teacher/AttendanceLog';
 import TimetableView from '@/components/views/teacher/TimetableView';
 import { getURL } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
@@ -32,6 +32,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { BiListCheck } from 'react-icons/bi';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

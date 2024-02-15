@@ -1,7 +1,7 @@
 'use client';
 
+import TaskListView from '@/components/views/teacher/AttendanceLog';
 import IncidentReport from '@/components/views/teacher/IncidentReport';
-import TaskListView from '@/components/views/teacher/TaskListView';
 import TeacherDashboardView from '@/components/views/teacher/TeacherDashboardView';
 import TeacherTimeTableView from '@/components/views/teacher/TeacherTimeTableView';
 import { useState } from 'react';

@@ -15,7 +15,7 @@ import SchoolDashboardView from '@/components/views/single-school/SchoolDashboar
 import ActionNavigation from '@/components/views/single-teacher/Navigation';
 import Stat from '@/components/views/single-teacher/Stat';
 import Files from '@/components/views/super-admin/Library/Files';
-import TaskListView from '@/components/views/teacher/TaskListView';
+import TaskListView from '@/components/views/teacher/AttendanceLog';
 import clsxm from '@/lib/clsxm';
 import {
   useGetSchoolById, // useGetStudentsListByInstitution,
@@ -33,6 +33,8 @@ import { IoReorderThree } from 'react-icons/io5';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiCalendar2Fill, RiDashboardFill } from 'react-icons/ri';
 import Select from 'react-select';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -75,7 +77,6 @@ const SingleSchoolDashboard = () => {
       value: 0,
       label: 'Total Subjects',
     },
-    
   ];
 
   const navigation_menu = [

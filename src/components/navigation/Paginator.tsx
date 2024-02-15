@@ -24,9 +24,11 @@ export default function Paginator({ setPagingData, pagingData, data }) {
     if (data) setPagingData({ ...pagingData, page: data?.paging?.totalPage });
   };
 
+  const isPaginationAvailable =
+    (data && data?.data?.length > 0) || data?.data?.items.length > 0;
   return (
     <div>
-      {data && data?.data?.length > 0 && (
+      {isPaginationAvailable && (
         <div className='lg:min-w-[800px] my-4 flex items-center justify-center lg:justify-end space-x-3 lg:pr-10'>
           <button
             onClick={handleJumpToStart}
