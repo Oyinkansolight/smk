@@ -1,4 +1,3 @@
-import Button from '@/components/buttons/Button';
 import { BasicCard, CountCard } from '@/components/cards';
 import { Institution } from '@/types/institute';
 
@@ -15,12 +14,12 @@ export default function SchoolDashboardView({ school }: proptype) {
 
         <div className='flex flex-wrap gap-3 md:gap-[20px] xl:gap-[27px] mt-6'>
           <CountCard
-            text={school?.students?.length ?? '0'}
+            text={school?.studentCount ?? '0'}
             title='Total Student'
             variant='basic'
           />
           <CountCard
-            text={school?.staff?.length ?? '0'}
+            text={school?.staffCount ?? '0'}
             title='Total Staff'
             variant='basic'
           />
