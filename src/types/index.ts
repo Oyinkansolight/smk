@@ -48,6 +48,7 @@ export interface PaginationParams {
   id?: any;
   limit?: number;
   page?: number;
+  include?: boolean;
   query?: string | number | null;
   type?: string | number | null;
 }

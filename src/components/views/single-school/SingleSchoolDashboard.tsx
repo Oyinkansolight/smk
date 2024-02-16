@@ -4,70 +4,39 @@
 import Button from '@/components/buttons/Button';
 import { SchoolProfileCard } from '@/components/cards';
 import TabBar from '@/components/layout/TabBar';
-import Table from '@/components/tables/TableComponent';
 import InstitutionBioDetails from '@/components/views/admin/InstitutionBioDetails';
 import StaffClassAttendanceReport from '@/components/views/admin/StaffClassAttendanceReport';
 import StudentClassAttendanceReport from '@/components/views/admin/StudentClassAttendanceReport';
+import InstitutionStaff from '@/components/views/admin/student/InstitutionStaff';
+import InstitutionStudent from '@/components/views/admin/student/InstitutionStudent';
 import SchoolDashboardView from '@/components/views/single-school/SchoolDashboardView';
 import SchoolSubject from '@/components/views/single-school/Subjects';
 import Files from '@/components/views/super-admin/Library/Files';
 import clsxm from '@/lib/clsxm';
 import {
-  useGetSchoolById,
-  useGetStudentsListByInstitution,
-  useGetTeachersListByInstitution, // useGetStudentsListByInstitution,
+  useGetSchoolById, // useGetStudentsListByInstitution,
   // useGetTeachersListByInstitution,
 } from '@/server/institution';
 import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { TableColumn } from 'react-data-table-component';
 import { BiTrendingUp } from 'react-icons/bi';
 import { MdArrowBackIos, MdOutlineSort } from 'react-icons/md';
 import { RiDashboardFill } from 'react-icons/ri';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const studentListColumns: TableColumn<any>[] = [
-  // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
-  {
-    name: 'Name',
-    cell: (row) => (
-      <div>
-        {row.user[0].firstName} {row.user[0].lastName}
-      </div>
-    ),
-  },
-  {
-    name: 'Class',
-    cell: (row) => (
-      <div>
-        {row.class.class.name} - {row.class.arm}
-      </div>
-    ),
-  },
-];
-const staffListColumns: TableColumn<any>[] = [
-  // { name: 'Number', cell: (row) => <div className='truncate'># {row.id}</div> },
-  {
-    name: 'Name',
-    cell: (row) => (
-      <div>
-        {row?.user?.firstName} {row?.user?.lastName}
-      </div>
-    ),
-  },
-  {
-    name: 'Subject',
-    cell: (row) => (
-      <div>{row?.subjects?.length > 0 ? row?.subjects?.length : 'None'}</div>
-    ),
-  },
-  {
-    name: 'Attendance Rate',
-    cell: (row) => <div>{row?.attendanceRate ?? 0}% </div>,
-  },
-];
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const SingleSchoolDashboard = () => {
   const [tabIdx, setTabIdx] = useState(0);
@@ -77,14 +46,11 @@ const SingleSchoolDashboard = () => {
   const router = useRouter();
   const [isEditingBioDetails, setIsEditingBioDetails] = useState(false);
   const params = useSearchParams();
-  const { data: school } = useGetSchoolById({ id: params?.get('id') });
+  const { data: school } = useGetSchoolById({
+    id: params?.get('id'),
+    include: false,
+  });
   const instituteId = params?.get('id');
-  const { data: getInstitutionStudents } = useGetStudentsListByInstitution({
-    instituteId: instituteId ?? '',
-  });
-  const { data: getInstitutionStaffs } = useGetTeachersListByInstitution({
-    instituteId,
-  });
 
   return (
     <section>
@@ -235,13 +201,7 @@ const SingleSchoolDashboard = () => {
                       options={[{ value: 'all', label: 'All Class Arms' }]}
                     /> */}
                   </div>
-                  <Table
-                    showFilter={false}
-                    showSearch={false}
-                    columns={studentListColumns}
-                    data={getInstitutionStudents?.data}
-                    // data={[]}
-                  />
+                  <InstitutionStudent instituteId={instituteId} />
                 </div>
               </div>
             )}
@@ -307,13 +267,7 @@ const SingleSchoolDashboard = () => {
                       options={[{ value: 'all', label: 'Filter' }]}
                     /> */}
                   </div>
-                  <Table
-                    showFilter={false}
-                    showSearch={false}
-                    columns={staffListColumns}
-                    data={getInstitutionStaffs?.data}
-                    // data={[]}
-                  />
+                  <InstitutionStaff instituteId={instituteId} />
                 </div>
               </div>
             )}
