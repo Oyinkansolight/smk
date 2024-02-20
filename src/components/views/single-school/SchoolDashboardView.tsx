@@ -24,15 +24,15 @@ export default function SchoolDashboardView({ school }: proptype) {
             variant='basic'
           />
           <CountCard
-            text={school?.classes?.length ?? '0'}
+            text={school?.classCount ?? '0'}
             title='Total Classes'
             variant='basic'
           />
-          <CountCard
+          {/* <CountCard
             count={school?.totalSubjects ?? '0'}
             title='Total Subjects'
             variant='basic'
-          />
+          /> */}
           {/* <div>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores
             ipsum, fugiat deleniti ratione laudantium eveniet ex consequuntur

@@ -310,6 +310,7 @@ export interface Institution {
   students?: Student[];
   staff?: Staff[];
   classes?: classType[];
+  classCount?: number;
   studentCount?: number;
   staffCount?: number;
   totalClassArm?: number | string;
