@@ -126,7 +126,7 @@ export function useCreateAcademicCalendar() {
 
 export function useGetAdminCharts(params: Partial<ChartParams>) {
   const query = useQuery({
-    queryKey: 'admin_charts',
+    queryKey: ['admin_charts', params.endPeriod],
     refetchOnWindowFocus: false,
     queryFn: () =>
       request

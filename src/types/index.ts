@@ -63,8 +63,8 @@ export interface ChartParams {
   subjectId?: string;
   studentId?: string;
   staffId?: string;
-  startPeriod?: string;
-  endPeriod?: string;
+  startPeriod?: string | Date;
+  endPeriod?: string | Date;
 }
 
 export interface BatteryLevel {
