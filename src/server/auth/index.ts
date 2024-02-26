@@ -145,6 +145,14 @@ export function useGetCurrentSession() {
   });
   return query;
 }
+export function useUpdateDeviceToken() {
+  const mutation = useMutation({
+    mutationKey: 'update_device_token',
+    mutationFn: () =>
+      request.put('/v1/utilities/update-device-token', { deviceType: 'WEB', token: '#token#' }),
+  });
+  return mutation;
+}
 
 export function useGetValidIMEI() {
   const query = useQuery({

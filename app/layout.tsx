@@ -20,6 +20,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
+import { useUpdateDeviceToken } from '@/server/auth';
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ export default function RootLayout({
   // console.log(isValidDevice);
 
   const isValidDevice = true;
+  useUpdateDeviceToken()
   useEffect(() => {
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
