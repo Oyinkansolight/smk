@@ -73,17 +73,21 @@ const AttendanceRate = ({ data, institute, showLink = false }: AttendanceRatePro
         </div>
       </div>
 
-      <div className={clsxm(
-        institute ? '' : '',
-        'flex flex-col gap-2 justify-between'
-      )}>
+      <div
+        className={clsxm(
+          institute ? '' : '',
+          'flex flex-col gap-2 justify-between'
+        )}
+      >
         {
           <div className='flex flex-col items-center text-center'>
-            <div className={clsxm(
-              // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[230px]',
-              'h-[392px] w-[320px]'
-            )}>
-              {totalStudentSum > 0 ?
+            <div
+              className={clsxm(
+                // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[230px]',
+                'h-[392px] w-[320px]'
+              )}
+            >
+              {totalStudentSum > 0 ? (
                 <div className='flex justify-center items-center bg-[#EFF3F7] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] w-full max-w-[335px]'>
                   <ResponsivePie
                     data={parsedStudentData}
@@ -130,23 +134,26 @@ const AttendanceRate = ({ data, institute, showLink = false }: AttendanceRatePro
                       },
                     ]}
                   />
+                  <Link href='#'>View Details</Link>
                 </div>
-                : (
-                  <div className='mt-32 lg:mt-10'>
-                    <EmptyView label='No Student Data' />
-                  </div>
-                )}
+              ) : (
+                <div className='mt-32 lg:mt-10'>
+                  <EmptyView label='No Student Data' />
+                </div>
+              )}
             </div>
           </div>
         }
 
         {
           <div className='flex flex-col items-center text-center'>
-            <div className={clsxm(
-              // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[220px]',
-              'h-[392px] w-[320px]'
-            )}>
-              {totalStaffSum > 0 ?
+            <div
+              className={clsxm(
+                // institute ? 'h-64 w-56' : 'h-[392px] lg:h-[262px] w-[2320x]' lg:w-[220px]',
+                'h-[392px] w-[320px]'
+              )}
+            >
+              {totalStaffSum > 0 ? (
                 <div className='flex justify-center items-center bg-[#c0c1c1] rounded-2xl p-3 lg:p-2 h-full max-h-[392px] w-full max-w-[335px]'>
                   <ResponsivePie
                     data={parsedStaffData}
@@ -194,30 +201,30 @@ const AttendanceRate = ({ data, institute, showLink = false }: AttendanceRatePro
                     ]}
                   />
                 </div>
-                : (
-                  <div className='mt-32 lg:mt-10'>
-                    <EmptyView label='No Staff Data' />
-                  </div>
-                )}
+              ) : (
+                <div className='mt-32 lg:mt-10'>
+                  <EmptyView label='No Staff Data' />
+                </div>
+              )}
             </div>
           </div>
         }
       </div>
 
-      {showLink &&
+      {showLink && (
         <div className='flex justify-center mt-2'>
           <Link
             className='flex items-center text my-2 px-4 text-lg text-[#5754F7] font-medium gap-2 hover:text-[#5754F7]'
-            href={`${routeDetails}/attendance`}
+            href={`${routeDetails}/student-attendance`}
           >
             <div>View All</div>
             <BiChevronRight className='h-5 w-5' />
           </Link>
         </div>
-      }
+      )}
     </span>
     // </ChartWrapper>
-  )
+  );
 };
 
 export default AttendanceRate;
