@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bar
+import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
 import moment from 'moment';
@@ -8,7 +9,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BiChevronRight } from 'react-icons/bi';
 
-const BarChart = ({ data, showLink = false }: { data: any, showLink?: boolean }) => {
+const BarChart = ({
+  data,
+  showLink = false,
+  setEndPeriod,
+  setStartPeriod,
+}: {
+  data: any;
+  showLink?: boolean;
+  setEndPeriod?: (v: Date) => void;
+  setStartPeriod?: (v: Date) => void;
+}) => {
   const routeDetails = usePathname();
 
   const dateData = {};
@@ -98,11 +109,39 @@ const BarChart = ({ data, showLink = false }: { data: any, showLink?: boolean })
       {data?.Range?.start && data?.Range?.end && (
         <div className='flex flex-row items-center justify-center mx-auto gap-2'>
           <span className='font-semibold'>Date Range:</span>
-          <span className='font-medium'>{moment(data?.Range?.start).format('ll')} - {moment(data?.Range?.end).format('ll')}</span>
+          <span className='font-medium'>
+            {moment(data?.Range?.start).format('ll')} -{' '}
+            {moment(data?.Range?.end).format('ll')}
+          </span>
         </div>
       )}
 
-      {showLink &&
+      <div className='flex space-x-2  justify-center items-center'>
+        <div>
+          <input
+            type='date'
+            onChange={(e) => {
+              setStartPeriod &&
+                setStartPeriod(e.target.value as unknown as Date);
+            }}
+            className='ring-0 outline-none border-gray-300 rounded-lg'
+          />
+        </div>
+        <div>
+          <input
+            type='date'
+            onChange={(e) => {
+              setEndPeriod && setEndPeriod(e.target.value as unknown as Date);
+            }}
+            className='ring-0 outline-none border-gray-300 rounded-lg'
+          />
+        </div>
+      </div>
+      <div className='flex justify-center items-center'>
+        <Button variant='light'>Submit</Button>
+      </div>
+
+      {showLink && (
         <div className='flex justify-center mt-2'>
           <Link
             className='flex items-center text my-2 px-4 text-lg text-[#5754F7] font-medium gap-2 hover:text-[#5754F7]'
@@ -112,7 +151,7 @@ const BarChart = ({ data, showLink = false }: { data: any, showLink?: boolean })
             <BiChevronRight className='h-5 w-5' />
           </Link>
         </div>
-      }
+      )}
     </div>
   );
 };

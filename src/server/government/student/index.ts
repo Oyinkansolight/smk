@@ -79,13 +79,21 @@ export function useGetStudentOngoingPeriod({ studentId, weekId }) {
 }
 export function useGetStudentAttendance(params) {
   const query = useQuery({
-    queryKey: ['get_student_attendance', params.page, params.studentId],
-    queryFn: () =>
-      request
-        .get(`/v1/institutions/institutes/get-attendance-by-student-id?`, {
-          params,
-        })
-        .then((res) => res.data.data),
+    queryKey: [
+      'get_student_attendance',
+      params.page,
+      params.limit,
+      params.studentId,
+    ],
+    queryFn: async () =>
+      (
+        await request.get(
+          `/v1/institutions/institutes/get-attendance-by-student-id?`,
+          {
+            params,
+          }
+        )
+      ).data.data.data,
   });
   return query;
 }

@@ -17,7 +17,7 @@ import SuperTransferRequestsTable from '@/components/tables/SuperTransferRequest
 import request from '@/server';
 import { useGetAdminCharts } from '@/server/dashboard';
 import { EnrollmentAnalysis } from '@/types';
-import React from 'react';
+import React, { useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -28,8 +28,13 @@ const SuperAdminCharts = ({
   variant?: (typeof ButtonVariant)[number];
   setIsDataLoading?: (v: boolean) => void;
 }) => {
-  const { data: chartData, isLoading } = useGetAdminCharts({});
+  const [endPeriod, setEndPeriod] = useState<Date>();
+  const [startPeriod, setStartPeriod] = useState<Date>();
 
+  const { data: chartData, isLoading } = useGetAdminCharts({
+    endPeriod,
+    startPeriod,
+  });
   setIsDataLoading && setIsDataLoading(isLoading);
 
   if (isLoading || !chartData) {
@@ -50,8 +55,6 @@ const SuperAdminCharts = ({
       .get('/v1/government/dashboards/generate-csv-data')
       .then((response) => {
         const link = document.createElement('a');
-        console.log(response);
-
         link.href = response.data.url;
         link.setAttribute('download', 'filename.xlsx');
         document.body.appendChild(link);
@@ -88,7 +91,12 @@ const SuperAdminCharts = ({
               title='Attendance Tracker'
               description='Total number that were present'
               content={
-                <BarChart data={chartData?.attendanceTracker} showLink />
+                <BarChart
+                  data={chartData?.attendanceTracker}
+                  showLink
+                  setEndPeriod={setEndPeriod}
+                  setStartPeriod={setStartPeriod}
+                />
               }
             />
 
