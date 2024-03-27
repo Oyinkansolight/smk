@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/bar
-import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
 import { ResponsiveBar } from '@nivo/bar';
 import moment from 'moment';
@@ -136,9 +135,6 @@ const BarChart = ({
             className='ring-0 outline-none border-gray-300 rounded-lg'
           />
         </div>
-      </div>
-      <div className='flex justify-center items-center'>
-        <Button variant='light'>Submit</Button>
       </div>
 
       {showLink && (

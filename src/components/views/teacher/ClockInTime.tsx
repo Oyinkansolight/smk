@@ -39,8 +39,6 @@ export default function ClockInTime() {
   const lat = institutionData?.instituteLat ?? 6.5994752;
   const long = institutionData?.instituteLong ?? 3.3488896;
 
-
-
   const handleClockIn = async () => {
     setIsClockingIn(true);
     try {
@@ -78,7 +76,7 @@ export default function ClockInTime() {
       const d = calculateEarthDistanceTwo(latitude, +lat, longitude, +long);
       logger(d.toFixed(2));
       setDistance(d.toFixed(2));
-      if (d < 200) {
+      if (d < 2) {
         setInArea(true);
         setIsLoading(false);
       } else {
