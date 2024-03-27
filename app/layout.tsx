@@ -8,6 +8,7 @@ import request from '@/server';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useBattery } from '@uidotdev/usehooks';
+import RunOnce from 'app/runOnce';
 import Cookies from 'js-cookie';
 import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
-import { useUpdateDeviceToken } from '@/server/auth';
 
 const queryClient = new QueryClient();
 
@@ -47,7 +47,6 @@ export default function RootLayout({
   // console.log(isValidDevice);
 
   const isValidDevice = true;
-  useUpdateDeviceToken()
   useEffect(() => {
     if (!loadingBatteryCheck && isNumber(batteryLevel)) {
       const currentBattery = batteryLevel * 100;
@@ -91,6 +90,7 @@ export default function RootLayout({
               }}
             >
               {children}
+              <RunOnce />
             </MyGlobalContext.Provider>
           </QueryClientProvider>
           <ToastContainer />
