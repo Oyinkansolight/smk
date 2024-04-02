@@ -140,7 +140,8 @@ export function useCreateResultFromGradeBook() {
 
 export function useGetSubjectScoreSheet(params: CreateGradeSettingsParams) {
   const query = useQuery({
-    queryKey: 'get-gradebook-scoresheet',
+    enabled: params.sessionId && params.termId ? true : false,
+    queryKey: ['get-gradebook-scoresheet', params.sessionId, params.termId],
     queryFn: async () => {
       if (params.sessionId && params.termId) {
         const d = await request.get(

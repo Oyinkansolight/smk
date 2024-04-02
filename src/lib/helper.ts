@@ -330,3 +330,15 @@ export default async function DownloadFile(fileUrl: string) {
     getErrMsg(error);
   }
 }
+
+export const termNumberToName = (num: string) => {
+  if (num) {
+    if (num === '1') {
+      return 'First Term';
+    } else if (num === '2') {
+      return 'Second Term';
+    } else if (num === '3') {
+      return 'Third Term';
+    }
+  } else return 'Term';
+};
