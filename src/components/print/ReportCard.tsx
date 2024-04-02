@@ -14,7 +14,14 @@ import {
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
-import { ImImage } from 'react-icons/im';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -172,9 +179,15 @@ const Header = (props: HeaderProps) => {
   const PlaceholderImage = ({ title }) => {
     return (
       <div className='w-[85px] h-[85px] rounded-lg bg-gray-200 flex justify-center items-center'>
-        <div className='flex flex-col justify-center items-center mt-4'>
-          <ImImage className='w-8 h-8 fill-gray-100' />
-          <span className='font-medium text-[7px] -mt-1'>{title}</span>
+        <div className='flex flex-col justify-center items-center '>
+          <Image
+            alt='Logo'
+            width={70}
+            height={70}
+            src='/images/SSEB_LOGO.png'
+            className='rounded-lg'
+          />
+          {/* <span className='font-medium text-[7px] -mt-1'>{title}</span> */}
         </div>
       </div>
     );

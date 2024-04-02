@@ -4,8 +4,9 @@ import BackButton from '@/components/accordions/BackButton';
 import Button from '@/components/buttons/Button';
 import GenericLoader from '@/components/layout/Loader';
 import EmptyView from '@/components/misc/EmptyView';
-import { getErrMsg } from '@/server';
+import request, { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetAcademicSessions } from '@/server/dashboard';
 import {
   CreateGradeSettingsParams,
   useCreateResultFromGradeBook,
@@ -19,7 +20,7 @@ import { useGetSessionTerms } from '@/server/government/terms';
 import { Institution } from '@/types/institute';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ImSpinner2 } from 'react-icons/im';
 import { toast } from 'react-toastify';
 import { useSessionStorage } from 'usehooks-ts';
@@ -34,14 +35,18 @@ export default function Page() {
     useState(false);
   const [isLoadingGenerateResult, setIsLoadingGenerateResult] = useState(false);
   const [isModify, setIsModify] = useState(false);
+  const [selectedTermId, setSelectedTermId] = useState<string>('0');
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('0');
+
   const params = useSearchParams();
   const { data: profile, isLoading: isLoadingProfile } = useGetProfile();
   const { data: terms, isLoading: isLoadingTerms } = useGetSessionTerms({
-    sessionId: profile?.currentSession?.[0]?.id,
+    sessionId: selectedSessionId,
   });
   const term = terms?.data[0]?.id;
   const router = useRouter();
 
+  const { data: allSession } = useGetAcademicSessions();
   const [institution] = useSessionStorage('institution', {} as Institution);
   const handleCreateGradebook = useCreateSubjectGradeBook();
   const handleResetGradebook = useResetSubjectGradeBook();
@@ -49,6 +54,20 @@ export default function Page() {
   const handleEditGradebook = useEditSubjectGradeBook();
   const handleDeleteGradebook = useDeleteSubjectGradeBook();
 
+  const [sessionterms, setsessionterms] = useState([]);
+
+  function Fetchterms(currrentsession: string | null) {
+    request
+      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+      .then((v) => {
+        const data = v.data.data.data;
+        setsessionterms(data.data || []);
+      });
+  }
+
+  useEffect(() => {
+    Fetchterms(selectedSessionId);
+  }, [selectedSessionId]);
   // const { data: arms, isLoading: isLoadingArms } = useGetTeacherClassArms({
   //   teacherId: profile?.userInfo?.staff?.id,
   //   sessionId: profile?.currentSession?.[0]?.id,
@@ -60,8 +79,10 @@ export default function Page() {
     subjectId: params?.get('id') as string,
     classArmId: params?.get('classArmId') as string,
     institutionId: institution?.id,
-    sessionId: profile?.currentSession?.[0]?.id,
-    termId: term as unknown as string,
+    // sessionId: profile?.currentSession?.[0]?.id,
+    sessionId: selectedSessionId,
+    // termId: term as unknown as string,
+    termId: selectedTermId as string,
     limit: 100,
   };
 
@@ -77,6 +98,17 @@ export default function Page() {
     );
   }
 
+  const termNumberToName = (num: string) => {
+    if (num) {
+      if (num === '1') {
+        return 'First Term';
+      } else if (num === '2') {
+        return 'Second Term';
+      } else if (num === '3') {
+        return 'Third Term';
+      }
+    } else return 'Term';
+  };
   const handleGenerateGradeBook = async () => {
     delete genericPayload.limit;
 
@@ -184,7 +216,39 @@ export default function Page() {
         {params?.get('classArmName') && '-'}{' '}
         {params?.get('classArmName') && params?.get('classArmName')}
       </div>
-      <div className='flex justify-between'>
+      <div className='my-3 flex justify-end space-x-2   text-gray-500'>
+        <select
+          name=''
+          id=''
+          className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[250px]'
+          onChange={(e) => {
+            setSelectedSessionId(e.target.value);
+          }}
+        >
+          <option value=''> Session</option>
+          {(allSession?.data ?? []).map((v: any) => (
+            <option key={v.id} value={v.id}>
+              {v.session}
+            </option>
+          ))}
+        </select>
+        <select
+          name=''
+          id=''
+          className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[200px]'
+          onChange={(e) => {
+            setSelectedTermId(e.target.value);
+          }}
+        >
+          <option value=''> Term</option>
+          {sessionterms.map((v: any, i: number) => (
+            <option key={i} value={v.id}>
+              {termNumberToName(v.name)}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className='flex justify-between items-center'>
         <h2 className='font-bold text-2xl'>{params?.get('subjectName')}</h2>
         <div className='flex space-x-1'>
           {StudentScoreSheet && StudentScoreSheet.length > 0 && (
@@ -233,6 +297,7 @@ export default function Page() {
           </Button>
         </div>
       </div>
+
       {/* <TextTabBar
         tabs={[
           ...(arms ?? []).map((arm) =>

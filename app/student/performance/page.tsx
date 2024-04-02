@@ -2,9 +2,16 @@
 
 import Result from '@/components/cards/Result';
 import EmptyView from '@/components/misc/EmptyView';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import {
+  getFromLocalStorage,
+  getFromSessionStorage,
+  termNumberToName,
+} from '@/lib/helper';
+import request from '@/server';
+import { useGetAcademicSessions } from '@/server/dashboard';
 import { useGetStudentReportCard } from '@/server/student';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
 import Lightup from '~/svg/lightup.svg';
@@ -32,6 +39,24 @@ const Page = () => {
   const userData = getFromSessionStorage('user');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  const [sessionterms, setsessionterms] = useState([]);
+  const [selectedTermId, setSelectedTermId] = useState<string>('0');
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('0');
+
+  const { data: allSession } = useGetAcademicSessions();
+
+  function Fetchterms(currrentsession: string | null) {
+    request
+      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+      .then((v) => {
+        const data = v.data.data.data;
+        setsessionterms(data.data || []);
+      });
+  }
+
+  useEffect(() => {
+    Fetchterms(selectedSessionId);
+  }, [selectedSessionId]);
 
   let user;
   let currentTermInfo;
@@ -42,8 +67,8 @@ const Page = () => {
   }
   const { data } = useGetStudentReportCard({
     studentId: user?.currentStudentInfo?.id ?? '',
-    termId: currentTermInfo?.id ?? '',
-    sessionId: currentSessionId,
+    termId: selectedTermId ?? '',
+    sessionId: selectedSessionId,
     classArmId: user?.currentStudentInfo?.class?.id,
   });
   const getDomainValue = (value: string) => {
@@ -63,16 +88,36 @@ const Page = () => {
       <div className='w-full px-4'>
         <h1 className='text-lg font-bold'>Grade Book</h1>
 
-        <div className='flex justify-end py-4 border-b-2 mb-5  text-gray-500'>
+        <div className='my-3 flex justify-end space-x-2   text-gray-500'>
           <select
             name=''
             id=''
-            className='p-2 bg-[#FFF6E7] border !text-xs rounded'
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[250px]'
+            onChange={(e) => {
+              setSelectedSessionId(e.target.value);
+            }}
           >
-            <option value=''> Session & Term</option>
-            <option value=''>2023/2024 First</option>
-            <option value=''>2023/2024 Secomd</option>
-            <option value=''>2023/2024 Third</option>
+            <option value=''> Session</option>
+            {(allSession?.data ?? []).map((v: any) => (
+              <option key={v.id} value={v.id}>
+                {v.session}
+              </option>
+            ))}
+          </select>
+          <select
+            name=''
+            id=''
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[200px]'
+            onChange={(e) => {
+              setSelectedTermId(e.target.value);
+            }}
+          >
+            <option value=''> Term</option>
+            {sessionterms.map((v: any, i: number) => (
+              <option key={i} value={v.id}>
+                {termNumberToName(v.name)}
+              </option>
+            ))}
           </select>
         </div>
         <div className='flex justify-end p-2  bg-[#F9F9F9] rounded'>
