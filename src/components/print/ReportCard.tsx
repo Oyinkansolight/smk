@@ -77,6 +77,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -235,7 +237,7 @@ const Header = (props: HeaderProps) => {
           {props?.email ?? 'N/A'}
         </span>
 
-        <span className='font-bold text-[10px]'>EDOSECONDARY-EDU.ORG</span>
+        <span className='font-bold text-[10px]'>SSEB.EDOSTATE.GOV.NG</span>
 
         <span className='font-medium text-[13px] mt-[6px]'>
           {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}{' '}
