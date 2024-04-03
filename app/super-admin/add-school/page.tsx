@@ -31,7 +31,9 @@ const AddSchool = () => {
   const [studentDetailsFile, setStudentDetailsFile] = useState<File>();
   const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
 
-  const [location, setLocation] = useState<string | GeoCodeResponse>('');
+  const [location, setLocation] = useState<GeoCodeResponse | string>('');
+  const [lat, setLat] = useState<string | number>('');
+  const [lng, setLng] = useState<string | number>('');
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();
   let googleAddress: GeoCodeResponse[] = [];
@@ -41,7 +43,9 @@ const AddSchool = () => {
   const [instituteType, setInstituteType] = useState('');
 
   const { data: allRoles } = useGetAdminRoles();
-  const instituteRoleId = allRoles?.data.find((role) => role.name === 'institution-admin')?.id;
+  const instituteRoleId = allRoles?.data.find(
+    (role) => role.name === 'institution-admin'
+  )?.id;
 
   const geocode = useGeocoding();
 
@@ -78,6 +82,7 @@ const AddSchool = () => {
         } else {
           setGoogleAddressState([location]);
         }
+        console.log(location);
 
         setStage(3);
       }
@@ -164,6 +169,10 @@ const AddSchool = () => {
             setLocation={setLocation}
             setTown={setTown}
             setLga={setLga}
+            setLng={setLng}
+            lng={lng}
+            setLat={setLat}
+            lat={lat}
           />
         )}
         {stage === 3 && (
@@ -244,10 +253,12 @@ const AddSchool = () => {
                       p = await uploadDocument(p, array, environment);
                     }
                     const response = createInstitution.mutateAsync({
-                      instituteLat:
-                        googleAddressState[0].geometry?.location?.lat?.toString(),
-                      instituteLong:
-                        googleAddressState[0].geometry?.location?.lng?.toString(),
+                      instituteLat: lat as string,
+                      instituteLong: lng as string,
+                      // instituteLat:
+                      //   googleAddressState[0].geometry?.location?.lat?.toString(),
+                      // instituteLong:
+                      //   googleAddressState[0].geometry?.location?.lng?.toString(),
                       instituteAddress: googleAddressState[0].formatted_address,
                       instituteEmail: schoolEmail as string,
                       instituteName: schoolName as string,

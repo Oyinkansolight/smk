@@ -65,6 +65,20 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -109,6 +123,7 @@ const PrintedReportCard = ({
     termInfo = JSON.parse(term ?? '{}');
     sessionInfo = JSON.parse(session ?? '{}');
   }
+  console.log(termInfo);
 
   return (
     <div className='flex flex-col py-10 max-w-[750px] mx-auto gap-8'>
@@ -121,9 +136,9 @@ const PrintedReportCard = ({
       <div className='bg-white flex flex-col w-full max-w-[750px] mx-auto h-full overflow-hidden px-[6px]'>
         <Header
           term={
-            termInfo?.name === 1
+            termInfo?.name === '1'
               ? 'First'
-              : termInfo?.name === 2
+              : termInfo?.name === '2'
               ? 'Second'
               : 'Third'
           }
@@ -132,6 +147,7 @@ const PrintedReportCard = ({
           address={
             user?.currentStudentInfo?.institution?.instituteAddress ?? 'N/A'
           }
+          email={user?.currentStudentInfo?.institution?.instituteEmail ?? 'N/A'}
         />
 
         <span className='mt-[3px] mb-1'>
@@ -167,6 +183,7 @@ interface HeaderProps {
   address?: string;
   session: string;
   passport?: string;
+  email?: string;
 }
 
 interface RowItemProps {
@@ -217,10 +234,10 @@ const Header = (props: HeaderProps) => {
         <span className='font-bold text-[10px]'>{props?.address ?? 'N/A'}</span>
 
         <span className='font-bold text-[10px] mt-[6px]'>
-          INFO@EDOSECONDARY-EDU.ORG
+          {props?.email ?? 'N/A'}
         </span>
 
-        <span className='font-bold text-[10px]'>EDOSECONDARY-EDU.ORG</span>
+        <span className='font-bold text-[10px]'>SSEB.EDOSTATE.GOV.NG</span>
 
         <span className='font-medium text-[13px] mt-[6px]'>
           {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}{' '}
