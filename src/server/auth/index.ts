@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isLocal } from '@/constant/env';
-import { requestForToken } from '@/firebase/messaging';
 import { setStorageValueWithExpiry } from '@/lib/helper';
 import request from '@/server';
 import { UserProfile } from '@/types/auth';
@@ -146,18 +145,18 @@ export function useGetCurrentSession() {
   });
   return query;
 }
-export function useUpdateDeviceToken() {
-  const mutation = useMutation({
-    mutationKey: 'update_device_token',
-    mutationFn: async () => {
-      const token = await requestForToken()
-      if (token) {
-        request.put('/v1/utilities/update-device-token', { deviceType: 'WEB', token });
-      }
-    }
-  });
-  return mutation;
-}
+// export function useUpdateDeviceToken() {
+//   const mutation = useMutation({
+//     mutationKey: 'update_device_token',
+//     mutationFn: async () => {
+//       const token = await requestForToken()
+//       if (token) {
+//         request.put('/v1/utilities/update-device-token', { deviceType: 'WEB', token });
+//       }
+//     }
+//   });
+//   return mutation;
+// }
 
 export function useGetValidIMEI() {
   const query = useQuery({

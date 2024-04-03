@@ -1,12 +1,11 @@
 'use client';
 
-import { useUpdateDeviceToken } from '@/server/auth';
-import { useEffect } from 'react';
+// import { useUpdateDeviceToken } from '@/server/auth';
 
 export default function RunOnce() {
-  const handleUseUpdateDeviceToken = useUpdateDeviceToken();
-  useEffect(() => {
-    handleUseUpdateDeviceToken.mutateAsync();
-  }, []);
+  // const handleUseUpdateDeviceToken = useUpdateDeviceToken();
+  // useEffect(() => {
+  //   handleUseUpdateDeviceToken.mutateAsync();
+  // }, []);
   return <div></div>;
 }
