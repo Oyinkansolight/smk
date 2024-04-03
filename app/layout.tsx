@@ -8,7 +8,6 @@ import request from '@/server';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { useBattery } from '@uidotdev/usehooks';
-import RunOnce from 'app/runOnce';
 import Cookies from 'js-cookie';
 import { isNumber } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -90,7 +89,7 @@ export default function RootLayout({
               }}
             >
               {children}
-              <RunOnce />
+              {/* <RunOnce /> */}
             </MyGlobalContext.Provider>
           </QueryClientProvider>
           <ToastContainer />
