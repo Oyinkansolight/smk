@@ -34,6 +34,8 @@ const AddSchool = () => {
   const [location, setLocation] = useState<string | GeoCodeResponse>('');
   const [town, setTown] = useState<Town>();
   const [lga, setLga] = useState<LocalGovernmentArea>();
+  const [lng, setLng] = useState<string | number>('');
+  const [lat, setLat] = useState<string | number>('');
   let googleAddress: GeoCodeResponse[] = [];
   const [googleAddressState, setGoogleAddressState] = useState<
     GeoCodeResponse[]
@@ -41,7 +43,9 @@ const AddSchool = () => {
   const [instituteType, setInstituteType] = useState('');
 
   const { data: allRoles } = useGetAdminRoles();
-  const instituteRoleId = allRoles?.data.find((role) => role.name === 'institution-admin')?.id;
+  const instituteRoleId = allRoles?.data.find(
+    (role) => role.name === 'institution-admin'
+  )?.id;
 
   const geocode = useGeocoding();
 
@@ -164,6 +168,10 @@ const AddSchool = () => {
             setLocation={setLocation}
             setTown={setTown}
             setLga={setLga}
+            setLng={setLng}
+            setLat={setLat}
+            lng={lng}
+            lat={lat}
           />
         )}
         {stage === 3 && (

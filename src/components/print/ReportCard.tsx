@@ -79,6 +79,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -478,7 +480,7 @@ const Cognitive = ({ subjectResults }: any) => {
 
       <tbody className='text-[10px] font-black leading-3 text-[#3222EF]'>
         {subjectResults && subjectResults.subjectsGrades.length > 0 ? (
-          subjectResults.map((result, i) => (
+          subjectResults.subjectsGrades.map((result, i) => (
             <tr key={i}>
               <td
                 className={clsxm(
