@@ -8,6 +8,7 @@ import Dragdrop from '@/components/input/dragdrop';
 import Success from '@/components/modal/Success';
 import { VerticalStepper } from '@/components/stepper';
 import { APP_LOGOS } from '@/constant/assets';
+import { isLocal } from '@/constant/env';
 import { uploadDocument } from '@/firebase/init';
 import clsxm from '@/lib/clsxm';
 import logger from '@/lib/logger';
@@ -33,7 +34,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 
 import '/src/styles/globals.css';
-import { isLocal } from '@/constant/env';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const LocationInput = dynamic(
   () => import('../../src/components/input/Location'),
@@ -118,7 +120,9 @@ export default function Page() {
   const [staffDetailsFile, setStaffDetailsFile] = useState<File>();
 
   const { data: allRoles } = useGetAdminRoles();
-  const instituteRoleId = allRoles?.data.find((role) => role.name === 'institution-admin')?.id;
+  const instituteRoleId = allRoles?.data.find(
+    (role) => role.name === 'institution-admin'
+  )?.id;
 
   useEffect(() => {
     setIsLoading(true);
@@ -225,7 +229,7 @@ export default function Page() {
                     typeof getValues('instituteAddress') === 'string'
                       ? getValues('instituteAddress')
                       : (getValues('instituteAddress') as GeoCodeResponse)
-                        .formatted_address,
+                          .formatted_address,
                   id: user?.id ?? Math.floor(Math.random() * 1000),
                   // permissions: Array.from(permissions.values()).join(','),
                 });
@@ -358,14 +362,13 @@ export default function Page() {
             /> */}
 
             <div className=' w-full gap-6'>
-
-              <LocationInput
+              {/* <LocationInput
                 value={
                   (getValues('instituteAddress') as GeoCodeResponse)
                     ?.formatted_address
                 }
                 onChanged={(v) => setValue('instituteAddress', v)}
-              />
+              /> */}
             </div>
 
             <div className='flex flex-col'>
