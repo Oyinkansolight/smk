@@ -5,15 +5,20 @@ import React, { useRef } from 'react';
 const LocationInput = ({
   value,
   onChanged,
+  setLat,
+  setLng,
 }: {
   value?: string;
+
   onChanged: (value: GeoCodeResponse | string) => void;
+  setLat: (value: string) => void;
+  setLng: (value: string) => void;
 }) => {
   const inputRef = useRef<google.maps.places.SearchBox>();
 
   const handlePlaceChanged = () => {
     const p = inputRef.current?.getPlaces();
-    p &&
+    if (p) {
       onChanged({
         ...p[0],
         geometry: {
@@ -23,6 +28,9 @@ const LocationInput = ({
           },
         },
       });
+      setLat(`${p[0].geometry?.location?.lat()}`);
+      setLng(`${p[0].geometry?.location?.lng()}`);
+    }
   };
 
   const { isLoaded } = useJsApiLoader({

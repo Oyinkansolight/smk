@@ -1,6 +1,7 @@
 'use client';
 
 import LocationInput from '@/components/input/Location';
+import FormInput from '@/components/input/formInput';
 import FormSelect from '@/components/input/formSelect';
 import { useGetLocalGovernments } from '@/server/onboard';
 import { LocalGovernmentArea, Town } from '@/types';
@@ -13,22 +14,25 @@ interface LocationBioProps {
   setTown: (v: Town) => void;
   lga: LocalGovernmentArea | undefined;
   setLga: (v: LocalGovernmentArea) => void;
+  setLat: (v: string | number) => void;
+  setLng: (v: string | number) => void;
+  lat: string | number;
+  lng: string | number;
 }
 
-const Biodata = ({
+const Location = ({
   // location,
   town,
   lga,
   setLga,
   setLocation,
   setTown,
+  setLat,
+  setLng,
+  lng,
+  lat,
 }: LocationBioProps) => {
   const { data } = useGetLocalGovernments();
-
-  function capitalize(str: string) {
-    const result = str.charAt(0).toUpperCase() + str.slice(1);
-    return result;
-  }
 
   //create local government array in edo state nigeria
 
@@ -51,7 +55,36 @@ const Biodata = ({
         </div> */}
 
         <div className=' w-full gap-6'>
-          <LocationInput onChanged={(v) => setLocation(v)} />
+          <LocationInput
+            onChanged={(v) => setLocation(v)}
+            setLat={setLat}
+            setLng={setLng}
+          />
+        </div>
+        <div className='my-10 grid md:grid-cols-2 gap-6'>
+          <div className='w-full'>
+            <FormInput
+              label='Institution Latitude*'
+              setFormValue={setLat}
+              formValue={lat}
+              placeholder='Details here'
+              validation={{
+                required: 'Latitude is required',
+              }}
+            />
+          </div>
+
+          <div className='w-full'>
+            <FormInput
+              label='Institution Longitude*'
+              setFormValue={setLng}
+              formValue={lng}
+              placeholder='Details here'
+              validation={{
+                required: 'Longitude is required',
+              }}
+            />
+          </div>
         </div>
 
         <div className='w-full mt-4'>
@@ -94,4 +127,4 @@ const Biodata = ({
   );
 };
 
-export default Biodata;
+export default Location;
