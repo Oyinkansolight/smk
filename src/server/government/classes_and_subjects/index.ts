@@ -226,6 +226,22 @@ export function useGetSubjectGradeList(params: GetSubjectGradeBookParams) {
   return query;
 }
 
+export function useGetStudentListScore(params: GetSubjectGradeBookParams) {
+  const query = useQuery({
+    queryKey: 'get_subject_grade_List',
+    queryFn: async () => {
+      if (params?.classArmId && params.termId) {
+        const d = await request.get(
+          `/v1/institutions/manual_grade/students/scores?classArmId=${params.classArmId}&termId=${params.termId}`
+        );
+        return d.data.data.data as any[];
+      }
+    },
+  });
+
+  return query;
+}
+
 export function useGetSubjectsAssignedToTeacher(
   teacherId?: string,
   sessionId?: string
