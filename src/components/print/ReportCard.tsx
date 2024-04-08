@@ -81,6 +81,22 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -215,12 +231,12 @@ const Header = (props: HeaderProps) => {
   return (
     <div className='flex justify-between items-center'>
       <div className='flex items-center gap-[10px]'>
-        {props.logo ? (
+        {props?.name ? (
           <Image
             alt='Logo'
             width={85}
             height={85}
-            src={props.logo}
+            src='/images/SSEB_LOGO.png'
             className='rounded-lg'
           />
         ) : (
@@ -257,7 +273,11 @@ const Header = (props: HeaderProps) => {
             className='rounded-lg'
           />
         ) : (
-          <PlaceholderImage title='Student Passport' />
+          <div>
+            {
+              // <PlaceholderImage title='Student Passport' />
+            }
+          </div>
         )}
       </div>
     </div>
@@ -301,7 +321,7 @@ const BioData = ({
             />
             <RowItem
               title='Reg No'
-              value={user?.currentStudentInfo?.studentId ?? 'N/A'}
+              value={user?.currentStudentInfo?.uniqueId ?? 'N/A'}
               capitalizeValue
             />
           </div>
@@ -552,7 +572,7 @@ const Cognitive = ({ subjectResults }: any) => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                {result?.remark ?? 'N/A'}
+                {result?.position ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -560,7 +580,7 @@ const Cognitive = ({ subjectResults }: any) => {
                   'border-black p-1 font-bold leading-[10px] text-black'
                 )}
               >
-                Excellent
+                {result?.remark ?? 'N/A'}
               </td>
             </tr>
           ))
