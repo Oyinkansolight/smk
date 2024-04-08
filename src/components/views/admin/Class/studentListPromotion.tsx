@@ -2,13 +2,14 @@
 // import PaymentStatus from '@/components/profile/PaymentStatus';
 import Button from '@/components/buttons/Button';
 import clsxm from '@/lib/clsxm';
-import { getFromLocalStorage } from '@/lib/helper';
+import { getFromLocalStorage, termNumberToName } from '@/lib/helper';
 import { getErrMsg } from '@/server';
+import { useGetStudentListScore } from '@/server/government/classes_and_subjects';
+import { useGetSessionTerms } from '@/server/government/terms';
 import {
   useGetInstituteClassArms,
   usePromoteStudent,
 } from '@/server/institution/class';
-import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useEffect, useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { ImSpinner } from 'react-icons/im';
@@ -25,8 +26,15 @@ export default function StudentListPromotion({
   classArmId,
   closeModal,
 }: Iprop) {
-  const { data: getInstitutionStudents } = useGetClassArmStudents({
-    classArmId: classArmId,
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
+
+  const { data: terms } = useGetSessionTerms({
+    sessionId,
+  });
+  const { data: getInstitutionStudents } = useGetStudentListScore({
+    classArmId: classArmId as string,
+    termId: selectedTerm,
   });
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';
@@ -112,6 +120,21 @@ export default function StudentListPromotion({
   return (
     <div className='flex flex-col gap-[22px]'>
       <div>
+        <select
+          name=''
+          id=''
+          className='rounded-md w-full outline-none border-none focus:ring-0'
+          onChange={(e) => {
+            setSelectedTerm(e.target.value);
+          }}
+        >
+          <option value=''> Term</option>
+          {(terms?.data ?? []).map((v: any, i: number) => (
+            <option key={i} value={v.id}>
+              {termNumberToName(v.name)}
+            </option>
+          ))}
+        </select>
         <div className='mb-4 border-b text-gray-500 front-medium'>
           Next Class:
         </div>

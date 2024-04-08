@@ -6,8 +6,10 @@ import Button from '@/components/buttons/Button';
 import Result from '@/components/cards/Result';
 import GenericLoader from '@/components/layout/Loader';
 import EmptyView from '@/components/misc/EmptyView';
-import { getErrMsg } from '@/server';
+import { termNumberToName } from '@/lib/helper';
+import request, { getErrMsg } from '@/server';
 import { useGetProfile } from '@/server/auth';
+import { useGetAcademicSessions } from '@/server/dashboard';
 import { useUpdateStudent } from '@/server/government/student';
 import { useGetStudentById } from '@/server/institution';
 import {
@@ -16,7 +18,7 @@ import {
 } from '@/server/student';
 import moment from 'moment';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiTrendingUp } from 'react-icons/fi';
 import { ImSpinner2 } from 'react-icons/im';
 import ReactSelect from 'react-select';
@@ -63,6 +65,25 @@ const rating: { value: number; label: string }[] = [
 export default function Page() {
   // const { data } = useGetProfienciencies();
 
+  const [sessionterms, setsessionterms] = useState([]);
+  const [selectedTermId, setSelectedTermId] = useState<string>('0');
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('0');
+
+  const { data: allSession } = useGetAcademicSessions();
+
+  function Fetchterms(currrentsession: string | null) {
+    request
+      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+      .then((v) => {
+        const data = v.data.data.data;
+        setsessionterms(data.data || []);
+      });
+  }
+
+  useEffect(() => {
+    Fetchterms(selectedSessionId);
+  }, [selectedSessionId]);
+
   const p = useSearchParams();
   const studentId = p?.get('studentid');
   const update = useUpdateStudent();
@@ -74,15 +95,15 @@ export default function Page() {
   const { data: profile } = useGetProfile();
 
   const { data } = useGetStudentReportCard({
-    sessionId: (profile?.currentSession ?? [])[0]?.id,
-    termId: profile?.currentTerm?.id,
+    sessionId: selectedSessionId,
+    termId: selectedTermId,
     classArmId: student?.class.id,
     studentId: studentId ?? undefined,
   });
 
   // const { data: totalData } = useGetStudentTotalScoreAndTotalAttendance({
   //   sessionId: (profile?.currentSession ?? [])[0]?.id,
-  //   termId: profile?.currentTerm?.id,
+  //   termId: selectedTermId,
   //   classArmId: student?.class.id,
   // })
 
@@ -111,8 +132,8 @@ export default function Page() {
         rating: value,
         remark: label,
         type,
-        sessionId: (profile?.currentSession ?? [])[0]?.id,
-        termId: profile?.currentTerm?.id,
+        sessionId: selectedSessionId,
+        termId: selectedTermId,
         teacherId: profile?.userInfo?.staff?.id,
         studentId: studentId ?? undefined,
       });
@@ -140,7 +161,7 @@ export default function Page() {
     <div className='h-full layout flex flex-col gap-6 pl-0 lg:pl-20'>
       <BackButton />
       <div className='text-black font-bold pb-8 mt-2 text-2xl'>Grade Book</div>
-      <div className='flex md:flex-row flex-col gap-4'>
+      <div className='flex md:flex-row flex-col md:items-center gap-4'>
         <div className='flex w-max py-8 px-2 flex-row space-x-4 justify-center items-center bg-white rounded-lg'>
           <div className='h-20 rounded-full w-20 bg-slate-300' />
           <div className='text-lg font-bold'>
@@ -168,40 +189,38 @@ export default function Page() {
           </div>
         </div>
         <div className='flex-1' />
-        {/* <div className='grid md:grid-cols-2 gap-4'>
-          <FlashCard
-            title={
-              <div>
-                1/<span className='text-[#C8C8C8]'>50</span>
-              </div>
-            }
-            subtitle='Position in class'
-          />
-          <FlashCard
-            title={
-              <div>
-                1/<span className='text-[#C8C8C8]'>50</span>
-              </div>
-            }
-            subtitle='Position in class'
-          />
-          <FlashCard
-            title={
-              <div>
-                1/<span className='text-[#C8C8C8]'>50</span>
-              </div>
-            }
-            subtitle='Position in class'
-          />
-          <FlashCard
-            title={
-              <div>
-                1/<span className='text-[#C8C8C8]'>50</span>
-              </div>
-            }
-            subtitle='Position in class'
-          />
-        </div> */}
+        <div className='my-3 flex justify-end space-x-2  h-fit  text-gray-500'>
+          <select
+            name=''
+            id=''
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[250px]'
+            onChange={(e) => {
+              setSelectedSessionId(e.target.value);
+            }}
+          >
+            <option value=''> Session</option>
+            {(allSession?.data ?? []).map((v: any) => (
+              <option key={v.id} value={v.id}>
+                {v.session}
+              </option>
+            ))}
+          </select>
+          <select
+            name=''
+            id=''
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[200px]'
+            onChange={(e) => {
+              setSelectedTermId(e.target.value);
+            }}
+          >
+            <option value=''> Term</option>
+            {sessionterms.map((v: any, i: number) => (
+              <option key={i} value={v.id}>
+                {termNumberToName(v.name)}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className='rounded-lg bg-white p-6'>
         <div className='mb-5 font-bold text-xl'>Cognitive Domain</div>

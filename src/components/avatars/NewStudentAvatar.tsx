@@ -23,7 +23,7 @@ export default function NewStudentAvatar() {
         <OnlineStatus status='online' />
         <div className='font-extrabold'>
           <span className='font-normal text-[#3361FF]'>ID no:</span>{' '}
-          {user?.currentStudentInfo.studentId}
+          {user?.currentStudentInfo.uniqueId}
         </div>
       </div>
     </div>

@@ -81,7 +81,7 @@ const Page = () => {
       : null;
   };
 
-  const reportCardURL = `/view-report-card?sessionId=${currentSessionId}&termId=${currentTermInfo?.id}&studentId=${user?.currentStudentInfo?.id}&classArmId=${user?.currentStudentInfo?.class?.id}`;
+  const reportCardURL = `/view-report-card?sessionId=${selectedSessionId}&termId=${selectedTermId}&studentId=${user?.currentStudentInfo?.id}&classArmId=${user?.currentStudentInfo?.class?.id}`;
 
   return (
     <div className='flex gapx-4 gap-y-10'>
