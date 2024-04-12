@@ -228,7 +228,7 @@ export function useGetSubjectGradeList(params: GetSubjectGradeBookParams) {
 
 export function useGetStudentListScore(params: GetSubjectGradeBookParams) {
   const query = useQuery({
-    queryKey: 'get_subject_grade_List',
+    queryKey: ['get_subject_grade_List', params.classArmId, params.termId],
     queryFn: async () => {
       if (params?.classArmId && params.termId) {
         const d = await request.get(
