@@ -116,6 +116,16 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -626,6 +636,7 @@ const CommentObservation = ({ user, domains }: any) => {
         }
       : null;
   };
+
   return (
     <div className='table rounded-[2px] border-2 border-black w-full mt-[5px]'>
       <thead>
@@ -731,6 +742,7 @@ const CognitiveKeys = ({ termInfo, user }) => {
 const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
   const getDomainValue = (value: string) => {
     const result = domains && domains.find((v) => v.behavior === value);
+    console.log(result);
     return result
       ? {
           label: result.remark,
@@ -754,7 +766,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 5 && (
+        {getDomainValue(title)?.value === 5 && (
           <Image
             alt='Logo'
             width={11}
@@ -769,7 +781,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 4 && (
+        {getDomainValue(title)?.value === 4 && (
           <Image
             alt='Logo'
             width={11}
@@ -784,7 +796,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 3 && (
+        {getDomainValue(title)?.value === 3 && (
           <Image
             alt='Logo'
             width={11}
@@ -799,7 +811,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 2 && (
+        {getDomainValue(title)?.value === 2 && (
           <Image
             alt='Logo'
             width={11}
@@ -814,7 +826,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 1 && (
+        {getDomainValue(title)?.value === 1 && (
           <Image
             alt='Logo'
             width={11}
