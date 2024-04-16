@@ -772,7 +772,7 @@ export function useCreateStudentTransfer() {
       request.post('/v1/institutions/student_transfer_request', params, {
         withCredentials: true,
       }),
-    onSettled: (data) => {
+    onSettled: () => {
       client.refetchQueries('get_staff_transfer_requests');
     },
   });
@@ -1152,6 +1152,7 @@ export function useUpdateInstitution() {
       if (params.town) parsedParams['town'] = params.town;
       if (params.instituteName)
         parsedParams['instituteName'] = params.instituteName;
+      if (params.principalId) parsedParams['principalId'] = params.principalId;
 
       return (
         await request.patch(

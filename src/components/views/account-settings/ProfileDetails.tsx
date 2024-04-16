@@ -6,15 +6,21 @@ import { isLocal } from '@/constant/env';
 import { getURL, uploadDocument } from '@/firebase/init';
 import logger from '@/lib/logger';
 import { getErrMsg } from '@/server';
+import { useGetProfile } from '@/server/auth';
 import {
   useUpdateUser,
   useUpdateUserPassword,
 } from '@/server/government/staff';
+import {
+  useGetTeachersListByInstitution,
+  useUpdateInstitution,
+} from '@/server/institution';
 import { UserInfo } from '@/types/auth';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { RiImageAddFill } from 'react-icons/ri';
+import ReactSelect from 'react-select';
 import { toast } from 'react-toastify';
 import { uuid } from 'uuidv4';
 
@@ -27,12 +33,21 @@ export default function TeacherBioDetails({
   setIsEditing: (value: boolean) => void;
   initProfile?: UserInfo;
 }) {
+  const { data: institutionProfile } = useGetProfile();
+  const { data: staffs } = useGetTeachersListByInstitution({
+    instituteId: institutionProfile?.userInfo?.esiAdmin?.id,
+    limit: 1000,
+  });
   const { control, setValue, handleSubmit, getValues, register } = useForm();
   const [loading, setIsLoading] = useState(false);
 
   const update = useUpdateUser();
+  const updatePrincipal = useUpdateInstitution();
   const updatePassword = useUpdateUserPassword();
-
+  const staffData = (staffs?.data ?? []).map((v) => ({
+    label: v?.user ? `${v?.user?.firstName} ${v?.user?.lastName}` : ' ',
+    value: v.user.id,
+  }));
   const environment = isLocal ? 'staging' : 'production';
   const [url, setUrl] = useState(
     'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'
@@ -287,6 +302,29 @@ export default function TeacherBioDetails({
                 label='Address'
                 placeholder='Enter Address'
                 {...field.field}
+              />
+            )}
+          />
+        </div>
+        <div className='font-bold text-2xl text-[#6B7A99] my-8'>
+          Principal Details
+        </div>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+          <Controller
+            control={control}
+            name='currentPassword'
+            render={(field) => (
+              <ReactSelect
+                required
+                {...field}
+                options={staffData}
+                className='h-auto mt-2 select'
+                onChange={(value: any) => {
+                  updatePrincipal.mutateAsync({
+                    id: institutionProfile?.userInfo?.esiAdmin?.id,
+                    principalId: value.value, // staff Id to be made principal
+                  });
+                }}
               />
             )}
           />

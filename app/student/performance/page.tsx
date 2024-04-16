@@ -37,6 +37,7 @@ const psychomotor = [
 ];
 const Page = () => {
   const userData = getFromSessionStorage('user');
+
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
   const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
   const [sessionterms, setsessionterms] = useState([]);

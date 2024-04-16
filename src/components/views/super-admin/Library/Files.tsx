@@ -769,7 +769,7 @@ const UploadDocument = ({
                           htmlFor='upload_file'
                           className='p-3 cursor-pointer hover:bg-slate-100  block text-left font-medium max-w-full'
                         >
-                          Upload File{' '}
+                          Upload File
                           {folderTrail.length > 0 &&
                             `To ${
                               folderTrail[folderTrail.length - 1].folderName

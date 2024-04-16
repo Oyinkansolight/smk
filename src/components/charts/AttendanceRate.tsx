@@ -215,7 +215,7 @@ const AttendanceRate = ({ data, institute, showLink = false }: AttendanceRatePro
         <div className='flex justify-center mt-2'>
           <Link
             className='flex items-center text my-2 px-4 text-lg text-[#5754F7] font-medium gap-2 hover:text-[#5754F7]'
-            href={`${routeDetails}/student-attendance`}
+            href={`/admin-new/student-attendance`}
           >
             <div>View All</div>
             <BiChevronRight className='h-5 w-5' />

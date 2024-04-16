@@ -6,6 +6,7 @@ import Button from '@/components/buttons/Button';
 import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { useGetProfile } from '@/server/auth';
 import {
   Agregates,
   StudentResult,
@@ -14,6 +15,34 @@ import {
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -129,6 +158,8 @@ const PrintedReportCard = ({
   const handlePrint = () => {
     window.print();
   };
+  const { data: studentProfile } = useGetProfile();
+
   const userData = getFromSessionStorage('user');
   const term = getFromSessionStorage('currentTerm');
   const session = getFromLocalStorage('currentSession');
@@ -141,7 +172,6 @@ const PrintedReportCard = ({
     termInfo = JSON.parse(term ?? '{}');
     sessionInfo = JSON.parse(session ?? '{}');
   }
-  console.log(termInfo);
 
   return (
     <div className='flex flex-col py-10 max-w-[750px] mx-auto gap-8'>
@@ -180,7 +210,7 @@ const PrintedReportCard = ({
           <div className='flex flex-col col-span-9 w-full min-w-[434px]'>
             <Cognitive subjectResults={subjectResults} />
             <CommentObservation domains={domains} />
-            <CognitiveKeys termInfo={termInfo} />
+            <CognitiveKeys termInfo={termInfo} user={studentProfile} />
           </div>
 
           <div className='flex flex-col col-span-3 w-full gap-[6px]'>
@@ -258,7 +288,7 @@ const Header = (props: HeaderProps) => {
         <span className='font-bold text-[10px]'>SSEB.EDOSTATE.GOV.NG</span>
 
         <span className='font-medium text-[13px] mt-[6px]'>
-          {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}{' '}
+          {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}
           Session
         </span>
       </div>
@@ -516,7 +546,7 @@ const Cognitive = ({ subjectResults }: any) => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                {result?.ca1_score ?? 'N/A'}{' '}
+                {result?.ca1_score ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -524,7 +554,7 @@ const Cognitive = ({ subjectResults }: any) => {
                   'border-r-2 border-black p-1'
                 )}
               >
-                {result?.ca2_score ?? 'N/A'}{' '}
+                {result?.ca2_score ?? 'N/A'}
               </td>
               <td
                 className={clsxm(
@@ -606,6 +636,7 @@ const CommentObservation = ({ user, domains }: any) => {
         }
       : null;
   };
+
   return (
     <div className='table rounded-[2px] border-2 border-black w-full mt-[5px]'>
       <thead>
@@ -629,7 +660,7 @@ const CommentObservation = ({ user, domains }: any) => {
   );
 };
 
-const CognitiveKeys = ({ termInfo }) => {
+const CognitiveKeys = ({ termInfo, user }) => {
   return (
     <div className='flex flex-row mt-[6px] gap-4'>
       <div className='table rounded-[2px] border-2 border-black w-full min-w-[215px]'>
@@ -663,7 +694,7 @@ const CognitiveKeys = ({ termInfo }) => {
           <div>normal: 1, </div>
           <div>fair: 2, </div>
           <div>
-            no tick: <span className='lowercase'>not recorded</span>{' '}
+            no tick: <span className='lowercase'>not recorded</span>
           </div>
         </div>
       </div>
@@ -671,7 +702,14 @@ const CognitiveKeys = ({ termInfo }) => {
       <div className='flex flex-col gap-[13px] rounded-[2px] border-2 border-black w-full p-[9px] uppercase font-bold text-[8px] leading-[10px] h-[98px]'>
         <div className='flex flex-row justify-between items-center'>
           <div>principal:</div>
-          <div>Principal Name</div>
+          <div>
+            {`${
+              user?.userInfo?.student?.institution?.principal?.firstName ??
+              'N/A'
+            } ${
+              user?.userInfo?.student?.institution?.principal?.lastName ?? 'N/A'
+            }`}
+          </div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
@@ -704,6 +742,7 @@ const CognitiveKeys = ({ termInfo }) => {
 const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
   const getDomainValue = (value: string) => {
     const result = domains && domains.find((v) => v.behavior === value);
+    console.log(result);
     return result
       ? {
           label: result.remark,
@@ -727,7 +766,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 5 && (
+        {getDomainValue(title)?.value === 5 && (
           <Image
             alt='Logo'
             width={11}
@@ -742,7 +781,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 4 && (
+        {getDomainValue(title)?.value === 4 && (
           <Image
             alt='Logo'
             width={11}
@@ -757,7 +796,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 3 && (
+        {getDomainValue(title)?.value === 3 && (
           <Image
             alt='Logo'
             width={11}
@@ -772,7 +811,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-r-2 border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 2 && (
+        {getDomainValue(title)?.value === 2 && (
           <Image
             alt='Logo'
             width={11}
@@ -787,7 +826,7 @@ const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
           'border-black p-1'
         )}
       >
-        {getDomainValue(title)?.label === 1 && (
+        {getDomainValue(title)?.value === 1 && (
           <Image
             alt='Logo'
             width={11}

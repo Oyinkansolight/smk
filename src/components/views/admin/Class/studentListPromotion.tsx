@@ -4,12 +4,12 @@ import Button from '@/components/buttons/Button';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, termNumberToName } from '@/lib/helper';
 import { getErrMsg } from '@/server';
-import { useGetStudentListScore } from '@/server/government/classes_and_subjects';
 import { useGetSessionTerms } from '@/server/government/terms';
 import {
   useGetInstituteClassArms,
   usePromoteStudent,
 } from '@/server/institution/class';
+import { useGetClassArmStudents } from '@/server/institution/class-arm';
 import { useEffect, useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { ImSpinner } from 'react-icons/im';
@@ -32,9 +32,12 @@ export default function StudentListPromotion({
   const { data: terms } = useGetSessionTerms({
     sessionId,
   });
-  const { data: getInstitutionStudents } = useGetStudentListScore({
-    classArmId: classArmId as string,
-    termId: selectedTerm,
+  // const { data: getInstitutionStudents } = useGetStudentListScore({
+  //   classArmId: classArmId as string,
+  //   termId: selectedTerm,
+  // });
+  const { data: getInstitutionStudents } = useGetClassArmStudents({
+    classArmId: classArmId,
   });
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';
@@ -205,7 +208,7 @@ export default function StudentListPromotion({
               handlePromotion();
             }}
           >
-            {loading ? <ImSpinner /> : 'Promote Selected Children'}
+            {loading ? <ImSpinner /> : 'Promote Selected Students'}
           </Button>
         </div>
       </div>
