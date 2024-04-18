@@ -213,7 +213,10 @@ export default function Page() {
                 <div>Rating</div>
               </div>
               {affective.map((v, i) => (
-                <div key={i} className='grid grid-cols-2 items-center pb-20'>
+                <div
+                  key={i}
+                  className='grid grid-cols-2 items-center pb-[300px]'
+                >
                   <div>{v}</div>
                   <ReactSelect className='min-w-[20rem]' />
                 </div>
@@ -233,7 +236,10 @@ export default function Page() {
                 <div>Rating</div>
               </div>
               {psychomotor.map((v, i) => (
-                <div key={i} className='grid grid-cols-2 items-center pb-20'>
+                <div
+                  key={i}
+                  className='grid grid-cols-2 items-center  pb-[300px]'
+                >
                   <div>{v}</div>
                   <ReactSelect className='min-w-[20rem]' />
                 </div>
