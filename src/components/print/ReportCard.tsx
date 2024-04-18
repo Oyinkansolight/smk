@@ -134,6 +134,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -520,7 +522,7 @@ const Cognitive = ({ subjectResults }: any) => {
             rowSpan={1}
             className='relative max-w-[30px] border-r-2 border-b-2 border-black p-1'
           >
-            <div className='absolute text-[7px] left-0 bottom-5 flex transform -rotate-90 justify-start w-full whitespace-nowrap'>
+            <div className='absolute text-[7px] left-0 bottom-5\ flex transform -rotate-90 justify-start w-full whitespace-nowrap'>
               GRADE
             </div>
           </td>

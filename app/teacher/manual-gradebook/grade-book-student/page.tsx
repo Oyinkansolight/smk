@@ -207,7 +207,7 @@ export default function Page() {
           length={500}
         >
           <div className='flex justify-center mt-4'>
-            <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
+            <div className='flex-1 flex flex-col gap-6 max-w-3xl pb-[300px]'>
               <div className='grid grid-cols-2 font-bold'>
                 <div>Behavior</div>
                 <div>Rating</div>
@@ -230,16 +230,13 @@ export default function Page() {
           length={420}
         >
           <div className='flex justify-center mt-4'>
-            <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
+            <div className='flex-1 flex flex-col gap-6 max-w-3xl pb-[300px]'>
               <div className='grid grid-cols-2 font-bold'>
                 <div>Skills</div>
                 <div>Rating</div>
               </div>
               {psychomotor.map((v, i) => (
-                <div
-                  key={i}
-                  className='grid grid-cols-2 items-center  pb-[300px]'
-                >
+                <div key={i} className='grid grid-cols-2 items-center'>
                   <div>{v}</div>
                   <ReactSelect className='min-w-[20rem]' />
                 </div>
