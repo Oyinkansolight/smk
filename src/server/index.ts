@@ -20,7 +20,7 @@ const request = axios.create({
 export function getErrMsg(error: any) {
   if (error.code === 'ERR_NETWORK') return 'Network Error';
   if (error.response?.data?.message === 'Unauthorized') {
-    toast.error('Token  expired, login required');
+    toast.error('Token  expired, login required.');
     if (typeof window !== 'undefined') {
       window.open('/auth/user', '_self');
     }
