@@ -346,11 +346,11 @@ export default function Page() {
       {!data ? (
         <GenericLoader />
       ) : (
-        <div className='px-8 pt-8 pb-40 flex flex-col gap-5 bg-white rounded-lg'>
+        <div className='px-8 pt-8 pb-40 flex flex-col gap-6 bg-white rounded-lg'>
           <AccordionAlt
             titleClassName='bg-[#EFF7F6]'
             title={<div> Reading Proficiency </div>}
-            length={500}
+            length={700}
           >
             <div className='flex justify-center mt-4'>
               <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
@@ -368,7 +368,7 @@ export default function Page() {
           <AccordionAlt
             titleClassName='bg-[#EFF7F6]'
             title={<div>Affective Domain</div>}
-            length={500}
+            length={700}
           >
             <div className='flex justify-center mt-4'>
               <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
@@ -395,10 +395,10 @@ export default function Page() {
           <AccordionAlt
             titleClassName='bg-[#EFF7F6]'
             title={<div>Psychomotor Domain</div>}
-            length={420}
+            length={700}
           >
             <div className='flex justify-center mt-4'>
-              <div className='flex-1 flex flex-col gap-6 max-w-3xl'>
+              <div className='flex-1 flex flex-col gap-6 max-w-3xl '>
                 <div className='grid grid-cols-2 font-bold'>
                   <div>Skills</div>
                   <div>Rating</div>

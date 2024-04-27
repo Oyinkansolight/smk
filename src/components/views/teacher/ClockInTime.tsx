@@ -76,19 +76,17 @@ export default function ClockInTime() {
       const d = calculateEarthDistanceTwo(latitude, +lat, longitude, +long);
       logger(d.toFixed(2));
       setDistance(d.toFixed(2));
+      if (profile?.userInfo?.staff?.id) {
+        submitCoordinates.mutateAsync({
+          latitude: String(latitude),
+          longitude: String(longitude),
+          staff: profile?.userInfo?.staff?.id,
+          address: `Distance from school: ${d.toFixed(2)} Km`,
+        });
+      }
       if (d < 2) {
         setInArea(true);
         setIsLoading(false);
-      } else {
-        //* This is done to track the coordinates of teachers that can't clock in due to distance
-        if (!clockInfo?.isClockedIn && profile?.userInfo?.staff?.id) {
-          submitCoordinates.mutateAsync({
-            latitude: String(latitude),
-            longitude: String(longitude),
-            staff: profile?.userInfo?.staff?.id,
-            address: `Distance from school: ${d.toFixed(2)} Km`,
-          });
-        }
       }
     }
   }, [
