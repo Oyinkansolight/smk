@@ -9,7 +9,8 @@ export const TOKEN_KEY = 'TOKEN_KEY';
 const request = axios.create({
   baseURL: isLocal
     ? process.env.NEXT_PUBLIC_BE_STAGING_URL
-    : process.env.NEXT_PUBLIC_BE_PROD_URL,
+    : // : process.env.NEXT_PUBLIC_BE_PROD_URL,
+      'https://es-ems-be-production-b62b1d40e244.herokuapp.com/',
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Origin': '*', // For CORS support to work
