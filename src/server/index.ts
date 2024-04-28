@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 export const TOKEN_KEY = 'TOKEN_KEY';
 
 const request = axios.create({
-  baseURL: !isLocal
+  baseURL: isLocal
     ? process.env.NEXT_PUBLIC_BE_STAGING_URL
-    : process.env.NEXT_PUBLIC_BE_PROD_URL,
+    : // : process.env.NEXT_PUBLIC_BE_PROD_URL,
+      'https://es-ems-be-production-b62b1d40e244.herokuapp.com/',
   withCredentials: true,
   headers: {
     'Access-Control-Allow-Origin': '*', // For CORS support to work
@@ -20,7 +21,7 @@ const request = axios.create({
 export function getErrMsg(error: any) {
   if (error.code === 'ERR_NETWORK') return 'Network Error';
   if (error.response?.data?.message === 'Unauthorized') {
-    toast.error('Token  expired, login required');
+    toast.error('Token  expired, login required.');
     if (typeof window !== 'undefined') {
       window.open('/auth/user', '_self');
     }
