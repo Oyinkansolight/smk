@@ -136,6 +136,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -988,13 +990,7 @@ const Overview = ({
     <div className='rounded-[2px] border-2 border-black w-full p-[5px] divide-black divide-y-2 gap-[6px]'>
       <SingleItem
         title='total score:'
-        value={`${
-          agregates &&
-          agregates.classTotalExamScore &&
-          agregates.studentTotalExamScore
-            ? agregates.classTotalExamScore / agregates.studentTotalExamScore
-            : 'N/A'
-        }`}
+        value={agregates?.studentTotalExamScore ?? 'N/A'}
       />
       <SingleItem
         title='position in class:'
