@@ -1,6 +1,7 @@
 'use client';
 
 import PrintedReportCard from '@/components/print/ReportCard';
+import { useGetTermById } from '@/server/government/terms';
 import { useGetStudentReportCard } from '@/server/student';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -18,6 +19,9 @@ const ViewReportCard = () => {
     sessionId,
     classArmId,
   });
+  const { data: termInfo } = useGetTermById({
+    termId,
+  });
 
   return (
     <PrintedReportCard
@@ -25,6 +29,7 @@ const ViewReportCard = () => {
       subjectResults={reportCard?.subjectResults}
       agregates={reportCard?.agregates}
       attendanceReport={reportCard?.attendanceReport}
+      termInfo={termInfo}
     />
   );
 };

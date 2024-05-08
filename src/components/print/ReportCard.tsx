@@ -24,120 +24,6 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -161,11 +47,13 @@ const PrintedReportCard = ({
   subjectResults,
   agregates,
   attendanceReport,
+  termInfo,
 }: {
   domains: any[] | undefined;
   subjectResults: SubjectResults | undefined;
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
+  termInfo: any;
 }) => {
   const handlePrint = () => {
     window.print();
@@ -173,15 +61,15 @@ const PrintedReportCard = ({
   const { data: studentProfile } = useGetProfile();
 
   const userData = getFromSessionStorage('user');
-  const term = getFromSessionStorage('currentTerm');
+  // const term = getFromSessionStorage('currentTerm');
   const session = getFromLocalStorage('currentSession');
   let user;
-  let termInfo;
+  // let termInfo;
   let sessionInfo;
 
   if (userData) {
     user = JSON.parse(userData);
-    termInfo = JSON.parse(term ?? '{}');
+    // termInfo = JSON.parse(term ?? '{}');
     sessionInfo = JSON.parse(session ?? '{}');
   }
 
@@ -738,12 +626,12 @@ const CognitiveKeys = ({ termInfo, user }) => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>this term ends:</div>
-          <div>{moment(termInfo.endDate).format('ll')}</div>
+          <div>{moment(termInfo?.endDate).format('ll')}</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>{moment(termInfo.nextTermStart).format('ll')}</div>
+          <div>{moment(termInfo?.nextTermStart).format('ll')}</div>
         </div>
       </div>
     </div>
