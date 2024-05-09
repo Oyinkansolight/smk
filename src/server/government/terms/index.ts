@@ -31,6 +31,22 @@ export function useGetSessionTerms(params: { sessionId?: string }) {
 
   return query;
 }
+export function useGetTermById(params: { termId?: string }) {
+  const query = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: `get_session_term_${params.termId ?? ''}`,
+    queryFn: async () => {
+      if (params.termId) {
+        const d = await request.get(`v1/government/terms/session-term-by-id`, {
+          params,
+        });
+        return d.data.data.data as PaginatedData<Term>;
+      }
+    },
+  });
+
+  return query;
+}
 
 export function useGetCurrentSessionTerm(params: { sessionId?: string }) {
   const query = useQuery({

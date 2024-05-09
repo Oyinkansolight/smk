@@ -24,118 +24,6 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -159,11 +47,13 @@ const PrintedReportCard = ({
   subjectResults,
   agregates,
   attendanceReport,
+  termInfo,
 }: {
   domains: any[] | undefined;
   subjectResults: SubjectResults | undefined;
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
+  termInfo: any;
 }) => {
   const handlePrint = () => {
     window.print();
@@ -171,15 +61,15 @@ const PrintedReportCard = ({
   const { data: studentProfile } = useGetProfile();
 
   const userData = getFromSessionStorage('user');
-  const term = getFromSessionStorage('currentTerm');
+  // const term = getFromSessionStorage('currentTerm');
   const session = getFromLocalStorage('currentSession');
   let user;
-  let termInfo;
+  // let termInfo;
   let sessionInfo;
 
   if (userData) {
     user = JSON.parse(userData);
-    termInfo = JSON.parse(term ?? '{}');
+    // termInfo = JSON.parse(term ?? '{}');
     sessionInfo = JSON.parse(session ?? '{}');
   }
 
@@ -736,12 +626,12 @@ const CognitiveKeys = ({ termInfo, user }) => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>this term ends:</div>
-          <div>{moment(termInfo.endDate).format('ll')}</div>
+          <div>{moment(termInfo?.endDate).format('ll')}</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>{moment(termInfo.nextTermStart).format('ll')}</div>
+          <div>{moment(termInfo?.nextTermStart).format('ll')}</div>
         </div>
       </div>
     </div>
@@ -988,13 +878,7 @@ const Overview = ({
     <div className='rounded-[2px] border-2 border-black w-full p-[5px] divide-black divide-y-2 gap-[6px]'>
       <SingleItem
         title='total score:'
-        value={`${
-          agregates &&
-          agregates.classTotalExamScore &&
-          agregates.studentTotalExamScore
-            ? agregates.classTotalExamScore / agregates.studentTotalExamScore
-            : 'N/A'
-        }`}
+        value={agregates?.studentTotalExamScore ?? 'N/A'}
       />
       <SingleItem
         title='position in class:'
