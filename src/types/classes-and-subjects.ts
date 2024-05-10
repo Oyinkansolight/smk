@@ -187,6 +187,7 @@ export interface StudentResult {
   agregates: Agregates;
   subjectResults: SubjectResults;
   domains: any[];
+  term: Term;
   attendanceReport: {
     PRESENT: number;
     ABSENT: number;
@@ -252,4 +253,29 @@ export interface Student {
   updatedAt: Date;
   lessonNoteTimeLogs: any[];
   classArmId: string;
+}
+
+export interface TermOrNextTerm {
+  id: string;
+  name: string;
+  noOfWeeks: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Term {
+  currentTerm: CurrentTerm;
+  nextTerm: TermOrNextTerm;
+}
+export interface CurrentTerm {
+  id: string;
+  name: string;
+  noOfWeeks: number;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+  session: Session;
 }

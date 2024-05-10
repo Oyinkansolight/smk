@@ -11,10 +11,21 @@ import {
   Agregates,
   StudentResult,
   SubjectResults,
+  Term,
 } from '@/types/classes-and-subjects';
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -53,7 +64,7 @@ const PrintedReportCard = ({
   subjectResults: SubjectResults | undefined;
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
-  termInfo: any;
+  termInfo: Term;
 }) => {
   const handlePrint = () => {
     window.print();
@@ -84,9 +95,9 @@ const PrintedReportCard = ({
       <div className='bg-white flex flex-col w-full max-w-[750px] mx-auto h-full overflow-hidden px-[6px]'>
         <Header
           term={
-            termInfo?.name === '1'
+            termInfo?.currentTerm.name === '1'
               ? 'First'
-              : termInfo?.name === '2'
+              : termInfo?.currentTerm.name === '2'
               ? 'Second'
               : 'Third'
           }
@@ -560,7 +571,7 @@ const CommentObservation = ({ user, domains }: any) => {
   );
 };
 
-const CognitiveKeys = ({ termInfo, user }) => {
+const CognitiveKeys = ({ termInfo, user }: { termInfo: Term; user: any }) => {
   return (
     <div className='flex flex-row mt-[6px] gap-4'>
       <div className='table rounded-[2px] border-2 border-black w-full min-w-[215px]'>
@@ -626,12 +637,12 @@ const CognitiveKeys = ({ termInfo, user }) => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>this term ends:</div>
-          <div>{moment(termInfo?.endDate).format('ll')}</div>
+          <div>{moment(termInfo?.currentTerm.endDate).format('ll')}</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>{moment(termInfo?.nextTermStart).format('ll')}</div>
+          <div>{moment(termInfo?.nextTerm.startDate).format('ll')}</div>
         </div>
       </div>
     </div>
@@ -642,7 +653,7 @@ const CognitiveKeys = ({ termInfo, user }) => {
 const SingleDomain = ({ title, value, domains, noBottomBorder = false }) => {
   const getDomainValue = (value: string) => {
     const result = domains && domains.find((v) => v.behavior === value);
-    console.log(result);
+
     return result
       ? {
           label: result.remark,
