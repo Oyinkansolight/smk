@@ -17,9 +17,18 @@ const firebaseConfig = {
   appId: '1:340775384417:web:3b25c8930c144ba5cdc120',
   measurementId: 'G-LCJGRFEBR0',
 };
+const firebaseConfigNew = {
+  apiKey: 'AIzaSyDqGPS5zqO3_VistA0HQENeUxCXv-Vd_Ng',
+  authDomain: 'es-ems.firebaseapp.com',
+  projectId: 'es-ems',
+  storageBucket: 'es-ems.appspot.com',
+  messagingSenderId: '1021261041575',
+  appId: '1:1021261041575:web:b7739b53baa9ead8f53082',
+  measurementId: 'G-EVXKXMBLP2',
+};
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfigNew);
 export let analytics: unknown;
 
 if (typeof window !== 'undefined') {
