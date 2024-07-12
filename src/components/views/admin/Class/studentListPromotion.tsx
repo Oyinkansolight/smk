@@ -87,7 +87,6 @@ export default function StudentListPromotion({
     } else {
       setSelected([]);
     }
-    console.log(selected);
   }, [selectedAll]);
 
   const payload = {
@@ -97,7 +96,6 @@ export default function StudentListPromotion({
   };
 
   async function handlePromotion() {
-    console.log(payload);
     if (!payload.toClassArmId) {
       toast.error('Next class is required');
       return false;
