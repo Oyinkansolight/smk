@@ -38,7 +38,7 @@ export default function AttendanceLog({ userId }: { userId?: string }) {
                     >
                       <div>
                         {v?.user?.firstName ?? 'N/A'}{' '}
-                        {v?.user?.firstName ?? 'N/A'}
+                        {v?.user?.lastName ?? 'N/A'}
                       </div>
                       <div>{moment(v.clockInTime).format('llll')}</div>
                       <div>

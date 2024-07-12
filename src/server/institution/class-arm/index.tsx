@@ -94,8 +94,11 @@ export function useTakeClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.post(
-          `/v1/institutions/institutes/take-class-arm-attendance?${params.studentId ? `studentId=${params.studentId}` : ''
-          }&${params.status ? `status=${params.status}` : ''}&${params.classArmId ? `classArmId=${params.classArmId}` : ''}`,
+          `/v1/institutions/institutes/take-class-arm-attendance?${
+            params.studentId ? `studentId=${params.studentId}` : ''
+          }&${params.status ? `status=${params.status}` : ''}&${
+            params.classArmId ? `classArmId=${params.classArmId}` : ''
+          }`,
           {
             withCredentials: true,
           }
@@ -111,9 +114,10 @@ export function useUpdateClassArmAttendance() {
     mutationFn: async (params: TakeClassArmAttendanceParams) =>
       (
         await request.patch(
-          `/v1/institutions/institutes/update-class-arm-attendance?${params.classArmAttendanceId
-            ? `classArmAttendanceId=${params.classArmAttendanceId}`
-            : ''
+          `/v1/institutions/institutes/update-class-arm-attendance?${
+            params.classArmAttendanceId
+              ? `classArmAttendanceId=${params.classArmAttendanceId}`
+              : ''
           }&${params.status ? `status=${params.status}` : ''}`,
           {
             withCredentials: true,
@@ -124,7 +128,10 @@ export function useUpdateClassArmAttendance() {
   return mutation;
 }
 
-export function useGetClassArmStudents(params: { classArmId?: string | null | undefined }) {
+export function useGetClassArmStudents(params: {
+  classArmId?: string | null | undefined;
+  termId?: string;
+}) {
   const query = useQuery({
     queryKey: `get_students_in_class`,
     queryFn: async () => {

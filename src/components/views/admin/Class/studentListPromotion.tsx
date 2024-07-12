@@ -38,6 +38,7 @@ export default function StudentListPromotion({
   // });
   const { data: getInstitutionStudents } = useGetClassArmStudents({
     classArmId: classArmId,
+    termId: selectedTerm,
   });
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';
@@ -51,7 +52,7 @@ export default function StudentListPromotion({
     page: 1,
     limit: 100,
     institutionId,
-    currentSessionId,
+    // currentSessionId,
   });
   const { mutateAsync } = usePromoteStudent();
 
@@ -87,7 +88,6 @@ export default function StudentListPromotion({
     } else {
       setSelected([]);
     }
-    console.log(selected);
   }, [selectedAll]);
 
   const payload = {
@@ -97,7 +97,6 @@ export default function StudentListPromotion({
   };
 
   async function handlePromotion() {
-    console.log(payload);
     if (!payload.toClassArmId) {
       toast.error('Next class is required');
       return false;
@@ -154,7 +153,7 @@ export default function StudentListPromotion({
               <option value=''> --Select next class --</option>
               {allClasses?.data?.map((item: any, key: number) => (
                 <option value={item.id} key={key}>
-                  {`${item.class.name} ${item.arm}`}
+                  {`${item?.class?.name ?? ''} ${item?.arm}`}
                 </option>
               ))}
             </select>
@@ -181,24 +180,30 @@ export default function StudentListPromotion({
             )}
             <button>Select All</button>
           </div>
-          {getInstitutionStudents?.map((student, key) => (
-            <div
-              className='flex space-x-2 items-center my-1'
-              key={key}
-              onClick={() => {
-                handleSelection(student.id);
-              }}
-            >
-              {selected?.includes(student.id) ? (
-                <AiFillCheckCircle
-                  className={clsxm('h-5 w-5 text-fun-green-500')}
-                />
-              ) : (
-                <div className='h-5 w-5 rounded-full border-2' />
-              )}
-              <p>{`${student.firstName} ${student.lastName}`}</p>
-            </div>
-          ))}
+          {getInstitutionStudents
+            ?.sort((a, b) => a?.firstName.localeCompare(b?.firstName))
+            ?.map((student, key) => (
+              <div
+                className='space-x-2 items-center my-1 grid grid-cols-12'
+                key={key}
+                onClick={() => {
+                  handleSelection(student.id);
+                }}
+              >
+                <div className='col-span-8 flex space-x-2'>
+                  {selected?.includes(student.id) ? (
+                    <AiFillCheckCircle
+                      className={clsxm('h-5 w-5 text-fun-green-500')}
+                    />
+                  ) : (
+                    <div className='h-5 w-5 rounded-full border-2' />
+                  )}
+                  <p>{`${student.firstName} ${student.lastName}`}</p>
+                </div>
+                <div className='col-span-2'>{student.position}</div>
+                <div className='col-span-2'>{student.total}</div>
+              </div>
+            ))}
         </div>
 
         <div className='flex justify-end  mt-8'>

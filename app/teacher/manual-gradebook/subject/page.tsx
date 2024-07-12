@@ -27,9 +27,9 @@ import { useSessionStorage } from 'usehooks-ts';
 
 export default function Page() {
   const [idx, setIdx] = useState(1);
-  const [ca1_score, setCa1_Score] = useState(0);
-  const [ca2_score, setCa2_Score] = useState(0);
-  const [exams_score, setExam] = useState(0);
+  const [ca1_score, setCa1_Score] = useState<null | number>();
+  const [ca2_score, setCa2_Score] = useState<null | number>();
+  const [exams_score, setExam] = useState<null | number>();
   const [loading, setloading] = useState(false);
   const [isLoadingCreateGradebook, setIsLoadingCreateGradebook] =
     useState(false);
@@ -164,18 +164,25 @@ export default function Page() {
       toast.error(getErrMsg(error));
     }
   };
-  const handleGradeBookEdit = async (gradeBookId: string) => {
+  const handleGradeBookEdit = async (
+    gradeBookId: string,
+    v1_score: number, // student_Ca1
+    v2_score: number, // student_Ca2
+    v3_score: number //  student_Ca3
+  ) => {
     const payload = {
       id: gradeBookId,
-      ca1_score: Number(ca1_score),
-      ca2_score: Number(ca2_score),
-      exams_score: Number(exams_score),
+      ca1_score: Number(v1_score ?? ca1_score),
+      ca2_score: Number(v2_score ?? ca2_score),
+      exams_score: Number(v3_score ?? exams_score),
     };
 
     try {
       setloading(true);
       const response = await handleEditGradebook.mutateAsync(payload);
-
+      setCa1_Score(0);
+      setCa2_Score(0);
+      setExam(0);
       if (response) {
         toast.success('Gradebook updated successfully');
         setIsModify(false);
@@ -371,7 +378,8 @@ function StudentGradeListItem({
   setCa1_Score: (v: number) => void;
   setCa2_Score: (v: number) => void;
   setExam: (v: number) => void;
-  handleGradeBookEdit: (v: string) => void;
+
+  handleGradeBookEdit: (id: string, v1: number, v2: number, v3: number) => void;
   handleGradeBookDelete: (v: string) => void;
   handleResetGradeBook: (v: string) => void;
   loading: boolean;
@@ -393,6 +401,7 @@ function StudentGradeListItem({
             <input
               type='number'
               className='rounded-lg w-full outline-none bg-transparent'
+              defaultValue={item?.ca1_score ?? 0}
               onChange={(e) => {
                 setCa1_Score(e.target.value as unknown as number);
               }}
@@ -406,6 +415,7 @@ function StudentGradeListItem({
             <input
               type='number'
               className='rounded-lg w-full outline-none bg-transparent'
+              defaultValue={item?.ca2_score ?? 0}
               onChange={(e) => {
                 setCa2_Score(e.target.value as unknown as number);
               }}
@@ -419,6 +429,7 @@ function StudentGradeListItem({
             <input
               type='number'
               className='rounded-lg w-full outline-none bg-transparent'
+              defaultValue={item?.exams_score ?? 0}
               onChange={(e) => {
                 setExam(e.target.value as unknown as number);
               }}
@@ -449,7 +460,12 @@ function StudentGradeListItem({
               <div className='flex space-x-1'>
                 <Button
                   onClickHandler={() => {
-                    handleGradeBookEdit(item.id);
+                    handleGradeBookEdit(
+                      item.id,
+                      item?.ca1_score,
+                      item?.ca2_score,
+                      item?.exam_score
+                    );
                   }}
                   variant='secondary'
                   className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'

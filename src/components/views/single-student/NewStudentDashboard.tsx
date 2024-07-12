@@ -120,7 +120,7 @@ export default function NewStudentDashboard() {
     <div className='flex md:flex-row flex-col md:justify-between gap-8'>
       <div className='w-full flex flex-col gap-8 mt-8 px-7'>
         <div className='flex flex-col gap-2'>
-          <div className='h3'>Hello, {user?.name ?? ''}</div>
+          <div className='h3'> {user?.name ?? ''}</div>
           <div className='text-sm text-[#888]'>
             Monitor your Period room and activities here
           </div>
