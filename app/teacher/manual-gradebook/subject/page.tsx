@@ -180,7 +180,9 @@ export default function Page() {
     try {
       setloading(true);
       const response = await handleEditGradebook.mutateAsync(payload);
-
+      setCa1_Score(0);
+      setCa2_Score(0);
+      setExam(0);
       if (response) {
         toast.success('Gradebook updated successfully');
         setIsModify(false);
