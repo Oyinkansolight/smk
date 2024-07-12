@@ -30,6 +30,8 @@ import { useDebounce } from 'usehooks-ts';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const AllClasses = () => {
   const router = useRouter();
 
@@ -48,7 +50,7 @@ const AllClasses = () => {
     limit: 10,
     query,
     institutionId,
-    currentSessionId,
+    // currentSessionId,
   });
 
   const {
@@ -308,7 +310,7 @@ const AllClasses = () => {
                 )}
               >
                 {pagingData.page > 3 &&
-                  pagingData.page < allClasses.paging.totalPage
+                pagingData.page < allClasses.paging.totalPage
                   ? pagingData.page
                   : 3}
               </div>
