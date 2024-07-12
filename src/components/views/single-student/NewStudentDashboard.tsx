@@ -121,6 +121,12 @@ export default function NewStudentDashboard() {
       <div className='w-full flex flex-col gap-8 mt-8 px-7'>
         <div className='flex flex-col gap-2'>
           <div className='h3'> {user?.name ?? ''}</div>
+          <div className='text-xs text-[#888]'>
+            Welcome to{' '}
+            <span className='font-bold'>
+              {user?.currentStudentInfo?.institution?.instituteName}
+            </span>
+          </div>
           <div className='text-sm text-[#888]'>
             Monitor your Period room and activities here
           </div>
