@@ -68,7 +68,7 @@ export default function Header({ handleToggle }: HeaderProps) {
               )}
 
               <div className='flex flex-col gap-2'>
-                <div className='whitespace-nowrap text-xs font-bold text-[#6B7A99]'>
+                <div className='whitespace-nowrap uppercase text-xs font-bold text-[#6B7A99]'>
                   {data?.userInfo?.email
                     ? data?.userInfo?.email?.split('@')[0]
                     : data?.userInfo?.firstName}
