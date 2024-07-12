@@ -182,7 +182,7 @@ export default function StudentListPromotion({
             <button>Select All</button>
           </div>
           {getInstitutionStudents
-            ?.sort((a, b) => a?.lastName.localeCompare(b?.lastName))
+            ?.sort((a, b) => a?.firstName.localeCompare(b?.firstName))
             ?.map((student, key) => (
               <div
                 className='space-x-2 items-center my-1 grid grid-cols-12'
@@ -191,7 +191,7 @@ export default function StudentListPromotion({
                   handleSelection(student.id);
                 }}
               >
-                <div className='col-span-8'>
+                <div className='col-span-8 flex space-x-2'>
                   {selected?.includes(student.id) ? (
                     <AiFillCheckCircle
                       className={clsxm('h-5 w-5 text-fun-green-500')}
