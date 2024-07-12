@@ -559,6 +559,8 @@ export interface ClassArmStudents {
   user: User;
   classArmId: string;
   grade?: any;
+  total?: any;
+  position?: any;
 }
 
 export interface StudentsListByInstitution {

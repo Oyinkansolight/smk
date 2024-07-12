@@ -181,24 +181,30 @@ export default function StudentListPromotion({
             )}
             <button>Select All</button>
           </div>
-          {getInstitutionStudents?.map((student, key) => (
-            <div
-              className='flex space-x-2 items-center my-1'
-              key={key}
-              onClick={() => {
-                handleSelection(student.id);
-              }}
-            >
-              {selected?.includes(student.id) ? (
-                <AiFillCheckCircle
-                  className={clsxm('h-5 w-5 text-fun-green-500')}
-                />
-              ) : (
-                <div className='h-5 w-5 rounded-full border-2' />
-              )}
-              <p>{`${student.firstName} ${student.lastName}`}</p>
-            </div>
-          ))}
+          {getInstitutionStudents
+            ?.sort((a, b) => a?.lastName.localeCompare(b?.lastName))
+            ?.map((student, key) => (
+              <div
+                className='space-x-2 items-center my-1 grid grid-cols-12'
+                key={key}
+                onClick={() => {
+                  handleSelection(student.id);
+                }}
+              >
+                <div className='col-span-8'>
+                  {selected?.includes(student.id) ? (
+                    <AiFillCheckCircle
+                      className={clsxm('h-5 w-5 text-fun-green-500')}
+                    />
+                  ) : (
+                    <div className='h-5 w-5 rounded-full border-2' />
+                  )}
+                  <p>{`${student.firstName} ${student.lastName}`}</p>
+                </div>
+                <div className='col-span-2'>{student.position}</div>
+                <div className='col-span-2'>{student.total}</div>
+              </div>
+            ))}
         </div>
 
         <div className='flex justify-end  mt-8'>
