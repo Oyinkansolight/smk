@@ -140,7 +140,7 @@ export function usePromoteStudent() {
             withCredentials: true,
           }
         )
-      ).data.data.data,
+      ).data,
   });
   return mutation;
 }
