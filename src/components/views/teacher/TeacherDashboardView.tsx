@@ -24,6 +24,7 @@ export default function TeacherDashboardView() {
   const sessionId: string = getFromLocalStorage('currentSessionId') ?? '';
   const term: any = getFromSessionStorage('currentTerm');
   const week: any = getFromSessionStorage('currentWeek');
+  const institution: any = getFromSessionStorage('institution');
 
   const { data: userUnreadMessage, isLoading: userUnreadMessageLoading } =
     useGetSenderUnreadMessages();
@@ -39,8 +40,6 @@ export default function TeacherDashboardView() {
     });
   // const { data: sessionCalendarData } = useGetSessionCalendar(1);
 
-  console.log(userUnreadMessage);
-
   const isWithinTime = (startTime: string, endTime: string) => {
     const currentTime = moment().format('HH:mm');
     return moment(currentTime, 'HH:mm').isBetween(
@@ -51,6 +50,12 @@ export default function TeacherDashboardView() {
 
   return (
     <div className='flex flex-col layout'>
+      <div className='text-sm text-[#888] mt-5'>
+        Welcome to
+        <span className='ml-1 font-bold'>
+          {profileData?.userInfo?.staff?.institution?.instituteName ?? ''}
+        </span>
+      </div>
       {profileData?.userInfo?.staff?.managedClassArm && (
         <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 py-4 px-6 bg-white rounded-lg mt-4 w-full'>
           <SmallTeacherCard
