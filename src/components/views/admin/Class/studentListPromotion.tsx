@@ -38,6 +38,7 @@ export default function StudentListPromotion({
   // });
   const { data: getInstitutionStudents } = useGetClassArmStudents({
     classArmId: classArmId,
+    termId: selectedTerm,
   });
   const currentSessionId: string =
     getFromLocalStorage('currentSessionId') ?? '';
@@ -51,7 +52,7 @@ export default function StudentListPromotion({
     page: 1,
     limit: 100,
     institutionId,
-    currentSessionId,
+    // currentSessionId,
   });
   const { mutateAsync } = usePromoteStudent();
 
@@ -152,7 +153,7 @@ export default function StudentListPromotion({
               <option value=''> --Select next class --</option>
               {allClasses?.data?.map((item: any, key: number) => (
                 <option value={item.id} key={key}>
-                  {`${item.class.name} ${item.arm}`}
+                  {`${item?.class?.name ?? ''} ${item?.arm}`}
                 </option>
               ))}
             </select>

@@ -34,6 +34,9 @@ export function useGetInstituteClassArms(params?: InstituteClassArmsParams) {
     institutionId,
     sessionId: currentSessionId,
   };
+  if (!params?.currentSessionId) {
+    delete parsedParams.sessionId;
+  }
 
   if (params?.query) {
     parsedParams.query = params?.query;
