@@ -164,17 +164,12 @@ export default function Page() {
       toast.error(getErrMsg(error));
     }
   };
-  const handleGradeBookEdit = async (
-    gradeBookId: string,
-    v1_score: number, // student_Ca1
-    v2_score: number, // student_Ca2
-    v3_score: number //  student_Ca3
-  ) => {
+  const handleGradeBookEdit = async (gradeBookId: string) => {
     const payload = {
       id: gradeBookId,
-      ca1_score: Number(v1_score ?? ca1_score),
-      ca2_score: Number(v2_score ?? ca2_score),
-      exams_score: Number(v3_score ?? exams_score),
+      ca1_score: Number(ca1_score),
+      ca2_score: Number(ca2_score),
+      exams_score: Number(exams_score),
     };
 
     try {
@@ -379,7 +374,7 @@ function StudentGradeListItem({
   setCa2_Score: (v: number) => void;
   setExam: (v: number) => void;
 
-  handleGradeBookEdit: (id: string, v1: number, v2: number, v3: number) => void;
+  handleGradeBookEdit: (id: string) => void;
   handleGradeBookDelete: (v: string) => void;
   handleResetGradeBook: (v: string) => void;
   loading: boolean;
@@ -449,6 +444,9 @@ function StudentGradeListItem({
                 onClickHandler={() => {
                   setIsModify(true);
                   setLineToModify(id);
+                  setCa1_Score(item?.ca1_score);
+                  setCa2_Score(item?.ca2_score);
+                  setExam(item?.exam_score);
                   console.log(id);
                 }}
                 variant='secondary'
@@ -460,12 +458,7 @@ function StudentGradeListItem({
               <div className='flex space-x-1'>
                 <Button
                   onClickHandler={() => {
-                    handleGradeBookEdit(
-                      item.id,
-                      item?.ca1_score,
-                      item?.ca2_score,
-                      item?.exam_score
-                    );
+                    handleGradeBookEdit(item.id);
                   }}
                   variant='secondary'
                   className='flex justify-center h-[46px] bg-[#1A8FE3] max-w-[186px] w-full font-semibold !text-xs rounded-lg'
