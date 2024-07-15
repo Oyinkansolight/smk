@@ -35,6 +35,10 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -637,12 +641,12 @@ const CognitiveKeys = ({ termInfo, user }: { termInfo: Term; user: any }) => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>this term ends:</div>
-          <div>{moment(termInfo?.currentTerm.endDate).format('ll')}</div>
+          <div>{moment(termInfo?.currentTerm?.endDate).format('ll')}</div>
         </div>
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>{moment(termInfo?.nextTerm.startDate).format('ll')}</div>
+          <div>{moment(termInfo?.nextTerm?.startDate).format('ll')}</div>
         </div>
       </div>
     </div>
