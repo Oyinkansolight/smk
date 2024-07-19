@@ -9,6 +9,7 @@ import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
 import {
   Agregates,
+  Session,
   StudentResult,
   SubjectResults,
   Term,
@@ -16,6 +17,16 @@ import {
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -125,7 +136,11 @@ const PrintedReportCard = ({
           <div className='flex flex-col col-span-9 w-full min-w-[434px]'>
             <Cognitive subjectResults={subjectResults} />
             <CommentObservation domains={domains} />
-            <CognitiveKeys termInfo={termInfo} user={studentProfile} />
+            <CognitiveKeys
+              termInfo={termInfo}
+              user={studentProfile}
+              sessionInfo={sessionInfo}
+            />
           </div>
 
           <div className='flex flex-col col-span-3 w-full gap-[6px]'>
@@ -575,7 +590,15 @@ const CommentObservation = ({ user, domains }: any) => {
   );
 };
 
-const CognitiveKeys = ({ termInfo, user }: { termInfo: Term; user: any }) => {
+const CognitiveKeys = ({
+  termInfo,
+  user,
+  sessionInfo,
+}: {
+  termInfo: Term;
+  user: any;
+  sessionInfo: Session;
+}) => {
   return (
     <div className='flex flex-row mt-[6px] gap-4'>
       <div className='table rounded-[2px] border-2 border-black w-full min-w-[215px]'>
@@ -646,7 +669,11 @@ const CognitiveKeys = ({ termInfo, user }: { termInfo: Term; user: any }) => {
 
         <div className='flex flex-row justify-between items-center'>
           <div>next term begins:</div>
-          <div>{moment(termInfo?.nextTerm?.startDate).format('ll')}</div>
+          <div>
+            {termInfo?.currentTerm?.name === '3'
+              ? moment(sessionInfo[0]?.endDate).format('ll')
+              : moment(termInfo?.nextTerm?.startDate).format('ll')}
+          </div>
         </div>
       </div>
     </div>
