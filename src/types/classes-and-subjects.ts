@@ -184,6 +184,7 @@ export interface ClassArm {
 }
 
 export interface StudentResult {
+  adminSignature: string | null;
   agregates: Agregates;
   subjectResults: SubjectResults;
   domains: any[];

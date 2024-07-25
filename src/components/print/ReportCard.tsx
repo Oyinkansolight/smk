@@ -52,6 +52,16 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -76,7 +86,9 @@ const PrintedReportCard = ({
   agregates,
   attendanceReport,
   termInfo,
+  adminSignature,
 }: {
+  adminSignature: string | null;
   domains: any[] | undefined;
   subjectResults: SubjectResults | undefined;
   agregates: Agregates | undefined;
@@ -142,6 +154,7 @@ const PrintedReportCard = ({
               termInfo={termInfo}
               user={studentProfile}
               sessionInfo={sessionInfo}
+              adminSignature={adminSignature}
             />
           </div>
 
@@ -596,10 +609,12 @@ const CognitiveKeys = ({
   termInfo,
   user,
   sessionInfo,
+  adminSignature,
 }: {
   termInfo: Term;
   user: any;
   sessionInfo: Session;
+  adminSignature: string | null;
 }) => {
   return (
     <div className='flex flex-row mt-[6px] gap-4'>
@@ -639,7 +654,7 @@ const CognitiveKeys = ({
         </div>
       </div>
 
-      <div className='flex flex-col gap-[13px] rounded-[2px] border-2 border-black w-full p-[9px] uppercase font-bold text-[8px] leading-[10px] h-[98px]'>
+      <div className='flex flex-col gap-[13px] rounded-[2px] border-2 border-black w-full p-[9px] uppercase font-bold text-[8px] leading-[10px] h-[120px]'>
         <div className='flex flex-row justify-between items-center'>
           <div>principal:</div>
           <div>
@@ -655,12 +670,17 @@ const CognitiveKeys = ({
         <div className='flex flex-row justify-between items-center'>
           <div>signature:</div>
           <div>
-            <Image
-              alt='Logo'
-              width={75}
-              height={10}
-              src='/images/principal_signature.png'
-            />
+            {adminSignature ? (
+              <Image
+                alt='Logo'
+                width={75}
+                height={18}
+                className='h-[18px]'
+                src={adminSignature}
+              />
+            ) : (
+              'No Signature'
+            )}
           </div>
         </div>
 
