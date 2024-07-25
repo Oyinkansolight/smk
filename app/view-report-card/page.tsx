@@ -27,6 +27,7 @@ const ViewReportCard = () => {
       agregates={reportCard?.agregates}
       attendanceReport={reportCard?.attendanceReport}
       termInfo={reportCard?.term as Term}
+      adminSignature={reportCard?.adminSignature ?? ''}
     />
   );
 };

@@ -2,8 +2,12 @@
 
 import Result from '@/components/cards/Result';
 import EmptyView from '@/components/misc/EmptyView';
-import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
+import { getFromSessionStorage, termNumberToName } from '@/lib/helper';
+import request from '@/server';
+import { useGetAcademicSessions } from '@/server/dashboard';
 import { useGetStudentReportCard } from '@/server/student';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 // import { useRouter } from 'next/navigation';
 import Lightupyellow from '~/svg/lightup-yellow.svg';
 import Lightup from '~/svg/lightup.svg';
@@ -30,10 +34,9 @@ const psychomotor = [
 const ExamReport = ({ studentId, classArmId }) => {
   const userData = getFromSessionStorage('user');
   const currentTerm = getFromSessionStorage('currentTerm') ?? '';
-  const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
+  // const currentSessionId = getFromLocalStorage('currentSessionId') ?? '';
   const getDomainValue = (value: string) => {
     const result = data?.domains.find((v) => v.behavior === value);
-    console.log(result);
     return result
       ? {
           label: result.remark,
@@ -42,35 +45,82 @@ const ExamReport = ({ studentId, classArmId }) => {
       : null;
   };
   let user;
-  let currentTermInfo;
+  // let currentTermInfo;
 
   if (userData && currentTerm) {
     user = JSON.parse(userData);
-    currentTermInfo = JSON.parse(currentTerm);
+    // currentTermInfo = JSON.parse(currentTerm);
   }
+  const [sessionterms, setsessionterms] = useState([]);
+  const [selectedTermId, setSelectedTermId] = useState<string>('0');
+  const [selectedSessionId, setSelectedSessionId] = useState<string>('0');
+
+  const { data: allSession } = useGetAcademicSessions();
+
+  function Fetchterms(currrentsession: string | null) {
+    request
+      .get(`/v1/government/terms/session-terms?sessionId=${currrentsession}`)
+      .then((v) => {
+        const data = v.data.data.data;
+        setsessionterms(data.data || []);
+      });
+  }
+
+  useEffect(() => {
+    Fetchterms(selectedSessionId);
+  }, [selectedSessionId]);
+
   const { data } = useGetStudentReportCard({
     studentId: studentId,
-    termId: currentTermInfo?.id ?? '',
-    sessionId: currentSessionId,
+    termId: selectedTermId ?? '',
+    sessionId: selectedSessionId,
     classArmId: classArmId,
   });
+  const reportCardURL = `/view-report-card?sessionId=${selectedSessionId}&termId=${selectedTermId}&studentId=${studentId}&classArmId=${classArmId}`;
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className='flex gapx-4 gap-y-10'>
       <div className='w-full px-4'>
-        <div className='flex justify-end py-4 border-b-2 mb-5  text-gray-500'>
+        <div className='my-3 flex justify-end space-x-2   text-gray-500'>
           <select
             name=''
             id=''
-            className='p-2 bg-[#FFF6E7] border !text-xs rounded'
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[250px]'
+            onChange={(e) => {
+              setSelectedSessionId(e.target.value);
+            }}
           >
-            <option value=''> Session & Term</option>
-            <option value=''>2023/2024 First</option>
-            <option value=''>2023/2024 Secomd</option>
-            <option value=''>2023/2024 Third</option>
+            <option value=''> Session</option>
+            {(allSession?.data ?? []).map((v: any) => (
+              <option key={v.id} value={v.id}>
+                {v.session}
+              </option>
+            ))}
           </select>
+          <select
+            name=''
+            id=''
+            className='p-2 bg-[#FFF6E7] border !text-xs rounded w-[200px]'
+            onChange={(e) => {
+              setSelectedTermId(e.target.value);
+            }}
+          >
+            <option value=''> Term</option>
+            {sessionterms.map((v: any, i: number) => (
+              <option key={i} value={v.id}>
+                {termNumberToName(v.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='flex justify-end p-2  bg-[#F9F9F9] rounded'>
+          <Link href={reportCardURL}>
+            <button className='bg-[#3361FF] text-white p-1 rounded'>
+              Download Report Card
+            </button>
+          </Link>
         </div>
 
         <div className='grid sm:grid-cols-2 md:grid-cols-3 p-2 gap-8  bg-[#F9F9F9] rounded '>
