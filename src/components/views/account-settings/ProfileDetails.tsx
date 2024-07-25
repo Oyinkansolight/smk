@@ -382,7 +382,7 @@ export default function TeacherBioDetails({
                 </Button>
                 <Button
                   onClick={() => {
-                    console.log(sig?.clear);
+                    // console.log(sig?.clear);
                   }}
                   className='!text-pink-300'
                 >
