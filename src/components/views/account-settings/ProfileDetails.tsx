@@ -16,11 +16,13 @@ import {
   useUpdateInstitution,
 } from '@/server/institution';
 import { UserInfo } from '@/types/auth';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ImSpinner2 } from 'react-icons/im';
 import { RiImageAddFill } from 'react-icons/ri';
 import ReactSelect from 'react-select';
+import SignatureCanvas from 'react-signature-canvas';
 import { toast } from 'react-toastify';
 import { uuid } from 'uuidv4';
 
@@ -40,7 +42,8 @@ export default function TeacherBioDetails({
   });
   const { control, setValue, handleSubmit, getValues, register } = useForm();
   const [loading, setIsLoading] = useState(false);
-
+  const [sig, setSig] = useState<any>({});
+  const [updateSignature, setUpdateSignature] = useState(false);
   const update = useUpdateUser();
   const updatePrincipal = useUpdateInstitution();
   const updatePassword = useUpdateUserPassword();
@@ -107,6 +110,7 @@ export default function TeacherBioDetails({
         middleName: data.middleName,
         address: data.address,
         phoneNumber: data.phone,
+        signature: getValues('signature'),
       };
       for (const key in payload) {
         if (!payload[key]) delete payload[key]; //remove empty object
@@ -328,6 +332,65 @@ export default function TeacherBioDetails({
               />
             )}
           />
+        </div>
+        <div className='fßont-bold text-2xl text-[#6B7A99] my-8'>
+          Principal Signature
+        </div>
+        <div>
+          <label htmlFor='signature'>Signature</label>
+          {initProfile?.signature && !updateSignature ? (
+            <>
+              <Image
+                alt='signature'
+                height='500'
+                width='200'
+                src={initProfile?.signature}
+              />
+              <Button
+                className='mt-4'
+                onClick={() => {
+                  setUpdateSignature(true);
+                }}
+              >
+                Update
+              </Button>
+            </>
+          ) : (
+            <>
+              <SignatureCanvas
+                penColor='green'
+                canvasProps={{
+                  width: 500,
+                  height: 200,
+                  className: 'sigCanvas',
+                }}
+                ref={(ref: any) => {
+                  setSig(ref);
+                }}
+              />
+              <div className='flex mt-4 space-x-2'>
+                <Button
+                  onClick={() => {
+                    setValue(
+                      'signature',
+                      sig?.getTrimmedCanvas().toDataURL('image/png')
+                    );
+                    toast.success('signature saved successfully');
+                  }}
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={() => {
+                    console.log(sig?.clear);
+                  }}
+                  className='!text-pink-300'
+                >
+                  Clear
+                </Button>
+              </div>
+            </>
+          )}
         </div>
         <div className='font-bold text-2xl text-[#6B7A99] my-8'>
           Login Details
