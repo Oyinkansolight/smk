@@ -66,6 +66,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -335,9 +337,11 @@ const BioData = ({
               value={`${
                 agregates?.classTotalExamScore &&
                 agregates?.studentTotalExamScore
-                  ? (agregates.classTotalExamScore /
-                      agregates.studentTotalExamScore) *
-                    100
+                  ? (
+                      (agregates.classTotalExamScore /
+                        agregates.studentTotalExamScore) *
+                      100
+                    ).toFixed(2)
                   : 'N/A'
               }%`}
             />
