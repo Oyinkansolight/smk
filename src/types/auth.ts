@@ -110,10 +110,41 @@ export interface UserInfo {
     instituteType: string;
     isOnboardingCompleted: boolean;
     updatedAt: string;
+    principal: Principal;
   };
   staff?: Staff;
   student?: null;
   role?: Role[];
+}
+
+export interface Principal {
+  id: string;
+  profileImg: any;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  deviceToken: any;
+  batteryLevel: any;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  address: string;
+  resetPasswordToken: any;
+  resetPasswordTokenExpires: any;
+  type: string;
+  loginCount: number;
+  suspended: boolean;
+  signature: any;
+  createdAt: string;
+  updatedAt: string;
+  staff: Staff;
+}
+
+export interface EmploymentDetails {
+  jobTitle: string;
+  schoolName: string;
+  retirementDate: string;
+  salaryGradeLevel: string;
 }
 
 export interface Role {

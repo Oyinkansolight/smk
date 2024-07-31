@@ -1,6 +1,7 @@
 'use client';
 
 import PrintedReportCard from '@/components/print/ReportCard';
+import { useGetStudentList } from '@/server/government/student';
 import { useGetStudentReportCard } from '@/server/student';
 import { Term } from '@/types/classes-and-subjects';
 import { useSearchParams } from 'next/navigation';
@@ -12,6 +13,9 @@ const ViewReportCard = () => {
   const studentId = params?.get('studentId') ?? '';
   const sessionId = params?.get('sessionId') ?? '';
   const classArmId = params?.get('classArmId') ?? '';
+  const { data } = useGetStudentList({
+    id: studentId,
+  });
 
   const { data: reportCard } = useGetStudentReportCard({
     termId,
@@ -28,6 +32,7 @@ const ViewReportCard = () => {
       attendanceReport={reportCard?.attendanceReport}
       termInfo={reportCard?.term as Term}
       adminSignature={reportCard?.adminSignature ?? ''}
+      studentData={data}
     />
   );
 };

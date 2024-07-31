@@ -7,6 +7,7 @@ import EmptyView from '@/components/misc/EmptyView';
 import clsxm from '@/lib/clsxm';
 import { getFromLocalStorage, getFromSessionStorage } from '@/lib/helper';
 import { useGetProfile } from '@/server/auth';
+import { UserProfile } from '@/types/auth';
 import {
   Agregates,
   Session,
@@ -14,9 +15,26 @@ import {
   SubjectResults,
   Term,
 } from '@/types/classes-and-subjects';
+import { Student } from '@/types/institute';
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -93,6 +111,7 @@ const PrintedReportCard = ({
   attendanceReport,
   termInfo,
   adminSignature,
+  studentData,
 }: {
   adminSignature: string | null;
   domains: any[] | undefined;
@@ -100,11 +119,14 @@ const PrintedReportCard = ({
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
   termInfo: Term;
+  studentData: Student;
 }) => {
   const handlePrint = () => {
     window.print();
   };
   const { data: Profile } = useGetProfile();
+
+  console.log(studentData);
 
   const userData = getFromSessionStorage('user');
   // const term = getFromSessionStorage('currentTerm');
@@ -156,7 +178,7 @@ const PrintedReportCard = ({
 
         <span className='mt-[3px] mb-1'>
           <BioData
-            user={user}
+            user={studentData}
             agregates={agregates}
             attendanceReport={attendanceReport}
           />
@@ -168,7 +190,8 @@ const PrintedReportCard = ({
             <CommentObservation domains={domains} />
             <CognitiveKeys
               termInfo={termInfo}
-              user={Profile}
+              user={user}
+              Profile={Profile as UserProfile}
               sessionInfo={sessionInfo}
               adminSignature={adminSignature}
             />
@@ -291,28 +314,26 @@ const BioData = ({
   agregates,
   attendanceReport,
 }: {
-  user: any;
+  user: Student;
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
 }) => {
+  const name = `${user.firstName ?? 'N/A'} ${user.lastName ?? 'N/A'} `;
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <tr>
         <th>
           <div className='flex flex-col gap-[2px] w-full p-[6px]'>
-            <RowItem title='Name' value={user?.name ?? 'N/A'} />
-            <RowItem
-              title='Sex'
-              value={user?.currentStudentInfo?.gender ?? 'N/A'}
-            />
+            <RowItem title='Name' value={name ?? 'N/A'} />
+            <RowItem title='Sex' value={user?.gender ?? 'N/A'} />
             <RowItem
               title='Class'
-              value={user?.currentStudentInfo?.class?.class?.name ?? 'N/A'}
+              value={user?.class?.class?.name ?? 'N/A'}
               capitalizeValue
             />
             <RowItem
               title='Reg No'
-              value={user?.currentStudentInfo?.uniqueId ?? 'N/A'}
+              value={user?.uniqueId ?? 'N/A'}
               capitalizeValue
             />
           </div>
@@ -628,9 +649,11 @@ const CognitiveKeys = ({
   user,
   sessionInfo,
   adminSignature,
+  Profile,
 }: {
   termInfo: Term;
   user: any;
+  Profile: UserProfile;
   sessionInfo: Session;
   adminSignature: string | null;
 }) => {
@@ -677,10 +700,13 @@ const CognitiveKeys = ({
           <div>principal:</div>
           <div>
             {`${
-              user?.userInfo?.student?.institution?.principal?.firstName ??
+              (user?.userInfo?.student?.institution?.principal?.firstName ||
+                Profile?.userInfo?.esiAdmin?.principal.firstName) ??
               'N/A'
             } ${
-              user?.userInfo?.student?.institution?.principal?.lastName ?? 'N/A'
+              (user?.userInfo?.student?.institution?.principal?.lastName ||
+                Profile?.userInfo?.esiAdmin?.principal.lastName) ??
+              'N/A'
             }`}
           </div>
         </div>
