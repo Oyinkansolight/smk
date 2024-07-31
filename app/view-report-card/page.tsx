@@ -4,6 +4,7 @@ import PrintedReportCard from '@/components/print/ReportCard';
 import { useGetStudentList } from '@/server/government/student';
 import { useGetStudentReportCard } from '@/server/student';
 import { Term } from '@/types/classes-and-subjects';
+import { Student } from '@/types/institute';
 import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
@@ -32,7 +33,7 @@ const ViewReportCard = () => {
       attendanceReport={reportCard?.attendanceReport}
       termInfo={reportCard?.term as Term}
       adminSignature={reportCard?.adminSignature ?? ''}
-      studentData={data}
+      studentData={data as Student}
     />
   );
 };
