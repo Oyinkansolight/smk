@@ -375,7 +375,7 @@ export default function TeacherBioDetails({
                       'signature',
                       sig?.getTrimmedCanvas().toDataURL('image/png')
                     );
-                    toast.success('signature saved successfully');
+                    toast.success('Signature saved successfully');
                   }}
                 >
                   Save
