@@ -62,6 +62,10 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -98,7 +102,7 @@ const PrintedReportCard = ({
   const handlePrint = () => {
     window.print();
   };
-  const { data: studentProfile } = useGetProfile();
+  const { data: Profile } = useGetProfile();
 
   const userData = getFromSessionStorage('user');
   // const term = getFromSessionStorage('currentTerm');
@@ -131,11 +135,21 @@ const PrintedReportCard = ({
               : 'Third'
           }
           session={sessionInfo[0]?.session ?? 'N/A'}
-          name={user?.currentStudentInfo?.institution?.instituteName ?? 'N/A'}
-          address={
-            user?.currentStudentInfo?.institution?.instituteAddress ?? 'N/A'
+          name={
+            (user?.currentStudentInfo?.institution?.instituteName ||
+              Profile?.userInfo?.esiAdmin?.instituteName) ??
+            'N/A'
           }
-          email={user?.currentStudentInfo?.institution?.instituteEmail ?? 'N/A'}
+          address={
+            (user?.currentStudentInfo?.institution?.instituteAddress ||
+              Profile?.userInfo?.esiAdmin?.instituteAddress) ??
+            'N/A'
+          }
+          email={
+            (user?.currentStudentInfo?.institution?.instituteEmail ||
+              Profile?.userInfo?.esiAdmin?.instituteEmail) ??
+            'N/A'
+          }
         />
 
         <span className='mt-[3px] mb-1'>
@@ -152,7 +166,7 @@ const PrintedReportCard = ({
             <CommentObservation domains={domains} />
             <CognitiveKeys
               termInfo={termInfo}
-              user={studentProfile}
+              user={Profile}
               sessionInfo={sessionInfo}
               adminSignature={adminSignature}
             />
