@@ -86,6 +86,18 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -318,7 +330,7 @@ const BioData = ({
   agregates: Agregates | undefined;
   attendanceReport: StudentResult['attendanceReport'] | undefined;
 }) => {
-  const name = `${user.firstName ?? 'N/A'} ${user.lastName ?? 'N/A'} `;
+  const name = `${user?.firstName ?? 'N/A'} ${user?.lastName ?? 'N/A'} `;
   return (
     <div className='table rounded-[2px] border-2 border-black w-full'>
       <tr>
@@ -646,14 +658,13 @@ const CommentObservation = ({ user, domains }: any) => {
 
 const CognitiveKeys = ({
   termInfo,
-  user,
   sessionInfo,
   adminSignature,
   Profile,
 }: {
   termInfo: Term;
   user: any;
-  Profile: UserProfile;
+  Profile: UserProfile | any;
   sessionInfo: Session;
   adminSignature: string | null;
 }) => {
@@ -700,11 +711,11 @@ const CognitiveKeys = ({
           <div>principal:</div>
           <div>
             {`${
-              (user?.userInfo?.student?.institution?.principal?.firstName ||
-                Profile?.userInfo?.esiAdmin?.principal.firstName) ??
+              (Profile?.userInfo?.student?.institution?.principal?.firstName || //login in as a student
+                Profile?.userInfo?.esiAdmin?.principal.firstName) ?? //login in as a admin
               'N/A'
             } ${
-              (user?.userInfo?.student?.institution?.principal?.lastName ||
+              (Profile?.userInfo?.student?.institution?.principal?.lastName ||
                 Profile?.userInfo?.esiAdmin?.principal.lastName) ??
               'N/A'
             }`}
