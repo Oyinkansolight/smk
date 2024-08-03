@@ -96,6 +96,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -709,8 +711,8 @@ const CognitiveKeys = ({
           <div>principal:</div>
           <div>
             {`${
-              (Profile?.userInfo?.student?.institution?.principal?.firstName ||
-                Profile?.userInfo?.esiAdmin?.principal.firstName) ??
+              (Profile?.userInfo?.student?.institution?.principal?.firstName || //login in as a student
+                Profile?.userInfo?.esiAdmin?.principal.firstName) ?? //login in as a admin
               'N/A'
             } ${
               (Profile?.userInfo?.student?.institution?.principal?.lastName ||
