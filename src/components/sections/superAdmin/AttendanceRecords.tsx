@@ -9,7 +9,7 @@ import request from '@/server';
 import { useGetSchools } from '@/server/institution';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AttendanceRecords = () => {
@@ -24,6 +24,8 @@ const AttendanceRecords = () => {
   const [itemIndex, setItemIndex] = useState<number>(0);
 
   const [query, setQuery] = useState('');
+  const [startDate, setStartDate] = useState('2024-07-20T09:22:39.910Z');
+  const [endDate, setEndDate] = useState(new Date());
   const [pagingData, setPagingData] = useState<any>({
     page: 1,
     limit: 10,
@@ -60,7 +62,7 @@ const AttendanceRecords = () => {
       setIsLoading(true);
       request
         .get(
-          `/v1/government/dashboards/get-admin-stat-dashboard?institutionId=${institutionId}`
+          `/v1/government/dashboards/get-admin-stat-dashboard?institutionId=${institutionId}&startPeriod=2024-0-20T09:22:39.910Z&endPeriod=2024-08-20T09:22:39.910Z`
         )
         .then((v) => {
           setIsLoading(false);
@@ -75,8 +77,15 @@ const AttendanceRecords = () => {
   };
   const handleSelectedInstitution = (value: string) => {
     fetchAttendance(value);
-    // setSelectedInstitutionId(value);
+    setSelectedInstitutionId(value);
   };
+
+  useEffect(() => {
+    // if (endDate) {
+    fetchAttendance(selectedInstitutionId);
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate]);
 
   const handleInstitutionName = (name: string) => {
     setSelectedInstitution([name]);
@@ -149,7 +158,13 @@ const AttendanceRecords = () => {
                 titleClassName='bg-[#DADEE6]'
                 title='Attendance Tracker'
                 description='Total number that were present'
-                content={<BarChart data={chartData?.attendanceTracker} />}
+                content={
+                  <BarChart
+                    // setStartPeriod={setStartDate}
+                    // setEndPeriod={setEndDate}
+                    data={chartData?.attendanceTracker}
+                  />
+                }
               />
             </div>
           </div>

@@ -120,8 +120,7 @@ const BarChart = ({
           <input
             type='date'
             onChange={(e) => {
-              setStartPeriod &&
-                setStartPeriod(e.target.value as unknown as Date);
+              setStartPeriod && setStartPeriod(e.target.value as any);
             }}
             className='ring-0 outline-none border-gray-300 rounded-lg'
           />
@@ -130,7 +129,7 @@ const BarChart = ({
           <input
             type='date'
             onChange={(e) => {
-              setEndPeriod && setEndPeriod(e.target.value as unknown as Date);
+              setEndPeriod && setEndPeriod(e.target.value as any);
             }}
             className='ring-0 outline-none border-gray-300 rounded-lg'
           />
