@@ -98,6 +98,14 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -170,7 +178,7 @@ const PrintedReportCard = ({
               ? 'Second'
               : 'Third'
           }
-          session={sessionInfo[0]?.session ?? 'N/A'}
+          session={termInfo.session?.session ?? 'N/A'}
           name={
             (user?.currentStudentInfo?.institution?.instituteName ||
               Profile?.userInfo?.esiAdmin?.instituteName) ??
@@ -284,7 +292,7 @@ const Header = (props: HeaderProps) => {
         <span className='font-bold text-[10px]'>SSEB.EDOSTATE.GOV.NG</span>
 
         <span className='font-medium text-[13px] mt-[6px]'>
-          {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}
+          {props?.term ?? 'N/A'} Term Report Sheet for {props?.session ?? 'N/A'}{' '}
           Session
         </span>
       </div>
@@ -748,7 +756,7 @@ const CognitiveKeys = ({
           <div>next term begins:</div>
           <div>
             {termInfo?.currentTerm?.name === '3'
-              ? moment(sessionInfo[0]?.endDate).format('ll')
+              ? moment(sessionInfo[0]?.startDate).format('ll')
               : moment(termInfo?.nextTerm?.startDate).format('ll')}
           </div>
         </div>
