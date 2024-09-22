@@ -106,6 +106,12 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -146,8 +152,6 @@ const PrintedReportCard = ({
   };
   const { data: Profile } = useGetProfile();
 
-  console.log(studentData);
-
   const userData = getFromSessionStorage('user');
   // const term = getFromSessionStorage('currentTerm');
   const session = getFromLocalStorage('currentSession');
@@ -178,7 +182,7 @@ const PrintedReportCard = ({
               ? 'Second'
               : 'Third'
           }
-          session={termInfo.session?.session ?? 'N/A'}
+          session={termInfo?.currentTerm?.session?.session ?? 'N/A'}
           name={
             (user?.currentStudentInfo?.institution?.instituteName ||
               Profile?.userInfo?.esiAdmin?.instituteName) ??
