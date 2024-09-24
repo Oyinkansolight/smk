@@ -114,6 +114,8 @@ import React from 'react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const affective = [
   'Attentiveness',
   'Honesty',
@@ -273,7 +275,7 @@ const Header = (props: HeaderProps) => {
       <div className='flex items-center gap-[10px]'>
         {props?.name ? (
           <Image
-            alt='Profile_Logo'
+            alt='Logo'
             width={85}
             height={85}
             src='/images/SSEB_LOGO.png'
